@@ -13,24 +13,26 @@ s=json.loads(a.summary.read_text());left,right=a.skills
 groups=defaultdict(dict)
 for r in s['rows']:
     if r['skill'] in a.skills:
-        key=(r['origin_id'],r['distance_m'])
+        spec=json.loads(Path(r['config']).read_text())
+        disturbance=json.dumps(spec.get('external_force_pulse'),sort_keys=True)
+        key=(r['origin_id'],r['distance_m'],disturbance)
         candidate=(r['speed_m_s'],r['alpha'])
         slot=groups[key].setdefault(candidate,{})
         if r['skill'] in slot:raise ValueError('Duplicate skill/candidate in paired summary')
         slot[r['skill']]=r
 pairs=[];selected=[]
-for (origin,distance),candidates in sorted(groups.items()):
-    complete=all(set(by_skill)==set(a.skills) and all(r['status']=='evaluated' for r in by_skill.values()) for by_skill in candidates.values())
+for (origin,distance,disturbance),candidates in sorted(groups.items()):
+    complete=len(candidates)==6 and all(set(by_skill)==set(a.skills) and all(r['status']=='evaluated' for r in by_skill.values()) for by_skill in candidates.values())
     for (speed,alpha),by_skill in sorted(candidates.items()):
         observed=all(skill in by_skill and by_skill[skill]['status']=='evaluated' for skill in a.skills)
         outcome=None
         if observed:
             yl,yr=(bool(by_skill[skill]['complete']) for skill in a.skills)
             outcome='both_success' if yl and yr else 'only_first' if yl else 'only_second' if yr else 'both_failed'
-        pairs.append(dict(origin_id=origin,distance_m=distance,speed_m_s=speed,alpha=alpha,
+        pairs.append(dict(origin_id=origin,distance_m=distance,disturbance=json.loads(disturbance),speed_m_s=speed,alpha=alpha,
             status='evaluated' if observed else 'pending',outcome=outcome,
             cases={skill:dict(case_id=r['case_id'],Y=r['complete'],T_s=r.get('success_time_s'),failure_phase=r.get('failure_phase')) for skill,r in by_skill.items()}))
-    row=dict(origin_id=origin,distance_m=distance,all_candidates_evaluated=complete,selected_by_skill=None)
+    row=dict(origin_id=origin,distance_m=distance,disturbance=json.loads(disturbance),all_candidates_evaluated=complete,selected_by_skill=None)
     if complete:
         row['selected_by_skill']={}
         for skill in a.skills:

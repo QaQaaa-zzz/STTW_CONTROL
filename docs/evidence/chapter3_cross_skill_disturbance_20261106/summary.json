@@ -1,0 +1,824 @@
+{
+  "protocol_id": "ch3_jump_connection_hold_v1",
+  "role": "Matched source/RB approach DEV; no training, not independent TEST",
+  "declared_cases": 24,
+  "evaluated_cases": 0,
+  "rows": [
+    {
+      "case_id": "L9.6_v2.0_a0.5_pulse0_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_disturbance/L9.6_v2.0_a0.5_pulse0_source.json",
+      "distance_m": 9.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started",
+      "disturbance": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "disturbance_key": "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, -2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}",
+      "panel_key": [
+        9.6,
+        "source",
+        "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, -2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}"
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "L9.6_v2.0_a0.5_pulse0_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_disturbance/L9.6_v2.0_a0.5_pulse0_rb_run1_candidate.json",
+      "distance_m": 9.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started",
+      "disturbance": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "disturbance_key": "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, -2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}",
+      "panel_key": [
+        9.6,
+        "rb_run1_candidate",
+        "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, -2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}"
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "L9.6_v2.0_a0.5_pulse1_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_disturbance/L9.6_v2.0_a0.5_pulse1_source.json",
+      "distance_m": 9.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started",
+      "disturbance": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "disturbance_key": "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, 2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}",
+      "panel_key": [
+        9.6,
+        "source",
+        "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, 2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}"
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "L9.6_v2.0_a0.5_pulse1_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_disturbance/L9.6_v2.0_a0.5_pulse1_rb_run1_candidate.json",
+      "distance_m": 9.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started",
+      "disturbance": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "disturbance_key": "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, 2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}",
+      "panel_key": [
+        9.6,
+        "rb_run1_candidate",
+        "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, 2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}"
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "L9.6_v1.8_a0.0_pulse0_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_disturbance/L9.6_v1.8_a0.0_pulse0_source.json",
+      "distance_m": 9.6,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started",
+      "disturbance": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "disturbance_key": "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, -2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}",
+      "panel_key": [
+        9.6,
+        "source",
+        "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, -2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}"
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "L9.6_v1.8_a0.0_pulse0_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_disturbance/L9.6_v1.8_a0.0_pulse0_rb_run1_candidate.json",
+      "distance_m": 9.6,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started",
+      "disturbance": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "disturbance_key": "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, -2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}",
+      "panel_key": [
+        9.6,
+        "rb_run1_candidate",
+        "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, -2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}"
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "L9.6_v1.8_a0.0_pulse1_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_disturbance/L9.6_v1.8_a0.0_pulse1_source.json",
+      "distance_m": 9.6,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started",
+      "disturbance": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "disturbance_key": "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, 2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}",
+      "panel_key": [
+        9.6,
+        "source",
+        "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, 2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}"
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "L9.6_v1.8_a0.0_pulse1_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_disturbance/L9.6_v1.8_a0.0_pulse1_rb_run1_candidate.json",
+      "distance_m": 9.6,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started",
+      "disturbance": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "disturbance_key": "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, 2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}",
+      "panel_key": [
+        9.6,
+        "rb_run1_candidate",
+        "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, 2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}"
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "L9.6_v1.8_a0.5_pulse0_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_disturbance/L9.6_v1.8_a0.5_pulse0_source.json",
+      "distance_m": 9.6,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started",
+      "disturbance": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "disturbance_key": "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, -2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}",
+      "panel_key": [
+        9.6,
+        "source",
+        "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, -2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}"
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "L9.6_v1.8_a0.5_pulse0_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_disturbance/L9.6_v1.8_a0.5_pulse0_rb_run1_candidate.json",
+      "distance_m": 9.6,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started",
+      "disturbance": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "disturbance_key": "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, -2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}",
+      "panel_key": [
+        9.6,
+        "rb_run1_candidate",
+        "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, -2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}"
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "L9.6_v1.8_a0.5_pulse1_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_disturbance/L9.6_v1.8_a0.5_pulse1_source.json",
+      "distance_m": 9.6,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started",
+      "disturbance": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "disturbance_key": "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, 2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}",
+      "panel_key": [
+        9.6,
+        "source",
+        "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, 2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}"
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "L9.6_v1.8_a0.5_pulse1_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_disturbance/L9.6_v1.8_a0.5_pulse1_rb_run1_candidate.json",
+      "distance_m": 9.6,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started",
+      "disturbance": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "disturbance_key": "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, 2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}",
+      "panel_key": [
+        9.6,
+        "rb_run1_candidate",
+        "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, 2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}"
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "L9.6_v1.8_a1.0_pulse0_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_disturbance/L9.6_v1.8_a1.0_pulse0_source.json",
+      "distance_m": 9.6,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started",
+      "disturbance": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "disturbance_key": "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, -2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}",
+      "panel_key": [
+        9.6,
+        "source",
+        "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, -2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}"
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "L9.6_v1.8_a1.0_pulse0_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_disturbance/L9.6_v1.8_a1.0_pulse0_rb_run1_candidate.json",
+      "distance_m": 9.6,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started",
+      "disturbance": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "disturbance_key": "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, -2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}",
+      "panel_key": [
+        9.6,
+        "rb_run1_candidate",
+        "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, -2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}"
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "L9.6_v1.8_a1.0_pulse1_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_disturbance/L9.6_v1.8_a1.0_pulse1_source.json",
+      "distance_m": 9.6,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started",
+      "disturbance": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "disturbance_key": "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, 2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}",
+      "panel_key": [
+        9.6,
+        "source",
+        "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, 2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}"
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "L9.6_v1.8_a1.0_pulse1_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_disturbance/L9.6_v1.8_a1.0_pulse1_rb_run1_candidate.json",
+      "distance_m": 9.6,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started",
+      "disturbance": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "disturbance_key": "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, 2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}",
+      "panel_key": [
+        9.6,
+        "rb_run1_candidate",
+        "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, 2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}"
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "L9.6_v2.0_a0.0_pulse0_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_disturbance/L9.6_v2.0_a0.0_pulse0_source.json",
+      "distance_m": 9.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started",
+      "disturbance": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "disturbance_key": "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, -2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}",
+      "panel_key": [
+        9.6,
+        "source",
+        "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, -2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}"
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "L9.6_v2.0_a0.0_pulse0_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_disturbance/L9.6_v2.0_a0.0_pulse0_rb_run1_candidate.json",
+      "distance_m": 9.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started",
+      "disturbance": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "disturbance_key": "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, -2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}",
+      "panel_key": [
+        9.6,
+        "rb_run1_candidate",
+        "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, -2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}"
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "L9.6_v2.0_a0.0_pulse1_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_disturbance/L9.6_v2.0_a0.0_pulse1_source.json",
+      "distance_m": 9.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started",
+      "disturbance": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "disturbance_key": "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, 2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}",
+      "panel_key": [
+        9.6,
+        "source",
+        "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, 2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}"
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "L9.6_v2.0_a0.0_pulse1_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_disturbance/L9.6_v2.0_a0.0_pulse1_rb_run1_candidate.json",
+      "distance_m": 9.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started",
+      "disturbance": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "disturbance_key": "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, 2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}",
+      "panel_key": [
+        9.6,
+        "rb_run1_candidate",
+        "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, 2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}"
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "L9.6_v2.0_a1.0_pulse0_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_disturbance/L9.6_v2.0_a1.0_pulse0_source.json",
+      "distance_m": 9.6,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started",
+      "disturbance": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "disturbance_key": "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, -2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}",
+      "panel_key": [
+        9.6,
+        "source",
+        "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, -2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}"
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "L9.6_v2.0_a1.0_pulse0_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_disturbance/L9.6_v2.0_a1.0_pulse0_rb_run1_candidate.json",
+      "distance_m": 9.6,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started",
+      "disturbance": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "disturbance_key": "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, -2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}",
+      "panel_key": [
+        9.6,
+        "rb_run1_candidate",
+        "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, -2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}"
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "L9.6_v2.0_a1.0_pulse1_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_disturbance/L9.6_v2.0_a1.0_pulse1_source.json",
+      "distance_m": 9.6,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started",
+      "disturbance": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "disturbance_key": "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, 2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}",
+      "panel_key": [
+        9.6,
+        "source",
+        "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, 2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}"
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "L9.6_v2.0_a1.0_pulse1_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_disturbance/L9.6_v2.0_a1.0_pulse1_rb_run1_candidate.json",
+      "distance_m": 9.6,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started",
+      "disturbance": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "disturbance_key": "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, 2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}",
+      "panel_key": [
+        9.6,
+        "rb_run1_candidate",
+        "{\"body\": \"chasis\", \"duration_s\": 0.12, \"force_world_N\": [0.0, 2.0, 0.0], \"kind\": \"external_force_N\", \"site_body_position_m\": [0.0, 0.0, 0.0], \"trigger_x_m\": -2.5}"
+      ],
+      "status": "pending",
+      "complete": null
+    }
+  ]
+}
