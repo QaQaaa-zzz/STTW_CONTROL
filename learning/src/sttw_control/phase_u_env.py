@@ -32,6 +32,8 @@ class PhaseUEnv:
         self.sensor_substeps=round(self.rand['sensor_dt_s']/self.plant.physics_dt)
         if self.sensor_substeps<1 or abs(self.physics_substeps*self.plant.physics_dt-self.dt)>1e-9 or abs(self.sensor_substeps*self.plant.physics_dt-self.rand['sensor_dt_s'])>1e-9:
             raise ValueError('physics_dt must divide policy and sensor periods')
+        if 'jump_steering_gains' in cfg:
+            self.plant.jump_steering_servo.kp.fill_(cfg['jump_steering_gains'][0]);self.plant.jump_steering_servo.kd.fill_(cfg['jump_steering_gains'][1])
         self.properties=randomize_vehicle_properties(self.plant,self.rand)
         self.randomization=PendulumControlRandomization(self.plant,self.rand)
         mount=json.loads(Path(cfg['asset_spec']).read_text())['mount_rotation_wxyz']
@@ -90,14 +92,18 @@ class PhaseUEnv:
         push_ticks=round(self.rand['push_interval_s']/self.dt)
         ids=((self.episode_length_buf>0)&(self.episode_length_buf%push_ticks==0)).nonzero().flatten()
         if len(ids):push_by_setting_velocity(SimpleNamespace(scene={'robot':plant.robot}),ids,self.rand['push_velocity_range'])
+        previous_root_velocity=plant.robot.data.root_link_lin_vel_w.clone()
         for tick in range(self.physics_substeps):
             delivered=self.randomization.command(target)
             command=torch.stack((torch.zeros_like(delivered[:,0]),delivered[:,1]),-1)
             plant.step(command,pendulum_target=delivered[:,2:],steering_position_target=delivered[:,:1],refresh_diagnostics=False)
+            root_velocity=plant.robot.data.root_link_lin_vel_w
+            root_acceleration=(root_velocity-previous_root_velocity)/plant.physics_dt;previous_root_velocity=root_velocity.clone()
             if (tick+1)%self.sensor_substeps==0:
                 plant.refresh();root=plant.roots.clone();root[:,:3]-=plant.origin
                 distance=3.6-(self.geometry.frontmost_x(plant.rigid)-plant.origin[:,0])
-                frame=self.history.make_frame(root,plant.dofs[:,:,0],plant.dofs[:,:,1],plant.robot.data.body_com_acc_w[:,plant.bodies.index('chasis'),:3],distance,action)
+                acceleration=root_acceleration if self.cfg.get('root_acceleration_difference',False) else plant.robot.data.body_com_acc_w[:,plant.bodies.index('chasis'),:3]
+                frame=self.history.make_frame(root,plant.dofs[:,:,0],plant.dofs[:,:,1],acceleration,distance,action)
                 measured=self.randomization.sensor_frame(frame)
         plant.sensor.update(self.dt,force_recompute=True);plant.refresh()
         root,contact,critic=self.physical();angles=critic[:,99:102]

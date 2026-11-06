@@ -149,6 +149,7 @@ class PendulumControlRandomization:
                 getattr(servo,field)[ids]=nominal*(low+(high-low)*torch.rand(n,len(nominal),device=self.device))
         low,high=self.config['joint_zero_offset_rad']
         self.offset[ids]=low+(high-low)*torch.rand(n,3,device=self.device)
+        if self.plant.servo_mode=='hybrid':self.plant.sync_native_drives(ids)
 
     def command(self,target):
         return self.action_buffer.compute(target)

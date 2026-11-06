@@ -213,6 +213,18 @@ class IsaacLabVectorPlant:
     def observe(self):
         measurement,pose,speed=self.signals.observe(self.roots,self.dofs[:,:,0],self.dofs[:,:,1]);return measurement,pose-self.origin,speed
 
+    def sync_native_drives(self,env_ids=None):
+        """Apply sampled motor gains to native hybrid drives, including reset lanes."""
+        ids=torch.arange(self.count,device=self.device) if env_ids is None else env_ids
+        gain=self.servos.gain.reshape(-1,2).expand(self.count,2)
+        stiffness=torch.zeros(len(ids),2,device=self.device)
+        damping=gain[ids].clone()
+        if self.jump_position_mode:
+            stiffness[:,0]=self.jump_steering_servo.kp.reshape(-1,1).expand(self.count,1)[ids,0]
+            damping[:,0]=self.jump_steering_servo.kd.reshape(-1,1).expand(self.count,1)[ids,0]
+        self.robot.write_joint_stiffness_to_sim(stiffness,joint_ids=self.servos.indices,env_ids=ids)
+        self.robot.write_joint_damping_to_sim(damping,joint_ids=self.servos.indices,env_ids=ids)
+
     def step(self,command,pendulum_target=None,steering_position_target=None,refresh_diagnostics=True):
         torque=self.signals.passive_torque(self.dofs[:,:,0],self.dofs[:,:,1])
         if self.servo_mode in ('implicit','hybrid'):
@@ -221,11 +233,8 @@ class IsaacLabVectorPlant:
             if self.servo_mode=='hybrid':
                 position_mode=steering_position_target is not None
                 if position_mode!=self.jump_position_mode:
-                    kp=self.jump_steering_servo.kp[0] if position_mode else 0.
-                    kd=self.jump_steering_servo.kd[0] if position_mode else self.servos.gain[0]
-                    self.robot.write_joint_stiffness_to_sim(torch.full((self.count,1),float(kp),device=self.device),joint_ids=[self.signals.steer])
-                    self.robot.write_joint_damping_to_sim(torch.full((self.count,1),float(kd),device=self.device),joint_ids=[self.signals.steer])
                     self.jump_position_mode=position_mode
+                    self.sync_native_drives()
                 if position_mode:
                     self.robot.set_joint_position_target(steering_position_target,joint_ids=[self.signals.steer])
                     self.robot.set_joint_velocity_target(torch.zeros_like(steering_position_target),joint_ids=[self.signals.steer])

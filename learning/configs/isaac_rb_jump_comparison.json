@@ -1,0 +1,32 @@
+{
+  "output": "runs/rb_sttw_platform/jump_policy_comparison",
+  "plant_config": "learning/configs/isaac_rb_jump_plant.json",
+  "model_config": "learning/configs/rb_sttw_platform.json",
+  "initial_state": "runs/rb_sttw_platform/jump_input/initial_state.npz",
+  "geometry": "runs/rb_sttw_platform/jump_input/geometry.json",
+  "bundles": "runs/historical_jump_candidate",
+  "skills": [
+    "isaac01966080",
+    "source",
+    "rb_run1_candidate"
+  ],
+  "start_x": 1.5,
+  "approach_speed": 2.0,
+  "seconds": 4.0,
+  "handoff_x": 1.5,
+  "physics_dt": 0.005,
+  "gpu_pair_capacities": [
+    1048576,
+    1048576,
+    1048576
+  ],
+  "zero_initial_history": true,
+  "root_acceleration_difference": true,
+  "jump_steering_gains": [
+    2.5,
+    0.4
+  ],
+  "optimizer_updates": 0,
+  "maximum_physics_lane_steps": 2400,
+  "role": "Paired nominal DEV on original RB vehicle friction0.8: historical Isaac-adapted actor, frozen Phase U, frozen RB candidate; same saved state and jump interface, no training"
+}
