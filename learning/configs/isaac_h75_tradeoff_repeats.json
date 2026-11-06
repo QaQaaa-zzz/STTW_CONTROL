@@ -1,0 +1,235 @@
+{
+  "role": "Repeated paired DEV reproduction of original fixed-route tradeoff figure; parameter-randomization replicates, not independent trained policies or full navigation validation",
+  "reference_bundle": "runs/h75_selected_local300_flat/bundle",
+  "base_evaluation_config": "runs/h75_selected_local300_bend/lab_config.json",
+  "terrain_generator": "learning/cli/place_isaac_terrain.py",
+  "terrain_base_config": "runs/h75_selected_local300_bend/bump_terrain/identity.json",
+  "terrain_overrides": [
+    {
+      "name": "flat",
+      "height_m": 0
+    },
+    {
+      "name": "oblique_2cm",
+      "height_m": 0.02
+    },
+    {
+      "name": "oblique_4cm",
+      "height_m": 0.04
+    },
+    {
+      "name": "oblique_6cm",
+      "height_m": 0.06
+    }
+  ],
+  "user_speed_m_s": [
+    1.5,
+    1.8,
+    2.0,
+    2.3,
+    2.6
+  ],
+  "initial_state_protocol": "Same complete saved 2.3m/s warm state; requested speed changes at start, randomized physical/control parameters applied identically to six lanes; five seeds are parameter repeats, not trained-policy seeds",
+  "alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "include_zero": true,
+  "seconds": 10,
+  "max_physics_lane_steps": 30000000,
+  "optimizer_updates": 0,
+  "reuse": "No nominal cached trajectories reused; identical sampled parameters across all six lanes and all terrain/speed conditions within each seed",
+  "start_condition": "Queued after existing ramp screen process exits",
+  "seeds": [
+    101,
+    102,
+    103,
+    104,
+    105
+  ],
+  "randomization_by_seed": {
+    "101": {
+      "base_body": "chasis",
+      "friction_range": [
+        0.8443532505610554,
+        0.8443532505610554
+      ],
+      "mass_scale": [
+        0.9943768413336629,
+        0.9943768413336629
+      ],
+      "base_com_m": [
+        0,
+        0
+      ],
+      "latency_s": [
+        0.0,
+        0.0
+      ],
+      "servo_gain_scale": [
+        1.0036511274091764,
+        1.0036511274091764
+      ],
+      "steer_zero_offset_rad": [
+        -0.0008226857552122873,
+        -0.0008226857552122873
+      ],
+      "measurement_noise": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "102": {
+      "base_body": "chasis",
+      "friction_range": [
+        0.7659991145004303,
+        0.7659991145004303
+      ],
+      "mass_scale": [
+        1.003437740593609,
+        1.003437740593609
+      ],
+      "base_com_m": [
+        0,
+        0
+      ],
+      "latency_s": [
+        0.0,
+        0.0
+      ],
+      "servo_gain_scale": [
+        0.9918904094704118,
+        0.9918904094704118
+      ],
+      "steer_zero_offset_rad": [
+        0.0007395980861852084,
+        0.0007395980861852084
+      ],
+      "measurement_noise": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "103": {
+      "base_body": "chasis",
+      "friction_range": [
+        0.7812683232722948,
+        0.7812683232722948
+      ],
+      "mass_scale": [
+        0.9889727289050418,
+        0.9889727289050418
+      ],
+      "base_com_m": [
+        0,
+        0
+      ],
+      "latency_s": [
+        0.002,
+        0.002
+      ],
+      "servo_gain_scale": [
+        1.0144071458237374,
+        1.0144071458237374
+      ],
+      "steer_zero_offset_rad": [
+        0.0014301699535214782,
+        0.0014301699535214782
+      ],
+      "measurement_noise": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "104": {
+      "base_body": "chasis",
+      "friction_range": [
+        0.8338564812369536,
+        0.8338564812369536
+      ],
+      "mass_scale": [
+        1.0076859259450939,
+        1.0076859259450939
+      ],
+      "base_com_m": [
+        0,
+        0
+      ],
+      "latency_s": [
+        0.0,
+        0.0
+      ],
+      "servo_gain_scale": [
+        0.9850164759176376,
+        0.9850164759176376
+      ],
+      "steer_zero_offset_rad": [
+        -0.0004997228433781312,
+        -0.0004997228433781312
+      ],
+      "measurement_noise": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "105": {
+      "base_body": "chasis",
+      "friction_range": [
+        0.8138195333601544,
+        0.8138195333601544
+      ],
+      "mass_scale": [
+        1.0196583910192503,
+        1.0196583910192503
+      ],
+      "base_com_m": [
+        0,
+        0
+      ],
+      "latency_s": [
+        0.002,
+        0.002
+      ],
+      "servo_gain_scale": [
+        1.0002681736707901,
+        1.0002681736707901
+      ],
+      "steer_zero_offset_rad": [
+        -0.00041424419406817844,
+        -0.00041424419406817844
+      ],
+      "measurement_noise": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  }
+}

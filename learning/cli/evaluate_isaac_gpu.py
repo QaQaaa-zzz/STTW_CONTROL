@@ -12,8 +12,8 @@ else:
 import torch
 from sttw_control.torch_path_policy import TorchPathPolicy
 from sttw_control.isaac_path_rollout import IsaacPathRollout
-a.output.mkdir(parents=True,exist_ok=False);torch.set_num_threads(2);torch.manual_seed(1)
-s=json.loads(a.config.read_text())
+a.output.mkdir(parents=True,exist_ok=False);torch.set_num_threads(2)
+s=json.loads(a.config.read_text());torch.manual_seed(s.get('seed',1))
 if not a.configured_lanes:s.update(num_envs=6,alphas=[0,.25,.5,.75,1,0],zero_middle=[False]*5+[True])
 if not 1<=s['num_envs']<=15:p.error('diagnostic evaluation supports 1 to 15 lanes')
 if a.channel_protocol:
