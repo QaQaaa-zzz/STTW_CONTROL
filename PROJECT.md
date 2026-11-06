@@ -1,3 +1,9 @@
+## 第三章最新执行约束：Isaac Lab 与带摆策略适配
+
+用户最新要求：带摆平台采用 Isaac Lab，以除摆机构外与 STTW 一致的共同车体为目标核对与适配。允许调整 ECBC 参数、蒸馏或重训带摆底层，以及蒸馏并续训 alpha 网络；覆盖此前第三章不新增 RL 训练要求。原 STTW 模型及已选权重独立保留。先核对资产和接口，再评估原控制器，随后按需要适配网络；后续训练继续 Go2 随机化/GPU流程、原任务难度和五档 alpha，具体预算逐阶段记录。旧 RB 模型/策略来源保留，不能把共同车体适配后的结果冒充原模型复现。
+
+原生 MuJoCo 的 `runs/pendulum_ground_compat` 仅为已完成接口排查，不作为正式跨技能环境。后续转向 Isaac Lab；文本 LLM/能力工具/受扰任务修订的修订版总体目标继续有效。
+
 ## Pendulum-bicycle skill lineage located and model pair identified
 
 `learning/configs/pendulum_bike_skill_sources.json` binds the reviewed source and first Full/Run1 student record from the existing10k evaluation request. Actual payload hashes and checkpoint XML identities match: source actor`a06acbc8…`, Run1 actor`c3eae39c…`; payloads are accessible. Run1 is an interface-preparation candidate, not a new best-model selection or a claim that all historical Full labels share one recipe. Preserve the existing training-record audit differences.
