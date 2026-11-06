@@ -1,0 +1,459 @@
+{
+  "role": "Descriptive pilot DEV uncertainty, not population or independent TEST confidence",
+  "anchor": "fixed_2.0_0.0",
+  "independent_origins": 6,
+  "task_groups": 18,
+  "resamples": 10000,
+  "seed": 20261106,
+  "scores": {
+    "fixed_2.0_0.5": {
+      "paired_success_difference": -0.16666666666666666,
+      "empirical_root_bootstrap_95_percentile": [
+        -0.3888888888888889,
+        0.0
+      ],
+      "common_success_tasks": 2,
+      "mean_time_saved_s": 0.4200000762939453,
+      "time_difference_percentile_s": [
+        -0.3600006103515625,
+        1.2000007629394531
+      ],
+      "resamples_without_common_success": 903,
+      "per_root": [
+        {
+          "origin_id": "rb_upstream_offset_01",
+          "tasks": 3,
+          "successes": 1,
+          "anchor_successes": 3,
+          "common_success_tasks": 1,
+          "time_saved_sum_s": 1.2000007629394531
+        },
+        {
+          "origin_id": "rb_upstream_offset_02",
+          "tasks": 3,
+          "successes": 0,
+          "anchor_successes": 0,
+          "common_success_tasks": 0,
+          "time_saved_sum_s": 0
+        },
+        {
+          "origin_id": "rb_upstream_offset_03",
+          "tasks": 3,
+          "successes": 1,
+          "anchor_successes": 2,
+          "common_success_tasks": 1,
+          "time_saved_sum_s": -0.3600006103515625
+        },
+        {
+          "origin_id": "rb_upstream_offset_04",
+          "tasks": 3,
+          "successes": 0,
+          "anchor_successes": 0,
+          "common_success_tasks": 0,
+          "time_saved_sum_s": 0
+        },
+        {
+          "origin_id": "rb_upstream_offset_05",
+          "tasks": 3,
+          "successes": 0,
+          "anchor_successes": 0,
+          "common_success_tasks": 0,
+          "time_saved_sum_s": 0
+        },
+        {
+          "origin_id": "rb_upstream_offset_06",
+          "tasks": 3,
+          "successes": 1,
+          "anchor_successes": 1,
+          "common_success_tasks": 0,
+          "time_saved_sum_s": 0
+        }
+      ]
+    },
+    "fixed_2.0_0.0": {
+      "paired_success_difference": 0.0,
+      "empirical_root_bootstrap_95_percentile": [
+        0.0,
+        0.0
+      ],
+      "common_success_tasks": 6,
+      "mean_time_saved_s": 0.0,
+      "time_difference_percentile_s": [
+        0.0,
+        0.0
+      ],
+      "resamples_without_common_success": 170,
+      "per_root": [
+        {
+          "origin_id": "rb_upstream_offset_01",
+          "tasks": 3,
+          "successes": 3,
+          "anchor_successes": 3,
+          "common_success_tasks": 3,
+          "time_saved_sum_s": 0.0
+        },
+        {
+          "origin_id": "rb_upstream_offset_02",
+          "tasks": 3,
+          "successes": 0,
+          "anchor_successes": 0,
+          "common_success_tasks": 0,
+          "time_saved_sum_s": 0
+        },
+        {
+          "origin_id": "rb_upstream_offset_03",
+          "tasks": 3,
+          "successes": 2,
+          "anchor_successes": 2,
+          "common_success_tasks": 2,
+          "time_saved_sum_s": 0.0
+        },
+        {
+          "origin_id": "rb_upstream_offset_04",
+          "tasks": 3,
+          "successes": 0,
+          "anchor_successes": 0,
+          "common_success_tasks": 0,
+          "time_saved_sum_s": 0
+        },
+        {
+          "origin_id": "rb_upstream_offset_05",
+          "tasks": 3,
+          "successes": 0,
+          "anchor_successes": 0,
+          "common_success_tasks": 0,
+          "time_saved_sum_s": 0
+        },
+        {
+          "origin_id": "rb_upstream_offset_06",
+          "tasks": 3,
+          "successes": 1,
+          "anchor_successes": 1,
+          "common_success_tasks": 1,
+          "time_saved_sum_s": 0.0
+        }
+      ]
+    },
+    "distance_only_kernel": {
+      "paired_success_difference": -0.1111111111111111,
+      "empirical_root_bootstrap_95_percentile": [
+        -0.3333333333333333,
+        0.0
+      ],
+      "common_success_tasks": 4,
+      "mean_time_saved_s": -0.22500014305114746,
+      "time_difference_percentile_s": [
+        -0.9500002861022949,
+        1.0
+      ],
+      "resamples_without_common_success": 170,
+      "per_root": [
+        {
+          "origin_id": "rb_upstream_offset_01",
+          "tasks": 3,
+          "successes": 1,
+          "anchor_successes": 3,
+          "common_success_tasks": 1,
+          "time_saved_sum_s": 1.0
+        },
+        {
+          "origin_id": "rb_upstream_offset_02",
+          "tasks": 3,
+          "successes": 0,
+          "anchor_successes": 0,
+          "common_success_tasks": 0,
+          "time_saved_sum_s": 0
+        },
+        {
+          "origin_id": "rb_upstream_offset_03",
+          "tasks": 3,
+          "successes": 2,
+          "anchor_successes": 2,
+          "common_success_tasks": 2,
+          "time_saved_sum_s": -1.9000005722045898
+        },
+        {
+          "origin_id": "rb_upstream_offset_04",
+          "tasks": 3,
+          "successes": 0,
+          "anchor_successes": 0,
+          "common_success_tasks": 0,
+          "time_saved_sum_s": 0
+        },
+        {
+          "origin_id": "rb_upstream_offset_05",
+          "tasks": 3,
+          "successes": 0,
+          "anchor_successes": 0,
+          "common_success_tasks": 0,
+          "time_saved_sum_s": 0
+        },
+        {
+          "origin_id": "rb_upstream_offset_06",
+          "tasks": 3,
+          "successes": 1,
+          "anchor_successes": 1,
+          "common_success_tasks": 1,
+          "time_saved_sum_s": 0.0
+        }
+      ]
+    },
+    "full_state_kernel": {
+      "paired_success_difference": -0.1111111111111111,
+      "empirical_root_bootstrap_95_percentile": [
+        -0.3333333333333333,
+        0.0
+      ],
+      "common_success_tasks": 4,
+      "mean_time_saved_s": -0.22500014305114746,
+      "time_difference_percentile_s": [
+        -0.9500002861022949,
+        1.0
+      ],
+      "resamples_without_common_success": 170,
+      "per_root": [
+        {
+          "origin_id": "rb_upstream_offset_01",
+          "tasks": 3,
+          "successes": 1,
+          "anchor_successes": 3,
+          "common_success_tasks": 1,
+          "time_saved_sum_s": 1.0
+        },
+        {
+          "origin_id": "rb_upstream_offset_02",
+          "tasks": 3,
+          "successes": 0,
+          "anchor_successes": 0,
+          "common_success_tasks": 0,
+          "time_saved_sum_s": 0
+        },
+        {
+          "origin_id": "rb_upstream_offset_03",
+          "tasks": 3,
+          "successes": 2,
+          "anchor_successes": 2,
+          "common_success_tasks": 2,
+          "time_saved_sum_s": -1.9000005722045898
+        },
+        {
+          "origin_id": "rb_upstream_offset_04",
+          "tasks": 3,
+          "successes": 0,
+          "anchor_successes": 0,
+          "common_success_tasks": 0,
+          "time_saved_sum_s": 0
+        },
+        {
+          "origin_id": "rb_upstream_offset_05",
+          "tasks": 3,
+          "successes": 0,
+          "anchor_successes": 0,
+          "common_success_tasks": 0,
+          "time_saved_sum_s": 0
+        },
+        {
+          "origin_id": "rb_upstream_offset_06",
+          "tasks": 3,
+          "successes": 1,
+          "anchor_successes": 1,
+          "common_success_tasks": 1,
+          "time_saved_sum_s": 0.0
+        }
+      ]
+    },
+    "exact_distance_full_state_kernel": {
+      "paired_success_difference": 0.0,
+      "empirical_root_bootstrap_95_percentile": [
+        -0.16666666666666666,
+        0.16666666666666666
+      ],
+      "common_success_tasks": 5,
+      "mean_time_saved_s": -0.07999992370605469,
+      "time_difference_percentile_s": [
+        -0.630000114440918,
+        0.43000030517578125
+      ],
+      "resamples_without_common_success": 170,
+      "per_root": [
+        {
+          "origin_id": "rb_upstream_offset_01",
+          "tasks": 3,
+          "successes": 2,
+          "anchor_successes": 3,
+          "common_success_tasks": 2,
+          "time_saved_sum_s": 0.8600006103515625
+        },
+        {
+          "origin_id": "rb_upstream_offset_02",
+          "tasks": 3,
+          "successes": 0,
+          "anchor_successes": 0,
+          "common_success_tasks": 0,
+          "time_saved_sum_s": 0
+        },
+        {
+          "origin_id": "rb_upstream_offset_03",
+          "tasks": 3,
+          "successes": 2,
+          "anchor_successes": 2,
+          "common_success_tasks": 2,
+          "time_saved_sum_s": -1.260000228881836
+        },
+        {
+          "origin_id": "rb_upstream_offset_04",
+          "tasks": 3,
+          "successes": 0,
+          "anchor_successes": 0,
+          "common_success_tasks": 0,
+          "time_saved_sum_s": 0
+        },
+        {
+          "origin_id": "rb_upstream_offset_05",
+          "tasks": 3,
+          "successes": 0,
+          "anchor_successes": 0,
+          "common_success_tasks": 0,
+          "time_saved_sum_s": 0
+        },
+        {
+          "origin_id": "rb_upstream_offset_06",
+          "tasks": 3,
+          "successes": 2,
+          "anchor_successes": 1,
+          "common_success_tasks": 1,
+          "time_saved_sum_s": 0.0
+        }
+      ]
+    },
+    "exact_distance_only_kernel": {
+      "paired_success_difference": 0.0,
+      "empirical_root_bootstrap_95_percentile": [
+        -0.16666666666666666,
+        0.16666666666666666
+      ],
+      "common_success_tasks": 5,
+      "mean_time_saved_s": -0.07999992370605469,
+      "time_difference_percentile_s": [
+        -0.630000114440918,
+        0.43000030517578125
+      ],
+      "resamples_without_common_success": 170,
+      "per_root": [
+        {
+          "origin_id": "rb_upstream_offset_01",
+          "tasks": 3,
+          "successes": 2,
+          "anchor_successes": 3,
+          "common_success_tasks": 2,
+          "time_saved_sum_s": 0.8600006103515625
+        },
+        {
+          "origin_id": "rb_upstream_offset_02",
+          "tasks": 3,
+          "successes": 0,
+          "anchor_successes": 0,
+          "common_success_tasks": 0,
+          "time_saved_sum_s": 0
+        },
+        {
+          "origin_id": "rb_upstream_offset_03",
+          "tasks": 3,
+          "successes": 2,
+          "anchor_successes": 2,
+          "common_success_tasks": 2,
+          "time_saved_sum_s": -1.260000228881836
+        },
+        {
+          "origin_id": "rb_upstream_offset_04",
+          "tasks": 3,
+          "successes": 0,
+          "anchor_successes": 0,
+          "common_success_tasks": 0,
+          "time_saved_sum_s": 0
+        },
+        {
+          "origin_id": "rb_upstream_offset_05",
+          "tasks": 3,
+          "successes": 0,
+          "anchor_successes": 0,
+          "common_success_tasks": 0,
+          "time_saved_sum_s": 0
+        },
+        {
+          "origin_id": "rb_upstream_offset_06",
+          "tasks": 3,
+          "successes": 2,
+          "anchor_successes": 1,
+          "common_success_tasks": 1,
+          "time_saved_sum_s": 0.0
+        }
+      ]
+    },
+    "nominal_distance_rule": {
+      "paired_success_difference": -0.16666666666666666,
+      "empirical_root_bootstrap_95_percentile": [
+        -0.3888888888888889,
+        0.0
+      ],
+      "common_success_tasks": 3,
+      "mean_time_saved_s": 0.0,
+      "time_difference_percentile_s": [
+        0.0,
+        0.0
+      ],
+      "resamples_without_common_success": 170,
+      "per_root": [
+        {
+          "origin_id": "rb_upstream_offset_01",
+          "tasks": 3,
+          "successes": 1,
+          "anchor_successes": 3,
+          "common_success_tasks": 1,
+          "time_saved_sum_s": 0.0
+        },
+        {
+          "origin_id": "rb_upstream_offset_02",
+          "tasks": 3,
+          "successes": 0,
+          "anchor_successes": 0,
+          "common_success_tasks": 0,
+          "time_saved_sum_s": 0
+        },
+        {
+          "origin_id": "rb_upstream_offset_03",
+          "tasks": 3,
+          "successes": 1,
+          "anchor_successes": 2,
+          "common_success_tasks": 1,
+          "time_saved_sum_s": 0.0
+        },
+        {
+          "origin_id": "rb_upstream_offset_04",
+          "tasks": 3,
+          "successes": 0,
+          "anchor_successes": 0,
+          "common_success_tasks": 0,
+          "time_saved_sum_s": 0
+        },
+        {
+          "origin_id": "rb_upstream_offset_05",
+          "tasks": 3,
+          "successes": 0,
+          "anchor_successes": 0,
+          "common_success_tasks": 0,
+          "time_saved_sum_s": 0
+        },
+        {
+          "origin_id": "rb_upstream_offset_06",
+          "tasks": 3,
+          "successes": 1,
+          "anchor_successes": 1,
+          "common_success_tasks": 1,
+          "time_saved_sum_s": 0.0
+        }
+      ]
+    }
+  },
+  "scope": "Sample whole origins jointly across methods; keep all distances and upstream failures. Six preselected DEV roots are not an IID population sample. Percentiles describe sensitivity to root composition; not a guarantee or post-hoc significance claim. Common-success time intervals omit and count resamples with no common successes."
+}
