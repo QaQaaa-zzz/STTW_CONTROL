@@ -23,6 +23,13 @@ for name in ('frontwheel','rearwheel'):
     q=np.array(g['quat'])[[1,2,3,0]]
     matrix=(rotation*Rotation.from_quat(q)).as_matrix().reshape(*valid.shape,3,3)
     extent=np.linalg.norm(matrix*np.array(g['size']),axis=-1)
+    if protocol['plant'].get('wheel_collision')=='cylinder':
+        count=protocol['plant'].get('wheel_profile_slices',1);width=protocol['plant']['wheel_width_m'];radius=protocol['plant']['wheel_radius_m']
+        offsets=(np.arange(count)-(count-1)/2)*width/count
+        radii=radius*np.sqrt(1-(2*offsets/width)**2)
+        radial=np.linalg.norm(matrix[:,:,:,:2],axis=-1)
+        axial=np.abs(matrix[:,:,:,2])
+        extent=np.max(radial[...,None]*radii+axial[...,None]*(np.abs(offsets)+width/(2*count)),axis=-1)
     bottom=center[:,:,2]-extent[:,:,2];wheel_bottom.append(bottom)
     support&=(center[:,:,0]>=3.6)&(center[:,:,0]<=7.6)&(np.abs(center[:,:,1])+extent[:,:,1]<=1.)
     support&=(np.abs(bottom-.16)<=.015)&(forces[:,:,index,2]>1.)

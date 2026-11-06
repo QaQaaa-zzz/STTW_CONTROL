@@ -1,0 +1,18 @@
+{
+  "fixed_roll_reference": null,
+  "dt": 0.005,
+  "wo": 40.0,
+  "wc": 8.0,
+  "disturbance_filter": 8.0,
+  "minimum_speed": 0.5,
+  "max_steer_rate": 4.0,
+  "mass": 5.090999999999999,
+  "cg_forward": 0.1180001668768571,
+  "cg_height": 0.3140677151170621,
+  "wheelbase": 0.2790300000000001,
+  "trail": 0.0,
+  "caster": -0.0,
+  "gravity": 9.8,
+  "roll_inertia_com": 0.10978469709334349,
+  "wheel_radius_m": 0.07
+}
