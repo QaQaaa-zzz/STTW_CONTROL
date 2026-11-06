@@ -77,6 +77,24 @@ def export_isaac_asset(output, source=DEFAULT_XML, *, preserve_self_collisions=F
                       force_limited=bool(model.actuator_forcelimited[i]),
                       ctrlrange=model.actuator_ctrlrange[i].tolist(),
                       forcerange=model.actuator_forcerange[i].tolist()) for i in range(model.nu)]
+    excluded = {tuple(sorted((node.get('body1'), node.get('body2'))))
+                for node in ET.fromstring(bundle.portable_xml).findall('contact/exclude')}
+    filtered_pairs = []
+    if preserve_self_collisions:
+        for i in range(1, model.nbody):
+            for j in range(i+1, model.nbody):
+                gi=[g for g in vehicle if model.geom_bodyid[g]==i]
+                gj=[g for g in vehicle if model.geom_bodyid[g]==j]
+                permitted={bool((model.geom_contype[a]&model.geom_conaffinity[b]) or
+                                (model.geom_contype[b]&model.geom_conaffinity[a])) for a in gi for b in gj}
+                if len(permitted)>1:
+                    raise ValueError('mixed per-geom collision masks need shape-level filtering')
+                pair=(name(mujoco.mjtObj.mjOBJ_BODY,i),name(mujoco.mjtObj.mjOBJ_BODY,j))
+                wi,wj=int(model.body_weldid[i]),int(model.body_weldid[j])
+                adjacent=(wi==wj or model.body_weldid[model.body_parentid[wi]]==wj or
+                          model.body_weldid[model.body_parentid[wj]]==wi)
+                if not permitted or permitted=={False} or tuple(sorted(pair)) in excluded or adjacent:
+                    filtered_pairs.append(pair)
     xml = ET.tostring(root, encoding='unicode')
     gyro_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SENSOR, 'gyro_local')
     gyro_site = int(model.sensor_objid[gyro_id])
@@ -86,6 +104,7 @@ def export_isaac_asset(output, source=DEFAULT_XML, *, preserve_self_collisions=F
                     ground_friction=model.geom_friction[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, 'floor')].tolist(),
                     actor_collision_filter=None if preserve_self_collisions else 1,
                     requires_self_collision_filtering=preserve_self_collisions,
+                    filtered_body_pairs=filtered_pairs,
                     contact_exclusions=[dict(node.attrib) for node in ET.fromstring(bundle.portable_xml).findall("contact/exclude")],
                     root_translation=root.find('worldbody/body').get('pos', '0 0 0'),
                     vehicle_geoms=[dict(name=name(mujoco.mjtObj.mjOBJ_GEOM,i), contype=int(model.geom_contype[i]), conaffinity=int(model.geom_conaffinity[i]), body=name(mujoco.mjtObj.mjOBJ_BODY, int(model.geom_bodyid[i])),

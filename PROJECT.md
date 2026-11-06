@@ -1,3 +1,11 @@
+## Isaac Lab 共同带摆车首次物理诊断
+
+`runs/pendulum_isaac_ground/limit_rounding/RESULTS.md` 与 `xy_response.png`：一lane平地、原ECBC（无Local/H75）、固定摆姿态，完成3秒/15000physics steps，未触发45deg侧倾终止；峰值侧倾0.20002deg、末端速度1.94705m/s。这是单名义直行接口证据，不是弯道/地形/RB交接验证，不据此声明泛化。实际Isaac总质量8.92421009kg，自碰撞开启，25对body按源mask/exclude/焊接及相邻关系过滤。首次采样速度2.3与reset请求2.0不一致，可能为constructor/reset缓存，原数据保留并标图；不是新初始化加速实验。采样墙钟68.46s。
+
+实现：原位增加hip/knee显式affine position servo（原kp100/kd6/30Nm和目标范围），0.2ms物理，5ms ECBC；GPU张量/物理。关节初态用逐名称配置，避免Isaac regex重叠；knee初态2.499999rad避免USD弧度/角度边界舍入，原关节范围未改。前两次启动失败无有效轨迹，原文件/日志保留；最终结果已保存，物理不重跑。新增servo限幅/阻尼测试、带摆导出2测试及原URDF回归通过。
+
+后续先修正reset首次读取并接转弯参考/冻结网络，不因资产变化自动重训；按真实任务行为决定ECBC与网络适配。原STTW评测不改。
+
 ## 带摆 URDF 导出与运动学检查
 
 现有 `isaac_urdf.py` 原位支持非原点单hinge和圆柱碰撞；URDF link改以hinge为原点，COM/geom/子节点origin同步平移，`link_frame_offsets`记录变换。`export_isaac_asset.py --preserve-self-collisions`记录源contype/conaffinity及显式exclude，不再用原无自碰撞假设拒绝候选；默认原STTW路径不变。实际候选在 `runs/pendulum_common_asset/isaac_urdf/{vehicle.urdf,contract.json}`。

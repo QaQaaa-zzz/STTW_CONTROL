@@ -78,7 +78,7 @@ class TorchVelocityServos:
     each 0.0002 s physics step, holding commands across 25 steps. This returns
     actuator torque only; passive suspension and joint damping remain separate.
     """
-    def __init__(self, contract, joint_names, device='cpu', dtype=torch.float32):
+    def __init__(self, contract, joint_names, device='cpu', dtype=torch.float32, additional_actuators=()):
         actuators = {a['name']: a for a in contract['actuators']}
         selected = [actuators[name] for name in ('cmd_steering_v', 'cmd_rearwheel_v')]
         for a in selected:
@@ -86,7 +86,7 @@ class TorchVelocityServos:
                     a['gear'] != [1., 0., 0., 0., 0., 0.] or a['gain'][0] <= 0 or
                     a['bias'][:3] != [0., 0., -a['gain'][0]]):
                 raise ValueError('unsupported source velocity-servo contract')
-        if any(a['enabled'] and a not in selected and any(a['gain']) for a in actuators.values()):
+        if any(a['enabled'] and a not in selected and a['name'] not in additional_actuators and any(a['gain']) for a in actuators.values()):
             raise ValueError('unmapped active actuator')
         self.indices = [joint_names.index(a['joint']) for a in selected]
         self.joint_count = len(joint_names)
@@ -101,4 +101,26 @@ class TorchVelocityServos:
         force = torch.maximum(self.force[:, 0], torch.minimum(self.force[:, 1], force))
         result = torch.zeros_like(joint_velocity)
         result[:, self.indices] = force
+        return result
+
+
+class TorchPositionServos:
+    """Original affine position actuators, with source target and force bounds."""
+    def __init__(self, contract, joint_names, names, device='cpu'):
+        rows={a['name']:a for a in contract['actuators']}
+        selected=[rows[n] for n in names]
+        for a in selected:
+            if not a['enabled'] or a['gear'] != [1.,0.,0.,0.,0.,0.] or a['bias'][0] != 0 or a['bias'][1] != -a['gain'][0]:
+                raise ValueError('Expected enabled unit-gear affine position servo')
+        self.indices=[joint_names.index(a['joint']) for a in selected]
+        self.kp=torch.tensor([a['gain'][0] for a in selected],device=device)
+        self.kd=torch.tensor([-a['bias'][2] for a in selected],device=device)
+        self.control=torch.tensor([a['ctrlrange'] for a in selected],device=device)
+        self.force=torch.tensor([a['forcerange'] for a in selected],device=device)
+
+    def torque(self, target, position, velocity):
+        target=torch.maximum(self.control[:,0],torch.minimum(self.control[:,1],target))
+        force=self.kp*(target-position[:,self.indices])-self.kd*velocity[:,self.indices]
+        force=torch.maximum(self.force[:,0],torch.minimum(self.force[:,1],force))
+        result=torch.zeros_like(position);result[:,self.indices]=force
         return result
