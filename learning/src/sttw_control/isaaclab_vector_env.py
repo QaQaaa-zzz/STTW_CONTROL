@@ -15,7 +15,7 @@ from .torch_controller import TorchVelocityServos,TorchPositionServos
 from .torch_observation import TorchVehicleSignals
 
 class IsaacLabVectorPlant:
-    def __init__(self,asset,terrain_paths,terrain_ids,output,servo_mode="explicit",hull_vertices=None,mesh_collision_on_geometry=False,compliant_wheels=None,friction_correlation_distance=.025,external_forces_every_iteration=False,wheel_collision="convexHull",friction_offset_threshold=.04,env_spacing=None,track_wheel_contacts=False,terrain_layout="external",pendulum_rest=None,pendulum_locked=False,physics_dt=.0002,gpu_pair_capacities=None,actuator_force_limits=None,wheel_radius_m=.1,robot_contact_offset=.01,solver_position_iterations=4,solver_velocity_iterations=1,wheel_contact_slop=0.,wheel_width_m=None,wheel_profile_slices=1):
+    def __init__(self,asset,terrain_paths,terrain_ids,output,servo_mode="explicit",hull_vertices=None,mesh_collision_on_geometry=False,compliant_wheels=None,friction_correlation_distance=.025,external_forces_every_iteration=False,wheel_collision="convexHull",friction_offset_threshold=.04,env_spacing=None,track_wheel_contacts=False,terrain_layout="external",pendulum_rest=None,pendulum_locked=False,physics_dt=.0002,gpu_pair_capacities=None,actuator_force_limits=None,wheel_radius_m=.1,robot_contact_offset=.01,solver_position_iterations=4,solver_velocity_iterations=1,wheel_contact_slop=0.,wheel_width_m=None,wheel_profile_slices=1,terrain_base_plane=False):
         self.servo_mode=servo_mode;self.physics_dt=physics_dt;self.wheel_radius_m=wheel_radius_m
         pair_capacities=gpu_pair_capacities or [2**24,2**24,2**27]
         asset=Path(asset);output=Path(output);self.contract=json.loads(asset.with_name('contract.json').read_text());self.device='cuda:0';self.count=len(terrain_ids)
@@ -53,7 +53,7 @@ class IsaacLabVectorPlant:
         self.origin=torch.as_tensor(origins,device=self.device);self.terrain_identity=[];terrain_sources={}
         sim_utils.create_prim(env_paths[0],'Xform')
         plane_paths=[]
-        if 'plane' in terrain_paths:
+        if 'plane' in terrain_paths or terrain_base_plane:
             plane=sim_utils.GroundPlaneCfg(physics_material=material);plane.func('/World/Ground',plane);plane_paths=['/World/Ground']
         for i,terrain_id in enumerate(range(len(terrain_paths)) if replicated_terrain else terrain_ids):
             if str(terrain_paths[terrain_id])=='plane':
@@ -62,8 +62,12 @@ class IsaacLabVectorPlant:
             if terrain_id not in terrain_sources:
                 path=Path(terrain_paths[terrain_id]);identity=json.loads((path/'identity.json').read_text())
                 if hashlib.sha256((path/'terrain.npz').read_bytes()).hexdigest()!=identity['sha256']:raise ValueError('terrain identity mismatch')
-                mesh=np.load(path/'terrain.npz');ground=UsdGeom.Mesh.Define(self.sim.stage,ground_path)
-                ground.GetPointsAttr().Set(Vt.Vec3fArray.FromNumpy(mesh['vertices'].astype(np.float32)));ground.GetFaceVertexCountsAttr().Set([3]*len(mesh['triangles']));ground.GetFaceVertexIndicesAttr().Set(mesh['triangles'].flatten().astype(int).tolist());UsdPhysics.CollisionAPI.Apply(ground.GetPrim());UsdPhysics.MeshCollisionAPI.Apply(ground.GetPrim()).CreateApproximationAttr('none');collision=PhysxSchema.PhysxCollisionAPI.Apply(ground.GetPrim());collision.CreateContactOffsetAttr(.01);collision.CreateRestOffsetAttr(0.);sim_utils.bind_physics_material(ground_path,'/World/Material')
+                mesh=np.load(path/'terrain.npz');triangles=mesh['triangles']
+                if terrain_base_plane:
+                    if np.any(mesh['vertices'][:,2]<0):raise ValueError('Base plane requires nonnegative terrain heights')
+                    triangles=triangles[np.any(mesh['vertices'][triangles,2]!=0,axis=1)]
+                ground=UsdGeom.Mesh.Define(self.sim.stage,ground_path)
+                ground.GetPointsAttr().Set(Vt.Vec3fArray.FromNumpy(mesh['vertices'].astype(np.float32)));ground.GetFaceVertexCountsAttr().Set([3]*len(triangles));ground.GetFaceVertexIndicesAttr().Set(triangles.flatten().astype(int).tolist());UsdPhysics.CollisionAPI.Apply(ground.GetPrim());UsdPhysics.MeshCollisionAPI.Apply(ground.GetPrim()).CreateApproximationAttr('none');collision=PhysxSchema.PhysxCollisionAPI.Apply(ground.GetPrim());collision.CreateContactOffsetAttr(.01);collision.CreateRestOffsetAttr(0.);sim_utils.bind_physics_material(ground_path,'/World/Material')
                 terrain_sources[terrain_id]=(ground_path,identity)
             else:
                 prim=self.sim.stage.DefinePrim(ground_path);prim.GetReferences().AddInternalReference(terrain_sources[terrain_id][0]);prim.SetInstanceable(True)
