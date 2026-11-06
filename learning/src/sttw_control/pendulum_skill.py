@@ -9,12 +9,11 @@ import json
 import hashlib
 from types import SimpleNamespace
 
-import jax
-from jax import numpy as jp
 
 
 class PendulumSkill:
     def __init__(self, registry: Path, skill_id: str):
+        import jax
         from jit_dvgc.checkpoint import CheckpointIdentity, load_checkpoint
         from jit_dvgc.config import load_config
         from jit_dvgc.constants import ACTOR_OBSERVATION_SIZE, PRIVILEGED_OBSERVATION_SIZE
@@ -41,6 +40,7 @@ class PendulumSkill:
         # Inference only needs dimensions, not the training reset pool or PPO budget.
         dimensions = SimpleNamespace(actor_observation_size=ACTOR_OBSERVATION_SIZE,
             privileged_observation_size=PRIVILEGED_OBSERVATION_SIZE, action_size=4)
+        self.payload=payload
         self.policy = jax.jit(make_checkpoint_policy(dimensions, payload, deterministic=True))
 
     def infer(self, actor_observation, knee_position):
@@ -49,6 +49,8 @@ class PendulumSkill:
         Observation is the original 76-D FIFO plus jump signal. Targets are
         steering rad, rear-wheel rad/s, hip rad, knee rad, in that order.
         """
+        import jax
+        from jax import numpy as jp
         from jit_dvgc.action_mapping import map_action
 
         observation = jp.asarray(actor_observation, dtype=jp.float32)
@@ -94,3 +96,30 @@ class TorchPendulumObservation:
         self.valid_count=(self.valid_count+1).clamp_max(3)
         self.frames[:,:,-1]=(torch.arange(3,device=root.device)[None]>=3-self.valid_count[:,None])
         return torch.cat((self.frames.flatten(1),jump_signal[:,None]),dim=-1)
+
+class TorchPendulumSkill:
+    """Exact deterministic Brax actor arrays exported for Isaac Lab inference."""
+    def __init__(self, bundle, device='cuda:0'):
+        import numpy as np
+        import torch
+        bundle=Path(bundle);self.identity=json.loads((bundle/'identity.json').read_text())
+        path=bundle/'actor.npz'
+        if hashlib.sha256(path.read_bytes()).hexdigest()!=self.identity['artifact_sha256']:
+            raise ValueError('Pendulum actor identity mismatch')
+        data=np.load(path);to=lambda x:torch.as_tensor(x,device=device)
+        self.weights=[(to(data[f'kernel_{i}']),to(data[f'bias_{i}'])) for i in range(4)]
+        self.mean=to(data['mean']);self.std=to(data['std']);self.mapping=self.identity['mapping']
+        self.lo=to(np.asarray(self.mapping['ctrl_min'],dtype=np.float32));self.hi=to(np.asarray(self.mapping['ctrl_max'],dtype=np.float32))
+
+    def infer(self, observation, knee_position):
+        import torch
+        with torch.no_grad():
+            x=(observation-self.mean)/self.std
+            for weight,bias in self.weights[:-1]:x=torch.nn.functional.silu(x@weight+bias)
+            weight,bias=self.weights[-1];action=torch.tanh((x@weight+bias)[...,:4])
+            m=self.mapping
+            absolute=lambda a,initial,i:torch.where(a>=0,initial+a*(self.hi[i]-initial),initial+a*(initial-self.lo[i]))
+            hip=absolute(action[:,2],m['hip_initial'],2)
+            knee=absolute(action[:,3],m['knee_initial'],3) if m['joint_target_semantics']=='keyframe_centered_absolute' else knee_position-action[:,3]*m['knee_target_delta']
+            target=torch.stack((action[:,0]*self.hi[0],m['base_rear_speed']+action[:,1]*m['rear_speed_delta'],hip,knee),dim=-1)
+            return action,torch.maximum(self.lo,torch.minimum(self.hi,target))

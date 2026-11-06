@@ -1,3 +1,11 @@
+## 锁摆左右弯完成，原跳跃策略与RB候选GPU推理就绪
+
+`runs/pendulum_h75_locked/RESULTS.md`包含两个弯向的同图五alpha/Zero、全程路径速度指标。H75 10/10回合完整10s并goal；右弯pathRMSE .293/.164/.134/.102/.087m，尾段摆动和严格hold失败保留，按用户决定推进不重训。Zero两弯提前域退出，不称摔倒。左弯旧出图错误已修，不重复物理。
+
+`export_pendulum_skill.py`通过原PendulumSkill/checkpoint身份加载，原样导出原始source与rb_run1_candidate的76→256→256→256→8 SiLU权重、mean/std、动作映射到runs/pendulum_torch_skills。Torch确定性tanh前四logits推理保留原网络/权重，无蒸馏。各16个声明数值输入与原JAX比对；Isaac Lab环境cuda:0两策略动作max误差2.384e-7、目标max误差≤2.861e-6。这里是推理实现一致，不是物理sim2sim或跳跃成功。候选Run1仍非best选择结论。JAX依赖已移入原适配类局部，Torch观测/推理无需在Isaac环境装JAX。
+
+下一步真实共同模型上地面锁摆→释放→原策略/RB接管，保持真实FIFO与物理状态；观测实际加速度及地面动作历史约定尚需显式接入。未运行完整跨技能任务，不因GPU推理通过称章节完成。
+
 ## 锁摆H75左弯完成；RB观测组装实现待物理接入
 
 `runs/pendulum_h75_locked/RESULTS.md`先给实际XY。五alpha皆完整10秒/goal，路径RMSE .232/.158/.110/.064/.083m，速度RMSE .149/.105/.076/.055/.039m/s；严格final_hold按各行记录，不因此重训或要求单调排序。Zero9.18s domain_exit，末roll-.02491rad，非摔倒。平面绘图错误plane/identity.json已原位修复并复用轨迹补全，原批处理退出后仅继续右弯session19125，未重跑预热/左弯。用户认可当前效果并要求推进。
