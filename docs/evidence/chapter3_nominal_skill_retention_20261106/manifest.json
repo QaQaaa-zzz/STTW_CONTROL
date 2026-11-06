@@ -1,0 +1,62 @@
+{
+  "simulation_python": "/home/qy/miniconda3/envs/env_isaaclab/bin/python",
+  "analysis_python": "/home/qy/miniconda3/envs/mjp/bin/python",
+  "cases": [
+    {
+      "case_id": "source_nominal_v1.8",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_nominal_skill_retention/source_nominal_v1.8.json",
+      "analysis_kind": "jump_only",
+      "seconds": 8.0,
+      "retention": true,
+      "skill": "source",
+      "source_panel_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/panel/source_nominal_v1.8.json"
+    },
+    {
+      "case_id": "source_nominal_v2.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_nominal_skill_retention/source_nominal_v2.0.json",
+      "analysis_kind": "jump_only",
+      "seconds": 8.0,
+      "retention": true,
+      "skill": "source",
+      "source_panel_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/panel/source_nominal_v2.0.json"
+    },
+    {
+      "case_id": "source_nominal_v2.2",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_nominal_skill_retention/source_nominal_v2.2.json",
+      "analysis_kind": "jump_only",
+      "seconds": 8.0,
+      "retention": true,
+      "skill": "source",
+      "source_panel_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/panel/source_nominal_v2.2.json"
+    },
+    {
+      "case_id": "rb_run1_candidate_nominal_v1.8",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_nominal_skill_retention/rb_run1_candidate_nominal_v1.8.json",
+      "analysis_kind": "jump_only",
+      "seconds": 8.0,
+      "retention": true,
+      "skill": "rb_run1_candidate",
+      "source_panel_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/panel/rb_run1_candidate_nominal_v1.8.json"
+    },
+    {
+      "case_id": "rb_run1_candidate_nominal_v2.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_nominal_skill_retention/rb_run1_candidate_nominal_v2.0.json",
+      "analysis_kind": "jump_only",
+      "seconds": 8.0,
+      "retention": true,
+      "skill": "rb_run1_candidate",
+      "source_panel_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/panel/rb_run1_candidate_nominal_v2.0.json"
+    },
+    {
+      "case_id": "rb_run1_candidate_nominal_v2.2",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_nominal_skill_retention/rb_run1_candidate_nominal_v2.2.json",
+      "analysis_kind": "jump_only",
+      "seconds": 8.0,
+      "retention": true,
+      "skill": "rb_run1_candidate",
+      "source_panel_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/panel/rb_run1_candidate_nominal_v2.2.json"
+    }
+  ],
+  "role": "Original nominal-start retention baseline, same frozen DEV panel, no optimization",
+  "maximum_physics_lane_steps": 19200
+}

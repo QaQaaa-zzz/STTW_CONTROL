@@ -1,0 +1,224 @@
+{
+  "role": "Six fixed nominal-start DEV cases, not independent recovery-distribution validation",
+  "rows": [
+    {
+      "case_id": "source_nominal_v1.8",
+      "skill": "source",
+      "initial_speed_m_s": 1.8,
+      "duration_s": 4.025000095367432,
+      "full_window": false,
+      "strict_support": false,
+      "longest_support_s": 0.3450000286102295,
+      "peak_root_z_m": 0.5420358777046204,
+      "terminal_flags": {
+        "ground_domain_exit": null,
+        "ground_policy_fault": null,
+        "ground_alive": null,
+        "roll_limit": true,
+        "low_root": false,
+        "nonfinite_state": false,
+        "legacy_physical_termination_scope": "Legacy field includes controller/domain termination; inspect flags before attributing a physical fall"
+      },
+      "raw_first_airborne_interval_s": [
+        0.0,
+        0.03999999910593033
+      ],
+      "post_contact_airborne_intervals_s": [
+        [
+          1.7899999618530273,
+          2.305000066757202
+        ],
+        [
+          2.325000047683716,
+          2.3499999046325684
+        ],
+        [
+          3.9549999237060547,
+          4.025000095367432
+        ]
+      ],
+      "first_wheel_contact_s": 0.07999999821186066,
+      "simulation_wall_s": 38.0761777000007,
+      "physics_steps": 1610,
+      "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_nominal_skill_retention/source_nominal_v1.8"
+    },
+    {
+      "case_id": "source_nominal_v2.0",
+      "skill": "source",
+      "initial_speed_m_s": 2.0,
+      "duration_s": 2.365000009536743,
+      "full_window": false,
+      "strict_support": false,
+      "longest_support_s": 0.0,
+      "peak_root_z_m": 0.5549474358558655,
+      "terminal_flags": {
+        "ground_domain_exit": null,
+        "ground_policy_fault": null,
+        "ground_alive": null,
+        "roll_limit": true,
+        "low_root": false,
+        "nonfinite_state": false,
+        "legacy_physical_termination_scope": "Legacy field includes controller/domain termination; inspect flags before attributing a physical fall"
+      },
+      "raw_first_airborne_interval_s": [
+        0.0,
+        0.03999999910593033
+      ],
+      "post_contact_airborne_intervals_s": [
+        [
+          1.2899999618530273,
+          1.8200000524520874
+        ],
+        [
+          2.069999933242798,
+          2.3350000381469727
+        ]
+      ],
+      "first_wheel_contact_s": 0.07999999821186066,
+      "simulation_wall_s": 24.34836469199945,
+      "physics_steps": 946,
+      "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_nominal_skill_retention/source_nominal_v2.0"
+    },
+    {
+      "case_id": "source_nominal_v2.2",
+      "skill": "source",
+      "initial_speed_m_s": 2.2,
+      "duration_s": 2.0250000953674316,
+      "full_window": false,
+      "strict_support": false,
+      "longest_support_s": 0.0,
+      "peak_root_z_m": 0.2891429364681244,
+      "terminal_flags": {
+        "ground_domain_exit": null,
+        "ground_policy_fault": null,
+        "ground_alive": null,
+        "roll_limit": true,
+        "low_root": false,
+        "nonfinite_state": false,
+        "legacy_physical_termination_scope": "Legacy field includes controller/domain termination; inspect flags before attributing a physical fall"
+      },
+      "raw_first_airborne_interval_s": [
+        0.0,
+        0.03999999910593033
+      ],
+      "post_contact_airborne_intervals_s": [
+        [
+          1.600000023841858,
+          1.8250000476837158
+        ]
+      ],
+      "first_wheel_contact_s": 0.07999999821186066,
+      "simulation_wall_s": 16.371615733994986,
+      "physics_steps": 810,
+      "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_nominal_skill_retention/source_nominal_v2.2"
+    },
+    {
+      "case_id": "rb_run1_candidate_nominal_v1.8",
+      "skill": "rb_run1_candidate",
+      "initial_speed_m_s": 1.8,
+      "duration_s": 2.174999952316284,
+      "full_window": false,
+      "strict_support": false,
+      "longest_support_s": 0.0,
+      "peak_root_z_m": 0.5577297210693359,
+      "terminal_flags": {
+        "ground_domain_exit": null,
+        "ground_policy_fault": null,
+        "ground_alive": null,
+        "roll_limit": true,
+        "low_root": false,
+        "nonfinite_state": false,
+        "legacy_physical_termination_scope": "Legacy field includes controller/domain termination; inspect flags before attributing a physical fall"
+      },
+      "raw_first_airborne_interval_s": [
+        0.0,
+        0.03999999910593033
+      ],
+      "post_contact_airborne_intervals_s": [
+        [
+          1.3849999904632568,
+          1.940000057220459
+        ]
+      ],
+      "first_wheel_contact_s": 0.07999999821186066,
+      "simulation_wall_s": 23.276878378004767,
+      "physics_steps": 870,
+      "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_nominal_skill_retention/rb_run1_candidate_nominal_v1.8"
+    },
+    {
+      "case_id": "rb_run1_candidate_nominal_v2.0",
+      "skill": "rb_run1_candidate",
+      "initial_speed_m_s": 2.0,
+      "duration_s": 2.065000057220459,
+      "full_window": false,
+      "strict_support": false,
+      "longest_support_s": 0.0,
+      "peak_root_z_m": 0.5704011917114258,
+      "terminal_flags": {
+        "ground_domain_exit": null,
+        "ground_policy_fault": null,
+        "ground_alive": null,
+        "roll_limit": true,
+        "low_root": false,
+        "nonfinite_state": false,
+        "legacy_physical_termination_scope": "Legacy field includes controller/domain termination; inspect flags before attributing a physical fall"
+      },
+      "raw_first_airborne_interval_s": [
+        0.0,
+        0.03999999910593033
+      ],
+      "post_contact_airborne_intervals_s": [
+        [
+          1.225000023841858,
+          1.7949999570846558
+        ],
+        [
+          2.0250000953674316,
+          2.065000057220459
+        ]
+      ],
+      "first_wheel_contact_s": 0.07999999821186066,
+      "simulation_wall_s": 19.882709073994192,
+      "physics_steps": 826,
+      "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_nominal_skill_retention/rb_run1_candidate_nominal_v2.0"
+    },
+    {
+      "case_id": "rb_run1_candidate_nominal_v2.2",
+      "skill": "rb_run1_candidate",
+      "initial_speed_m_s": 2.2,
+      "duration_s": 1.8250000476837158,
+      "full_window": false,
+      "strict_support": false,
+      "longest_support_s": 0.0,
+      "peak_root_z_m": 0.5747519731521606,
+      "terminal_flags": {
+        "ground_domain_exit": null,
+        "ground_policy_fault": null,
+        "ground_alive": null,
+        "roll_limit": true,
+        "low_root": false,
+        "nonfinite_state": false,
+        "legacy_physical_termination_scope": "Legacy field includes controller/domain termination; inspect flags before attributing a physical fall"
+      },
+      "raw_first_airborne_interval_s": [
+        0.0,
+        0.03999999910593033
+      ],
+      "post_contact_airborne_intervals_s": [
+        [
+          0.9449999928474426,
+          1.4950000047683716
+        ]
+      ],
+      "first_wheel_contact_s": 0.07999999821186066,
+      "simulation_wall_s": 17.82973172399943,
+      "physics_steps": 730,
+      "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_nominal_skill_retention/rb_run1_candidate_nominal_v2.2"
+    }
+  ],
+  "full_window": 0,
+  "strict_support": 0,
+  "physics_steps": 5792,
+  "simulation_wall_s": 139.78547730199352,
+  "diagnostic": "Additional takeoff diagnostic excludes initial clearance before any observed wheel contact. Requires both wheels clear >.02m with <=1N contact for >=.02s after support; does not change strict landing or terminal criteria. Raw airborne fields retained unchanged."
+}
