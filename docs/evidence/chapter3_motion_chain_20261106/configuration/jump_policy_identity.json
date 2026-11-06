@@ -1,0 +1,42 @@
+{
+  "skill_id": "update2",
+  "source_archive": "/home/qy/ISAAC\u2014\u2014SIM/worktrees/jump-landing-v2/sim2sim_v2/runs/deliveries/dual_landing_01966080_20261009",
+  "source_actor_sha256": "d2648c4f33b3e191293d2a4281d9a95f475f2a2be09c14a0ad8f605235c2d1a0",
+  "artifact_sha256": "80529e5c6ffdc4036da9ee08a4218193d706ae55e23ce02e9cc7cd840c01be39",
+  "mapping": {
+    "ctrl_min": [
+      -0.8,
+      -5,
+      -1.3,
+      -1.5
+    ],
+    "ctrl_max": [
+      0.8,
+      40,
+      0.5,
+      2.5
+    ],
+    "hip_initial": -1.2,
+    "knee_initial": 2.5,
+    "knee_target_delta": 0.0,
+    "base_rear_speed": 12.0,
+    "joint_target_semantics": "keyframe_centered_absolute",
+    "rear_speed_delta": 12.0
+  },
+  "conversion": "exact selected Torch actor/critic/normalizer arrays; no extra optimization",
+  "model_scope": "original RB whole vehicle; new Isaac Lab adaptation with friction0.8 and Go2 randomization",
+  "source_learner_sha256": "a419949a00b766ca8b5f80045aeddb5209700236ef8b06a7c140fd3312522c54",
+  "network": "76/106-256-256-256-8/1 SiLU",
+  "source_bundle": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/rb_sttw_platform/training_bundle",
+  "training_checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/rb_isaac150/training/model_step_best.pt",
+  "training_checkpoint_sha256": "5be947c490971a92dd17412bc96cf4b6155a7957f3f4eee675f312922c9720d8",
+  "stored_checkpoint_iter": 2,
+  "scored_policy_update": 2,
+  "selection_evidence": {
+    "update": 2,
+    "mean_step_reward": 1.314517855644226,
+    "samples": 98304,
+    "reward_scaling": 0.1
+  },
+  "source_note": "source records identify original Phase U initialization; training_checkpoint identifies current weights"
+}

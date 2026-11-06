@@ -1,0 +1,86 @@
+{
+  "asset": "runs/rb_sttw_platform/isaac_asset/vehicle.urdf",
+  "controller_config": "learning/configs/rb_sttw_rounded_controller.json",
+  "lower_actor": "runs/local300_torch_portable_parity/actor.npz",
+  "lower_sha256": "517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125",
+  "plant_options": {
+    "physics_dt": 0.005,
+    "wheel_radius_m": 0.07,
+    "gpu_pair_capacities": [
+      1048576,
+      1048576,
+      1048576
+    ],
+    "servo_mode": "hybrid",
+    "compliant_wheels": null,
+    "wheel_collision": "cylinder",
+    "hull_vertices": 64,
+    "robot_contact_offset": 0.001,
+    "mesh_collision_on_geometry": true,
+    "solver_position_iterations": 16,
+    "solver_velocity_iterations": 4,
+    "wheel_width_m": 0.05,
+    "wheel_profile_slices": 21,
+    "pendulum_rest": [
+      -1.2,
+      2.499999
+    ],
+    "pendulum_locked": true,
+    "env_spacing": 3.0
+  },
+  "initial_state": "runs/rb_ground_standard1500/initial_state.npz",
+  "selected_lower": "learning/configs/isaaclab_selected_lower.json",
+  "role": "Locked pendulum H75 ground execution, nominal DEV",
+  "num_envs": 6,
+  "alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1,
+    0
+  ],
+  "zero_middle": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    true
+  ],
+  "evaluation_role": "RB chassis ground DEV: frozen H75 five alpha plus pure pursuit; ECBC+ESO only, no lower residual or training",
+  "case_labels": [
+    "alpha0",
+    "alpha025",
+    "alpha05",
+    "alpha075",
+    "alpha1",
+    "Zero"
+  ],
+  "auto_reset_horizon": false,
+  "replanning": {
+    "original_route": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/rb_h75_ecbc_ground/left90_R2/bundle/route.npz",
+    "period_s": 0.5,
+    "departure_m": 0.3,
+    "arrival_radius_m": 2.0,
+    "radius_m": 1.8,
+    "enabled": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "goal_after_turn_m": 5.0
+  },
+  "user_speed_m_s": 2.3,
+  "zero_lower": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ]
+}

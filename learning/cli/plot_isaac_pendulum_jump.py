@@ -26,13 +26,13 @@ if protocol['spec'].get('ground_route'):
  ref=route['xy'][:min(end+51,len(route['xy']))];ax[0].plot(ref[:,0],ref[:,1],color='gray',ls=':',label='Original ground route')
 else:ax[0].axhline(0,color='gray',ls=':',label='Straight approach reference')
 ax[0].set(xlabel='World x (m)',ylabel='World y (m)');ax[0].set_aspect('equal',adjustable='datalim');ax[0].legend(fontsize=8)
-ax[1].plot([1,3.6,3.6,7.6],[0,0,.16,.16],color='gray',ls=':',label='Platform surface');ax[1].set(xlabel='World x (m)',ylabel='Root height (m)');ax[1].legend(fontsize=8)
+ax[1].plot([1,protocol['spec'].get('platform_front_x',3.6),protocol['spec'].get('platform_front_x',3.6),protocol['spec'].get('platform_back_x',7.6)],[0,0,.16,.16],color='gray',ls=':',label='Platform surface');ax[1].set(xlabel='World x (m)',ylabel='Root height (m)');ax[1].legend(fontsize=8)
 ax[2].set(xlabel='Time (s)',ylabel='Roll (deg)');ax[2].legend(fontsize=8)
 ax[3].axhline(protocol['spec']['approach_speed'],ls=':',color='gray',label='Approach speed request');ax[3].set(xlabel='Time (s)',ylabel='Measured forward speed (m/s)')
 if landing is not None:
  ax[3].hlines(protocol['spec']['landing_return']['speed_m_s'],landing,t[-1,0,0],ls='--',color='black',label='Resumed ground request')
  for axis in (ax[2],ax[3],ax[4],ax[5]):axis.axvline(landing,ls='--',color='green',alpha=.6,label='Landing-to-ground handoff')
-ax[4].set(xlabel='Time (s)',ylabel='Last policy rear target, before delay (rad/s)')
+ax[4].set(xlabel='Time (s)',ylabel='Raw jump-policy rear target, before transition override (rad/s)')
 ax[5].axhline(0,ls=':',color='gray');ax[5].set(xlabel='Time (s)',ylabel='Frontmost collision distance to edge (m)')
 if np.isfinite(handoff):
  for a in (ax[2],ax[3],ax[4],ax[5]):a.axvline(handoff,ls=':',color='black',alpha=.5,label='Ground-to-jump handoff')

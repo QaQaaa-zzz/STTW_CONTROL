@@ -89,7 +89,7 @@ previous_root_velocity=plant.roots[:,7:10].clone()
 for k in range(steps+1):
  if ground is not None and not active and (returned or not spec.get('ground_after_landing_only',False)) and k%4:continue
  m,pose,speed=plant.observe();root=plant.roots.clone();root[:,:3]-=plant.origin
- distance=3.6-(geometry.frontmost_x(plant.rigid)-plant.origin[:,0])
+ distance=spec.get('platform_front_x',3.6)-(geometry.frontmost_x(plant.rigid)-plant.origin[:,0])
  row=torch.cat((torch.full((n,1),k*.005,device='cuda:0'),root[:,:3],speed[:,None],m[:,:4],plant.dofs[:,plant.pendulum_servos.indices,0],distance[:,None]),-1)
  rows.append(row);valid.append(alive.clone());actions.append(last.clone())
  if spec.get('record_body_states',False):
@@ -101,7 +101,7 @@ for k in range(steps+1):
  alive &= torch.isfinite(row).all(-1)&(m[:,0].abs()<torch.pi/4)&(root[:,2]>0.05)
  if k==steps or not bool(alive.any()):break
  if k%4==0:
-  inside=(root[:,0]>=2.5)&(root[:,0]<=4.0);consumed|=entered&~inside;entered|=inside
+  inside=(root[:,0]>=spec.get('platform_front_x',3.6)-1.1)&(root[:,0]<=spec.get('platform_front_x',3.6)+.4);consumed|=entered&~inside;entered|=inside
   signal=(inside&~consumed).float()
   acceleration=root_acceleration if spec.get('root_acceleration_difference',False) else plant.robot.data.body_com_acc_w[:,plant.bodies.index('chasis'),:3]
   obs=torch.cat((history.frames.flatten(1),signal[:,None]),-1) if k==0 and spec.get('zero_initial_history',False) else history.advance(root,plant.dofs[:,:,0],plant.dofs[:,:,1],acceleration,distance,last,signal)
@@ -118,7 +118,7 @@ for k in range(steps+1):
   wheels=plant.rigid[:,ids,:3]-plant.origin[:,None,:]
   roll,pitch,yaw=euler_xyz_from_quat(plant.robot.data.root_link_quat_w)
   pitch=torch.atan2(torch.sin(pitch),torch.cos(pitch))
-  on_platform=((wheels[:,:,0]>3.6)&(wheels[:,:,0]<7.6)&(wheels[:,:,1].abs()<.9)&((wheels[:,:,2]-.23).abs()<.025)).all()
+  on_platform=((wheels[:,:,0]>spec.get('platform_front_x',3.6))&(wheels[:,:,0]<spec.get('platform_back_x',7.6))&(wheels[:,:,1].abs()<.9)&((wheels[:,:,2]-.23).abs()<.025)).all()
   supported=(plant.contact[:,ids,2]>1.).all()
   settled=bool(on_platform & supported & (m[:,0].abs()<.15).all() & (pitch.abs()<.15).all())
   landing_ticks=landing_ticks+1 if settled else 0

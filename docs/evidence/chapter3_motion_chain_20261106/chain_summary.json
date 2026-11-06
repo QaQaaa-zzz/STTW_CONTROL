@@ -1,0 +1,91 @@
+{
+  "role": "Single nominal DEV, no robustness claim",
+  "complete": true,
+  "checks": {
+    "full_window": true,
+    "ordered_approach": true,
+    "original_path_corridor": true,
+    "stable_landing": true,
+    "ground_return": true,
+    "continued_time": true,
+    "continued_forward": true
+  },
+  "criteria": {
+    "corridor_half_width_m": 1.0,
+    "waypoints": [
+      [
+        -4.0,
+        -8.0
+      ],
+      [
+        -4.0,
+        -4.8
+      ],
+      [
+        -4.0,
+        -2
+      ],
+      [
+        -2.0,
+        0
+      ],
+      [
+        6.0,
+        0
+      ]
+    ],
+    "waypoint_radius_m": 1.0,
+    "minimum_post_handoff_s": 2.0,
+    "minimum_post_handoff_forward_m": 2.0
+  },
+  "passed_waypoints": [
+    {
+      "point": [
+        -4.0,
+        -8.0
+      ],
+      "time_s": 0.0
+    },
+    {
+      "point": [
+        -4.0,
+        -4.8
+      ],
+      "time_s": 1.5800000429153442
+    },
+    {
+      "point": [
+        -4.0,
+        -2
+      ],
+      "time_s": 3.0
+    },
+    {
+      "point": [
+        -2.0,
+        0
+      ],
+      "time_s": 4.71999979019165
+    },
+    {
+      "point": [
+        6.0,
+        0
+      ],
+      "time_s": 8.720000267028809
+    }
+  ],
+  "max_original_path_error_m": 0.7902385592460632,
+  "path_rmse_m": 0.22320721514683045,
+  "post_handoff_s": 7.640000343322754,
+  "post_handoff_forward_m": 11.295435905456543,
+  "landing": {
+    "skill": "update2",
+    "landing_hold_1s": true,
+    "longest_hold_s": 1.260000228881836,
+    "interval_s": [
+      12.53499984741211,
+      13.795000076293945
+    ]
+  }
+}

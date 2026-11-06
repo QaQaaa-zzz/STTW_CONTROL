@@ -1,0 +1,209 @@
+[
+  {
+    "run": "rb_offroad_turn_chain/evaluation",
+    "status": "complete",
+    "elapsed_s": 0.8448139459997037,
+    "physics_lane_steps": 80,
+    "landing_return_executed": false,
+    "ground_controller": "H75+ECBC (zero lower residual)",
+    "cases": [
+      {
+        "skill": "update2",
+        "duration_s": 0.4000000059604645,
+        "physical_termination": true,
+        "peak_root_z": 0.15000000596046448,
+        "final_xyz": [
+          -3.8465638160705566,
+          -6.2895684242248535,
+          0.1156502366065979
+        ],
+        "peak_abs_roll_deg": 45.456329345703125,
+        "full_jump_success": "not adjudicated; requires clearance and landing evidence"
+      }
+    ]
+  },
+  {
+    "run": "rb_offroad_warm_start",
+    "status": "complete",
+    "elapsed_s": 1.9252678949997062,
+    "physics_lane_steps": 180,
+    "landing_return_executed": false,
+    "ground_controller": "H75+ECBC (zero lower residual)",
+    "cases": [
+      {
+        "skill": "update2",
+        "duration_s": 0.8999999761581421,
+        "physical_termination": true,
+        "peak_root_z": 0.14165353775024414,
+        "final_xyz": [
+          -4.265780925750732,
+          -5.413669109344482,
+          0.11335307359695435
+        ],
+        "peak_abs_roll_deg": 41.632301330566406,
+        "full_jump_success": "not adjudicated; requires clearance and landing evidence"
+      }
+    ]
+  },
+  {
+    "run": "rb_offroad_plane_support",
+    "status": "complete",
+    "elapsed_s": 2.515150461000303,
+    "physics_lane_steps": 244,
+    "landing_return_executed": false,
+    "ground_controller": "H75+ECBC (zero lower residual)",
+    "cases": [
+      {
+        "skill": "update2",
+        "duration_s": 1.2200000286102295,
+        "physical_termination": true,
+        "peak_root_z": 0.14888915419578552,
+        "final_xyz": [
+          -3.8658368587493896,
+          -4.687707424163818,
+          0.10945861041545868
+        ],
+        "peak_abs_roll_deg": 44.20823287963867,
+        "full_jump_success": "not adjudicated; requires clearance and landing evidence"
+      }
+    ]
+  },
+  {
+    "run": "rb_offroad_long_wave/evaluation",
+    "status": "complete",
+    "elapsed_s": 4.217110338999191,
+    "physics_lane_steps": 396,
+    "landing_return_executed": false,
+    "ground_controller": "H75+ECBC (zero lower residual)",
+    "cases": [
+      {
+        "skill": "update2",
+        "duration_s": 1.9800000190734863,
+        "physical_termination": true,
+        "peak_root_z": 0.14352118968963623,
+        "final_xyz": [
+          -3.9734270572662354,
+          -5.307926654815674,
+          0.14226052165031433
+        ],
+        "peak_abs_roll_deg": 40.370765686035156,
+        "full_jump_success": "not adjudicated; requires clearance and landing evidence"
+      }
+    ]
+  },
+  {
+    "run": "rb_offroad_filtered_rate",
+    "status": "complete",
+    "elapsed_s": 4.182489761000397,
+    "physics_lane_steps": 400,
+    "landing_return_executed": false,
+    "ground_controller": "H75+ECBC (zero lower residual)",
+    "cases": [
+      {
+        "skill": "update2",
+        "duration_s": 2.0,
+        "physical_termination": true,
+        "peak_root_z": 0.17672814428806305,
+        "final_xyz": [
+          -4.210914611816406,
+          -5.29388427734375,
+          0.16062942147254944
+        ],
+        "peak_abs_roll_deg": 40.19637680053711,
+        "full_jump_success": "not adjudicated; requires clearance and landing evidence"
+      }
+    ]
+  },
+  {
+    "run": "rb_offroad_contact_dt001",
+    "status": "complete",
+    "elapsed_s": 49.90233346599962,
+    "physics_lane_steps": 8435,
+    "landing_return_executed": false,
+    "ground_controller": "H75+ECBC (zero lower residual)",
+    "cases": [
+      {
+        "skill": "update2",
+        "duration_s": 8.4350004196167,
+        "physical_termination": true,
+        "peak_root_z": 0.569404125213623,
+        "final_xyz": [
+          4.348051071166992,
+          0.12794499099254608,
+          0.34824037551879883
+        ],
+        "peak_abs_roll_deg": 109.66612243652344,
+        "full_jump_success": "not adjudicated; requires clearance and landing evidence"
+      }
+    ]
+  },
+  {
+    "run": "rb_offroad_contact_dt0025",
+    "status": "complete",
+    "elapsed_s": 24.69425705699905,
+    "physics_lane_steps": 3498,
+    "landing_return_executed": false,
+    "ground_controller": "H75+ECBC (zero lower residual)",
+    "cases": [
+      {
+        "skill": "update2",
+        "duration_s": 8.744999885559082,
+        "physical_termination": true,
+        "peak_root_z": 0.5742807388305664,
+        "final_xyz": [
+          4.283384799957275,
+          0.07522035390138626,
+          0.3651387095451355
+        ],
+        "peak_abs_roll_deg": 53.11320877075195,
+        "full_jump_success": "not adjudicated; requires clearance and landing evidence"
+      }
+    ]
+  },
+  {
+    "run": "rb_offroad_long_approach/evaluation",
+    "status": "complete",
+    "elapsed_s": 13.4416654380002,
+    "physics_lane_steps": 1712,
+    "landing_return_executed": false,
+    "ground_controller": "H75+ECBC (zero lower residual)",
+    "cases": [
+      {
+        "skill": "update2",
+        "duration_s": 4.28000020980835,
+        "physical_termination": true,
+        "peak_root_z": 0.14046552777290344,
+        "final_xyz": [
+          -8.066520690917969,
+          -0.4426683485507965,
+          0.11831797659397125
+        ],
+        "peak_abs_roll_deg": 10.172008514404297,
+        "full_jump_success": "not adjudicated; requires clearance and landing evidence"
+      }
+    ]
+  },
+  {
+    "run": "rb_offroad_platform_shift/evaluation",
+    "status": "complete",
+    "elapsed_s": 60.04895110799953,
+    "physics_lane_steps": 8800,
+    "landing_return_executed": true,
+    "ground_controller": "H75+ECBC (zero lower residual)",
+    "cases": [
+      {
+        "skill": "update2",
+        "duration_s": 22.0,
+        "physical_termination": false,
+        "peak_root_z": 0.5260226726531982,
+        "final_xyz": [
+          22.51773452758789,
+          -0.07855060696601868,
+          0.11889820545911789
+        ],
+        "peak_abs_roll_deg": 12.222540855407715,
+        "full_jump_success": "not adjudicated; requires clearance and landing evidence"
+      }
+    ]
+  }
+]
