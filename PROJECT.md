@@ -1,3 +1,9 @@
+## dt005训练53轮与后续候选比较准备
+
+训练pid4094392已核实live，53/150更新、最近采样5.852秒/优化.186秒。新select_phase_u_candidates.py只生成候选清单：按每个已存周期模型自己的下一次rollout奖励排序，取最多三个不同更新数，阶段完成后追加最后模型；不把model_25错误归属update25（原runner保存后实际26）。当前sample best仍update0，短启动批次与完整episode分布不同，不能据此判后续模型无用。清单是DEV筛选，最终还需同工况物理比较，未自动采用或声称训练收敛。
+
+接续进程4081935 live elapsed9:52，真实source_exit_snapshot与264个lower步已保存，出口真速度2.353m/s、近零横向误差、roll峰值约0.102度；这是本来源退出状态，不能宣称强残余扰动或左/右候选差异。B仍运行。GPU错误参考NVlabs/RoboLab docs/env_vram_size_guide.md列出narrowphase kernel launch作为显存故障特征，只支持资源问题候选解释，不证明本机确切因果；本轮未额外启动GPU任务。
+
 ## 同车H75/Local300到跳跃入口已接通，首跑引擎错误不采用
 
 跳跃评估复用IsaacPathRollout作为可选ground_bundle，在同一个commonasset与.005物理实例中锁摆运行H75+Local300，再原位释放摆给PhaseU/RB，控制周期.005/上层.02，保存ground身份。ground_alpha=.5首跑输出runs/pendulum_sttw_jump_dt005，日志出现GPU narrowphase/friction kernel launch errors，确切原因未定；虽写出results.json，已INVALID.json标明不可用于兼容或能力结论。保留runtime.log，不将其曲线当有效实验证据；后续需补无引擎错误运行。没有修改其他任务或新训练预算。
