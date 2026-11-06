@@ -45,6 +45,34 @@ def replay_rewards(data,config,offset_reset=None):
     return total,components,closure
 
 
+def write_zero_scores(run):
+    """Rescore the saved Zero lane with the original shared five-alpha reward."""
+    import jax
+    import jax.numpy as jnp
+    from .controller import ControllerConfig, _system
+    from .path_command_reward import costs
+    run=Path(run);data,contract=load_case(run)
+    cfg=json.loads((Path(contract['bundle'])/'config.json').read_text())
+    route=np.load(Path(contract['bundle'])/'route.npz')
+    lane=int(np.flatnonzero(contract['settings']['zero_middle'])[0])
+    trace=data['lower_trace'][:,:,lane].reshape(-1,11);ids=np.flatnonzero(trace[:,6])
+    time=ids*.005+trace[ids,7]*.0002;speed=float(contract['settings'].get('user_speed_m_s',2.3))
+    progress=data['progress'][ids,lane];heading=np.interp(progress,route['s'],route['heading'])
+    eh=(heading-data['pose'][ids,lane,2]+np.pi)%(2*np.pi)-np.pi
+    cc=ControllerConfig(**json.loads(Path(contract['settings']['controller_config']).read_text()))
+    ratio=float(_system(jnp.float32(speed),jnp.zeros(3),cc)[3])
+    curvature=np.interp(progress,route['s'],route['curvature'])
+    chi=np.clip((abs(np.arctan(cc.wheelbase*curvature/np.cos(cc.caster))/ratio)-.18)/.12,0,1)
+    for alpha,stem in zip([0,.25,.5,.75,1],['alpha0','alpha025','alpha05','alpha075','alpha1']):
+        args=dict(alpha=jnp.full(len(ids),alpha),chi=jnp.asarray(chi),ev=jnp.asarray(trace[ids,2]-speed),ey=jnp.asarray(trace[ids,3]),eh=jnp.asarray(eh),peak_roll=jnp.asarray(trace[ids,4]),roll_rate=jnp.asarray(data['measurement'][ids,lane,1]),speed=jnp.asarray(trace[ids,2]),offsets=jnp.zeros((len(ids),2)),offset_rate=jnp.zeros((len(ids),2)))
+        terms=jax.vmap(lambda **x:costs(**x,config=cfg))(**args);reward=np.asarray(terms['reward']).copy()
+        for step in np.flatnonzero(data['failure'][:,lane]):
+            active=np.flatnonzero(ids//4==step)
+            if len(active):
+                reward[active]=0;reward[active[-1]]=data['reward'][step,lane]
+        np.savez_compressed(run/(stem+'_zero_rescored.npz'),time=time,reward=reward,**{key:np.asarray(value) for key,value in terms['effective'].items()})
+
+
 def raised_contact_phases(data,contract,lane):
     """Reuse the original switch report's measured mean-point convention."""
     terrain=Path(next(iter(contract['settings']['terrains'].values())));meta=json.loads((terrain/'identity.json').read_text());vertices=np.load(terrain/'terrain.npz')['vertices'];side=int(np.sqrt(len(vertices)));height=vertices[:,2].reshape(side,side);lo=meta['bounds_m'][0];spacing=meta['horizontal_scale_m']
