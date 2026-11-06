@@ -1,0 +1,70 @@
+{
+  "role": "Actual forward-route DEV and interface timing; no pooled success claim across task roles",
+  "declared_cases": 2,
+  "evaluated_cases": 2,
+  "rows": [
+    {
+      "case_id": "normal_query",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_async_route_probe/normal_query.json",
+      "origin_id": "rb_upstream_offset_01",
+      "status": "evaluated",
+      "executed_route": "bypass",
+      "requested_route": "bypass",
+      "optional_platform_complete": true,
+      "mandatory_platform_complete": false,
+      "full_window": true,
+      "arrival_s": 16.559999465942383,
+      "max_mapped_path_error_m": 0.47691786635988603,
+      "selection": {
+        "status": "rule_selected",
+        "violated": [
+          "roll"
+        ]
+      },
+      "selection_wall_s": 0.2747980300046038,
+      "query_time_s": 5.22,
+      "application_time_s": 5.24,
+      "application_delay_sim_s": 0.020000000000000462,
+      "asynchronous": true,
+      "available_routes_at_application": [
+        "original_jump",
+        "bypass"
+      ],
+      "requested_route_unavailable": false,
+      "world_xy_motion_during_query_m": 0.03977371241182661,
+      "stored_samples_after_request_through_application": 1,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_async_route_probe/normal_query/chain_summary.json"
+    },
+    {
+      "case_id": "forced_timeout",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_async_route_probe/forced_timeout.json",
+      "origin_id": "rb_upstream_offset_01",
+      "status": "evaluated",
+      "executed_route": "original_jump",
+      "requested_route": "original_jump",
+      "optional_platform_complete": true,
+      "mandatory_platform_complete": true,
+      "full_window": true,
+      "arrival_s": 18.760000228881836,
+      "max_mapped_path_error_m": 0.6122847199440002,
+      "selection": {
+        "status": "query_timeout",
+        "fallback": "retain_current_reference"
+      },
+      "selection_wall_s": 0.000331235998601187,
+      "query_time_s": 5.22,
+      "application_time_s": 5.22,
+      "application_delay_sim_s": 0.0,
+      "asynchronous": true,
+      "available_routes_at_application": [
+        "original_jump",
+        "bypass"
+      ],
+      "requested_route_unavailable": false,
+      "world_xy_motion_during_query_m": 0.0,
+      "stored_samples_after_request_through_application": 0,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_async_route_probe/forced_timeout/chain_summary.json"
+    }
+  ],
+  "limits": "Wall query latency and simulated control advance are distinct. A zero simulated delay does not demonstrate pending-query motion. Mandatory platform success requires the platform skill; bypass is at most safe exit. Pending rows are not failures; actual XY is retained in each source run."
+}

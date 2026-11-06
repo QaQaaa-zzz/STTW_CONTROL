@@ -1,0 +1,18 @@
+{
+  "role": "Two bounded async route interface probes; normal deadline and deliberately expired deadline; retain actual outcomes",
+  "simulation_python": "/home/qy/miniconda3/envs/env_isaaclab/bin/python",
+  "analysis_python": "/home/qy/miniconda3/envs/mjp/bin/python",
+  "cases": [
+    {
+      "case_id": "normal_query",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_async_route_probe/normal_query.json"
+    },
+    {
+      "case_id": "forced_timeout",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_async_route_probe/forced_timeout.json"
+    }
+  ],
+  "maximum_physics_steps": 24000,
+  "optimizer_updates": 0,
+  "status": "prepared_not_started"
+}

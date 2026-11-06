@@ -1,0 +1,10 @@
+{
+  "mode": "rule",
+  "absolute_limits": {
+    "roll": 0.1,
+    "roll_rate": 0.5,
+    "cross_track": 0.4,
+    "heading_error": 0.2
+  },
+  "role": "Frozen engineering rule for nonblocking query integration; not tuned task improvement or calibrated safety limits"
+}
