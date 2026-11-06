@@ -1,0 +1,306 @@
+{
+  "decision_prefix": {
+    "decision_time_s": 5.54,
+    "decision_reached": true,
+    "max_path_error_before_decision_m": 0.6451108146596943,
+    "corridor_intact_at_decision": true,
+    "first_corridor_violation_s": null,
+    "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+  },
+  "stages": {
+    "reached_release_line": true,
+    "airborne_after_handoff": true,
+    "strict_support": true,
+    "ground_return": true,
+    "continued": true
+  },
+  "stage_times": {
+    "release": 9.5,
+    "strict_support": 13.385000228881836,
+    "ground_return": 14.16,
+    "final_conditions": 20.440000534057617
+  },
+  "role": "Single nominal DEV, no robustness claim",
+  "complete": true,
+  "success_time_s": 20.440000534057617,
+  "first_final_conditions_time_s": 20.440000534057617,
+  "checks": {
+    "full_window": true,
+    "ordered_approach": true,
+    "original_path_corridor": true,
+    "stable_landing": true,
+    "ground_return": true,
+    "continued_time": true,
+    "continued_forward": true,
+    "final_goal": true
+  },
+  "criteria": {
+    "corridor_half_width_m": 1.0,
+    "waypoints": [
+      [
+        -4.0,
+        -8.0
+      ],
+      [
+        -4.0,
+        -4.8
+      ],
+      [
+        -4.0,
+        -2
+      ],
+      [
+        -2.0,
+        0
+      ],
+      [
+        6.0,
+        0
+      ]
+    ],
+    "waypoint_radius_m": 1.0,
+    "minimum_post_handoff_s": 2.0,
+    "minimum_post_handoff_forward_m": 2.0,
+    "final_goal_xy": [
+      21.6,
+      0.0
+    ]
+  },
+  "passed_waypoints": [
+    {
+      "point": [
+        -4.0,
+        -8.0
+      ],
+      "time_s": 0.019999999552965164
+    },
+    {
+      "point": [
+        -4.0,
+        -4.8
+      ],
+      "time_s": 1.559999942779541
+    },
+    {
+      "point": [
+        -4.0,
+        -2
+      ],
+      "time_s": 3.0199999809265137
+    },
+    {
+      "point": [
+        -2.0,
+        0
+      ],
+      "time_s": 5.099999904632568
+    },
+    {
+      "point": [
+        6.0,
+        0
+      ],
+      "time_s": 9.020000457763672
+    }
+  ],
+  "max_original_path_error_m": 0.6451108146596943,
+  "path_rmse_m": 0.20067566748927224,
+  "post_handoff_s": 15.84000015258789,
+  "post_handoff_forward_m": 24.51083755493164,
+  "landing": {
+    "skill": "update2",
+    "first_strict_support_completion_s": 13.385000228881836,
+    "airborne_after_handoff": true,
+    "first_airborne_interval_s": [
+      10.029999732971191,
+      10.529999732971191
+    ],
+    "landing_hold_1s": true,
+    "longest_hold_s": 1.7749996185302734,
+    "interval_s": [
+      12.385000228881836,
+      14.15999984741211
+    ]
+  },
+  "forward_task": {
+    "executed_route": "original_jump",
+    "branch_event": {
+      "time_s": 5.54,
+      "requested_route": "original_jump",
+      "executed_route": "original_jump",
+      "furthest_common_progress_m": 10.148763656616211,
+      "availability": {
+        "available_routes": [
+          "original_jump",
+          "bypass"
+        ],
+        "blocked_routes": []
+      },
+      "root": [
+        [
+          -1.9928160905838013,
+          0.6069017648696899,
+          0.11800861358642578,
+          0.754282534122467,
+          0.0019929229747503996,
+          0.0011297408491373062,
+          0.6565459370613098,
+          1.9931551218032837,
+          -0.06260135769844055,
+          0.0010901638306677341,
+          -0.11844776570796967,
+          -0.0008711697882972658,
+          -0.7451295852661133
+        ]
+      ],
+      "selection_wall_s": 3.0790004529990256e-05,
+      "history": "existing begin_connection; controller/filter/ESO/observation history retained",
+      "role": "Forced-route pilot",
+      "decision_state": {
+        "time": 5.54,
+        "root": [
+          [
+            -1.9928160905838013,
+            0.6069017648696899,
+            0.11800861358642578,
+            0.754282534122467,
+            0.0019929229747503996,
+            0.0011297408491373062,
+            0.6565459370613098,
+            1.9931551218032837,
+            -0.06260135769844055,
+            0.0010901638306677341,
+            -0.11844776570796967,
+            -0.0008711697882972658,
+            -0.7451295852661133
+          ]
+        ],
+        "measurement": [
+          [
+            -0.13833308219909668,
+            0.11777042597532272,
+            -0.10209345817565918,
+            0.046711958944797516,
+            -0.7380714416503906,
+            28.654203414916992,
+            28.83833122253418
+          ]
+        ],
+        "position": [
+          [
+            -1.200199007987976,
+            1.7622590065002441,
+            -0.10209345817565918,
+            2.499999761581421,
+            -4.250935077667236
+          ]
+        ],
+        "velocity": [
+          [
+            -0.002045480301603675,
+            -28.654203414916992,
+            0.046711958944797516,
+            0.001954604871571064,
+            -28.83833122253418
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.0104997158050537,
+            -0.059537969529628754
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "previous_alpha_duration_s": 5.54
+      },
+      "observable_state": null,
+      "selection": null,
+      "query_state": {
+        "time": 5.54,
+        "root": [
+          [
+            -1.9928160905838013,
+            0.6069017648696899,
+            0.11800861358642578,
+            0.754282534122467,
+            0.0019929229747503996,
+            0.0011297408491373062,
+            0.6565459370613098,
+            1.9931551218032837,
+            -0.06260135769844055,
+            0.0010901638306677341,
+            -0.11844776570796967,
+            -0.0008711697882972658,
+            -0.7451295852661133
+          ]
+        ],
+        "measurement": [
+          [
+            -0.13833308219909668,
+            0.11777042597532272,
+            -0.10209345817565918,
+            0.046711958944797516,
+            -0.7380714416503906,
+            28.654203414916992,
+            28.83833122253418
+          ]
+        ],
+        "position": [
+          [
+            -1.200199007987976,
+            1.7622590065002441,
+            -0.10209345817565918,
+            2.499999761581421,
+            -4.250935077667236
+          ]
+        ],
+        "velocity": [
+          [
+            -0.002045480301603675,
+            -28.654203414916992,
+            0.046711958944797516,
+            0.001954604871571064,
+            -28.83833122253418
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.0104997158050537,
+            -0.059537969529628754
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "previous_alpha_duration_s": 5.54
+      },
+      "asynchronous": false,
+      "application_delay_sim_s": 0.0
+    },
+    "route_prefix": {
+      "decision_time_s": 5.54,
+      "max_error_before_branch_m": 0.6451108146596943,
+      "corridor_intact_at_branch": true,
+      "max_error_after_branch_m": 0.6053491234779358,
+      "first_violation_s": null,
+      "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+    },
+    "common_goal_xy": [
+      21.6,
+      0.0
+    ],
+    "full_window": true,
+    "common_prefix_passed": true,
+    "first_goal_arrival_s": 19.799999237060547,
+    "max_mapped_path_error_m": 0.6451108146596943,
+    "mapped_corridor_half_width_m": 1.0,
+    "mapped_corridor_complete": true,
+    "optional_platform_task_complete": true,
+    "mandatory_platform_task_complete": true,
+    "platform_skill_complete": true,
+    "bypass_exit_complete": false,
+    "scope": "E5 declared mapped-route center corridor and full window; bypass cannot complete mandatory platform skill. Not a body-envelope clearance guarantee. Original jump-task labels retained separately."
+  }
+}

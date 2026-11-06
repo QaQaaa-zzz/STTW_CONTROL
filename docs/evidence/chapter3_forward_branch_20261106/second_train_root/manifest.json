@@ -1,0 +1,64 @@
+{
+  "role": "Paired original/bypass, D0 and two prescribed forces; independent preassigned train roots only",
+  "simulation_python": "/home/qy/miniconda3/envs/env_isaaclab/bin/python",
+  "analysis_python": "/home/qy/miniconda3/envs/mjp/bin/python",
+  "root_split": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/root_split.json",
+  "selected_origins": [
+    "rb_connection_seed20261106_root000",
+    "rb_connection_seed20261106_root002",
+    "rb_connection_seed20261106_root003",
+    "rb_connection_seed20261106_root004",
+    "rb_connection_seed20261106_root005",
+    "rb_connection_seed20261106_root008"
+  ],
+  "cases": [
+    {
+      "case_id": "rb_connection_seed20261106_root002_forced_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root002_forced_bypass.json",
+      "origin_id": "rb_connection_seed20261106_root002",
+      "split": "train"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root002_forced_original_jump_extended_reference",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root002_forced_original_jump_extended_reference.json",
+      "origin_id": "rb_connection_seed20261106_root002",
+      "split": "train"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root002_worldFy-2N_original_jump",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root002_worldFy-2N_original_jump.json",
+      "force_world_y_N": -2,
+      "route": "original_jump",
+      "origin_id": "rb_connection_seed20261106_root002",
+      "split": "train"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root002_worldFy-2N_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root002_worldFy-2N_bypass.json",
+      "force_world_y_N": -2,
+      "route": "bypass",
+      "origin_id": "rb_connection_seed20261106_root002",
+      "split": "train"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root002_worldFy+2N_original_jump",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root002_worldFy+2N_original_jump.json",
+      "force_world_y_N": 2,
+      "route": "original_jump",
+      "origin_id": "rb_connection_seed20261106_root002",
+      "split": "train"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root002_worldFy+2N_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root002_worldFy+2N_bypass.json",
+      "force_world_y_N": 2,
+      "route": "bypass",
+      "origin_id": "rb_connection_seed20261106_root002",
+      "split": "train"
+    }
+  ],
+  "maximum_physics_steps": 432000,
+  "optimizer_updates": 0,
+  "status": "prepared_not_started",
+  "scope": "All descendants inherit original split; failed upstream roots remain in denominator. No test roots, outcome-based replacement or synthetic exit states."
+}
