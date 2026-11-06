@@ -1,0 +1,175 @@
+{
+  "status": "map_prepared_not_physically_executed",
+  "base_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v2.0_a0.5.json",
+  "planner": "Existing pinned PythonRobotics Dubins adapter; no new geometric planner",
+  "segments": [
+    {
+      "planner": "PythonRobotics Dubins; six path families and finite goal-heading candidates",
+      "upstream_commit": "8c392897c7f41a6e4d9aab9cb2e9737a7a6fa031",
+      "radius_m": 1.8,
+      "modes": [
+        "R",
+        "S",
+        "L"
+      ],
+      "segment_lengths_m": [
+        0.6440550289067077,
+        5.059644256269408,
+        0.6440550289067077
+      ],
+      "goal_heading_rad": 0.0,
+      "goal_heading_candidates": 1,
+      "goal_heading_mode": "prescribed",
+      "goal_arclength_m": 6.347754314082824,
+      "goal_xy": [
+        4.0,
+        -2.0
+      ],
+      "start_pose": [
+        -2.0,
+        0.0,
+        0.0
+      ],
+      "curvature_continuous": false,
+      "position_heading_continuous": true,
+      "shortest_path_certificate": false,
+      "safety_certificate": false
+    },
+    {
+      "planner": "PythonRobotics Dubins; six path families and finite goal-heading candidates",
+      "upstream_commit": "8c392897c7f41a6e4d9aab9cb2e9737a7a6fa031",
+      "radius_m": 1.8,
+      "modes": [
+        "L",
+        "S",
+        "L"
+      ],
+      "segment_lengths_m": [
+        0.0,
+        8.6,
+        0.0
+      ],
+      "goal_heading_rad": 0.0,
+      "goal_heading_candidates": 1,
+      "goal_heading_mode": "prescribed",
+      "goal_arclength_m": 8.6,
+      "goal_xy": [
+        12.6,
+        -2.0
+      ],
+      "start_pose": [
+        4.0,
+        -2.0,
+        0.0
+      ],
+      "curvature_continuous": false,
+      "position_heading_continuous": true,
+      "shortest_path_certificate": false,
+      "safety_certificate": false
+    },
+    {
+      "planner": "PythonRobotics Dubins; six path families and finite goal-heading candidates",
+      "upstream_commit": "8c392897c7f41a6e4d9aab9cb2e9737a7a6fa031",
+      "radius_m": 1.8,
+      "modes": [
+        "L",
+        "S",
+        "R"
+      ],
+      "segment_lengths_m": [
+        1.0957870046646294,
+        2.3664319132398473,
+        1.0957870046646294
+      ],
+      "goal_heading_rad": 0.0,
+      "goal_heading_candidates": 1,
+      "goal_heading_mode": "prescribed",
+      "goal_arclength_m": 4.558005922569106,
+      "goal_xy": [
+        16.6,
+        0.0
+      ],
+      "start_pose": [
+        12.6,
+        -2.0,
+        0.0
+      ],
+      "curvature_continuous": false,
+      "position_heading_continuous": true,
+      "shortest_path_certificate": false,
+      "safety_certificate": false
+    },
+    {
+      "planner": "PythonRobotics Dubins; six path families and finite goal-heading candidates",
+      "upstream_commit": "8c392897c7f41a6e4d9aab9cb2e9737a7a6fa031",
+      "radius_m": 1.8,
+      "modes": [
+        "L",
+        "S",
+        "L"
+      ],
+      "segment_lengths_m": [
+        0.0,
+        5.0,
+        0.0
+      ],
+      "goal_heading_rad": 0.0,
+      "goal_heading_candidates": 1,
+      "goal_heading_mode": "prescribed",
+      "goal_arclength_m": 5.0,
+      "goal_xy": [
+        21.6,
+        0.0
+      ],
+      "start_pose": [
+        16.6,
+        0.0,
+        0.0
+      ],
+      "curvature_continuous": false,
+      "position_heading_continuous": true,
+      "shortest_path_certificate": false,
+      "safety_certificate": false
+    }
+  ],
+  "branch_reference": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/bypass_reference.npz",
+  "allowed_route_map": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/bypass_original_map.npz",
+  "common_goal_xy": [
+    21.6,
+    0.0
+  ],
+  "original_jump_goal_xy": [
+    14.6,
+    0.0
+  ],
+  "goal_change": "E5 comparison only: shared goal moved to 21.6m so bypass last turn has 5m straight. Existing J4 goal and labels unchanged.",
+  "branch_entry_pose": [
+    -2.0,
+    0.0,
+    0.0
+  ],
+  "first_entry_progress_m": 9.941579715693258,
+  "last_entry_progress_m": 12.141579715693258,
+  "minimum_dwell_s": 0.5,
+  "half_width_m": 0.6,
+  "monotone_world_x": true,
+  "centerline_min_platform_lateral_clearance_m": 1.0,
+  "limits": "Sampled map geometry only. No physical tracking, vehicle-envelope clearance or validated fallback claim.",
+  "proposed_pilot": {
+    "cases": [
+      "forced_original_jump",
+      "forced_bypass"
+    ],
+    "seconds": 30.0,
+    "physics_hz": 400,
+    "lower_hz": 200,
+    "upper_hz": 50,
+    "physics_lane_steps_max": 24000,
+    "optimizer_updates": 0
+  },
+  "task_semantics": {
+    "optional_platform": "same destination arrival may use either route",
+    "mandatory_platform_jump": "bypass only counts as safe exit, never completion of mandatory jump"
+  },
+  "next": "Connect same executor/map-entry filter, then execute two route pilots when a simulation slot is free"
+}
