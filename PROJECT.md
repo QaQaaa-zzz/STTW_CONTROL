@@ -1,3 +1,7 @@
+## 0.005秒短测完成（非等价替换）
+
+runs/pendulum_jump_dt005_small_buffers/dt_comparison.png为同冻结source/RB与旧.0002实际XY、根高度及侧倾对比。仅小批量缓冲各2^20，日志无PhysX错误；采样11.6658秒/764lane physics，0optimizer。两者.78秒接管，source1.65秒、RB1.91秒45度侧倾终止；最高根高度.40634/.39195m。旧source2.09秒/RB1.865秒、采样40.8938秒。窗口及共享负载不同，不将总耗时比当训练加速倍率。地面接近与起跳形状基本保持，落下后响应明显变化，不能直接认为动力学等价或跨平台跳跃成功。旧150轮训练没有改步长。先前OOM结果仍无效且保留。
+
 ## 同出口六候选实际采集入口与固定场景准备
 
 prepare_connection_candidates.py复用geometric_path.build_path，准备固定直行A与左右90度B路线，不按车辆偏移移动原参考；两速度1.5/2.3m/s×alpha0/.5/1，各B观察10秒、2m原路径走廊、弯后5m目标/2m到达半径，全候选均启用已有Dubins重规划。source几何进度3.1m触发保存，不能称所有轮接触已离开地形；源斜向凸起支持最远3m，真实接触状态仍需轨迹解释。terrain复用现有place_isaac_terrain.py/Isaac Gym转换，3cm凸起、0.1m网格、0.005m高度量化。准备产物runs/connection_candidates_nominal，未启动采集。

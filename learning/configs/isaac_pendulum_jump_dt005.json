@@ -1,5 +1,5 @@
 {
-  "output": "runs/pendulum_jump_dt005",
+  "output": "runs/pendulum_jump_dt005_small_buffers",
   "initial_state": "runs/pendulum_h75_locked/warmup/initial_state.npz",
   "geometry": "runs/pendulum_jump_pair/geometry.json",
   "bundles": "runs/pendulum_torch_skills",
@@ -13,5 +13,10 @@
   "maximum_physics_lane_steps": 1600,
   "optimizer_updates": 0,
   "align_heading": true,
-  "physics_dt": 0.005
+  "physics_dt": 0.005,
+  "gpu_pair_capacities": [
+    1048576,
+    1048576,
+    1048576
+  ]
 }
