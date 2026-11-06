@@ -41,3 +41,35 @@ result=dict(start_relative=a.start_relative,physics_dt=s['physics_dt'],control_d
  adoption='not qualified if any case lacks survival or tracking hold; best only relative to tested candidates',
  limitation='Each error uses its actual observation window; early failure is ranked before error. XY uses original issued-reference trajectory, not a reward target.')
 (a.output/'comparison.json').write_text(json.dumps(result,indent=2));print(json.dumps([dict(label=r['label'],update=r['completed_updates'],**r['score']) for r in rank],indent=2))
+
+# Command response is evaluated against this chassis, independently of old XY.
+controller=json.loads(Path(s['controller_config']).read_text())
+radius=controller['wheel_radius_m'];dt=s['control_dt'];response=[]
+response_rows=[(zero,dict(label='ECBC+ESO'))]+list(zip(traces,results))
+for i,name in enumerate(s['cases']):
+ fig,axes=plt.subplots(4,1,figsize=(11,10),sharex=True)
+ for (d,identity),color,style in zip(response_rows,['.45']+colors,[':']+styles):
+  n=int(d['valid'][:,i].sum());t=d['time'][:n,i]+dt;r=d['reference'][:n,i];m=d['measurement'][:n,i]
+  yaw=np.diff(np.unwrap(d['pose'][:n,i,2]))/dt
+  target=r[:,0]*np.tan(r[:,1])*np.cos(controller['caster'])/controller['wheelbase']
+  label=identity['label'];speed=d['speed'][:n,i];wheel=m[:,5]*radius;command=d['command'][:n,i,1]*radius
+  axes[0].plot(t,speed,style,color=color,label=label)
+  axes[1].plot(t,m[:,2],style,color=color)
+  axes[2].plot(t[1:],yaw,style,color=color)
+  axes[3].plot(t,command,style,color=color,label=label+' command')
+  axes[3].plot(t,wheel,color=color,alpha=.35,lw=.7)
+  tail=max(1,round(.5/dt))
+  response.append(dict(model=label,case=name,source=str((a.zero if label=='ECBC+ESO' else Path(identity['run']))/'trajectory.npz'),
+   final_window_s=.5,speed_mean=float(speed[-tail:].mean()),requested_speed=float(r[-tail:,0].mean()),
+   wheel_command_speed=float(command[-tail:].mean()),wheel_measured_speed=float(wheel[-tail:].mean()),
+   steer_mean=float(m[-tail:,2].mean()),requested_steer=float(r[-tail:,1].mean()),
+   yawrate_mean=float(yaw[-tail:].mean()),kinematic_yawrate_target=float(target[-tail:].mean())))
+ axes[0].plot(t,r[:,0],'k--',label='Request');axes[1].plot(t,r[:,1],'k--')
+ axes[2].plot(t,target,'k--',label='Current-chassis kinematic target')
+ for ax,label in zip(axes,['Body speed (m/s)','Steering (rad)','Yaw rate (rad/s)','Wheel speed × radius (m/s)']):
+  ax.set_ylabel(label);ax.grid(alpha=.2)
+ axes[0].legend(ncol=3);axes[2].legend();axes[3].set_xlabel('Time (s)')
+ fig.suptitle(name+' | nominal DEV; all saved candidates\nWheel panel: strong lines = command, faint lines = measured; yaw uses backward difference')
+ fig.tight_layout();fig.savefig(a.output/(name+'_response.png'),dpi=140);plt.close(fig)
+(a.output/'response.json').write_text(json.dumps(dict(controller=controller,rows=response,
+ limitation='Kinematic yaw target is diagnostic, not a physical feasibility guarantee. Old chassis XY is historical only. No smoothing; no simulation rerun.'),indent=2))
