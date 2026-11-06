@@ -1,0 +1,88 @@
+{
+  "skill_id": "rb_run1_candidate",
+  "source": {
+    "action_order": [
+      "steer",
+      "rear_wheel_drive",
+      "hip",
+      "knee"
+    ],
+    "actor_frame_fields": [
+      "gravity_x",
+      "gravity_y",
+      "gravity_z",
+      "angular_velocity_x",
+      "angular_velocity_y",
+      "angular_velocity_z",
+      "acceleration_x",
+      "acceleration_y",
+      "acceleration_z",
+      "steering_position",
+      "hip_position",
+      "knee_position",
+      "steering_velocity",
+      "hip_velocity",
+      "knee_velocity",
+      "front_wheel_velocity",
+      "rear_wheel_velocity",
+      "last_action_steer",
+      "last_action_rear_wheel_drive",
+      "last_action_hip",
+      "last_action_knee",
+      "estimated_forward_velocity",
+      "obstacle_relative_x",
+      "root_height",
+      "history_valid"
+    ],
+    "actor_sha256": "c3eae39c7c116d5db56122d5aff4f29a6f95b8971a51c4c46864754ecb58b040",
+    "actor_task_fields": [
+      "jump_signal"
+    ],
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_pi0_scratchG_100_candidates12_20261019/training_initial_source_policy_recovery/round_0009/students/student/training/round_0009_student/checkpoints/transition_128000",
+    "checkpoint_identity_sha256": "f6c42676539c66e06d4703b744577243e5b0f99d5df7c8431e3cc40e929036db",
+    "critic_sha256": "ef6f698d2dc016183a1bd2a83ec147338e47fdb539dff0f97b91df3b6563eeb9",
+    "data_role": "train",
+    "formal_config": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_pi0_scratchG_100_candidates12_20261019/training_initial_source_policy_recovery/round_0009/students/student/config.json",
+    "formal_config_file_sha256": "caf486f6f0587a9acc8a86061999272309cb1df0dfb4b666b00c17780efd3e51",
+    "formal_config_sha256": "06bcc68c2245bb8853b5933b826add551b2408c10c8b3656c630c74466e47584",
+    "iteration": 1,
+    "name": "round_0009_student",
+    "normalizer_sha256": "db84aad7750991d6b720e9f065ed7e49f862893c7753f9839c593d7951b6ea86",
+    "payload_sha256": "c11052e726ccbc3970fe272037a9b52b95161d4b7a48ec958caa3b75b306e4df",
+    "policy_role": "development_checkpoint",
+    "source_formal_report": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_pi0_scratchG_100_candidates12_20261019/training_initial_source_policy_recovery/round_0009/students/student/training/round_0009_student/formal_report.json",
+    "source_formal_report_sha256": "6b4c25707dd7ce4abf967d3f83c25b7c65c5aaefae999285feb39c76dadcdc79",
+    "source_requested_training_transitions": 128000,
+    "source_reset_mixture": {
+      "natural_reset_probability": 0.6,
+      "selection": "complete_start_60pct_current_teacher_30pct_historical_success_10pct",
+      "soft_tube_probability": 0.4
+    },
+    "source_training_run_id": "round_0009_student",
+    "source_training_transitions": 128000,
+    "xml_sha256": "0b56d3672773ef05a2b5982117fa53a7fdffcaf2b7f3f04a7a7941233d6e9c8a"
+  },
+  "artifact_sha256": "cceb7ed72cbfcb5ef9a13b058b1e2c19acbbd1032305877dbd970571282ec6de",
+  "mapping": {
+    "ctrl_min": [
+      -0.800000011920929,
+      -5.0,
+      -1.2999999523162842,
+      -1.5
+    ],
+    "ctrl_max": [
+      0.800000011920929,
+      40.0,
+      0.5,
+      2.5
+    ],
+    "hip_initial": -1.2,
+    "knee_initial": 2.5,
+    "base_rear_speed": 12.0,
+    "rear_speed_delta": 12.0,
+    "joint_target_semantics": "keyframe_centered_absolute",
+    "knee_target_delta": 0.0
+  },
+  "network": "76-256-256-256-8 SiLU; tanh first four logits, deterministic",
+  "conversion": "exact arrays, no training or architecture change"
+}

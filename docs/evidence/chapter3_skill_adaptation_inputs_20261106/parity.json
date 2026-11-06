@@ -1,0 +1,18 @@
+[
+  {
+    "skill": "source",
+    "samples": 16,
+    "action_max_error": 2.682209014892578e-07,
+    "target_max_error": 1.9073486328125e-06,
+    "physics_steps": 0,
+    "optimizer_updates": 0
+  },
+  {
+    "skill": "rb_run1_candidate",
+    "samples": 16,
+    "action_max_error": 2.8312206268310547e-07,
+    "target_max_error": 2.86102294921875e-06,
+    "physics_steps": 0,
+    "optimizer_updates": 0
+  }
+]

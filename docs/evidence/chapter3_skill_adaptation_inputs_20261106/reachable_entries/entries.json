@@ -1,0 +1,191 @@
+{
+  "status": "prepared_inputs_only_not_connected_to_training",
+  "entries": [
+    {
+      "case_id": "L9.6_v2.0_a0.5_source",
+      "origin_id": "rb_nominal_upstream_01",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_pilot/rb_nominal_upstream_01_9.6_v2.0_a0.5_source.json",
+      "handoff_time_s": 9.200000000000001,
+      "observation_index": 460,
+      "source_platform_front_x": 7.6,
+      "translated_platform_front_x": 3.6,
+      "physics_dt": 0.0025
+    },
+    {
+      "case_id": "L5.6_v2.0_a0.5_source",
+      "origin_id": "rb_nominal_upstream_01",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L5.6_v2.0_a0.5_source.json",
+      "handoff_time_s": 7.24,
+      "observation_index": 362,
+      "source_platform_front_x": 3.6,
+      "translated_platform_front_x": 3.6,
+      "physics_dt": 0.0025
+    },
+    {
+      "case_id": "L7.6_v2.0_a0.5_source",
+      "origin_id": "rb_nominal_upstream_01",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L7.6_v2.0_a0.5_source.json",
+      "handoff_time_s": 8.22,
+      "observation_index": 411,
+      "source_platform_front_x": 5.6,
+      "translated_platform_front_x": 3.6,
+      "physics_dt": 0.0025
+    },
+    {
+      "case_id": "L9.6_v1.8_a0.0_source",
+      "origin_id": "rb_nominal_upstream_01",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L9.6_v1.8_a0.0_source.json",
+      "handoff_time_s": 9.68,
+      "observation_index": 484,
+      "source_platform_front_x": 7.6,
+      "translated_platform_front_x": 3.6,
+      "physics_dt": 0.0025
+    },
+    {
+      "case_id": "L9.6_v1.8_a0.5_source",
+      "origin_id": "rb_nominal_upstream_01",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L9.6_v1.8_a0.5_source.json",
+      "handoff_time_s": 9.6,
+      "observation_index": 480,
+      "source_platform_front_x": 7.6,
+      "translated_platform_front_x": 3.6,
+      "physics_dt": 0.0025
+    },
+    {
+      "case_id": "L9.6_v1.8_a1.0_source",
+      "origin_id": "rb_nominal_upstream_01",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L9.6_v1.8_a1.0_source.json",
+      "handoff_time_s": 9.58,
+      "observation_index": 479,
+      "source_platform_front_x": 7.6,
+      "translated_platform_front_x": 3.6,
+      "physics_dt": 0.0025
+    },
+    {
+      "case_id": "L9.6_v2.0_a0.0_source",
+      "origin_id": "rb_nominal_upstream_01",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L9.6_v2.0_a0.0_source.json",
+      "handoff_time_s": 9.22,
+      "observation_index": 461,
+      "source_platform_front_x": 7.6,
+      "translated_platform_front_x": 3.6,
+      "physics_dt": 0.0025
+    },
+    {
+      "case_id": "L9.6_v2.0_a1.0_source",
+      "origin_id": "rb_nominal_upstream_01",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L9.6_v2.0_a1.0_source.json",
+      "handoff_time_s": 9.18,
+      "observation_index": 459,
+      "source_platform_front_x": 7.6,
+      "translated_platform_front_x": 3.6,
+      "physics_dt": 0.0025
+    },
+    {
+      "case_id": "L5.6_v1.8_a0.0_source",
+      "origin_id": "rb_nominal_upstream_01",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L5.6_v1.8_a0.0_source.json",
+      "handoff_time_s": 7.48,
+      "observation_index": 374,
+      "source_platform_front_x": 3.6,
+      "translated_platform_front_x": 3.6,
+      "physics_dt": 0.0025
+    },
+    {
+      "case_id": "L5.6_v1.8_a0.5_source",
+      "origin_id": "rb_nominal_upstream_01",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L5.6_v1.8_a0.5_source.json",
+      "handoff_time_s": 7.44,
+      "observation_index": 372,
+      "source_platform_front_x": 3.6,
+      "translated_platform_front_x": 3.6,
+      "physics_dt": 0.0025
+    },
+    {
+      "case_id": "L5.6_v1.8_a1.0_source",
+      "origin_id": "rb_nominal_upstream_01",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L5.6_v1.8_a1.0_source.json",
+      "handoff_time_s": 7.42,
+      "observation_index": 371,
+      "source_platform_front_x": 3.6,
+      "translated_platform_front_x": 3.6,
+      "physics_dt": 0.0025
+    },
+    {
+      "case_id": "L5.6_v2.0_a0.0_source",
+      "origin_id": "rb_nominal_upstream_01",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L5.6_v2.0_a0.0_source.json",
+      "handoff_time_s": 7.26,
+      "observation_index": 363,
+      "source_platform_front_x": 3.6,
+      "translated_platform_front_x": 3.6,
+      "physics_dt": 0.0025
+    },
+    {
+      "case_id": "L5.6_v2.0_a1.0_source",
+      "origin_id": "rb_nominal_upstream_01",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L5.6_v2.0_a1.0_source.json",
+      "handoff_time_s": 7.22,
+      "observation_index": 361,
+      "source_platform_front_x": 3.6,
+      "translated_platform_front_x": 3.6,
+      "physics_dt": 0.0025
+    },
+    {
+      "case_id": "L7.6_v1.8_a0.0_source",
+      "origin_id": "rb_nominal_upstream_01",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L7.6_v1.8_a0.0_source.json",
+      "handoff_time_s": 8.6,
+      "observation_index": 430,
+      "source_platform_front_x": 5.6,
+      "translated_platform_front_x": 3.6,
+      "physics_dt": 0.0025
+    },
+    {
+      "case_id": "L7.6_v1.8_a0.5_source",
+      "origin_id": "rb_nominal_upstream_01",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L7.6_v1.8_a0.5_source.json",
+      "handoff_time_s": 8.52,
+      "observation_index": 426,
+      "source_platform_front_x": 5.6,
+      "translated_platform_front_x": 3.6,
+      "physics_dt": 0.0025
+    },
+    {
+      "case_id": "L7.6_v1.8_a1.0_source",
+      "origin_id": "rb_nominal_upstream_01",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L7.6_v1.8_a1.0_source.json",
+      "handoff_time_s": 8.5,
+      "observation_index": 425,
+      "source_platform_front_x": 5.6,
+      "translated_platform_front_x": 3.6,
+      "physics_dt": 0.0025
+    },
+    {
+      "case_id": "L7.6_v2.0_a0.0_source",
+      "origin_id": "rb_nominal_upstream_01",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L7.6_v2.0_a0.0_source.json",
+      "handoff_time_s": 8.24,
+      "observation_index": 412,
+      "source_platform_front_x": 5.6,
+      "translated_platform_front_x": 3.6,
+      "physics_dt": 0.0025
+    },
+    {
+      "case_id": "L7.6_v2.0_a1.0_source",
+      "origin_id": "rb_nominal_upstream_01",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L7.6_v2.0_a1.0_source.json",
+      "handoff_time_s": 8.2,
+      "observation_index": 410,
+      "source_platform_front_x": 5.6,
+      "translated_platform_front_x": 3.6,
+      "physics_dt": 0.0025
+    }
+  ],
+  "count": 18,
+  "independent_origins": 1,
+  "sha256": "b58013b48cad62cb8c54e0974860f996bf62cb7820b559de35ff67e11b0c12e0",
+  "pose_contract": "world xyz and wxyz; root world velocities, actual live joint ordering; only world x translated with the platform",
+  "observation_contract": "Original 76-D pre-action jump observation at exact handoff control tick; three 25-D history frames plus signal; no rebuilding from synthetic zero history",
+  "scope": "Observed accessible states, not full hidden PhysX snapshots. Same nominal upstream root across approaches; not independent 18-root data. No failed landing outcome is an input. No PPO updates."
+}

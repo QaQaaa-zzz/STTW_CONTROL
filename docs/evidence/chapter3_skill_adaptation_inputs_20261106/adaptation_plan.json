@@ -1,0 +1,33 @@
+{
+  "status": "prepared_not_training_ready",
+  "reason": "Original source/RB each failed strict landing in all18 reachable matched approaches; taskbook conditional adaptation",
+  "skills": [
+    "source",
+    "rb_run1_candidate"
+  ],
+  "initialization": "Each own original actor/critic/normalizers; fresh Adam; no shared update2 initialization",
+  "base_recipe": "learning/configs/isaac_rb_training150.json",
+  "updates_each": 25,
+  "evaluate_every_updates": 5,
+  "num_envs": 4096,
+  "rollout_steps": 24,
+  "learning_rate": 1e-05,
+  "physics_dt": 0.0025,
+  "policy_dt": 0.02,
+  "training_transitions_total": 4915200,
+  "physics_lane_steps_total": 39321600,
+  "optimizer_resume": false,
+  "proposed_reset_mixture": {
+    "actual_reachable_entries": 0.5,
+    "original_nominal": 0.42,
+    "original_airborne_rsi": 0.08
+  },
+  "preserved": "Original76/106-256-256-256-8/1 SiLU, actuator mapping, Go2 domain randomization and delay/noise; old policy artifacts immutable",
+  "missing_before_launch": [
+    "Connect reachable state/history reset bank to PhaseUEnv; current reset still nominal/RSI only",
+    "Declare fixed original-capability and reached-entry evaluation panel; include update0 and each5 updates",
+    "Resolve allocation after current collection stages; no concurrent4096-env training"
+  ],
+  "selection": "Best qualified evaluated candidate, with original-capability retention; not last or sampled reward alone",
+  "no_automatic_extension": true
+}
