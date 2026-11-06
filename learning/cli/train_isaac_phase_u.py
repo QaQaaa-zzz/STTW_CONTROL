@@ -25,7 +25,7 @@ class RecordedRunner(module.OnPolicyRunner):
 env=PhaseUEnv(cfg,a.output)
 (a.output/'randomized_properties.json').write_text(json.dumps(env.properties));(a.output/'plant.json').write_text(json.dumps(env.plant.metadata))
 runner=RecordedRunner(env,train,log_dir=str(a.output/'training'),device=cfg['device']);(a.output/'training').mkdir(exist_ok=True)
-initialization={'initialization':'original Phase U actor/critic/frozen normalizer; fresh optimizer'}
+initialization={'initialization':'bundle actor/critic/frozen normalizer; fresh optimizer','bundle':cfg['bundle'],'bundle_identity':runner.alg.actor_critic.identity}
 if cfg.get('resume_checkpoint'):
     runner.load(cfg['resume_checkpoint'],load_optimizer=True)
     runner.current_learning_iteration=cfg.get('resume_policy_update',runner.current_learning_iteration)

@@ -1,0 +1,48 @@
+{
+  "task_spec": "learning/configs/isaac_phase_u_task_traversal.json",
+  "device": "cuda:0",
+  "num_envs": 4096,
+  "updates": 150,
+  "save_interval": 25,
+  "asset": "runs/rb_sttw_platform/isaac_asset_sectors/vehicle.urdf",
+  "asset_spec": "learning/configs/rb_sttw_platform.json",
+  "geometry": "runs/rb_sttw_platform/jump_input/geometry.json",
+  "bundle": "runs/rb_sttw_platform/training_bundle",
+  "plant_options": {
+    "physics_dt": 0.005,
+    "wheel_radius_m": 0.07,
+    "gpu_pair_capacities": [
+      4194304,
+      4194304,
+      16777216
+    ],
+    "servo_mode": "hybrid",
+    "compliant_wheels": null,
+    "wheel_collision": "convexHull",
+    "hull_vertices": 64,
+    "robot_contact_offset": 0.001,
+    "mesh_collision_on_geometry": true,
+    "solver_position_iterations": 16,
+    "solver_velocity_iterations": 4,
+    "pendulum_rest": [
+      -1.2,
+      2.499999
+    ],
+    "pendulum_locked": false,
+    "terrain_layout": "replicated",
+    "env_spacing": 20.0
+  },
+  "go2_checkout": "/home/qy/projects/My_unitree_go2_gym",
+  "seed": 28,
+  "status": "authorized RB adaptation150; fixed budget; compare best sampled reward candidates and last on fixed cases",
+  "reset_note": "original RB rootz0.15, x1.5,vx2, joint velocities0, original8percent airborne RSI retained",
+  "optimizer_initialization": "historical Isaac01966080 actor and critic and normalizers; fresh Go2 Adam, no optimizer resume",
+  "jump_steering_gains": [
+    2.5,
+    0.4
+  ],
+  "root_acceleration_difference": true,
+  "ppo_overrides": {
+    "learning_rate": 1e-05
+  }
+}
