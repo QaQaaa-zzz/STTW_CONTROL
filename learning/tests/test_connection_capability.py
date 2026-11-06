@@ -56,3 +56,20 @@ class ConnectionCapabilityTests(unittest.TestCase):
         assert fast['groups']==1 and fast['complete_count']==0
         assert fast['successful_mean_cost'] is None
         assert slow['matched_decided_groups']==0
+
+    def test_deployed_selection_threshold_and_tolerance(self):
+        from sttw_control.empirical_capability import select_connection_estimate
+        rows=[dict(candidate_id='slow',known=True,complete_probability=.9,success_cost=8.),
+              dict(candidate_id='fast',known=True,complete_probability=.88,success_cost=5.)]
+        self.assertEqual(select_connection_estimate(rows)['candidate_id'],'fast')
+        self.assertEqual(select_connection_estimate(rows,probability_tolerance=.01)['candidate_id'],'slow')
+        self.assertIsNone(select_connection_estimate(rows,minimum_completion=.95))
+
+    def test_known_failures_are_not_selected_or_called_unknown(self):
+        from sttw_control.empirical_capability import evaluate_connection_groups
+        rows=[dict(origin_id=o,snapshot_id=o,task_id='left',skill_id='frozen',
+                   candidate_id='fast',state=[0.],complete=0,success_cost=None) for o in ['a','b']]
+        result=evaluate_connection_groups(rows,['fast'],[1.],1.,.5)
+        self.assertEqual(result['selected_groups'],0)
+        self.assertEqual(result['unknown_groups'],0)
+        self.assertEqual(result['no_feasible_groups'],2)

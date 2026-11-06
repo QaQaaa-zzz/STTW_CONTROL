@@ -4,6 +4,8 @@ Language models propose goal order and allowed route IDs. Actual capability data
 select speed/alpha. Recommendations never constitute physical task completion.
 """
 
+from .empirical_capability import select_connection_estimate
+
 class ContinuousTask:
     def __init__(self, program, routes, candidates, capability):
         self.program=program
@@ -36,12 +38,11 @@ class ContinuousTask:
             for estimate in query['estimates']:
                 if estimate['known'] and estimate['complete_probability']>=minimum_completion and estimate['success_cost'] is not None:
                     options.append(dict(route_id=route_id,**estimate))
-        if not options:
+        selected=select_connection_estimate(options,minimum_completion,probability_tolerance)
+        if selected is None:
             event=dict(status='revision_required',goal_id=goal['goal_id'],completed=list(self.completed),remaining_goals=[g['goal_id'] for g in remaining],queries=queries,active_reference=self.active)
             self.events.append(event)
             return event
-        best_probability=max(o['complete_probability'] for o in options)
-        selected=min((o for o in options if o['complete_probability']>=best_probability-probability_tolerance),key=lambda o:o['success_cost'])
         route=self.routes[selected['route_id']];candidate=self.candidates[selected['candidate_id']]
         self.active=dict(goal_id=goal['goal_id'],route_id=route['route_id'],reference_path=route['reference_path'],skill_id=route['skill_id'],candidate_id=candidate['candidate_id'],speed_m_s=candidate['speed_m_s'],alpha=candidate['alpha'])
         event=dict(status='reference_selected',reference=self.active.copy(),estimate=selected,queries=queries)

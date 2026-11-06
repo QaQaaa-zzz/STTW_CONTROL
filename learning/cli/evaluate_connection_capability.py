@@ -18,7 +18,7 @@ if a.request:
                   evidence_rows=len(evidence),excluded_origin_id=excluded,completed=manager.completed,
                   request=str(a.request.resolve()))
 else:
-    result=evaluate_connection_groups(rows,c['candidates'],c['feature_scales'],c['bandwidth'],c['minimum_support'])
+    result=evaluate_connection_groups(rows,c['candidates'],c['feature_scales'],c['bandwidth'],c['minimum_support'],c.get('minimum_completion',.7),c.get('probability_tolerance',.05))
 result['inputs']=dict(records=str(a.records.resolve()),config=str(a.config.resolve()))
 a.output.parent.mkdir(parents=True,exist_ok=True);a.output.write_text(json.dumps(result,indent=2))
 print(json.dumps({k:v for k,v in result.items() if k!='rows'},indent=2))

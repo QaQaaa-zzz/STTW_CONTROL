@@ -1,0 +1,471 @@
+{
+  "fixed_candidates": [
+    {
+      "candidate_id": "v1.5_a0.0",
+      "groups": 4,
+      "complete_count": 4,
+      "successful_mean_cost": 4.475000023841858,
+      "matched_decided_groups": 4,
+      "matched_decided_complete_count": 4
+    },
+    {
+      "candidate_id": "v1.5_a0.5",
+      "groups": 4,
+      "complete_count": 4,
+      "successful_mean_cost": 4.400000095367432,
+      "matched_decided_groups": 4,
+      "matched_decided_complete_count": 4
+    },
+    {
+      "candidate_id": "v1.5_a1.0",
+      "groups": 4,
+      "complete_count": 4,
+      "successful_mean_cost": 4.390000104904175,
+      "matched_decided_groups": 4,
+      "matched_decided_complete_count": 4
+    },
+    {
+      "candidate_id": "v2.3_a0.0",
+      "groups": 4,
+      "complete_count": 4,
+      "successful_mean_cost": 3.309999942779541,
+      "matched_decided_groups": 4,
+      "matched_decided_complete_count": 4
+    },
+    {
+      "candidate_id": "v2.3_a0.5",
+      "groups": 4,
+      "complete_count": 4,
+      "successful_mean_cost": 3.2949999570846558,
+      "matched_decided_groups": 4,
+      "matched_decided_complete_count": 4
+    },
+    {
+      "candidate_id": "v2.3_a1.0",
+      "groups": 4,
+      "complete_count": 4,
+      "successful_mean_cost": 3.3399999737739563,
+      "matched_decided_groups": 4,
+      "matched_decided_complete_count": 4
+    }
+  ],
+  "observed_oracle_complete_groups": 4,
+  "role": "leave-one-origin-run-out DEV; not independent TEST or deployed planning success",
+  "groups": 4,
+  "selected_groups": 4,
+  "unknown_groups": 0,
+  "no_feasible_groups": 0,
+  "selection_rule": {
+    "minimum_completion": 0.7,
+    "probability_tolerance": 0.05
+  },
+  "selected_complete_count": 4,
+  "brier_score": 0.0,
+  "brier_count": 24,
+  "rows": [
+    {
+      "origin_id": "connection_candidates_bump6_negative",
+      "snapshot_id": "40bc68864f0a43e475e2a331b4c6c7927156380e1885ed7f96bfb459fbf8b246",
+      "task_id": "left90_R2",
+      "skill_id": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b:517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125:arrival_original_route",
+      "selection_status": "selected",
+      "selected_candidate": "v2.3_a0.5",
+      "selected_complete": 1,
+      "selected_success_cost": 3.240000009536743,
+      "observed_oracle_candidate": "v2.3_a0.5",
+      "observed_oracle_success_cost": 3.240000009536743,
+      "predictions": [
+        {
+          "candidate_id": "v1.5_a0.0",
+          "known": true,
+          "support": 0.9714046924267635,
+          "complete_probability": 1.0,
+          "success_cost": 4.519999980926514,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v1.5_a0.5",
+          "known": true,
+          "support": 0.9714046924267635,
+          "complete_probability": 1.0,
+          "success_cost": 4.440000057220459,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v1.5_a1.0",
+          "known": true,
+          "support": 0.9714046924267635,
+          "complete_probability": 1.0,
+          "success_cost": 4.380000114440918,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v2.3_a0.0",
+          "known": true,
+          "support": 0.9714046924267635,
+          "complete_probability": 1.0,
+          "success_cost": 3.299999952316284,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v2.3_a0.5",
+          "known": true,
+          "support": 0.9714046924267635,
+          "complete_probability": 1.0,
+          "success_cost": 3.2799999713897705,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v2.3_a1.0",
+          "known": true,
+          "support": 0.9714046924267635,
+          "complete_probability": 1.0,
+          "success_cost": 3.299999952316284,
+          "sample_count": 1
+        }
+      ],
+      "calibration": [
+        {
+          "candidate_id": "v1.5_a0.0",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v1.5_a0.5",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v1.5_a1.0",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.3_a0.0",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.3_a0.5",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.3_a1.0",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        }
+      ]
+    },
+    {
+      "origin_id": "connection_candidates_bump6_negative",
+      "snapshot_id": "40bc68864f0a43e475e2a331b4c6c7927156380e1885ed7f96bfb459fbf8b246",
+      "task_id": "right90_R2",
+      "skill_id": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b:517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125:arrival_original_route",
+      "selection_status": "selected",
+      "selected_candidate": "v2.3_a0.5",
+      "selected_complete": 1,
+      "selected_success_cost": 3.359999895095825,
+      "observed_oracle_candidate": "v2.3_a0.0",
+      "observed_oracle_success_cost": 3.3399999141693115,
+      "predictions": [
+        {
+          "candidate_id": "v1.5_a0.0",
+          "known": true,
+          "support": 0.9714046924267635,
+          "complete_probability": 1.0,
+          "success_cost": 4.420000076293945,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v1.5_a0.5",
+          "known": true,
+          "support": 0.9714046924267635,
+          "complete_probability": 1.0,
+          "success_cost": 4.340000152587891,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v1.5_a1.0",
+          "known": true,
+          "support": 0.9714046924267635,
+          "complete_probability": 1.0,
+          "success_cost": 4.360000133514404,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v2.3_a0.0",
+          "known": true,
+          "support": 0.9714046924267635,
+          "complete_probability": 1.0,
+          "success_cost": 3.319999933242798,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v2.3_a0.5",
+          "known": true,
+          "support": 0.9714046924267635,
+          "complete_probability": 1.0,
+          "success_cost": 3.299999952316284,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v2.3_a1.0",
+          "known": true,
+          "support": 0.9714046924267635,
+          "complete_probability": 1.0,
+          "success_cost": 3.359999895095825,
+          "sample_count": 1
+        }
+      ],
+      "calibration": [
+        {
+          "candidate_id": "v1.5_a0.0",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v1.5_a0.5",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v1.5_a1.0",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.3_a0.0",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.3_a0.5",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.3_a1.0",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        }
+      ]
+    },
+    {
+      "origin_id": "connection_candidates_bump6_positive",
+      "snapshot_id": "3be8e8eacbdad241496659e5736a5715abd4b5843fa2fd1f0340cf54596f1055",
+      "task_id": "left90_R2",
+      "skill_id": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b:517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125:arrival_original_route",
+      "selection_status": "selected",
+      "selected_candidate": "v2.3_a0.5",
+      "selected_complete": 1,
+      "selected_success_cost": 3.2799999713897705,
+      "observed_oracle_candidate": "v2.3_a0.5",
+      "observed_oracle_success_cost": 3.2799999713897705,
+      "predictions": [
+        {
+          "candidate_id": "v1.5_a0.0",
+          "known": true,
+          "support": 0.9714046924267635,
+          "complete_probability": 1.0,
+          "success_cost": 4.539999961853027,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v1.5_a0.5",
+          "known": true,
+          "support": 0.9714046924267635,
+          "complete_probability": 1.0,
+          "success_cost": 4.440000057220459,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v1.5_a1.0",
+          "known": true,
+          "support": 0.9714046924267635,
+          "complete_probability": 1.0,
+          "success_cost": 4.380000114440918,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v2.3_a0.0",
+          "known": true,
+          "support": 0.9714046924267635,
+          "complete_probability": 1.0,
+          "success_cost": 3.2799999713897705,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v2.3_a0.5",
+          "known": true,
+          "support": 0.9714046924267635,
+          "complete_probability": 1.0,
+          "success_cost": 3.240000009536743,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v2.3_a1.0",
+          "known": true,
+          "support": 0.9714046924267635,
+          "complete_probability": 1.0,
+          "success_cost": 3.259999990463257,
+          "sample_count": 1
+        }
+      ],
+      "calibration": [
+        {
+          "candidate_id": "v1.5_a0.0",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v1.5_a0.5",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v1.5_a1.0",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.3_a0.0",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.3_a0.5",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.3_a1.0",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        }
+      ]
+    },
+    {
+      "origin_id": "connection_candidates_bump6_positive",
+      "snapshot_id": "3be8e8eacbdad241496659e5736a5715abd4b5843fa2fd1f0340cf54596f1055",
+      "task_id": "right90_R2",
+      "skill_id": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b:517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125:arrival_original_route",
+      "selection_status": "selected",
+      "selected_candidate": "v2.3_a0.0",
+      "selected_complete": 1,
+      "selected_success_cost": 3.319999933242798,
+      "observed_oracle_candidate": "v2.3_a0.5",
+      "observed_oracle_success_cost": 3.299999952316284,
+      "predictions": [
+        {
+          "candidate_id": "v1.5_a0.0",
+          "known": true,
+          "support": 0.9714046924267635,
+          "complete_probability": 1.0,
+          "success_cost": 4.420000076293945,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v1.5_a0.5",
+          "known": true,
+          "support": 0.9714046924267635,
+          "complete_probability": 1.0,
+          "success_cost": 4.380000114440918,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v1.5_a1.0",
+          "known": true,
+          "support": 0.9714046924267635,
+          "complete_probability": 1.0,
+          "success_cost": 4.440000057220459,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v2.3_a0.0",
+          "known": true,
+          "support": 0.9714046924267635,
+          "complete_probability": 1.0,
+          "success_cost": 3.3399999141693115,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v2.3_a0.5",
+          "known": true,
+          "support": 0.9714046924267635,
+          "complete_probability": 1.0,
+          "success_cost": 3.359999895095825,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v2.3_a1.0",
+          "known": true,
+          "support": 0.9714046924267635,
+          "complete_probability": 1.0,
+          "success_cost": 3.440000057220459,
+          "sample_count": 1
+        }
+      ],
+      "calibration": [
+        {
+          "candidate_id": "v1.5_a0.0",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v1.5_a0.5",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v1.5_a1.0",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.3_a0.0",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.3_a0.5",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.3_a1.0",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        }
+      ]
+    }
+  ],
+  "inputs": {
+    "records": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/docs/evidence/chapter3_connection_capability_20261106/records.jsonl",
+    "config": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/docs/evidence/chapter3_connection_capability_20261106/config.json"
+  }
+}
