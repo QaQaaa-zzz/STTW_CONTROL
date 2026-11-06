@@ -1,0 +1,22 @@
+{
+  "origin_id": "rb_upstream_offset_06",
+  "evaluated_sequences": 36,
+  "successful_sequences": 20,
+  "successful_holds": 3,
+  "failure_phases": {
+    "jump_or_landing": 12,
+    "continuation_or_corridor": 4
+  },
+  "best_hold": {
+    "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_2.0_0.5",
+    "T_s": 14.859999656677246
+  },
+  "best_sequence": {
+    "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_2.0_0.5",
+    "T_s": 14.760000228881836
+  },
+  "oracle_time_gain_s": 0.09999942779541016,
+  "all_diagonal_labels_match": true,
+  "max_diagonal_position_difference_m": 0.0,
+  "max_midpoint_prefix_state_difference": 0.0
+}
