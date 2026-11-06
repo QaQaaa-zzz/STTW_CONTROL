@@ -82,3 +82,7 @@ source_manifest.json给出来源、提取方式和文件哈希；内部历史绝
 ## 当前小车物理模型
 
 [完整物理资产及说明](../../../assets/sttw_bicycle/README.md)已随同分支提交：当前实际URDF、轮子OBJ、转换契约、ECBC参数和Isaac Lab物理选项，并链接原MuJoCo XML/STL。身份与已评测模型一致；此处为小车物理模型，不是H75/Local300策略权重。
+
+## 低速坡段筛查：阶段结果及设计局限
+
+[已完成条件的XY/速度/侧倾与数据](low_speed_feasibility/FEASIBILITY.md)。当前快照4条件24轨迹，无提前失败；其余条件仍运行。1.4m/s低于冻结H75参考下限1.5m/s，两坡段alpha0/1执行参考触底比例100%，这会遮蔽速度偏好差异。该筛查不证明alpha0无法通过，也不证明动态alpha收益。完整数据保留，不降低限幅制造差异。
