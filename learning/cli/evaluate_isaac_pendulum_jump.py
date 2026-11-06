@@ -13,6 +13,9 @@ from sttw_control.pendulum_skill import TorchPendulumObservation,TorchPendulumSk
 from sttw_control.torch_controller import TorchController
 cfg=json.loads(Path('learning/configs/isaac_pendulum_local300_standard.json').read_text())
 options=cfg['plant_options'].copy();options['env_spacing']=20.;options['pendulum_locked']=True
+options['physics_dt']=spec.get('physics_dt',.0002)
+substeps=round(.005/options['physics_dt'])
+if substeps<1 or abs(substeps*options['physics_dt']-.005)>1e-9:raise ValueError('physics_dt must divide ground/sensor period .005')
 n=len(spec['skills'])
 plant=IsaacLabVectorPlant(Path(cfg['asset']),['plane'],[0]*n,out,**options)
 # Same source step dimensions, translated independently into each lane.
@@ -39,7 +42,7 @@ history=TorchPendulumObservation(plant.joints,json.loads(Path('learning/configs/
 geometry=TorchPendulumGeometry(json.loads(Path(spec['geometry']).read_text()),plant.bodies)
 last=torch.zeros(n,4,device='cuda:0');alive=torch.ones(n,dtype=torch.bool,device='cuda:0');entered=torch.zeros_like(alive);consumed=torch.zeros_like(alive)
 active=False;rows=[];actions=[];observations=[];valid=[];start=time.monotonic();steps=round(spec['seconds']/.005)
-(out/'protocol.json').write_text(json.dumps(dict(spec=spec,plant=plant.metadata,policies=[s.identity for s in policies],ground_history='last_action zero means no prior jump action; physical FIFO sampled throughout ground approach',initial_translation='common saved snapshot translated to start_x/y0; optional rigid world-yaw alignment rotates pose and both velocities together',role='nominal paired DEV integration; not original donor benchmark',physics_dt=.0002,ground_dt=.005,jump_dt=.02,optimizer_updates=0),indent=2))
+(out/'protocol.json').write_text(json.dumps(dict(spec=spec,plant=plant.metadata,policies=[s.identity for s in policies],ground_history='last_action zero means no prior jump action; physical FIFO sampled throughout ground approach',initial_translation='common saved snapshot translated to start_x/y0; optional rigid world-yaw alignment rotates pose and both velocities together',role='nominal paired DEV integration; not original donor benchmark',physics_dt=plant.physics_dt,ground_dt=.005,jump_dt=.02,optimizer_updates=0),indent=2))
 target=torch.zeros(n,4,device='cuda:0')
 for k in range(steps+1):
  m,pose,speed=plant.observe();root=plant.roots.clone();root[:,:3]-=plant.origin
@@ -60,14 +63,14 @@ for k in range(steps+1):
    for i,policy in enumerate(policies):last[i:i+1],target[i:i+1]=policy.infer(obs[i:i+1],plant.dofs[i:i+1,plant.joints.index('knee_joint'),0])
  if active:
   command=torch.stack((torch.zeros_like(speed),target[:,1]),-1)
-  for _ in range(25):plant.step(command,pendulum_target=target[:,2:],steering_position_target=target[:,:1],refresh_diagnostics=False)
+  for _ in range(substeps):plant.step(command,pendulum_target=target[:,2:],steering_position_target=target[:,:1],refresh_diagnostics=False)
  else:
   request=torch.stack((m[:,5]*.1,m[:,2],m[:,3],m[:,0],m[:,1],torch.zeros_like(speed)),-1)
   control=controller.step(request,torch.ones_like(alive));command=torch.stack((control[:,0].clamp(-3,3),torch.full_like(speed,spec['approach_speed']/.1)),-1)
-  for _ in range(25):plant.step(command,refresh_diagnostics=False)
+  for _ in range(substeps):plant.step(command,refresh_diagnostics=False)
  plant.refresh()
 trace=torch.stack(rows).cpu().numpy();mask=torch.stack(valid).cpu().numpy();np.savez(out/'trajectory.npz',trace=trace,valid=mask,action=torch.stack(actions).cpu().numpy(),observations=torch.stack(observations).cpu().numpy(),columns=['time','x','y','z','speed','roll','roll_rate','steer','steer_rate','hip','knee','obstacle_relative_x'])
-result=dict(status='complete',elapsed_s=time.monotonic()-start,physics_lane_steps=k*25*n,cases=[])
+result=dict(status='complete',elapsed_s=time.monotonic()-start,physics_lane_steps=k*substeps*n,cases=[])
 for i,name in enumerate(spec['skills']):
  tr=trace[mask[:,i],i];result['cases'].append(dict(skill=name,duration_s=float(tr[-1,0]),physical_termination=not bool(alive[i]),peak_root_z=float(tr[:,3].max()),final_xyz=tr[-1,1:4].tolist(),peak_abs_roll_deg=float(np.rad2deg(abs(tr[:,5])).max()),full_jump_success='not adjudicated; requires clearance and landing evidence'))
 (out/'results.json').write_text(json.dumps(result,indent=2));print(result,flush=True)

@@ -15,8 +15,8 @@ from .torch_controller import TorchVelocityServos,TorchPositionServos
 from .torch_observation import TorchVehicleSignals
 
 class IsaacLabVectorPlant:
-    def __init__(self,asset,terrain_paths,terrain_ids,output,servo_mode="explicit",hull_vertices=None,mesh_collision_on_geometry=False,compliant_wheels=None,friction_correlation_distance=.025,external_forces_every_iteration=False,wheel_collision="convexHull",friction_offset_threshold=.04,env_spacing=None,track_wheel_contacts=False,terrain_layout="external",pendulum_rest=None,pendulum_locked=False):
-        self.servo_mode=servo_mode
+    def __init__(self,asset,terrain_paths,terrain_ids,output,servo_mode="explicit",hull_vertices=None,mesh_collision_on_geometry=False,compliant_wheels=None,friction_correlation_distance=.025,external_forces_every_iteration=False,wheel_collision="convexHull",friction_offset_threshold=.04,env_spacing=None,track_wheel_contacts=False,terrain_layout="external",pendulum_rest=None,pendulum_locked=False,physics_dt=.0002):
+        self.servo_mode=servo_mode;self.physics_dt=physics_dt
         asset=Path(asset);output=Path(output);self.contract=json.loads(asset.with_name('contract.json').read_text());self.device='cuda:0';self.count=len(terrain_ids)
         if hashlib.sha256(asset.read_bytes()).hexdigest()!=self.contract['exported_xml_sha256']:raise ValueError('asset identity mismatch')
         self_collision=self.contract.get('requires_self_collision_filtering', False)
@@ -33,7 +33,7 @@ class IsaacLabVectorPlant:
             mesh.set('filename',mapping[original])
         tree.write(staged/'vehicle.urdf',encoding='unicode')
         converter=UrdfConverter(UrdfConverterCfg(asset_path=str((staged/'vehicle.urdf').resolve()),usd_dir=str((output/'usd').resolve()),usd_file_name='vehicle.usd',fix_base=False,merge_fixed_joints=False,make_instanceable=False,force_usd_conversion=True,self_collision=self_collision,collider_type='convex_hull',joint_drive=UrdfConverterCfg.JointDriveCfg(target_type='none',gains=UrdfConverterCfg.JointDriveCfg.PDGainsCfg(stiffness=0.,damping=0.))))
-        self.sim=sim_utils.SimulationContext(sim_utils.SimulationCfg(dt=.0002,device=self.device,gravity=(0.,0.,-9.81),physx=sim_utils.PhysxCfg(solver_type=1,friction_offset_threshold=friction_offset_threshold,enable_external_forces_every_iteration=external_forces_every_iteration,bounce_threshold_velocity=.2,friction_correlation_distance=friction_correlation_distance,gpu_found_lost_pairs_capacity=2**24,gpu_total_aggregate_pairs_capacity=2**24,gpu_found_lost_aggregate_pairs_capacity=2**27)))
+        self.sim=sim_utils.SimulationContext(sim_utils.SimulationCfg(dt=self.physics_dt,device=self.device,gravity=(0.,0.,-9.81),physx=sim_utils.PhysxCfg(solver_type=1,friction_offset_threshold=friction_offset_threshold,enable_external_forces_every_iteration=external_forces_every_iteration,bounce_threshold_velocity=.2,friction_correlation_distance=friction_correlation_distance,gpu_found_lost_pairs_capacity=2**24,gpu_total_aggregate_pairs_capacity=2**24,gpu_found_lost_aggregate_pairs_capacity=2**27)))
         material=sim_utils.RigidBodyMaterialCfg(static_friction=.8,dynamic_friction=.8,restitution=0.,friction_combine_mode='average');material.func('/World/Material',material)
         cloner=GridCloner(spacing=100. if env_spacing is None else env_spacing,stage=self.sim.stage);cloner.define_base_env('/World/Envs')
         env_paths=cloner.generate_paths('/World/Envs/Env',self.count)
@@ -123,16 +123,16 @@ class IsaacLabVectorPlant:
             terrain_filter='/World/Envs/Env_.*/Terrain_.*' if replicated_terrain else '/World/Terrain_.*'
             filters=plane_paths+([terrain_filter] if terrain_sources else [])
             self.wheel_sensors=[ContactSensor(ContactSensorCfg(prim_path=f'/World/Envs/Env_.*/Robot/{wheel}',filter_prim_paths_expr=filters,track_contact_points=True,max_contact_data_count_per_prim=16,update_period=0.)) for wheel in ('frontwheel','rearwheel')]
-        self.sim.reset();self.robot.update(.0002);self.sensor.update(.0002,force_recompute=True)
-        for sensor in self.wheel_sensors:sensor.update(.0002,force_recompute=True)
+        self.sim.reset();self.robot.update(self.physics_dt);self.sensor.update(self.physics_dt,force_recompute=True)
+        for sensor in self.wheel_sensors:sensor.update(self.physics_dt,force_recompute=True)
         self.joints=self.robot.joint_names;self.bodies=self.robot.body_names;self.signals=TorchVehicleSignals(self.contract,self.joints,self.device);self.servos=TorchVelocityServos(self.contract,self.joints,self.device,additional_actuators=(() if pendulum_rest is None else ("cmd_hip_f","cmd_knee_f")));self.contact_order=[self.sensor.body_names.index(name) for name in self.bodies];self.nonwheel=[i for i,name in enumerate(self.bodies) if name not in ('frontwheel','rearwheel')]
         self.pendulum_servos=None if pendulum_rest is None else TorchPositionServos(self.contract,self.joints,['cmd_hip_f','cmd_knee_f'],self.device)
         self.jump_steering_servo=None if pendulum_rest is None else TorchPositionServos(self.contract,self.joints,['cmd_steering_p'],self.device,allow_inactive=True)
         self.pendulum_target=None if pendulum_rest is None else torch.tensor(pendulum_rest,device=self.device).expand(self.count,-1).clone()
-        self.metadata=dict(env_origins=origins.tolist(),env_spacing=env_spacing,friction_offset_threshold=PhysxSchema.PhysxSceneAPI(self.sim.stage.GetPrimAtPath(self.sim.cfg.physics_prim_path)).GetFrictionOffsetThresholdAttr().Get(),wheel_collision=wheel_collision,external_forces_every_iteration=PhysxSchema.PhysxSceneAPI(self.sim.stage.GetPrimAtPath(self.sim.cfg.physics_prim_path)).GetEnableExternalForcesEveryIterationAttr().Get(),friction_correlation_distance=PhysxSchema.PhysxSceneAPI(self.sim.stage.GetPrimAtPath(self.sim.cfg.physics_prim_path)).GetFrictionCorrelationDistanceAttr().Get(),compliant_wheels=compliant_wheels,mesh_collision_on_geometry=mesh_collision_on_geometry,collision_cooking=self.collision_cooking,servo_mode=servo_mode,device=self.device,num_envs=self.count,replicate_physics=True,terrain_asset_count=len(terrain_sources),masses=self.robot.root_physx_view.get_masses().cpu().tolist(),materials=self.robot.root_physx_view.get_material_properties().cpu().tolist(),contact_sensor_bodies=self.sensor.body_names,mesh_filename_mapping=mapping,scope='original meshes imported by Isaac Sim 5.1; contact representation may be recooked')
+        self.metadata=dict(physics_dt_s=self.physics_dt,env_origins=origins.tolist(),env_spacing=env_spacing,friction_offset_threshold=PhysxSchema.PhysxSceneAPI(self.sim.stage.GetPrimAtPath(self.sim.cfg.physics_prim_path)).GetFrictionOffsetThresholdAttr().Get(),wheel_collision=wheel_collision,external_forces_every_iteration=PhysxSchema.PhysxSceneAPI(self.sim.stage.GetPrimAtPath(self.sim.cfg.physics_prim_path)).GetEnableExternalForcesEveryIterationAttr().Get(),friction_correlation_distance=PhysxSchema.PhysxSceneAPI(self.sim.stage.GetPrimAtPath(self.sim.cfg.physics_prim_path)).GetFrictionCorrelationDistanceAttr().Get(),compliant_wheels=compliant_wheels,mesh_collision_on_geometry=mesh_collision_on_geometry,collision_cooking=self.collision_cooking,servo_mode=servo_mode,device=self.device,num_envs=self.count,replicate_physics=True,terrain_asset_count=len(terrain_sources),masses=self.robot.root_physx_view.get_masses().cpu().tolist(),materials=self.robot.root_physx_view.get_material_properties().cpu().tolist(),contact_sensor_bodies=self.sensor.body_names,mesh_filename_mapping=mapping,scope='original meshes imported by Isaac Sim 5.1; contact representation may be recooked')
         self.metadata['self_collision']=dict(enabled=self_collision,filtered_body_pairs=self.contract.get('filtered_body_pairs',[]))
         self.metadata['terrain_layout']=dict(mode=terrain_layout,clone_origins=clone_origins.tolist(),template_offsets=terrain_offsets.tolist(),filtering='native replicated environment IDs' if replicated_terrain else 'explicit collision groups')
-        self.metadata['wheel_contact_tracking']=dict(enabled=track_wheel_contacts,body_order=['frontwheel','rearwheel'],aggregation='official ContactSensor mean contact position per body/filter; force_matrix_w per filter',sample_dt_s=.0002)
+        self.metadata['wheel_contact_tracking']=dict(enabled=track_wheel_contacts,body_order=['frontwheel','rearwheel'],aggregation='official ContactSensor mean contact position per body/filter; force_matrix_w per filter',sample_dt_s=self.physics_dt)
         self.reset()
         if self.pendulum_servos is not None:
             self.pendulum_original_limits=self.robot.data.joint_pos_limits[:,self.pendulum_servos.indices].clone()
@@ -208,12 +208,12 @@ class IsaacLabVectorPlant:
             if pendulum_target is not None:self.pendulum_target=pendulum_target
             self.last_pendulum_torque=self.pendulum_servos.torque(self.pendulum_target,self.dofs[:,:,0],self.dofs[:,:,1])
             torque=torque+self.last_pendulum_torque
-        self.robot.set_joint_effort_target(torque);self.robot.write_data_to_sim();self.sim.step(render=False);self.robot.update(.0002)
+        self.robot.set_joint_effort_target(torque);self.robot.write_data_to_sim();self.sim.step(render=False);self.robot.update(self.physics_dt)
         if not refresh_diagnostics:
             self.dofs=torch.stack((self.robot.data.joint_pos,self.robot.data.joint_vel),dim=-1)
             return None
-        self.sensor.update(.0002,force_recompute=True)
-        for sensor in self.wheel_sensors:sensor.update(.0002,force_recompute=True)
+        self.sensor.update(self.physics_dt,force_recompute=True)
+        for sensor in self.wheel_sensors:sensor.update(self.physics_dt,force_recompute=True)
         self.refresh();return (self.contact[:,self.nonwheel].square().sum(-1)>0).any(-1)
 
     def close(self):
