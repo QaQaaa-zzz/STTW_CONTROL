@@ -1,3 +1,17 @@
+## 带摆四组转弯诊断结果
+
+`runs/pendulum_isaac_turns/RESULTS.md`、`xy_response.png`及`tracking_metrics.json`保留四条完整轨迹。实际完成8s/160000physics/0optimizer，4lane未触发45deg终止；初始速度均2.0，reset修复在本run得到确认。3–8s正/负方向速度RMSE：ECBC .05524/.05575m/s，Local300 .03440/.02848m/s；峰值roll ECBC5.85/6.04deg、Local3007.80/7.75deg。8s末端yawrate ECBC-.00424/+.04225rad/s，Local300-.15020/+.13044rad/s。Local300改善速度但放大roll瞬态及尾段偏航，不能认定整体更优或共同任务已合格；回正窗口仅1s，保留其限制。
+
+下一步接H75任务级参考检查实际路径行为，仍保留ECBC对照，之后据行为决定底层/中层适配。未启动训练、未证明跳跃交接。采样255.50s，进程退出清理与物理完成分开记录。
+
+## 第三章经验接续查询实现（真实能力库待采集）
+
+`empirical_capability.ConnectionCapability` 接收已执行的闭环结果记录，字段state/task_id/skill_id/candidate_id/complete/success_cost。task_id应标识下一任务弯向、道路和连接条件；skill_id必须绑定实际模型/策略/执行版本，不使用含混的“best”。state特征尺度、Gaussian bandwidth和minimum_support由冻结开发协议显式传入，不在查询时拟合；正式建库需另保留完整快照与轨迹来源。
+
+按每个候选返回加权完整任务完成率、仅成功样本的条件代价、sum(weights)支持度和样本数；低支持返回known=False、概率/代价None，全部未知返回best_candidate=None。无成功样本时成功代价为None；词典序先完成率后成功代价，失败记录上的cost不参与。执行管理器仍需使用声明的完成门槛/备用路线；支持度不是置信区间，经验比例不是已校准概率，也不是安全证明。
+
+13项查询/旧force-grid测试通过，验证任务/策略隔离、远距离未知、完成优先及失败代价排除。测试为人工小样本单元测试，不是物理实验；当前未建真实6候选库、未连接LLM，不能称能力评价已验证有效。
+
 ## 带摆左右转弯配对诊断已启动
 
 `learning/configs/isaac_pendulum_turns.json`：4lane正/负0.12rad转向，各比较原ECBC与原Local300＋ECBC；2m/s、3秒零残差预热并填充history、3–7秒slew转弯、7–8秒回正。共同带摆模型/固定摆姿态不变，Local300原权重与1.5/10缩放。最多160000physics steps、0optimizer，输出 `runs/pendulum_isaac_turns`；此处结果尚待采集，不是H75或跳跃任务完成。
