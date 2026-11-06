@@ -1,0 +1,47 @@
+{
+  "duration_s": 8.0,
+  "warmup_s": 3.0,
+  "return_s": 7.0,
+  "speed_m_s": 2.0,
+  "steer_slew_rad_s": 0.8,
+  "cases": [
+    {
+      "name": "ecbc_1",
+      "steer_rad": 0.12,
+      "local300": false,
+      "lower_start_s": 0.0
+    },
+    {
+      "name": "ecbc_-1",
+      "steer_rad": -0.12,
+      "local300": false,
+      "lower_start_s": 0.0
+    },
+    {
+      "name": "local300_from_start_1",
+      "steer_rad": 0.12,
+      "local300": true,
+      "lower_start_s": 0.0
+    },
+    {
+      "name": "local300_from_start_-1",
+      "steer_rad": -0.12,
+      "local300": true,
+      "lower_start_s": 0.0
+    }
+  ],
+  "pendulum_locked": true,
+  "plant_options": {
+    "physics_dt": 0.005,
+    "wheel_radius_m": 0.07,
+    "gpu_pair_capacities": [
+      1048576,
+      1048576,
+      1048576
+    ],
+    "servo_mode": "hybrid"
+  },
+  "role": "Frozen original orange Local300 active from reset, paired ECBC; original hybrid compliant RB setup; no training or weight change",
+  "save_warmup_state": false,
+  "controller_config": "learning/configs/rb_sttw_controller.json"
+}
