@@ -20,6 +20,7 @@ plant=IsaacLabVectorPlant(a.asset,['plane'],[0]*n,a.output,pendulum_rest=[-1.2,2
 if any('controller_wc' in case for case in cases):cfg['wc']=[case.get('controller_wc',cfg['wc']) for case in cases]
 if any('feedback_gain_scale' in case for case in cases):cfg['feedback_gain_scale']=[case.get('feedback_gain_scale',[1.,1.,1.]) for case in cases]
 if any('roll_rate_filter_hz' in case for case in cases):cfg['roll_rate_filter_hz']=[case.get('roll_rate_filter_hz',0.) for case in cases]
+if any('roll_reference_scale' in case for case in cases):cfg['roll_reference_scale']=[case.get('roll_reference_scale',1.) for case in cases]
 controller=TorchController(cfg,n,'cuda:0')
 from sttw_control.torch_local_lower import TorchLocalLower
 from sttw_control.torch_path_reference import wrap
