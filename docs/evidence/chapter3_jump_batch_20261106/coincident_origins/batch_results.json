@@ -1,0 +1,56 @@
+{
+  "status": "complete",
+  "elapsed_s": 22.815509131,
+  "physics_lane_steps": 5424,
+  "optimizer_updates": 0,
+  "cases": [
+    {
+      "lane": 0,
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_batch_pilot/coincident_origins/evaluation/lane_00"
+    },
+    {
+      "lane": 1,
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_batch_pilot/coincident_origins/evaluation/lane_01"
+    },
+    {
+      "lane": 2,
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_batch_pilot/coincident_origins/evaluation/lane_02"
+    },
+    {
+      "lane": 3,
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_batch_pilot/coincident_origins/evaluation/lane_03"
+    },
+    {
+      "lane": 4,
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_batch_pilot/coincident_origins/evaluation/lane_04"
+    },
+    {
+      "lane": 5,
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_batch_pilot/coincident_origins/evaluation/lane_05"
+    }
+  ]
+}

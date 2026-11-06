@@ -304,6 +304,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.5",
+        "matched_samples": 361,
+        "reference_samples": 361,
+        "sequence_samples": 361,
+        "reference_midpoint_s": 7.2,
+        "sequence_midpoint_s": 7.2,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -606,6 +616,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_1.8_0.0_then_1.8_0.0",
+        "matched_samples": 373,
+        "reference_samples": 373,
+        "sequence_samples": 373,
+        "reference_midpoint_s": 7.44,
+        "sequence_midpoint_s": 7.44,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -908,6 +928,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_1.8_0.5_then_1.8_0.5",
+        "matched_samples": 371,
+        "reference_samples": 371,
+        "sequence_samples": 371,
+        "reference_midpoint_s": 7.4,
+        "sequence_midpoint_s": 7.4,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -1210,6 +1240,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_1.8_1.0_then_1.8_1.0",
+        "matched_samples": 370,
+        "reference_samples": 370,
+        "sequence_samples": 370,
+        "reference_midpoint_s": 7.38,
+        "sequence_midpoint_s": 7.38,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -1512,6 +1552,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_2.0_0.0_then_2.0_0.0",
+        "matched_samples": 362,
+        "reference_samples": 362,
+        "sequence_samples": 362,
+        "reference_midpoint_s": 7.22,
+        "sequence_midpoint_s": 7.22,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -1814,6 +1864,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_2.0_1.0_then_2.0_1.0",
+        "matched_samples": 361,
+        "reference_samples": 361,
+        "sequence_samples": 361,
+        "reference_midpoint_s": 7.2,
+        "sequence_midpoint_s": 7.2,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -2082,6 +2142,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.5",
+        "matched_samples": 361,
+        "reference_samples": 361,
+        "sequence_samples": 361,
+        "reference_midpoint_s": 7.2,
+        "sequence_midpoint_s": 7.2,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -2350,6 +2420,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.5",
+        "matched_samples": 361,
+        "reference_samples": 361,
+        "sequence_samples": 361,
+        "reference_midpoint_s": 7.2,
+        "sequence_midpoint_s": 7.2,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -2618,6 +2698,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.5",
+        "matched_samples": 361,
+        "reference_samples": 361,
+        "sequence_samples": 361,
+        "reference_midpoint_s": 7.2,
+        "sequence_midpoint_s": 7.2,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -2886,6 +2976,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.5",
+        "matched_samples": 361,
+        "reference_samples": 361,
+        "sequence_samples": 361,
+        "reference_midpoint_s": 7.2,
+        "sequence_midpoint_s": 7.2,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -3154,6 +3254,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.5",
+        "matched_samples": 361,
+        "reference_samples": 361,
+        "sequence_samples": 361,
+        "reference_midpoint_s": 7.2,
+        "sequence_midpoint_s": 7.2,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -3422,6 +3532,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_1.8_0.0_then_1.8_0.0",
+        "matched_samples": 373,
+        "reference_samples": 373,
+        "sequence_samples": 373,
+        "reference_midpoint_s": 7.44,
+        "sequence_midpoint_s": 7.44,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -3690,6 +3810,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_1.8_0.0_then_1.8_0.0",
+        "matched_samples": 373,
+        "reference_samples": 373,
+        "sequence_samples": 373,
+        "reference_midpoint_s": 7.44,
+        "sequence_midpoint_s": 7.44,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -3958,6 +4088,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_1.8_0.0_then_1.8_0.0",
+        "matched_samples": 373,
+        "reference_samples": 373,
+        "sequence_samples": 373,
+        "reference_midpoint_s": 7.44,
+        "sequence_midpoint_s": 7.44,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -4226,6 +4366,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_1.8_0.0_then_1.8_0.0",
+        "matched_samples": 373,
+        "reference_samples": 373,
+        "sequence_samples": 373,
+        "reference_midpoint_s": 7.44,
+        "sequence_midpoint_s": 7.44,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -4494,6 +4644,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_1.8_0.0_then_1.8_0.0",
+        "matched_samples": 373,
+        "reference_samples": 373,
+        "sequence_samples": 373,
+        "reference_midpoint_s": 7.44,
+        "sequence_midpoint_s": 7.44,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -4762,6 +4922,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_1.8_0.5_then_1.8_0.5",
+        "matched_samples": 371,
+        "reference_samples": 371,
+        "sequence_samples": 371,
+        "reference_midpoint_s": 7.4,
+        "sequence_midpoint_s": 7.4,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -5030,6 +5200,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_1.8_0.5_then_1.8_0.5",
+        "matched_samples": 371,
+        "reference_samples": 371,
+        "sequence_samples": 371,
+        "reference_midpoint_s": 7.4,
+        "sequence_midpoint_s": 7.4,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -5298,6 +5478,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_1.8_0.5_then_1.8_0.5",
+        "matched_samples": 371,
+        "reference_samples": 371,
+        "sequence_samples": 371,
+        "reference_midpoint_s": 7.4,
+        "sequence_midpoint_s": 7.4,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -5566,6 +5756,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_1.8_0.5_then_1.8_0.5",
+        "matched_samples": 371,
+        "reference_samples": 371,
+        "sequence_samples": 371,
+        "reference_midpoint_s": 7.4,
+        "sequence_midpoint_s": 7.4,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -5834,6 +6034,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_1.8_0.5_then_1.8_0.5",
+        "matched_samples": 371,
+        "reference_samples": 371,
+        "sequence_samples": 371,
+        "reference_midpoint_s": 7.4,
+        "sequence_midpoint_s": 7.4,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -6102,6 +6312,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_1.8_1.0_then_1.8_1.0",
+        "matched_samples": 370,
+        "reference_samples": 370,
+        "sequence_samples": 370,
+        "reference_midpoint_s": 7.38,
+        "sequence_midpoint_s": 7.38,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -6370,6 +6590,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_1.8_1.0_then_1.8_1.0",
+        "matched_samples": 370,
+        "reference_samples": 370,
+        "sequence_samples": 370,
+        "reference_midpoint_s": 7.38,
+        "sequence_midpoint_s": 7.38,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -6638,6 +6868,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_1.8_1.0_then_1.8_1.0",
+        "matched_samples": 370,
+        "reference_samples": 370,
+        "sequence_samples": 370,
+        "reference_midpoint_s": 7.38,
+        "sequence_midpoint_s": 7.38,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -6906,6 +7146,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_1.8_1.0_then_1.8_1.0",
+        "matched_samples": 370,
+        "reference_samples": 370,
+        "sequence_samples": 370,
+        "reference_midpoint_s": 7.38,
+        "sequence_midpoint_s": 7.38,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -7174,6 +7424,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_1.8_1.0_then_1.8_1.0",
+        "matched_samples": 370,
+        "reference_samples": 370,
+        "sequence_samples": 370,
+        "reference_midpoint_s": 7.38,
+        "sequence_midpoint_s": 7.38,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -7442,6 +7702,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_2.0_0.0_then_2.0_0.0",
+        "matched_samples": 362,
+        "reference_samples": 362,
+        "sequence_samples": 362,
+        "reference_midpoint_s": 7.22,
+        "sequence_midpoint_s": 7.22,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -7710,6 +7980,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_2.0_0.0_then_2.0_0.0",
+        "matched_samples": 362,
+        "reference_samples": 362,
+        "sequence_samples": 362,
+        "reference_midpoint_s": 7.22,
+        "sequence_midpoint_s": 7.22,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -7978,6 +8258,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_2.0_0.0_then_2.0_0.0",
+        "matched_samples": 362,
+        "reference_samples": 362,
+        "sequence_samples": 362,
+        "reference_midpoint_s": 7.22,
+        "sequence_midpoint_s": 7.22,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -8246,6 +8536,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_2.0_0.0_then_2.0_0.0",
+        "matched_samples": 362,
+        "reference_samples": 362,
+        "sequence_samples": 362,
+        "reference_midpoint_s": 7.22,
+        "sequence_midpoint_s": 7.22,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -8514,6 +8814,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_2.0_0.0_then_2.0_0.0",
+        "matched_samples": 362,
+        "reference_samples": 362,
+        "sequence_samples": 362,
+        "reference_midpoint_s": 7.22,
+        "sequence_midpoint_s": 7.22,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -8782,6 +9092,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_2.0_1.0_then_2.0_1.0",
+        "matched_samples": 361,
+        "reference_samples": 361,
+        "sequence_samples": 361,
+        "reference_midpoint_s": 7.2,
+        "sequence_midpoint_s": 7.2,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -9050,6 +9370,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_2.0_1.0_then_2.0_1.0",
+        "matched_samples": 361,
+        "reference_samples": 361,
+        "sequence_samples": 361,
+        "reference_midpoint_s": 7.2,
+        "sequence_midpoint_s": 7.2,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -9318,6 +9648,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_2.0_1.0_then_2.0_1.0",
+        "matched_samples": 361,
+        "reference_samples": 361,
+        "sequence_samples": 361,
+        "reference_midpoint_s": 7.2,
+        "sequence_midpoint_s": 7.2,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -9586,6 +9926,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_2.0_1.0_then_2.0_1.0",
+        "matched_samples": 361,
+        "reference_samples": 361,
+        "sequence_samples": 361,
+        "reference_midpoint_s": 7.2,
+        "sequence_midpoint_s": 7.2,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {
@@ -9854,6 +10204,16 @@
         "max_roll_difference_rad": 0.0,
         "max_roll_rate_difference_rad_s": 0.0,
         "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      },
+      "midpoint_prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_2.0_1.0_then_2.0_1.0",
+        "matched_samples": 361,
+        "reference_samples": 361,
+        "sequence_samples": 361,
+        "reference_midpoint_s": 7.2,
+        "sequence_midpoint_s": 7.2,
+        "max_observed_state_difference": 0.0,
+        "scope": "Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim"
       }
     },
     {

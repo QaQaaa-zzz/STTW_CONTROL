@@ -13,3 +13,7 @@
 新入口单环境完整22秒已完成。1635个状态样本一致，XY和速度RMSE均0，T=14.90秒；出口5.22秒、交权9.16秒、落台稳定12.02秒、交回12.72秒均一致。见 [单环境XY](single_lane_control/batch_vs_single_xy.png) 和 [逐项数据](single_lane_control/batch_comparison.json)。这支持当前六环境差异与多环境执行条件有关，具体原因尚未确定；不能据此宣称任意批量等价。
 
 单环境新入口213.792秒，旧97.331秒，当前共享机器负载不同且新入口继续计算跳跃期间地面历史，未实现单环境加速。正式跨技能候选使用原单环境入口推进。
+
+## 零平移、外部地形模式：未采用
+
+六条全部在2.24秒提前结束，尚未到出口决策。采样22.816秒来自提前失败，不能当有效加速。各lane相互一致但与原单环境不同；具体原因待查。保留[逐候选对比](coincident_origins/batch_comparison.json)和[实际XY](coincident_origins/batch_vs_single_xy.png)。下一诊断复用已有原生replicated地形模式，其结果尚未收取。

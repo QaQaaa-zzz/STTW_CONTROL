@@ -24,6 +24,7 @@ cfg=json.loads(Path(spec.get('plant_config','learning/configs/isaac_pendulum_loc
 options=cfg['plant_options'].copy();options['env_spacing']=spec.get('env_spacing',20.);options['pendulum_locked']=True
 options['physics_dt']=spec.get('physics_dt',.0002)
 if 'terrain_base_plane' in spec:options['terrain_base_plane']=spec['terrain_base_plane']
+if 'terrain_layout' in spec:options['terrain_layout']=spec['terrain_layout']
 options['gpu_pair_capacities']=spec.get('gpu_pair_capacities')
 options['actuator_force_limits']=spec.get('actuator_force_limits')
 substeps=round(.005/options['physics_dt'])

@@ -6,7 +6,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 p=argparse.ArgumentParser();p.add_argument('--manifest',type=Path,required=True);p.add_argument('--include-comparison-references',action='store_true');a=p.parse_args()
-m=json.loads(a.manifest.read_text());rows=[];prefixes={}
+m=json.loads(a.manifest.read_text());rows=[];prefixes={};midpoint_prefixes={}
 if a.include_comparison_references:
  references={}
  for c in m['cases']:
@@ -36,7 +36,9 @@ for c in m['cases']:
   if sequences:
    midpoint=run/'midpoint_decision.json'
    row['midpoint']=json.loads(midpoint.read_text()) if midpoint.exists() else None
-   if row['midpoint'] is not None:axes[i,1].axvline(row['midpoint']['time'],color=color,alpha=.2)
+   if row['midpoint'] is not None:
+    axes[i,1].axvline(row['midpoint']['time'],color=color,alpha=.2)
+    midpoint_prefixes[c['case_id']]=t[t[:,0]<=row['midpoint']['time']+.000001]
    if c['diagonal']:
     paired_spec=json.loads(Path(spec['paired_C6_config']).read_text());paired=Path(paired_spec['output'])
     if (paired/'chain_summary.json').exists():
@@ -70,6 +72,14 @@ for row in rows:
  if not len(times):continue
  delta=np.abs(reference[ri]-observed[oi])
  row['prefix_comparison']=dict(reference_case=baseline,matched_samples=len(times),through_time_s=float(times[-1]),max_position_difference_m=float(np.linalg.norm(reference[ri,1:4]-observed[oi,1:4],axis=1).max()),max_speed_difference_m_s=float(delta[:,4].max()),max_roll_difference_rad=float(delta[:,5].max()),max_roll_rate_difference_rad_s=float(delta[:,6].max()),scope='Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality')
+if sequences:
+ for row in rows:
+  if row['case_id'] not in midpoint_prefixes:continue
+  base=next(r for r in rows if r['origin_id']==row['origin_id'] and r['distance_m']==row['distance_m'] and r['first_candidate']==row['first_candidate'] and r['diagonal'])
+  if base['case_id'] not in midpoint_prefixes:continue
+  reference=midpoint_prefixes[base['case_id']];observed=midpoint_prefixes[row['case_id']]
+  times,ri,oi=np.intersect1d(reference[:,0],observed[:,0],return_indices=True)
+  row['midpoint_prefix_comparison']=dict(reference_case=base['case_id'],matched_samples=len(times),reference_samples=len(reference),sequence_samples=len(observed),reference_midpoint_s=base['midpoint']['time'],sequence_midpoint_s=row['midpoint']['time'],max_observed_state_difference=float(np.abs(reference[ri,1:]-observed[oi,1:]).max()) if len(times) else None,scope='Same first reference, complete stored trajectory through decision before applying second reference; no hidden simulator-state claim')
 for origin,(fig,axes) in figures.items():
  for ax in axes[:,0]:ax.set(xlabel='World x (m)',ylabel='World y (m)');ax.set_aspect('equal',adjustable='datalim')
  for ax in axes[:,1]:ax.set(xlabel='Time (s)',ylabel='Measured forward speed (m/s)')
