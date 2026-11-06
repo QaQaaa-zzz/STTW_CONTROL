@@ -18,9 +18,9 @@ options['gpu_pair_capacities']=spec.get('gpu_pair_capacities')
 substeps=round(.005/options['physics_dt'])
 if substeps<1 or abs(substeps*options['physics_dt']-.005)>1e-9:raise ValueError('physics_dt must divide ground/sensor period .005')
 n=len(spec['skills'])
-plant=IsaacLabVectorPlant(Path(cfg['asset']),['plane'],[0]*n,out,**options)
+plant=IsaacLabVectorPlant(Path(cfg['asset']),[spec.get('scene_terrain','plane')],[0]*n,out,**options)
 # Same source step dimensions, translated independently into each lane.
-for i,origin in enumerate(plant.origin.cpu().numpy()):
+for i,origin in enumerate([] if spec.get('scene_terrain') else plant.origin.cpu().numpy()):
  box=sim_utils.CuboidCfg(size=(4.,2.,.32),collision_props=sim_utils.CollisionPropertiesCfg(contact_offset=.01,rest_offset=0.),physics_material=sim_utils.RigidBodyMaterialCfg(static_friction=.8,dynamic_friction=.8))
  box.func(f'/World/JumpStep_{i}',box,translation=(float(origin[0]+5.6),float(origin[1]),0.))
 camera=None;writer=None
