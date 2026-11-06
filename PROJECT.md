@@ -1,3 +1,9 @@
+## 原Phase U完整环境接线通过，启动4096环境有界适配
+
+`PhaseUEnv`已接真实GPU物理、原92/8 reset、原事件/奖励/106critic、startup摩擦/质量惯量/COM、四动作增益/延迟/传感噪声及4s推扰。接口检查runs/phase_u_env_integration：4lane×8policy=3200physics lane steps、0optimizer，采样4.059s，初始化2.558s（不含App加载），奖励/观测有限，partial reset通过；不是恢复能力验证。共同车natural rootz=.254与原donor .15不同，明确以模型几何适配避免穿地；8%空中RSI范围原样保留。训练为原PhaseU全程四动作控制，不是锁摆地面交接实验。
+
+正式入口train_isaac_phase_u.py导入原Go2 OnPolicyRunner/PPO，仅替换模型任务adapter与采样前best记录；4096env×24步×150updates=14745600policy transitions/1474560000lane physics steps，50Hz策略/5000Hz物理，原网络/critic/归一化权重，fresh optimizer。当前Go2源码PPO为lr1e-5/adaptiveKL.01、5epochs/4minibatches、gamma.99/lambda.95/clip.2/entropy.01。训练奖励归属更新前模型，best不是固定任务合格，最后模型另存。产物计划数据盘/media/qy/6A7E3DB07E3D75C3/STTW_runs/phase_u_isaac150，根盘约30GB保留。训练尚待实际进程记录，其他线程地形任务不停止。
+
 ## 四动作Go2式随机化适配完成，实际GPU DelayBuffer检查通过
 
 `PendulumControlRandomization`复用Isaac Lab DelayBuffer，动作按物理0.2ms时钟延迟25–75tick（5–15ms），IMU/关节/速度按源Phase U 5ms采样时钟延迟1–3tick；50Hz策略历史与传感器采样拆开，不将延迟取整成0或20ms。转向位置、后轮速度及hip/knee位置servo均按原增益范围随机化，原力矩/动作范围不变。角度偏置仅进观测，物理状态/奖励终止不改。25维frame新通道噪声在isaac_phase_u_task.json明确：加速度0.2m/s²为显式任务映射，已知地图障碍距离/根高度不加噪声；不能称与Go2腿部观测逐字段相同。现有startup摩擦/质量惯量/质心函数继续复用，周期推扰仍待环境接线。

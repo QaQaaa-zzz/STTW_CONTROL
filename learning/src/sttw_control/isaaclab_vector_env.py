@@ -206,7 +206,8 @@ class IsaacLabVectorPlant:
             torque=torque+motor
         if self.pendulum_servos is not None and not self.pendulum_is_locked:
             if pendulum_target is not None:self.pendulum_target=pendulum_target
-            torque=torque+self.pendulum_servos.torque(self.pendulum_target,self.dofs[:,:,0],self.dofs[:,:,1])
+            self.last_pendulum_torque=self.pendulum_servos.torque(self.pendulum_target,self.dofs[:,:,0],self.dofs[:,:,1])
+            torque=torque+self.last_pendulum_torque
         self.robot.set_joint_effort_target(torque);self.robot.write_data_to_sim();self.sim.step(render=False);self.robot.update(.0002)
         if not refresh_diagnostics:
             self.dofs=torch.stack((self.robot.data.joint_pos,self.robot.data.joint_vel),dim=-1)
