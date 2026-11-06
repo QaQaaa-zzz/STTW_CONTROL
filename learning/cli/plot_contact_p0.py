@@ -18,7 +18,11 @@ for lane,identity in enumerate(lanes):
  # pose contains solved endpoints; active masks terminate observations at actual failure.
  xy=pose[m,lane,:2];ax.plot(*xy.T,color=colors[ai],ls=styles[ai],label=f"alpha={identity['alpha']:g}")
  if len(xy):ax.plot(*xy[-1],marker='x',color=colors[ai])
- ax.set(title=f"{a.terrain}, seed{identity['seed']}, {identity['speed_m_s']} m/s",xlabel='World x (m)',ylabel='World y (m)');ax.set_aspect('equal',adjustable='datalim');ax.grid(alpha=.2)
+ ax.set(title=f"{a.terrain}, seed{identity['seed']}, {identity['speed_m_s']} m/s",xlabel='World x (m)',ylabel='World y (m)');ax.set_aspect('equal',adjustable='box');ax.grid(alpha=.2)
+for group,ax in enumerate(axes.flat):
+ xy=pose[:,group*5:group*5+5,:2][alive[:,group*5:group*5+5].astype(bool)]
+ ax.set_xlim(float(xy[:,0].min())-.5,float(xy[:,0].max())+.5)
+ ax.set_ylim(float(xy[:,1].min())-.5,float(xy[:,1].max())+.5)
 axes[0,0].legend(fontsize=8)
 fig.suptitle('Frozen H75 + Local300 | P0 natural trajectories | DEV\nCrosses: actual observation endpoints; all five alphas shown per condition')
 fig.savefig(run/'xy_p0.png',dpi=140);plt.close(fig)
