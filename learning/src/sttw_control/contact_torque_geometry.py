@@ -13,7 +13,7 @@ def front_contact_torques(samples,body_order,radii=(.1,.1,.025)):
     axis=rotate(fork[:,3:7],basis[1].expand(n,3));axle=rotate(wheel[:,3:7],basis[2].expand(n,3))
     forward=rotate(body[:,body_order.index('chasis'),3:7],basis[0].expand(n,3))
     zero=torch.zeros(n,device=device,dtype=body.dtype)
-    result=dict(normal_moment=zero.clone(),friction_moment=zero.clone(),negative_lateral=zero.clone(),reference_delta=zero.clone())
+    result=dict(normal_moment=zero.clone(),friction_moment=zero.clone(),lateral_moment=zero.clone(),negative_lateral=zero.clone(),reference_delta=zero.clone())
     patches={}
     for kind in ['normal','friction']:
         count=samples['frontwheel_'+kind+'_count'][:,0];start=samples['frontwheel_'+kind+'_start'][:,0]
@@ -43,6 +43,7 @@ def front_contact_torques(samples,body_order,radii=(.1,.1,.025)):
     intersection=fork[:,None,:3]+axis[:,None]*distance[:,:,None]
     trail=((intersection-p)*direction).sum(-1)
     moment=(torch.cross(lever,lateral_force,dim=-1)*axis[:,None]).sum(-1)
+    result['lateral_moment']=torch.where(usable,moment,0.).sum(1)
     result['negative_lateral']=torch.where(usable&regular&(trail<0),moment,0.).sum(1)
     up=basis[2].expand(n,3);q_up=rotate(wheel[:,3:7],rotate_inverse(wheel[:,3:7],up)*torch.tensor(radii,device=device,dtype=body.dtype).square())
     reference=wheel[:,:3]-q_up/torch.sqrt((q_up*up).sum(1))[:,None]

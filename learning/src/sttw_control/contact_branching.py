@@ -5,6 +5,7 @@ import numpy as np
 import torch
 from .contact_events import WheelClearanceEvents
 from .isaac_path_snapshot import capture,restore
+from .contact_torque_geometry import front_contact_torques
 
 
 class ContactBranching:
@@ -12,6 +13,9 @@ class ContactBranching:
         self.env=env;self.config=config;self.output=Path(output);self.groups=config['groups']
         self.events=WheelClearanceEvents(env.n,env.device,env.physics_dt,config.get('confirmation_s',.02))
         self.log=[];self.active=[];self.completed=set()
+        self.impulses={key:torch.zeros(env.n,device=env.device) for key in ['normal_signed','normal_absolute','lateral_signed','lateral_absolute','negative_absolute','migration_signed','migration_absolute']}
+        self.front_unloaded_s=torch.zeros(env.n,device=env.device)
+        self.front_load=torch.zeros(env.n,device=env.device)
         mesh=np.load(Path(terrain)/'terrain.npz');vertices=mesh['vertices'];raised=vertices[vertices[:,2]>0]
         identity=json.loads((Path(terrain)/'identity.json').read_text())
         anchor,heading,_=env.route.at(torch.tensor([identity['terrain_support_end_s_m']],device=env.device))
@@ -20,22 +24,31 @@ class ContactBranching:
         # Wheel-centre clearance adds the declared bounding radius; no future trajectory is used.
         self.bound=float((raised[:,:2]@self.direction.cpu().numpy()).max())+config['wheel_bound_radius_m']
         self.rear=env.plant.bodies.index('rearwheel')
-        if not env.plant.wheel_sensors or env.plant.servo_mode!='explicit':
+        if not env.plant.track_contact_wrench or env.plant.servo_mode!='explicit':
             raise ValueError('Contact branches require wheel sensors and explicit servos')
 
     def record(self,env,lower_tick,physics_tick):
+        samples=env.plant.read_wheel_contact_samples()
         ridge=[];rear_ground=None
-        for wi,sensor in enumerate(env.plant.wheel_sensors):
-            force,point,normal,separation,count,start=sensor.contact_physx_view.get_contact_data(dt=env.physics_dt)
-            # The normal API buffers are consumed before reading the next sensor.
+        for wi,wheel in enumerate(['frontwheel','rearwheel']):
+            force,point,normal,count,start=[samples[wheel+'_'+key] for key in ['normal_force','normal_point','normal_direction','normal_count','normal_start']]
             count=count[:,0];start=start[:,0];slots=torch.arange(int(count.max()),device=env.device)
             valid=slots[None,:]<count[:,None];indices=(start[:,None]+slots[None,:]).clamp_max(len(force)-1)
             load=force[indices,0];height=point[indices,2]-env.plant.origin[:,None,2]
             ridge.append((valid&(load>.01)&(height>.003)).any(1))
+            if wi==0:self.front_load=(torch.where(valid,load,0)[:,:,None]*normal[indices]).sum(1)[:,2]
             if wi==1:rear_ground=(torch.where(valid&(height<=.003),load,0).sum(1)>.1)
         rear_xy=env.plant.robot.data.body_link_pos_w[:,self.rear,:2]-env.plant.origin[:,:2]
         beyond=(rear_xy*self.direction).sum(1)>self.bound
         self.events.update(torch.stack(ridge,1),beyond,rear_ground,env.alive)
+        torque=front_contact_torques(samples,env.plant.bodies)
+        active=(self.events.first_contact[:,0]>=0)&env.alive
+        for prefix,field in [('normal','normal_moment'),('lateral','lateral_moment'),('migration','reference_delta')]:
+            value=torch.where(active,torque[field],0.)
+            self.impulses[prefix+'_signed']+=value*env.physics_dt
+            self.impulses[prefix+'_absolute']+=value.abs()*env.physics_dt
+        self.impulses['negative_absolute']+=torch.where(active,torque['negative_lateral'].abs(),0.)*env.physics_dt
+        self.front_unloaded_s+=(active&(self.front_load.abs()<.1))*env.physics_dt
 
     def decision(self,policy_step):
         ready=self.events.take_ready(self.env.alive)
@@ -48,6 +61,7 @@ class ContactBranching:
             np.savez_compressed(self.output/f'contact_fork_{gi:03d}.npz',**{k:v.cpu().numpy() for k,v in state.items()})
             self.completed.add(gi)
             item=dict(group=gi,source_lane=source,branch_lanes=lanes,target_alphas=group['target_alphas'],entry_alpha=float(state['rollout.alpha']),policy_step=policy_step,time_s=policy_step*.02,first_contact_steps=self.events.first_contact[source].cpu().tolist(),last_contact_steps=self.events.last_contact[source].cpu().tolist(),confirmed_step=int(self.events.confirmed[source]))
+            item['contact_features_oracle']=dict(impulse_Nms={key:float(value[source]) for key,value in self.impulses.items()},front_vertical_load_N=float(self.front_load[source]),front_near_zero_vertical_load_s=float(self.front_unloaded_s[source]),scope='first actual front ridge contact through confirmed clearance decision; simulator contact truth, not assumed deployable sensing')
             self.log.append(item);self.active.append(item)
         ramp=self.config.get('ramp_s',0.)
         for item in self.active:

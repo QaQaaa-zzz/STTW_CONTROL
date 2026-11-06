@@ -18,7 +18,7 @@
     },
     "env_spacing": 3.0,
     "track_wheel_contacts": true,
-    "track_contact_wrench": false
+    "track_contact_wrench": true
   },
   "initial_state": "runs/h75_selected_local300_flat/initial_state.npz",
   "selected_lower": "learning/configs/isaaclab_selected_lower.json",
