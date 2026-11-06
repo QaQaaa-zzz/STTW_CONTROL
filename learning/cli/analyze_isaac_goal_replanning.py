@@ -12,9 +12,10 @@ colors=['#0072B2','#56B4E9','#009E73','#E69F00','#D55E00','#CC79A7','#555555']
 names=['alpha 0','alpha .25','alpha .5','alpha .75','alpha 1','alpha 1 to 0','Zero']
 labels={'original':'Original H75 u77','best33':'Reward-peak update33','original_exit':'Original H75 u77: forward-exit handoff'}
 models=[(key,labels.get(key,key)) for key in a.models]
-all_rows=[];series={};closures={};model_groups={}
+all_rows=[];series={};closures={};model_groups={};model_names={}
 for model,label in models:
  run=a.root/model;data=np.load(run/'trajectory.npz');contract=json.loads((run/'contract.json').read_text());settings=contract['settings'];cfg=json.loads((Path(contract['bundle'])/'config.json').read_text());route=np.load(Path(contract['bundle'])/'route.npz');events=json.loads((run/'replanning_decisions.json').read_text())
+ names=['alpha '+format(float(v),'g') for v in settings['alphas'][:5]]+[settings['case_labels'][5], 'Zero'];model_names[model]=names
  goal_s=float(route['turn_end'])+settings['replanning']['goal_after_turn_m'] if 'goal_after_turn_m' in settings['replanning'] else float(route['goal'])
  goal=np.array([np.interp(goal_s,route['s'],route['xy'][:,k]) for k in (0,1)]);arrival_radius=settings['replanning']['arrival_radius_m']
  total,components,closure=replay_rewards(data,cfg);closures[model]=closure
@@ -68,6 +69,7 @@ def reference(ax):
 columns=max(len(g) for g in model_groups.values())
 fig,axs=plt.subplots(len(models),columns,figsize=(6.5*columns,6*len(models)),squeeze=False,layout='constrained')
 for row,(model,label) in enumerate(models):
+ names=model_names[model]
  for col,(offset,style,title) in enumerate(model_groups[model]):
   ax=axs[row,col];reference(ax)
   for j in range(7):
@@ -85,7 +87,7 @@ for ax,(model,label) in zip(axs,models):
   i=offset+5;d=series[model,i];ax.plot(*d['xy'].T,style,label=name);ax.plot(*d['xy'][-1],marker='x')
   for event in d['plans']:
    q=np.load(a.root/model/event['file']);extent=float(q['goal']) if event.get('event')!='goal_arrival_forward_exit' else float(np.linalg.norm(d['xy'][-1]-event['start_pose'][:2])+1);ss=q['s']<=extent;ax.plot(*q['xy'][ss].T,':',alpha=.6,label='Forward exit reference' if event.get('event')=='goal_arrival_forward_exit' else None);ax.scatter(*event['start_pose'][:2],s=20,color='black')
- ax.set_title(label+' | alpha 1 to 0');ax.legend(fontsize=8)
+ ax.set_title(label+' | '+model_names[model][5]);ax.legend(fontsize=8)
 fig.savefig(a.root/'xy_switch.png',dpi=160);plt.close(fig)
 (a.root/'metrics.json').write_text(json.dumps(dict(goal_xy=goal.tolist(),goal_progress_m=goal_s,arrival_radius_m=arrival_radius,cases=all_rows,reward_replay=closures,scope='one route and initial state, nominal DEV; no global superiority; declared original task goal disk;  full-window completion separate'),indent=2))
 lines=['# Integrated replanning: configured frozen controllers','','![All five alphas grouped by model](xy_models.png)','','![Switch trajectories and actual plans](xy_switch.png)','','Original target and physical limits unchanged. Termination flags include follower-domain exits, so they are not all falls. Fixed-route panels diagnose the integration; replanning is part of the intended execution system. No optimizer updates. Goal entry means measured XY enters the declared goal disk, not endpoint rest or a safety guarantee. Crosses are actual observed endpoints. All termination flags retained. After goal entry, the replanned route hands off to a measured-heading straight forward extension; this tail is not tracking the old path and is not a validated next task.','','|Model|Case|Termination flag|Goal entry (s)|Replans|Original path RMSE (m)|Speed RMSE (m/s)|','|---|---|---|---|---|---|---|']
