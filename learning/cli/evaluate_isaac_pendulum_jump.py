@@ -54,7 +54,7 @@ policies=[TorchPendulumSkill(Path(spec['bundles'])/s) for s in spec['skills']]
 history=TorchPendulumObservation(plant.joints,json.loads(Path(spec.get('model_config','learning/configs/pendulum_common_asset.json')).read_text())['mount_rotation_wxyz'],n,'cuda:0')
 geometry=TorchPendulumGeometry(json.loads(Path(spec['geometry']).read_text()),plant.bodies)
 last=torch.zeros(n,4,device='cuda:0');alive=torch.ones(n,dtype=torch.bool,device='cuda:0');entered=torch.zeros_like(alive);consumed=torch.zeros_like(alive)
-returned=False;landing_ticks=0
+returned=False;landing_ticks=0;landing_ready=False;transition_speed=None
 if spec.get('landing_return'):assert n==1, 'Landing return currently uses a single lane'
 active=False;rows=[];actions=[];observations=[];valid=[];arm_rows=[];body_rows=[];contact_rows=[];start=time.monotonic();steps=round(spec['seconds']/.005)
 (out/'protocol.json').write_text(json.dumps(dict(spec=spec,plant=plant.metadata,policies=[s.identity for s in policies],ground_history='last_action zero means no prior jump action; physical FIFO sampled throughout ground approach',initial_translation='common saved snapshot translated to start_x/y0; optional rigid world-yaw alignment rotates pose and both velocities together',role='nominal paired DEV integration; not original donor benchmark',physics_dt=plant.physics_dt,ground_dt=.005,jump_dt=.02,optimizer_updates=0),indent=2))
@@ -115,7 +115,14 @@ for k in range(steps+1):
   supported=(plant.contact[:,ids,2]>1.).all()
   settled=bool(on_platform & supported & (m[:,0].abs()<.15).all() & (pitch.abs()<.15).all())
   landing_ticks=landing_ticks+1 if settled else 0
-  if landing_ticks*.005>=spec['landing_return']['support_s'] and k%4==0:
+  # Latch stable support, then leave the low-speed ECBC gain singularity under jump steering.
+  if not landing_ready and landing_ticks*.005>=spec['landing_return']['support_s']:
+   landing_ready=True;transition_speed=speed.clone()
+   (out/'landing_ready.json').write_text(json.dumps(dict(time=k*.005,speed=speed.cpu().tolist())))
+  if landing_ready and spec['landing_return'].get('minimum_handoff_speed_m_s',0)>0:
+   transition_speed=(transition_speed+spec['landing_return']['acceleration_m_s2']*.005).clamp_max(spec['landing_return']['speed_m_s'])
+   target[:,1]=transition_speed/plant.wheel_radius_m
+  if landing_ready and bool((speed>=spec['landing_return'].get('minimum_handoff_speed_m_s',0)).all()) and k%4==0:
    plant.set_pendulum_locked(True);active=False;returned=True;controller.reset(slice(None))
    if ground is not None:
     ground.controller.reset(slice(None));ground.lower.reset(slice(None));ground.alive.fill_(True)

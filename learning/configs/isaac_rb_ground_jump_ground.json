@@ -1,0 +1,44 @@
+{
+  "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/rb_rounded_continuous_chain",
+  "plant_config": "runs/rb_h75_ecbc_ground/left90_R2/config.json",
+  "model_config": "learning/configs/rb_sttw_platform.json",
+  "initial_state": "runs/rb_sttw_platform/jump_input/initial_state.npz",
+  "geometry": "runs/rb_sttw_platform/jump_input/geometry.json",
+  "bundles": "runs/rb_sttw_platform/evaluation_bundles",
+  "skills": [
+    "update2"
+  ],
+  "start_x": 1.5,
+  "approach_speed": 2.0,
+  "seconds": 10.0,
+  "handoff_x": 2.0,
+  "physics_dt": 0.005,
+  "gpu_pair_capacities": [
+    1048576,
+    1048576,
+    1048576
+  ],
+  "zero_initial_history": true,
+  "root_acceleration_difference": true,
+  "jump_steering_gains": [
+    2.5,
+    0.4
+  ],
+  "optimizer_updates": 0,
+  "maximum_physics_lane_steps": 2000,
+  "role": "Nominal DEV same RB chassis: ECBC approach, frozen update2 jump, stable-support and speed-conditioned handoff to H75 plus ECBC; no new training",
+  "scene_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/rb_continuous_terrain",
+  "record_body_states": true,
+  "landing_return": {
+    "support_s": 1.0,
+    "speed_m_s": 1.5,
+    "minimum_handoff_speed_m_s": 1.2,
+    "acceleration_m_s2": 0.8
+  },
+  "ground_bundle": "runs/rb_h75_ecbc_ground/left90_R2/bundle",
+  "ground_settings": "runs/rb_h75_ecbc_ground/left90_R2/config.json",
+  "ground_initial_state": "runs/rb_ground_standard1500/initial_state.npz",
+  "zero_lower": true,
+  "ground_alpha": 0.5,
+  "ground_after_landing_only": true
+}
