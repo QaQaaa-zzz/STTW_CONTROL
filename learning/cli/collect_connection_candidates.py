@@ -85,4 +85,4 @@ for task in spec['tasks']:
         records.append(dict(origin_id=spec['origin_id'],snapshot_id=snapshot_id,task_id=task['task_id'],skill_id=skill_id,candidate_id=candidate['candidate_id'],state=feature,complete=int(completed),success_cost=float(arrivals[i]) if completed else None,path_rmse_m=float(np.sqrt(np.mean(path_errors**2))) if len(path_errors) else None,observed_lower_steps=int(valid.sum()),physical_or_controller_failure=not bool(env.alive[i]),trace=str((folder/'trajectory.npz').resolve()),snapshot=str((a.output/'exit_snapshot.pt').resolve())))
     (a.output/'records.jsonl').write_text(''.join(json.dumps(row)+'\n' for row in records))
 (a.output/'status.json').write_text(json.dumps(dict(status='complete',rows=len(records),elapsed_s=time.monotonic()-start,optimizer_updates=0),indent=2))
-plant.close();os.sync();os._exit(0)
+os.sync();os._exit(0)

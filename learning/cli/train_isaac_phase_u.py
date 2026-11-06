@@ -53,4 +53,4 @@ def recorded_update():
 runner.alg.update=recorded_update
 runner.learn(cfg['updates'],init_at_random_ep_len=False)
 status.update(stage='training_complete',elapsed_s=time.time()-start,total_physics_steps=env.total_physics_steps)
-(a.output/'status.json').write_text(json.dumps(status,indent=2));runner.writer.close();env.plant.close();os.sync();os._exit(0)
+(a.output/'status.json').write_text(json.dumps(status,indent=2));runner.writer.close();os.sync();os._exit(0)
