@@ -1,3 +1,9 @@
+## 同出口连接候选的控制状态保存/恢复接口已实现
+
+IsaacPathRollout.capture_connection_state在50Hz边界导出单lane车体/关节位置速度、ECBC ESO/扰动/gains、Local300历史/前动作/偏航率、H75历史/mask、filtered/offsets/执行模式、原参考/命令、进度/跟随器及物理控制时钟。restore_connection_state把该出口广播给匹配原模型/网络/控制器的名义批次，不用重新预热替代真实出口。begin_connection只绑定下一路线/速度/alpha与新任务计时，保留历史、ESO、滤波和原参考slew。
+
+当前范围仅原STTW、名义条件、无偏好自动切换的接续采集；训练随机化delay/RNG和带摆制动状态不在此接口范围，不伪装通用快照。PhysX内部solver/contact缓存尚未序列化，故称“可访问物理＋控制状态”，不称完全同引擎内部状态重放。真正物理接续尚未执行。新增状态广播测试覆盖坐标原点、独立保存、ESO/历史/滤波和时钟；连同能力评价共5项通过，单元fixture不是实验结果。后续真实出口采集仍须检查实际配对轨迹与scene身份。
+
 ## 第三章接续评价补充按原始运行整体留出的DEV评估
 
 在训练等待期间复用ConnectionCapability，新增evaluate_connection_groups和薄CLI evaluate_connection_capability.py。输入是实际执行的同snapshot/task/skill全候选配对结果；origin_id将一次上游运行产生的所有出口、左右支路和候选整体留出，避免同源状态进入查询库。每组输出预测、支持量、所选候选真实完成标签与成功条件代价、实际候选中最优参考，以及有支持预测的Brier；未知保持None并单独计数，不能当失败/成功或凭空给备选路线。

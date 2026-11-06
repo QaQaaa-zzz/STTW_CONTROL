@@ -17,6 +17,7 @@ class IsaacPathRollout:
         if plant is None:
             from .isaac_vector_env import IsaacVectorPlant
             plant=IsaacVectorPlant(settings['asset'],list(settings['terrains'].values()),terrain_ids)
+        self.upper_sha256=identity['files']['actor.npz'];self.lower_sha256=settings['lower_sha256']
         self.plant=plant;self.cc=json.loads(Path(settings['controller_config']).read_text());self.controller=TorchController(self.cc,n,self.device)
         self.lower=lower if lower is not None else TorchLocalLower(settings['lower_actor'],settings['lower_sha256'],n,self.device);self.policy=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],self.config,n,self.device);self.policy.weights=actor.weights
         self.route=TorchPathReference(np.load(bundle/'route.npz'),self.config,self.device);self.speed=torch.full((n,),float(settings.get("user_speed_m_s",2.3)),device=self.device);self.middle=TorchMiddleControl(self.policy,self.route,identity['frame_scales'],self.alpha,self.speed);self.scale=torch.tensor([1.5,10.],device=self.device);self.episode=0
@@ -129,3 +130,68 @@ class IsaacPathRollout:
         if self.diagnostics:result['diagnostics']=details
         if self.auto_reset_horizon and self.tick==self.horizon:self.episode+=1;self.reset()
         return result
+
+
+    @torch.no_grad()
+    def capture_connection_state(self,lane):
+        """Capture a nominal original-STTW exit at a 50 Hz boundary.
+
+        Includes exposed physical and controller state, not hidden PhysX solver
+        caches. Source terrain/model and target scene must be matched by caller.
+        The six-connection experiment does not use randomized training snapshots.
+        """
+        if self.randomization is not None or self.switch is not None or self.plant.pendulum_rest is not None or self.middle.tick%4:
+            raise ValueError('Connection capture requires nominal original STTW at a policy boundary')
+        groups={
+            'controller':(self.controller,('eso','disturbance','gains')),
+            'lower':(self.lower,('frames','mask','previous_applied','yaw_rate')),
+            'policy':(self.policy,('filtered','offsets','execution_mode','hold_channels')),
+            'middle':(self.middle,('frames','mask','pose','yaw_rate','nominal','rates','fault','domain_exit')),
+            'rollout':(self,('previous_reference','previous_command','measurement','alive','task_tick','physical_tick','since_reset_tick','alpha','speed','switched','switch_tick','preference_progress')),
+        }
+        root=self.plant.roots[lane].clone();root[:3]-=self.plant.origin[lane]
+        physical=dict(root_pose=torch.cat((root[:3],root[[6,3,4,5]])),root_velocity=root[7:],joint_position=self.plant.dofs[lane,:,0],joint_velocity=self.plant.dofs[lane,:,1])
+        state={name:{key:getattr(obj,key)[lane].detach().cpu().clone() for key in keys} for name,(obj,keys) in groups.items()}
+        state['physical']={key:value.detach().cpu().clone() for key,value in physical.items()}
+        for group in ('projection','follower'):
+            state[group]={key:value[lane].detach().cpu().clone() for key,value in getattr(self.middle,group).items()}
+        return dict(state=state,upper_sha256=self.upper_sha256,lower_sha256=self.lower_sha256,
+            asset_sha256=self.plant.contract['exported_xml_sha256'],joint_names=list(self.plant.joints),
+            controller_config=self.cc,rollout_tick=self.tick,middle_tick=self.middle.tick,
+            channel_intervention_mode=self.policy.channel_intervention_mode,
+            scope='exposed physical plus controller snapshot; PhysX solver/contact cache not serialized')
+
+    @torch.no_grad()
+    def restore_connection_state(self,snapshot):
+        """Broadcast one saved exit into this matched nominal batch, without warmup.
+
+        Preserves histories/ESO/filter clocks. Bind the next task geometry after
+        restoration; do not reset controllers merely because the route changes.
+        """
+        identity=(self.upper_sha256,self.lower_sha256,self.plant.contract['exported_xml_sha256'],list(self.plant.joints),self.cc)
+        source=tuple(snapshot[k] for k in ('upper_sha256','lower_sha256','asset_sha256','joint_names','controller_config'))
+        if identity!=source or self.randomization is not None or self.switch is not None or self.plant.pendulum_rest is not None:
+            raise ValueError('Connection replay requires the same nominal policy/model/controller interfaces')
+        states=snapshot['state'];to=lambda v:v.to(self.device)
+        self.plant.reset_idx(torch.arange(self.n,device=self.device),state={k:to(v) for k,v in states['physical'].items()})
+        for name,obj in (('controller',self.controller),('lower',self.lower),('policy',self.policy),('middle',self.middle),('rollout',self)):
+            for key,value in states[name].items():
+                target=getattr(obj,key);target.copy_(to(value).expand_as(target))
+        for group in ('projection','follower'):
+            target=getattr(self.middle,group)
+            for key,value in states[group].items():target[key].copy_(to(value).expand_as(target[key]))
+        self.tick=snapshot['rollout_tick'];self.middle.tick=snapshot['middle_tick']
+        self.policy.channel_intervention_mode=snapshot['channel_intervention_mode']
+
+    @torch.no_grad()
+    def begin_connection(self,route,speeds,alphas):
+        """Assign a new A-to-B task while retaining inherited control dynamics."""
+        self.route=route;self.middle.route=route
+        self.speed.copy_(torch.as_tensor(speeds,device=self.device));self.alpha.copy_(torch.as_tensor(alphas,device=self.device))
+        _,pose,speed=self.plant.observe()
+        self.middle.projection=route.project(pose[:,:2],torch.zeros_like(speed),torch.zeros_like(speed))
+        self.middle.follower=route.pursuit(self.middle.projection['progress'],pose,speed,self.speed)
+        self.preference_progress=self.middle.projection['progress'].clone()
+        self.task_tick.zero_();self.tick=0
+        # middle.nominal/filtered/offsets/history and physical_tick are inherited.
+        # Original reference publication applies its usual slew on the next step.
