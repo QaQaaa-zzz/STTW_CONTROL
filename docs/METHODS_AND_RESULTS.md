@@ -1,3 +1,9 @@
+## 第三章共同车体候选资产
+
+`pendulum_asset.py` 与 `learning/configs/pendulum_common_asset.json` 构造 STTW 原车体＋RB 双节摆及髋电机的仿真候选，不修改两份原XML。完整候选在 `runs/pendulum_common_asset/complete_mechanism/{vehicle.xml,contract.json}`；最初仅双臂的中间产物保留在父目录，不作为完整机构。安装旋转Rx(-90deg)、平移0是显式仿真设计，不是已测实机安装。
+
+实际编译总质量8.92421kg，原车5.43421kg，新增双臂3.03kg＋髋电机0.46kg；nq13/nv12/nu6。针对性测试确认原车body质量/惯量/局部位姿、关节轴心/范围、执行器gain/bias/限幅保持，膝关节原始偏置[0,0,.11]保留。无physics、无训练、未导入Isaac；不能认为旧RB策略可直接复用。原URDF导出器不支持该膝轴偏置、圆柱碰撞与新增自碰撞mask；下一步原位扩展导出与Isaac执行器，而非删除碰撞或改关节消除报错。
+
 ## 带摆原生模型地面接口短诊断（非正式跨技能环境）
 
 `runs/pendulum_ground_compat/{protocol.json,results.json,fixed_steer.npz,ecbc.npz,xy_response.png}`：原始带摆MJCF、5ms物理、固定摆姿态，比较固定转向与原ECBC速度积分位置适配，无网络/训练。固定转向1.265s达到45度终止；ECBC2.710s终止，共795物理步。后者已接近台阶，缺少接触日志，不能归因纯平地失稳。目标2m/s但实际约3.2m/s，便捷轮速映射尚不构成速度跟踪接口。JSON序列化错误已用保存NPZ恢复，未重跑仿真。完整XY图已查看；不是技能交接证据。

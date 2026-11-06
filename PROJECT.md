@@ -1,3 +1,9 @@
+## 第三章共同车体候选资产
+
+`pendulum_asset.py` 与 `learning/configs/pendulum_common_asset.json` 构造 STTW 原车体＋RB 双节摆及髋电机的仿真候选，不修改两份原XML。完整候选在 `runs/pendulum_common_asset/complete_mechanism/{vehicle.xml,contract.json}`；最初仅双臂的中间产物保留在父目录，不作为完整机构。安装旋转Rx(-90deg)、平移0是显式仿真设计，不是已测实机安装。
+
+实际编译总质量8.92421kg，原车5.43421kg，新增双臂3.03kg＋髋电机0.46kg；nq13/nv12/nu6。针对性测试确认原车body质量/惯量/局部位姿、关节轴心/范围、执行器gain/bias/限幅保持，膝关节原始偏置[0,0,.11]保留。无physics、无训练、未导入Isaac；不能认为旧RB策略可直接复用。原URDF导出器不支持该膝轴偏置、圆柱碰撞与新增自碰撞mask；下一步原位扩展导出与Isaac执行器，而非删除碰撞或改关节消除报错。
+
 ## 第三章最新执行约束：Isaac Lab 与带摆策略适配
 
 用户最新要求：带摆平台采用 Isaac Lab，以除摆机构外与 STTW 一致的共同车体为目标核对与适配。允许调整 ECBC 参数、蒸馏或重训带摆底层，以及蒸馏并续训 alpha 网络；覆盖此前第三章不新增 RL 训练要求。原 STTW 模型及已选权重独立保留。先核对资产和接口，再评估原控制器，随后按需要适配网络；后续训练继续 Go2 随机化/GPU流程、原任务难度和五档 alpha，具体预算逐阶段记录。旧 RB 模型/策略来源保留，不能把共同车体适配后的结果冒充原模型复现。

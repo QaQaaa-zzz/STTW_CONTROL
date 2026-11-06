@@ -1,0 +1,8 @@
+{
+  "sttw_source": "/home/qy/STTW_CONTROL/mujoco_ros_ws20260313/model/scalebike_scene_matlab.xml",
+  "pendulum_source": "/home/qy/DVGC/assets/orange_bike_4kg_horizontal.xml",
+  "mount_rotation_wxyz": [0.7071067811865476, -0.7071067811865476, 0.0, 0.0],
+  "mount_translation_m": [0.0, 0.0, 0.0],
+  "pendulum_rest_rad": [-1.2, 2.5],
+  "mount_semantics": "Donor upright frame mapped to STTW chassis local frame; explicit unvalidated simulation mounting candidate"
+}
