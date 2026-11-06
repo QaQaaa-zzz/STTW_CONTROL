@@ -30,10 +30,13 @@ use_lower=torch.tensor([c['local300'] for c in cases],device=device)
 eso_enabled=torch.tensor([c.get('eso_enabled',True) for c in cases],device=device)
 true_feedback=torch.tensor([c.get('true_speed_feedback',False) for c in cases],device=device)
 turn=torch.tensor([c['steer_rad'] for c in cases],device=device)
-alive=torch.ones(n,dtype=torch.bool,device=device);rows=[];masks=[];references=[];commands=[];start=time.monotonic()
+open_loop=torch.tensor(['open_loop_steer_rate' in c for c in cases],device=device)
+pulse=torch.tensor([c.get('open_loop_steer_rate',0.) for c in cases],device=device)
+alive=torch.ones(n,dtype=torch.bool,device=device);rows=[];masks=[];references=[];commands=[];contacts=[];start=time.monotonic()
 for k in range(steps+1):
  m,pose,v=plant.observe()
  row=torch.cat((torch.full((n,1),k*.005,device=device),pose,v[:,None],m[:,:4],plant.dofs[:,plant.pendulum_servos.indices,0],plant.dofs[:,plant.pendulum_servos.indices,1],m[:,5:7]*radius,plant.roots[:,2:3],controller.disturbance[:,None]),dim=1)
+ contacts.append(plant.contact.cpu().numpy().copy())
  rows.append(row.cpu().numpy());masks.append(alive.cpu().numpy().copy());references.append(raw.cpu().numpy().copy());commands.append(command.cpu().numpy().copy())
  alive &= (m[:,0].abs()<=torch.pi/4)&torch.isfinite(row).all(-1)
  if spec.get('save_warmup_state',False) and k==round(spec['warmup_s']/.005) and bool(alive[0]):
@@ -48,11 +51,12 @@ for k in range(steps+1):
  request=torch.stack((torch.where(true_feedback,v,m[:,5]*radius),m[:,2],m[:,3],m[:,0],m[:,1],raw[:,1]),dim=-1)
  out=controller.step(request,eso_enabled)
  steer=(out[:,0]+applied[:,0]).clamp(-3,3);steer=torch.maximum(torch.maximum(torch.full_like(steer,-3),(-.8-m[:,2])/.005),torch.minimum(torch.minimum(torch.full_like(steer,3),(.8-m[:,2])/.005),steer))
+ steer=torch.where(open_loop,pulse if .1<=k*.005<.3 else torch.zeros_like(pulse),steer)
  command=torch.stack((steer,(raw[:,0]/radius+applied[:,1]).clamp(-60,60)),dim=-1)
  for _ in range(substeps):plant.step(torch.where(alive[:,None],command,0.))
  _,new_pose,_=plant.observe();lower.finish(applied,wrap(new_pose[:,2]-pose[:,2])/.005);previous=raw.clone()
  if (k+1)%200==0:print(dict(control_steps=k+1,alive=int(alive.sum()),elapsed_s=time.monotonic()-start),flush=True)
-trace=np.asarray(rows);valid=np.asarray(masks);np.savez(a.output/'trajectory.npz',trace=trace,valid=valid,reference=np.asarray(references),command=np.asarray(commands),columns=['time','x','y','yaw','speed','roll','roll_rate','steer','steer_rate','hip','knee','hip_velocity','knee_velocity','rear_wheel_speed_estimate','front_wheel_speed_estimate','root_height','eso_disturbance'])
+trace=np.asarray(rows);valid=np.asarray(masks);np.savez(a.output/'trajectory.npz',trace=trace,valid=valid,contact=np.asarray(contacts),contact_body_names=plant.bodies,reference=np.asarray(references),command=np.asarray(commands),columns=['time','x','y','yaw','speed','roll','roll_rate','steer','steer_rate','hip','knee','hip_velocity','knee_velocity','rear_wheel_speed_estimate','front_wheel_speed_estimate','root_height','eso_disturbance'])
 results=[]
 for i,case in enumerate(cases):
  tr=trace[valid[:,i],i];results.append(dict(name=case['name'],failed=not bool(alive[i]),duration_s=float(tr[-1,0]),peak_roll_deg=float(np.rad2deg(abs(tr[:,5])).max()),final_speed=float(tr[-1,4]),final_xy=tr[-1,1:3].tolist(),max_pendulum_position_drift_rad=np.max(np.abs(tr[:,9:11]-tr[0,9:11]),axis=0).tolist(),max_pendulum_speed_rad_s=np.max(np.abs(tr[:,11:13]),axis=0).tolist()))
