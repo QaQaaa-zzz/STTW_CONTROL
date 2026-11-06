@@ -1,3 +1,11 @@
+## Completed terrain/speed matrix and short-uphill follow-up
+
+Original H75 u77 + selected orange Local300 completed 10 terrain/requested-speed conditions (50 alpha lanes and 10 matched Zero lanes). All50 H75 lanes survive10s, cross the original goal and satisfy original final hold. Speed RMSE decreases across all five alpha levels in every condition; path error is not strictly monotonic. Zero fails physically in6/10 conditions; the remaining4 do not satisfy final hold. Preserve actual early-failure windows. Evidence: `runs/h75_terrain_speed_sweep/evaluation/RESULTS.md`, `METRICS.md`, `xy_matrix_full.png`, `xy_matrix_bend.png`. Eight new conditions used2400000 physics lane steps,0 optimizer updates; two matched historical conditions were reused. Single initial-state nominal DEV only;2.6m/s starts from the same2.3m/s warm state.
+
+User clarification: mild working-roll exceedance alone is acceptable when traversal and subsequent recovery remain satisfactory. The6cm/2.6m/s alpha1 peak .316699rad exceeds the historical .302rad working threshold, but completes goal/hold. Retain raw flags and thresholds; do not reject this model solely for that overshoot. This does not establish tolerance of physical failure or sustained instability.
+
+Next registered experiment uses `learning/configs/isaac_h75_uphill.json`:8/16/24cm half-cosine ascents over s3.8–5.0m, persistent plateau, same2.3m/s request/initial state/actuator limits for five alphas and Zero. Budget900000 physics lane steps,0 optimizer updates; reuse native evaluation and reward plotting. Outputs `runs/h75_uphill/evaluation`. Tests the user's entry-speed/traversal hypothesis; no outcome is presumed. Existing switch1→0 recovery issue remains unresolved; the later connection chapter has not started.
+
 
 ## Faithful H75 training bank and policy import ready
 
