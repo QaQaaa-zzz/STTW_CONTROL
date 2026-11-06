@@ -1,3 +1,7 @@
+## Active matched low-speed flat comparison
+
+Configuration `learning/configs/isaac_h75_low_speed_flat.json`: flat mesh at2.0/1.7m/s, original H75/Local300, same complete2.3m/s warm state as completed24cm ramp cases. Budget600000 physics lane steps/0 optimizer updates; output `runs/h75_low_speed_flat/evaluation`. Reuse all ramp trajectories and existing evaluator/plotting. Separates low-speed policy behavior from added terrain response; no new training or changed physical limits.
+
 ## Lower-speed ramp results: no climb failure, recovery is non-monotonic
 
 `runs/h75_uphill_low_speed/evaluation/UPHILL.md` and `uphill_comparison.png`:24cm ramp at2.0/1.7m/s, all five alphas and matched Zero,12/12 survive10s and cross crest and goal. Completed600000 physics lane steps/0 optimizer updates in287s. No alpha0 climb failure occurred. At2.0m/s, alpha0 has substantial post-ramp lateral oscillation (path RMSE .435m vs alpha1 .185m), and fails final hold; other five lanes pass. At1.7m/s, alpha0/.25/.5 and Zero pass final hold, while alpha.75/1 retain lateral oscillations and fail it. Alpha1 path RMSE .220m versus alpha0 .087m. Thus reducing speed does not monotonically favor alpha1. Actual ascent minimum speeds at1.7m/s are1.298/1.294/1.297/1.300/1.290m/s: entry-speed ordering does not persist as a minimum-speed advantage. Full actual XY/reward panels inspected; no early physical failure hidden.

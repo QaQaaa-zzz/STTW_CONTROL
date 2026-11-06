@@ -1,0 +1,31 @@
+{
+  "role": "nominal DEV matched low-speed flat control for completed24cm ramp cases",
+  "reference_bundle": "runs/h75_selected_local300_flat/bundle",
+  "base_evaluation_config": "runs/h75_selected_local300_bend/lab_config.json",
+  "terrain_generator": "learning/cli/place_isaac_terrain.py --terrain bend_ramp",
+  "terrain_base_config": "runs/h75_uphill/ramp_8cm.json",
+  "terrain_overrides": [
+    {
+      "name": "flat",
+      "height_m": 0
+    }
+  ],
+  "user_speed_m_s": [
+    2.0,
+    1.7
+  ],
+  "initial_state_protocol": "same full saved2.3m/s warm state, then fixed2.0 or1.7m/s request; measure actual ramp-entry speed; not equilibrated low-speed initialization",
+  "alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "include_zero": true,
+  "seconds": 10,
+  "max_physics_lane_steps": 600000,
+  "optimizer_updates": 0,
+  "reuse": "two new flat cases; completed matching ramp trajectories reused",
+  "start_condition": "completed low-speed ramp screen; diagnose low-speed versus terrain response"
+}
