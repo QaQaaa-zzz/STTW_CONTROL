@@ -1,0 +1,585 @@
+{
+  "role": "Within one upstream DEV origin: six reached midpoint states, not six independent origins",
+  "state_groups": [
+    {
+      "first_candidate": [
+        1.8,
+        0.0
+      ],
+      "decision_state": {
+        "speed": 1.8242909400297933,
+        "roll": -0.019336700439453125,
+        "roll_rate": -0.21188472211360931,
+        "cross_track": -0.0029686724301427603,
+        "heading_error": -0.24196259803109657,
+        "steer": -0.005928793456405401,
+        "steer_rate": -0.2506498396396637,
+        "previous_speed_reference": 1.8249047994613647,
+        "lateral_velocity_heading_frame": -0.02961554736920541,
+        "world_yaw_rate": -0.03906828910112381,
+        "previous_alpha": 0.0,
+        "previous_alpha_duration": 2.2200000000000006,
+        "remaining_path_to_release": 3.998535633087073,
+        "path_curvature": 0.0,
+        "corridor_half_width": 1.0,
+        "pitch": 0.0009388705958486288,
+        "body_angular_y": -0.010969670713108242,
+        "hip": -1.2002018690109253,
+        "knee": 2.499999523162842,
+        "hip_velocity": 0.03287293761968613,
+        "knee_velocity": -3.104114512098022e-06,
+        "platform_height": 0.16,
+        "remaining_path_to_platform": 5.598535633087053
+      },
+      "same_recorded_state_across_second_choices": true,
+      "outcomes": [
+        {
+          "candidate": [
+            1.8,
+            0.0
+          ],
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_1.8_0.0:midpoint"
+        },
+        {
+          "candidate": [
+            1.8,
+            0.5
+          ],
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_1.8_0.5:midpoint"
+        },
+        {
+          "candidate": [
+            1.8,
+            1.0
+          ],
+          "Y": 1,
+          "T_s": 15.600000381469727,
+          "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_1.8_1.0:midpoint"
+        },
+        {
+          "candidate": [
+            2.0,
+            0.0
+          ],
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_2.0_0.0:midpoint"
+        },
+        {
+          "candidate": [
+            2.0,
+            0.5
+          ],
+          "Y": 1,
+          "T_s": 14.739999771118164,
+          "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_2.0_0.5:midpoint"
+        },
+        {
+          "candidate": [
+            2.0,
+            1.0
+          ],
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_2.0_1.0:midpoint"
+        }
+      ]
+    },
+    {
+      "first_candidate": [
+        1.8,
+        0.5
+      ],
+      "decision_state": {
+        "speed": 1.8414054717756323,
+        "roll": -0.0035666227340698242,
+        "roll_rate": -0.07364873588085175,
+        "cross_track": 0.021026598289608955,
+        "heading_error": -0.10712626261839961,
+        "steer": -0.0018807555316016078,
+        "steer_rate": -0.06427142024040222,
+        "previous_speed_reference": 1.842383623123169,
+        "lateral_velocity_heading_frame": -0.010184580695158707,
+        "world_yaw_rate": -0.01237350981682539,
+        "previous_alpha": 0.5,
+        "previous_alpha_duration": 7.4,
+        "remaining_path_to_release": 3.9811794757842165,
+        "path_curvature": 0.0,
+        "corridor_half_width": 1.0,
+        "pitch": 0.0009391013258377434,
+        "body_angular_y": -0.010019470231902217,
+        "hip": -1.2002018690109253,
+        "knee": 2.499999523162842,
+        "hip_velocity": 0.0322326123714447,
+        "knee_velocity": -3.1767312975716777e-06,
+        "platform_height": 0.16,
+        "remaining_path_to_platform": 5.581179475784197
+      },
+      "same_recorded_state_across_second_choices": true,
+      "outcomes": [
+        {
+          "candidate": [
+            1.8,
+            0.0
+          ],
+          "Y": 1,
+          "T_s": 15.0,
+          "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_1.8_0.0:midpoint"
+        },
+        {
+          "candidate": [
+            1.8,
+            0.5
+          ],
+          "Y": 1,
+          "T_s": 15.100000381469727,
+          "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_1.8_0.5:midpoint"
+        },
+        {
+          "candidate": [
+            1.8,
+            1.0
+          ],
+          "Y": 1,
+          "T_s": 16.780000686645508,
+          "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_1.8_1.0:midpoint"
+        },
+        {
+          "candidate": [
+            2.0,
+            0.0
+          ],
+          "Y": 1,
+          "T_s": 16.280000686645508,
+          "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_2.0_0.0:midpoint"
+        },
+        {
+          "candidate": [
+            2.0,
+            0.5
+          ],
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_2.0_0.5:midpoint"
+        },
+        {
+          "candidate": [
+            2.0,
+            1.0
+          ],
+          "Y": 1,
+          "T_s": 15.5600004196167,
+          "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_2.0_1.0:midpoint"
+        }
+      ]
+    },
+    {
+      "first_candidate": [
+        1.8,
+        1.0
+      ],
+      "decision_state": {
+        "speed": 1.8482177570994334,
+        "roll": 0.007780671119689941,
+        "roll_rate": -0.048731617629528046,
+        "cross_track": 0.043662574142217636,
+        "heading_error": -0.07339744786515282,
+        "steer": 0.0071616689674556255,
+        "steer_rate": -0.05600805580615997,
+        "previous_speed_reference": 1.8476039171218872,
+        "lateral_velocity_heading_frame": -0.0003598862267736036,
+        "world_yaw_rate": 0.048004236072301865,
+        "previous_alpha": 1.0,
+        "previous_alpha_duration": 2.16,
+        "remaining_path_to_release": 3.993756771087561,
+        "path_curvature": 0.0,
+        "corridor_half_width": 1.0,
+        "pitch": 0.0009382862855760177,
+        "body_angular_y": -0.0010590046913975634,
+        "hip": -1.2001993656158447,
+        "knee": 2.499999523162842,
+        "hip_velocity": -0.0038070380687713623,
+        "knee_velocity": 0.002512578386813402,
+        "platform_height": 0.16,
+        "remaining_path_to_platform": 5.593756771087541
+      },
+      "same_recorded_state_across_second_choices": true,
+      "outcomes": [
+        {
+          "candidate": [
+            1.8,
+            0.0
+          ],
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_1.8_0.0:midpoint"
+        },
+        {
+          "candidate": [
+            1.8,
+            0.5
+          ],
+          "Y": 1,
+          "T_s": 14.9399995803833,
+          "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_1.8_0.5:midpoint"
+        },
+        {
+          "candidate": [
+            1.8,
+            1.0
+          ],
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_1.8_1.0:midpoint"
+        },
+        {
+          "candidate": [
+            2.0,
+            0.0
+          ],
+          "Y": 1,
+          "T_s": 15.600000381469727,
+          "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_2.0_0.0:midpoint"
+        },
+        {
+          "candidate": [
+            2.0,
+            0.5
+          ],
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_2.0_0.5:midpoint"
+        },
+        {
+          "candidate": [
+            2.0,
+            1.0
+          ],
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_2.0_1.0:midpoint"
+        }
+      ]
+    },
+    {
+      "first_candidate": [
+        2.0,
+        0.0
+      ],
+      "decision_state": {
+        "speed": 2.0343330959879267,
+        "roll": 0.013827204704284668,
+        "roll_rate": -0.17469310760498047,
+        "cross_track": -0.055600982159376144,
+        "heading_error": -0.14535448340240736,
+        "steer": 0.01578451879322529,
+        "steer_rate": -0.15914882719516754,
+        "previous_speed_reference": 2.0337486267089844,
+        "lateral_velocity_heading_frame": -0.0075457361334282935,
+        "world_yaw_rate": 0.11624186486005783,
+        "previous_alpha": 0.0,
+        "previous_alpha_duration": 2.0,
+        "remaining_path_to_release": 3.9767754077910524,
+        "path_curvature": 0.0,
+        "corridor_half_width": 1.0,
+        "pitch": 0.0009383650393539611,
+        "body_angular_y": -0.002264176383792904,
+        "hip": -1.2001993656158447,
+        "knee": 2.499999523162842,
+        "hip_velocity": -0.0036025431472808123,
+        "knee_velocity": 0.0023962529376149178,
+        "platform_height": 0.16,
+        "remaining_path_to_platform": 5.5767754077910325
+      },
+      "same_recorded_state_across_second_choices": true,
+      "outcomes": [
+        {
+          "candidate": [
+            1.8,
+            0.0
+          ],
+          "Y": 1,
+          "T_s": 14.800000190734863,
+          "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_1.8_0.0:midpoint"
+        },
+        {
+          "candidate": [
+            1.8,
+            0.5
+          ],
+          "Y": 1,
+          "T_s": 15.0600004196167,
+          "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_1.8_0.5:midpoint"
+        },
+        {
+          "candidate": [
+            1.8,
+            1.0
+          ],
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_1.8_1.0:midpoint"
+        },
+        {
+          "candidate": [
+            2.0,
+            0.0
+          ],
+          "Y": 1,
+          "T_s": 16.100000381469727,
+          "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_2.0_0.0:midpoint"
+        },
+        {
+          "candidate": [
+            2.0,
+            0.5
+          ],
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_2.0_0.5:midpoint"
+        },
+        {
+          "candidate": [
+            2.0,
+            1.0
+          ],
+          "Y": 1,
+          "T_s": 14.84000015258789,
+          "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_2.0_1.0:midpoint"
+        }
+      ]
+    },
+    {
+      "first_candidate": [
+        2.0,
+        0.5
+      ],
+      "decision_state": {
+        "speed": 2.04072959144612,
+        "roll": 0.016356587409973145,
+        "roll_rate": -0.08206270635128021,
+        "cross_track": -0.021838242188096046,
+        "heading_error": -0.07168848513893843,
+        "steer": 0.01316356472671032,
+        "steer_rate": -0.07259591668844223,
+        "previous_speed_reference": 2.041687250137329,
+        "lateral_velocity_heading_frame": 0.001262215213507778,
+        "world_yaw_rate": 0.0968376025557518,
+        "previous_alpha": 0.5,
+        "previous_alpha_duration": 7.2,
+        "remaining_path_to_release": 3.980828762054358,
+        "path_curvature": 0.0,
+        "corridor_half_width": 1.0,
+        "pitch": 0.0009386650427360976,
+        "body_angular_y": -0.011300892383519626,
+        "hip": -1.2002018690109253,
+        "knee": 2.499999523162842,
+        "hip_velocity": 0.03190770745277405,
+        "knee_velocity": -3.2079121865535853e-06,
+        "platform_height": 0.16,
+        "remaining_path_to_platform": 5.580828762054338
+      },
+      "same_recorded_state_across_second_choices": true,
+      "outcomes": [
+        {
+          "candidate": [
+            1.8,
+            0.0
+          ],
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_1.8_0.0:midpoint"
+        },
+        {
+          "candidate": [
+            1.8,
+            0.5
+          ],
+          "Y": 1,
+          "T_s": 16.100000381469727,
+          "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_1.8_0.5:midpoint"
+        },
+        {
+          "candidate": [
+            1.8,
+            1.0
+          ],
+          "Y": 1,
+          "T_s": 15.100000381469727,
+          "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_1.8_1.0:midpoint"
+        },
+        {
+          "candidate": [
+            2.0,
+            0.0
+          ],
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.0:midpoint"
+        },
+        {
+          "candidate": [
+            2.0,
+            0.5
+          ],
+          "Y": 1,
+          "T_s": 14.899999618530273,
+          "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.5:midpoint"
+        },
+        {
+          "candidate": [
+            2.0,
+            1.0
+          ],
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_1.0:midpoint"
+        }
+      ]
+    },
+    {
+      "first_candidate": [
+        2.0,
+        1.0
+      ],
+      "decision_state": {
+        "speed": 2.04409135581122,
+        "roll": 0.017055392265319824,
+        "roll_rate": -0.03905724361538887,
+        "cross_track": 0.029747381806373596,
+        "heading_error": -0.0440953627169881,
+        "steer": 0.012239612638950348,
+        "steer_rate": -0.029829973354935646,
+        "previous_speed_reference": 2.04502534866333,
+        "lateral_velocity_heading_frame": 0.005617952816233174,
+        "world_yaw_rate": 0.09026055037975311,
+        "previous_alpha": 1.0,
+        "previous_alpha_duration": 1.9800000000000004,
+        "remaining_path_to_release": 3.965269327163611,
+        "path_curvature": 0.0,
+        "corridor_half_width": 1.0,
+        "pitch": 0.0009388900150288926,
+        "body_angular_y": -0.011175414711186018,
+        "hip": -1.2002018690109253,
+        "knee": 2.499999523162842,
+        "hip_velocity": 0.031954575330019,
+        "knee_velocity": -3.249891506129643e-06,
+        "platform_height": 0.16,
+        "remaining_path_to_platform": 5.565269327163591
+      },
+      "same_recorded_state_across_second_choices": true,
+      "outcomes": [
+        {
+          "candidate": [
+            1.8,
+            0.0
+          ],
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_1.8_0.0:midpoint"
+        },
+        {
+          "candidate": [
+            1.8,
+            0.5
+          ],
+          "Y": 1,
+          "T_s": 16.360000610351562,
+          "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_1.8_0.5:midpoint"
+        },
+        {
+          "candidate": [
+            1.8,
+            1.0
+          ],
+          "Y": 1,
+          "T_s": 15.279999732971191,
+          "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_1.8_1.0:midpoint"
+        },
+        {
+          "candidate": [
+            2.0,
+            0.0
+          ],
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_2.0_0.0:midpoint"
+        },
+        {
+          "candidate": [
+            2.0,
+            0.5
+          ],
+          "Y": 1,
+          "T_s": 15.420000076293945,
+          "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_2.0_0.5:midpoint"
+        },
+        {
+          "candidate": [
+            2.0,
+            1.0
+          ],
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_2.0_1.0:midpoint"
+        }
+      ]
+    }
+  ],
+  "fixed_second_reference": [
+    {
+      "candidate": [
+        1.8,
+        0.0
+      ],
+      "successful_midpoint_states": 2,
+      "declared_midpoint_states": 6
+    },
+    {
+      "candidate": [
+        1.8,
+        0.5
+      ],
+      "successful_midpoint_states": 5,
+      "declared_midpoint_states": 6
+    },
+    {
+      "candidate": [
+        1.8,
+        1.0
+      ],
+      "successful_midpoint_states": 4,
+      "declared_midpoint_states": 6
+    },
+    {
+      "candidate": [
+        2.0,
+        0.0
+      ],
+      "successful_midpoint_states": 3,
+      "declared_midpoint_states": 6
+    },
+    {
+      "candidate": [
+        2.0,
+        0.5
+      ],
+      "successful_midpoint_states": 3,
+      "declared_midpoint_states": 6
+    },
+    {
+      "candidate": [
+        2.0,
+        1.0
+      ],
+      "successful_midpoint_states": 2,
+      "declared_midpoint_states": 6
+    }
+  ],
+  "hindsight_statewise_successes": 6,
+  "interpretation": "All six fixed second references have mixed outcomes across first-stage states. This supports investigating state-conditioned choice; it does not establish causal importance of any single feature, generalization, calibrated probability, or online R6 benefit."
+}
