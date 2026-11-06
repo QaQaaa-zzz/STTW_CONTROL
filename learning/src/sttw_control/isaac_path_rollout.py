@@ -18,7 +18,7 @@ class IsaacPathRollout:
             from .isaac_vector_env import IsaacVectorPlant
             plant=IsaacVectorPlant(settings['asset'],list(settings['terrains'].values()),terrain_ids)
         self.upper_sha256=identity['files']['actor.npz'];self.lower_sha256=settings['lower_sha256']
-        self.plant=plant;self.cc=json.loads(Path(settings['controller_config']).read_text());self.controller=TorchController(self.cc,n,self.device)
+        self.plant=plant;self.wheel_radius_m=getattr(plant,'wheel_radius_m',.1);self.cc=json.loads(Path(settings['controller_config']).read_text());self.cc['wheel_radius_m']=self.wheel_radius_m;self.controller=TorchController(self.cc,n,self.device)
         self.lower=lower if lower is not None else TorchLocalLower(settings['lower_actor'],settings['lower_sha256'],n,self.device);self.policy=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],self.config,n,self.device);self.policy.weights=actor.weights
         self.physics_dt=getattr(self.plant,'physics_dt',.0002);self.physics_substeps=round(.005/self.physics_dt)
         if self.physics_substeps<1 or abs(self.physics_substeps*self.physics_dt-.005)>1e-9:raise ValueError('physics step must divide STTW .005 s control period')
@@ -47,7 +47,7 @@ class IsaacPathRollout:
     def reset(self):
         self.controller.reset(slice(None));self.lower.reset(slice(None))
         if self.initial_state is None:
-            self.plant.reset();self.previous_reference=torch.stack((self.speed,torch.zeros_like(self.speed)),dim=-1);self.previous_command=torch.stack((torch.zeros_like(self.speed),self.speed/.1),dim=-1);raw=self.previous_reference
+            self.plant.reset();self.previous_reference=torch.stack((self.speed,torch.zeros_like(self.speed)),dim=-1);self.previous_command=torch.stack((torch.zeros_like(self.speed),self.speed/self.wheel_radius_m),dim=-1);raw=self.previous_reference
         else:
             state=self.initial_state
             self.plant.reset_idx(torch.arange(self.n,device=self.device),state=state)
@@ -95,8 +95,8 @@ class IsaacPathRollout:
             if lower_tick==0:first_action=self.middle.latent.clone()
             policy_m=m if self.randomization is None else self.measurement
             action,_,finite=self.lower.prepare(policy_m,v,governed,self.previous_reference,self.previous_command,self.controller);applied=action*self.scale
-            signals=self.plant.signals;position=self.plant.dofs[:,:,0];row=torch.stack((m[:,5]*.1,m[:,2],m[:,3],m[:,0],m[:,1],governed[:,1]),dim=-1);output=self.controller.step(row,self.physical_tick*.005>3.)
-            steer=(output[:,0]+applied[:,0]).clamp(-3,3);steer=torch.maximum(torch.maximum(torch.full_like(steer,-3),(-.8-position[:,signals.steer])/.005),torch.minimum(torch.minimum(torch.full_like(steer,3),(.8-position[:,signals.steer])/.005),steer));command=torch.stack((steer,(governed[:,0]/.1+applied[:,1]).clamp(-60,60)),dim=-1)
+            signals=self.plant.signals;position=self.plant.dofs[:,:,0];row=torch.stack((m[:,5]*self.wheel_radius_m,m[:,2],m[:,3],m[:,0],m[:,1],governed[:,1]),dim=-1);output=self.controller.step(row,self.physical_tick*.005>3.)
+            steer=(output[:,0]+applied[:,0]).clamp(-3,3);steer=torch.maximum(torch.maximum(torch.full_like(steer,-3),(-.8-position[:,signals.steer])/.005),torch.minimum(torch.minimum(torch.full_like(steer,3),(.8-position[:,signals.steer])/.005),steer));command=torch.stack((steer,(governed[:,0]/self.wheel_radius_m+applied[:,1]).clamp(-60,60)),dim=-1)
             pre_failure=self.middle.fault|self.middle.domain_exit|~finite|~torch.isfinite(m).all(-1)|(m[:,0].abs()>.7);just_failed=self.alive&pre_failure;new_failure|=just_failed;self.alive&=~pre_failure;active_lower=self.alive.clone();peak=m[:,0].abs();endpoint=self.plant.roots.clone();stop_tick=torch.full((self.n,),self.physics_substeps,device=self.device,dtype=torch.long)
             wheel_points=[];wheel_forces=[]
             for physics_tick in range(self.physics_substeps):
@@ -115,7 +115,7 @@ class IsaacPathRollout:
             projection=self.middle.projection;curvature=self.route.at(projection['progress'])[2];ratio=self.controller._system(self.speed)[3];chi=((torch.atan(self.cc['wheelbase']*curvature/np.cos(self.cc['caster']))/ratio).abs()-.18).div(.12).clamp(0,1)
             terms=costs(alpha=self.alpha,chi=chi,ev=post_v-self.speed,ey=projection['cross_track'],eh=wrap(projection['heading']-post_pose[:,2]),peak_roll=peak,roll_rate=post_m[:,1],speed=post_v,offsets=offsets,offset_rate=torch.zeros_like(offsets),config=self.config)
             reward+=torch.where(active_lower,torch.nan_to_num(terms['reward']),0);bad=(post_m[:,0].abs()>.7)|self.middle.fault|self.middle.domain_exit;new_failure|=self.alive&bad;self.alive&=~bad
-            logs.append(torch.cat((post_pose[:self.trace_lanes,:2],post_v[:self.trace_lanes,None],projection['cross_track'][:self.trace_lanes,None],peak[:self.trace_lanes,None],terms['reward'][:self.trace_lanes,None],active_lower[:self.trace_lanes,None],stop_tick[:self.trace_lanes,None],governed[:self.trace_lanes],post_m[:self.trace_lanes,5:6]*.1),dim=-1));self.previous_reference=governed;self.previous_command=command
+            logs.append(torch.cat((post_pose[:self.trace_lanes,:2],post_v[:self.trace_lanes,None],projection['cross_track'][:self.trace_lanes,None],peak[:self.trace_lanes,None],terms['reward'][:self.trace_lanes,None],active_lower[:self.trace_lanes,None],stop_tick[:self.trace_lanes,None],governed[:self.trace_lanes],post_m[:self.trace_lanes,5:6]*self.wheel_radius_m),dim=-1));self.previous_reference=governed;self.previous_command=command
             if self.diagnostics:
                 details.append(dict(observation=self.middle.obs.clone(),nominal=self.middle.nominal.clone(),
                     progress=projection['progress'].clone(),pose=post_pose.clone(),measurement=post_m.clone(),policy_measurement=(post_m if self.randomization is None else self.measurement).clone(),

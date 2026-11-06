@@ -32,6 +32,10 @@ for k in range(steps+1):
  row=torch.cat((torch.full((n,1),k*.005,device=device),pose,v[:,None],m[:,:4],plant.dofs[:,plant.pendulum_servos.indices,0],plant.dofs[:,plant.pendulum_servos.indices,1]),dim=1)
  rows.append(row.cpu().numpy());masks.append(alive.cpu().numpy().copy());references.append(raw.cpu().numpy().copy());commands.append(command.cpu().numpy().copy())
  alive &= (m[:,0].abs()<=torch.pi/4)&torch.isfinite(row).all(-1)
+ if spec.get('save_warmup_state',False) and k==round(spec['warmup_s']/.005) and bool(alive[0]):
+  root=plant.roots[0].clone();root[:3]-=plant.origin[0]
+  state=dict(root_pose=torch.cat((root[:3],root[[6,3,4,5]])),root_velocity=root[7:],joint_position=plant.dofs[0,:,0],joint_velocity=plant.dofs[0,:,1],previous_reference=previous[0],previous_command=command[0],raw=raw[0],eso=controller.eso[0],disturbance=controller.disturbance[0],gains=controller.gains[0])
+  np.savez(a.output/'initial_state.npz',**{name:value.cpu().numpy() for name,value in state.items()},joint_names=plant.joints,physical_tick=k)
  if k==steps or not bool(alive.any()):break
  desired=turn if spec['warmup_s']<=k*.005<spec['return_s'] else torch.zeros_like(turn)
  raw=raw.clone();raw[:,1]+=torch.clamp(desired-raw[:,1],-spec['steer_slew_rad_s']*.005,spec['steer_slew_rad_s']*.005)

@@ -36,5 +36,6 @@
       1048576
     ]
   },
-  "role": "RB complete vehicle, friction0.8; original ECBC versus frozen Local300 before controller tuning; nominal DEV"
+  "role": "RB complete vehicle, friction0.8; original ECBC versus frozen Local300 before controller tuning; nominal DEV",
+  "save_warmup_state": true
 }
