@@ -17,5 +17,5 @@ for run in a.run:
 for i,title in enumerate(('Initially rolling at 2 m/s','Initially spinning, zero translation')):
  axs[i,0].set(xlabel='World x (m)',ylabel='World y minus initial y (m)',aspect='equal',title=title);axs[i,1].set(xlabel='Time (s)',ylabel='World forward speed (m/s)');axs[i,2].set(xlabel='Time (s)',ylabel='Wheel axle tilt (deg)')
  for ax in axs[i]:ax.grid(alpha=.2)
-axs[0,1].legend(fontsize=7);f.suptitle('Isolated original RB wheel: same mass, inertia, semiaxes and friction\nCollision representation changes; free wheel can wobble or fall — not whole-bike validation')
+axs[0,1].legend(fontsize=7);f.suptitle('Isolated original RB wheel: same mass, inertia, outer diameter, width and friction\nCollision representation changes; free wheel can wobble or fall — not whole-bike validation')
 f.savefig(a.output/'xy_and_rolling.png',dpi=150);plt.close(f);(a.output/'summary.json').write_text(json.dumps(records,indent=2))
