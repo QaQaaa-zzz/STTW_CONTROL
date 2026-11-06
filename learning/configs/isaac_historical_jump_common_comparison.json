@@ -1,0 +1,27 @@
+{
+  "output": "runs/historical_jump_common_comparison",
+  "initial_state": "runs/pendulum_h75_locked/warmup/initial_state.npz",
+  "geometry": "runs/pendulum_jump_pair/geometry.json",
+  "bundles": "runs/historical_jump_candidate",
+  "skills": [
+    "isaac01966080",
+    "traversal600_best",
+    "best151"
+  ],
+  "start_x": 1.0,
+  "approach_speed": 2.0,
+  "seconds": 4.0,
+  "maximum_physics_lane_steps": 2400,
+  "optimizer_updates": 0,
+  "align_heading": true,
+  "physics_dt": 0.005,
+  "gpu_pair_capacities": [
+    1048576,
+    1048576,
+    1048576
+  ],
+  "ground_bundle": "runs/h75_selected_local300_flat/bundle",
+  "ground_alpha": 0.5,
+  "handoff_x": 1.5,
+  "role": "historical Isaac-adapted successful actor versus current training candidates on unchanged common chassis; nominal paired DEV, no training"
+}

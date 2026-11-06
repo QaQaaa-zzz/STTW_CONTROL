@@ -51,7 +51,7 @@ policies=[TorchPendulumSkill(Path(spec['bundles'])/s) for s in spec['skills']]
 history=TorchPendulumObservation(plant.joints,json.loads(Path('learning/configs/pendulum_common_asset.json').read_text())['mount_rotation_wxyz'],n,'cuda:0')
 geometry=TorchPendulumGeometry(json.loads(Path(spec['geometry']).read_text()),plant.bodies)
 last=torch.zeros(n,4,device='cuda:0');alive=torch.ones(n,dtype=torch.bool,device='cuda:0');entered=torch.zeros_like(alive);consumed=torch.zeros_like(alive)
-active=False;rows=[];actions=[];observations=[];valid=[];start=time.monotonic();steps=round(spec['seconds']/.005)
+active=False;rows=[];actions=[];observations=[];valid=[];arm_rows=[];start=time.monotonic();steps=round(spec['seconds']/.005)
 (out/'protocol.json').write_text(json.dumps(dict(spec=spec,plant=plant.metadata,policies=[s.identity for s in policies],ground_history='last_action zero means no prior jump action; physical FIFO sampled throughout ground approach',initial_translation='common saved snapshot translated to start_x/y0; optional rigid world-yaw alignment rotates pose and both velocities together',role='nominal paired DEV integration; not original donor benchmark',physics_dt=plant.physics_dt,ground_dt=.005,jump_dt=.02,optimizer_updates=0),indent=2))
 ground=None
 if spec.get('ground_bundle'):
@@ -95,7 +95,11 @@ for k in range(steps+1):
    for i,policy in enumerate(policies):last[i:i+1],target[i:i+1]=policy.infer(obs[i:i+1],plant.dofs[i:i+1,plant.joints.index('knee_joint'),0])
  if active:
   command=torch.stack((torch.zeros_like(speed),target[:,1]),-1)
-  for _ in range(substeps):plant.step(command,pendulum_target=target[:,2:],steering_position_target=target[:,:1],refresh_diagnostics=False)
+  for substep in range(substeps):
+   ids=plant.pendulum_servos.indices
+   before=torch.cat((torch.full((n,1),k*.005+substep*plant.physics_dt,device='cuda:0'),target[:,2:],plant.dofs[:,ids,0],plant.dofs[:,ids,1]),-1)
+   plant.step(command,pendulum_target=target[:,2:],steering_position_target=target[:,:1],refresh_diagnostics=False)
+   arm_rows.append(torch.cat((before,plant.last_pendulum_torque[:,ids],alive[:,None]),-1))
  elif ground is not None:
   ground.step()
  else:
@@ -104,6 +108,8 @@ for k in range(steps+1):
   for _ in range(substeps):plant.step(command,refresh_diagnostics=False)
  plant.refresh()
 if writer is not None:writer.close()
+if arm_rows:
+ np.savez(out/'arm_commands.npz',trace=torch.stack(arm_rows).cpu().numpy(),columns=['time','hip_target','knee_target','hip_position','knee_position','hip_velocity','knee_velocity','hip_command_torque','knee_command_torque','alive_before_step'],semantics='pre-step state and actual clipped PD effort command each physics step; not solver-measured reaction torque')
 trace=torch.stack(rows).cpu().numpy();mask=torch.stack(valid).cpu().numpy();np.savez(out/'trajectory.npz',trace=trace,valid=mask,action=torch.stack(actions).cpu().numpy(),observations=torch.stack(observations).cpu().numpy(),columns=['time','x','y','z','speed','roll','roll_rate','steer','steer_rate','hip','knee','obstacle_relative_x'])
 result=dict(status='complete',elapsed_s=time.monotonic()-start,physics_lane_steps=k*substeps*n,ground_controller=('H75+Local300' if ground is not None else 'ECBC+ESO'),cases=[])
 for i,name in enumerate(spec['skills']):
