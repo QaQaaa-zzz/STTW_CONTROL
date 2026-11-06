@@ -1,0 +1,37 @@
+{
+  "role": "Current extended-reference E5 DEV; historical short-reference failure retained separately",
+  "cases": [
+    {
+      "case_id": "forced_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/forced_bypass.json"
+    },
+    {
+      "case_id": "forced_original_jump_extended_reference",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/forced_original_jump_extended_reference.json"
+    },
+    {
+      "case_id": "worldFy-2N_original_jump",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_disturbance/worldFy-2N_original_jump.json",
+      "force_world_y_N": -2,
+      "route": "original_jump"
+    },
+    {
+      "case_id": "worldFy-2N_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_disturbance/worldFy-2N_bypass.json",
+      "force_world_y_N": -2,
+      "route": "bypass"
+    },
+    {
+      "case_id": "worldFy+2N_original_jump",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_disturbance/worldFy+2N_original_jump.json",
+      "force_world_y_N": 2,
+      "route": "original_jump"
+    },
+    {
+      "case_id": "worldFy+2N_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_disturbance/worldFy+2N_bypass.json",
+      "force_world_y_N": 2,
+      "route": "bypass"
+    }
+  ]
+}

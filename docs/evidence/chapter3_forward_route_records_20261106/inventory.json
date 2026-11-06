@@ -1,0 +1,44 @@
+{
+  "records": 12,
+  "physical_cases": 6,
+  "independent_origins": 1,
+  "usable_records": 12,
+  "cases": [
+    {
+      "case_id": "forced_bypass",
+      "status": "exported",
+      "state_source": "same_tick_same_root_connection_event_after_reference_assignment",
+      "supervised_input_complete": true
+    },
+    {
+      "case_id": "forced_original_jump_extended_reference",
+      "status": "exported",
+      "state_source": "same_tick_same_root_connection_event_after_reference_assignment",
+      "supervised_input_complete": true
+    },
+    {
+      "case_id": "worldFy-2N_original_jump",
+      "status": "exported",
+      "state_source": "same_tick_same_root_connection_event_after_reference_assignment",
+      "supervised_input_complete": true
+    },
+    {
+      "case_id": "worldFy-2N_bypass",
+      "status": "exported",
+      "state_source": "same_tick_same_root_connection_event_after_reference_assignment",
+      "supervised_input_complete": true
+    },
+    {
+      "case_id": "worldFy+2N_original_jump",
+      "status": "exported",
+      "state_source": "same_tick_same_root_connection_event_after_reference_assignment",
+      "supervised_input_complete": true
+    },
+    {
+      "case_id": "worldFy+2N_bypass",
+      "status": "exported",
+      "state_source": "same_tick_same_root_connection_event_after_reference_assignment",
+      "supervised_input_complete": true
+    }
+  ]
+}
