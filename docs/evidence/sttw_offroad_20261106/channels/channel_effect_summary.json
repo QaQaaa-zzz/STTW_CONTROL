@@ -1,0 +1,302 @@
+[
+  {
+    "phase": "entry_projection",
+    "alpha": 0,
+    "intervention": "hold_speed_correction",
+    "delta_speed_rmse": 0.0015617012977600098,
+    "delta_path_rmse": 0.005771338939666748,
+    "max_xy_m": 0.017334679141640663,
+    "reload_max_xy_m": 0.0004743089957628399,
+    "contrast_to_reload": 36.54722827628639
+  },
+  {
+    "phase": "entry_projection",
+    "alpha": 0,
+    "intervention": "hold_steer_correction",
+    "delta_speed_rmse": -0.032887041568756104,
+    "delta_path_rmse": -0.011526674032211304,
+    "max_xy_m": 0.03122883476316929,
+    "reload_max_xy_m": 0.0004743089957628399,
+    "contrast_to_reload": 65.84069676549856
+  },
+  {
+    "phase": "entry_projection",
+    "alpha": 0,
+    "intervention": "hold_both_corrections",
+    "delta_speed_rmse": -0.0188789963722229,
+    "delta_path_rmse": -0.0040232837200164795,
+    "max_xy_m": 0.016460509970784187,
+    "reload_max_xy_m": 0.0004743089957628399,
+    "contrast_to_reload": 34.704190976412846
+  },
+  {
+    "phase": "entry_projection",
+    "alpha": 0.25,
+    "intervention": "hold_speed_correction",
+    "delta_speed_rmse": -0.0030346810817718506,
+    "delta_path_rmse": 0.005541801452636719,
+    "max_xy_m": 0.013080395758152008,
+    "reload_max_xy_m": 0.0004358930455055088,
+    "contrast_to_reload": 30.008268984843667
+  },
+  {
+    "phase": "entry_projection",
+    "alpha": 0.25,
+    "intervention": "hold_steer_correction",
+    "delta_speed_rmse": -0.028921693563461304,
+    "delta_path_rmse": -0.0068476274609565735,
+    "max_xy_m": 0.02198702283203602,
+    "reload_max_xy_m": 0.0004358930455055088,
+    "contrast_to_reload": 50.44132513409909
+  },
+  {
+    "phase": "entry_projection",
+    "alpha": 0.25,
+    "intervention": "hold_both_corrections",
+    "delta_speed_rmse": -0.008632421493530273,
+    "delta_path_rmse": 0.002076566219329834,
+    "max_xy_m": 0.010523990727961063,
+    "reload_max_xy_m": 0.0004358930455055088,
+    "contrast_to_reload": 24.143516021817472
+  },
+  {
+    "phase": "entry_projection",
+    "alpha": 0.5,
+    "intervention": "hold_speed_correction",
+    "delta_speed_rmse": 0.005022913217544556,
+    "delta_path_rmse": 0.004068464040756226,
+    "max_xy_m": 0.009779147803783417,
+    "reload_max_xy_m": 0.0011035760398954153,
+    "contrast_to_reload": 8.8613266782325
+  },
+  {
+    "phase": "entry_projection",
+    "alpha": 0.5,
+    "intervention": "hold_steer_correction",
+    "delta_speed_rmse": 0.009568199515342712,
+    "delta_path_rmse": 0.004243999719619751,
+    "max_xy_m": 0.010933722369372845,
+    "reload_max_xy_m": 0.0011035760398954153,
+    "contrast_to_reload": 9.907538741425576
+  },
+  {
+    "phase": "entry_projection",
+    "alpha": 0.5,
+    "intervention": "hold_both_corrections",
+    "delta_speed_rmse": 0.006486564874649048,
+    "delta_path_rmse": 0.005638450384140015,
+    "max_xy_m": 0.012051749974489212,
+    "reload_max_xy_m": 0.0011035760398954153,
+    "contrast_to_reload": 10.920633956162497
+  },
+  {
+    "phase": "entry_projection",
+    "alpha": 0.75,
+    "intervention": "hold_speed_correction",
+    "delta_speed_rmse": -0.0017634853720664978,
+    "delta_path_rmse": -0.00021839141845703125,
+    "max_xy_m": 0.004695254378020763,
+    "reload_max_xy_m": 0.0012189055560156703,
+    "contrast_to_reload": 3.8520247568388317
+  },
+  {
+    "phase": "entry_projection",
+    "alpha": 0.75,
+    "intervention": "hold_steer_correction",
+    "delta_speed_rmse": 0.012394249439239502,
+    "delta_path_rmse": 0.008030794560909271,
+    "max_xy_m": 0.02914489060640335,
+    "reload_max_xy_m": 0.0012189055560156703,
+    "contrast_to_reload": 23.910704535363248
+  },
+  {
+    "phase": "entry_projection",
+    "alpha": 0.75,
+    "intervention": "hold_both_corrections",
+    "delta_speed_rmse": 0.024927832186222076,
+    "delta_path_rmse": 0.005879327654838562,
+    "max_xy_m": 0.030566591769456863,
+    "reload_max_xy_m": 0.0012189055560156703,
+    "contrast_to_reload": 25.077079695470598
+  },
+  {
+    "phase": "entry_projection",
+    "alpha": 1,
+    "intervention": "hold_speed_correction",
+    "delta_speed_rmse": -0.008412107825279236,
+    "delta_path_rmse": -0.0008640848100185394,
+    "max_xy_m": 0.004312620032578707,
+    "reload_max_xy_m": 0.0011020130477845669,
+    "contrast_to_reload": 3.9134019703746583
+  },
+  {
+    "phase": "entry_projection",
+    "alpha": 1,
+    "intervention": "hold_steer_correction",
+    "delta_speed_rmse": -0.029693327844142914,
+    "delta_path_rmse": 0.0035222917795181274,
+    "max_xy_m": 0.04038901627063751,
+    "reload_max_xy_m": 0.0011020130477845669,
+    "contrast_to_reload": 36.650216031319786
+  },
+  {
+    "phase": "entry_projection",
+    "alpha": 1,
+    "intervention": "hold_both_corrections",
+    "delta_speed_rmse": -0.015536084771156311,
+    "delta_path_rmse": 0.0006520114839076996,
+    "max_xy_m": 0.032204464077949524,
+    "reload_max_xy_m": 0.0011020130477845669,
+    "contrast_to_reload": 29.22330560667299
+  },
+  {
+    "phase": "exit_projection",
+    "alpha": 0,
+    "intervention": "hold_speed_correction",
+    "delta_speed_rmse": 0.06745612621307373,
+    "delta_path_rmse": 0.011164478957653046,
+    "max_xy_m": 0.05109274759888649,
+    "reload_max_xy_m": 0.001107167568989098,
+    "contrast_to_reload": 46.14725812962246
+  },
+  {
+    "phase": "exit_projection",
+    "alpha": 0,
+    "intervention": "hold_steer_correction",
+    "delta_speed_rmse": 0.0038239508867263794,
+    "delta_path_rmse": 0.003988489508628845,
+    "max_xy_m": 0.010919740423560143,
+    "reload_max_xy_m": 0.001107167568989098,
+    "contrast_to_reload": 9.862771209538261
+  },
+  {
+    "phase": "exit_projection",
+    "alpha": 0,
+    "intervention": "hold_both_corrections",
+    "delta_speed_rmse": 0.06758266687393188,
+    "delta_path_rmse": 0.0150289386510849,
+    "max_xy_m": 0.05649298429489136,
+    "reload_max_xy_m": 0.001107167568989098,
+    "contrast_to_reload": 51.02478240621915
+  },
+  {
+    "phase": "exit_projection",
+    "alpha": 0.25,
+    "intervention": "hold_speed_correction",
+    "delta_speed_rmse": 0.07222544401884079,
+    "delta_path_rmse": 0.007740821689367294,
+    "max_xy_m": 0.06079763174057007,
+    "reload_max_xy_m": 0.0017287489026784897,
+    "contrast_to_reload": 35.168572860044286
+  },
+  {
+    "phase": "exit_projection",
+    "alpha": 0.25,
+    "intervention": "hold_steer_correction",
+    "delta_speed_rmse": -0.0053224116563797,
+    "delta_path_rmse": 0.00047605112195014954,
+    "max_xy_m": 0.011578097939491272,
+    "reload_max_xy_m": 0.0017287489026784897,
+    "contrast_to_reload": 6.69738556105655
+  },
+  {
+    "phase": "exit_projection",
+    "alpha": 0.25,
+    "intervention": "hold_both_corrections",
+    "delta_speed_rmse": 0.07277560979127884,
+    "delta_path_rmse": 0.010899771004915237,
+    "max_xy_m": 0.06932023912668228,
+    "reload_max_xy_m": 0.0017287489026784897,
+    "contrast_to_reload": 40.098500724586934
+  },
+  {
+    "phase": "exit_projection",
+    "alpha": 0.5,
+    "intervention": "hold_speed_correction",
+    "delta_speed_rmse": 0.05368332006037235,
+    "delta_path_rmse": -0.021124809980392456,
+    "max_xy_m": 0.03936596214771271,
+    "reload_max_xy_m": 0.0006233945023268461,
+    "contrast_to_reload": 63.14775314953469
+  },
+  {
+    "phase": "exit_projection",
+    "alpha": 0.5,
+    "intervention": "hold_steer_correction",
+    "delta_speed_rmse": -0.003018217161297798,
+    "delta_path_rmse": -0.011027954518795013,
+    "max_xy_m": 0.0215458907186985,
+    "reload_max_xy_m": 0.0006233945023268461,
+    "contrast_to_reload": 34.562208422239145
+  },
+  {
+    "phase": "exit_projection",
+    "alpha": 0.5,
+    "intervention": "hold_both_corrections",
+    "delta_speed_rmse": 0.05493849702179432,
+    "delta_path_rmse": -0.032436907291412354,
+    "max_xy_m": 0.0593147873878479,
+    "reload_max_xy_m": 0.0006233945023268461,
+    "contrast_to_reload": 95.14807584355167
+  },
+  {
+    "phase": "exit_projection",
+    "alpha": 0.75,
+    "intervention": "hold_speed_correction",
+    "delta_speed_rmse": 0.005170801654458046,
+    "delta_path_rmse": -0.006972193717956543,
+    "max_xy_m": 0.011414247564971447,
+    "reload_max_xy_m": 0.00018436294340062886,
+    "contrast_to_reload": 61.911831924747375
+  },
+  {
+    "phase": "exit_projection",
+    "alpha": 0.75,
+    "intervention": "hold_steer_correction",
+    "delta_speed_rmse": -0.0008568847551941872,
+    "delta_path_rmse": -0.006516903638839722,
+    "max_xy_m": 0.01166741643100977,
+    "reload_max_xy_m": 0.00018436294340062886,
+    "contrast_to_reload": 63.285040994685986
+  },
+  {
+    "phase": "exit_projection",
+    "alpha": 0.75,
+    "intervention": "hold_both_corrections",
+    "delta_speed_rmse": 0.002379756420850754,
+    "delta_path_rmse": -0.01316659152507782,
+    "max_xy_m": 0.018584636971354485,
+    "reload_max_xy_m": 0.00018436294340062886,
+    "contrast_to_reload": 100.8046228192899
+  },
+  {
+    "phase": "exit_projection",
+    "alpha": 1,
+    "intervention": "hold_speed_correction",
+    "delta_speed_rmse": -0.000826176255941391,
+    "delta_path_rmse": -0.0012907087802886963,
+    "max_xy_m": 0.003119126660749316,
+    "reload_max_xy_m": 0.0006913737743161619,
+    "contrast_to_reload": 4.5114911450531165
+  },
+  {
+    "phase": "exit_projection",
+    "alpha": 1,
+    "intervention": "hold_steer_correction",
+    "delta_speed_rmse": 0.0005796141922473907,
+    "delta_path_rmse": -0.0028911828994750977,
+    "max_xy_m": 0.00494154030457139,
+    "reload_max_xy_m": 0.0006913737743161619,
+    "contrast_to_reload": 7.147422260063408
+  },
+  {
+    "phase": "exit_projection",
+    "alpha": 1,
+    "intervention": "hold_both_corrections",
+    "delta_speed_rmse": -0.001054493710398674,
+    "delta_path_rmse": -0.006529808044433594,
+    "max_xy_m": 0.010711858049035072,
+    "reload_max_xy_m": 0.0006913737743161619,
+    "contrast_to_reload": 15.493584580396004
+  }
+]

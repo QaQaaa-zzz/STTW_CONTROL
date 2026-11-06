@@ -1,0 +1,17 @@
+{
+  "question": "Does prescribed 1to0.5 bend switching reduce pre-arrival path deviation at a speed cost versus fixed policies?",
+  "role": "DEV single frozen parameter seed101; no statistical generalization",
+  "config": "learning/configs/isaac_h75_bend_switch_replanning.json",
+  "budget": {
+    "lanes": 7,
+    "seconds": 10,
+    "lane_physics_steps": 350000,
+    "optimizer_updates": 0
+  },
+  "stop": "one batch only; retain all failures; no automatic follow-up",
+  "evaluation": "complete",
+  "model": "original H75 u77 + orange Local300 unchanged",
+  "execution": "completed",
+  "service": "sttw-bend-switch-replanning.service",
+  "physics_seconds": 161.50670909881592
+}

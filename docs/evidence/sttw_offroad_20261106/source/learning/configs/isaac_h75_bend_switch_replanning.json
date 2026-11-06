@@ -1,0 +1,143 @@
+{
+  "asset": "runs/isaac_urdf_drive/vehicle.urdf",
+  "controller_config": "runs/isaac_signals_parity/dynamic.json",
+  "lower_actor": "runs/local300_torch_portable_parity/actor.npz",
+  "lower_sha256": "517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125",
+  "plant_options": {
+    "wheel_collision": "sdf",
+    "friction_offset_threshold": 0.0,
+    "compliant_wheels": {
+      "frontwheel": {
+        "stiffness": 5324.4083452801915,
+        "damping": 112.38579318769304
+      },
+      "rearwheel": {
+        "stiffness": 7833.38122453075,
+        "damping": 173.11038721684574
+      }
+    },
+    "env_spacing": 3.0,
+    "track_wheel_contacts": false
+  },
+  "initial_state": "runs/h75_selected_local300_flat/initial_state.npz",
+  "selected_lower": "learning/configs/isaaclab_selected_lower.json",
+  "role": "DEV full task with replanning; original H75/Local300; seed101 physical parameters",
+  "evaluation_role": "DEV 6cm 2.6m/s: five fixed alpha, prescribed 1to0.5 at original progress5.3m, matched Zero; all replanning; frozen seed101",
+  "num_envs": 7,
+  "alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1,
+    1,
+    0
+  ],
+  "zero_middle": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    true
+  ],
+  "case_labels": [
+    "alpha0",
+    "alpha025",
+    "alpha05",
+    "alpha075",
+    "alpha1",
+    "switch1to05",
+    "Zero"
+  ],
+  "auto_reset_horizon": false,
+  "user_speed_m_s": 2.6,
+  "replanning": {
+    "original_route": "runs/h75_selected_local300_flat/bundle/route.npz",
+    "period_s": 0.5,
+    "departure_m": 0.3,
+    "arrival_radius_m": 2.0,
+    "radius_m": 1.8,
+    "enabled": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "goal_after_turn_m": 5.0
+  },
+  "alpha_switch": {
+    "progress_s_m": 5.3,
+    "target_alpha": [
+      0,
+      0.25,
+      0.5,
+      0.75,
+      1,
+      0.5,
+      0
+    ],
+    "execution_modes": [
+      "independent",
+      "independent",
+      "independent",
+      "independent",
+      "independent",
+      "independent",
+      "independent"
+    ],
+    "progress_frame": "original_route"
+  },
+  "seed": 101,
+  "randomization": {
+    "base_body": "chasis",
+    "friction_range": [
+      0.8443532505610554,
+      0.8443532505610554
+    ],
+    "mass_scale": [
+      0.9943768413336629,
+      0.9943768413336629
+    ],
+    "base_com_m": [
+      0,
+      0
+    ],
+    "latency_s": [
+      0.0,
+      0.0
+    ],
+    "servo_gain_scale": [
+      1.0036511274091764,
+      1.0036511274091764
+    ],
+    "steer_zero_offset_rad": [
+      -0.0008226857552122873,
+      -0.0008226857552122873
+    ],
+    "measurement_noise": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "push_interval_s": 1000000000,
+    "push_velocity_range": {
+      "x": [
+        0,
+        0
+      ],
+      "y": [
+        0,
+        0
+      ]
+    }
+  }
+}

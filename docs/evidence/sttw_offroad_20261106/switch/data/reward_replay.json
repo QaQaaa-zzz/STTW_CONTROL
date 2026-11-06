@@ -1,0 +1,4 @@
+{
+  "max_error": 4.76837158203125e-07,
+  "note": "Execution-path reward; geometry changes after planning, not a common original-path ranking"
+}

@@ -1,0 +1,68 @@
+{
+  "physics_steps": 0,
+  "optimizer_updates": 0,
+  "smoothing": false,
+  "scope": "Frozen-state forward queries; no new closed-loop evidence",
+  "sources": [
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/analysis/entry_projection/alpha0/same_state_alpha/queries.csv",
+      "phase": "entry_projection",
+      "source_alpha": 0,
+      "time_s": 1.6
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/analysis/entry_projection/alpha0.25/same_state_alpha/queries.csv",
+      "phase": "entry_projection",
+      "source_alpha": 0.25,
+      "time_s": 1.58
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/analysis/entry_projection/alpha0.5/same_state_alpha/queries.csv",
+      "phase": "entry_projection",
+      "source_alpha": 0.5,
+      "time_s": 1.58
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/analysis/entry_projection/alpha0.75/same_state_alpha/queries.csv",
+      "phase": "entry_projection",
+      "source_alpha": 0.75,
+      "time_s": 1.56
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/analysis/entry_projection/alpha1/same_state_alpha/queries.csv",
+      "phase": "entry_projection",
+      "source_alpha": 1,
+      "time_s": 1.56
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/analysis/exit_projection/alpha0/same_state_alpha/queries.csv",
+      "phase": "exit_projection",
+      "source_alpha": 0,
+      "time_s": 2.16
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/analysis/exit_projection/alpha0.25/same_state_alpha/queries.csv",
+      "phase": "exit_projection",
+      "source_alpha": 0.25,
+      "time_s": 2.14
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/analysis/exit_projection/alpha0.5/same_state_alpha/queries.csv",
+      "phase": "exit_projection",
+      "source_alpha": 0.5,
+      "time_s": 2.1
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/analysis/exit_projection/alpha0.75/same_state_alpha/queries.csv",
+      "phase": "exit_projection",
+      "source_alpha": 0.75,
+      "time_s": 2.08
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/analysis/exit_projection/alpha1/same_state_alpha/queries.csv",
+      "phase": "exit_projection",
+      "source_alpha": 1,
+      "time_s": 2.06
+    }
+  ]
+}

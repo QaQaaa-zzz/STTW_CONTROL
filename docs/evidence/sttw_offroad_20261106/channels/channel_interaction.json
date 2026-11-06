@@ -1,0 +1,566 @@
+{
+  "formula": "I(t)=both(t)-speed_hold(t)-steer_hold(t)+restored(t)",
+  "scope": "Same-state finite intervention nonadditivity of signed trajectories, not an RMSE-cost interaction or an identified mechanical cross-term. One state per phase/alpha; reload contrast is descriptive, not a noise distribution.",
+  "rows": [
+    {
+      "phase": "entry_projection",
+      "alpha": 0,
+      "window": "hold",
+      "n_ticks": 40,
+      "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/entry_projection/alpha0/evaluation",
+      "xy_m": {
+        "interaction_rms": 8.30974665917384e-05,
+        "reload_rms": 5.838274499358646e-05,
+        "speed_hold_effect_rms": 0.00514636135943822,
+        "steer_hold_effect_rms": 0.0013646828677416276,
+        "both_hold_effect_rms": 0.0037595361103564297
+      },
+      "speed_m_s": {
+        "interaction_rms": 0.006915434763131626,
+        "reload_rms": 0.0007197428095693038,
+        "speed_hold_effect_rms": 0.06305785821768425,
+        "steer_hold_effect_rms": 0.01771355008172315,
+        "both_hold_effect_rms": 0.045262905501854585
+      },
+      "signed_path_m": {
+        "interaction_rms": 1.6765462318393817e-05,
+        "reload_rms": 1.235314452739649e-05,
+        "speed_hold_effect_rms": 0.00038219859406597576,
+        "steer_hold_effect_rms": 0.0003876065292119522,
+        "both_hold_effect_rms": 6.328418859688011e-05
+      }
+    },
+    {
+      "phase": "entry_projection",
+      "alpha": 0,
+      "window": "after_release_0p5",
+      "n_ticks": 100,
+      "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/entry_projection/alpha0/evaluation",
+      "xy_m": {
+        "interaction_rms": 0.004496196172445229,
+        "reload_rms": 0.00021207835801999496,
+        "speed_hold_effect_rms": 0.014420564607038076,
+        "steer_hold_effect_rms": 0.019385045783210278,
+        "both_hold_effect_rms": 0.00986489025995939
+      },
+      "speed_m_s": {
+        "interaction_rms": 0.027454280413360115,
+        "reload_rms": 0.001999968235216634,
+        "speed_hold_effect_rms": 0.03907956969334686,
+        "steer_hold_effect_rms": 0.04562148002924397,
+        "both_hold_effect_rms": 0.05593244404694145
+      },
+      "signed_path_m": {
+        "interaction_rms": 0.0023278893432841664,
+        "reload_rms": 2.7549934812409193e-05,
+        "speed_hold_effect_rms": 0.0060054417880900865,
+        "steer_hold_effect_rms": 0.01431344757996243,
+        "both_hold_effect_rms": 0.007083126856165486
+      }
+    },
+    {
+      "phase": "entry_projection",
+      "alpha": 0.25,
+      "window": "hold",
+      "n_ticks": 40,
+      "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/entry_projection/alpha0.25/evaluation",
+      "xy_m": {
+        "interaction_rms": 6.25785756344842e-05,
+        "reload_rms": 1.7137511876395836e-05,
+        "speed_hold_effect_rms": 0.003922764372137565,
+        "steer_hold_effect_rms": 0.0005786781777698246,
+        "both_hold_effect_rms": 0.0033100119911170134
+      },
+      "speed_m_s": {
+        "interaction_rms": 0.004715578971515897,
+        "reload_rms": 0.00037537545467346837,
+        "speed_hold_effect_rms": 0.050705627466526765,
+        "steer_hold_effect_rms": 0.011844046080508062,
+        "both_hold_effect_rms": 0.03906817513123784
+      },
+      "signed_path_m": {
+        "interaction_rms": 1.6548883261191747e-05,
+        "reload_rms": 4.3466036836228995e-06,
+        "speed_hold_effect_rms": 0.00046700828860998247,
+        "steer_hold_effect_rms": 0.00013977503297632569,
+        "both_hold_effect_rms": 0.00032075195324198527
+      }
+    },
+    {
+      "phase": "entry_projection",
+      "alpha": 0.25,
+      "window": "after_release_0p5",
+      "n_ticks": 100,
+      "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/entry_projection/alpha0.25/evaluation",
+      "xy_m": {
+        "interaction_rms": 0.009396919313824303,
+        "reload_rms": 0.0001919461156147887,
+        "speed_hold_effect_rms": 0.010182946231343458,
+        "steer_hold_effect_rms": 0.01347240353582428,
+        "both_hold_effect_rms": 0.006655833070644759
+      },
+      "speed_m_s": {
+        "interaction_rms": 0.03515337049005355,
+        "reload_rms": 0.002217215178814568,
+        "speed_hold_effect_rms": 0.03436661393183838,
+        "steer_hold_effect_rms": 0.0378567156426396,
+        "both_hold_effect_rms": 0.030234671784726972
+      },
+      "signed_path_m": {
+        "interaction_rms": 0.004715692109936249,
+        "reload_rms": 4.0249468044316005e-05,
+        "speed_hold_effect_rms": 0.005784926403671447,
+        "steer_hold_effect_rms": 0.00888584192240612,
+        "both_hold_effect_rms": 0.0024979307755557795
+      }
+    },
+    {
+      "phase": "entry_projection",
+      "alpha": 0.5,
+      "window": "hold",
+      "n_ticks": 40,
+      "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/entry_projection/alpha0.5/evaluation",
+      "xy_m": {
+        "interaction_rms": 0.0008407967333821819,
+        "reload_rms": 5.683216144067947e-05,
+        "speed_hold_effect_rms": 0.0021284591727307673,
+        "steer_hold_effect_rms": 0.0012475673150246101,
+        "both_hold_effect_rms": 0.0024585524473406373
+      },
+      "speed_m_s": {
+        "interaction_rms": 0.009697045005191059,
+        "reload_rms": 0.0010359216902178943,
+        "speed_hold_effect_rms": 0.03255363027306894,
+        "steer_hold_effect_rms": 0.011471856140445385,
+        "both_hold_effect_rms": 0.032617554374671565
+      },
+      "signed_path_m": {
+        "interaction_rms": 0.00012222343040111264,
+        "reload_rms": 1.5575306601324247e-05,
+        "speed_hold_effect_rms": 0.0002868405743680842,
+        "steer_hold_effect_rms": 0.0003497295759049835,
+        "both_hold_effect_rms": 0.0004938991911858374
+      }
+    },
+    {
+      "phase": "entry_projection",
+      "alpha": 0.5,
+      "window": "after_release_0p5",
+      "n_ticks": 100,
+      "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/entry_projection/alpha0.5/evaluation",
+      "xy_m": {
+        "interaction_rms": 0.006321985590462132,
+        "reload_rms": 0.0005618385582727799,
+        "speed_hold_effect_rms": 0.008010504091849729,
+        "steer_hold_effect_rms": 0.00770031500879003,
+        "both_hold_effect_rms": 0.00945948190807731
+      },
+      "speed_m_s": {
+        "interaction_rms": 0.0196387481524876,
+        "reload_rms": 0.005264629989565049,
+        "speed_hold_effect_rms": 0.016488787213222347,
+        "steer_hold_effect_rms": 0.020683830669696292,
+        "both_hold_effect_rms": 0.01784062957083809
+      },
+      "signed_path_m": {
+        "interaction_rms": 0.00371597965380626,
+        "reload_rms": 0.00022668618038725524,
+        "speed_hold_effect_rms": 0.005086368887181833,
+        "steer_hold_effect_rms": 0.005704901231766894,
+        "both_hold_effect_rms": 0.007076471272532208
+      }
+    },
+    {
+      "phase": "entry_projection",
+      "alpha": 0.75,
+      "window": "hold",
+      "n_ticks": 40,
+      "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/entry_projection/alpha0.75/evaluation",
+      "xy_m": {
+        "interaction_rms": 0.0012434885247581268,
+        "reload_rms": 2.5438142334431906e-05,
+        "speed_hold_effect_rms": 0.001587171894328379,
+        "steer_hold_effect_rms": 0.0022242961214896267,
+        "both_hold_effect_rms": 0.0006980094307793088
+      },
+      "speed_m_s": {
+        "interaction_rms": 0.023139020136200134,
+        "reload_rms": 0.0009995685017518637,
+        "speed_hold_effect_rms": 0.013568088049296325,
+        "steer_hold_effect_rms": 0.03243946744783051,
+        "both_hold_effect_rms": 0.009592481929683979
+      },
+      "signed_path_m": {
+        "interaction_rms": 0.00014953060467901572,
+        "reload_rms": 1.2465552068665412e-05,
+        "speed_hold_effect_rms": 0.0003481832164206221,
+        "steer_hold_effect_rms": 0.0005748708769074698,
+        "both_hold_effect_rms": 0.000100734249567791
+      }
+    },
+    {
+      "phase": "entry_projection",
+      "alpha": 0.75,
+      "window": "after_release_0p5",
+      "n_ticks": 100,
+      "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/entry_projection/alpha0.75/evaluation",
+      "xy_m": {
+        "interaction_rms": 0.004145458608490465,
+        "reload_rms": 0.0007023136670501637,
+        "speed_hold_effect_rms": 0.0030726392246933384,
+        "steer_hold_effect_rms": 0.019289898921936933,
+        "both_hold_effect_rms": 0.018736081133803994
+      },
+      "speed_m_s": {
+        "interaction_rms": 0.021558186504275278,
+        "reload_rms": 0.0030952401489475027,
+        "speed_hold_effect_rms": 0.017335108034276535,
+        "steer_hold_effect_rms": 0.04023754170952579,
+        "both_hold_effect_rms": 0.061276483048242306
+      },
+      "signed_path_m": {
+        "interaction_rms": 0.002526237962588959,
+        "reload_rms": 0.0004782309396672776,
+        "speed_hold_effect_rms": 0.0012225254582780712,
+        "steer_hold_effect_rms": 0.015197518662765704,
+        "both_hold_effect_rms": 0.013990597493288875
+      }
+    },
+    {
+      "phase": "entry_projection",
+      "alpha": 1,
+      "window": "hold",
+      "n_ticks": 40,
+      "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/entry_projection/alpha1/evaluation",
+      "xy_m": {
+        "interaction_rms": 0.0013044001119004972,
+        "reload_rms": 1.6192718273311133e-05,
+        "speed_hold_effect_rms": 0.001371137342690768,
+        "steer_hold_effect_rms": 0.0021800877973417224,
+        "both_hold_effect_rms": 0.0005739293699139733
+      },
+      "speed_m_s": {
+        "interaction_rms": 0.020998819569177173,
+        "reload_rms": 0.0009268835599469369,
+        "speed_hold_effect_rms": 0.013336932263644387,
+        "steer_hold_effect_rms": 0.03127696684778327,
+        "both_hold_effect_rms": 0.006394884310364887
+      },
+      "signed_path_m": {
+        "interaction_rms": 0.0001877391209170081,
+        "reload_rms": 1.0519978131106552e-05,
+        "speed_hold_effect_rms": 0.00027851863189228666,
+        "steer_hold_effect_rms": 0.0006579652864741591,
+        "both_hold_effect_rms": 0.00020147480129896144
+      }
+    },
+    {
+      "phase": "entry_projection",
+      "alpha": 1,
+      "window": "after_release_0p5",
+      "n_ticks": 100,
+      "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/entry_projection/alpha1/evaluation",
+      "xy_m": {
+        "interaction_rms": 0.010351022890442513,
+        "reload_rms": 0.000740330984410977,
+        "speed_hold_effect_rms": 0.00228947429715513,
+        "steer_hold_effect_rms": 0.02631199868047779,
+        "both_hold_effect_rms": 0.01847237595443666
+      },
+      "speed_m_s": {
+        "interaction_rms": 0.03171253426843652,
+        "reload_rms": 0.006220465248492954,
+        "speed_hold_effect_rms": 0.015064795449981055,
+        "steer_hold_effect_rms": 0.055797875361165705,
+        "both_hold_effect_rms": 0.04737465870395873
+      },
+      "signed_path_m": {
+        "interaction_rms": 0.006749145989747422,
+        "reload_rms": 0.0004904605409989765,
+        "speed_hold_effect_rms": 0.001798410982089518,
+        "steer_hold_effect_rms": 0.02161459158377342,
+        "both_hold_effect_rms": 0.01652275673620927
+      }
+    },
+    {
+      "phase": "exit_projection",
+      "alpha": 0,
+      "window": "hold",
+      "n_ticks": 40,
+      "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/exit_projection/alpha0/evaluation",
+      "xy_m": {
+        "interaction_rms": 0.0008338495768782952,
+        "reload_rms": 2.753998894155339e-05,
+        "speed_hold_effect_rms": 0.004059487772526503,
+        "steer_hold_effect_rms": 0.0019927101814447004,
+        "both_hold_effect_rms": 0.005175025196995145
+      },
+      "speed_m_s": {
+        "interaction_rms": 0.010688562471986497,
+        "reload_rms": 0.000675680565899493,
+        "speed_hold_effect_rms": 0.05284122684600518,
+        "steer_hold_effect_rms": 0.01883129783082215,
+        "both_hold_effect_rms": 0.057744497998449
+      },
+      "signed_path_m": {
+        "interaction_rms": 0.00016182688716603866,
+        "reload_rms": 1.65287526115073e-05,
+        "speed_hold_effect_rms": 0.0009444244622318634,
+        "steer_hold_effect_rms": 0.0007457648379455674,
+        "both_hold_effect_rms": 0.0015279358174552702
+      }
+    },
+    {
+      "phase": "exit_projection",
+      "alpha": 0,
+      "window": "after_release_0p5",
+      "n_ticks": 100,
+      "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/exit_projection/alpha0/evaluation",
+      "xy_m": {
+        "interaction_rms": 0.0029577801185314274,
+        "reload_rms": 0.00045215119611958946,
+        "speed_hold_effect_rms": 0.032107691839963814,
+        "steer_hold_effect_rms": 0.00693893250768111,
+        "both_hold_effect_rms": 0.03542579672708487
+      },
+      "speed_m_s": {
+        "interaction_rms": 0.013682084523896892,
+        "reload_rms": 0.0011140099954576605,
+        "speed_hold_effect_rms": 0.08000513394171764,
+        "steer_hold_effect_rms": 0.013768255464305884,
+        "both_hold_effect_rms": 0.07987090343993412
+      },
+      "signed_path_m": {
+        "interaction_rms": 0.0009330586620204743,
+        "reload_rms": 0.00044878762366376806,
+        "speed_hold_effect_rms": 0.018334194210841075,
+        "steer_hold_effect_rms": 0.006406743775448079,
+        "both_hold_effect_rms": 0.023869778208335912
+      }
+    },
+    {
+      "phase": "exit_projection",
+      "alpha": 0.25,
+      "window": "hold",
+      "n_ticks": 40,
+      "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/exit_projection/alpha0.25/evaluation",
+      "xy_m": {
+        "interaction_rms": 9.353050390252281e-05,
+        "reload_rms": 6.415540824980156e-05,
+        "speed_hold_effect_rms": 0.005946384276772387,
+        "steer_hold_effect_rms": 0.001240952038859177,
+        "both_hold_effect_rms": 0.007096824724052698
+      },
+      "speed_m_s": {
+        "interaction_rms": 0.005833163297994112,
+        "reload_rms": 0.0008743340946581635,
+        "speed_hold_effect_rms": 0.0676916126894724,
+        "steer_hold_effect_rms": 0.011518458126344513,
+        "both_hold_effect_rms": 0.07373594595490177
+      },
+      "signed_path_m": {
+        "interaction_rms": 4.276914701002839e-05,
+        "reload_rms": 5.94115080454263e-05,
+        "speed_hold_effect_rms": 0.0016058372233945391,
+        "steer_hold_effect_rms": 0.0005779707231315583,
+        "both_hold_effect_rms": 0.0022147908908930953
+      }
+    },
+    {
+      "phase": "exit_projection",
+      "alpha": 0.25,
+      "window": "after_release_0p5",
+      "n_ticks": 100,
+      "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/exit_projection/alpha0.25/evaluation",
+      "xy_m": {
+        "interaction_rms": 0.001280167205704636,
+        "reload_rms": 0.0007619382586614193,
+        "speed_hold_effect_rms": 0.04171082784613848,
+        "steer_hold_effect_rms": 0.0059840419623026645,
+        "both_hold_effect_rms": 0.04598631859292155
+      },
+      "speed_m_s": {
+        "interaction_rms": 0.00925298107209745,
+        "reload_rms": 0.0021492802705316227,
+        "speed_hold_effect_rms": 0.08802712775601126,
+        "steer_hold_effect_rms": 0.010973290423606664,
+        "both_hold_effect_rms": 0.0894740733856215
+      },
+      "signed_path_m": {
+        "interaction_rms": 0.0006938632652186332,
+        "reload_rms": 0.0007536636007940119,
+        "speed_hold_effect_rms": 0.027062478994391632,
+        "steer_hold_effect_rms": 0.005795355596951991,
+        "both_hold_effect_rms": 0.033503274216340743
+      }
+    },
+    {
+      "phase": "exit_projection",
+      "alpha": 0.5,
+      "window": "hold",
+      "n_ticks": 40,
+      "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/exit_projection/alpha0.5/evaluation",
+      "xy_m": {
+        "interaction_rms": 5.413053990449828e-05,
+        "reload_rms": 3.3791691494300854e-05,
+        "speed_hold_effect_rms": 0.005762580254298846,
+        "steer_hold_effect_rms": 0.001770720325960244,
+        "both_hold_effect_rms": 0.00745810282296
+      },
+      "speed_m_s": {
+        "interaction_rms": 0.006959108553515412,
+        "reload_rms": 0.001161213146188493,
+        "speed_hold_effect_rms": 0.06854410562166137,
+        "steer_hold_effect_rms": 0.01672721579196077,
+        "both_hold_effect_rms": 0.08334363832236907
+      },
+      "signed_path_m": {
+        "interaction_rms": 2.6538974779632598e-05,
+        "reload_rms": 2.7546200884108203e-05,
+        "speed_hold_effect_rms": 0.0018910983896401068,
+        "steer_hold_effect_rms": 0.0009329756402140793,
+        "both_hold_effect_rms": 0.0028145675413291135
+      }
+    },
+    {
+      "phase": "exit_projection",
+      "alpha": 0.5,
+      "window": "after_release_0p5",
+      "n_ticks": 100,
+      "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/exit_projection/alpha0.5/evaluation",
+      "xy_m": {
+        "interaction_rms": 0.0013036370389139307,
+        "reload_rms": 0.00030413566231161004,
+        "speed_hold_effect_rms": 0.032009310064732246,
+        "steer_hold_effect_rms": 0.011437992040035488,
+        "both_hold_effect_rms": 0.04154113079043127
+      },
+      "speed_m_s": {
+        "interaction_rms": 0.011066097505622208,
+        "reload_rms": 0.002127491130074305,
+        "speed_hold_effect_rms": 0.05987106134744438,
+        "steer_hold_effect_rms": 0.014477819810658725,
+        "both_hold_effect_rms": 0.06230828494530426
+      },
+      "signed_path_m": {
+        "interaction_rms": 0.0007795291102585317,
+        "reload_rms": 0.00023402019492123344,
+        "speed_hold_effect_rms": 0.023008337539743674,
+        "steer_hold_effect_rms": 0.011320897786351211,
+        "both_hold_effect_rms": 0.034941905505392556
+      }
+    },
+    {
+      "phase": "exit_projection",
+      "alpha": 0.75,
+      "window": "hold",
+      "n_ticks": 40,
+      "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/exit_projection/alpha0.75/evaluation",
+      "xy_m": {
+        "interaction_rms": 0.00024028118700943887,
+        "reload_rms": 3.083869237957155e-05,
+        "speed_hold_effect_rms": 0.004724171405493772,
+        "steer_hold_effect_rms": 0.0012123796116318877,
+        "both_hold_effect_rms": 0.005674830443681734
+      },
+      "speed_m_s": {
+        "interaction_rms": 0.005759917712483263,
+        "reload_rms": 0.0008253219542346469,
+        "speed_hold_effect_rms": 0.045843027095936205,
+        "steer_hold_effect_rms": 0.011172009421751124,
+        "both_hold_effect_rms": 0.05394009623928199
+      },
+      "signed_path_m": {
+        "interaction_rms": 8.700932899068762e-05,
+        "reload_rms": 2.4150059778403433e-05,
+        "speed_hold_effect_rms": 0.0017350259056938704,
+        "steer_hold_effect_rms": 0.0006844307208492262,
+        "both_hold_effect_rms": 0.0023364189961142786
+      }
+    },
+    {
+      "phase": "exit_projection",
+      "alpha": 0.75,
+      "window": "after_release_0p5",
+      "n_ticks": 100,
+      "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/exit_projection/alpha0.75/evaluation",
+      "xy_m": {
+        "interaction_rms": 0.00056061048639035,
+        "reload_rms": 8.81485165891123e-05,
+        "speed_hold_effect_rms": 0.010849453599012144,
+        "steer_hold_effect_rms": 0.006612261830678026,
+        "both_hold_effect_rms": 0.015167306522878718
+      },
+      "speed_m_s": {
+        "interaction_rms": 0.008887132506167445,
+        "reload_rms": 0.0015318167438023414,
+        "speed_hold_effect_rms": 0.017504721935901284,
+        "steer_hold_effect_rms": 0.010186674744985556,
+        "both_hold_effect_rms": 0.015308756758804977
+      },
+      "signed_path_m": {
+        "interaction_rms": 0.0003469523627301038,
+        "reload_rms": 6.175222942791106e-05,
+        "speed_hold_effect_rms": 0.007363822856445184,
+        "steer_hold_effect_rms": 0.006537580218162808,
+        "both_hold_effect_rms": 0.013320145723189153
+      }
+    },
+    {
+      "phase": "exit_projection",
+      "alpha": 1,
+      "window": "hold",
+      "n_ticks": 40,
+      "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/exit_projection/alpha1/evaluation",
+      "xy_m": {
+        "interaction_rms": 0.00025253450357532766,
+        "reload_rms": 2.6832593411081256e-05,
+        "speed_hold_effect_rms": 0.001725290897078153,
+        "steer_hold_effect_rms": 0.0007970464298039698,
+        "both_hold_effect_rms": 0.0022660770439429257
+      },
+      "speed_m_s": {
+        "interaction_rms": 0.0032531750620398113,
+        "reload_rms": 0.000684447941145509,
+        "speed_hold_effect_rms": 0.015388602168603127,
+        "steer_hold_effect_rms": 0.009169759419641042,
+        "both_hold_effect_rms": 0.02179138375101736
+      },
+      "signed_path_m": {
+        "interaction_rms": 0.00011279818959028808,
+        "reload_rms": 2.289791669255957e-05,
+        "speed_hold_effect_rms": 0.0007336467752462925,
+        "steer_hold_effect_rms": 0.00046089861568589143,
+        "both_hold_effect_rms": 0.0010827278850670064
+      }
+    },
+    {
+      "phase": "exit_projection",
+      "alpha": 1,
+      "window": "after_release_0p5",
+      "n_ticks": 100,
+      "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/exit_projection/alpha1/evaluation",
+      "xy_m": {
+        "interaction_rms": 0.0025761371747824906,
+        "reload_rms": 0.00030102586780809905,
+        "speed_hold_effect_rms": 0.002566393283264523,
+        "steer_hold_effect_rms": 0.0029491231072256425,
+        "both_hold_effect_rms": 0.006757738676556255
+      },
+      "speed_m_s": {
+        "interaction_rms": 0.008585730978731314,
+        "reload_rms": 0.0017898282188065385,
+        "speed_hold_effect_rms": 0.00862149749799836,
+        "steer_hold_effect_rms": 0.009650139043534572,
+        "both_hold_effect_rms": 0.012578994895928957
+      },
+      "signed_path_m": {
+        "interaction_rms": 0.00250006457385206,
+        "reload_rms": 0.0002041424613318132,
+        "speed_hold_effect_rms": 0.0014967010804536743,
+        "steer_hold_effect_rms": 0.00290038514747183,
+        "both_hold_effect_rms": 0.006539459158748849
+      }
+    }
+  ]
+}

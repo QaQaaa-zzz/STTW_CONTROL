@@ -1,0 +1,3984 @@
+{
+  "scope": "Retrospective leave-one-parameter-repeat-out DEV, not an independent TEST, online planner or new trained policy. All H75 metrics use fixed10s; no Zero-dependent or held-fold-dependent horizon. Four repeats select, the fifth scores. Terrain and requested speed are known. Existing eta and path bound unchanged.",
+  "eta_per_s": 0.533,
+  "path_bound_m": 0.4,
+  "summary": {
+    "n": 100,
+    "oracle_matches": 77,
+    "mean_cost": 0.016066038807529725,
+    "fixed05_mean_cost": 0.018077410294808416,
+    "fixed075_mean_cost": 0.018493208393813677,
+    "mean_excess_cost": 0.00028028509137557574,
+    "constraint_selected": 95,
+    "constraint_met": 95,
+    "constraint_failed": 0,
+    "no_candidate": 5,
+    "fixed_candidates": [
+      {
+        "alpha": 0.0,
+        "mean_cost": 0.024866894171936438,
+        "mean_speed_rmse": 0.1388920443652456,
+        "mean_path_rmse": 0.09029105038544813
+      },
+      {
+        "alpha": 0.25,
+        "mean_cost": 0.020292244069395223,
+        "mean_speed_rmse": 0.12478805238951114,
+        "mean_path_rmse": 0.07877036510670068
+      },
+      {
+        "alpha": 0.5,
+        "mean_cost": 0.018077410294808416,
+        "mean_speed_rmse": 0.11060582312399178,
+        "mean_path_rmse": 0.08747867391091944
+      },
+      {
+        "alpha": 0.75,
+        "mean_cost": 0.018493208393813677,
+        "mean_speed_rmse": 0.0993801699648411,
+        "mean_path_rmse": 0.11988536406580307
+      },
+      {
+        "alpha": 1.0,
+        "mean_cost": 0.021394458319779187,
+        "mean_speed_rmse": 0.09235619491083982,
+        "mean_path_rmse": 0.15215815935307528
+      }
+    ],
+    "global_fixed_selection_by_held_seed": {
+      "101": 0.5,
+      "102": 0.5,
+      "103": 0.5,
+      "104": 0.5,
+      "105": 0.5
+    },
+    "calibrated_fixed_mean_cost": 0.018077410294808416,
+    "conditional_vs_calibrated_fixed_cost_reduction_percent": 11.12643600204355,
+    "conditional_better_than_calibrated_fixed_count": 71,
+    "conditional_worse_than_calibrated_fixed_count": 5,
+    "conditional_mean_speed_rmse": 0.10102482009844638,
+    "conditional_mean_path_rmse": 0.09230345394294064
+  },
+  "cases": [
+    {
+      "terrain": "flat",
+      "speed_m_s": 1.5,
+      "folds": [
+        {
+          "held_seed": 101,
+          "selected_alpha": 0.0,
+          "held_cost": 0.03321965683261372,
+          "held_speed_rmse": 0.18065176462226917,
+          "held_path_rmse": 0.045362919482405326,
+          "held_oracle_alpha": 0.0,
+          "held_oracle_cost": 0.03321965683261372,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.03321965683261372,
+            0.033805845102109204,
+            0.0341086185262545,
+            0.03431128339972279,
+            0.034433774874137464
+          ],
+          "all_alpha_speed_rmse": [
+            0.18065176462226917,
+            0.1823947020527823,
+            0.18343538589285407,
+            0.18399895818646955,
+            0.18427260667890832
+          ],
+          "all_alpha_path_rmse": [
+            0.04536291948240568,
+            0.0435182175649185,
+            0.04024281908101592,
+            0.04004944275986036,
+            0.040992602685416844
+          ],
+          "fixed05_cost": 0.0341086185262545,
+          "fixed075_cost": 0.03431128339972279,
+          "constraint_selected_alpha": 0.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.18065176462226917,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.0341086185262545
+        },
+        {
+          "held_seed": 102,
+          "selected_alpha": 0.0,
+          "held_cost": 0.03320679522911703,
+          "held_speed_rmse": 0.18057019066180297,
+          "held_path_rmse": 0.04600264566082356,
+          "held_oracle_alpha": 0.0,
+          "held_oracle_cost": 0.03320679522911703,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.03320679522911703,
+            0.033783794930870206,
+            0.03405771579227902,
+            0.03424854478336503,
+            0.03451132032141831
+          ],
+          "all_alpha_speed_rmse": [
+            0.18057019066180297,
+            0.18229253742022744,
+            0.18332972162966907,
+            0.18385223139858448,
+            0.18417268878710819
+          ],
+          "all_alpha_path_rmse": [
+            0.04600264566082355,
+            0.04412898890892608,
+            0.03970794042614269,
+            0.03966238625032127,
+            0.045639263908486175
+          ],
+          "fixed05_cost": 0.03405771579227902,
+          "fixed075_cost": 0.03424854478336503,
+          "constraint_selected_alpha": 0.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.18057019066180297,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.03405771579227902
+        },
+        {
+          "held_seed": 103,
+          "selected_alpha": 0.0,
+          "held_cost": 0.033274257211110984,
+          "held_speed_rmse": 0.18082629889567478,
+          "held_path_rmse": 0.04503231839623612,
+          "held_oracle_alpha": 0.0,
+          "held_oracle_cost": 0.033274257211110984,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.033274257211110984,
+            0.033864119050388844,
+            0.03419513484748937,
+            0.03434653223388898,
+            0.03451682556385864
+          ],
+          "all_alpha_speed_rmse": [
+            0.18082629889567478,
+            0.18260968172803654,
+            0.18359454829032526,
+            0.18416954652757875,
+            0.18441803363656073
+          ],
+          "all_alpha_path_rmse": [
+            0.045032318396236136,
+            0.042693674896637925,
+            0.041453509872846704,
+            0.03881956483628616,
+            0.04223740989137531
+          ],
+          "fixed05_cost": 0.03419513484748937,
+          "fixed075_cost": 0.03434653223388898,
+          "constraint_selected_alpha": 0.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.18082629889567478,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.03419513484748937
+        },
+        {
+          "held_seed": 104,
+          "selected_alpha": 0.0,
+          "held_cost": 0.03325505159115122,
+          "held_speed_rmse": 0.18065367640551844,
+          "held_path_rmse": 0.04668997149558565,
+          "held_oracle_alpha": 0.0,
+          "held_oracle_cost": 0.03325505159115122,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.03325505159115122,
+            0.03377025031619672,
+            0.03407904535190154,
+            0.03427801671500872,
+            0.03442763371189185
+          ],
+          "all_alpha_speed_rmse": [
+            0.18065367640551844,
+            0.18226848946460145,
+            0.18331773235226137,
+            0.18381571820133175,
+            0.18416268309432313
+          ],
+          "all_alpha_path_rmse": [
+            0.04668997149558596,
+            0.0439380263587139,
+            0.040832273279467785,
+            0.04152230912521388,
+            0.04244215402403448
+          ],
+          "fixed05_cost": 0.03407904535190154,
+          "fixed075_cost": 0.03427801671500872,
+          "constraint_selected_alpha": 0.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.18065367640551844,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.03407904535190154
+        },
+        {
+          "held_seed": 105,
+          "selected_alpha": 0.0,
+          "held_cost": 0.0332035365624363,
+          "held_speed_rmse": 0.18062571538360184,
+          "held_path_rmse": 0.04510185900670042,
+          "held_oracle_alpha": 0.0,
+          "held_oracle_cost": 0.0332035365624363,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.0332035365624363,
+            0.03376460042223509,
+            0.03413987525294724,
+            0.034265697359666544,
+            0.03444197677601402
+          ],
+          "all_alpha_speed_rmse": [
+            0.18062571538360184,
+            0.18231818831443386,
+            0.1834198232547287,
+            0.18394803529102344,
+            0.18425850831822976
+          ],
+          "all_alpha_path_rmse": [
+            0.04510185900670037,
+            0.042975355677448875,
+            0.04182828644209488,
+            0.03885161965444922,
+            0.041563846022322125
+          ],
+          "fixed05_cost": 0.03413987525294724,
+          "fixed075_cost": 0.034265697359666544,
+          "constraint_selected_alpha": 0.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.18062571538360184,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.03413987525294724
+        }
+      ]
+    },
+    {
+      "terrain": "flat",
+      "speed_m_s": 1.8,
+      "folds": [
+        {
+          "held_seed": 101,
+          "selected_alpha": 1.0,
+          "held_cost": 0.009644984541105635,
+          "held_speed_rmse": 0.0945497629651162,
+          "held_path_rmse": 0.049827374471205346,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.009644984541105635,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.015672580744654052,
+            0.013547237752879592,
+            0.011539639504087467,
+            0.010224824072438748,
+            0.009644984541105635
+          ],
+          "all_alpha_speed_rmse": [
+            0.12275202532321426,
+            0.11416199595798036,
+            0.10576180340811552,
+            0.09859087000091982,
+            0.0945497629651162
+          ],
+          "all_alpha_path_rmse": [
+            0.04612947325856664,
+            0.042547211481029024,
+            0.035303987569718184,
+            0.04214772488835035,
+            0.049827374471205416
+          ],
+          "fixed05_cost": 0.011539639504087467,
+          "fixed075_cost": 0.010224824072438748,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.0945497629651162,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.011539639504087467
+        },
+        {
+          "held_seed": 102,
+          "selected_alpha": 1.0,
+          "held_cost": 0.009645764580422645,
+          "held_speed_rmse": 0.09437232459289205,
+          "held_path_rmse": 0.051024614981114096,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.009645764580422645,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.0161940825912976,
+            0.013726120206435509,
+            0.011594133628172411,
+            0.010058115604641522,
+            0.009645764580422645
+          ],
+          "all_alpha_speed_rmse": [
+            0.12448764452049646,
+            0.11485196761713172,
+            0.10588672905441011,
+            0.09846362053628988,
+            0.09437232459289205
+          ],
+          "all_alpha_path_rmse": [
+            0.049529142933842564,
+            0.043401908559826924,
+            0.03667589887296166,
+            0.03574741714297978,
+            0.051024614981114005
+          ],
+          "fixed05_cost": 0.011594133628172411,
+          "fixed075_cost": 0.010058115604641522,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.09437232459289205,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.011594133628172411
+        },
+        {
+          "held_seed": 103,
+          "selected_alpha": 1.0,
+          "held_cost": 0.009779086838095856,
+          "held_speed_rmse": 0.09443375200868255,
+          "held_path_rmse": 0.0550634548510244,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.009779086838095856,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.015690630693856716,
+            0.013327051424470857,
+            0.011653601077193753,
+            0.010249237366900426,
+            0.009779086838095856
+          ],
+          "all_alpha_speed_rmse": [
+            0.12283156959301951,
+            0.11309032345235775,
+            0.1062561930224387,
+            0.0988573586425096,
+            0.09443375200868255
+          ],
+          "all_alpha_path_rmse": [
+            0.04607278705223543,
+            0.04350253902261972,
+            0.03575684364988042,
+            0.040953028002544786,
+            0.055063454851024485
+          ],
+          "fixed05_cost": 0.011653601077193753,
+          "fixed075_cost": 0.010249237366900426,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.09443375200868255,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.011653601077193753
+        },
+        {
+          "held_seed": 104,
+          "selected_alpha": 1.0,
+          "held_cost": 0.009652565746198112,
+          "held_speed_rmse": 0.09421645600540951,
+          "held_path_rmse": 0.05225823312175435,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.009652565746198112,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.015625604696568856,
+            0.013785793385616578,
+            0.01161762316626602,
+            0.010016936951515856,
+            0.009652565746198112
+          ],
+          "all_alpha_speed_rmse": [
+            0.12243071520640296,
+            0.11521575565157148,
+            0.10605289347934413,
+            0.09850710026662465,
+            0.09421645600540951
+          ],
+          "all_alpha_path_rmse": [
+            0.04732734825186232,
+            0.04241656721711322,
+            0.036108741726467476,
+            0.03320815703534406,
+            0.05225823312175437
+          ],
+          "fixed05_cost": 0.01161762316626602,
+          "fixed075_cost": 0.010016936951515856,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.09421645600540951,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.01161762316626602
+        },
+        {
+          "held_seed": 105,
+          "selected_alpha": 1.0,
+          "held_cost": 0.009715446417597697,
+          "held_speed_rmse": 0.09415981400580199,
+          "held_path_rmse": 0.054679274523876435,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.009715446417597697,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.015470983609596232,
+            0.013309726530584005,
+            0.01156087482767591,
+            0.010116927654134616,
+            0.009715446417597697
+          ],
+          "all_alpha_speed_rmse": [
+            0.12189340779566854,
+            0.11312978282420258,
+            0.10580317131289238,
+            0.09859998182156644,
+            0.09415981400580199
+          ],
+          "all_alpha_path_rmse": [
+            0.046451121882502285,
+            0.0424271771672187,
+            0.03592092890777977,
+            0.037286835530435235,
+            0.05467927452387635
+          ],
+          "fixed05_cost": 0.01156087482767591,
+          "fixed075_cost": 0.010116927654134616,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.09415981400580199,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.01156087482767591
+        }
+      ]
+    },
+    {
+      "terrain": "flat",
+      "speed_m_s": 2.0,
+      "folds": [
+        {
+          "held_seed": 101,
+          "selected_alpha": 1.0,
+          "held_cost": 0.0035664072480417882,
+          "held_speed_rmse": 0.053412344921789506,
+          "held_path_rmse": 0.050116242420568335,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.0035664072480417882,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.013059935174145852,
+            0.009893288034359694,
+            0.006912346753009663,
+            0.004402894382982036,
+            0.0035664072480417882
+          ],
+          "all_alpha_speed_rmse": [
+            0.11048895885046559,
+            0.09620823887678899,
+            0.08049083384046049,
+            0.0630769673794908,
+            0.053412344921789506
+          ],
+          "all_alpha_path_rmse": [
+            0.054767697336761734,
+            0.04736222285065136,
+            0.039066420065672534,
+            0.038641439382934725,
+            0.05011624242056834
+          ],
+          "fixed05_cost": 0.006912346753009663,
+          "fixed075_cost": 0.004402894382982036,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.053412344921789506,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.006912346753009663
+        },
+        {
+          "held_seed": 102,
+          "selected_alpha": 1.0,
+          "held_cost": 0.0035474019581337407,
+          "held_speed_rmse": 0.053741916843248444,
+          "held_path_rmse": 0.048170830618126,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.0035474019581337407,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.012639034596799853,
+            0.009974026376157626,
+            0.00677216026242338,
+            0.004409141851097915,
+            0.0035474019581337407
+          ],
+          "all_alpha_speed_rmse": [
+            0.10892381576031351,
+            0.09670525045942942,
+            0.07963149591680949,
+            0.06325243598192155,
+            0.053741916843248444
+          ],
+          "all_alpha_path_rmse": [
+            0.05221820001093283,
+            0.046796157088683635,
+            0.03894968316730325,
+            0.03790942176322319,
+            0.048170830618126
+          ],
+          "fixed05_cost": 0.00677216026242338,
+          "fixed075_cost": 0.004409141851097915,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.053741916843248444,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.00677216026242338
+        },
+        {
+          "held_seed": 103,
+          "selected_alpha": 1.0,
+          "held_cost": 0.003566498705230959,
+          "held_speed_rmse": 0.05350546693018709,
+          "held_path_rmse": 0.04976859368596554,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.003566498705230959,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.013191331605406297,
+            0.009945373143190111,
+            0.006790032887967158,
+            0.004482520674015767,
+            0.003566498705230959
+          ],
+          "all_alpha_speed_rmse": [
+            0.11117056642502264,
+            0.0968283308837287,
+            0.07993340255611887,
+            0.06379695893901598,
+            0.05350546693018709
+          ],
+          "all_alpha_path_rmse": [
+            0.05413129508665225,
+            0.04477915373813547,
+            0.037555523056799954,
+            0.03810380027465414,
+            0.04976859368596556
+          ],
+          "fixed05_cost": 0.006790032887967158,
+          "fixed075_cost": 0.004482520674015767,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.05350546693018709,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.006790032887967158
+        },
+        {
+          "held_seed": 104,
+          "selected_alpha": 1.0,
+          "held_cost": 0.0034450216288965264,
+          "held_speed_rmse": 0.053161597244305914,
+          "held_path_rmse": 0.04667358662896355,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.0034450216288965264,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.013237075569475211,
+            0.00991785040117653,
+            0.006693300321702196,
+            0.004460131094567716,
+            0.0034450216288965264
+          ],
+          "all_alpha_speed_rmse": [
+            0.11128711693089273,
+            0.09631499915539739,
+            0.07927171888115006,
+            0.0636171670777202,
+            0.053161597244305914
+          ],
+          "all_alpha_path_rmse": [
+            0.05477181149609932,
+            0.047510949073043096,
+            0.03795691973135488,
+            0.03812773961942034,
+            0.04667358662896357
+          ],
+          "fixed05_cost": 0.006693300321702196,
+          "fixed075_cost": 0.004460131094567716,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.053161597244305914,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.006693300321702196
+        },
+        {
+          "held_seed": 105,
+          "selected_alpha": 1.0,
+          "held_cost": 0.003512067050942278,
+          "held_speed_rmse": 0.05342922477383187,
+          "held_path_rmse": 0.04810416529268459,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.003512067050942278,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.013221046153974849,
+            0.00963173263189016,
+            0.006699364069933893,
+            0.00437652462252289,
+            0.003512067050942278
+          ],
+          "all_alpha_speed_rmse": [
+            0.11118678615290734,
+            0.09528468845180225,
+            0.07922310995088551,
+            0.06308450018596289,
+            0.05342922477383187
+          ],
+          "all_alpha_path_rmse": [
+            0.05497360993827089,
+            0.044102460373749895,
+            0.038590043852177,
+            0.03737637492865452,
+            0.04810416529268458
+          ],
+          "fixed05_cost": 0.006699364069933893,
+          "fixed075_cost": 0.00437652462252289,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.05342922477383187,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.006699364069933893
+        }
+      ]
+    },
+    {
+      "terrain": "flat",
+      "speed_m_s": 2.3,
+      "folds": [
+        {
+          "held_seed": 101,
+          "selected_alpha": 1.0,
+          "held_cost": 0.00419542721119362,
+          "held_speed_rmse": 0.03872957316310591,
+          "held_path_rmse": 0.09740656299954911,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.00419542721119362,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.016542281368035962,
+            0.011512833667001532,
+            0.0065613950982520985,
+            0.004239188893512089,
+            0.00419542721119362
+          ],
+          "all_alpha_speed_rmse": [
+            0.12409882129928329,
+            0.10324291294965736,
+            0.07619749500839765,
+            0.054453164587027994,
+            0.03872957316310591
+          ],
+          "all_alpha_path_rmse": [
+            0.06339586742762544,
+            0.054819394021798515,
+            0.05156358781790361,
+            0.06696758269484408,
+            0.09740656299954911
+          ],
+          "fixed05_cost": 0.0065613950982520985,
+          "fixed075_cost": 0.004239188893512089,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.03872957316310591,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.0065613950982520985
+        },
+        {
+          "held_seed": 102,
+          "selected_alpha": 1.0,
+          "held_cost": 0.004463355219254665,
+          "held_speed_rmse": 0.03806930714761574,
+          "held_path_rmse": 0.10300312476910543,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.004463355219254665,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.016370057134705122,
+            0.011469559482146275,
+            0.0066410823839628255,
+            0.0044685035897082045,
+            0.004463355219254665
+          ],
+          "all_alpha_speed_rmse": [
+            0.12335464472422182,
+            0.1032280900155878,
+            0.07643871202270776,
+            0.05437026813868178,
+            0.03806930714761574
+          ],
+          "all_alpha_path_rmse": [
+            0.06372606785314451,
+            0.05351273549666416,
+            0.05300663075429606,
+            0.07296303645061927,
+            0.10300312476910543
+          ],
+          "fixed05_cost": 0.0066410823839628255,
+          "fixed075_cost": 0.0044685035897082045,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.03806930714761574,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.0066410823839628255
+        },
+        {
+          "held_seed": 103,
+          "selected_alpha": 0.75,
+          "held_cost": 0.004369913223325793,
+          "held_speed_rmse": 0.05464529673572482,
+          "held_path_rmse": 0.0697927325487231,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.004189286982120571,
+          "excess_cost": 0.00018062624120522217,
+          "all_alpha_cost": [
+            0.016406252075579646,
+            0.011316434130253055,
+            0.006606753928791059,
+            0.004369913223325793,
+            0.004189286982120571
+          ],
+          "all_alpha_speed_rmse": [
+            0.12361869871524295,
+            0.10239171288920315,
+            0.0765854721443579,
+            0.05464529673572482,
+            0.03798990797097481
+          ],
+          "all_alpha_path_rmse": [
+            0.06291949542060112,
+            0.05412916525451514,
+            0.051086336469860855,
+            0.06979273254872309,
+            0.09831670557364017
+          ],
+          "fixed05_cost": 0.006606753928791059,
+          "fixed075_cost": 0.004369913223325793,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.03798990797097481,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.006606753928791059
+        },
+        {
+          "held_seed": 104,
+          "selected_alpha": 1.0,
+          "held_cost": 0.0042242830906903395,
+          "held_speed_rmse": 0.038883010335856893,
+          "held_path_rmse": 0.09771229781940513,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.0042242830906903395,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.016333084190215553,
+            0.011471259565658712,
+            0.0067907079637468,
+            0.0042254515379625945,
+            0.0042242830906903395
+          ],
+          "all_alpha_speed_rmse": [
+            0.12336668075003569,
+            0.10329645294428295,
+            0.07674082100101982,
+            0.05513912810085615,
+            0.038883010335856893
+          ],
+          "all_alpha_path_rmse": [
+            0.06261320323115294,
+            0.05310272412012399,
+            0.056333761266350854,
+            0.06458853544807294,
+            0.09771229781940512
+          ],
+          "fixed05_cost": 0.0067907079637468,
+          "fixed075_cost": 0.0042254515379625945,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.038883010335856893,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.0067907079637468
+        },
+        {
+          "held_seed": 105,
+          "selected_alpha": 1.0,
+          "held_cost": 0.004354668143679269,
+          "held_speed_rmse": 0.038926737049004664,
+          "held_path_rmse": 0.09997337251655848,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.004262165011123713,
+          "excess_cost": 9.25031325555558e-05,
+          "all_alpha_cost": [
+            0.01715004517444984,
+            0.011382923617234576,
+            0.006779373852668692,
+            0.004262165011123713,
+            0.004354668143679269
+          ],
+          "all_alpha_speed_rmse": [
+            0.12681598615032572,
+            0.10286482349263328,
+            0.07743691328185695,
+            0.054852546105338296,
+            0.038926737049004664
+          ],
+          "all_alpha_path_rmse": [
+            0.061306673232970406,
+            0.0531242408595942,
+            0.052495910169833876,
+            0.06642189473953916,
+            0.09997337251655848
+          ],
+          "fixed05_cost": 0.006779373852668692,
+          "fixed075_cost": 0.004262165011123713,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.038926737049004664,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.006779373852668692
+        }
+      ]
+    },
+    {
+      "terrain": "flat",
+      "speed_m_s": 2.6,
+      "folds": [
+        {
+          "held_seed": 101,
+          "selected_alpha": 0.75,
+          "held_cost": 0.01007275531715467,
+          "held_speed_rmse": 0.06770484999152027,
+          "held_path_rmse": 0.13899905080313962,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.01007275531715467,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.02113826858686758,
+            0.015188743671200235,
+            0.010358139166114411,
+            0.01007275531715467,
+            0.011299024193806958
+          ],
+          "all_alpha_speed_rmse": [
+            0.14040289133841252,
+            0.11627482094548668,
+            0.0865634603771573,
+            0.06770484999152027,
+            0.05178210489108169
+          ],
+          "all_alpha_path_rmse": [
+            0.07083133533940689,
+            0.07664594946611218,
+            0.10042180353755874,
+            0.13899905080313962,
+            0.17416741637446023
+          ],
+          "fixed05_cost": 0.010358139166114411,
+          "fixed075_cost": 0.01007275531715467,
+          "constraint_selected_alpha": 0.75,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.06770484999152027,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.010358139166114411
+        },
+        {
+          "held_seed": 102,
+          "selected_alpha": 0.75,
+          "held_cost": 0.009748817618653732,
+          "held_speed_rmse": 0.06705323307507234,
+          "held_path_rmse": 0.13597633366082607,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.009748817618653732,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.02166445879876439,
+            0.015382136582498322,
+            0.01061394865197077,
+            0.009748817618653732,
+            0.011926441163387567
+          ],
+          "all_alpha_speed_rmse": [
+            0.1421246875170954,
+            0.11802350018791014,
+            0.08877626365425721,
+            0.06705323307507234,
+            0.051934781685044694
+          ],
+          "all_alpha_path_rmse": [
+            0.07181188817937958,
+            0.07150630119589294,
+            0.09807778513560685,
+            0.1359763336608261,
+            0.18024170260212782
+          ],
+          "fixed05_cost": 0.01061394865197077,
+          "fixed075_cost": 0.009748817618653732,
+          "constraint_selected_alpha": 0.75,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.06705323307507234,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.01061394865197077
+        },
+        {
+          "held_seed": 103,
+          "selected_alpha": 0.75,
+          "held_cost": 0.009657057879767363,
+          "held_speed_rmse": 0.0664374091956761,
+          "held_path_rmse": 0.1358526278054408,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.009657057879767363,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.021694363794405883,
+            0.015411741976911985,
+            0.01063919181826242,
+            0.009657057879767363,
+            0.011650861897093842
+          ],
+          "all_alpha_speed_rmse": [
+            0.14250369612348768,
+            0.1177824302142181,
+            0.08657607312977035,
+            0.0664374091956761,
+            0.051531892319940445
+          ],
+          "all_alpha_path_rmse": [
+            0.06987478348760488,
+            0.07360340421230845,
+            0.10519583499898015,
+            0.1358526278054408,
+            0.17794313754247057
+          ],
+          "fixed05_cost": 0.01063919181826242,
+          "fixed075_cost": 0.009657057879767363,
+          "constraint_selected_alpha": 0.75,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.0664374091956761,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.01063919181826242
+        },
+        {
+          "held_seed": 104,
+          "selected_alpha": 0.75,
+          "held_cost": 0.009919633462042566,
+          "held_speed_rmse": 0.06729638011164682,
+          "held_path_rmse": 0.13775286397069977,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.009919633462042566,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.021492858280849125,
+            0.015503218745804292,
+            0.010548702358219409,
+            0.009919633462042566,
+            0.011492587424315501
+          ],
+          "all_alpha_speed_rmse": [
+            0.1413658458097945,
+            0.11818304975128419,
+            0.0891488456173888,
+            0.06729638011164682,
+            0.05182368744172884
+          ],
+          "all_alpha_path_rmse": [
+            0.07287079332811201,
+            0.07353030180489893,
+            0.09568821837163961,
+            0.13775286397069977,
+            0.17606950654486545
+          ],
+          "fixed05_cost": 0.010548702358219409,
+          "fixed075_cost": 0.009919633462042566,
+          "constraint_selected_alpha": 0.75,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.06729638011164682,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.010548702358219409
+        },
+        {
+          "held_seed": 105,
+          "selected_alpha": 0.75,
+          "held_cost": 0.009167233684543627,
+          "held_speed_rmse": 0.06638479893336956,
+          "held_path_rmse": 0.12944628611371153,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.009167233684543627,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.02226835222114012,
+            0.015471736573577474,
+            0.010669894391936236,
+            0.009167233684543627,
+            0.01067901350807957
+          ],
+          "all_alpha_speed_rmse": [
+            0.14372578657693197,
+            0.11787052540313507,
+            0.0882841179544162,
+            0.06638479893336956,
+            0.05252235890424753
+          ],
+          "all_alpha_path_rmse": [
+            0.07531029048036904,
+            0.07453568408082069,
+            0.10061269992145476,
+            0.12944628611371153,
+            0.16697319932145077
+          ],
+          "fixed05_cost": 0.010669894391936236,
+          "fixed075_cost": 0.009167233684543627,
+          "constraint_selected_alpha": 0.75,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.06638479893336956,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.010669894391936236
+        }
+      ]
+    },
+    {
+      "terrain": "oblique_2cm",
+      "speed_m_s": 1.5,
+      "folds": [
+        {
+          "held_seed": 101,
+          "selected_alpha": 0.0,
+          "held_cost": 0.03359935818176022,
+          "held_speed_rmse": 0.18160276684990492,
+          "held_path_rmse": 0.04670853150965015,
+          "held_oracle_alpha": 0.0,
+          "held_oracle_cost": 0.03359935818176022,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.03359935818176022,
+            0.034199487224275446,
+            0.03446720550047723,
+            0.0347437067066928,
+            0.03482316898380195
+          ],
+          "all_alpha_speed_rmse": [
+            0.18160276684990492,
+            0.18344778924613828,
+            0.18442631653570793,
+            0.18500601123092048,
+            0.18527656016525093
+          ],
+          "all_alpha_path_rmse": [
+            0.04670853150965011,
+            0.043855744197105105,
+            0.0399822582062773,
+            0.04263837086919597,
+            0.041774458246876874
+          ],
+          "fixed05_cost": 0.03446720550047723,
+          "fixed075_cost": 0.0347437067066928,
+          "constraint_selected_alpha": 0.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.18160276684990492,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.03446720550047723
+        },
+        {
+          "held_seed": 102,
+          "selected_alpha": 0.0,
+          "held_cost": 0.033607637347799646,
+          "held_speed_rmse": 0.1816046111038767,
+          "held_path_rmse": 0.046994381579461904,
+          "held_oracle_alpha": 0.0,
+          "held_oracle_cost": 0.033607637347799646,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.033607637347799646,
+            0.03414969384858951,
+            0.0344336365739626,
+            0.034555882979179685,
+            0.0347035979687094
+          ],
+          "all_alpha_speed_rmse": [
+            0.1816046111038767,
+            0.18333011109906988,
+            0.18430527958954707,
+            0.1848050766906642,
+            0.1850919527100687
+          ],
+          "all_alpha_path_rmse": [
+            0.04699438157946193,
+            0.04358879211009403,
+            0.04046624181629973,
+            0.03766234185561323,
+            0.039558644992479804
+          ],
+          "fixed05_cost": 0.0344336365739626,
+          "fixed075_cost": 0.034555882979179685,
+          "constraint_selected_alpha": 0.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.1816046111038767,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.0344336365739626
+        },
+        {
+          "held_seed": 103,
+          "selected_alpha": 0.0,
+          "held_cost": 0.033682037492421796,
+          "held_speed_rmse": 0.18178128560657086,
+          "held_path_rmse": 0.0473748145205251,
+          "held_oracle_alpha": 0.0,
+          "held_oracle_cost": 0.033682037492421796,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.033682037492421796,
+            0.03426845199813294,
+            0.03461757002117471,
+            0.03480219065730588,
+            0.03499469448464265
+          ],
+          "all_alpha_speed_rmse": [
+            0.18178128560657086,
+            0.1836248551740642,
+            0.18465017312551804,
+            0.1851849727066351,
+            0.18543947748962206
+          ],
+          "all_alpha_path_rmse": [
+            0.04737481452052501,
+            0.04401472789156816,
+            0.04286073456279212,
+            0.042316595534197365,
+            0.04621994812687837
+          ],
+          "fixed05_cost": 0.03461757002117471,
+          "fixed075_cost": 0.03480219065730588,
+          "constraint_selected_alpha": 0.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.18178128560657086,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.03461757002117471
+        },
+        {
+          "held_seed": 104,
+          "selected_alpha": 0.0,
+          "held_cost": 0.03363659080250135,
+          "held_speed_rmse": 0.18166036039077055,
+          "held_path_rmse": 0.047319151094015716,
+          "held_oracle_alpha": 0.0,
+          "held_oracle_cost": 0.03363659080250135,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.03363659080250135,
+            0.0341536836552771,
+            0.03445813948376516,
+            0.034689222771409255,
+            0.03492024475798779
+          ],
+          "all_alpha_speed_rmse": [
+            0.18166036039077055,
+            0.18333094487026547,
+            0.1843576617718503,
+            0.1848882328953945,
+            0.18526051978798933
+          ],
+          "all_alpha_path_rmse": [
+            0.047319151094015556,
+            0.04373729415590161,
+            0.040691412751904125,
+            0.04218527728790253,
+            0.045910084250124925
+          ],
+          "fixed05_cost": 0.03445813948376516,
+          "fixed075_cost": 0.034689222771409255,
+          "constraint_selected_alpha": 0.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.18166036039077055,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.03445813948376516
+        },
+        {
+          "held_seed": 105,
+          "selected_alpha": 0.0,
+          "held_cost": 0.033651532289502545,
+          "held_speed_rmse": 0.1816443137561291,
+          "held_path_rmse": 0.04808552321623823,
+          "held_oracle_alpha": 0.0,
+          "held_oracle_cost": 0.033651532289502545,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.033651532289502545,
+            0.03418345864160586,
+            0.03451567652998158,
+            0.034703142128065724,
+            0.034883802646382474
+          ],
+          "all_alpha_speed_rmse": [
+            0.1816443137561291,
+            0.18339503418582326,
+            0.1844624183858065,
+            0.184986191990493,
+            0.18527644738282406
+          ],
+          "all_alpha_path_rmse": [
+            0.0480855232162381,
+            0.04398894948155415,
+            0.04150086740073089,
+            0.04124384320517506,
+            0.044257026523797975
+          ],
+          "fixed05_cost": 0.03451567652998158,
+          "fixed075_cost": 0.034703142128065724,
+          "constraint_selected_alpha": 0.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.1816443137561291,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.03451567652998158
+        }
+      ]
+    },
+    {
+      "terrain": "oblique_2cm",
+      "speed_m_s": 1.8,
+      "folds": [
+        {
+          "held_seed": 101,
+          "selected_alpha": 1.0,
+          "held_cost": 0.010106724037131996,
+          "held_speed_rmse": 0.09713548903683883,
+          "held_path_rmse": 0.04861498865338486,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.010106724037131996,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.016466725353708734,
+            0.013892142013079159,
+            0.011925104951910626,
+            0.010572753524129895,
+            0.010106724037131996
+          ],
+          "all_alpha_speed_rmse": [
+            0.12572757772979448,
+            0.11553428835678609,
+            0.10751629039697601,
+            0.10110875943692586,
+            0.09713548903683883
+          ],
+          "all_alpha_path_rmse": [
+            0.04817423645685361,
+            0.04375829140072512,
+            0.03586151929872979,
+            0.03508855556858223,
+            0.048614988653384886
+          ],
+          "fixed05_cost": 0.011925104951910626,
+          "fixed075_cost": 0.010572753524129895,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.09713548903683883,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.011925104951910626
+        },
+        {
+          "held_seed": 102,
+          "selected_alpha": 1.0,
+          "held_cost": 0.010175436653058385,
+          "held_speed_rmse": 0.09693164155164273,
+          "held_path_rmse": 0.05238835396113702,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.010175436653058385,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.016054991327322955,
+            0.01376319181166547,
+            0.011841117213658457,
+            0.010603671814173245,
+            0.010175436653058385
+          ],
+          "all_alpha_speed_rmse": [
+            0.12387637272687897,
+            0.11504888341553006,
+            0.10705788761464204,
+            0.10099217076824725,
+            0.09693164155164273
+          ],
+          "all_alpha_path_rmse": [
+            0.049979336970436966,
+            0.043068122981844356,
+            0.03656014491948781,
+            0.03772242077999282,
+            0.052388353961136974
+          ],
+          "fixed05_cost": 0.011841117213658457,
+          "fixed075_cost": 0.010603671814173245,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.09693164155164273,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.011841117213658457
+        },
+        {
+          "held_seed": 103,
+          "selected_alpha": 1.0,
+          "held_cost": 0.010086373969873505,
+          "held_speed_rmse": 0.09725567486685198,
+          "held_path_rmse": 0.04700580674664516,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.010086373969873505,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.016261021628701404,
+            0.013755204086270477,
+            0.01188218039079903,
+            0.010699349584874259,
+            0.010086373969873505
+          ],
+          "all_alpha_speed_rmse": [
+            0.12496240202298321,
+            0.11516290418899532,
+            0.1072114742741364,
+            0.10141711734293414,
+            0.09725567486685198
+          ],
+          "all_alpha_path_rmse": [
+            0.04766437499876152,
+            0.04164552069697441,
+            0.03695060744166512,
+            0.03817067959144787,
+            0.047005806746645146
+          ],
+          "fixed05_cost": 0.01188218039079903,
+          "fixed075_cost": 0.010699349584874259,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.09725567486685198,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.01188218039079903
+        },
+        {
+          "held_seed": 104,
+          "selected_alpha": 1.0,
+          "held_cost": 0.010015987818308753,
+          "held_speed_rmse": 0.09702830156206128,
+          "held_path_rmse": 0.04601393222098216,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.010015987818308753,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.016363224710857473,
+            0.013906659840118381,
+            0.011868912794344029,
+            0.010466837683798644,
+            0.010015987818308753
+          ],
+          "all_alpha_speed_rmse": [
+            0.1252301172176771,
+            0.11583424574676994,
+            0.10719187427164979,
+            0.10069853606001594,
+            0.09702830156206128
+          ],
+          "all_alpha_path_rmse": [
+            0.0489477020207511,
+            0.04149215648260573,
+            0.036516261501562446,
+            0.03390854455822594,
+            0.046013932220982164
+          ],
+          "fixed05_cost": 0.011868912794344029,
+          "fixed075_cost": 0.010466837683798644,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.09702830156206128,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.011868912794344029
+        },
+        {
+          "held_seed": 105,
+          "selected_alpha": 1.0,
+          "held_cost": 0.010043657770852654,
+          "held_speed_rmse": 0.09684685584609941,
+          "held_path_rmse": 0.04835811817020802,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.010043657770852654,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.01601532657603489,
+            0.01407525492463556,
+            0.011923971763004986,
+            0.01052818711439743,
+            0.010043657770852654
+          ],
+          "all_alpha_speed_rmse": [
+            0.12389008946626516,
+            0.1163882391106518,
+            0.10740068058779202,
+            0.10075963714669203,
+            0.09684685584609941
+          ],
+          "all_alpha_path_rmse": [
+            0.048439140082173544,
+            0.043153304545693966,
+            0.03700702659785584,
+            0.03636497995272001,
+            0.04835811817020809
+          ],
+          "fixed05_cost": 0.011923971763004986,
+          "fixed075_cost": 0.01052818711439743,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.09684685584609941,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.011923971763004986
+        }
+      ]
+    },
+    {
+      "terrain": "oblique_2cm",
+      "speed_m_s": 2.0,
+      "folds": [
+        {
+          "held_seed": 101,
+          "selected_alpha": 1.0,
+          "held_cost": 0.004165535541648821,
+          "held_speed_rmse": 0.0582758907724098,
+          "held_path_rmse": 0.052043286408812214,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.004165535541648821,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.013167548833208803,
+            0.010093380399660222,
+            0.006693740535955319,
+            0.004885167917483289,
+            0.004165535541648821
+          ],
+          "all_alpha_speed_rmse": [
+            0.1111536949000362,
+            0.09746221361852954,
+            0.07935610507412853,
+            0.06567686086264164,
+            0.0582758907724098
+          ],
+          "all_alpha_path_rmse": [
+            0.05347601908725865,
+            0.045745432730751726,
+            0.037351817758969355,
+            0.04486045482963736,
+            0.05204328640881219
+          ],
+          "fixed05_cost": 0.006693740535955319,
+          "fixed075_cost": 0.004885167917483289,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.0582758907724098,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.006693740535955319
+        },
+        {
+          "held_seed": 102,
+          "selected_alpha": 1.0,
+          "held_cost": 0.004392867432949899,
+          "held_speed_rmse": 0.05798564102498913,
+          "held_path_rmse": 0.060228731280896064,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.004392867432949899,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.012870747511749317,
+            0.00951121310707004,
+            0.006951503318357231,
+            0.004881461375733601,
+            0.004392867432949899
+          ],
+          "all_alpha_speed_rmse": [
+            0.10963648994282828,
+            0.09455779371333697,
+            0.08085955766348397,
+            0.0652936003574274,
+            0.05798564102498913
+          ],
+          "all_alpha_path_rmse": [
+            0.05471826403175168,
+            0.04479445124172113,
+            0.03813919066831916,
+            0.04664872682423893,
+            0.06022873128089605
+          ],
+          "fixed05_cost": 0.006951503318357231,
+          "fixed075_cost": 0.004881461375733601,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.05798564102498913,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.006951503318357231
+        },
+        {
+          "held_seed": 103,
+          "selected_alpha": 1.0,
+          "held_cost": 0.004237226675846296,
+          "held_speed_rmse": 0.05865824462509161,
+          "held_path_rmse": 0.0529478717830613,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.004237226675846296,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.013124767795263448,
+            0.009777644620428851,
+            0.006893084119488151,
+            0.005008109582728298,
+            0.004237226675846296
+          ],
+          "all_alpha_speed_rmse": [
+            0.11101955900484815,
+            0.09607246072079988,
+            0.08051781403118369,
+            0.06621492236829545,
+            0.05865824462509161
+          ],
+          "all_alpha_path_rmse": [
+            0.053047111269508,
+            0.04390912985525173,
+            0.0379880127588815,
+            0.046855270361816165,
+            0.05294787178306127
+          ],
+          "fixed05_cost": 0.006893084119488151,
+          "fixed075_cost": 0.005008109582728298,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.05865824462509161,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.006893084119488151
+        },
+        {
+          "held_seed": 104,
+          "selected_alpha": 1.0,
+          "held_cost": 0.0041366220253749265,
+          "held_speed_rmse": 0.058024482211911324,
+          "held_path_rmse": 0.05205428946379647,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.0041366220253749265,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.013325931795133432,
+            0.009788275547797206,
+            0.006878382120715317,
+            0.0048265566697922695,
+            0.0041366220253749265
+          ],
+          "all_alpha_speed_rmse": [
+            0.11194386710095218,
+            0.0959125601217298,
+            0.08046871923147997,
+            0.06522345709460499,
+            0.058024482211911324
+          ],
+          "all_alpha_path_rmse": [
+            0.0528835256912661,
+            0.045535615911799505,
+            0.0376717214170913,
+            0.04488945631198296,
+            0.05205428946379647
+          ],
+          "fixed05_cost": 0.006878382120715317,
+          "fixed075_cost": 0.0048265566697922695,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.058024482211911324,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.006878382120715317
+        },
+        {
+          "held_seed": 105,
+          "selected_alpha": 1.0,
+          "held_cost": 0.0042413979277156994,
+          "held_speed_rmse": 0.058174585980146715,
+          "held_path_rmse": 0.05492783212819664,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.0042413979277156994,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.01402598345016329,
+            0.009851126216098014,
+            0.0067945987403888655,
+            0.004798077047301723,
+            0.0042413979277156994
+          ],
+          "all_alpha_speed_rmse": [
+            0.11467091782927044,
+            0.09645789131940996,
+            0.07981166037120267,
+            0.06531321828725412,
+            0.058174585980146715
+          ],
+          "all_alpha_path_rmse": [
+            0.0555475130502637,
+            0.04388004024077124,
+            0.03866452677003265,
+            0.04328475224135423,
+            0.05492783212819666
+          ],
+          "fixed05_cost": 0.0067945987403888655,
+          "fixed075_cost": 0.004798077047301723,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.058174585980146715,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.0067945987403888655
+        }
+      ]
+    },
+    {
+      "terrain": "oblique_2cm",
+      "speed_m_s": 2.3,
+      "folds": [
+        {
+          "held_seed": 101,
+          "selected_alpha": 0.75,
+          "held_cost": 0.0047785136070167405,
+          "held_speed_rmse": 0.05903096624807534,
+          "held_path_rmse": 0.06748639111847388,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.0047785136070167405,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.01603543674729288,
+            0.010725427510601983,
+            0.006696926533401363,
+            0.0047785136070167405,
+            0.0050500846263137975
+          ],
+          "all_alpha_speed_rmse": [
+            0.12267283921477902,
+            0.10009899492195924,
+            0.07715581945683864,
+            0.05903096624807534,
+            0.04475140178339886
+          ],
+          "all_alpha_path_rmse": [
+            0.05893724628690534,
+            0.04983768260441627,
+            0.0511719348727834,
+            0.06748639111847388,
+            0.10357078905120824
+          ],
+          "fixed05_cost": 0.006696926533401363,
+          "fixed075_cost": 0.0047785136070167405,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.04475140178339886,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.006696926533401363
+        },
+        {
+          "held_seed": 102,
+          "selected_alpha": 0.75,
+          "held_cost": 0.004924457494261564,
+          "held_speed_rmse": 0.058693916384670836,
+          "held_path_rmse": 0.07216516117821818,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.0049121617148780855,
+          "excess_cost": 1.2295779383478603e-05,
+          "all_alpha_cost": [
+            0.016115290815709046,
+            0.010851240969862126,
+            0.006792380015740362,
+            0.004924457494261564,
+            0.0049121617148780855
+          ],
+          "all_alpha_speed_rmse": [
+            0.12297069184937609,
+            0.10047914572164819,
+            0.0773398192762576,
+            0.058693916384670836,
+            0.045183278701107416
+          ],
+          "all_alpha_path_rmse": [
+            0.05913664398929413,
+            0.051558310344558815,
+            0.0534275315249104,
+            0.07216516117821818,
+            0.10052211799802528
+          ],
+          "fixed05_cost": 0.006792380015740362,
+          "fixed075_cost": 0.004924457494261564,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.045183278701107416,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.006792380015740362
+        },
+        {
+          "held_seed": 103,
+          "selected_alpha": 0.75,
+          "held_cost": 0.004802921015728977,
+          "held_speed_rmse": 0.05905118976305358,
+          "held_path_rmse": 0.06805822285454266,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.004802921015728977,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.016423757365804675,
+            0.010931100407047811,
+            0.006489130546271877,
+            0.004802921015728977,
+            0.004929743866906311
+          ],
+          "all_alpha_speed_rmse": [
+            0.12389995400379689,
+            0.10087171803923052,
+            0.0763150985383489,
+            0.05905118976305358,
+            0.0451000060679666
+          ],
+          "all_alpha_path_rmse": [
+            0.06144454588483559,
+            0.05158611242308237,
+            0.04838693464016261,
+            0.06805822285454266,
+            0.10096063481476804
+          ],
+          "fixed05_cost": 0.006489130546271877,
+          "fixed075_cost": 0.004802921015728977,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.0451000060679666,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.006489130546271877
+        },
+        {
+          "held_seed": 104,
+          "selected_alpha": 0.75,
+          "held_cost": 0.004833386527867,
+          "held_speed_rmse": 0.05892603360021406,
+          "held_path_rmse": 0.06921803377966314,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.004833386527867,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.01622563647263188,
+            0.01053779981334058,
+            0.006619317980804241,
+            0.004833386527867,
+            0.004977138177525365
+          ],
+          "all_alpha_speed_rmse": [
+            0.12337970370792019,
+            0.09901462377697465,
+            0.07699605031379202,
+            0.05892603360021406,
+            0.045253889394106836
+          ],
+          "all_alpha_path_rmse": [
+            0.0594212384654779,
+            0.05082676226917381,
+            0.04931608892616497,
+            0.06921803377966314,
+            0.10154278219424692
+          ],
+          "fixed05_cost": 0.006619317980804241,
+          "fixed075_cost": 0.004833386527867,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.045253889394106836,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.006619317980804241
+        },
+        {
+          "held_seed": 105,
+          "selected_alpha": 0.75,
+          "held_cost": 0.004967178609995647,
+          "held_speed_rmse": 0.05871865638277953,
+          "held_path_rmse": 0.07312978126225049,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.004799423255559808,
+          "excess_cost": 0.00016775535443583865,
+          "all_alpha_cost": [
+            0.015904929351698755,
+            0.010641452064234854,
+            0.006827046457559968,
+            0.004967178609995647,
+            0.004799423255559808
+          ],
+          "all_alpha_speed_rmse": [
+            0.12205482970765093,
+            0.09984580968649545,
+            0.07803632446565151,
+            0.05871865638277953,
+            0.04528014515291282
+          ],
+          "all_alpha_path_rmse": [
+            0.0595532738781726,
+            0.04864559036747494,
+            0.050946931584474185,
+            0.07312978126225046,
+            0.09837178787856955
+          ],
+          "fixed05_cost": 0.006827046457559968,
+          "fixed075_cost": 0.004967178609995647,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.04528014515291282,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.006827046457559968
+        }
+      ]
+    },
+    {
+      "terrain": "oblique_2cm",
+      "speed_m_s": 2.6,
+      "folds": [
+        {
+          "held_seed": 101,
+          "selected_alpha": 0.75,
+          "held_cost": 0.010752341986923734,
+          "held_speed_rmse": 0.07193989628278485,
+          "held_path_rmse": 0.14011120002206318,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.010752341986923734,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.02047015210518683,
+            0.014624656434145402,
+            0.010980420002266674,
+            0.010752341986923734,
+            0.012179626125826726
+          ],
+          "all_alpha_speed_rmse": [
+            0.13851221823435939,
+            0.1140328227781816,
+            0.09010837891599109,
+            0.07193989628278485,
+            0.05666289355990196
+          ],
+          "all_alpha_path_rmse": [
+            0.06724233787011615,
+            0.07554179608150094,
+            0.10035156129454528,
+            0.14011120002206318,
+            0.17768199170463989
+          ],
+          "fixed05_cost": 0.010980420002266674,
+          "fixed075_cost": 0.010752341986923734,
+          "constraint_selected_alpha": 0.75,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.07193989628278485,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.010980420002266674
+        },
+        {
+          "held_seed": 102,
+          "selected_alpha": 0.75,
+          "held_cost": 0.010423197411495862,
+          "held_speed_rmse": 0.07128646272386834,
+          "held_path_rmse": 0.13712033713340385,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.010423197411495862,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.020815107887952395,
+            0.014625959656682817,
+            0.011312928399441726,
+            0.010423197411495862,
+            0.012368784327119535
+          ],
+          "all_alpha_speed_rmse": [
+            0.13939242824033649,
+            0.11471506287592022,
+            0.09145024653266584,
+            0.07128646272386834,
+            0.05754415188979499
+          ],
+          "all_alpha_path_rmse": [
+            0.06981930868478961,
+            0.07184575136147851,
+            0.10189847016458321,
+            0.13712033713340385,
+            0.17855658916635464
+          ],
+          "fixed05_cost": 0.011312928399441726,
+          "fixed075_cost": 0.010423197411495862,
+          "constraint_selected_alpha": 0.75,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.07128646272386834,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.011312928399441726
+        },
+        {
+          "held_seed": 103,
+          "selected_alpha": 0.75,
+          "held_cost": 0.010833834685463069,
+          "held_speed_rmse": 0.07164099412397405,
+          "held_path_rmse": 0.14166535278417275,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.010833834685463069,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.020635506574754107,
+            0.014860118506819581,
+            0.011223620203102625,
+            0.010833834685463069,
+            0.012483149760229755
+          ],
+          "all_alpha_speed_rmse": [
+            0.138710419287343,
+            0.11519293551439964,
+            0.08957512798363754,
+            0.07164099412397405,
+            0.05635243364929121
+          ],
+          "all_alpha_path_rmse": [
+            0.07007262707415278,
+            0.0748286252053436,
+            0.10613096767661613,
+            0.14166535278417275,
+            0.18100499071244794
+          ],
+          "fixed05_cost": 0.011223620203102625,
+          "fixed075_cost": 0.010833834685463069,
+          "constraint_selected_alpha": 0.75,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.07164099412397405,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.011223620203102625
+        },
+        {
+          "held_seed": 104,
+          "selected_alpha": 0.75,
+          "held_cost": 0.010446635505178728,
+          "held_speed_rmse": 0.07136338405190763,
+          "held_path_rmse": 0.1372802423114281,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.010446635505178728,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.020671991477729895,
+            0.014587282197310288,
+            0.010811891976520396,
+            0.010446635505178728,
+            0.01129495766996205
+          ],
+          "all_alpha_speed_rmse": [
+            0.1389819555726788,
+            0.11469616604748907,
+            0.0903826695317591,
+            0.07136338405190763,
+            0.05727242760315728
+          ],
+          "all_alpha_path_rmse": [
+            0.06908819353588067,
+            0.07099948048021516,
+            0.09645178797316042,
+            0.13728024231142813,
+            0.1679654118970033
+          ],
+          "fixed05_cost": 0.010811891976520396,
+          "fixed075_cost": 0.010446635505178728,
+          "constraint_selected_alpha": 0.75,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.07136338405190763,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.010811891976520396
+        },
+        {
+          "held_seed": 105,
+          "selected_alpha": 0.75,
+          "held_cost": 0.009852042412768528,
+          "held_speed_rmse": 0.07133698928812444,
+          "held_path_rmse": 0.12948413608690937,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.009852042412768528,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.020513256503518314,
+            0.014947496195188441,
+            0.01124228867286558,
+            0.009852042412768528,
+            0.012048523878987884
+          ],
+          "all_alpha_speed_rmse": [
+            0.13826186108072033,
+            0.11599785904117886,
+            0.0900237748008919,
+            0.07133698928812444,
+            0.057228155673132955
+          ],
+          "all_alpha_path_rmse": [
+            0.07012254479067344,
+            0.07246965072341816,
+            0.10509930852866414,
+            0.12948413608690937,
+            0.1757350108665293
+          ],
+          "fixed05_cost": 0.01124228867286558,
+          "fixed075_cost": 0.009852042412768528,
+          "constraint_selected_alpha": 0.75,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.07133698928812444,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.01124228867286558
+        }
+      ]
+    },
+    {
+      "terrain": "oblique_4cm",
+      "speed_m_s": 1.5,
+      "folds": [
+        {
+          "held_seed": 101,
+          "selected_alpha": 1.0,
+          "held_cost": 0.03759636225010175,
+          "held_speed_rmse": 0.1877192885641098,
+          "held_path_rmse": 0.09110225420523232,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.03759636225010175,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.043143544231686246,
+            0.040155967994517414,
+            0.048417985021912635,
+            0.04446874968514539,
+            0.03759636225010175
+          ],
+          "all_alpha_speed_rmse": [
+            0.1840627866556315,
+            0.1857736621715792,
+            0.18656645223955853,
+            0.18723220289564635,
+            0.1877192885641098
+          ],
+          "all_alpha_path_rmse": [
+            0.180585242040977,
+            0.1409518227280729,
+            0.21888545991360103,
+            0.1820259906950126,
+            0.09110225420523235
+          ],
+          "fixed05_cost": 0.048417985021912635,
+          "fixed075_cost": 0.04446874968514539,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.1877192885641098,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.048417985021912635
+        },
+        {
+          "held_seed": 102,
+          "selected_alpha": 1.0,
+          "held_cost": 0.03691769226929928,
+          "held_speed_rmse": 0.18784230645325367,
+          "held_path_rmse": 0.07581595112599608,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.03691769226929928,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.04268270715447756,
+            0.03798689810676467,
+            0.04894891424204281,
+            0.04425523028629694,
+            0.03691769226929928
+          ],
+          "all_alpha_speed_rmse": [
+            0.18415927986268385,
+            0.18573612019390834,
+            0.1864520538762661,
+            0.18699772593924247,
+            0.18784230645325367
+          ],
+          "all_alpha_path_rmse": [
+            0.17568096801567615,
+            0.11082117817943649,
+            0.22345007700132943,
+            0.1808058185647464,
+            0.0758159511259961
+          ],
+          "fixed05_cost": 0.04894891424204281,
+          "fixed075_cost": 0.04425523028629694,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.18784230645325367,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.04894891424204281
+        },
+        {
+          "held_seed": 103,
+          "selected_alpha": 1.0,
+          "held_cost": 0.03680049629794629,
+          "held_speed_rmse": 0.18817340206185593,
+          "held_path_rmse": 0.0699806611953885,
+          "held_oracle_alpha": 0.25,
+          "held_oracle_cost": 0.036040909237389056,
+          "excess_cost": 0.0007595870605572319,
+          "all_alpha_cost": [
+            0.04199536770319374,
+            0.036040909237389056,
+            0.036814106379832914,
+            0.04486379931701969,
+            0.03680049629794629
+          ],
+          "all_alpha_speed_rmse": [
+            0.18436651953433433,
+            0.1860948714959681,
+            0.18729731319925605,
+            0.18751704795921037,
+            0.18817340206185593
+          ],
+          "all_alpha_path_rmse": [
+            0.16785564049501409,
+            0.07044042621585214,
+            0.078122323559804,
+            0.18479258303106028,
+            0.06998066119538839
+          ],
+          "fixed05_cost": 0.036814106379832914,
+          "fixed075_cost": 0.04486379931701969,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.18817340206185593,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.036814106379832914
+        },
+        {
+          "held_seed": 104,
+          "selected_alpha": 1.0,
+          "held_cost": 0.03954527079962256,
+          "held_speed_rmse": 0.18745459721799967,
+          "held_path_rmse": 0.12453666871161087,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.03954527079962256,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.04185244840360414,
+            0.040395029326425295,
+            0.04422027631935729,
+            0.04522398147690013,
+            0.03954527079962256
+          ],
+          "all_alpha_speed_rmse": [
+            0.18426985068182644,
+            0.18592463213102275,
+            0.1864922134914505,
+            0.18712434468893352,
+            0.18745459721799967
+          ],
+          "all_alpha_path_rmse": [
+            0.16672694766876137,
+            0.14321798341411401,
+            0.182297282278251,
+            0.18956271931582006,
+            0.12453666871161076
+          ],
+          "fixed05_cost": 0.04422027631935729,
+          "fixed075_cost": 0.04522398147690013,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.18745459721799967,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.04422027631935729
+        },
+        {
+          "held_seed": 105,
+          "selected_alpha": 1.0,
+          "held_cost": 0.03756498463162437,
+          "held_speed_rmse": 0.18769441530760358,
+          "held_path_rmse": 0.09067546472365903,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.03756498463162437,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.04190602392367542,
+            0.039677301459205956,
+            0.0389087171777664,
+            0.045780659135538526,
+            0.03756498463162437
+          ],
+          "all_alpha_speed_rmse": [
+            0.18429523235593573,
+            0.18575787676020097,
+            0.18686256321131525,
+            0.1871642361076054,
+            0.18769441530760358
+          ],
+          "all_alpha_path_rmse": [
+            0.16719310112486077,
+            0.13491902371924222,
+            0.11852748697319891,
+            0.19452759688759894,
+            0.09067546472365905
+          ],
+          "fixed05_cost": 0.0389087171777664,
+          "fixed075_cost": 0.045780659135538526,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.18769441530760358,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.0389087171777664
+        }
+      ]
+    },
+    {
+      "terrain": "oblique_4cm",
+      "speed_m_s": 1.8,
+      "folds": [
+        {
+          "held_seed": 101,
+          "selected_alpha": 0.5,
+          "held_cost": 0.01249884340880665,
+          "held_speed_rmse": 0.10917737633983053,
+          "held_path_rmse": 0.045150860930137406,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.012346971735911849,
+          "excess_cost": 0.00015187167289480198,
+          "all_alpha_cost": [
+            0.017898613538641125,
+            0.01440133195117212,
+            0.01249884340880665,
+            0.012346971735911849,
+            0.014274104098215043
+          ],
+          "all_alpha_speed_rmse": [
+            0.13120058908849108,
+            0.11794095747186223,
+            0.10917737633983053,
+            0.10292258642458911,
+            0.10171173074898603
+          ],
+          "all_alpha_path_rmse": [
+            0.049104815937034536,
+            0.041584319483519615,
+            0.04515086093013731,
+            0.07857362811640843,
+            0.11759918041861464
+          ],
+          "fixed05_cost": 0.01249884340880665,
+          "fixed075_cost": 0.012346971735911849,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.10171173074898603,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.01249884340880665
+        },
+        {
+          "held_seed": 102,
+          "selected_alpha": 0.75,
+          "held_cost": 0.013970351376292545,
+          "held_speed_rmse": 0.10275298245427537,
+          "held_path_rmse": 0.10959443479772289,
+          "held_oracle_alpha": 0.5,
+          "held_oracle_cost": 0.012637875218231658,
+          "excess_cost": 0.0013324761580608864,
+          "all_alpha_cost": [
+            0.01787470378123628,
+            0.014559889870515909,
+            0.012637875218231658,
+            0.013970351376292545,
+            0.016114843772440116
+          ],
+          "all_alpha_speed_rmse": [
+            0.13091268670193304,
+            0.11843119409416565,
+            0.11047770681259118,
+            0.10275298245427537,
+            0.10157217324690188
+          ],
+          "all_alpha_path_rmse": [
+            0.0509190702403157,
+            0.04335307311708777,
+            0.039020399369411735,
+            0.10959443479772293,
+            0.14285964012181288
+          ],
+          "fixed05_cost": 0.012637875218231658,
+          "fixed075_cost": 0.013970351376292545,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.10157217324690188,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.012637875218231658
+        },
+        {
+          "held_seed": 103,
+          "selected_alpha": 0.5,
+          "held_cost": 0.012706129789791376,
+          "held_speed_rmse": 0.11083654139883899,
+          "held_path_rmse": 0.038513710121176624,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.012426088598554546,
+          "excess_cost": 0.00028004119123683016,
+          "all_alpha_cost": [
+            0.017728148702583758,
+            0.014714499246319544,
+            0.012706129789791376,
+            0.012426088598554546,
+            0.013185942806997116
+          ],
+          "all_alpha_speed_rmse": [
+            0.130377268053268,
+            0.1192189067418203,
+            0.11083654139883899,
+            0.1041541869455295,
+            0.10166680820480599
+          ],
+          "all_alpha_path_rmse": [
+            0.05068849939417536,
+            0.04200915632689693,
+            0.038513710121176645,
+            0.07452902787841754,
+            0.10015674553775734
+          ],
+          "fixed05_cost": 0.012706129789791376,
+          "fixed075_cost": 0.012426088598554546,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.10166680820480599,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.012706129789791376
+        },
+        {
+          "held_seed": 104,
+          "selected_alpha": 0.5,
+          "held_cost": 0.012424545391266969,
+          "held_speed_rmse": 0.109431997008105,
+          "held_path_rmse": 0.039763504259247205,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.012151495820396216,
+          "excess_cost": 0.0002730495708707526,
+          "all_alpha_cost": [
+            0.017000939553687422,
+            0.014599193625775716,
+            0.012424545391266969,
+            0.012151495820396216,
+            0.014242895775857412
+          ],
+          "all_alpha_speed_rmse": [
+            0.12794180136062516,
+            0.11867779650162026,
+            0.109431997008105,
+            0.10303240426997287,
+            0.10172589224103587
+          ],
+          "all_alpha_path_rmse": [
+            0.04716009128643148,
+            0.04256779901708142,
+            0.039763504259247205,
+            0.07352632818627225,
+            0.11708788188141352
+          ],
+          "fixed05_cost": 0.012424545391266969,
+          "fixed075_cost": 0.012151495820396216,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.10172589224103587,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.012424545391266969
+        },
+        {
+          "held_seed": 105,
+          "selected_alpha": 0.5,
+          "held_cost": 0.01278662198919946,
+          "held_speed_rmse": 0.1108732798083076,
+          "held_path_rmse": 0.04168895277581156,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.012113777911290004,
+          "excess_cost": 0.0006728440779094555,
+          "all_alpha_cost": [
+            0.017311686228628467,
+            0.014508274440521584,
+            0.01278662198919946,
+            0.012113777911290004,
+            0.012452845793507823
+          ],
+          "all_alpha_speed_rmse": [
+            0.12900169230706035,
+            0.11837570198003931,
+            0.1108732798083076,
+            0.1027367395812553,
+            0.10127780798062339
+          ],
+          "all_alpha_path_rmse": [
+            0.048572569250249234,
+            0.04176191742346012,
+            0.04168895277581157,
+            0.07407770623700383,
+            0.08791328045162376
+          ],
+          "fixed05_cost": 0.01278662198919946,
+          "fixed075_cost": 0.012113777911290004,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.10127780798062339,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.01278662198919946
+        }
+      ]
+    },
+    {
+      "terrain": "oblique_4cm",
+      "speed_m_s": 2.0,
+      "folds": [
+        {
+          "held_seed": 101,
+          "selected_alpha": 0.75,
+          "held_cost": 0.006528973363098697,
+          "held_speed_rmse": 0.07136272799907421,
+          "held_path_rmse": 0.07110507097859237,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.006528973363098697,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.014612149105587384,
+            0.010532750824330169,
+            0.007290690586781023,
+            0.006528973363098697,
+            0.007502758699099372
+          ],
+          "all_alpha_speed_rmse": [
+            0.11731108718704791,
+            0.09975885911626463,
+            0.08216440870022187,
+            0.07136272799907421,
+            0.06475378867914415
+          ],
+          "all_alpha_path_rmse": [
+            0.05470765961982563,
+            0.045220074535537766,
+            0.04358622065522802,
+            0.07110507097859237,
+            0.1079362859673586
+          ],
+          "fixed05_cost": 0.007290690586781023,
+          "fixed075_cost": 0.006528973363098697,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.06475378867914415,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.007290690586781023
+        },
+        {
+          "held_seed": 102,
+          "selected_alpha": 0.75,
+          "held_cost": 0.007128407260389151,
+          "held_speed_rmse": 0.07048893966633239,
+          "held_path_rmse": 0.08719090364203928,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.006760194002899666,
+          "excess_cost": 0.00036821325748948464,
+          "all_alpha_cost": [
+            0.014541002174935244,
+            0.010567066582977961,
+            0.007581953346642306,
+            0.007128407260389151,
+            0.006760194002899666
+          ],
+          "all_alpha_speed_rmse": [
+            0.11730279999420129,
+            0.10000298787407479,
+            0.08333580518880193,
+            0.07048893966633239,
+            0.06388633564840629
+          ],
+          "all_alpha_path_rmse": [
+            0.05243408329400136,
+            0.044654051069121334,
+            0.047356057999662984,
+            0.0871909036420393,
+            0.09710403383846562
+          ],
+          "fixed05_cost": 0.007581953346642306,
+          "fixed075_cost": 0.007128407260389151,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.06388633564840629,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.007581953346642306
+        },
+        {
+          "held_seed": 103,
+          "selected_alpha": 1.0,
+          "held_cost": 0.007931604355520417,
+          "held_speed_rmse": 0.06530807256097143,
+          "held_path_rmse": 0.11360469170501704,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.006513837524178735,
+          "excess_cost": 0.0014177668313416821,
+          "all_alpha_cost": [
+            0.014231018712361276,
+            0.010760646076127815,
+            0.0076337839838776355,
+            0.006513837524178735,
+            0.007931604355520417
+          ],
+          "all_alpha_speed_rmse": [
+            0.11577162448547693,
+            0.10093354261923593,
+            0.08302906486194739,
+            0.0715934979031602,
+            0.06530807256097143
+          ],
+          "all_alpha_path_rmse": [
+            0.053985205802645785,
+            0.04491331710349731,
+            0.05103597724084548,
+            0.06990369837638341,
+            0.11360469170501705
+          ],
+          "fixed05_cost": 0.0076337839838776355,
+          "fixed075_cost": 0.006513837524178735,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.06530807256097143,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.0076337839838776355
+        },
+        {
+          "held_seed": 104,
+          "selected_alpha": 0.75,
+          "held_cost": 0.006924738761619714,
+          "held_speed_rmse": 0.07099753163926563,
+          "held_path_rmse": 0.08143733033556992,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.006924738761619714,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.01452012199544398,
+            0.010516469094055361,
+            0.007555213126387607,
+            0.006924738761619714,
+            0.007346851700942755
+          ],
+          "all_alpha_speed_rmse": [
+            0.11716053672390488,
+            0.09974813978739278,
+            0.08204082225576578,
+            0.07099753163926563,
+            0.06441662858220812
+          ],
+          "all_alpha_path_rmse": [
+            0.05285117395341454,
+            0.04466621678038321,
+            0.053873165590352615,
+            0.0814373303355699,
+            0.10608838977858566
+          ],
+          "fixed05_cost": 0.007555213126387607,
+          "fixed075_cost": 0.006924738761619714,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.06441662858220812,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.007555213126387607
+        },
+        {
+          "held_seed": 105,
+          "selected_alpha": 0.75,
+          "held_cost": 0.007161525308180193,
+          "held_speed_rmse": 0.07099404681648433,
+          "held_path_rmse": 0.08641339467570454,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.005899041928118541,
+          "excess_cost": 0.0012624833800616523,
+          "all_alpha_cost": [
+            0.014249955267017837,
+            0.010490657634906371,
+            0.00768658393000842,
+            0.007161525308180193,
+            0.005899041928118541
+          ],
+          "all_alpha_speed_rmse": [
+            0.11632860409005005,
+            0.09979873069833657,
+            0.08273617893970045,
+            0.07099404681648433,
+            0.06475536060367203
+          ],
+          "all_alpha_path_rmse": [
+            0.050259408857430084,
+            0.04322821333241301,
+            0.054418988036399565,
+            0.08641339467570457,
+            0.07748809107111267
+          ],
+          "fixed05_cost": 0.00768658393000842,
+          "fixed075_cost": 0.007161525308180193,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.06475536060367203,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.00768658393000842
+        }
+      ]
+    },
+    {
+      "terrain": "oblique_4cm",
+      "speed_m_s": 2.3,
+      "folds": [
+        {
+          "held_seed": 101,
+          "selected_alpha": 0.75,
+          "held_cost": 0.00600216094389138,
+          "held_speed_rmse": 0.0648211697815164,
+          "held_path_rmse": 0.07960759541103789,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.00600216094389138,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.016658076466328282,
+            0.011059775261323039,
+            0.007639094181431966,
+            0.00600216094389138,
+            0.006965274190664433
+          ],
+          "all_alpha_speed_rmse": [
+            0.12557601317958203,
+            0.10219506614831457,
+            0.07949244994298192,
+            0.0648211697815164,
+            0.054148435444176565
+          ],
+          "all_alpha_path_rmse": [
+            0.0559320183907608,
+            0.046563252153694314,
+            0.06816588706217351,
+            0.07960759541103789,
+            0.11915130624673073
+          ],
+          "fixed05_cost": 0.007639094181431966,
+          "fixed075_cost": 0.00600216094389138,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.054148435444176565,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.007639094181431966
+        },
+        {
+          "held_seed": 102,
+          "selected_alpha": 0.75,
+          "held_cost": 0.005752095431926383,
+          "held_speed_rmse": 0.06623998436908497,
+          "held_path_rmse": 0.06930064307688726,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.005752095431926383,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.016337297115759347,
+            0.011152599783946462,
+            0.007571123561446954,
+            0.005752095431926383,
+            0.005944475546668965
+          ],
+          "all_alpha_speed_rmse": [
+            0.12445537547751873,
+            0.10225533182311541,
+            0.07858645636042541,
+            0.06623998436908497,
+            0.05397747385753454
+          ],
+          "all_alpha_path_rmse": [
+            0.054640016491243205,
+            0.04951272113322601,
+            0.07008182636991614,
+            0.06930064307688723,
+            0.1032902094645944
+          ],
+          "fixed05_cost": 0.007571123561446954,
+          "fixed075_cost": 0.005752095431926383,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.05397747385753454,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.007571123561446954
+        },
+        {
+          "held_seed": 103,
+          "selected_alpha": 0.75,
+          "held_cost": 0.005956022486681486,
+          "held_speed_rmse": 0.0670220845213047,
+          "held_path_rmse": 0.07178812743811364,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.005956022486681486,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.016710242797980425,
+            0.011228216537745118,
+            0.007345629294267448,
+            0.005956022486681486,
+            0.0068570410797342924
+          ],
+          "all_alpha_speed_rmse": [
+            0.12557235648692583,
+            0.10294032197176832,
+            0.08164033872722251,
+            0.0670220845213047,
+            0.05375906559540052
+          ],
+          "all_alpha_path_rmse": [
+            0.057578208509987516,
+            0.04714783501224023,
+            0.04894201812343719,
+            0.07178812743811364,
+            0.1181691487986717
+          ],
+          "fixed05_cost": 0.007345629294267448,
+          "fixed075_cost": 0.005956022486681486,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.05375906559540052,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.007345629294267448
+        },
+        {
+          "held_seed": 104,
+          "selected_alpha": 0.75,
+          "held_cost": 0.005912069575177997,
+          "held_speed_rmse": 0.06586447541753968,
+          "held_path_rmse": 0.07443324274782293,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.005912069575177997,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.016778011682275166,
+            0.011103625788238555,
+            0.007350644326988196,
+            0.005912069575177997,
+            0.006208221701687673
+          ],
+          "all_alpha_speed_rmse": [
+            0.1259536618882567,
+            0.10214727255569214,
+            0.08119904594053365,
+            0.06586447541753968,
+            0.05320965860201279
+          ],
+          "all_alpha_path_rmse": [
+            0.05671154146106119,
+            0.0485475930398475,
+            0.051632572364541926,
+            0.07443324274782293,
+            0.10902732558870747
+          ],
+          "fixed05_cost": 0.007350644326988196,
+          "fixed075_cost": 0.005912069575177997,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.05320965860201279,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.007350644326988196
+        },
+        {
+          "held_seed": 105,
+          "selected_alpha": 0.75,
+          "held_cost": 0.005844161644712822,
+          "held_speed_rmse": 0.06564660888838804,
+          "held_path_rmse": 0.07349915197873423,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.005844161644712822,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.01624595135223928,
+            0.01149061313186327,
+            0.007328171887253911,
+            0.005844161644712822,
+            0.007064711194265333
+          ],
+          "all_alpha_speed_rmse": [
+            0.12425241009504263,
+            0.10371672689874996,
+            0.08101689730812686,
+            0.06564660888838804,
+            0.05445255479900443
+          ],
+          "all_alpha_path_rmse": [
+            0.053307407338829334,
+            0.05081116363404756,
+            0.051873178035236014,
+            0.07349915197873425,
+            0.12012824909153064
+          ],
+          "fixed05_cost": 0.007328171887253911,
+          "fixed075_cost": 0.005844161644712822,
+          "constraint_selected_alpha": 1.0,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.05445255479900443,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.007328171887253911
+        }
+      ]
+    },
+    {
+      "terrain": "oblique_4cm",
+      "speed_m_s": 2.6,
+      "folds": [
+        {
+          "held_seed": 101,
+          "selected_alpha": 0.5,
+          "held_cost": 0.011918380484664171,
+          "held_speed_rmse": 0.092553414754457,
+          "held_path_rmse": 0.10862773527407776,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.011676968739715573,
+          "excess_cost": 0.000241411744948598,
+          "all_alpha_cost": [
+            0.02079792010194258,
+            0.015581656762073477,
+            0.011918380484664171,
+            0.011676968739715573,
+            0.013949336424083563
+          ],
+          "all_alpha_speed_rmse": [
+            0.14047056698480073,
+            0.11963376216581062,
+            0.092553414754457,
+            0.07557417472942332,
+            0.06445962297012171
+          ],
+          "all_alpha_path_rmse": [
+            0.06125466274322228,
+            0.06684599774296926,
+            0.10862773527407776,
+            0.1449094419164491,
+            0.18567752840750734
+          ],
+          "fixed05_cost": 0.011918380484664171,
+          "fixed075_cost": 0.011676968739715573,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.092553414754457,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.011918380484664171
+        },
+        {
+          "held_seed": 102,
+          "selected_alpha": 0.5,
+          "held_cost": 0.011248644134125447,
+          "held_speed_rmse": 0.09366907217807398,
+          "held_path_rmse": 0.09333367666662756,
+          "held_oracle_alpha": 0.5,
+          "held_oracle_cost": 0.011248644134125447,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.02101171191527833,
+            0.015207137042596028,
+            0.011248644134125447,
+            0.011442781345021304,
+            0.014477273356218722
+          ],
+          "all_alpha_speed_rmse": [
+            0.14099154070842781,
+            0.11690277499854301,
+            0.09366907217807398,
+            0.07541087031383124,
+            0.06439971195798479
+          ],
+          "all_alpha_path_rmse": [
+            0.06315480602451809,
+            0.07364732075524606,
+            0.09333367666662755,
+            0.14234181654470773,
+            0.19068736181340556
+          ],
+          "fixed05_cost": 0.011248644134125447,
+          "fixed075_cost": 0.011442781345021304,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.09366907217807398,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.011248644134125447
+        },
+        {
+          "held_seed": 103,
+          "selected_alpha": 0.75,
+          "held_cost": 0.011402626424102679,
+          "held_speed_rmse": 0.0755915575849839,
+          "held_path_rmse": 0.1415054959279579,
+          "held_oracle_alpha": 0.5,
+          "held_oracle_cost": 0.011089912778890355,
+          "excess_cost": 0.0003127136452123237,
+          "all_alpha_cost": [
+            0.021296011940234262,
+            0.01564399107514767,
+            0.011089912778890355,
+            0.011402626424102679,
+            0.01567319101528019
+          ],
+          "all_alpha_speed_rmse": [
+            0.14205291821027935,
+            0.11906279593146163,
+            0.09368391843342105,
+            0.0755915575849839,
+            0.0631569214699441
+          ],
+          "all_alpha_path_rmse": [
+            0.06270404546490078,
+            0.07188561407082324,
+            0.09023661209939045,
+            0.1415054959279579,
+            0.20280370873069894
+          ],
+          "fixed05_cost": 0.011089912778890355,
+          "fixed075_cost": 0.011402626424102679,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.09368391843342105,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.011089912778890355
+        },
+        {
+          "held_seed": 104,
+          "selected_alpha": 0.5,
+          "held_cost": 0.011602589023930764,
+          "held_speed_rmse": 0.09373206670213893,
+          "held_path_rmse": 0.09957667819846751,
+          "held_oracle_alpha": 0.5,
+          "held_oracle_cost": 0.011602589023930764,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.021135138715533786,
+            0.015367262731213733,
+            0.011602589023930764,
+            0.011656731481572962,
+            0.014152346807666097
+          ],
+          "all_alpha_speed_rmse": [
+            0.14124551155917875,
+            0.11907907666174175,
+            0.09373206670213893,
+            0.07480161267368551,
+            0.06506335512477418
+          ],
+          "all_alpha_path_rmse": [
+            0.06458079854170143,
+            0.06465140081262787,
+            0.09957667819846748,
+            0.14607001117906637,
+            0.18685687025408423
+          ],
+          "fixed05_cost": 0.011602589023930764,
+          "fixed075_cost": 0.011656731481572962,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.09373206670213893,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.011602589023930764
+        },
+        {
+          "held_seed": 105,
+          "selected_alpha": 0.5,
+          "held_cost": 0.01143533214294426,
+          "held_speed_rmse": 0.09356664191217863,
+          "held_path_rmse": 0.09713820333341619,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.011400428818806499,
+          "excess_cost": 3.4903324137761094e-05,
+          "all_alpha_cost": [
+            0.021778379750897237,
+            0.015077346464560387,
+            0.01143533214294426,
+            0.011400428818806499,
+            0.015027057749382716
+          ],
+          "all_alpha_speed_rmse": [
+            0.14350358826799328,
+            0.1173490232035262,
+            0.09356664191217863,
+            0.07492424101838001,
+            0.06368890843927748
+          ],
+          "all_alpha_path_rmse": [
+            0.06458776740988939,
+            0.06781665158631905,
+            0.09713820333341622,
+            0.1427222017263494,
+            0.19651312307830424
+          ],
+          "fixed05_cost": 0.01143533214294426,
+          "fixed075_cost": 0.011400428818806499,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.09356664191217863,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.01143533214294426
+        }
+      ]
+    },
+    {
+      "terrain": "oblique_6cm",
+      "speed_m_s": 1.5,
+      "folds": [
+        {
+          "held_seed": 101,
+          "selected_alpha": 1.0,
+          "held_cost": 0.07114778232264042,
+          "held_speed_rmse": 0.19035363507350844,
+          "held_path_rmse": 0.3505646262191608,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.07114778232264042,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.09790889388261886,
+            0.08282243588624047,
+            0.08873384965946685,
+            0.07729311173195891,
+            0.07114778232264042
+          ],
+          "all_alpha_speed_rmse": [
+            0.1871748003125044,
+            0.188640180803881,
+            0.18916428034577182,
+            0.1901203017115038,
+            0.19035363507350844
+          ],
+          "all_alpha_path_rmse": [
+            0.4704462616129188,
+            0.4077701276371213,
+            0.4317265378368809,
+            0.38057819184389624,
+            0.35056462621916074
+          ],
+          "fixed05_cost": 0.08873384965946685,
+          "fixed075_cost": 0.07729311173195891,
+          "constraint_selected_alpha": null,
+          "held_constraint_met": null,
+          "constraint_held_speed_rmse": null,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.08873384965946685
+        },
+        {
+          "held_seed": 102,
+          "selected_alpha": 1.0,
+          "held_cost": 0.07340322390580359,
+          "held_speed_rmse": 0.1903809477178758,
+          "held_path_rmse": 0.3616602834403314,
+          "held_oracle_alpha": 0.25,
+          "held_oracle_cost": 0.06812535721675372,
+          "excess_cost": 0.005277866689049865,
+          "all_alpha_cost": [
+            0.10104533550809727,
+            0.06812535721675372,
+            0.0895113557296032,
+            0.07775072789164823,
+            0.07340322390580359
+          ],
+          "all_alpha_speed_rmse": [
+            0.18696072290519317,
+            0.18838476223553258,
+            0.18912757513970918,
+            0.18997846051720718,
+            0.1903809477178758
+          ],
+          "all_alpha_path_rmse": [
+            0.48232972790614786,
+            0.33894156986738105,
+            0.43494082327013084,
+            0.38293649235987437,
+            0.36166028344033146
+          ],
+          "fixed05_cost": 0.0895113557296032,
+          "fixed075_cost": 0.07775072789164823,
+          "constraint_selected_alpha": null,
+          "held_constraint_met": null,
+          "constraint_held_speed_rmse": null,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.0895113557296032
+        },
+        {
+          "held_seed": 103,
+          "selected_alpha": 1.0,
+          "held_cost": 0.07752243115071135,
+          "held_speed_rmse": 0.190840394537754,
+          "held_path_rmse": 0.3803699937293552,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.07752243115071135,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.10378901576737501,
+            0.08683566596067638,
+            0.09321059268065857,
+            0.07769611892505232,
+            0.07752243115071135
+          ],
+          "all_alpha_speed_rmse": [
+            0.18720719632702096,
+            0.1889537179575827,
+            0.18939483741821636,
+            0.19007341996983265,
+            0.190840394537754
+          ],
+          "all_alpha_path_rmse": [
+            0.49190970781122406,
+            0.4242480491229857,
+            0.44926475374951674,
+            0.3825194065243904,
+            0.38036999372935515
+          ],
+          "fixed05_cost": 0.09321059268065857,
+          "fixed075_cost": 0.07769611892505232,
+          "constraint_selected_alpha": null,
+          "held_constraint_met": null,
+          "constraint_held_speed_rmse": null,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.09321059268065857
+        },
+        {
+          "held_seed": 104,
+          "selected_alpha": 1.0,
+          "held_cost": 0.057185773318171346,
+          "held_speed_rmse": 0.19044788633937085,
+          "held_path_rmse": 0.271334881533437,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.057185773318171346,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.10531671645707094,
+            0.07549269163808532,
+            0.08612139733021745,
+            0.07906345984224528,
+            0.057185773318171346
+          ],
+          "all_alpha_speed_rmse": [
+            0.187025324770493,
+            0.18874300368484292,
+            0.18892259611410647,
+            0.19018886845627597,
+            0.19044788633937085
+          ],
+          "all_alpha_path_rmse": [
+            0.49758645875631324,
+            0.37461849150237875,
+            0.4213235822005654,
+            0.3885609826240877,
+            0.27133488153343693
+          ],
+          "fixed05_cost": 0.08612139733021745,
+          "fixed075_cost": 0.07906345984224528,
+          "constraint_selected_alpha": null,
+          "held_constraint_met": null,
+          "constraint_held_speed_rmse": null,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.08612139733021745
+        },
+        {
+          "held_seed": 105,
+          "selected_alpha": 1.0,
+          "held_cost": 0.0747148429575261,
+          "held_speed_rmse": 0.19063750976982102,
+          "held_path_rmse": 0.36752005554199757,
+          "held_oracle_alpha": 1.0,
+          "held_oracle_cost": 0.0747148429575261,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.08724103753146045,
+            0.0768302433131312,
+            0.07836852794233853,
+            0.08150378494679678,
+            0.0747148429575261
+          ],
+          "all_alpha_speed_rmse": [
+            0.18728064613633463,
+            0.18868988333922476,
+            0.18903386858069038,
+            0.19034711542287386,
+            0.19063750976982102
+          ],
+          "all_alpha_path_rmse": [
+            0.42851961895501867,
+            0.380943305429251,
+            0.3873954551181359,
+            0.3991962777693795,
+            0.3675200555419976
+          ],
+          "fixed05_cost": 0.07836852794233853,
+          "fixed075_cost": 0.08150378494679678,
+          "constraint_selected_alpha": null,
+          "held_constraint_met": null,
+          "constraint_held_speed_rmse": null,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.07836852794233853
+        }
+      ]
+    },
+    {
+      "terrain": "oblique_6cm",
+      "speed_m_s": 1.8,
+      "folds": [
+        {
+          "held_seed": 101,
+          "selected_alpha": 0.25,
+          "held_cost": 0.023764310063469764,
+          "held_speed_rmse": 0.12255068727645074,
+          "held_path_rmse": 0.17545613852713862,
+          "held_oracle_alpha": 0.0,
+          "held_oracle_cost": 0.01889840809728663,
+          "excess_cost": 0.004865901966183136,
+          "all_alpha_cost": [
+            0.01889840809728663,
+            0.023764310063469764,
+            0.019029750856633325,
+            0.02085637945361498,
+            0.026880912390644354
+          ],
+          "all_alpha_speed_rmse": [
+            0.13497720565932478,
+            0.12255068727645074,
+            0.11433304365027087,
+            0.10860139892696766,
+            0.10581149711689981
+          ],
+          "all_alpha_path_rmse": [
+            0.04890883856358398,
+            0.17545613852713865,
+            0.14481459180165,
+            0.1786025231875642,
+            0.2349702235330399
+          ],
+          "fixed05_cost": 0.019029750856633325,
+          "fixed075_cost": 0.02085637945361498,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.11433304365027087,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.019029750856633325
+        },
+        {
+          "held_seed": 102,
+          "selected_alpha": 0.25,
+          "held_cost": 0.015898323472709083,
+          "held_speed_rmse": 0.12373761551576026,
+          "held_path_rmse": 0.045468685264267825,
+          "held_oracle_alpha": 0.25,
+          "held_oracle_cost": 0.015898323472709083,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.01857270716391867,
+            0.015898323472709083,
+            0.016216261057036073,
+            0.02358878007724438,
+            0.027597102090120187
+          ],
+          "all_alpha_speed_rmse": [
+            0.13387482868340567,
+            0.12373761551576026,
+            0.11424864012423816,
+            0.1085356752912891,
+            0.10540348568713437
+          ],
+          "all_alpha_path_rmse": [
+            0.047841938301383106,
+            0.04546868526426794,
+            0.10552548280366819,
+            0.2038803828450879,
+            0.24090529192287854
+          ],
+          "fixed05_cost": 0.016216261057036073,
+          "fixed075_cost": 0.02358878007724438,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.11424864012423816,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.016216261057036073
+        },
+        {
+          "held_seed": 103,
+          "selected_alpha": 0.25,
+          "held_cost": 0.01838648249606262,
+          "held_speed_rmse": 0.1225287295825018,
+          "held_path_rmse": 0.10896659524924499,
+          "held_oracle_alpha": 0.5,
+          "held_oracle_cost": 0.017905273934658995,
+          "excess_cost": 0.0004812085614036253,
+          "all_alpha_cost": [
+            0.05230039724251024,
+            0.01838648249606262,
+            0.017905273934658995,
+            0.025830949542208163,
+            0.02655462443484328
+          ],
+          "all_alpha_speed_rmse": [
+            0.13978544679432744,
+            0.1225287295825018,
+            0.11456078933725443,
+            0.10869123996341737,
+            0.10537522828040276
+          ],
+          "all_alpha_path_rmse": [
+            0.339584267642279,
+            0.10896659524924497,
+            0.1297288837083553,
+            0.2221277751402529,
+            0.23320973209128035
+          ],
+          "fixed05_cost": 0.017905273934658995,
+          "fixed075_cost": 0.025830949542208163,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.11456078933725443,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.017905273934658995
+        },
+        {
+          "held_seed": 104,
+          "selected_alpha": 0.25,
+          "held_cost": 0.01573881785586065,
+          "held_speed_rmse": 0.12260695731718887,
+          "held_path_rmse": 0.049863566883983766,
+          "held_oracle_alpha": 0.25,
+          "held_oracle_cost": 0.01573881785586065,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.01849356821194255,
+            0.01573881785586065,
+            0.01775874638293916,
+            0.02586111122003193,
+            0.027215984314350794
+          ],
+          "all_alpha_speed_rmse": [
+            0.1337348745301134,
+            0.12260695731718887,
+            0.11420511304771176,
+            0.10841185443887422,
+            0.10506264974333229
+          ],
+          "all_alpha_path_rmse": [
+            0.04628299729054284,
+            0.04986356688398378,
+            0.1288418224126972,
+            0.22284619576932274,
+            0.23863428705776515
+          ],
+          "fixed05_cost": 0.01775874638293916,
+          "fixed075_cost": 0.02586111122003193,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.11420511304771176,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.01775874638293916
+        },
+        {
+          "held_seed": 105,
+          "selected_alpha": 0.5,
+          "held_cost": 0.022370964942206938,
+          "held_speed_rmse": 0.11394992721039368,
+          "held_path_rmse": 0.18176984408754515,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.01474216226939547,
+          "excess_cost": 0.007628802672811467,
+          "all_alpha_cost": [
+            0.018544111730684647,
+            0.016011324270811828,
+            0.022370964942206938,
+            0.01474216226939547,
+            0.0276656627531778
+          ],
+          "all_alpha_speed_rmse": [
+            0.13358028261730012,
+            0.12388689999765175,
+            0.11394992721039368,
+            0.10918524205710065,
+            0.10548870737734924
+          ],
+          "all_alpha_path_rmse": [
+            0.04965374464869168,
+            0.04832229171234894,
+            0.18176984408754515,
+            0.09964481812596783,
+            0.24127459645237107
+          ],
+          "fixed05_cost": 0.022370964942206938,
+          "fixed075_cost": 0.01474216226939547,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.11394992721039368,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.022370964942206938
+        }
+      ]
+    },
+    {
+      "terrain": "oblique_6cm",
+      "speed_m_s": 2.0,
+      "folds": [
+        {
+          "held_seed": 101,
+          "selected_alpha": 0.5,
+          "held_cost": 0.009407685133452928,
+          "held_speed_rmse": 0.09027353707827714,
+          "held_path_rmse": 0.0665545262766888,
+          "held_oracle_alpha": 0.5,
+          "held_oracle_cost": 0.009407685133452928,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.015338188059640788,
+            0.011248247939204533,
+            0.009407685133452928,
+            0.03773458598780255,
+            0.049674262855985016
+          ],
+          "all_alpha_speed_rmse": [
+            0.11925070657691243,
+            0.1016652864678291,
+            0.09027353707827714,
+            0.07573048064504925,
+            0.07115591178284247
+          ],
+          "all_alpha_path_rmse": [
+            0.06271742354148593,
+            0.056672136586958334,
+            0.06655452627668881,
+            0.3356172336920854,
+            0.39627278987780723
+          ],
+          "fixed05_cost": 0.009407685133452928,
+          "fixed075_cost": 0.03773458598780255,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.09027353707827714,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.009407685133452928
+        },
+        {
+          "held_seed": 102,
+          "selected_alpha": 0.5,
+          "held_cost": 0.010179943483209726,
+          "held_speed_rmse": 0.08778546694859818,
+          "held_path_rmse": 0.09331304884169818,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.009870437506796415,
+          "excess_cost": 0.00030950597641331117,
+          "all_alpha_cost": [
+            0.01593294235885947,
+            0.011840732726799778,
+            0.010179943483209726,
+            0.009870437506796415,
+            0.02939789088801411
+          ],
+          "all_alpha_speed_rmse": [
+            0.12071559856552115,
+            0.10365258142937563,
+            0.08778546694859818,
+            0.07597770280250883,
+            0.07026618082881514
+          ],
+          "all_alpha_path_rmse": [
+            0.06920729076675688,
+            0.062137156857113504,
+            0.09331304884169817,
+            0.12010181138816876,
+            0.29343096499371185
+          ],
+          "fixed05_cost": 0.010179943483209726,
+          "fixed075_cost": 0.009870437506796415,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.08778546694859818,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.010179943483209726
+        },
+        {
+          "held_seed": 103,
+          "selected_alpha": 0.5,
+          "held_cost": 0.009410616715523961,
+          "held_speed_rmse": 0.08944618040724923,
+          "held_path_rmse": 0.07045015716564026,
+          "held_oracle_alpha": 0.5,
+          "held_oracle_cost": 0.009410616715523961,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.01575332183671335,
+            0.011598173695307279,
+            0.009410616715523961,
+            0.02159554308009465,
+            0.04096366111536026
+          ],
+          "all_alpha_speed_rmse": [
+            0.12071679882629269,
+            0.10368254666829713,
+            0.08944618040724923,
+            0.07613030476329982,
+            0.0718181986497427
+          ],
+          "all_alpha_path_rmse": [
+            0.06446984232616043,
+            0.0546382957881552,
+            0.07045015716564026,
+            0.23582914864268562,
+            0.35501730834281464
+          ],
+          "fixed05_cost": 0.009410616715523961,
+          "fixed075_cost": 0.02159554308009465,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.08944618040724923,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.009410616715523961
+        },
+        {
+          "held_seed": 104,
+          "selected_alpha": 0.5,
+          "held_cost": 0.010349654126412646,
+          "held_speed_rmse": 0.08875243042344627,
+          "held_path_rmse": 0.09329427884547772,
+          "held_oracle_alpha": 0.5,
+          "held_oracle_cost": 0.010349654126412646,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.015629325142141746,
+            0.01202123650349396,
+            0.010349654126412646,
+            0.01748855653848243,
+            0.02103672295576852
+          ],
+          "all_alpha_speed_rmse": [
+            0.12092981444136501,
+            0.10342277465074484,
+            0.08875243042344627,
+            0.07519022033813297,
+            0.07062784219989093
+          ],
+          "all_alpha_path_rmse": [
+            0.05948695493208018,
+            0.06829284237645059,
+            0.09329427884547775,
+            0.20410643121037056,
+            0.23767805168470757
+          ],
+          "fixed05_cost": 0.010349654126412646,
+          "fixed075_cost": 0.01748855653848243,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.08875243042344627,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.010349654126412646
+        },
+        {
+          "held_seed": 105,
+          "selected_alpha": 0.5,
+          "held_cost": 0.009282505957395406,
+          "held_speed_rmse": 0.08988374716457002,
+          "held_path_rmse": 0.06508501871445256,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.008584088776981117,
+          "excess_cost": 0.0006984171804142892,
+          "all_alpha_cost": [
+            0.015707697895077782,
+            0.011581613916663264,
+            0.009282505957395406,
+            0.008584088776981117,
+            0.05517859513278714
+          ],
+          "all_alpha_speed_rmse": [
+            0.12131985949328099,
+            0.10344924598188686,
+            0.08988374716457002,
+            0.0781045302531457,
+            0.07086372163257754
+          ],
+          "all_alpha_path_rmse": [
+            0.05900822609793301,
+            0.05565208118186434,
+            0.06508501871445256,
+            0.09350365304808661,
+            0.4201827855991758
+          ],
+          "fixed05_cost": 0.009282505957395406,
+          "fixed075_cost": 0.008584088776981117,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.08988374716457002,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.009282505957395406
+        }
+      ]
+    },
+    {
+      "terrain": "oblique_6cm",
+      "speed_m_s": 2.3,
+      "folds": [
+        {
+          "held_seed": 101,
+          "selected_alpha": 0.5,
+          "held_cost": 0.009444646727532,
+          "held_speed_rmse": 0.0930332511459043,
+          "held_path_rmse": 0.05271547280607041,
+          "held_oracle_alpha": 0.5,
+          "held_oracle_cost": 0.009444646727532,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.018640325088631133,
+            0.01309314236235588,
+            0.009444646727532,
+            0.02165974738290178,
+            0.05088345411390264
+          ],
+          "all_alpha_speed_rmse": [
+            0.1293950810574619,
+            0.11012955104176436,
+            0.0930332511459043,
+            0.07066487830114421,
+            0.06710219172685998
+          ],
+          "all_alpha_path_rmse": [
+            0.08172100674697697,
+            0.058270923527013005,
+            0.052715472806070376,
+            0.24220961362184407,
+            0.404056106306429
+          ],
+          "fixed05_cost": 0.009444646727532,
+          "fixed075_cost": 0.02165974738290178,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.0930332511459043,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.009444646727532
+        },
+        {
+          "held_seed": 102,
+          "selected_alpha": 0.5,
+          "held_cost": 0.00912592730923006,
+          "held_speed_rmse": 0.09171028660485837,
+          "held_path_rmse": 0.05017317181195006,
+          "held_oracle_alpha": 0.5,
+          "held_oracle_cost": 0.00912592730923006,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.019006980000891485,
+            0.012912978213327458,
+            0.00912592730923006,
+            0.02449632224090298,
+            0.03677640254721244
+          ],
+          "all_alpha_speed_rmse": [
+            0.12935099173753867,
+            0.11053407623646166,
+            0.09171028660485837,
+            0.07136735945441865,
+            0.06694402946517675
+          ],
+          "all_alpha_path_rmse": [
+            0.08949364849480501,
+            0.04946824316888127,
+            0.050173171811950065,
+            0.2613409598087631,
+            0.33716288354821916
+          ],
+          "fixed05_cost": 0.00912592730923006,
+          "fixed075_cost": 0.02449632224090298,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.09171028660485837,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.00912592730923006
+        },
+        {
+          "held_seed": 103,
+          "selected_alpha": 0.5,
+          "held_cost": 0.009376651166903066,
+          "held_speed_rmse": 0.0922368629589849,
+          "held_path_rmse": 0.05530771895522102,
+          "held_oracle_alpha": 0.5,
+          "held_oracle_cost": 0.009376651166903066,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.020049936393971297,
+            0.013206875660692199,
+            0.009376651166903066,
+            0.03811823400481008,
+            0.07409796667317166
+          ],
+          "all_alpha_speed_rmse": [
+            0.13108649749506956,
+            0.11200813851215664,
+            0.0922368629589849,
+            0.07193855778194724,
+            0.06843313237689805
+          ],
+          "all_alpha_path_rmse": [
+            0.10044563764147711,
+            0.04823816616880939,
+            0.05530771895522099,
+            0.3405296073675272,
+            0.49430961468641726
+          ],
+          "fixed05_cost": 0.009376651166903066,
+          "fixed075_cost": 0.03811823400481008,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.0922368629589849,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.009376651166903066
+        },
+        {
+          "held_seed": 104,
+          "selected_alpha": 0.5,
+          "held_cost": 0.009468101045006758,
+          "held_speed_rmse": 0.09062353348068862,
+          "held_path_rmse": 0.06647786103591505,
+          "held_oracle_alpha": 0.5,
+          "held_oracle_cost": 0.009468101045006758,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.017637683936012644,
+            0.01235735579839859,
+            0.009468101045006758,
+            0.02602549312918999,
+            0.06970334726195919
+          ],
+          "all_alpha_speed_rmse": [
+            0.1261953117138158,
+            0.10818377309593989,
+            0.09062353348068862,
+            0.07153431907975373,
+            0.06849207120140242
+          ],
+          "all_alpha_path_rmse": [
+            0.07763880719453152,
+            0.0479664740411313,
+            0.06647786103591503,
+            0.2712892025023067,
+            0.47837686352829667
+          ],
+          "fixed05_cost": 0.009468101045006758,
+          "fixed075_cost": 0.02602549312918999,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.09062353348068862,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.009468101045006758
+        },
+        {
+          "held_seed": 105,
+          "selected_alpha": 0.5,
+          "held_cost": 0.009379165346680624,
+          "held_speed_rmse": 0.08882995518050554,
+          "held_path_rmse": 0.07238244765356483,
+          "held_oracle_alpha": 0.5,
+          "held_oracle_cost": 0.009379165346680624,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.018754755866529603,
+            0.013137219603160184,
+            0.009379165346680624,
+            0.017931792546587413,
+            0.06504866767460586
+          ],
+          "all_alpha_speed_rmse": [
+            0.12849530458035574,
+            0.11170995006012438,
+            0.08882995518050554,
+            0.07060018463990966,
+            0.06656694136201204
+          ],
+          "all_alpha_path_rmse": [
+            0.08887024986482868,
+            0.048130562151025756,
+            0.07238244765356483,
+            0.21348343509179127,
+            0.4619253933844765
+          ],
+          "fixed05_cost": 0.009379165346680624,
+          "fixed075_cost": 0.017931792546587413,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.08882995518050554,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.009379165346680624
+        }
+      ]
+    },
+    {
+      "terrain": "oblique_6cm",
+      "speed_m_s": 2.6,
+      "folds": [
+        {
+          "held_seed": 101,
+          "selected_alpha": 0.5,
+          "held_cost": 0.01277185241671323,
+          "held_speed_rmse": 0.10199715212900011,
+          "held_path_rmse": 0.0913068535310278,
+          "held_oracle_alpha": 0.5,
+          "held_oracle_cost": 0.01277185241671323,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.028751211798319434,
+            0.015866836418263242,
+            0.01277185241671323,
+            0.014838567782422585,
+            0.02949329941739634
+          ],
+          "all_alpha_speed_rmse": [
+            0.15217008502452323,
+            0.11878864556981635,
+            0.10199715212900011,
+            0.08991436221156794,
+            0.07752252570982246
+          ],
+          "all_alpha_path_rmse": [
+            0.14034319176861026,
+            0.07862246993386675,
+            0.0913068535310278,
+            0.1541886916868399,
+            0.28751117826803685
+          ],
+          "fixed05_cost": 0.01277185241671323,
+          "fixed075_cost": 0.014838567782422585,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.10199715212900011,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.01277185241671323
+        },
+        {
+          "held_seed": 102,
+          "selected_alpha": 0.5,
+          "held_cost": 0.012539186559096733,
+          "held_speed_rmse": 0.10074652439791154,
+          "held_path_rmse": 0.09170866010886491,
+          "held_oracle_alpha": 0.5,
+          "held_oracle_cost": 0.012539186559096733,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.02732472815341578,
+            0.071213800727011,
+            0.012539186559096733,
+            0.015763324757996373,
+            0.015546656974375853
+          ],
+          "all_alpha_speed_rmse": [
+            0.15069459704354674,
+            0.12862560792015648,
+            0.10074652439791154,
+            0.09125018193735497,
+            0.07493230649406177
+          ],
+          "all_alpha_path_rmse": [
+            0.12746748421201395,
+            0.4386764938437013,
+            0.09170866010886487,
+            0.16179450603781254,
+            0.18697645178832825
+          ],
+          "fixed05_cost": 0.012539186559096733,
+          "fixed075_cost": 0.015763324757996373,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.10074652439791154,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.012539186559096733
+        },
+        {
+          "held_seed": 103,
+          "selected_alpha": 0.5,
+          "held_cost": 0.01384621241823774,
+          "held_speed_rmse": 0.10200462585639827,
+          "held_path_rmse": 0.11006065284017427,
+          "held_oracle_alpha": 0.75,
+          "held_oracle_cost": 0.012639948749257411,
+          "excess_cost": 0.0012062636689803286,
+          "all_alpha_cost": [
+            0.027018908640299058,
+            0.017871810890846808,
+            0.01384621241823774,
+            0.012639948749257411,
+            0.03220898718398417
+          ],
+          "all_alpha_speed_rmse": [
+            0.14839053939999675,
+            0.12339197034920016,
+            0.10200462585639827,
+            0.08804046929920047,
+            0.07639957456232264
+          ],
+          "all_alpha_path_rmse": [
+            0.13265424599705972,
+            0.09651321749381649,
+            0.11006065284017429,
+            0.13118223178160687,
+            0.3046807974444798
+          ],
+          "fixed05_cost": 0.01384621241823774,
+          "fixed075_cost": 0.012639948749257411,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.10200462585639827,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.01384621241823774
+        },
+        {
+          "held_seed": 104,
+          "selected_alpha": 0.5,
+          "held_cost": 0.013895613638688208,
+          "held_speed_rmse": 0.10281627981193998,
+          "held_path_rmse": 0.10817605565857338,
+          "held_oracle_alpha": 0.5,
+          "held_oracle_cost": 0.013895613638688208,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.02512952779256838,
+            0.015191610242463332,
+            0.013895613638688208,
+            0.013986152810154445,
+            0.015292805538519532
+          ],
+          "all_alpha_speed_rmse": [
+            0.14637300806219447,
+            0.11758869096559196,
+            0.10281627981193998,
+            0.0893596507644111,
+            0.07437781939563773
+          ],
+          "all_alpha_path_rmse": [
+            0.11419204479978033,
+            0.06930445494330016,
+            0.1081760556585734,
+            0.14533988355784852,
+            0.18535925959655422
+          ],
+          "fixed05_cost": 0.013895613638688208,
+          "fixed075_cost": 0.013986152810154445,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.10281627981193998,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.013895613638688208
+        },
+        {
+          "held_seed": 105,
+          "selected_alpha": 0.5,
+          "held_cost": 0.013631354463964402,
+          "held_speed_rmse": 0.10145376847623273,
+          "held_path_rmse": 0.10840458642390446,
+          "held_oracle_alpha": 0.5,
+          "held_oracle_cost": 0.013631354463964402,
+          "excess_cost": 0.0,
+          "all_alpha_cost": [
+            0.022720405436751818,
+            0.016499210607235158,
+            0.013631354463964402,
+            0.013739947936339612,
+            0.015947296865840583
+          ],
+          "all_alpha_speed_rmse": [
+            0.1425832937503422,
+            0.118455225899688,
+            0.10145376847623273,
+            0.08758645736768919,
+            0.07428969548709492
+          ],
+          "all_alpha_path_rmse": [
+            0.09172948800622535,
+            0.0931982027486528,
+            0.10840458642390446,
+            0.14615565755376753,
+            0.19159331009694813
+          ],
+          "fixed05_cost": 0.013631354463964402,
+          "fixed075_cost": 0.013739947936339612,
+          "constraint_selected_alpha": 0.5,
+          "held_constraint_met": true,
+          "constraint_held_speed_rmse": 0.10145376847623273,
+          "calibrated_fixed_alpha": 0.5,
+          "calibrated_fixed_cost": 0.013631354463964402
+        }
+      ]
+    }
+  ]
+}

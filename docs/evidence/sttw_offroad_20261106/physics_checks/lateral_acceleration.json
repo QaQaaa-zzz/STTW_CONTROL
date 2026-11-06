@@ -1,0 +1,502 @@
+[
+  {
+    "terrain": "flat",
+    "speed": 2.3,
+    "alpha": 0,
+    "constant_segment_s": 1.08,
+    "mean_ay": 1.893985531382539,
+    "max_200ms_ay": 2.0457565531134607,
+    "above_2p4_s": 0.0,
+    "longest_above_2p4_s": 0.0
+  },
+  {
+    "terrain": "flat",
+    "speed": 2.3,
+    "alpha": 0.25,
+    "constant_segment_s": 1.055,
+    "mean_ay": 1.969221398206119,
+    "max_200ms_ay": 2.085225185751915,
+    "above_2p4_s": 0.0,
+    "longest_above_2p4_s": 0.0
+  },
+  {
+    "terrain": "flat",
+    "speed": 2.3,
+    "alpha": 0.5,
+    "constant_segment_s": 1.035,
+    "mean_ay": 2.0822850792448304,
+    "max_200ms_ay": 2.2225046217441564,
+    "above_2p4_s": 0.0,
+    "longest_above_2p4_s": 0.0
+  },
+  {
+    "terrain": "flat",
+    "speed": 2.3,
+    "alpha": 0.75,
+    "constant_segment_s": 1.025,
+    "mean_ay": 2.1556994772975036,
+    "max_200ms_ay": 2.306476163864135,
+    "above_2p4_s": 0.0,
+    "longest_above_2p4_s": 0.0
+  },
+  {
+    "terrain": "flat",
+    "speed": 2.3,
+    "alpha": 1,
+    "constant_segment_s": 1.025,
+    "mean_ay": 2.1857406902313232,
+    "max_200ms_ay": 2.401128175854683,
+    "above_2p4_s": 0.005,
+    "longest_above_2p4_s": 0.005
+  },
+  {
+    "terrain": "oblique_2cm",
+    "speed": 2.3,
+    "alpha": 0,
+    "constant_segment_s": 1.075,
+    "mean_ay": 1.902910687479862,
+    "max_200ms_ay": 2.0634611338377,
+    "above_2p4_s": 0.0,
+    "longest_above_2p4_s": 0.0
+  },
+  {
+    "terrain": "oblique_2cm",
+    "speed": 2.3,
+    "alpha": 0.25,
+    "constant_segment_s": 1.055,
+    "mean_ay": 1.9858788304278074,
+    "max_200ms_ay": 2.115905374288559,
+    "above_2p4_s": 0.0,
+    "longest_above_2p4_s": 0.0
+  },
+  {
+    "terrain": "oblique_2cm",
+    "speed": 2.3,
+    "alpha": 0.5,
+    "constant_segment_s": 1.035,
+    "mean_ay": 2.0813551746560752,
+    "max_200ms_ay": 2.2774518996477124,
+    "above_2p4_s": 0.0,
+    "longest_above_2p4_s": 0.0
+  },
+  {
+    "terrain": "oblique_2cm",
+    "speed": 2.3,
+    "alpha": 0.75,
+    "constant_segment_s": 1.025,
+    "mean_ay": 2.1667820120802737,
+    "max_200ms_ay": 2.382525879144669,
+    "above_2p4_s": 0.0,
+    "longest_above_2p4_s": 0.0
+  },
+  {
+    "terrain": "oblique_2cm",
+    "speed": 2.3,
+    "alpha": 1,
+    "constant_segment_s": 1.02,
+    "mean_ay": 2.1957487180390776,
+    "max_200ms_ay": 2.4633441537618634,
+    "above_2p4_s": 0.195,
+    "longest_above_2p4_s": 0.075
+  },
+  {
+    "terrain": "oblique_4cm",
+    "speed": 2.3,
+    "alpha": 0,
+    "constant_segment_s": 1.075,
+    "mean_ay": 1.9019420730859735,
+    "max_200ms_ay": 2.085927999019623,
+    "above_2p4_s": 0.0,
+    "longest_above_2p4_s": 0.0
+  },
+  {
+    "terrain": "oblique_4cm",
+    "speed": 2.3,
+    "alpha": 0.25,
+    "constant_segment_s": 1.055,
+    "mean_ay": 1.9927300385813014,
+    "max_200ms_ay": 2.2119364142417908,
+    "above_2p4_s": 0.0,
+    "longest_above_2p4_s": 0.0
+  },
+  {
+    "terrain": "oblique_4cm",
+    "speed": 2.3,
+    "alpha": 0.5,
+    "constant_segment_s": 1.035,
+    "mean_ay": 2.102750155257718,
+    "max_200ms_ay": 2.400690045952797,
+    "above_2p4_s": 0.005,
+    "longest_above_2p4_s": 0.005
+  },
+  {
+    "terrain": "oblique_4cm",
+    "speed": 2.3,
+    "alpha": 0.75,
+    "constant_segment_s": 1.025,
+    "mean_ay": 2.1614244538327543,
+    "max_200ms_ay": 2.497684705257416,
+    "above_2p4_s": 0.215,
+    "longest_above_2p4_s": 0.14
+  },
+  {
+    "terrain": "oblique_4cm",
+    "speed": 2.3,
+    "alpha": 1,
+    "constant_segment_s": 1.03,
+    "mean_ay": 2.1400376004139776,
+    "max_200ms_ay": 2.5193890959024428,
+    "above_2p4_s": 0.195,
+    "longest_above_2p4_s": 0.145
+  },
+  {
+    "terrain": "oblique_6cm",
+    "speed": 2.3,
+    "alpha": 0,
+    "constant_segment_s": 1.07,
+    "mean_ay": 1.9144969045071403,
+    "max_200ms_ay": 2.268253868818283,
+    "above_2p4_s": 0.0,
+    "longest_above_2p4_s": 0.0
+  },
+  {
+    "terrain": "oblique_6cm",
+    "speed": 2.3,
+    "alpha": 0.25,
+    "constant_segment_s": 1.05,
+    "mean_ay": 2.0153531498639357,
+    "max_200ms_ay": 2.3430893361568454,
+    "above_2p4_s": 0.0,
+    "longest_above_2p4_s": 0.0
+  },
+  {
+    "terrain": "oblique_6cm",
+    "speed": 2.3,
+    "alpha": 0.5,
+    "constant_segment_s": 1.035,
+    "mean_ay": 2.0917313088181513,
+    "max_200ms_ay": 2.4784236222505567,
+    "above_2p4_s": 0.245,
+    "longest_above_2p4_s": 0.245
+  },
+  {
+    "terrain": "oblique_6cm",
+    "speed": 2.3,
+    "alpha": 0.75,
+    "constant_segment_s": 1.035,
+    "mean_ay": 2.066247278063194,
+    "max_200ms_ay": 2.5143867194652563,
+    "above_2p4_s": 0.17,
+    "longest_above_2p4_s": 0.17
+  },
+  {
+    "terrain": "oblique_6cm",
+    "speed": 2.3,
+    "alpha": 1,
+    "constant_segment_s": 1.035,
+    "mean_ay": 2.0703029228005434,
+    "max_200ms_ay": 2.443404611945152,
+    "above_2p4_s": 0.095,
+    "longest_above_2p4_s": 0.075
+  },
+  {
+    "terrain": "reverse_oblique_4cm",
+    "speed": 2.3,
+    "alpha": 0,
+    "constant_segment_s": 1.075,
+    "mean_ay": 1.9015012150927078,
+    "max_200ms_ay": 2.0718820035457615,
+    "above_2p4_s": 0.0,
+    "longest_above_2p4_s": 0.0
+  },
+  {
+    "terrain": "reverse_oblique_4cm",
+    "speed": 2.3,
+    "alpha": 0.25,
+    "constant_segment_s": 1.05,
+    "mean_ay": 2.0028178288255423,
+    "max_200ms_ay": 2.196572935581208,
+    "above_2p4_s": 0.0,
+    "longest_above_2p4_s": 0.0
+  },
+  {
+    "terrain": "reverse_oblique_4cm",
+    "speed": 2.3,
+    "alpha": 0.5,
+    "constant_segment_s": 1.04,
+    "mean_ay": 2.070958026776162,
+    "max_200ms_ay": 2.328674575686455,
+    "above_2p4_s": 0.0,
+    "longest_above_2p4_s": 0.0
+  },
+  {
+    "terrain": "reverse_oblique_4cm",
+    "speed": 2.3,
+    "alpha": 0.75,
+    "constant_segment_s": 1.03,
+    "mean_ay": 2.107786729107204,
+    "max_200ms_ay": 2.425091171264648,
+    "above_2p4_s": 0.055,
+    "longest_above_2p4_s": 0.015
+  },
+  {
+    "terrain": "reverse_oblique_4cm",
+    "speed": 2.3,
+    "alpha": 1,
+    "constant_segment_s": 1.03,
+    "mean_ay": 2.126093578172251,
+    "max_200ms_ay": 2.415994867682457,
+    "above_2p4_s": 0.015,
+    "longest_above_2p4_s": 0.01
+  },
+  {
+    "terrain": "flat",
+    "speed": 2.6,
+    "alpha": 0,
+    "constant_segment_s": 0.96,
+    "mean_ay": 2.273999028668429,
+    "max_200ms_ay": 2.3916386455297474,
+    "above_2p4_s": 0.0,
+    "longest_above_2p4_s": 0.0
+  },
+  {
+    "terrain": "flat",
+    "speed": 2.6,
+    "alpha": 0.25,
+    "constant_segment_s": 0.935,
+    "mean_ay": 2.328799893288689,
+    "max_200ms_ay": 2.4412950128316884,
+    "above_2p4_s": 0.18,
+    "longest_above_2p4_s": 0.03
+  },
+  {
+    "terrain": "flat",
+    "speed": 2.6,
+    "alpha": 0.5,
+    "constant_segment_s": 0.915,
+    "mean_ay": 2.4797797441808256,
+    "max_200ms_ay": 2.6220149576663974,
+    "above_2p4_s": 0.735,
+    "longest_above_2p4_s": 0.725
+  },
+  {
+    "terrain": "flat",
+    "speed": 2.6,
+    "alpha": 0.75,
+    "constant_segment_s": 0.92,
+    "mean_ay": 2.518782096842061,
+    "max_200ms_ay": 2.7499862253665923,
+    "above_2p4_s": 0.735,
+    "longest_above_2p4_s": 0.735
+  },
+  {
+    "terrain": "flat",
+    "speed": 2.6,
+    "alpha": 1,
+    "constant_segment_s": 0.915,
+    "mean_ay": 2.5940317774079538,
+    "max_200ms_ay": 2.8877938419580462,
+    "above_2p4_s": 0.715,
+    "longest_above_2p4_s": 0.715
+  },
+  {
+    "terrain": "oblique_2cm",
+    "speed": 2.6,
+    "alpha": 0,
+    "constant_segment_s": 0.9550000000000001,
+    "mean_ay": 2.312218347176207,
+    "max_200ms_ay": 2.5115373373031615,
+    "above_2p4_s": 0.21,
+    "longest_above_2p4_s": 0.155
+  },
+  {
+    "terrain": "oblique_2cm",
+    "speed": 2.6,
+    "alpha": 0.25,
+    "constant_segment_s": 0.935,
+    "mean_ay": 2.3756115564209894,
+    "max_200ms_ay": 2.5902333498001107,
+    "above_2p4_s": 0.43,
+    "longest_above_2p4_s": 0.375
+  },
+  {
+    "terrain": "oblique_2cm",
+    "speed": 2.6,
+    "alpha": 0.5,
+    "constant_segment_s": 0.92,
+    "mean_ay": 2.43764027590337,
+    "max_200ms_ay": 2.6556886762380603,
+    "above_2p4_s": 0.655,
+    "longest_above_2p4_s": 0.585
+  },
+  {
+    "terrain": "oblique_2cm",
+    "speed": 2.6,
+    "alpha": 0.75,
+    "constant_segment_s": 0.92,
+    "mean_ay": 2.5396116537730333,
+    "max_200ms_ay": 2.846309363842011,
+    "above_2p4_s": 0.655,
+    "longest_above_2p4_s": 0.655
+  },
+  {
+    "terrain": "oblique_2cm",
+    "speed": 2.6,
+    "alpha": 1,
+    "constant_segment_s": 0.925,
+    "mean_ay": 2.5093297685723046,
+    "max_200ms_ay": 2.882715678215027,
+    "above_2p4_s": 0.615,
+    "longest_above_2p4_s": 0.605
+  },
+  {
+    "terrain": "oblique_4cm",
+    "speed": 2.6,
+    "alpha": 0,
+    "constant_segment_s": 0.9550000000000001,
+    "mean_ay": 2.3091092911534288,
+    "max_200ms_ay": 2.557828879356384,
+    "above_2p4_s": 0.3,
+    "longest_above_2p4_s": 0.145
+  },
+  {
+    "terrain": "oblique_4cm",
+    "speed": 2.6,
+    "alpha": 0.25,
+    "constant_segment_s": 0.9400000000000001,
+    "mean_ay": 2.3567891964807792,
+    "max_200ms_ay": 2.762577924132347,
+    "above_2p4_s": 0.36,
+    "longest_above_2p4_s": 0.2
+  },
+  {
+    "terrain": "oblique_4cm",
+    "speed": 2.6,
+    "alpha": 0.5,
+    "constant_segment_s": 0.925,
+    "mean_ay": 2.4159812402584264,
+    "max_200ms_ay": 2.722927060723305,
+    "above_2p4_s": 0.52,
+    "longest_above_2p4_s": 0.275
+  },
+  {
+    "terrain": "oblique_4cm",
+    "speed": 2.6,
+    "alpha": 0.75,
+    "constant_segment_s": 0.925,
+    "mean_ay": 2.4446820595175835,
+    "max_200ms_ay": 2.8508294135332113,
+    "above_2p4_s": 0.515,
+    "longest_above_2p4_s": 0.46
+  },
+  {
+    "terrain": "oblique_4cm",
+    "speed": 2.6,
+    "alpha": 1,
+    "constant_segment_s": 0.92,
+    "mean_ay": 2.4560348182106795,
+    "max_200ms_ay": 2.952621391415597,
+    "above_2p4_s": 0.55,
+    "longest_above_2p4_s": 0.48
+  },
+  {
+    "terrain": "oblique_6cm",
+    "speed": 2.6,
+    "alpha": 0,
+    "constant_segment_s": 0.9500000000000001,
+    "mean_ay": 2.3532799129893904,
+    "max_200ms_ay": 2.848812234401703,
+    "above_2p4_s": 0.455,
+    "longest_above_2p4_s": 0.425
+  },
+  {
+    "terrain": "oblique_6cm",
+    "speed": 2.6,
+    "alpha": 0.25,
+    "constant_segment_s": 0.9400000000000001,
+    "mean_ay": 2.3824307349569938,
+    "max_200ms_ay": 2.895609125494957,
+    "above_2p4_s": 0.465,
+    "longest_above_2p4_s": 0.435
+  },
+  {
+    "terrain": "oblique_6cm",
+    "speed": 2.6,
+    "alpha": 0.5,
+    "constant_segment_s": 0.93,
+    "mean_ay": 2.349172393320709,
+    "max_200ms_ay": 2.802450159192086,
+    "above_2p4_s": 0.35000000000000003,
+    "longest_above_2p4_s": 0.24
+  },
+  {
+    "terrain": "oblique_6cm",
+    "speed": 2.6,
+    "alpha": 0.75,
+    "constant_segment_s": 0.93,
+    "mean_ay": 2.258468468335047,
+    "max_200ms_ay": 2.902289965748786,
+    "above_2p4_s": 0.26,
+    "longest_above_2p4_s": 0.17
+  },
+  {
+    "terrain": "oblique_6cm",
+    "speed": 2.6,
+    "alpha": 1,
+    "constant_segment_s": 0.93,
+    "mean_ay": 2.223495657417563,
+    "max_200ms_ay": 2.8636791525408634,
+    "above_2p4_s": 0.245,
+    "longest_above_2p4_s": 0.11
+  },
+  {
+    "terrain": "reverse_oblique_4cm",
+    "speed": 2.6,
+    "alpha": 0,
+    "constant_segment_s": 0.9550000000000001,
+    "mean_ay": 2.3113161492839223,
+    "max_200ms_ay": 2.6261591970920564,
+    "above_2p4_s": 0.265,
+    "longest_above_2p4_s": 0.145
+  },
+  {
+    "terrain": "reverse_oblique_4cm",
+    "speed": 2.6,
+    "alpha": 0.25,
+    "constant_segment_s": 0.9400000000000001,
+    "mean_ay": 2.3852003392386942,
+    "max_200ms_ay": 2.661475485563278,
+    "above_2p4_s": 0.455,
+    "longest_above_2p4_s": 0.245
+  },
+  {
+    "terrain": "reverse_oblique_4cm",
+    "speed": 2.6,
+    "alpha": 0.5,
+    "constant_segment_s": 0.925,
+    "mean_ay": 2.4089833097804236,
+    "max_200ms_ay": 2.7415377914905545,
+    "above_2p4_s": 0.49,
+    "longest_above_2p4_s": 0.29
+  },
+  {
+    "terrain": "reverse_oblique_4cm",
+    "speed": 2.6,
+    "alpha": 0.75,
+    "constant_segment_s": 0.925,
+    "mean_ay": 2.4070118790885084,
+    "max_200ms_ay": 2.8839203983545305,
+    "above_2p4_s": 0.45,
+    "longest_above_2p4_s": 0.28
+  },
+  {
+    "terrain": "reverse_oblique_4cm",
+    "speed": 2.6,
+    "alpha": 1,
+    "constant_segment_s": 0.92,
+    "mean_ay": 2.457690212104227,
+    "max_200ms_ay": 2.969693154096604,
+    "above_2p4_s": 0.58,
+    "longest_above_2p4_s": 0.58
+  }
+]

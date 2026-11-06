@@ -1,0 +1,245 @@
+{
+  "goal_xy": [
+    12.949443306871972,
+    7.052823066711426
+  ],
+  "goal_progress_m": 11.327433586120605,
+  "arrival_radius_m": 2.0,
+  "cases": [
+    {
+      "model": "original",
+      "case": "alpha0",
+      "failed": false,
+      "survived_full_window": true,
+      "goal_arrived": true,
+      "first_arrival_s": 3.739999999888241,
+      "min_goal_distance_m": 0.026604148020785912,
+      "original_path_rmse_m": 0.07129583903461056,
+      "execution_path_rmse_m": 0.0712958425283432,
+      "speed_rmse_m_s": 0.1410532295703888,
+      "peak_roll_rad": 0.24134182929992676,
+      "replans": 0,
+      "arrival_handoffs": 0,
+      "planner_seconds": 0,
+      "reward_sum": -11.318308685412607,
+      "before_goal_or_termination": {
+        "window_end_s": 3.739999999888241,
+        "end_reason": "first_goal_entry",
+        "original_path_rmse_m": 0.09552368203915156,
+        "original_path_peak_m": 0.1989055877784274,
+        "speed_rmse_m_s": 0.22854042053222656,
+        "peak_roll_rad": 0.24134182929992676
+      },
+      "domain_exit": false,
+      "policy_fault": false,
+      "common_prearrival": {
+        "window_end_s": 2.4749999998882415,
+        "original_path_rmse_m": 0.09761402826120716,
+        "original_path_peak_m": 0.1989055877784274,
+        "speed_rmse_m_s": 0.2773929834365845
+      }
+    },
+    {
+      "model": "original",
+      "case": "alpha025",
+      "failed": false,
+      "survived_full_window": true,
+      "goal_arrived": true,
+      "first_arrival_s": 3.7149999998882413,
+      "min_goal_distance_m": 0.12994674774793058,
+      "original_path_rmse_m": 0.08996236075228674,
+      "execution_path_rmse_m": 0.08996236324310303,
+      "speed_rmse_m_s": 0.12218532711267471,
+      "peak_roll_rad": 0.27086448669433594,
+      "replans": 0,
+      "arrival_handoffs": 0,
+      "planner_seconds": 0,
+      "reward_sum": -14.11682060076022,
+      "before_goal_or_termination": {
+        "window_end_s": 3.7149999998882413,
+        "end_reason": "first_goal_entry",
+        "original_path_rmse_m": 0.10266157752173434,
+        "original_path_peak_m": 0.20602703177693546,
+        "speed_rmse_m_s": 0.19748042523860931,
+        "peak_roll_rad": 0.27086448669433594
+      },
+      "domain_exit": false,
+      "policy_fault": false,
+      "common_prearrival": {
+        "window_end_s": 2.4749999998882415,
+        "original_path_rmse_m": 0.08901011078319186,
+        "original_path_peak_m": 0.1832506057828966,
+        "speed_rmse_m_s": 0.24071307480335236
+      }
+    },
+    {
+      "model": "original",
+      "case": "alpha05",
+      "failed": false,
+      "survived_full_window": true,
+      "goal_arrived": true,
+      "first_arrival_s": 3.6949999998882412,
+      "min_goal_distance_m": 0.0901807797801029,
+      "original_path_rmse_m": 0.8095563867301355,
+      "execution_path_rmse_m": 0.0864693894982338,
+      "speed_rmse_m_s": 0.09965629875659943,
+      "peak_roll_rad": 0.2791382074356079,
+      "replans": 2,
+      "arrival_handoffs": 1,
+      "planner_seconds": 0.02763722100007726,
+      "reward_sum": -10.854247799990382,
+      "before_goal_or_termination": {
+        "window_end_s": 3.6949999998882412,
+        "end_reason": "first_goal_entry",
+        "original_path_rmse_m": 0.16345398102336622,
+        "original_path_peak_m": 0.33810234104093856,
+        "speed_rmse_m_s": 0.15986767411231995,
+        "peak_roll_rad": 0.2791382074356079
+      },
+      "domain_exit": false,
+      "policy_fault": false,
+      "common_prearrival": {
+        "window_end_s": 2.4749999998882415,
+        "original_path_rmse_m": 0.08350962288035306,
+        "original_path_peak_m": 0.21736039536209015,
+        "speed_rmse_m_s": 0.1946479231119156
+      }
+    },
+    {
+      "model": "original",
+      "case": "alpha075",
+      "failed": false,
+      "survived_full_window": true,
+      "goal_arrived": true,
+      "first_arrival_s": 3.6899999998882413,
+      "min_goal_distance_m": 0.2098433701974482,
+      "original_path_rmse_m": 1.7386312260043935,
+      "execution_path_rmse_m": 0.09562919288873672,
+      "speed_rmse_m_s": 0.08756895363330841,
+      "peak_roll_rad": 0.3015928268432617,
+      "replans": 3,
+      "arrival_handoffs": 1,
+      "planner_seconds": 0.07493159900150204,
+      "reward_sum": -11.138787180581579,
+      "before_goal_or_termination": {
+        "window_end_s": 3.6899999998882413,
+        "end_reason": "first_goal_entry",
+        "original_path_rmse_m": 0.19477121857668772,
+        "original_path_peak_m": 0.41463851970134086,
+        "speed_rmse_m_s": 0.1398792266845703,
+        "peak_roll_rad": 0.3015928268432617
+      },
+      "domain_exit": false,
+      "policy_fault": false,
+      "common_prearrival": {
+        "window_end_s": 2.4749999998882415,
+        "original_path_rmse_m": 0.09117148663447182,
+        "original_path_peak_m": 0.28365864270508956,
+        "speed_rmse_m_s": 0.16999395191669464
+      }
+    },
+    {
+      "model": "original",
+      "case": "alpha1",
+      "failed": false,
+      "survived_full_window": true,
+      "goal_arrived": true,
+      "first_arrival_s": 3.7749999998882413,
+      "min_goal_distance_m": 1.111665034591,
+      "original_path_rmse_m": 4.036836897383295,
+      "execution_path_rmse_m": 0.09402085095643997,
+      "speed_rmse_m_s": 0.07745730131864548,
+      "peak_roll_rad": 0.3457685708999634,
+      "replans": 3,
+      "arrival_handoffs": 1,
+      "planner_seconds": 0.039319035999142216,
+      "reward_sum": -40.10122533174401,
+      "before_goal_or_termination": {
+        "window_end_s": 3.7749999998882413,
+        "end_reason": "first_goal_entry",
+        "original_path_rmse_m": 0.31667415219225764,
+        "original_path_peak_m": 0.6934442527098468,
+        "speed_rmse_m_s": 0.12056005001068115,
+        "peak_roll_rad": 0.3457685708999634
+      },
+      "domain_exit": false,
+      "policy_fault": false,
+      "common_prearrival": {
+        "window_end_s": 2.4749999998882415,
+        "original_path_rmse_m": 0.14542619854210273,
+        "original_path_peak_m": 0.5320952321851342,
+        "speed_rmse_m_s": 0.14663991332054138
+      }
+    },
+    {
+      "model": "original",
+      "case": "switch1to05",
+      "failed": false,
+      "survived_full_window": true,
+      "goal_arrived": true,
+      "first_arrival_s": 3.7549999998882413,
+      "min_goal_distance_m": 1.077182292078645,
+      "original_path_rmse_m": 3.8462333170756176,
+      "execution_path_rmse_m": 0.09041741490364075,
+      "speed_rmse_m_s": 0.07424262911081314,
+      "peak_roll_rad": 0.30560100078582764,
+      "replans": 3,
+      "arrival_handoffs": 1,
+      "planner_seconds": 0.03922495299957518,
+      "reward_sum": -14.78809121743033,
+      "before_goal_or_termination": {
+        "window_end_s": 3.7549999998882413,
+        "end_reason": "first_goal_entry",
+        "original_path_rmse_m": 0.25091541567865666,
+        "original_path_peak_m": 0.554142000551361,
+        "speed_rmse_m_s": 0.11631614714860916,
+        "peak_roll_rad": 0.30560100078582764
+      },
+      "domain_exit": false,
+      "policy_fault": false,
+      "common_prearrival": {
+        "window_end_s": 2.4749999998882415,
+        "original_path_rmse_m": 0.1224076063355906,
+        "original_path_peak_m": 0.4303526654152662,
+        "speed_rmse_m_s": 0.14153356850147247
+      }
+    },
+    {
+      "model": "original",
+      "case": "Zero",
+      "failed": true,
+      "survived_full_window": false,
+      "goal_arrived": false,
+      "first_arrival_s": null,
+      "min_goal_distance_m": 5.0451511623559355,
+      "original_path_rmse_m": 0.1081356484361648,
+      "execution_path_rmse_m": 0.1081356555223465,
+      "speed_rmse_m_s": 0.1563033014535904,
+      "peak_roll_rad": 0.7310643196105957,
+      "replans": 0,
+      "arrival_handoffs": 0,
+      "planner_seconds": 0,
+      "reward_sum": -4171.750462214412,
+      "before_goal_or_termination": {
+        "window_end_s": 2.4749999998882415,
+        "end_reason": "termination",
+        "original_path_rmse_m": 0.1081356484361648,
+        "original_path_peak_m": 0.3325214445636131,
+        "speed_rmse_m_s": 0.1563033014535904,
+        "peak_roll_rad": 0.7310643196105957
+      },
+      "domain_exit": false,
+      "policy_fault": false,
+      "common_prearrival": {
+        "window_end_s": 2.4749999998882415,
+        "original_path_rmse_m": 0.1081356484361648,
+        "original_path_peak_m": 0.3325214445636131,
+        "speed_rmse_m_s": 0.1563033014535904
+      }
+    }
+  ],
+  "reward_replay": {
+    "original": 4.76837158203125e-07
+  },
+  "scope": "one route and saved initial state, frozen configured parameters, DEV; no global superiority; declared original task goal disk;  full-window completion separate"
+}

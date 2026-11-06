@@ -1,0 +1,134 @@
+{
+  "source": "feasibility_metrics.json",
+  "role": "14 paired single-state DEV conditions; no new simulations",
+  "methods": [
+    {
+      "label": "alpha 0",
+      "n": 14,
+      "complete_window": 14,
+      "goal_crossed": 14,
+      "final_hold": 14
+    },
+    {
+      "label": "alpha .25",
+      "n": 14,
+      "complete_window": 14,
+      "goal_crossed": 14,
+      "final_hold": 13
+    },
+    {
+      "label": "alpha .5",
+      "n": 14,
+      "complete_window": 14,
+      "goal_crossed": 14,
+      "final_hold": 13
+    },
+    {
+      "label": "alpha .75",
+      "n": 14,
+      "complete_window": 14,
+      "goal_crossed": 14,
+      "final_hold": 11
+    },
+    {
+      "label": "alpha 1",
+      "n": 14,
+      "complete_window": 14,
+      "goal_crossed": 14,
+      "final_hold": 13
+    },
+    {
+      "label": "Zero",
+      "n": 14,
+      "complete_window": 12,
+      "goal_crossed": 14,
+      "final_hold": 3
+    }
+  ],
+  "alpha1_minus_alpha0": [
+    {
+      "terrain": "rough_1cm",
+      "speed_m_s": 2.0,
+      "path_delta_alpha1_minus0_m": 0.08799173310399055,
+      "speed_delta_alpha1_minus0_m_s": -0.051294632256031036
+    },
+    {
+      "terrain": "rough_2cm",
+      "speed_m_s": 2.0,
+      "path_delta_alpha1_minus0_m": 0.0654187761247158,
+      "speed_delta_alpha1_minus0_m_s": -0.042211852967739105
+    },
+    {
+      "terrain": "rough_3cm",
+      "speed_m_s": 2.0,
+      "path_delta_alpha1_minus0_m": 0.29281289130449295,
+      "speed_delta_alpha1_minus0_m_s": -0.04410950094461441
+    },
+    {
+      "terrain": "waves_2cm_n13",
+      "speed_m_s": 2.0,
+      "path_delta_alpha1_minus0_m": 0.050456348806619644,
+      "speed_delta_alpha1_minus0_m_s": -0.053717371076345444
+    },
+    {
+      "terrain": "waves_2cm_n26",
+      "speed_m_s": 2.0,
+      "path_delta_alpha1_minus0_m": 0.09585981070995331,
+      "speed_delta_alpha1_minus0_m_s": -0.04900464415550232
+    },
+    {
+      "terrain": "waves_4cm_n13",
+      "speed_m_s": 2.0,
+      "path_delta_alpha1_minus0_m": 0.052393458783626556,
+      "speed_delta_alpha1_minus0_m_s": -0.046146221458911896
+    },
+    {
+      "terrain": "waves_4cm_n26",
+      "speed_m_s": 2.0,
+      "path_delta_alpha1_minus0_m": 0.22544603049755096,
+      "speed_delta_alpha1_minus0_m_s": -0.025710999965667725
+    },
+    {
+      "terrain": "rough_1cm",
+      "speed_m_s": 2.3,
+      "path_delta_alpha1_minus0_m": 0.06291576102375984,
+      "speed_delta_alpha1_minus0_m_s": -0.06820468604564667
+    },
+    {
+      "terrain": "rough_2cm",
+      "speed_m_s": 2.3,
+      "path_delta_alpha1_minus0_m": 0.09267900139093399,
+      "speed_delta_alpha1_minus0_m_s": -0.05706053227186203
+    },
+    {
+      "terrain": "rough_3cm",
+      "speed_m_s": 2.3,
+      "path_delta_alpha1_minus0_m": 0.08114537224173546,
+      "speed_delta_alpha1_minus0_m_s": -0.05391418933868408
+    },
+    {
+      "terrain": "waves_2cm_n13",
+      "speed_m_s": 2.3,
+      "path_delta_alpha1_minus0_m": 0.07495855540037155,
+      "speed_delta_alpha1_minus0_m_s": -0.0682198517024517
+    },
+    {
+      "terrain": "waves_2cm_n26",
+      "speed_m_s": 2.3,
+      "path_delta_alpha1_minus0_m": 0.06550048291683197,
+      "speed_delta_alpha1_minus0_m_s": -0.059822939336299896
+    },
+    {
+      "terrain": "waves_4cm_n13",
+      "speed_m_s": 2.3,
+      "path_delta_alpha1_minus0_m": 0.10272001475095749,
+      "speed_delta_alpha1_minus0_m_s": -0.060730449855327606
+    },
+    {
+      "terrain": "waves_4cm_n26",
+      "speed_m_s": 2.3,
+      "path_delta_alpha1_minus0_m": 0.1262226663529873,
+      "speed_delta_alpha1_minus0_m_s": -0.03321210294961929
+    }
+  ]
+}

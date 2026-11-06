@@ -1,0 +1,52 @@
+{
+  "role": "DEV sensitivity using saved five parameter repeats; no new physics",
+  "calibration_conditions": "2cm and4cm at2.6m/s, ten equally weighted per-seed squared-error costs",
+  "mean_speed_squared_error": [
+    0.0196621971371036,
+    0.013614824803457614,
+    0.008443678536919047,
+    0.005389250850521271,
+    0.0036833504125694805
+  ],
+  "mean_path_squared_error": [
+    0.004401150377324371,
+    0.0050599226140387536,
+    0.010007145007364443,
+    0.01971041980783004,
+    0.03408113359437894
+  ],
+  "discrete_optimal_eta_intervals": [
+    {
+      "alpha": 0.0,
+      "eta_min_per_s": 3.0298122024957137,
+      "eta_max_per_s": null
+    },
+    {
+      "alpha": 0.25,
+      "eta_min_per_s": 1.0223808216098411,
+      "eta_max_per_s": 3.0298122024957137
+    },
+    {
+      "alpha": 0.5,
+      "eta_min_per_s": 0.5610554150826246,
+      "eta_max_per_s": 1.0223808216098411
+    },
+    {
+      "alpha": 0.75,
+      "eta_min_per_s": 0.3445384300224574,
+      "eta_max_per_s": 0.5610554150826246
+    },
+    {
+      "alpha": 1.0,
+      "eta_min_per_s": 0.0,
+      "eta_max_per_s": 0.3445384300224574
+    }
+  ],
+  "path_bound_split": {
+    "condition": "oblique4cm requested1.5m/s",
+    "alpha1_all_pass_if_bound_at_least_m": 0.26415348052978516,
+    "alpha0_all_fail_if_bound_below_m": 0.5550632476806641,
+    "full_window_s": 10,
+    "n_per_alpha": 5
+  }
+}

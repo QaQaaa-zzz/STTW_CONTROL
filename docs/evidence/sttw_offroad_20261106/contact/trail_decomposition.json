@@ -1,0 +1,616 @@
+{
+  "wheel_radii_m": [
+    0.1,
+    0.1,
+    0.025
+  ],
+  "definition": "q is the lowest support point of a nominal ellipsoid at the recorded wheel pose; p is the measured mean contact point; a is the steering axis; d is horizontal wheel-forward. T_actual=T_horizontal(q)+(p_z-q_z)*(a dot d)/a_z-(p-q) dot d+(T_normal(p)-T_horizontal(p)).",
+  "scope": "Algebraic geometry at recorded states, not simulated contact replacement, causal isolation, or exact SDF tire shape. The reference ellipsoid matches nominal asset radii; contact compliance and mesh approximation remain in p-q.",
+  "rows": [
+    {
+      "support_prediction": {
+        "raised_samples": 37,
+        "true_positive": 1,
+        "false_negative": 2,
+        "false_positive": 1,
+        "true_negative": 33,
+        "trail_rmse_m": 0.004569913142063952,
+        "contact_point_rmse_m": 0.004909829701846616
+      },
+      "run": "runs/h75_trail_verification/evaluation/oblique_6cm_v2p3/evaluation",
+      "alpha": 0,
+      "speed_m_s": 2.3,
+      "raised_negative_samples": 3,
+      "negative_with_positive_flat_support": 3,
+      "negative_also_horizontal": 3,
+      "closure_max_m": 4.1050037620678215e-07,
+      "at_minimum": {
+        "time_s": 1.625,
+        "predicted_ellipsoid_trail_m": -0.001101919275487133,
+        "reference_flat_support_m": 0.02473771982021694,
+        "contact_height_term_m": -0.0025192895533914543,
+        "contact_forward_term_m": -0.027931194309246184,
+        "normal_plane_term_m": 0.00045724512780130795,
+        "actual_trail_m": -0.005255624897328645
+      },
+      "negative_samples": [
+        {
+          "time_s": 1.58,
+          "predicted_ellipsoid_trail_m": 0.007039939613884591,
+          "reference_flat_support_m": 0.02181979896674492,
+          "contact_height_term_m": -0.0016504475381831625,
+          "contact_forward_term_m": -0.02115906887592989,
+          "normal_plane_term_m": -5.881278790858852e-05,
+          "actual_trail_m": -0.0010484602268377567
+        },
+        {
+          "time_s": 1.625,
+          "predicted_ellipsoid_trail_m": -0.001101919275487133,
+          "reference_flat_support_m": 0.02473771982021694,
+          "contact_height_term_m": -0.0025192895533914543,
+          "contact_forward_term_m": -0.027931194309246184,
+          "normal_plane_term_m": 0.00045724512780130795,
+          "actual_trail_m": -0.005255624897328645
+        },
+        {
+          "time_s": 1.6500000000000001,
+          "predicted_ellipsoid_trail_m": 0.004735029404234564,
+          "reference_flat_support_m": 0.028374848951507187,
+          "contact_height_term_m": -0.002791238684451953,
+          "contact_forward_term_m": -0.02879684410489266,
+          "normal_plane_term_m": -2.770741860673963e-05,
+          "actual_trail_m": -0.003240696945572501
+        }
+      ]
+    },
+    {
+      "support_prediction": {
+        "raised_samples": 38,
+        "true_positive": 3,
+        "false_negative": 5,
+        "false_positive": 0,
+        "true_negative": 30,
+        "trail_rmse_m": 0.004579645535309292,
+        "contact_point_rmse_m": 0.004984019687676655
+      },
+      "run": "runs/h75_trail_verification/evaluation/oblique_6cm_v2p3/evaluation",
+      "alpha": 0.25,
+      "speed_m_s": 2.3,
+      "raised_negative_samples": 8,
+      "negative_with_positive_flat_support": 8,
+      "negative_also_horizontal": 8,
+      "closure_max_m": 3.981902690491923e-07,
+      "at_minimum": {
+        "time_s": 1.61,
+        "predicted_ellipsoid_trail_m": -0.0011258696832384327,
+        "reference_flat_support_m": 0.025057136530139898,
+        "contact_height_term_m": -0.0029230669397215625,
+        "contact_forward_term_m": -0.028212704993284904,
+        "normal_plane_term_m": 0.0005422101222773432,
+        "actual_trail_m": -0.005536179537096235
+      },
+      "negative_samples": [
+        {
+          "time_s": 1.56,
+          "predicted_ellipsoid_trail_m": 0.009769569422612173,
+          "reference_flat_support_m": 0.021955380344561556,
+          "contact_height_term_m": -0.0015486339450871763,
+          "contact_forward_term_m": -0.0224716075142119,
+          "normal_plane_term_m": 8.543218858815278e-05,
+          "actual_trail_m": -0.0019792342143857924
+        },
+        {
+          "time_s": 1.605,
+          "predicted_ellipsoid_trail_m": -0.0016884758320380444,
+          "reference_flat_support_m": 0.024454747664422224,
+          "contact_height_term_m": -0.002187706106644614,
+          "contact_forward_term_m": -0.024611759255769406,
+          "normal_plane_term_m": 0.00017054166539099032,
+          "actual_trail_m": -0.002174465114406083
+        },
+        {
+          "time_s": 1.61,
+          "predicted_ellipsoid_trail_m": -0.0011258696832384327,
+          "reference_flat_support_m": 0.025057136530139898,
+          "contact_height_term_m": -0.0029230669397215625,
+          "contact_forward_term_m": -0.028212704993284904,
+          "normal_plane_term_m": 0.0005422101222773432,
+          "actual_trail_m": -0.005536179537096235
+        },
+        {
+          "time_s": 1.615,
+          "predicted_ellipsoid_trail_m": -0.00041891366372791283,
+          "reference_flat_support_m": 0.025827723420305912,
+          "contact_height_term_m": -0.002906595907698271,
+          "contact_forward_term_m": -0.027737902427459472,
+          "normal_plane_term_m": 0.00033943684043073047,
+          "actual_trail_m": -0.004477283955574828
+        },
+        {
+          "time_s": 1.62,
+          "predicted_ellipsoid_trail_m": 0.0002933243647629258,
+          "reference_flat_support_m": 0.026603083431269048,
+          "contact_height_term_m": -0.0028472196515136805,
+          "contact_forward_term_m": -0.027085811669187457,
+          "normal_plane_term_m": 0.0002591105420695545,
+          "actual_trail_m": -0.0030709829317909056
+        },
+        {
+          "time_s": 1.625,
+          "predicted_ellipsoid_trail_m": 0.000921012629159855,
+          "reference_flat_support_m": 0.02728772903018417,
+          "contact_height_term_m": -0.0027715614024977223,
+          "contact_forward_term_m": -0.025704774683621267,
+          "normal_plane_term_m": 0.0002095767607749211,
+          "actual_trail_m": -0.0009787320290380224
+        },
+        {
+          "time_s": 1.635,
+          "predicted_ellipsoid_trail_m": 0.0021818753803964502,
+          "reference_flat_support_m": 0.028662772601004194,
+          "contact_height_term_m": -0.002915407406721427,
+          "contact_forward_term_m": -0.027020326687128955,
+          "normal_plane_term_m": 6.886928140793758e-05,
+          "actual_trail_m": -0.0012044850896300988
+        },
+        {
+          "time_s": 1.655,
+          "predicted_ellipsoid_trail_m": 0.011395636206737655,
+          "reference_flat_support_m": 0.031279144605091194,
+          "contact_height_term_m": -0.003238209125583388,
+          "contact_forward_term_m": -0.033293665755881115,
+          "normal_plane_term_m": 0.00020430344775927527,
+          "actual_trail_m": -0.0050486498806635825
+        }
+      ]
+    },
+    {
+      "support_prediction": {
+        "raised_samples": 37,
+        "true_positive": 2,
+        "false_negative": 1,
+        "false_positive": 0,
+        "true_negative": 34,
+        "trail_rmse_m": 0.004913222242033922,
+        "contact_point_rmse_m": 0.005219847146668849
+      },
+      "run": "runs/h75_trail_verification/evaluation/oblique_6cm_v2p3/evaluation",
+      "alpha": 0.5,
+      "speed_m_s": 2.3,
+      "raised_negative_samples": 3,
+      "negative_with_positive_flat_support": 3,
+      "negative_also_horizontal": 3,
+      "closure_max_m": 4.367673085456207e-07,
+      "at_minimum": {
+        "time_s": 1.605,
+        "predicted_ellipsoid_trail_m": 0.00042385880775184376,
+        "reference_flat_support_m": 0.02702022943467318,
+        "contact_height_term_m": -0.0035059600708924215,
+        "contact_forward_term_m": -0.030899519738032438,
+        "normal_plane_term_m": 0.0006186808712731456,
+        "actual_trail_m": -0.006766513335691485
+      },
+      "negative_samples": [
+        {
+          "time_s": 1.595,
+          "predicted_ellipsoid_trail_m": -0.0007522063399483664,
+          "reference_flat_support_m": 0.02572089123992223,
+          "contact_height_term_m": -0.0025650772056719316,
+          "contact_forward_term_m": -0.02528069948669521,
+          "normal_plane_term_m": 0.00012077869721545224,
+          "actual_trail_m": -0.0020039487741633152
+        },
+        {
+          "time_s": 1.6,
+          "predicted_ellipsoid_trail_m": -0.0001530306061006681,
+          "reference_flat_support_m": 0.02638443607370329,
+          "contact_height_term_m": -0.0028060111871103352,
+          "contact_forward_term_m": -0.02586808458268609,
+          "normal_plane_term_m": 0.0001722630998672245,
+          "actual_trail_m": -0.002117833363534455
+        },
+        {
+          "time_s": 1.605,
+          "predicted_ellipsoid_trail_m": 0.00042385880775184376,
+          "reference_flat_support_m": 0.02702022943467318,
+          "contact_height_term_m": -0.0035059600708924215,
+          "contact_forward_term_m": -0.030899519738032438,
+          "normal_plane_term_m": 0.0006186808712731456,
+          "actual_trail_m": -0.006766513335691485
+        }
+      ]
+    },
+    {
+      "support_prediction": {
+        "raised_samples": 34,
+        "true_positive": 1,
+        "false_negative": 3,
+        "false_positive": 0,
+        "true_negative": 30,
+        "trail_rmse_m": 0.004057506944349218,
+        "contact_point_rmse_m": 0.004602092463823781
+      },
+      "run": "runs/h75_trail_verification/evaluation/oblique_6cm_v2p3/evaluation",
+      "alpha": 0.75,
+      "speed_m_s": 2.3,
+      "raised_negative_samples": 4,
+      "negative_with_positive_flat_support": 4,
+      "negative_also_horizontal": 4,
+      "closure_max_m": 4.46361994019262e-07,
+      "at_minimum": {
+        "time_s": 1.58,
+        "predicted_ellipsoid_trail_m": -0.00045325698032084444,
+        "reference_flat_support_m": 0.02619026982119335,
+        "contact_height_term_m": -0.0027432778040212854,
+        "contact_forward_term_m": -0.029246720665556187,
+        "normal_plane_term_m": 0.00045736572748921595,
+        "actual_trail_m": -0.005342438691239576
+      },
+      "negative_samples": [
+        {
+          "time_s": 1.58,
+          "predicted_ellipsoid_trail_m": -0.00045325698032084444,
+          "reference_flat_support_m": 0.02619026982119335,
+          "contact_height_term_m": -0.0027432778040212854,
+          "contact_forward_term_m": -0.029246720665556187,
+          "normal_plane_term_m": 0.00045736572748921595,
+          "actual_trail_m": -0.005342438691239576
+        },
+        {
+          "time_s": 1.585,
+          "predicted_ellipsoid_trail_m": 8.323580193284053e-05,
+          "reference_flat_support_m": 0.026787445943284333,
+          "contact_height_term_m": -0.0029791711646699783,
+          "contact_forward_term_m": -0.02844049594991418,
+          "normal_plane_term_m": 0.0003095614588735137,
+          "actual_trail_m": -0.004322694851818908
+        },
+        {
+          "time_s": 1.595,
+          "predicted_ellipsoid_trail_m": 0.0013634613916732596,
+          "reference_flat_support_m": 0.028230095010899348,
+          "contact_height_term_m": -0.002948159572464381,
+          "contact_forward_term_m": -0.02630439719492507,
+          "normal_plane_term_m": 7.087717581461309e-05,
+          "actual_trail_m": -0.0009516315903735301
+        },
+        {
+          "time_s": 1.605,
+          "predicted_ellipsoid_trail_m": 0.0025100849720812307,
+          "reference_flat_support_m": 0.029523223808478452,
+          "contact_height_term_m": -0.003375229319155704,
+          "contact_forward_term_m": -0.028468932210007767,
+          "normal_plane_term_m": 0.00014887301054644772,
+          "actual_trail_m": -0.0021716294736707116
+        }
+      ]
+    },
+    {
+      "support_prediction": {
+        "raised_samples": 28,
+        "true_positive": 0,
+        "false_negative": 4,
+        "false_positive": 0,
+        "true_negative": 24,
+        "trail_rmse_m": 0.0039534915289484085,
+        "contact_point_rmse_m": 0.004424636806738951
+      },
+      "run": "runs/h75_trail_verification/evaluation/oblique_6cm_v2p3/evaluation",
+      "alpha": 1,
+      "speed_m_s": 2.3,
+      "raised_negative_samples": 4,
+      "negative_with_positive_flat_support": 4,
+      "negative_also_horizontal": 4,
+      "closure_max_m": 4.226676709392918e-07,
+      "at_minimum": {
+        "time_s": 1.58,
+        "predicted_ellipsoid_trail_m": 0.0008513696958020317,
+        "reference_flat_support_m": 0.02769464048863282,
+        "contact_height_term_m": -0.003259002524144266,
+        "contact_forward_term_m": -0.02935352438774263,
+        "normal_plane_term_m": 0.00040566395134282625,
+        "actual_trail_m": -0.00451231435241655
+      },
+      "negative_samples": [
+        {
+          "time_s": 1.575,
+          "predicted_ellipsoid_trail_m": 0.0002594509296740752,
+          "reference_flat_support_m": 0.027025984263188488,
+          "contact_height_term_m": -0.0026389166228619537,
+          "contact_forward_term_m": -0.026601558272135326,
+          "normal_plane_term_m": 0.00014184384093224268,
+          "actual_trail_m": -0.0020729214732433826
+        },
+        {
+          "time_s": 1.58,
+          "predicted_ellipsoid_trail_m": 0.0008513696958020317,
+          "reference_flat_support_m": 0.02769464048863282,
+          "contact_height_term_m": -0.003259002524144266,
+          "contact_forward_term_m": -0.02935352438774263,
+          "normal_plane_term_m": 0.00040566395134282625,
+          "actual_trail_m": -0.00451231435241655
+        },
+        {
+          "time_s": 1.59,
+          "predicted_ellipsoid_trail_m": 0.0021040229616100525,
+          "reference_flat_support_m": 0.02911841109157845,
+          "contact_height_term_m": -0.0031703090233849503,
+          "contact_forward_term_m": -0.02686838797787578,
+          "normal_plane_term_m": 8.665868465426762e-05,
+          "actual_trail_m": -0.0008338645814102912
+        },
+        {
+          "time_s": 1.595,
+          "predicted_ellipsoid_trail_m": 0.002688829218338157,
+          "reference_flat_support_m": 0.02978643627958802,
+          "contact_height_term_m": -0.0034138921476807174,
+          "contact_forward_term_m": -0.027809103632921797,
+          "normal_plane_term_m": 0.0002201069775249144,
+          "actual_trail_m": -0.0012165605467534615
+        }
+      ]
+    },
+    {
+      "support_prediction": {
+        "raised_samples": 30,
+        "true_positive": 2,
+        "false_negative": 1,
+        "false_positive": 0,
+        "true_negative": 27,
+        "trail_rmse_m": 0.0042447011217571695,
+        "contact_point_rmse_m": 0.004770872385648035
+      },
+      "run": "runs/h75_trail_verification/evaluation/oblique_6cm_v2p6/evaluation",
+      "alpha": 0,
+      "speed_m_s": 2.6,
+      "raised_negative_samples": 3,
+      "negative_with_positive_flat_support": 3,
+      "negative_also_horizontal": 3,
+      "closure_max_m": 4.2696266964320495e-07,
+      "at_minimum": {
+        "time_s": 1.465,
+        "predicted_ellipsoid_trail_m": -0.001850277785020553,
+        "reference_flat_support_m": 0.02426331240560549,
+        "contact_height_term_m": -0.0029767611323440308,
+        "contact_forward_term_m": -0.03171088582334513,
+        "normal_plane_term_m": 0.0008258956591516414,
+        "actual_trail_m": -0.009598865853601672
+      },
+      "negative_samples": [
+        {
+          "time_s": 1.465,
+          "predicted_ellipsoid_trail_m": -0.001850277785020553,
+          "reference_flat_support_m": 0.02426331240560549,
+          "contact_height_term_m": -0.0029767611323440308,
+          "contact_forward_term_m": -0.03171088582334513,
+          "normal_plane_term_m": 0.0008258956591516414,
+          "actual_trail_m": -0.009598865853601672
+        },
+        {
+          "time_s": 1.475,
+          "predicted_ellipsoid_trail_m": -0.000503221208604375,
+          "reference_flat_support_m": 0.02571088660105031,
+          "contact_height_term_m": -0.003128099671767625,
+          "contact_forward_term_m": -0.029241507394232095,
+          "normal_plane_term_m": 0.0006697434376960187,
+          "actual_trail_m": -0.005989257742111592
+        },
+        {
+          "time_s": 1.49,
+          "predicted_ellipsoid_trail_m": 0.00410665754446457,
+          "reference_flat_support_m": 0.02799532559012481,
+          "contact_height_term_m": -0.0025593767677258967,
+          "contact_forward_term_m": -0.025963809556694847,
+          "normal_plane_term_m": -0.0002461167490484,
+          "actual_trail_m": -0.0007742602982164461
+        }
+      ]
+    },
+    {
+      "support_prediction": {
+        "raised_samples": 29,
+        "true_positive": 1,
+        "false_negative": 2,
+        "false_positive": 2,
+        "true_negative": 24,
+        "trail_rmse_m": 0.004791452278242368,
+        "contact_point_rmse_m": 0.0052569859154533065
+      },
+      "run": "runs/h75_trail_verification/evaluation/oblique_6cm_v2p6/evaluation",
+      "alpha": 0.25,
+      "speed_m_s": 2.6,
+      "raised_negative_samples": 3,
+      "negative_with_positive_flat_support": 3,
+      "negative_also_horizontal": 3,
+      "closure_max_m": 3.6489351694281996e-07,
+      "at_minimum": {
+        "time_s": 1.455,
+        "predicted_ellipsoid_trail_m": -0.0016806102497674072,
+        "reference_flat_support_m": 0.02466074098118186,
+        "contact_height_term_m": -0.0029417418236127204,
+        "contact_forward_term_m": -0.02898882868930175,
+        "normal_plane_term_m": 0.0005641774211232456,
+        "actual_trail_m": -0.0067060170041263086
+      },
+      "negative_samples": [
+        {
+          "time_s": 1.455,
+          "predicted_ellipsoid_trail_m": -0.0016806102497674072,
+          "reference_flat_support_m": 0.02466074098118186,
+          "contact_height_term_m": -0.0029417418236127204,
+          "contact_forward_term_m": -0.02898882868930175,
+          "normal_plane_term_m": 0.0005641774211232456,
+          "actual_trail_m": -0.0067060170041263086
+        },
+        {
+          "time_s": 1.47,
+          "predicted_ellipsoid_trail_m": 0.0005374934032730538,
+          "reference_flat_support_m": 0.02705579039100585,
+          "contact_height_term_m": -0.003136866390195475,
+          "contact_forward_term_m": -0.0282882419414281,
+          "normal_plane_term_m": 0.0004205245696630947,
+          "actual_trail_m": -0.003948994731697407
+        },
+        {
+          "time_s": 1.495,
+          "predicted_ellipsoid_trail_m": 0.010796913312132353,
+          "reference_flat_support_m": 0.030733543574851155,
+          "contact_height_term_m": -0.0031239796441036773,
+          "contact_forward_term_m": -0.032830792622481404,
+          "normal_plane_term_m": 0.000313793032814853,
+          "actual_trail_m": -0.004907369803906266
+        }
+      ]
+    },
+    {
+      "support_prediction": {
+        "raised_samples": 26,
+        "true_positive": 1,
+        "false_negative": 2,
+        "false_positive": 1,
+        "true_negative": 22,
+        "trail_rmse_m": 0.006321738748611634,
+        "contact_point_rmse_m": 0.006512877179624044
+      },
+      "run": "runs/h75_trail_verification/evaluation/oblique_6cm_v2p6/evaluation",
+      "alpha": 0.5,
+      "speed_m_s": 2.6,
+      "raised_negative_samples": 3,
+      "negative_with_positive_flat_support": 3,
+      "negative_also_horizontal": 3,
+      "closure_max_m": 4.336228987102467e-07,
+      "at_minimum": {
+        "time_s": 1.45,
+        "predicted_ellipsoid_trail_m": 0.00039346871939031913,
+        "reference_flat_support_m": 0.027252462804030153,
+        "contact_height_term_m": -0.003463995848987156,
+        "contact_forward_term_m": -0.031086346947871706,
+        "normal_plane_term_m": 0.0005958791803769917,
+        "actual_trail_m": -0.006702076407843254
+      },
+      "negative_samples": [
+        {
+          "time_s": 1.44,
+          "predicted_ellipsoid_trail_m": -0.0010314511462319112,
+          "reference_flat_support_m": 0.025661783845751712,
+          "contact_height_term_m": -0.0022773788377565608,
+          "contact_forward_term_m": -0.023708708958721007,
+          "normal_plane_term_m": 9.725247255232717e-05,
+          "actual_trail_m": -0.00022721518372452194
+        },
+        {
+          "time_s": 1.45,
+          "predicted_ellipsoid_trail_m": 0.00039346871939031913,
+          "reference_flat_support_m": 0.027252462804030153,
+          "contact_height_term_m": -0.003463995848987156,
+          "contact_forward_term_m": -0.031086346947871706,
+          "normal_plane_term_m": 0.0005958791803769917,
+          "actual_trail_m": -0.006702076407843254
+        },
+        {
+          "time_s": 1.465,
+          "predicted_ellipsoid_trail_m": 0.002366102812842677,
+          "reference_flat_support_m": 0.029464839377467633,
+          "contact_height_term_m": -0.0031257040234709686,
+          "contact_forward_term_m": -0.027707053530174157,
+          "normal_plane_term_m": 0.00020475536284386155,
+          "actual_trail_m": -0.0011629617056903138
+        }
+      ]
+    },
+    {
+      "support_prediction": {
+        "raised_samples": 29,
+        "true_positive": 1,
+        "false_negative": 2,
+        "false_positive": 0,
+        "true_negative": 26,
+        "trail_rmse_m": 0.0032695153758629937,
+        "contact_point_rmse_m": 0.0040253039242976255
+      },
+      "run": "runs/h75_trail_verification/evaluation/oblique_6cm_v2p6/evaluation",
+      "alpha": 0.75,
+      "speed_m_s": 2.6,
+      "raised_negative_samples": 3,
+      "negative_with_positive_flat_support": 3,
+      "negative_also_horizontal": 3,
+      "closure_max_m": 4.312628684062514e-07,
+      "at_minimum": {
+        "time_s": 1.435,
+        "predicted_ellipsoid_trail_m": 5.3731046707694574e-05,
+        "reference_flat_support_m": 0.02696558480952127,
+        "contact_height_term_m": -0.0029734201010761237,
+        "contact_forward_term_m": -0.02770687603287334,
+        "normal_plane_term_m": 0.0002776694870214218,
+        "actual_trail_m": -0.003436610574538367
+      },
+      "negative_samples": [
+        {
+          "time_s": 1.43,
+          "predicted_ellipsoid_trail_m": -0.0006905790420266289,
+          "reference_flat_support_m": 0.026126074943214894,
+          "contact_height_term_m": -0.0026450820841240974,
+          "contact_forward_term_m": -0.026595064048560903,
+          "normal_plane_term_m": 0.0003042044803088081,
+          "actual_trail_m": -0.002809702236767471
+        },
+        {
+          "time_s": 1.435,
+          "predicted_ellipsoid_trail_m": 5.3731046707694574e-05,
+          "reference_flat_support_m": 0.02696558480952127,
+          "contact_height_term_m": -0.0029734201010761237,
+          "contact_forward_term_m": -0.02770687603287334,
+          "normal_plane_term_m": 0.0002776694870214218,
+          "actual_trail_m": -0.003436610574538367
+        },
+        {
+          "time_s": 1.44,
+          "predicted_ellipsoid_trail_m": 0.0008437292919676181,
+          "reference_flat_support_m": 0.027856564314665808,
+          "contact_height_term_m": -0.003136478113174048,
+          "contact_forward_term_m": -0.028332515277702815,
+          "normal_plane_term_m": 0.0002738226080193861,
+          "actual_trail_m": -0.0033386323622974895
+        }
+      ]
+    },
+    {
+      "support_prediction": {
+        "raised_samples": 19,
+        "true_positive": 0,
+        "false_negative": 1,
+        "false_positive": 0,
+        "true_negative": 18,
+        "trail_rmse_m": 0.004245785042212601,
+        "contact_point_rmse_m": 0.004957026992136422
+      },
+      "run": "runs/h75_trail_verification/evaluation/oblique_6cm_v2p6/evaluation",
+      "alpha": 1,
+      "speed_m_s": 2.6,
+      "raised_negative_samples": 1,
+      "negative_with_positive_flat_support": 1,
+      "negative_also_horizontal": 1,
+      "closure_max_m": 4.188308984321657e-07,
+      "at_minimum": {
+        "time_s": 1.435,
+        "predicted_ellipsoid_trail_m": 0.0016217571873446412,
+        "reference_flat_support_m": 0.028758245558715215,
+        "contact_height_term_m": -0.0031182654414468763,
+        "contact_forward_term_m": -0.027325770719110343,
+        "normal_plane_term_m": 0.0001431143446654563,
+        "actual_trail_m": -0.0015423371303208686
+      },
+      "negative_samples": [
+        {
+          "time_s": 1.435,
+          "predicted_ellipsoid_trail_m": 0.0016217571873446412,
+          "reference_flat_support_m": 0.028758245558715215,
+          "contact_height_term_m": -0.0031182654414468763,
+          "contact_forward_term_m": -0.027325770719110343,
+          "normal_plane_term_m": 0.0001431143446654563,
+          "actual_trail_m": -0.0015423371303208686
+        }
+      ]
+    }
+  ]
+}

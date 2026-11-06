@@ -1,0 +1,359 @@
+{
+  "roll_penalty_start_rad": 0.26,
+  "roll_penalty_equivalent_ay": 2.6096713243346636,
+  "working_roll_start_rad": 0.3,
+  "working_roll_equivalent_ay": 3.034588608670404,
+  "roll_at_2p4": 0.239935478217234,
+  "means": [
+    {
+      "terrain": "flat",
+      "speed": 2.3,
+      "alpha": 0,
+      "ay": 1.8941458463668823,
+      "roll_deg": 11.010614395141602
+    },
+    {
+      "terrain": "flat",
+      "speed": 2.3,
+      "alpha": 0.25,
+      "ay": 1.9725680351257324,
+      "roll_deg": 11.487159729003906
+    },
+    {
+      "terrain": "flat",
+      "speed": 2.3,
+      "alpha": 0.5,
+      "ay": 2.0891852378845215,
+      "roll_deg": 12.194219589233398
+    },
+    {
+      "terrain": "flat",
+      "speed": 2.3,
+      "alpha": 0.75,
+      "ay": 2.1621575355529785,
+      "roll_deg": 12.623316764831543
+    },
+    {
+      "terrain": "flat",
+      "speed": 2.3,
+      "alpha": 1,
+      "ay": 2.1929500102996826,
+      "roll_deg": 12.80130672454834
+    },
+    {
+      "terrain": "oblique_2cm",
+      "speed": 2.3,
+      "alpha": 0,
+      "ay": 1.906030535697937,
+      "roll_deg": 11.101188659667969
+    },
+    {
+      "terrain": "oblique_2cm",
+      "speed": 2.3,
+      "alpha": 0.25,
+      "ay": 1.9924041032791138,
+      "roll_deg": 11.633234977722168
+    },
+    {
+      "terrain": "oblique_2cm",
+      "speed": 2.3,
+      "alpha": 0.5,
+      "ay": 2.089808940887451,
+      "roll_deg": 12.254653930664062
+    },
+    {
+      "terrain": "oblique_2cm",
+      "speed": 2.3,
+      "alpha": 0.75,
+      "ay": 2.1757216453552246,
+      "roll_deg": 12.747161865234375
+    },
+    {
+      "terrain": "oblique_2cm",
+      "speed": 2.3,
+      "alpha": 1,
+      "ay": 2.205940008163452,
+      "roll_deg": 12.931220054626465
+    },
+    {
+      "terrain": "oblique_4cm",
+      "speed": 2.3,
+      "alpha": 0,
+      "ay": 1.9076130390167236,
+      "roll_deg": 11.178353309631348
+    },
+    {
+      "terrain": "oblique_4cm",
+      "speed": 2.3,
+      "alpha": 0.25,
+      "ay": 2.003080368041992,
+      "roll_deg": 11.799413681030273
+    },
+    {
+      "terrain": "oblique_4cm",
+      "speed": 2.3,
+      "alpha": 0.5,
+      "ay": 2.1140434741973877,
+      "roll_deg": 12.483070373535156
+    },
+    {
+      "terrain": "oblique_4cm",
+      "speed": 2.3,
+      "alpha": 0.75,
+      "ay": 2.178557872772217,
+      "roll_deg": 12.876139640808105
+    },
+    {
+      "terrain": "oblique_4cm",
+      "speed": 2.3,
+      "alpha": 1,
+      "ay": 2.155815839767456,
+      "roll_deg": 12.760795593261719
+    },
+    {
+      "terrain": "oblique_6cm",
+      "speed": 2.3,
+      "alpha": 0,
+      "ay": 1.9246729612350464,
+      "roll_deg": 11.386853218078613
+    },
+    {
+      "terrain": "oblique_6cm",
+      "speed": 2.3,
+      "alpha": 0.25,
+      "ay": 2.029597043991089,
+      "roll_deg": 12.032995223999023
+    },
+    {
+      "terrain": "oblique_6cm",
+      "speed": 2.3,
+      "alpha": 0.5,
+      "ay": 2.110403537750244,
+      "roll_deg": 12.52281665802002
+    },
+    {
+      "terrain": "oblique_6cm",
+      "speed": 2.3,
+      "alpha": 0.75,
+      "ay": 2.080479383468628,
+      "roll_deg": 12.46066951751709
+    },
+    {
+      "terrain": "oblique_6cm",
+      "speed": 2.3,
+      "alpha": 1,
+      "ay": 2.089665412902832,
+      "roll_deg": 12.479930877685547
+    },
+    {
+      "terrain": "reverse_oblique_4cm",
+      "speed": 2.3,
+      "alpha": 0,
+      "ay": 1.9087296724319458,
+      "roll_deg": 11.191858291625977
+    },
+    {
+      "terrain": "reverse_oblique_4cm",
+      "speed": 2.3,
+      "alpha": 0.25,
+      "ay": 2.0110325813293457,
+      "roll_deg": 11.861687660217285
+    },
+    {
+      "terrain": "reverse_oblique_4cm",
+      "speed": 2.3,
+      "alpha": 0.5,
+      "ay": 2.0843071937561035,
+      "roll_deg": 12.297935485839844
+    },
+    {
+      "terrain": "reverse_oblique_4cm",
+      "speed": 2.3,
+      "alpha": 0.75,
+      "ay": 2.121013641357422,
+      "roll_deg": 12.570206642150879
+    },
+    {
+      "terrain": "reverse_oblique_4cm",
+      "speed": 2.3,
+      "alpha": 1,
+      "ay": 2.140746593475342,
+      "roll_deg": 12.675006866455078
+    },
+    {
+      "terrain": "flat",
+      "speed": 2.6,
+      "alpha": 0,
+      "ay": 2.2804558277130127,
+      "roll_deg": 13.286845207214355
+    },
+    {
+      "terrain": "flat",
+      "speed": 2.6,
+      "alpha": 0.25,
+      "ay": 2.327500343322754,
+      "roll_deg": 13.667470932006836
+    },
+    {
+      "terrain": "flat",
+      "speed": 2.6,
+      "alpha": 0.5,
+      "ay": 2.486582040786743,
+      "roll_deg": 14.552116394042969
+    },
+    {
+      "terrain": "flat",
+      "speed": 2.6,
+      "alpha": 0.75,
+      "ay": 2.52327299118042,
+      "roll_deg": 14.7808256149292
+    },
+    {
+      "terrain": "flat",
+      "speed": 2.6,
+      "alpha": 1,
+      "ay": 2.6078145503997803,
+      "roll_deg": 15.21156120300293
+    },
+    {
+      "terrain": "oblique_2cm",
+      "speed": 2.6,
+      "alpha": 0,
+      "ay": 2.324446678161621,
+      "roll_deg": 13.571612358093262
+    },
+    {
+      "terrain": "oblique_2cm",
+      "speed": 2.6,
+      "alpha": 0.25,
+      "ay": 2.38771390914917,
+      "roll_deg": 14.008135795593262
+    },
+    {
+      "terrain": "oblique_2cm",
+      "speed": 2.6,
+      "alpha": 0.5,
+      "ay": 2.451638698577881,
+      "roll_deg": 14.394412994384766
+    },
+    {
+      "terrain": "oblique_2cm",
+      "speed": 2.6,
+      "alpha": 0.75,
+      "ay": 2.558506727218628,
+      "roll_deg": 14.984918594360352
+    },
+    {
+      "terrain": "oblique_2cm",
+      "speed": 2.6,
+      "alpha": 1,
+      "ay": 2.523613214492798,
+      "roll_deg": 14.828537940979004
+    },
+    {
+      "terrain": "oblique_4cm",
+      "speed": 2.6,
+      "alpha": 0,
+      "ay": 2.329705238342285,
+      "roll_deg": 13.655539512634277
+    },
+    {
+      "terrain": "oblique_4cm",
+      "speed": 2.6,
+      "alpha": 0.25,
+      "ay": 2.373765707015991,
+      "roll_deg": 13.993672370910645
+    },
+    {
+      "terrain": "oblique_4cm",
+      "speed": 2.6,
+      "alpha": 0.5,
+      "ay": 2.4377710819244385,
+      "roll_deg": 14.43277645111084
+    },
+    {
+      "terrain": "oblique_4cm",
+      "speed": 2.6,
+      "alpha": 0.75,
+      "ay": 2.4688727855682373,
+      "roll_deg": 14.65740966796875
+    },
+    {
+      "terrain": "oblique_4cm",
+      "speed": 2.6,
+      "alpha": 1,
+      "ay": 2.4731366634368896,
+      "roll_deg": 14.706156730651855
+    },
+    {
+      "terrain": "oblique_6cm",
+      "speed": 2.6,
+      "alpha": 0,
+      "ay": 2.376340627670288,
+      "roll_deg": 14.028468132019043
+    },
+    {
+      "terrain": "oblique_6cm",
+      "speed": 2.6,
+      "alpha": 0.25,
+      "ay": 2.4106693267822266,
+      "roll_deg": 14.283567428588867
+    },
+    {
+      "terrain": "oblique_6cm",
+      "speed": 2.6,
+      "alpha": 0.5,
+      "ay": 2.3796205520629883,
+      "roll_deg": 14.229022979736328
+    },
+    {
+      "terrain": "oblique_6cm",
+      "speed": 2.6,
+      "alpha": 0.75,
+      "ay": 2.2847414016723633,
+      "roll_deg": 13.695433616638184
+    },
+    {
+      "terrain": "oblique_6cm",
+      "speed": 2.6,
+      "alpha": 1,
+      "ay": 2.2528367042541504,
+      "roll_deg": 13.586145401000977
+    },
+    {
+      "terrain": "reverse_oblique_4cm",
+      "speed": 2.6,
+      "alpha": 0,
+      "ay": 2.3321664333343506,
+      "roll_deg": 13.69687557220459
+    },
+    {
+      "terrain": "reverse_oblique_4cm",
+      "speed": 2.6,
+      "alpha": 0.25,
+      "ay": 2.3970558643341064,
+      "roll_deg": 14.172131538391113
+    },
+    {
+      "terrain": "reverse_oblique_4cm",
+      "speed": 2.6,
+      "alpha": 0.5,
+      "ay": 2.4332358837127686,
+      "roll_deg": 14.37193775177002
+    },
+    {
+      "terrain": "reverse_oblique_4cm",
+      "speed": 2.6,
+      "alpha": 0.75,
+      "ay": 2.42767071723938,
+      "roll_deg": 14.430679321289062
+    },
+    {
+      "terrain": "reverse_oblique_4cm",
+      "speed": 2.6,
+      "alpha": 1,
+      "ay": 2.4780449867248535,
+      "roll_deg": 14.692488670349121
+    }
+  ]
+}
