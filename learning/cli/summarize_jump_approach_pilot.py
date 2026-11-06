@@ -16,20 +16,21 @@ if a.include_comparison_references:
 skills=sorted({c['skill'] for c in m['cases'] if 'skill' in c})
 sequences=any('second_candidate' in c for c in m['cases'])
 for c in m['cases']:
+ c['origin_id']=json.loads(Path(c['config']).read_text())['origin_id']
  if sequences:c.update(speed_m_s=c['second_candidate']['speed_m_s'],alpha=c['second_candidate']['alpha'])
  c['panel_key']=(c['distance_m'],c['first_candidate']['speed_m_s'],c['first_candidate']['alpha']) if sequences else (c['distance_m'],)
-panels=sorted({tuple(c['panel_key']) for c in m['cases']});figures={}
+panels={origin:sorted({tuple(c['panel_key']) for c in m['cases'] if c['origin_id']==origin}) for origin in {c['origin_id'] for c in m['cases']}};figures={}
 for c in m['cases']:
  spec=json.loads(Path(c['config']).read_text());origin=spec['origin_id'];run=Path(spec['output']);row=dict(c,origin_id=origin,status='pending',complete=None)
  summary=run/'chain_summary.json'
  if summary.exists():
-  if origin not in figures:figures[origin]=plt.subplots(len(panels),2,figsize=(12,4*len(panels)),squeeze=False,layout='constrained')
+  if origin not in figures:figures[origin]=plt.subplots(len(panels[origin]),2,figsize=(12,4*len(panels[origin])),squeeze=False,layout='constrained')
   fig,axes=figures[origin]
   result=json.loads(summary.read_text());row.update(status='evaluated',complete=result['complete'],success_time_s=result['success_time_s'],checks=result['checks'],max_original_path_error_m=result['max_original_path_error_m'],stages=result.get('stages'),stage_times=result.get('stage_times'))
   decision=run/'connection_decision.json';handoff=run/'handoff.json'
   row['decision']=json.loads(decision.read_text()) if decision.exists() else None
   row['handoff']=json.loads(handoff.read_text()) if handoff.exists() else None
-  d=np.load(run/'trajectory.npz');t=d['trace'][d['valid'][:,0],0];i=panels.index(tuple(c['panel_key']));color={0.:'tab:blue',.5:'tab:orange',1.:'tab:green'}[c['alpha']];style='--' if c['speed_m_s']==1.8 else '-';label=f"v={c['speed_m_s']}, alpha={c['alpha']}"+(" after midpoint" if sequences else "")
+  d=np.load(run/'trajectory.npz');t=d['trace'][d['valid'][:,0],0];i=panels[origin].index(tuple(c['panel_key']));color={0.:'tab:blue',.5:'tab:orange',1.:'tab:green'}[c['alpha']];style='--' if c['speed_m_s']==1.8 else '-';label=f"v={c['speed_m_s']}, alpha={c['alpha']}"+(" after midpoint" if sequences else "")
   if skills:
    color=plt.get_cmap('tab10')(skills.index(c['skill']));label=c['skill']+' | '+label
   row['observed_duration_s']=float(t[-1,0])
@@ -50,7 +51,8 @@ for c in m['cases']:
    if row[key] is None:continue
    event=row[key];root=np.asarray(event['root'])[0];qx,qy,qz,qw=root[3:7];yaw=np.arctan2(2*(qw*qz+qx*qy),1-2*(qy*qy+qz*qz));sample=t[np.argmin(np.abs(t[:,0]-event['time']))]
    row[key+'_state']=dict(time_s=event['time'],x_m=float(root[0]),y_m=float(root[1]),forward_speed_m_s=float(sample[4]),lateral_velocity_heading_frame_m_s=float(-np.sin(yaw)*root[7]+np.cos(yaw)*root[8]),heading_rad=float(yaw),world_yaw_rate_rad_s=float(root[12]),roll_rad=float(sample[5]),roll_rate_rad_s=float(sample[6]),steer_rad=float(sample[7]),steer_rate_rad_s=float(sample[8]))
-  if row['decision'] is not None:prefixes[c['case_id']]=t[t[:,0]<=row['decision']['time']+.000001]
+  prefix_event=row['handoff'] if skills else row['decision']
+  if prefix_event is not None:prefixes[c['case_id']]=t[t[:,0]<=prefix_event['time']+.000001]
   axes[i,0].plot(t[:,1],t[:,2],style,color=color,label=label);axes[i,0].plot(t[-1,1],t[-1,2],'x',color=color)
   axes[i,1].plot(t[:,0],t[:,4],style,color=color,label=label)
   if not axes[i,0].get_title():
@@ -59,7 +61,7 @@ for c in m['cases']:
  elif (run/'results.json').exists():row['status']='simulation_complete_analysis_pending'
  elif (run/'runtime.log').exists():row['status']='started_no_final_result'
  rows.append(row)
-baselines={origin:next((r['case_id'] for r in rows if r['origin_id']==origin and r['speed_m_s']==2. and r['alpha']==.5 and r['case_id'] in prefixes),None) for origin in figures}
+baselines={origin:next((r['case_id'] for r in rows if r['origin_id']==origin and r['speed_m_s']==2. and r['alpha']==.5 and r['case_id'] in prefixes),next((r['case_id'] for r in rows if r['origin_id']==origin and r['case_id'] in prefixes),None)) for origin in figures}
 for row in rows:
  baseline=baselines.get(row['origin_id'])
  if baseline is None or row['case_id'] not in prefixes:continue
