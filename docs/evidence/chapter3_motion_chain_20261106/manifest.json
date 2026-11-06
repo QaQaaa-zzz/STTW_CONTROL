@@ -1,11 +1,15 @@
 {
+  "CONFIGURATION.md": {
+    "bytes": 4084,
+    "sha256": "475ac1971120b99c35683315885adc9e50ab29baf5ce68c70ba3d6ba2464edbf"
+  },
   "LEDGER_SNAPSHOT.md": {
     "bytes": 46485,
     "sha256": "6f89584fab41271a0606393821f037455bbf66ae626cfc8e5619750efd35cfde"
   },
   "RESULTS.md": {
-    "bytes": 4848,
-    "sha256": "5a14b533e2d69697f5653f40cc35f9c4b8609e1bbcf97e5c1349570cb747426c"
+    "bytes": 4941,
+    "sha256": "60383e8ca2f85cd97f5a6d662eb1b715e819d382e67cd7b65fac7c93c7cc4520"
   },
   "attempts.json": {
     "bytes": 6195,
@@ -74,6 +78,14 @@
   "model_config.json": {
     "bytes": 533,
     "sha256": "f1dadeb11737ba4b36a747a785dfecfdc3321fcf358a37d64b43fb691f0f3938"
+  },
+  "physical_model/ellipsoid_0.07_0.07_0.025.obj": {
+    "bytes": 20573,
+    "sha256": "63d7eff217bcbf973b23443d3af6f5015d4cb115482f0ba86aa5435d8263cbba"
+  },
+  "physical_model/vehicle.urdf": {
+    "bytes": 5774,
+    "sha256": "e2a293b36859d1fece61c2dd6a15116e3847689c378934eaa170aa4472789a5e"
   },
   "protocol.json": {
     "bytes": 24764,

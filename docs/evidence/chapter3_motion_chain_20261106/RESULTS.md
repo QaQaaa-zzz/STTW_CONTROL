@@ -57,3 +57,5 @@ python learning/cli/plot_isaac_pendulum_jump.py --run "$RUN"
 第三章实时台账为项目 `research-hub/CHAPTER3_PROJECT_STATE.md`；本目录只作为可分享证据快照，不替代台账。第一章及其他线程内容没有在此改写。
 
 详细运行、ECBC、地面策略配置及两策略身份集中在 [configuration](configuration/)。[第三章台账快照](LEDGER_SNAPSHOT.md)保留已做尝试、失败及下一步；后续以本地实时台账为准。
+
+[模型、400Hz仿真、200Hz底层、50Hz策略及交接详细说明](CONFIGURATION.md)。
