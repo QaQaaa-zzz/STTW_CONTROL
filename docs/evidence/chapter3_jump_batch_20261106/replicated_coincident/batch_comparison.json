@@ -1,0 +1,386 @@
+{
+  "role": "Same-root engineering batch comparison; not independent task improvement or an isolated hardware benchmark",
+  "batch_elapsed_s": 113.15173784500075,
+  "saved_single_elapsed_sum_s": 462.524016258998,
+  "observed_elapsed_ratio": 4.087643946684935,
+  "differing_observation_windows": 6,
+  "timing_interpretation": "Elapsed ratio only: early failures change workload; no speedup claim without comparable task behavior and windows",
+  "single_complete_count": 3,
+  "batch_complete_count": 0,
+  "matching_full_task_labels": 3,
+  "cases": [
+    {
+      "lane": 0,
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "reference_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v2.0_a0.5.json",
+      "single_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v2.0_a0.5",
+      "batch_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_batch_pilot/replicated_coincident/evaluation/lane_00",
+      "single_complete": true,
+      "batch_complete": false,
+      "single_checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "batch_checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "single_T_s": 14.899999618530273,
+      "batch_T_s": null,
+      "single_duration_s": 22.0,
+      "batch_duration_s": 2.200000047683716,
+      "single_samples": 1635,
+      "batch_samples": 111,
+      "matched_time_samples": 111,
+      "matched_time_end_s": 2.200000047683716,
+      "xy_rmse_m": 0.09985896944999695,
+      "xy_max_m": 0.2393770068883896,
+      "speed_rmse_m_s": 0.17644546926021576,
+      "first_state_difference_over_1e_6_s": 0.019999999552965164,
+      "events": {
+        "connection_decision": {
+          "single": 5.22,
+          "batch": null
+        },
+        "handoff": {
+          "single": 9.16,
+          "batch": null
+        },
+        "landing_ready": {
+          "single": 12.02,
+          "batch": null
+        },
+        "landing_handoff": {
+          "single": 12.72,
+          "batch": null
+        }
+      }
+    },
+    {
+      "lane": 1,
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "reference_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v1.8_a0.0.json",
+      "single_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v1.8_a0.0",
+      "batch_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_batch_pilot/replicated_coincident/evaluation/lane_01",
+      "single_complete": false,
+      "batch_complete": false,
+      "single_checks": {
+        "full_window": false,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "batch_checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "single_T_s": null,
+      "batch_T_s": null,
+      "single_duration_s": 11.125,
+      "batch_duration_s": 2.200000047683716,
+      "single_samples": 780,
+      "batch_samples": 111,
+      "matched_time_samples": 111,
+      "matched_time_end_s": 2.200000047683716,
+      "xy_rmse_m": 0.09985896944999695,
+      "xy_max_m": 0.2393770068883896,
+      "speed_rmse_m_s": 0.17644546926021576,
+      "first_state_difference_over_1e_6_s": 0.019999999552965164,
+      "events": {
+        "connection_decision": {
+          "single": 5.22,
+          "batch": null
+        },
+        "handoff": {
+          "single": 9.64,
+          "batch": null
+        },
+        "landing_ready": {
+          "single": null,
+          "batch": null
+        },
+        "landing_handoff": {
+          "single": null,
+          "batch": null
+        }
+      }
+    },
+    {
+      "lane": 2,
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "reference_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v1.8_a0.5.json",
+      "single_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v1.8_a0.5",
+      "batch_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_batch_pilot/replicated_coincident/evaluation/lane_02",
+      "single_complete": true,
+      "batch_complete": false,
+      "single_checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "batch_checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "single_T_s": 15.100000381469727,
+      "batch_T_s": null,
+      "single_duration_s": 22.0,
+      "batch_duration_s": 2.200000047683716,
+      "single_samples": 1587,
+      "batch_samples": 111,
+      "matched_time_samples": 111,
+      "matched_time_end_s": 2.200000047683716,
+      "xy_rmse_m": 0.09985896944999695,
+      "xy_max_m": 0.2393770068883896,
+      "speed_rmse_m_s": 0.17644546926021576,
+      "first_state_difference_over_1e_6_s": 0.019999999552965164,
+      "events": {
+        "connection_decision": {
+          "single": 5.22,
+          "batch": null
+        },
+        "handoff": {
+          "single": 9.58,
+          "batch": null
+        },
+        "landing_ready": {
+          "single": 12.155000000000001,
+          "batch": null
+        },
+        "landing_handoff": {
+          "single": 12.82,
+          "batch": null
+        }
+      }
+    },
+    {
+      "lane": 3,
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "reference_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v1.8_a1.0.json",
+      "single_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v1.8_a1.0",
+      "batch_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_batch_pilot/replicated_coincident/evaluation/lane_03",
+      "single_complete": false,
+      "batch_complete": false,
+      "single_checks": {
+        "full_window": false,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "batch_checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "single_T_s": null,
+      "batch_T_s": null,
+      "single_duration_s": 11.15999984741211,
+      "batch_duration_s": 2.200000047683716,
+      "single_samples": 799,
+      "batch_samples": 111,
+      "matched_time_samples": 111,
+      "matched_time_end_s": 2.200000047683716,
+      "xy_rmse_m": 0.09985896944999695,
+      "xy_max_m": 0.2393770068883896,
+      "speed_rmse_m_s": 0.17644546926021576,
+      "first_state_difference_over_1e_6_s": 0.019999999552965164,
+      "events": {
+        "connection_decision": {
+          "single": 5.22,
+          "batch": null
+        },
+        "handoff": {
+          "single": 9.56,
+          "batch": null
+        },
+        "landing_ready": {
+          "single": null,
+          "batch": null
+        },
+        "landing_handoff": {
+          "single": null,
+          "batch": null
+        }
+      }
+    },
+    {
+      "lane": 4,
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "reference_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v2.0_a0.0.json",
+      "single_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v2.0_a0.0",
+      "batch_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_batch_pilot/replicated_coincident/evaluation/lane_04",
+      "single_complete": true,
+      "batch_complete": false,
+      "single_checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "batch_checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "single_T_s": 16.100000381469727,
+      "batch_T_s": null,
+      "single_duration_s": 22.0,
+      "batch_duration_s": 2.200000047683716,
+      "single_samples": 1836,
+      "batch_samples": 111,
+      "matched_time_samples": 111,
+      "matched_time_end_s": 2.200000047683716,
+      "xy_rmse_m": 0.09985896944999695,
+      "xy_max_m": 0.2393770068883896,
+      "speed_rmse_m_s": 0.17644546926021576,
+      "first_state_difference_over_1e_6_s": 0.019999999552965164,
+      "events": {
+        "connection_decision": {
+          "single": 5.22,
+          "batch": null
+        },
+        "handoff": {
+          "single": 9.200000000000001,
+          "batch": null
+        },
+        "landing_ready": {
+          "single": 13.3,
+          "batch": null
+        },
+        "landing_handoff": {
+          "single": 14.1,
+          "batch": null
+        }
+      }
+    },
+    {
+      "lane": 5,
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "reference_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v2.0_a1.0.json",
+      "single_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v2.0_a1.0",
+      "batch_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_batch_pilot/replicated_coincident/evaluation/lane_05",
+      "single_complete": false,
+      "batch_complete": false,
+      "single_checks": {
+        "full_window": false,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "batch_checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": false,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "single_T_s": null,
+      "batch_T_s": null,
+      "single_duration_s": 10.420000076293945,
+      "batch_duration_s": 11.875,
+      "single_samples": 711,
+      "batch_samples": 825,
+      "matched_time_samples": 534,
+      "matched_time_end_s": 10.420000076293945,
+      "xy_rmse_m": 1.8655507564544678,
+      "xy_max_m": 2.6817545890808105,
+      "speed_rmse_m_s": 0.2794022858142853,
+      "first_state_difference_over_1e_6_s": 0.019999999552965164,
+      "events": {
+        "connection_decision": {
+          "single": 5.22,
+          "batch": 6.36
+        },
+        "handoff": {
+          "single": 9.16,
+          "batch": 10.34
+        },
+        "landing_ready": {
+          "single": null,
+          "batch": null
+        },
+        "landing_handoff": {
+          "single": null,
+          "batch": null
+        }
+      }
+    }
+  ],
+  "limits": "Matched stored timestamps only; different observed windows remain explicit. Wall times collected under shared-machine load and different initialization scopes. Speed alone does not establish behavioral compatibility."
+}

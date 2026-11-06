@@ -17,3 +17,9 @@
 ## 零平移、外部地形模式：未采用
 
 六条全部在2.24秒提前结束，尚未到出口决策。采样22.816秒来自提前失败，不能当有效加速。各lane相互一致但与原单环境不同；具体原因待查。保留[逐候选对比](coincident_origins/batch_comparison.json)和[实际XY](coincident_origins/batch_vs_single_xy.png)。下一诊断复用已有原生replicated地形模式，其结果尚未收取。
+
+## 零平移、原生replicated地形：未采用
+
+6条均未完成；5条2.20秒结束，另一条11.875秒结束。113.152秒采样对应改变后的失败窗口，不是加速证据。见[全部判据](replicated_coincident/batch_comparison.json)及[真实XY](replicated_coincident/batch_vs_single_xy.png)。本轮停止追加批量布局诊断，继续原单环境入口执行第二来源36序列。
+
+比较工具将耗时比明确命名为`observed_elapsed_ratio`并列出观察窗口不同的条数，避免早失败被误读为加速；图中候选数和频率从实际协议读取。此前三次原始报告保留历史字段，采用状态以本页明确结论为准。

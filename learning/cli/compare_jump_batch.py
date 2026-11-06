@@ -50,11 +50,13 @@ for axis,title in zip(axes,('Saved single-lane execution','Mixed-phase GPU batch
     axis.plot(route[:,0],route[:,1],':',color='gray',label='Original route')
     axis.set(title=title,xlabel='World x (m)',ylabel='World y (m)',aspect='equal')
     axis.grid(alpha=.2);axis.legend(fontsize=8)
-fig.suptitle(f"{spec['origin_id']} | frozen H75 + {spec['skills'][0]} | 400/200/50 Hz\nAll six candidates; crosses are observed endpoints; original full-task criteria unchanged")
+fig.suptitle(f"{spec['origin_id']} | frozen H75 + {spec['skills'][0]} | {1/protocol['physics_dt']:g}/{1/protocol['ground_dt']:g}/{1/protocol['jump_dt']:g} Hz\n{len(rows)} candidates; crosses are observed endpoints; original full-task criteria unchanged")
 fig.savefig(a.run/'batch_vs_single_xy.png',dpi=150)
 result=dict(role='Same-root engineering batch comparison; not independent task improvement or an isolated hardware benchmark',
     batch_elapsed_s=batch['elapsed_s'],saved_single_elapsed_sum_s=single_elapsed,
-    observed_sampling_speed_ratio=single_elapsed/batch['elapsed_s'],
+    observed_elapsed_ratio=single_elapsed/batch['elapsed_s'],
+    differing_observation_windows=sum(abs(r['single_duration_s']-r['batch_duration_s'])>1e-5 for r in rows),
+    timing_interpretation='Elapsed ratio only: early failures change workload; no speedup claim without comparable task behavior and windows',
     single_complete_count=sum(r['single_complete'] for r in rows),batch_complete_count=sum(r['batch_complete'] for r in rows),
     matching_full_task_labels=sum(r['single_complete']==r['batch_complete'] for r in rows),cases=rows,
     limits='Matched stored timestamps only; different observed windows remain explicit. Wall times collected under shared-machine load and different initialization scopes. Speed alone does not establish behavioral compatibility.')
