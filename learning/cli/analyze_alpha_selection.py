@@ -43,6 +43,8 @@ for (terrain,speed),samples in groups.items():
   per_seed_best_counts=[int(sum(r['cost_best_alpha']==x for r in per_seed)) for x in alpha],
   alpha075_minus05_cost_mean=float(gap.mean()),alpha075_minus05_cost_sd=float(gap.std(ddof=1)),
   alpha075_beats05_count=int((gap<0).sum()),alpha075_vs05_cost_change_percent=float(100*gap.mean()/mean[2]),
+  per_alpha_feasible_seed_counts=np.sum(np.array(survival)&(np.array(peaks)<=a.path_bound),axis=0).tolist(),
+  peak_path_range_m=np.stack((np.min(peaks,axis=0),np.max(peaks,axis=0)),axis=1).tolist(),
   full_window_feasible_alpha=alpha[candidates].tolist(),constraint_selected_alpha=float(alpha[selected]) if selected is not None else None,
   per_seed=per_seed))
 output=dict(role='DEV repetition check; offline task-rule selection, not an online alpha planner',eta_per_s=a.eta,path_bound_m=a.path_bound,
@@ -63,6 +65,9 @@ lines=['# Alpha selection: two distinct task rules','','[Actual/reference trajec
  '|---|---:|---:|---:|---:|---:|---:|---|---|']
 for r in result:
  lines.append(f"|{r['terrain']}|{r['speed_m_s']:g}|{r['n']}|{r['common_window_s']:.3f}|{r['cost_best_alpha']:g}|{r['alpha075_vs05_cost_change_percent']:+.2f}|{r['alpha075_beats05_count']}/{r['n']}|{r['full_window_feasible_alpha']}|{r['constraint_selected_alpha']}|")
+lines += ['', '## Full-window bound feasibility', '', 'Counts require a full10s observation without termination and peak absolute center-path error within the declared bound. They are not fall counts or automatic proof of goal completion. All five parameter repeats and all five alpha levels are retained.', '', '|Terrain|Speed m/s|Counts for alpha0/.25/.5/.75/1|Denominator per alpha|', '|---|---:|---|---:|']
+for r in result:
+ lines.append(f"|{r['terrain']}|{r['speed_m_s']:g}|{' / '.join(map(str,r['per_alpha_feasible_seed_counts']))}|{r['n']}|")
 lines += ['', '## Calibration-condition repetition', '', f"For {a.calibration_terrains} at {a.calibration_speed:g}m/s, the repeated mean-cost choice is alpha={output['calibration_repetition']['cost_best_alpha']:g}; .75 versus .5 cost change is {output['calibration_repetition']['alpha075_vs05_cost_change_percent']:+.2f}%. Common full-window bound-feasible levels are {sorted(common_feasible)}, giving alpha={constraint_choice} under the speed-priority constrained rule. These are task-conditioned choices, not a universal optimum.", '', 'Negative percentage favors .75; positive favors .5. No feasible candidate is reported as None rather than forcing a recommendation. These are paired physical-parameter repeats of one trained policy, not independent training seeds or a significance test.']
 (a.evaluation/'ALPHA_SELECTION.md').write_text('\n'.join(lines)+'\n')
 print(json.dumps(dict(panels=len(result),cost_best_counts={str(x):int(sum(r['cost_best_alpha']==x for r in result)) for x in alpha},bound_choice_counts={str(x):int(sum(r['constraint_selected_alpha']==x for r in result)) for x in [*alpha,None]})))
