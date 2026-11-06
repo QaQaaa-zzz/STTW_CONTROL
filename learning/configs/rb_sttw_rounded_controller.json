@@ -1,7 +1,7 @@
 {
   "fixed_roll_reference": null,
   "dt": 0.005,
-  "wo": 40.0,
+  "wo": 10.0,
   "wc": 8.0,
   "disturbance_filter": 8.0,
   "minimum_speed": 0.5,

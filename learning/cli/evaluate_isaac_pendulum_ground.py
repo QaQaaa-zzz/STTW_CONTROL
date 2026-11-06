@@ -18,6 +18,7 @@ substeps=round(.005/options.get('physics_dt',.0002))
 cases=spec['cases'];n=len(cases);steps=round(spec['duration_s']/.005)
 plant=IsaacLabVectorPlant(a.asset,['plane'],[0]*n,a.output,pendulum_rest=[-1.2,2.499999],pendulum_locked=spec.get('pendulum_locked',False),**options)
 if any('controller_wc' in case for case in cases):cfg['wc']=[case.get('controller_wc',cfg['wc']) for case in cases]
+if any('controller_wo' in case for case in cases):cfg['wo']=[case.get('controller_wo',cfg['wo']) for case in cases]
 if any('feedback_gain_scale' in case for case in cases):cfg['feedback_gain_scale']=[case.get('feedback_gain_scale',[1.,1.,1.]) for case in cases]
 if any('roll_rate_filter_hz' in case for case in cases):cfg['roll_rate_filter_hz']=[case.get('roll_rate_filter_hz',0.) for case in cases]
 if any('roll_reference_scale' in case for case in cases):cfg['roll_reference_scale']=[case.get('roll_reference_scale',1.) for case in cases]

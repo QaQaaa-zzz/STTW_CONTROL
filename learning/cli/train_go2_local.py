@@ -82,9 +82,9 @@ if s.get('initialize_from_local_actor', False):
         for layer, (weight, bias) in zip(layers, env.history.weights):
             layer.weight.copy_(weight.T)
             layer.bias.copy_(bias)
-    (a.output/'training').mkdir(exist_ok=True)
-    runner.save(str(a.output/'training/model_initial.pt'),
-                infos=dict(completed_updates=0, initialization='original Local300 actor; fresh critic/optimizer/std'))
+(a.output/'training').mkdir(exist_ok=True)
+runner.save(str(a.output/'training/model_initial.pt'),
+            infos=dict(completed_updates=0, initialization=s.get('initialization','fresh actor/critic/optimizer')))
 # Observe the native PPO update boundary to score the model that actually
 # collected this rollout. Sampling, losses and optimizer remain upstream.
 upstream_update = runner.alg.update

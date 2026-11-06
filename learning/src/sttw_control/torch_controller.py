@@ -15,7 +15,8 @@ def _floor_magnitude(value, floor):
 class TorchController:
     def __init__(self, config, count, device='cpu', dtype=torch.float32):
         self.config = dict(config)
-        if isinstance(config["wc"],list):self.config["wc"]=torch.tensor(config["wc"],device=device,dtype=dtype)
+        for key in ("wc","wo"):
+            if isinstance(config[key],list):self.config[key]=torch.tensor(config[key],device=device,dtype=dtype)
         self.feedback_gain_scale=torch.tensor(config.get('feedback_gain_scale',[1.,1.,1.]),device=device,dtype=dtype)
         self.roll_reference_scale=torch.tensor(config.get('roll_reference_scale',1.),device=device,dtype=dtype)
         self.roll_rate_filter_hz=torch.tensor(config.get('roll_rate_filter_hz',0.),device=device,dtype=dtype)
