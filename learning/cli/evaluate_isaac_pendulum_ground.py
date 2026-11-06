@@ -17,6 +17,7 @@ options.update(spec.get('plant_options',{}));radius=options.get('wheel_radius_m'
 substeps=round(.005/options.get('physics_dt',.0002))
 cases=spec['cases'];n=len(cases);steps=round(spec['duration_s']/.005)
 plant=IsaacLabVectorPlant(a.asset,['plane'],[0]*n,a.output,pendulum_rest=[-1.2,2.499999],pendulum_locked=spec.get('pendulum_locked',False),**options)
+if any('controller_wc' in case for case in cases):cfg['wc']=[case.get('controller_wc',cfg['wc']) for case in cases]
 controller=TorchController(cfg,n,'cuda:0')
 from sttw_control.torch_local_lower import TorchLocalLower
 from sttw_control.torch_path_reference import wrap

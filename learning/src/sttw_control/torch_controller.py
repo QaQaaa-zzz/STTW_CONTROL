@@ -15,6 +15,7 @@ def _floor_magnitude(value, floor):
 class TorchController:
     def __init__(self, config, count, device='cpu', dtype=torch.float32):
         self.config = dict(config)
+        if isinstance(config["wc"],list):self.config["wc"]=torch.tensor(config["wc"],device=device,dtype=dtype)
         self.eso = torch.zeros(count, 4, device=device, dtype=dtype)
         self.disturbance = torch.zeros(count, device=device, dtype=dtype)
         self.gains = torch.zeros(count, 3, device=device, dtype=dtype)
