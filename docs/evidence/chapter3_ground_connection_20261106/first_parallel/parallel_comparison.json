@@ -1,0 +1,140 @@
+{
+  "sequential_elapsed_s": 1271.1463058350018,
+  "parallel_elapsed_s": 641.8726125480025,
+  "observed_ratio": 1.9803716204513073,
+  "rows": [
+    {
+      "task": "left90_R2_connection_hold_v1_L1.0_W2.0",
+      "candidate": "v1.5_a0.0",
+      "sequential_complete": 1,
+      "parallel_complete": 1,
+      "sequential_time": 3.700000047683716,
+      "parallel_time": 3.700000047683716,
+      "xy_rmse_m": 0.052892863750457764,
+      "max_xy_m": 0.11491616070270538,
+      "max_speed_difference": 0.03927898406982422
+    },
+    {
+      "task": "left90_R2_connection_hold_v1_L1.0_W2.0",
+      "candidate": "v1.5_a0.5",
+      "sequential_complete": 1,
+      "parallel_complete": 1,
+      "sequential_time": 3.680000066757202,
+      "parallel_time": 3.680000066757202,
+      "xy_rmse_m": 0.011230546049773693,
+      "max_xy_m": 0.025018611922860146,
+      "max_speed_difference": 0.028525114059448242
+    },
+    {
+      "task": "left90_R2_connection_hold_v1_L1.0_W2.0",
+      "candidate": "v1.5_a1.0",
+      "sequential_complete": 1,
+      "parallel_complete": 1,
+      "sequential_time": 3.6600000858306885,
+      "parallel_time": 3.6600000858306885,
+      "xy_rmse_m": 0.08750350028276443,
+      "max_xy_m": 0.16744448244571686,
+      "max_speed_difference": 0.11170792579650879
+    },
+    {
+      "task": "left90_R2_connection_hold_v1_L1.0_W2.0",
+      "candidate": "v2.3_a0.0",
+      "sequential_complete": 1,
+      "parallel_complete": 1,
+      "sequential_time": 3.3399999141693115,
+      "parallel_time": 3.3399999141693115,
+      "xy_rmse_m": 0.03837810456752777,
+      "max_xy_m": 0.06340698897838593,
+      "max_speed_difference": 0.0307924747467041
+    },
+    {
+      "task": "left90_R2_connection_hold_v1_L1.0_W2.0",
+      "candidate": "v2.3_a0.5",
+      "sequential_complete": 1,
+      "parallel_complete": 1,
+      "sequential_time": 3.319999933242798,
+      "parallel_time": 3.319999933242798,
+      "xy_rmse_m": 0.0115766366943717,
+      "max_xy_m": 0.016781827434897423,
+      "max_speed_difference": 0.01871323585510254
+    },
+    {
+      "task": "left90_R2_connection_hold_v1_L1.0_W2.0",
+      "candidate": "v2.3_a1.0",
+      "sequential_complete": 1,
+      "parallel_complete": 1,
+      "sequential_time": 3.319999933242798,
+      "parallel_time": 3.319999933242798,
+      "xy_rmse_m": 0.06666838377714157,
+      "max_xy_m": 0.1367959976196289,
+      "max_speed_difference": 0.029590368270874023
+    },
+    {
+      "task": "right90_R2_connection_hold_v1_L1.0_W2.0",
+      "candidate": "v1.5_a0.0",
+      "sequential_complete": 1,
+      "parallel_complete": 1,
+      "sequential_time": 3.640000104904175,
+      "parallel_time": 3.640000104904175,
+      "xy_rmse_m": 0.04568891227245331,
+      "max_xy_m": 0.10546381026506424,
+      "max_speed_difference": 0.07239151000976562
+    },
+    {
+      "task": "right90_R2_connection_hold_v1_L1.0_W2.0",
+      "candidate": "v1.5_a0.5",
+      "sequential_complete": 1,
+      "parallel_complete": 1,
+      "sequential_time": 3.640000104904175,
+      "parallel_time": 3.640000104904175,
+      "xy_rmse_m": 0.0445883609354496,
+      "max_xy_m": 0.08297627419233322,
+      "max_speed_difference": 0.0845634937286377
+    },
+    {
+      "task": "right90_R2_connection_hold_v1_L1.0_W2.0",
+      "candidate": "v1.5_a1.0",
+      "sequential_complete": 1,
+      "parallel_complete": 1,
+      "sequential_time": 3.640000104904175,
+      "parallel_time": 3.640000104904175,
+      "xy_rmse_m": 0.04446494206786156,
+      "max_xy_m": 0.11514230817556381,
+      "max_speed_difference": 0.03325629234313965
+    },
+    {
+      "task": "right90_R2_connection_hold_v1_L1.0_W2.0",
+      "candidate": "v2.3_a0.0",
+      "sequential_complete": 1,
+      "parallel_complete": 1,
+      "sequential_time": 3.3399999141693115,
+      "parallel_time": 3.3399999141693115,
+      "xy_rmse_m": 0.05148005113005638,
+      "max_xy_m": 0.10413215309381485,
+      "max_speed_difference": 0.027756214141845703
+    },
+    {
+      "task": "right90_R2_connection_hold_v1_L1.0_W2.0",
+      "candidate": "v2.3_a0.5",
+      "sequential_complete": 1,
+      "parallel_complete": 1,
+      "sequential_time": 3.4000000953674316,
+      "parallel_time": 3.380000114440918,
+      "xy_rmse_m": 0.04300795495510101,
+      "max_xy_m": 0.10684284567832947,
+      "max_speed_difference": 0.04367208480834961
+    },
+    {
+      "task": "right90_R2_connection_hold_v1_L1.0_W2.0",
+      "candidate": "v2.3_a1.0",
+      "sequential_complete": 1,
+      "parallel_complete": 1,
+      "sequential_time": 3.440000057220459,
+      "parallel_time": 3.4600000381469727,
+      "xy_rmse_m": 0.05001469701528549,
+      "max_xy_m": 0.1183113157749176,
+      "max_speed_difference": 0.08846569061279297
+    }
+  ],
+  "limits": "Same snapshot, physical/control clocks and candidates; shared machine load may differ. Ratio is observed end-to-end collection time, not an isolated hardware benchmark."
+}
