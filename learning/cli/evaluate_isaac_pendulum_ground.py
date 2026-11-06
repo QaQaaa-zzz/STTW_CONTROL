@@ -19,6 +19,7 @@ cases=spec['cases'];n=len(cases);steps=round(spec['duration_s']/.005)
 plant=IsaacLabVectorPlant(a.asset,['plane'],[0]*n,a.output,pendulum_rest=[-1.2,2.499999],pendulum_locked=spec.get('pendulum_locked',False),**options)
 if any('controller_wc' in case for case in cases):cfg['wc']=[case.get('controller_wc',cfg['wc']) for case in cases]
 if any('feedback_gain_scale' in case for case in cases):cfg['feedback_gain_scale']=[case.get('feedback_gain_scale',[1.,1.,1.]) for case in cases]
+if any('roll_rate_filter_hz' in case for case in cases):cfg['roll_rate_filter_hz']=[case.get('roll_rate_filter_hz',0.) for case in cases]
 controller=TorchController(cfg,n,'cuda:0')
 from sttw_control.torch_local_lower import TorchLocalLower
 from sttw_control.torch_path_reference import wrap
@@ -28,6 +29,7 @@ candidates={name:TorchLocalLower(record['path'],record['sha256'],n,'cuda:0') for
 selectors={name:torch.tensor([case.get('actor')==name for case in cases],device='cuda:0') for name in candidates}
 plant.robot.data.default_root_state[:,2]+=torch.tensor([c.get('root_height_offset_m',0.) for c in cases],device='cuda:0')
 plant.reset(speed=spec['speed_m_s'])
+plant.metadata['runtime_joint_dynamics']=dict(names=plant.joints,limits=plant.robot.root_physx_view.get_dof_limits().cpu().tolist(),damping=plant.robot.root_physx_view.get_dof_dampings().cpu().tolist(),stiffness=plant.robot.root_physx_view.get_dof_stiffnesses().cpu().tolist(),friction=plant.robot.data.joint_friction_coeff.cpu().tolist(),armature=plant.robot.data.joint_armature.cpu().tolist())
 np.savez(a.output/'reset_state.npz',body_state=plant.rigid.cpu().numpy(),body_names=plant.bodies,joint_position=plant.dofs[:,:,0].cpu().numpy(),joint_names=plant.joints,origin=plant.origin.cpu().numpy())
 (a.output/'protocol.json').write_text(json.dumps(dict(asset=str(a.asset),controller=cfg,plant=plant.metadata,spec=spec,lower_actor=selected['lower_actor'],lower_sha256=selected['lower_sha256'],role='ground compatibility DEV; no H75 or training',pendulum_rest_rad=[-1.2,2.499999],max_physics_steps=steps*n*substeps,optimizer_updates=0),indent=2))
 device='cuda:0';raw=torch.tensor([spec['speed_m_s'],0.],device=device).repeat(n,1);previous=raw.clone();command=torch.tensor([0.,spec['speed_m_s']/radius],device=device).repeat(n,1)
@@ -41,7 +43,8 @@ pulse=torch.tensor([c.get('open_loop_steer_rate',0.) for c in cases],device=devi
 alive=torch.ones(n,dtype=torch.bool,device=device);rows=[];masks=[];references=[];commands=[];contacts=[];start=time.monotonic()
 for k in range(steps+1):
  m,pose,v=plant.observe()
- row=torch.cat((torch.full((n,1),k*.005,device=device),pose,v[:,None],m[:,:4],plant.dofs[:,plant.pendulum_servos.indices,0],plant.dofs[:,plant.pendulum_servos.indices,1],m[:,5:7]*radius,plant.roots[:,2:3],controller.disturbance[:,None]),dim=1)
+ q=plant.roots[:,3:7];pitch=torch.asin((2*(q[:,3]*q[:,1]-q[:,2]*q[:,0])).clamp(-1,1))
+ row=torch.cat((torch.full((n,1),k*.005,device=device),pose,v[:,None],m[:,:4],plant.dofs[:,plant.pendulum_servos.indices,0],plant.dofs[:,plant.pendulum_servos.indices,1],m[:,5:7]*radius,plant.roots[:,2:3],controller.disturbance[:,None],pitch[:,None],plant.roots[:,9:10]),dim=1)
  contacts.append(plant.contact.cpu().numpy().copy())
  rows.append(row.cpu().numpy());masks.append(alive.cpu().numpy().copy());references.append(raw.cpu().numpy().copy());commands.append(command.cpu().numpy().copy())
  alive &= (m[:,0].abs()<=torch.pi/4)&torch.isfinite(row).all(-1)
@@ -63,7 +66,7 @@ for k in range(steps+1):
  for _ in range(substeps):plant.step(torch.where(alive[:,None],command,0.))
  _,new_pose,_=plant.observe();lower.finish(applied,wrap(new_pose[:,2]-pose[:,2])/.005);previous=raw.clone()
  if (k+1)%200==0:print(dict(control_steps=k+1,alive=int(alive.sum()),elapsed_s=time.monotonic()-start),flush=True)
-trace=np.asarray(rows);valid=np.asarray(masks);np.savez(a.output/'trajectory.npz',trace=trace,valid=valid,contact=np.asarray(contacts),contact_body_names=plant.bodies,reference=np.asarray(references),command=np.asarray(commands),columns=['time','x','y','yaw','speed','roll','roll_rate','steer','steer_rate','hip','knee','hip_velocity','knee_velocity','rear_wheel_speed_estimate','front_wheel_speed_estimate','root_height','eso_disturbance'])
+trace=np.asarray(rows);valid=np.asarray(masks);np.savez(a.output/'trajectory.npz',trace=trace,valid=valid,contact=np.asarray(contacts),contact_body_names=plant.bodies,reference=np.asarray(references),command=np.asarray(commands),columns=['time','x','y','yaw','speed','roll','roll_rate','steer','steer_rate','hip','knee','hip_velocity','knee_velocity','rear_wheel_speed_estimate','front_wheel_speed_estimate','root_height','eso_disturbance','pitch','vertical_speed'])
 results=[]
 for i,case in enumerate(cases):
  tr=trace[valid[:,i],i];results.append(dict(name=case['name'],failed=not bool(alive[i]),duration_s=float(tr[-1,0]),peak_roll_deg=float(np.rad2deg(abs(tr[:,5])).max()),final_speed=float(tr[-1,4]),final_xy=tr[-1,1:3].tolist(),max_pendulum_position_drift_rad=np.max(np.abs(tr[:,9:11]-tr[0,9:11]),axis=0).tolist(),max_pendulum_speed_rad_s=np.max(np.abs(tr[:,11:13]),axis=0).tolist()))

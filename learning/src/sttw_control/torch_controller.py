@@ -17,6 +17,8 @@ class TorchController:
         self.config = dict(config)
         if isinstance(config["wc"],list):self.config["wc"]=torch.tensor(config["wc"],device=device,dtype=dtype)
         self.feedback_gain_scale=torch.tensor(config.get('feedback_gain_scale',[1.,1.,1.]),device=device,dtype=dtype)
+        self.roll_rate_filter_hz=torch.tensor(config.get('roll_rate_filter_hz',0.),device=device,dtype=dtype)
+        self.filtered_roll_rate=torch.zeros(count,device=device,dtype=dtype)
         self.eso = torch.zeros(count, 4, device=device, dtype=dtype)
         self.disturbance = torch.zeros(count, device=device, dtype=dtype)
         self.gains = torch.zeros(count, 3, device=device, dtype=dtype)
@@ -50,6 +52,7 @@ class TorchController:
         return a1, a2, a4, ratio, gains
 
     def reset(self, indices):
+        self.filtered_roll_rate[indices] = 0
         self.eso[indices] = 0
         self.disturbance[indices] = 0
         self.gains[indices] = self.initial_gains[indices]
@@ -57,6 +60,9 @@ class TorchController:
     def step(self, measurement, enable_eso):
         c = self.config
         speed, steer, steer_rate, roll, roll_rate, reference = measurement.unbind(-1)
+        weight=1-torch.exp(-2*math.pi*c['dt']*self.roll_rate_filter_hz)
+        self.filtered_roll_rate=torch.where(self.roll_rate_filter_hz>0,self.filtered_roll_rate+weight*(roll_rate-self.filtered_roll_rate),roll_rate)
+        roll_rate=self.filtered_roll_rate
         a1, a2, a4, ratio, gains = self._system(speed)
         shift = torch.where(enable_eso, -self.disturbance/a4, 0.)
         if c['fixed_roll_reference'] is not None:
