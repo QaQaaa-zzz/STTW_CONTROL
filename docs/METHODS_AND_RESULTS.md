@@ -1,3 +1,9 @@
+## 原Phase U奖励移植完成，训练环境仍待接线
+
+`learning/src/sttw_control/phase_u_reward.py`实现GPU可批量的原21分项奖励，保留分段侧倾/俯仰/偏航、速度、起跳高度、动作、实际摆功率与终止罚。`runs/phase_u_reward_port/compare.py`直接调用只读DVGC/JIT原函数，128组含分段边界与终止组合逐项对比：总奖励最大差0，唯一非零分项speed最大5.96e-8，0physics/0optimizer。原env.py还有stuck/yaw导致整回合回报固定-100的修正；已保留单独phase_u_episode_reward，修正不能再次裁剪，也不把它漏作原奖励。专项测试覆盖历史累计700时末步-800、累计-300时末步200，均最终-100。
+
+`learning/configs/isaac_phase_u_task.json`保存原resolved合同与来源SHA，明确不是可执行训练配置。原Phase U训练propulsion-ascent，事件apex高度.5m、起跳区x2.5–4、初速度2m/s、8%airborne RSI、400×.02s回合、侧倾35deg/俯仰75deg等保留；前两轮45deg停止仅接口DEV，不冒充原任务验证。首次apex事件奖励不是完整过台/落地成功。原8logits（均值与状态相关噪声）不能直接换成Go2默认4输出+独立std，否则违反保留网络要求；需兼容adapter再复用runner。随机化现有模块针对2动作/7测量，未接4动作/76观测前不能宣称Go2随机化生效。无新训练。
+
 ## 对齐跳跃接近航向后仍失稳；诊断循环减负已实跑
 
 `runs/pendulum_jump_aligned/xy_jump.png`（实际查看）显示接管前沿直线接近，0.78s释放时y约0.00083m；Phase U2.09s、RB1.865s达到45°终止，根最高.3996/.3906m，未完成过台。相比首轮约.204m交接偏移，朝向对齐排除了该明显接近误差，但不能排除其余模型/交接差异；目前证据支持准备基础跳跃适配，不支持直接采用RB或继续追求地面微小误差。
