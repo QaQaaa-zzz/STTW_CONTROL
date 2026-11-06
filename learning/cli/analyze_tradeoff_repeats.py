@@ -8,6 +8,20 @@ import matplotlib.pyplot as plt
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('--evaluation',type=Path,required=True);p.add_argument('--window-mode',choices=['panel','global','both'],default='both');a=p.parse_args()
 if a.window_mode=='both':
  for mode in ('panel','global'):subprocess.run([sys.executable,__file__,'--evaluation',str(a.evaluation),'--window-mode',mode],check=True)
+ marker='## Paired repeated-parameter summary'
+ lines=[marker,'','Five fixed H75 alpha levels and matched Zero. Each seed changes frozen physical/control parameters; these are not independent policy-training seeds. All runs start from the same saved 2.3 m/s warm state; low-speed requests include the deceleration transient, not equilibrated low-speed starts. No exclusions. Means average individual-run RMSE; error bars are sample SD, not confidence intervals. Failure counts use each full recorded run, while RMSE comparisons use the stated common window.','']
+ for suffix,title in (('', 'Common window within each speed/terrain panel'),('_global_window','One common window across the whole matrix')):
+  groups=json.loads((a.evaluation/('tradeoff_repeated_summary'+suffix+'.json')).read_text())
+  exchanges=json.loads((a.evaluation/('tradeoff_marginal_exchange'+suffix+'.json')).read_text())
+  lines.extend(['### '+title,'',f'![Five-alpha mean curves and individual seed points](tradeoff_repeated_mean{suffix}.png)','',f'[All per-seed values and failure endpoints](tradeoff_repeated_raw{suffix}.csv) · [All six-method means and SD](tradeoff_repeated_summary{suffix}.json) · [Paired adjacent-alpha changes](tradeoff_marginal_exchange{suffix}.json)','','|Terrain|Speed m/s|n|Window s|Path RMSE alpha0 → 1, m|Speed RMSE alpha0 → 1, m/s|Full-run failure counts 0/.25/.5/.75/1/Zero|','|---|---:|---:|---:|---:|---:|---|'])
+  for g in groups:
+   m=g['mean'];counts='/'.join(map(str,g['failure_counts']))
+   lines.append(f"|{g['terrain']}|{g['speed_m_s']:g}|{g['n']}|{g['common_window_s']:.3f}|{m[0][0]:.4f} → {m[4][0]:.4f}|{m[0][1]:.4f} → {m[4][1]:.4f}|{counts}|")
+  conventional=sum(e['path_cost_mean_m']>0 and e['speed_gain_mean_m_s']>0 for e in exchanges)
+  lines.extend(['',f'{conventional}/{len(exchanges)} adjacent-alpha mean changes have increasing path error and decreasing speed error. Other edges are retained, including folds and simultaneous improvement/deterioration. This fraction describes these panels; it is not a statistical significance test or a claim of a universal reciprocal law.',''])
+ report=a.evaluation/'RESULTS.md'
+ existing=report.read_text().split(marker)[0].rstrip()
+ report.write_text(existing+'\n\n'+'\n'.join(lines)+'\n')
  sys.exit(0)
 index=json.loads((a.evaluation/'index.json').read_text())
 suffix='' if a.window_mode=='panel' else '_global_window'
