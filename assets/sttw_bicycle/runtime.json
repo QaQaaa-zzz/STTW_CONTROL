@@ -1,0 +1,20 @@
+{
+  "asset": "assets/sttw_bicycle/vehicle.urdf",
+  "controller_config": "assets/sttw_bicycle/controller.json",
+  "plant_options": {
+    "wheel_collision": "sdf",
+    "friction_offset_threshold": 0.0,
+    "compliant_wheels": {
+      "frontwheel": {
+        "stiffness": 5324.4083452801915,
+        "damping": 112.38579318769304
+      },
+      "rearwheel": {
+        "stiffness": 7833.38122453075,
+        "damping": 173.11038721684574
+      }
+    },
+    "env_spacing": 3.0
+  },
+  "scope": "Physical asset and controller settings only; policy, initial state and terrain are supplied separately."
+}

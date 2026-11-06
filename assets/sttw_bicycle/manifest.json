@@ -1,0 +1,22 @@
+{
+  "source_evaluation_contract": "runs/h75_low_speed_feasibility/evaluation/flat_control_v1p4/evaluation/contract.json",
+  "source_runtime_asset": "runs/isaac_urdf_drive/vehicle.urdf",
+  "mujoco_source": "mujoco_ros_ws20260313/model/scalebike_scene_matlab.xml",
+  "mujoco_source_sha256": "053b2bd96634ad69edf35c6328b2f219486a03fb8ba3f80c402e1fcc696869cd",
+  "mujoco_assets": {
+    "meshes/chasis_link.STL": "01be830a25ac010bfd465f7d6839e94cd01b0304fa51105fead09d7c537510c3",
+    "meshes/frontfork_link.STL": "ad45d498d8b886f2977f0ab5093a2d74e3bf8345d91f9b7650faec9b2735b35b",
+    "meshes/frontsuspension_link.STL": "5101b8a5db1e864b59f926c33e52a6429fb70b4f62df655cfb2a1d695e416220",
+    "meshes/frontwheel_link.STL": "c5bdeeb0bad8e2f9a779307593f75bf54781274dc45179a84f93273c05a36337",
+    "meshes/rearsuspension_link.STL": "84963c406d91fba9fbdfac7dad82a3c58fca0507b6a418107867c88df7827680",
+    "meshes/rearwheel_link.STL": "5551b3e5c6abb5016623b2c17d8d35ada89f82d12a914e5fcd05b20ecec786cc"
+  },
+  "files": {
+    "runtime.json": "b9cb2f8d4ef36c87b649817871eb7c0bf0143ed63b63e3d25f4ae19b686e6a43",
+    "vehicle.urdf": "226c0681d8ae55b2ac579eb7d06d94b9306847d06158551ff737ca13f07e0b35",
+    "controller.json": "418a55486c863f5efb249c22987bc43017aee95ff0913582f59508230b18e00c",
+    "ellipsoid_0.1_0.1_0.025.obj": "5b8ac347bf98373f285f5da56a7cbb6f3355c3a6364638ab4f2164406b515c1f",
+    "contract.json": "c73414878f2bd49ed8cfa12c5737c83919206a273716306c791d5dce6175cb03"
+  },
+  "verification": "Byte-identical evaluated URDF and referenced OBJ copied; original MuJoCo XML and all six source mesh hashes match export contract. No physics rerun."
+}
