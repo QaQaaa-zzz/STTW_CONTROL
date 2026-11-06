@@ -13,6 +13,9 @@ a=p.parse_args()
 archive=np.load(a.run/'physics_wrench.npz')
 d={key:archive[key] for key in archive.files}
 c=json.loads((a.run/'contract.json').read_text())
+from sttw_control.contact_static_reference import static_wheel_loads
+static=static_wheel_loads(c)
+(a.run/'static_load_reference.json').write_text(json.dumps(static,indent=2)+'\n')
 idx=json.loads((a.run/'physics_contacts/index.json').read_text())
 t=d['time_s'];dt=idx['physics_dt_s'];steer=idx['joint_order'].index('steering_joint')
 limit=max(abs(v) for v in idx['motor_limits'][0])
@@ -48,7 +51,7 @@ for lane,alpha in enumerate(c['settings']['alphas']):
         low=m&(load<.2*reference) if reference is not None else np.zeros_like(m)
         # Near-zero normal load is reported separately from the20% criterion.
         unloaded=m&(np.linalg.norm(d['normal_force'][:,lane,0],axis=1)<.1)
-        row['windows'][name]=dict(start_s=lo,end_s=hi,observed_s=float(m.sum()*dt),signed_impulse_Nms=(moment.sum(0)*dt).tolist(),absolute_impulse_Nms=(abs(moment).sum(0)*dt).tolist(),net_contact_signed_impulse_Nms=float(total.sum()*dt),net_contact_absolute_impulse_Nms=float(abs(total).sum()*dt),motor_signed_impulse_Nms=float(d['motor'][m,lane,steer].sum()*dt),steering_saturation=periods(saturated),front_low_load=periods(low),front_near_zero_load=periods(unloaded),front_peak_vertical_load_N=float(load_window.max()),steering_rate_start_rad_s=float(d['steer_velocity'][m,lane][0]),steering_rate_end_rad_s=float(d['steer_velocity'][m,lane][-1]),steering_rate_peak_abs_rad_s=float(abs(d['steer_velocity'][m,lane]).max()))
+        row['windows'][name]=dict(start_s=lo,end_s=hi,observed_s=float(m.sum()*dt),signed_impulse_Nms=(moment.sum(0)*dt).tolist(),absolute_impulse_Nms=(abs(moment).sum(0)*dt).tolist(),net_contact_signed_impulse_Nms=float(total.sum()*dt),net_contact_absolute_impulse_Nms=float(abs(total).sum()*dt),motor_signed_impulse_Nms=float(d['motor'][m,lane,steer].sum()*dt),steering_saturation=periods(saturated),front_low_load=periods(low),front_low_load_static=periods(m&(load<.2*static['front_load_N'][lane])),front_near_zero_load=periods(unloaded),front_peak_vertical_load_N=float(load_window.max()),steering_rate_start_rad_s=float(d['steer_velocity'][m,lane][0]),steering_rate_end_rad_s=float(d['steer_velocity'][m,lane][-1]),steering_rate_peak_abs_rad_s=float(abs(d['steer_velocity'][m,lane]).max()))
     rows.append(row)
 report=dict(role='offline event-aligned DEV; last rear ridge contact is retrospective, not an online confirmed clearance event',components=['normal','longitudinal_friction','lateral_friction'],load_reference='mean150ms immediately before first front ridge contact; flat uses first150ms; not theoretical static load',ridge_definition='loaded normal patch above world z=3mm, force norm>0.01N',unloading_definition='front normal resultant norm<0.1N',lanes=rows)
 (a.run/'contact_event_windows.json').write_text(json.dumps(report,indent=2)+'\n')
