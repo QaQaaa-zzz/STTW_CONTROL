@@ -1,3 +1,9 @@
+## 整段粗糙路2.0m/s三档阶段结果
+
+±1/2/3cm三个条件已完成，15条H75均10秒无提前失败且goal；hold分别5/5、4/5、4/5。±3cm时alpha0路径RMSE0.0475m、alpha1为0.3403m，速度RMSE0.1399/0.0958m/s，存在更明显的路径—速度取舍。alpha.75后段偏离更大且未保持，不能强行称alpha严格排序。
+
+Zero在±3cm条件8.68s提前终止，但已goal；原始domain_exit=true、policy_fault=false、终点roll0.09515rad，明确为跟踪域退出，不作为摔倒证据。所有原轨迹保留，XY已实际查看，`termination_note.json`记录定位。本阶段尚未出现alpha0不能通过而更大alpha能通过。连续波形及2.3m/s仍在原84轨迹预算内继续；不重训、不改变物理、不push。
+
 ## Isaac Lab 共同带摆车首次物理诊断
 
 `runs/pendulum_isaac_ground/limit_rounding/RESULTS.md` 与 `xy_response.png`：一lane平地、原ECBC（无Local/H75）、固定摆姿态，完成3秒/15000physics steps，未触发45deg侧倾终止；峰值侧倾0.20002deg、末端速度1.94705m/s。这是单名义直行接口证据，不是弯道/地形/RB交接验证，不据此声明泛化。实际Isaac总质量8.92421009kg，自碰撞开启，25对body按源mask/exclude/焊接及相邻关系过滤。首次采样速度2.3与reset请求2.0不一致，可能为constructor/reset缓存，原数据保留并标图；不是新初始化加速实验。采样墙钟68.46s。
