@@ -11,7 +11,7 @@ import isaaclab.sim as sim_utils
 from sttw_control.isaaclab_vector_env import IsaacLabVectorPlant
 from sttw_control.pendulum_skill import TorchPendulumObservation,TorchPendulumSkill,TorchPendulumGeometry
 from sttw_control.torch_controller import TorchController
-cfg=json.loads(Path('learning/configs/isaac_pendulum_local300_standard.json').read_text())
+cfg=json.loads(Path(spec.get('plant_config','learning/configs/isaac_pendulum_local300_standard.json')).read_text())
 options=cfg['plant_options'].copy();options['env_spacing']=20.;options['pendulum_locked']=True
 options['physics_dt']=spec.get('physics_dt',.0002)
 options['gpu_pair_capacities']=spec.get('gpu_pair_capacities')
@@ -20,6 +20,8 @@ substeps=round(.005/options['physics_dt'])
 if substeps<1 or abs(substeps*options['physics_dt']-.005)>1e-9:raise ValueError('physics_dt must divide ground/sensor period .005')
 n=len(spec['skills'])
 plant=IsaacLabVectorPlant(Path(cfg['asset']),[spec.get('scene_terrain','plane')],[0]*n,out,**options)
+if 'jump_steering_gains' in spec:
+ plant.jump_steering_servo.kp.fill_(spec['jump_steering_gains'][0]);plant.jump_steering_servo.kd.fill_(spec['jump_steering_gains'][1])
 # Same source step dimensions, translated independently into each lane.
 for i,origin in enumerate([] if spec.get('scene_terrain') else plant.origin.cpu().numpy()):
  box=sim_utils.CuboidCfg(size=(4.,2.,.32),collision_props=sim_utils.CollisionPropertiesCfg(contact_offset=.01,rest_offset=0.),physics_material=sim_utils.RigidBodyMaterialCfg(static_friction=.8,dynamic_friction=.8))
@@ -34,7 +36,7 @@ if spec.get('video',False):
  camera.set_world_poses_from_view(torch.tensor([[4.,-5.,2.3]],device='cuda:0'),torch.tensor([[3.8,0.,.35]],device='cuda:0'))
  writer=imageio.get_writer(out/'simulation.mp4',fps=50,codec='libx264',quality=8,macro_block_size=1)
 saved=np.load(spec['initial_state'])
-state={k:torch.tensor(saved[k],device='cuda:0') for k in ('root_pose','root_velocity','joint_position','joint_velocity')}
+state={k:torch.tensor(saved[k],device='cuda:0',dtype=torch.float32) for k in ('root_pose','root_velocity','joint_position','joint_velocity')}
 state['root_pose']=state['root_pose'].clone();state['root_pose'][0]=spec['start_x'];state['root_pose'][1]=0.
 if spec.get('align_heading',False):
  from isaaclab.utils.math import quat_mul,quat_apply
@@ -49,7 +51,7 @@ plant.reset_idx(torch.arange(n,device='cuda:0'),state=state)
 plant.set_pendulum_locked(False);plant.set_pendulum_locked(True)
 controller=TorchController(json.loads(Path(cfg['controller_config']).read_text()),n,'cuda:0')
 policies=[TorchPendulumSkill(Path(spec['bundles'])/s) for s in spec['skills']]
-history=TorchPendulumObservation(plant.joints,json.loads(Path('learning/configs/pendulum_common_asset.json').read_text())['mount_rotation_wxyz'],n,'cuda:0')
+history=TorchPendulumObservation(plant.joints,json.loads(Path(spec.get('model_config','learning/configs/pendulum_common_asset.json')).read_text())['mount_rotation_wxyz'],n,'cuda:0')
 geometry=TorchPendulumGeometry(json.loads(Path(spec['geometry']).read_text()),plant.bodies)
 last=torch.zeros(n,4,device='cuda:0');alive=torch.ones(n,dtype=torch.bool,device='cuda:0');entered=torch.zeros_like(alive);consumed=torch.zeros_like(alive)
 active=False;rows=[];actions=[];observations=[];valid=[];arm_rows=[];start=time.monotonic();steps=round(spec['seconds']/.005)
@@ -72,6 +74,8 @@ if spec.get('ground_bundle'):
  ground.begin_connection(TorchPathReference(route,ground.config,ground.device),ground.speed.clone(),ground.alpha.clone())
  (out/'ground_controller.json').write_text(json.dumps(dict(upper_sha256=ground.upper_sha256,lower_sha256=ground.lower_sha256,alpha=spec['ground_alpha'],physics_dt=plant.physics_dt,control_dt=.005,policy_dt=.02,physical_substeps=ground.physics_substeps),indent=2))
 target=torch.zeros(n,4,device='cuda:0')
+root_acceleration=torch.zeros(n,3,device='cuda:0')
+previous_root_velocity=plant.roots[:,7:10].clone()
 for k in range(steps+1):
  if ground is not None and not active and k%4:continue
  m,pose,speed=plant.observe();root=plant.roots.clone();root[:,:3]-=plant.origin
@@ -87,7 +91,8 @@ for k in range(steps+1):
  if k%4==0:
   inside=(root[:,0]>=2.5)&(root[:,0]<=4.0);consumed|=entered&~inside;entered|=inside
   signal=(inside&~consumed).float()
-  obs=history.advance(root,plant.dofs[:,:,0],plant.dofs[:,:,1],plant.robot.data.body_com_acc_w[:,plant.bodies.index('chasis'),:3],distance,last,signal)
+  acceleration=root_acceleration if spec.get('root_acceleration_difference',False) else plant.robot.data.body_com_acc_w[:,plant.bodies.index('chasis'),:3]
+  obs=torch.cat((history.frames.flatten(1),signal[:,None]),-1) if k==0 and spec.get('zero_initial_history',False) else history.advance(root,plant.dofs[:,:,0],plant.dofs[:,:,1],acceleration,distance,last,signal)
   observations.append(obs)
   if not active and bool((root[:,0]>=spec.get('handoff_x',2.5)).any()):
    plant.set_pendulum_locked(False);active=True
@@ -100,19 +105,21 @@ for k in range(steps+1):
    ids=plant.pendulum_servos.indices
    before=torch.cat((torch.full((n,1),k*.005+substep*plant.physics_dt,device='cuda:0'),target[:,2:],plant.dofs[:,ids,0],plant.dofs[:,ids,1]),-1)
    plant.step(command,pendulum_target=target[:,2:],steering_position_target=target[:,:1],refresh_diagnostics=False)
+   velocity=plant.robot.data.root_link_lin_vel_w
+   root_acceleration=(velocity-previous_root_velocity)/plant.physics_dt;previous_root_velocity=velocity.clone()
    arm_rows.append(torch.cat((before,plant.last_pendulum_torque[:,ids],alive[:,None]),-1))
  elif ground is not None:
   ground.step()
  else:
-  request=torch.stack((m[:,5]*.1,m[:,2],m[:,3],m[:,0],m[:,1],torch.zeros_like(speed)),-1)
-  control=controller.step(request,torch.ones_like(alive));command=torch.stack((control[:,0].clamp(-3,3),torch.full_like(speed,spec['approach_speed']/.1)),-1)
+  request=torch.stack((m[:,5]*plant.wheel_radius_m,m[:,2],m[:,3],m[:,0],m[:,1],torch.zeros_like(speed)),-1)
+  control=controller.step(request,torch.ones_like(alive));command=torch.stack((control[:,0].clamp(-3,3),torch.full_like(speed,spec['approach_speed']/plant.wheel_radius_m)),-1)
   for _ in range(substeps):plant.step(command,refresh_diagnostics=False)
  plant.refresh()
 if writer is not None:writer.close()
 if arm_rows:
  np.savez(out/'arm_commands.npz',trace=torch.stack(arm_rows).cpu().numpy(),columns=['time','hip_target','knee_target','hip_position','knee_position','hip_velocity','knee_velocity','hip_command_torque','knee_command_torque','alive_before_step'],semantics='pre-step state and actual clipped PD effort command each physics step; not solver-measured reaction torque')
 trace=torch.stack(rows).cpu().numpy();mask=torch.stack(valid).cpu().numpy();np.savez(out/'trajectory.npz',trace=trace,valid=mask,action=torch.stack(actions).cpu().numpy(),observations=torch.stack(observations).cpu().numpy(),columns=['time','x','y','z','speed','roll','roll_rate','steer','steer_rate','hip','knee','obstacle_relative_x'])
-result=dict(status='complete',elapsed_s=time.monotonic()-start,physics_lane_steps=k*substeps*n,ground_controller=('H75+Local300' if ground is not None else 'ECBC+ESO'),cases=[])
+result=dict(status='complete',elapsed_s=time.monotonic()-start,physics_lane_steps=k*substeps*n,ground_controller=('none; jump policy from reset' if spec.get('handoff_x',2.5)<=spec['start_x'] else ('H75+Local300' if ground is not None else 'ECBC+ESO')),cases=[])
 for i,name in enumerate(spec['skills']):
  tr=trace[mask[:,i],i];result['cases'].append(dict(skill=name,duration_s=float(tr[-1,0]),physical_termination=not bool(alive[i]),peak_root_z=float(tr[:,3].max()),final_xyz=tr[-1,1:4].tolist(),peak_abs_roll_deg=float(np.rad2deg(abs(tr[:,5])).max()),full_jump_success='not adjudicated; requires clearance and landing evidence'))
 (out/'results.json').write_text(json.dumps(result,indent=2));print(result,flush=True)
