@@ -1,0 +1,102 @@
+{
+  "duration_s": 8.0,
+  "warmup_s": 3.0,
+  "return_s": 7.0,
+  "speed_m_s": 2.0,
+  "steer_slew_rad_s": 0.8,
+  "cases": [
+    {
+      "name": "ecbc_1",
+      "steer_rad": 0.12,
+      "local300": false,
+      "lower_start_s": 0.0,
+      "actor": "ecbc"
+    },
+    {
+      "name": "ecbc_-1",
+      "steer_rad": -0.12,
+      "local300": false,
+      "lower_start_s": 0.0,
+      "actor": "ecbc"
+    },
+    {
+      "name": "original_1",
+      "steer_rad": 0.12,
+      "local300": true,
+      "lower_start_s": 0.0,
+      "actor": "original"
+    },
+    {
+      "name": "original_-1",
+      "steer_rad": -0.12,
+      "local300": true,
+      "lower_start_s": 0.0,
+      "actor": "original"
+    },
+    {
+      "name": "update1_1",
+      "steer_rad": 0.12,
+      "local300": true,
+      "lower_start_s": 0.0,
+      "actor": "update1"
+    },
+    {
+      "name": "update1_-1",
+      "steer_rad": -0.12,
+      "local300": true,
+      "lower_start_s": 0.0,
+      "actor": "update1"
+    },
+    {
+      "name": "update150_1",
+      "steer_rad": 0.12,
+      "local300": true,
+      "lower_start_s": 0.0,
+      "actor": "update150"
+    },
+    {
+      "name": "update150_-1",
+      "steer_rad": -0.12,
+      "local300": true,
+      "lower_start_s": 0.0,
+      "actor": "update150"
+    }
+  ],
+  "pendulum_locked": true,
+  "plant_options": {
+    "physics_dt": 0.005,
+    "wheel_radius_m": 0.07,
+    "gpu_pair_capacities": [
+      1048576,
+      1048576,
+      1048576
+    ],
+    "servo_mode": "hybrid",
+    "compliant_wheels": null,
+    "wheel_collision": "convexHull",
+    "hull_vertices": 64,
+    "robot_contact_offset": 0.001,
+    "mesh_collision_on_geometry": true,
+    "solver_position_iterations": 16,
+    "solver_velocity_iterations": 4
+  },
+  "role": "RB nominal ground candidates; pure ECBC, original reward-best update0, reward-ranked stored trained model and final150, all residuals active at reset",
+  "save_warmup_state": false,
+  "controller_config": "learning/configs/rb_sttw_controller.json",
+  "actor_catalog": {
+    "update1": {
+      "path": "runs/rb_sttw_platform/local_candidates/update1.npz",
+      "sha256": "df3a658cd3787bd539923930ad97995052411b8a37ad62df6c475c29e9c41a46",
+      "checkpoint": "runs/rb_local150/training/model_0.pt",
+      "policy_update": 1,
+      "training_score": -0.01946425437927246
+    },
+    "update150": {
+      "path": "runs/rb_sttw_platform/local_candidates/update150.npz",
+      "sha256": "83a51556e55599c3f38fa033de892d8d41b53597486666c08e2ed8235d0457cc",
+      "checkpoint": "runs/rb_local150/training/model_150.pt",
+      "policy_update": 150,
+      "training_score": null
+    }
+  }
+}

@@ -16,6 +16,7 @@ class TorchController:
     def __init__(self, config, count, device='cpu', dtype=torch.float32):
         self.config = dict(config)
         if isinstance(config["wc"],list):self.config["wc"]=torch.tensor(config["wc"],device=device,dtype=dtype)
+        self.feedback_gain_scale=torch.tensor(config.get('feedback_gain_scale',[1.,1.,1.]),device=device,dtype=dtype)
         self.eso = torch.zeros(count, 4, device=device, dtype=dtype)
         self.disturbance = torch.zeros(count, device=device, dtype=dtype)
         self.gains = torch.zeros(count, 3, device=device, dtype=dtype)
@@ -57,7 +58,7 @@ class TorchController:
             reference = ratio*c['fixed_roll_reference']
         reference_roll = reference/ratio if c['fixed_roll_reference'] is None else torch.full_like(speed, c['fixed_roll_reference'])
         error = torch.stack((reference-steer, reference_roll-roll+shift, -roll_rate), dim=-1)
-        u = (gains*error).sum(-1).clamp(-c['max_steer_rate'], c['max_steer_rate'])
+        u = (gains*self.feedback_gain_scale*error).sum(-1).clamp(-c['max_steer_rate'], c['max_steer_rate'])
         e0, e1 = steer-self.eso[:, 0], roll-self.eso[:, 1]
         derivative = torch.stack((steer_rate+30*e0,
                                   self.eso[:, 2]+3*c['wo']*e1,

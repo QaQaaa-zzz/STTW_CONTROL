@@ -1,0 +1,96 @@
+{
+  "duration_s": 8.0,
+  "warmup_s": 3.0,
+  "return_s": 7.0,
+  "speed_m_s": 2.0,
+  "steer_slew_rad_s": 0.8,
+  "cases": [
+    {
+      "name": "roll1.5_eso0",
+      "steer_rad": 0.12,
+      "local300": false,
+      "eso_enabled": false,
+      "feedback_gain_scale": [
+        1.0,
+        1.5,
+        1.224744871391589
+      ]
+    },
+    {
+      "name": "roll1.5_eso1",
+      "steer_rad": 0.12,
+      "local300": false,
+      "eso_enabled": true,
+      "feedback_gain_scale": [
+        1.0,
+        1.5,
+        1.224744871391589
+      ]
+    },
+    {
+      "name": "roll2.0_eso0",
+      "steer_rad": 0.12,
+      "local300": false,
+      "eso_enabled": false,
+      "feedback_gain_scale": [
+        1.0,
+        2.0,
+        1.4142135623730951
+      ]
+    },
+    {
+      "name": "roll2.0_eso1",
+      "steer_rad": 0.12,
+      "local300": false,
+      "eso_enabled": true,
+      "feedback_gain_scale": [
+        1.0,
+        2.0,
+        1.4142135623730951
+      ]
+    },
+    {
+      "name": "roll3.0_eso0",
+      "steer_rad": 0.12,
+      "local300": false,
+      "eso_enabled": false,
+      "feedback_gain_scale": [
+        1.0,
+        3.0,
+        1.7320508075688772
+      ]
+    },
+    {
+      "name": "roll3.0_eso1",
+      "steer_rad": 0.12,
+      "local300": false,
+      "eso_enabled": true,
+      "feedback_gain_scale": [
+        1.0,
+        3.0,
+        1.7320508075688772
+      ]
+    }
+  ],
+  "pendulum_locked": true,
+  "plant_options": {
+    "physics_dt": 0.005,
+    "wheel_radius_m": 0.07,
+    "gpu_pair_capacities": [
+      1048576,
+      1048576,
+      1048576
+    ],
+    "servo_mode": "hybrid",
+    "compliant_wheels": null,
+    "wheel_collision": "convexHull",
+    "hull_vertices": 64,
+    "robot_contact_offset": 0.001,
+    "mesh_collision_on_geometry": true,
+    "solver_position_iterations": 16,
+    "solver_velocity_iterations": 4
+  },
+  "role": "RB nominal ECBC feedback adaptation: increased roll restoring gain with sqrt-scaled damping, ESO paired; no residual training",
+  "save_warmup_state": false,
+  "controller_config": "learning/configs/rb_sttw_controller.json"
+}

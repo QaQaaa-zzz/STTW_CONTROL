@@ -64,13 +64,17 @@ class TorchLocalLower:
                 previous_command, controller):
         obs = self.observation(measurement, true_speed, governed,
                                previous_reference, previous_command, controller)
-        x = obs
+        action = self.infer(obs)
+        return action,obs,torch.isfinite(obs).all(-1)&torch.isfinite(action).all(-1)
+
+    @torch.no_grad()
+    def infer(self, observation):
+        x = observation
         for weight, bias in self.weights[:-1]:
             x = x@weight+bias
             x = torch.where(x>0,x,torch.exp(x)-1)
         weight,bias = self.weights[-1]
-        action = torch.tanh(x@weight+bias)
-        return action,obs,torch.isfinite(obs).all(-1)&torch.isfinite(action).all(-1)
+        return torch.tanh(x@weight+bias)
 
     def finish(self, applied_residual, yaw_rate):
         # Applied residual is after residual permission clipping, before final

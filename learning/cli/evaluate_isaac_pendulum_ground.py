@@ -18,11 +18,14 @@ substeps=round(.005/options.get('physics_dt',.0002))
 cases=spec['cases'];n=len(cases);steps=round(spec['duration_s']/.005)
 plant=IsaacLabVectorPlant(a.asset,['plane'],[0]*n,a.output,pendulum_rest=[-1.2,2.499999],pendulum_locked=spec.get('pendulum_locked',False),**options)
 if any('controller_wc' in case for case in cases):cfg['wc']=[case.get('controller_wc',cfg['wc']) for case in cases]
+if any('feedback_gain_scale' in case for case in cases):cfg['feedback_gain_scale']=[case.get('feedback_gain_scale',[1.,1.,1.]) for case in cases]
 controller=TorchController(cfg,n,'cuda:0')
 from sttw_control.torch_local_lower import TorchLocalLower
 from sttw_control.torch_path_reference import wrap
 selected=json.loads(Path('learning/configs/isaaclab_h75_offroad_selected.json').read_text())
 lower=TorchLocalLower(selected['lower_actor'],selected['lower_sha256'],n,'cuda:0')
+candidates={name:TorchLocalLower(record['path'],record['sha256'],n,'cuda:0') for name,record in spec.get('actor_catalog',{}).items()}
+selectors={name:torch.tensor([case.get('actor')==name for case in cases],device='cuda:0') for name in candidates}
 plant.robot.data.default_root_state[:,2]+=torch.tensor([c.get('root_height_offset_m',0.) for c in cases],device='cuda:0')
 plant.reset(speed=spec['speed_m_s'])
 np.savez(a.output/'reset_state.npz',body_state=plant.rigid.cpu().numpy(),body_names=plant.bodies,joint_position=plant.dofs[:,:,0].cpu().numpy(),joint_names=plant.joints,origin=plant.origin.cpu().numpy())
@@ -50,6 +53,7 @@ for k in range(steps+1):
  desired=turn if spec['warmup_s']<=k*.005<spec['return_s'] else torch.zeros_like(turn)
  raw=raw.clone();raw[:,1]+=torch.clamp(desired-raw[:,1],-spec['steer_slew_rad_s']*.005,spec['steer_slew_rad_s']*.005)
  action,obs,finite=lower.prepare(m,v,raw,previous,command,controller)
+ for name,policy in candidates.items():action=torch.where(selectors[name][:,None],policy.infer(obs),action)
  applied=torch.where((use_lower & (k*.005>=lower_start))[:,None],action*torch.tensor([1.5,10.],device=device),0.)
  request=torch.stack((torch.where(true_feedback,v,m[:,5]*radius),m[:,2],m[:,3],m[:,0],m[:,1],raw[:,1]),dim=-1)
  out=controller.step(request,eso_enabled)
