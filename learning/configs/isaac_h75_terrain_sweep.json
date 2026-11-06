@@ -1,0 +1,48 @@
+{
+  "role": "planned nominal DEV terrain/speed expansion; not executed or independent holdout",
+  "reference_bundle": "runs/h75_selected_local300_flat/bundle",
+  "base_evaluation_config": "runs/h75_selected_local300_bend/lab_config.json",
+  "terrain_generator": "learning/cli/place_isaac_terrain.py",
+  "terrain_base_config": "learning/configs/isaac_bend_bump.json",
+  "terrain_overrides": [
+    {
+      "name": "flat",
+      "height_m": 0
+    },
+    {
+      "name": "oblique_2cm",
+      "height_m": 0.02
+    },
+    {
+      "name": "oblique_4cm",
+      "height_m": 0.04
+    },
+    {
+      "name": "oblique_6cm",
+      "height_m": 0.06
+    },
+    {
+      "name": "reverse_oblique_4cm",
+      "height_m": 0.04,
+      "oblique_s_per_lateral_m": -0.25
+    }
+  ],
+  "user_speed_m_s": [
+    2.3,
+    2.6
+  ],
+  "initial_state_protocol": "same full saved 2.3 m/s warm state; 2.6 m/s is a command-change condition, not an equilibrated 2.6 m/s entrance",
+  "alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "include_zero": true,
+  "seconds": 10,
+  "max_physics_lane_steps": 3000000,
+  "optimizer_updates": 0,
+  "reuse": "original flat and 4cm cases at 2.3 m/s only when policy and full condition match; fresh Zero required for changed speed or terrain",
+  "start_condition": "finish current three-candidate review and record adopted policy; no automatic launch"
+}

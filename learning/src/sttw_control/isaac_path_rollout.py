@@ -19,7 +19,7 @@ class IsaacPathRollout:
             plant=IsaacVectorPlant(settings['asset'],list(settings['terrains'].values()),terrain_ids)
         self.plant=plant;self.cc=json.loads(Path(settings['controller_config']).read_text());self.controller=TorchController(self.cc,n,self.device)
         self.lower=lower if lower is not None else TorchLocalLower(settings['lower_actor'],settings['lower_sha256'],n,self.device);self.policy=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],self.config,n,self.device);self.policy.weights=actor.weights
-        self.route=TorchPathReference(np.load(bundle/'route.npz'),self.config,self.device);self.speed=torch.full((n,),2.3,device=self.device);self.middle=TorchMiddleControl(self.policy,self.route,identity['frame_scales'],self.alpha,self.speed);self.scale=torch.tensor([1.5,10.],device=self.device);self.episode=0
+        self.route=TorchPathReference(np.load(bundle/'route.npz'),self.config,self.device);self.speed=torch.full((n,),float(settings.get("user_speed_m_s",2.3)),device=self.device);self.middle=TorchMiddleControl(self.policy,self.route,identity['frame_scales'],self.alpha,self.speed);self.scale=torch.tensor([1.5,10.],device=self.device);self.episode=0
         self.randomization=None;self.randomization_properties=None;self.push_events=0
         if settings.get('randomization'):
             from .isaaclab_randomization import randomize_vehicle_properties,VehicleControlRandomization

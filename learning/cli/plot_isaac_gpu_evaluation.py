@@ -7,7 +7,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True);p.add_argument('--output',type=Path);p.add_argument('--baseline-run',type=Path);p.add_argument('--title',default='H75 fixed-alpha GPU evaluation');a=p.parse_args();out=a.run if a.output is None else a.output;out.mkdir(parents=True,exist_ok=True)
 from sttw_control.isaac_path_reporting import load_case
-r,c=load_case(a.run,a.baseline_run);palette_markers=['o','s','^','D','v','x'];route=np.load(Path(c['bundle'])/'route.npz');labels=['alpha 0','alpha .25','alpha .5','alpha .75','alpha 1','Zero'];colors=['#0072B2','#D55E00','#009E73','#CC79A7','#8A6500','#333333'];styles=['-']*5+['--'];summary=[]
+r,c=load_case(a.run,a.baseline_run);user_speed=float(c["settings"].get("user_speed_m_s",2.3));palette_markers=['o','s','^','D','v','x'];route=np.load(Path(c['bundle'])/'route.npz');labels=['alpha 0','alpha .25','alpha .5','alpha .75','alpha 1','Zero'];colors=['#0072B2','#D55E00','#009E73','#CC79A7','#8A6500','#333333'];styles=['-']*5+['--'];summary=[]
 fig,axs=plt.subplots(2,2,figsize=(12,9));xy,per,cumulative,speed=axs.ravel();last_progress=max(float(r['progress'][np.flatnonzero(r['lower_trace'][:,:,i,6].reshape(-1))[-1],i]) for i in range(6));ref=route['s']<=last_progress+1;xy.plot(*route['xy'][ref].T,':',color='gray',label='Original reference')
 for lane,(label,color) in enumerate(zip(labels,colors)):
     trace=r['lower_trace'][:,:,lane].reshape(-1,11);mask=trace[:,6].astype(bool);indices=np.flatnonzero(mask);steps=np.flatnonzero(r['valid'][:,lane]);position=trace[indices,:2];t=indices*.005+trace[indices,7]*.0002;rewards=r['reward'][steps,lane]
@@ -15,8 +15,8 @@ for lane,(label,color) in enumerate(zip(labels,colors)):
 
     if lane<5 or a.baseline_run is None:
         per.plot(steps+1,rewards,color=color,label=label,linestyle=styles[lane]);cumulative.plot(steps+1,np.cumsum(rewards),color=color)
-    speed.plot(t,trace[indices,2]-2.3,color=color)
-    summary.append(dict(observation_end_s=float(t[-1]),lane=lane,label=label,observed_lower_steps=len(indices),failed=bool(r['failure'][:,lane].any()),last_progress_m=float(r['progress'][indices[-1],lane]),speed_rmse=float(np.sqrt(np.mean((trace[indices,2]-2.3)**2))),cross_rmse=float(np.sqrt(np.mean(trace[indices,3]**2))),peak_roll_rad=float(trace[indices,4].max()),rate_limited_lower_steps=int(r['rate_clipped'][indices,lane].sum())))
+    speed.plot(t,trace[indices,2]-user_speed,color=color)
+    summary.append(dict(observation_end_s=float(t[-1]),lane=lane,label=label,observed_lower_steps=len(indices),failed=bool(r['failure'][:,lane].any()),last_progress_m=float(r['progress'][indices[-1],lane]),speed_rmse=float(np.sqrt(np.mean((trace[indices,2]-user_speed)**2))),cross_rmse=float(np.sqrt(np.mean(trace[indices,3]**2))),peak_roll_rad=float(trace[indices,4].max()),rate_limited_lower_steps=int(r['rate_clipped'][indices,lane].sum())))
 xy.set(xlabel='World x (m)',ylabel='World y (m)',title='Actual XY; crosses mark observed endpoints');xy.axis('equal');xy.legend(fontsize=8);per.set(xlabel='Policy step',ylabel='Reward',title='Per-step reward (includes terminal penalty)');cumulative.set(xlabel='Policy step',ylabel='Cumulative reward');speed.set(xlabel='Time (s)',ylabel='True speed error (m/s)')
 if a.baseline_run:
  for lane,stem in enumerate(['alpha0','alpha025','alpha05','alpha075','alpha1']):
@@ -37,7 +37,7 @@ turn=np.flatnonzero(abs(route['curvature'])>1e-5);bend=route['xy'][turn];axs[1].
 fig,axs=plt.subplots(2,3,figsize=(15,8),layout='constrained')
 for lane,(label,color,ax) in enumerate(zip(labels,colors,axs.flat)):
  trace=r['lower_trace'][:,:,lane].reshape(-1,11);ids=np.flatnonzero(trace[:,6]);t=ids*.005+trace[ids,7]*.0002
- ax.plot(t,trace[ids,2],color=color,label='True forward speed');ax.plot(t,trace[ids,10],'--',color='.4',label='Rear axle × 0.1 m');ax.axhline(2.3,color='black',linestyle=':',label='User request');ax.plot(t,trace[ids,8],'-.',color=color,label='Executed speed reference');ax.set(title=label,xlabel='Time (s)',ylabel='Speed (m/s)');ax.legend(fontsize=8);ax.grid(alpha=.2)
+ ax.plot(t,trace[ids,2],color=color,label='True forward speed');ax.plot(t,trace[ids,10],'--',color='.4',label='Rear axle × 0.1 m');ax.axhline(user_speed,color='black',linestyle=':',label='User request');ax.plot(t,trace[ids,8],'-.',color=color,label='Executed speed reference');ax.set(title=label,xlabel='Time (s)',ylabel='Speed (m/s)');ax.legend(fontsize=8);ax.grid(alpha=.2)
 fig.suptitle(a.title+' — true / wheel proxy / requested / governed speeds');fig.savefig(out/'speed_measurements.png',dpi=150);plt.close(fig)
 (out/'metrics.json').write_text(json.dumps(summary,indent=2));print(json.dumps(summary))
 
@@ -56,7 +56,7 @@ if a.baseline_run:
    cum_components.plot(time,np.cumsum(parts[key][ids,lane]),color=line.get_color());cum_components.plot(zero['time'],np.cumsum(baseline_parts[key]),'--',color=line.get_color(),alpha=.65)
   baseline=r['lower_trace'][:,:,5].reshape(-1,11);bid=np.flatnonzero(baseline[:,6]);bt=bid*.005+baseline[bid,7]*.0002
   errors.plot(time,trace[ids,3],label='Policy signed cross-track');errors.plot(bt,baseline[bid,3],'--',label='Zero signed cross-track')
-  speeds.plot(time,trace[ids,2]-2.3,label='Policy true speed error');speeds.plot(bt,baseline[bid,2]-2.3,'--',label='Zero true speed error');speeds.plot(time,trace[ids,2]-trace[ids,10],':',label='Policy true minus wheel proxy')
+  speeds.plot(time,trace[ids,2]-user_speed,label='Policy true speed error');speeds.plot(bt,baseline[bid,2]-user_speed,'--',label='Zero true speed error');speeds.plot(time,trace[ids,2]-trace[ids,10],':',label='Policy true minus wheel proxy')
   tick.plot(time,replayed[ids,lane],color=colors[lane]);tick.plot(zero['time'],zero['reward'],'--',color='.4');cum.plot(time,np.cumsum(replayed[ids,lane]),color=colors[lane]);cum.plot(zero['time'],np.cumsum(zero['reward']),'--',color='.4')
   for ax,title,ylabel in zip(axes.flat,['Ordinary reward components','Cumulative ordinary components','Path error','Speed errors','Reward per lower step','Cumulative reward'],['Reward','Reward','m','m/s','Reward','Reward']):ax.set(title=title,xlabel='Time (s)',ylabel=ylabel);ax.grid(alpha=.2)
   terrain_meta=json.loads((Path(next(iter(c['settings']['terrains'].values())))/'identity.json').read_text())
