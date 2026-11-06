@@ -1,0 +1,12 @@
+{
+  "status": "prepared_not_started",
+  "maximum_physics_lane_steps": 52800,
+  "optimizer_updates": 0,
+  "simulation_clock_hz": 400,
+  "ground_clock_hz": 200,
+  "policy_clock_hz": 50,
+  "baseline": "Reuse complete root01 L9.6 six single-lane trajectories",
+  "selection": "No model or controller selection; test independent per-lane skill transitions",
+  "acceptance": "Report all six full-task labels, handoff times, actual XY and speed differences, valid trace durations and wall time; investigate regressions before adoption. No assumption of bitwise PhysX equality.",
+  "limits": "Batch implementation currently common upstream root/map and six one-stage candidates; midpoint, external-force, route switching and heterogeneous skill batches not yet supported. Does not complete the full taskbook."
+}

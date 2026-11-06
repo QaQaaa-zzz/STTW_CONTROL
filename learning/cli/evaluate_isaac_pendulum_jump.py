@@ -4,6 +4,8 @@ from pathlib import Path
 import numpy as np
 p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);a=p.parse_args()
 spec=json.loads(a.config.read_text())
+batch=spec.get('batch_candidates')
+if batch and (len(batch)!=len(spec['skills']) or len(set(spec['skills']))!=1 or not spec.get('ground_bundle') or not spec.get('zero_lower') or not spec.get('landing_return') or not spec.get('connection_candidate') or any(spec.get(k) for k in ('connection_midpoint_candidate','connection_selector','forward_branch','external_force_pulse','video'))):p.error('Batch connection requires same frozen jump skill, zero-lower ground, common exit/landing protocol and fixed per-lane candidates')
 pulse=spec.get('external_force_pulse')
 if pulse and (len(spec['skills'])!=1 or pulse['kind']!='external_force_N' or pulse['body']!='chasis' or pulse['duration_s']<=0):p.error('External pulse requires one lane, chasis body, external_force_N and positive duration')
 if spec.get('connection_selector') and (len(spec['skills'])!=1 or not spec.get('ground_bundle') or not spec.get('connection_midpoint_candidate')):p.error('Connection selection requires single-lane ground execution and a declared midpoint event')
@@ -64,7 +66,7 @@ history=TorchPendulumObservation(plant.joints,json.loads(Path(spec.get('model_co
 geometry=TorchPendulumGeometry(json.loads(Path(spec['geometry']).read_text()),plant.bodies)
 last=torch.zeros(n,4,device='cuda:0');alive=torch.ones(n,dtype=torch.bool,device='cuda:0');entered=torch.zeros_like(alive);consumed=torch.zeros_like(alive)
 returned=False;landing_ticks=0;landing_ready=False;transition_speed=None
-if spec.get('landing_return'):assert n==1, 'Landing return currently uses a single lane'
+if spec.get('landing_return') and not batch:assert n==1, 'Landing return currently uses a single lane'
 ground_rows=[];ground_command_rows=[];executed_rows=[]
 connection_events=[('exit','connection_decision.json',spec['connection_candidate'])] if spec.get('connection_candidate') else []
 if spec.get('connection_midpoint_candidate'):connection_events.append(('midpoint','midpoint_decision.json',spec['connection_midpoint_candidate']))
@@ -93,6 +95,10 @@ if spec.get('ground_bundle'):
   gm,gpose,gv=plant.observe()
   ground.middle.reset(gm,gpose,gv,ground.previous_reference,ground.previous_reference,ground.previous_command,ground.controller)
  (out/'ground_controller.json').write_text(json.dumps(dict(upper_sha256=ground.upper_sha256,lower_sha256=ground.lower_sha256,alpha=spec['ground_alpha'],physics_dt=plant.physics_dt,control_dt=.005,policy_dt=.02,physical_substeps=ground.physics_substeps),indent=2))
+if batch:
+ from sttw_control.isaac_pendulum_batch import run_connection_batch
+ print(run_connection_batch(spec,out,plant,ground,policies[0],history,geometry),flush=True)
+ os.sync();os._exit(0)
 target=torch.zeros(n,4,device='cuda:0')
 selector=None
 if spec.get('connection_selector'):

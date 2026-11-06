@@ -1,0 +1,13 @@
+{
+  "role": "Six-lane mixed-phase batch engineering comparison",
+  "simulation_python": "/home/qy/miniconda3/envs/env_isaaclab/bin/python",
+  "analysis_python": "/home/qy/miniconda3/envs/mjp/bin/python",
+  "cases": [
+    {
+      "case_id": "same_root_six_candidates",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_batch_pilot/config.json"
+    }
+  ],
+  "maximum_physics_lane_steps": 52800,
+  "optimizer_updates": 0
+}
