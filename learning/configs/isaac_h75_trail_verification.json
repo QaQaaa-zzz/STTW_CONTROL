@@ -1,0 +1,38 @@
+{
+  "role": "6cm trail reversal verification, frozen H75 and Local300, matched five alphas and Zero",
+  "reference_bundle": "runs/h75_selected_local300_flat/bundle",
+  "base_evaluation_config": "runs/h75_selected_local300_bend/lab_config.json",
+  "terrain_overrides": [
+    {
+      "name": "oblique_6cm",
+      "height_m": 0.06
+    }
+  ],
+  "user_speed_m_s": [
+    2.3,
+    2.6
+  ],
+  "initial_state_protocol": "Original saved initial state and fixed route; contact diagnostics only; no policy or physics changes",
+  "seconds": 10,
+  "max_physics_lane_steps": 600000,
+  "optimizer_updates": 0,
+  "evaluation_overrides": {
+    "plant_options": {
+      "wheel_collision": "sdf",
+      "friction_offset_threshold": 0.0,
+      "compliant_wheels": {
+        "frontwheel": {
+          "stiffness": 5324.4083452801915,
+          "damping": 112.38579318769304
+        },
+        "rearwheel": {
+          "stiffness": 7833.38122453075,
+          "damping": 173.11038721684574
+        }
+      },
+      "env_spacing": 3.0,
+      "track_wheel_contacts": true
+    },
+    "diagnostics": true
+  }
+}
