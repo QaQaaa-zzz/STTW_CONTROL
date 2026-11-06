@@ -49,23 +49,24 @@ class ContactTorqueExperiment:
         self.pulse=torch.tensor(config.get('pulse_Nm',[0.]*env.n),device=env.device)
         if len(self.window)!=2 or not 0<=self.window[0]<self.window[1] or self.pulse.shape!=(env.n,):
             raise ValueError('Declare increasing intervention window and one pulse amplitude per lane')
+        self.zero_torques={key:torch.zeros_like(self.pulse) for key in ['normal_moment','friction_moment','lateral_moment','negative_lateral','reference_delta']}
         self.metadata=dict(config=config,physics_dt_s=self.dt,body_order=env.plant.bodies,
             semantics='post-solve wrench k requests bounded external steering torque at k+1; unchanged motor limits',
             impulse_scope='submitted generalized torque, not direct measurement of cancelled contact impulse',
-            clock='first sampled state at physics_dt; active window gates next-step application time')
+            clock='first sampled state at physics_dt; active window gates next-step application time',
+            contact_sampling='geometry_observed marks actual contact calculation; zero placeholders outside active window are unobserved, not zero measured contact')
         (self.output/'protocol.json').write_text(json.dumps(self.metadata,indent=2))
 
     def record(self,env,lower_tick,physics_tick):
         from .contact_torque_geometry import front_contact_torques
-        samples=env.plant.read_wheel_contact_samples()
-        torques=front_contact_torques(samples,env.plant.bodies)
         next_time=(self.total+1)*self.dt
         active=self.window[0]<=next_time<self.window[1]
+        torques=front_contact_torques(env.plant.read_wheel_contact_samples(),env.plant.bodies) if active else self.zero_torques
         submitted=self.channel.after_solve(torques['negative_lateral'],torques['reference_delta'],self.pulse if self.pulse_window[0]<=next_time<self.pulse_window[1] else torch.zeros_like(self.pulse),env.alive&active)
-        values=dict(**torques,**submitted,bounded_next_torque=env.plant.diagnostic_joint_torque[:,env.plant.signals.steer],alive_before=env.alive.clone(),alpha=env.alpha.clone(),
-            steer_velocity=samples['joint_velocity'][:,env.plant.signals.steer],
-            steer_position=samples['joint_position'][:,env.plant.signals.steer],
-            motor_steering_torque=samples['motor_torque'][:,env.plant.signals.steer])
+        values=dict(**torques,**submitted,geometry_observed=torch.full((env.n,),active,device=env.device,dtype=torch.bool),bounded_next_torque=env.plant.diagnostic_joint_torque[:,env.plant.signals.steer],alive_before=env.alive.clone(),alpha=env.alpha.clone(),
+            steer_velocity=env.plant.dofs[:,env.plant.signals.steer,1],
+            steer_position=env.plant.dofs[:,env.plant.signals.steer,0],
+            motor_steering_torque=env.plant.last_motor_torque[:,env.plant.signals.steer])
         if self.buffers is None:
             self.buffers={k:torch.empty((self.chunk_steps,)+v.shape,device=v.device,dtype=v.dtype) for k,v in values.items()}
         for key,value in values.items():self.buffers[key][self.used].copy_(value)
