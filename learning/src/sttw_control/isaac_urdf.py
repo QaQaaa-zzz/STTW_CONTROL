@@ -26,9 +26,10 @@ def _values(values):
     return ' '.join(format(float(x), '.17g') for x in values)
 
 
-def export_isaac_urdf(output, source=DEFAULT_XML, wheel_vertices=226, *, preserve_self_collisions=False, wheel_sectors=0):
+def export_isaac_urdf(output, source=DEFAULT_XML, wheel_vertices=226, *, preserve_self_collisions=False, wheel_sectors=0, wheel_resolution=None):
     if not 6 <= wheel_vertices <= 226:
         raise ValueError('wheel_vertices must be between 6 and 226')
+    polar_segments, azimuth_segments = wheel_resolution or (8, 32)
     output = Path(output)
     contract = export_isaac_asset(output, source, preserve_self_collisions=preserve_self_collisions)
     model = load_model(source).model
@@ -69,22 +70,22 @@ def export_isaac_urdf(output, source=DEFAULT_XML, wheel_vertices=226, *, preserv
             mesh_name = 'ellipsoid_'+('_'.join(format(x, '.6g') for x in size))+'.obj'
             if kind == mujoco.mjtGeom.mjGEOM_ELLIPSOID and mesh_name not in meshes:
                 vertices = [[0., 0., size[2]]]
-                for polar in range(1, 8):
-                    theta = math.pi*polar/8
-                    for azimuth in range(32):
-                        phi = 2*math.pi*azimuth/32
+                for polar in range(1, polar_segments):
+                    theta = math.pi*polar/polar_segments
+                    for azimuth in range(azimuth_segments):
+                        phi = 2*math.pi*azimuth/azimuth_segments
                         vertices.append([size[0]*math.sin(theta)*math.cos(phi),
                                          size[1]*math.sin(theta)*math.sin(phi), size[2]*math.cos(theta)])
                 vertices.append([0., 0., -size[2]])
                 faces = []
-                for j in range(32):
-                    faces.append([1, 2+j, 2+(j+1)%32])
-                    faces.append([226, 194+(j+1)%32, 194+j])
-                for ring in range(6):
-                    for j in range(32):
-                        a, b = 2+ring*32+j, 2+ring*32+(j+1)%32
-                        faces.extend([[a, a+32, b], [b, a+32, b+32]])
-                if wheel_vertices < len(vertices):
+                for j in range(azimuth_segments):
+                    faces.append([1, 2+j, 2+(j+1)%azimuth_segments])
+                    faces.append([len(vertices), 2+(polar_segments-2)*azimuth_segments+(j+1)%azimuth_segments, 2+(polar_segments-2)*azimuth_segments+j])
+                for ring in range(polar_segments-2):
+                    for j in range(azimuth_segments):
+                        a, b = 2+ring*azimuth_segments+j, 2+ring*azimuth_segments+(j+1)%azimuth_segments
+                        faces.extend([[a, a+azimuth_segments, b], [b, a+azimuth_segments, b+azimuth_segments]])
+                if wheel_resolution is None and wheel_vertices < len(vertices):
                     from scipy.spatial import ConvexHull
                     original = np.asarray(vertices)
                     normalized = original / size
@@ -108,7 +109,7 @@ def export_isaac_urdf(output, source=DEFAULT_XML, wheel_vertices=226, *, preserv
                 text = '\n'.join(['v '+_values(v) for v in vertices]+['f '+' '.join(map(str, f)) for f in faces])+'\n'
                 (output/mesh_name).write_text(text)
                 meshes[mesh_name] = dict(sha256=hashlib.sha256(text.encode()).hexdigest(), vertices=len(vertices),
-                    faces=len(faces), source_semiaxes_m=size.tolist(), source_polar_segments=8, source_azimuth_segments=32, sampling='original mesh' if wheel_vertices == 226 else 'farthest normalized coverage subset; all six extrema retained')
+                    faces=len(faces), source_semiaxes_m=size.tolist(), source_polar_segments=polar_segments, source_azimuth_segments=azimuth_segments, sampling='original mesh' if wheel_vertices == 226 else 'farthest normalized coverage subset; all six extrema retained')
             sector_meshes = []
             if wheel_sectors and kind == mujoco.mjtGeom.mjGEOM_ELLIPSOID:
                 from .collision_geometry import ellipsoid_sectors
@@ -161,7 +162,10 @@ def export_isaac_urdf(output, source=DEFAULT_XML, wheel_vertices=226, *, preserv
     contract['differences'][0] = f'Ellipsoid wheels explicitly sampled to {wheel_vertices}-vertex convex OBJ; analytic contact not preserved.'
     if wheel_sectors:
         contract['differences'][0] = f'Ellipsoid wheels use historical RB {wheel_sectors} convex sectors, polar32/per-sector4; analytic contact not preserved.'
+    if wheel_resolution:
+        contract['differences'][0] = f'Ellipsoid wheel surface sampled at polar{polar_segments}/azimuth{azimuth_segments} for SDF; analytic contact not preserved.'
+    contract['wheel_resolution'] = wheel_resolution
     contract['wheel_sectors'] = wheel_sectors
-    contract['wheel_vertices'] = wheel_vertices
+    contract['wheel_vertices'] = (polar_segments-1)*azimuth_segments+2 if wheel_resolution else wheel_vertices
     (output/'contract.json').write_text(json.dumps(contract, indent=2))
     return contract
