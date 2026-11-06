@@ -19,7 +19,7 @@ class IsaacPathRollout:
             plant=IsaacVectorPlant(settings['asset'],list(settings['terrains'].values()),terrain_ids)
         self.zero_lower=torch.tensor(settings.get('zero_lower',[False]*n),device=self.device)
         self.upper_sha256=identity['files']['actor.npz'];self.lower_sha256=settings['lower_sha256']
-        self.plant=plant;self.wheel_radius_m=getattr(plant,'wheel_radius_m',.1);self.cc=json.loads(Path(settings['controller_config']).read_text());self.cc['wheel_radius_m']=self.wheel_radius_m;self.controller=TorchController(self.cc,n,self.device)
+        self.physics_recorder=None;self.plant=plant;self.wheel_radius_m=getattr(plant,'wheel_radius_m',.1);self.cc=json.loads(Path(settings['controller_config']).read_text());self.cc['wheel_radius_m']=self.wheel_radius_m;self.controller=TorchController(self.cc,n,self.device)
         self.lower=lower if lower is not None else TorchLocalLower(settings['lower_actor'],settings['lower_sha256'],n,self.device);self.policy=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],self.config,n,self.device);self.policy.weights=actor.weights
         self.physics_dt=getattr(self.plant,'physics_dt',.0002);self.physics_substeps=round(.005/self.physics_dt)
         if self.physics_substeps<1 or abs(self.physics_substeps*self.physics_dt-.005)>1e-9:raise ValueError('physics step must divide STTW .005 s control period')
@@ -104,6 +104,7 @@ class IsaacPathRollout:
                 if self.training_pulse is not None:self.training_pulse(physics_tick)
                 motor_command=torch.where(self.alive[:,None],torch.nan_to_num(command),torch.zeros_like(command))
                 contact=self.plant.step(motor_command if self.randomization is None else self.randomization.command(motor_command))
+                if self.physics_recorder is not None:self.physics_recorder.record(self, lower_tick, physics_tick)
                 if self.randomization is not None:self.measurement=self.randomization.observe(self.plant.observe()[0])
                 if self.diagnostics and getattr(self.plant,'wheel_sensors',[]):
                     wheel_points.append(torch.stack([s.data.contact_pos_w[:,0] for s in self.plant.wheel_sensors],dim=1).clone())

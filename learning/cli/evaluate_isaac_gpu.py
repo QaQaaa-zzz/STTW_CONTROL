@@ -58,6 +58,9 @@ if s.get('replanning'):
     from sttw_control.goal_replanning import IsaacGoalReplanning
     planner=IsaacGoalReplanning(env,s['replanning'],a.output)
     (a.output/'replanning_decisions.json').write_text('[]')
+if s.get('physics_contact_recording'):
+    from sttw_control.physics_contact_recording import PhysicsContactRecorder
+    env.physics_recorder=PhysicsContactRecorder(a.output/'physics_contacts',env,s['physics_contact_recording'])
 fork_step=None
 for step in range(env.horizon):
     if intervention:
@@ -80,6 +83,7 @@ for step in range(env.horizon):
         row_chunks.append(transfer(rows));detail_chunks.append(transfer(detail));rows.clear();detail.clear()
     if (step+1)%50==0:print(json.dumps(dict(step=step+1,alive=int(env.alive.sum()),seconds=time.time()-started)),flush=True)
     if intervention and fork_step is not None and intervention.get('post_fork_seconds') is not None and (step+1-fork_step)*.02>=intervention['post_fork_seconds']:break
+if env.physics_recorder is not None:env.physics_recorder.close()
 if rows:
     row_chunks.append(transfer(rows));detail_chunks.append(transfer(detail))
 arrays={key:np.concatenate([chunk[key] for chunk in chunks]) for chunks in (row_chunks,detail_chunks) for key in chunks[0]}
