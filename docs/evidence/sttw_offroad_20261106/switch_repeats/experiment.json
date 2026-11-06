@@ -1,0 +1,16 @@
+{
+  "role": "DEV four frozen parameter repeats102-105; seven policies per group; fixed H75/Local300; all replanning; no new tuning",
+  "budget": {
+    "lanes": 28,
+    "seconds": 10,
+    "lane_physics_steps": 1400000,
+    "optimizer_updates": 0
+  },
+  "baseline": "all five fixed alpha plus Zero per seed; reuse prior seed101 separately",
+  "acceptance": "paired path and speed RMSE vs fixed1 and fixed.5, first goal and same-time windows; report all seeds incl negative cases; no universal dominance requirement",
+  "stop": "one batch only, no switch point search",
+  "execution": "completed",
+  "config": "learning/configs/isaac_h75_bend_switch_repeats.json",
+  "service": "sttw-bend-switch-repeats.service",
+  "evaluation": "complete"
+}

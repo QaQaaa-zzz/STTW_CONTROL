@@ -1051,6 +1051,49 @@
       "source": "learning/configs/isaac_h75_bend_switch_replanning.json",
       "bytes": 2876,
       "sha256": "5c91ca1727027e2de36fc806479047813df74c96be82cffbbcdd95166aaeaddd"
+    },
+    {
+      "file": "switch_repeats/summary.json",
+      "source": "runs/h75_bend_switch_repeats/summary.json",
+      "bytes": 51195,
+      "sha256": "3604397b1441f48f0b40bb4a48f3e6a94dd488d717a14309e0cdbfa80d8fcd2b"
+    },
+    {
+      "file": "switch_repeats/xy_repeats.png",
+      "source": "runs/h75_bend_switch_repeats/xy_repeats.png",
+      "bytes": 278468,
+      "sha256": "1c4ab192d8215bcd4bc7fa73c9a6a7ee2e32539f564da47f530155ce217ed2b6"
+    },
+    {
+      "file": "switch_repeats/paired_differences.png",
+      "source": "runs/h75_bend_switch_repeats/paired_differences.png",
+      "bytes": 108926,
+      "sha256": "2b7d77ef6ea60bc1b38d5b87834ee33ef0f58f5613d683b1d68de0d6c8680ac9"
+    },
+    {
+      "file": "switch_repeats/experiment.json",
+      "source": "runs/h75_bend_switch_repeats/experiment.json",
+      "bytes": 740,
+      "sha256": "e9c72d618b2ef56b40a36b2b8c7c6b8c6eef57bd5cb1cbc3c8fa1e0b8f3633cb"
+    },
+    {
+      "file": "source/learning/cli/summarize_h75_switch_repeats.py",
+      "source": "learning/cli/summarize_h75_switch_repeats.py",
+      "bytes": 5930,
+      "sha256": "54deb1efc8e5c17bca35f4fb7ada03ace5b60b54f51d6a9042f0bafa3c4c28b5"
+    },
+    {
+      "file": "source/learning/cli/split_isaac_replanning_groups.py",
+      "source": "learning/cli/split_isaac_replanning_groups.py",
+      "bytes": 2730,
+      "sha256": "7e7e31d9d09ac10cc623c36608076154b0c3d1ebddd15fe3673fbf84cef19ff2"
+    },
+    {
+      "file": "source/learning/configs/isaac_h75_bend_switch_repeats.json",
+      "source": "learning/configs/isaac_h75_bend_switch_repeats.json",
+      "bytes": 8786,
+      "sha256": "bb04d525567a7b4c5e59e316bf908072dafc2f1b202315bdea8d846895859f5d"
     }
-  ]
+  ],
+  "incremental_source_commit": "582b1927"
 }
