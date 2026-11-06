@@ -1,3 +1,11 @@
+## User clarification: STTW remains bicycle; cross-skill platform is pendulum bicycle
+
+User explicitly clarified the platform: STTW continues on the current bicycle, while cross-skill tasks use a bicycle with a pendulum. Go2 is a training/transfer reference, NOT the cross-skill robot or policy to attach. This corrects the preceding exploratory Go2 compatibility assumption; no Go2 adapter, training or model change was performed. Bark clarification notification was delivered and answered.
+
+Read-only XML inspection located two relevant candidates: `/home/qy/STTWproject/dvgc_mjx_v21_port/orange_bike_2kg_horizontal.xml` and `/home/qy/quadruped_jump_jit/framework/assets/orange_bike_4kg_horizontal.xml`. Both have `hip_joint` and `knee_joint` in addition to steering/front/rear wheel joints, with steering position, rear-wheel velocity, hip position and knee position actuators. The selected current STTW model has no hip/knee joints. Source hashes and exact actuator attributes are retained in `runs/pendulum_bike_handoff/model_inspection.json`; filenames do not establish the correct trained policy/model pair. Neither candidate is adopted yet.
+
+Next required compatibility work is to identify the pendulum-bike source/RecoveryBridge checkpoint and its exact model/control/history contract, then define real physical-state-preserving ground-to-skill handoff. Do not pad observations, map a Go2 twelve-joint action, assume a fixed pendulum is dynamically equivalent to the current bicycle, or silently transplant masses. All exploration remains read-only outside STTW_CONTROL. Current frozen Local300/H75 and completed terrain results remain unchanged. Hardware evidence and continuous-task completion are still missing; this platform clarification does not mark them complete.
+
 ## Frozen offroad runtime entry prepared
 
 Current simulation selection is now explicit as `current_offroad_simulation_id` in `learning/configs/frozen_middle_registry.json`, with `isaaclab_h75_offroad_selected.json` as the six-lane all-replanning nominal entry. Existing U170/historical aliases remain unchanged. No weights or controller behavior changed; necessary actor/config/asset/warm-state identities recorded once. This new convenience configuration has not itself been executed and is not a new evaluation result.
