@@ -22,6 +22,12 @@ for terrain in ['oblique_4cm','oblique_6cm']:
                 dt=float(source['time_s'][1]-source['time_s'][0]);mom=np.column_stack((source['moment'][:,lane,0],source['friction_components'][:,lane,:2]))[paired]
                 force=source['normal_force'][paired,lane,0]
                 measurements[label]=dict(signed_impulse_Nms=(mom.sum(0)*dt).tolist(),absolute_impulse_Nms=(abs(mom).sum(0)*dt).tolist(),net_absolute_impulse_Nms=float(abs(mom.sum(1)).sum()*dt),front_near_zero_load_s=float((np.linalg.norm(force,axis=1)<.1).sum()*dt),steer_rate_rms_rad_s=float(np.sqrt(np.mean(source['steer_velocity'][paired,lane]**2))))
+                for field in ['negative_trail_lateral_moment','restore_reference_lateral_delta']:
+                    torque=source[field][paired,lane]
+                    measurements[label][field+'_signed_impulse_Nms']=float(torque.sum()*dt)
+                    measurements[label][field+'_absolute_impulse_Nms']=float(np.abs(torque).sum()*dt)
+                trail=source['friction_patch_min_trail'][paired,lane]
+                measurements[label]['negative_trail_duration_s']=float((trail<0).sum()*dt)
             delta={key:(np.asarray(measurements['terrain'][key])-np.asarray(measurements['flat'][key])).tolist() for key in measurements['flat']}
             row['windows'][name]=dict(start_s=lo,end_s=hi,paired_steps=int(paired.sum()),**measurements,terrain_minus_flat=delta)
         rows.append(row)
