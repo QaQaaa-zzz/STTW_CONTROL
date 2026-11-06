@@ -2,70 +2,70 @@
   "fixed_candidates": [
     {
       "candidate_id": "v1.8_a0.0",
-      "groups": 6,
-      "complete_count": 3,
-      "successful_mean_cost": 10.053333409627278,
-      "matched_decided_groups": 0,
-      "matched_decided_complete_count": 0
+      "groups": 9,
+      "complete_count": 4,
+      "successful_mean_cost": 9.760000019073486,
+      "matched_decided_groups": 6,
+      "matched_decided_complete_count": 4
     },
     {
       "candidate_id": "v1.8_a0.5",
-      "groups": 6,
-      "complete_count": 2,
-      "successful_mean_cost": 10.520000381469726,
-      "matched_decided_groups": 0,
-      "matched_decided_complete_count": 0
+      "groups": 9,
+      "complete_count": 4,
+      "successful_mean_cost": 9.950000114440918,
+      "matched_decided_groups": 6,
+      "matched_decided_complete_count": 4
     },
     {
       "candidate_id": "v1.8_a1.0",
-      "groups": 6,
-      "complete_count": 1,
-      "successful_mean_cost": 9.980000076293944,
-      "matched_decided_groups": 0,
-      "matched_decided_complete_count": 0
+      "groups": 9,
+      "complete_count": 2,
+      "successful_mean_cost": 10.130000247955321,
+      "matched_decided_groups": 6,
+      "matched_decided_complete_count": 2
     },
     {
       "candidate_id": "v2.0_a0.0",
-      "groups": 6,
-      "complete_count": 5,
-      "successful_mean_cost": 9.207999984741212,
-      "matched_decided_groups": 0,
-      "matched_decided_complete_count": 0
+      "groups": 9,
+      "complete_count": 6,
+      "successful_mean_cost": 9.363333333333335,
+      "matched_decided_groups": 6,
+      "matched_decided_complete_count": 5
     },
     {
       "candidate_id": "v2.0_a0.5",
-      "groups": 6,
-      "complete_count": 2,
-      "successful_mean_cost": 9.650000019073486,
-      "matched_decided_groups": 0,
-      "matched_decided_complete_count": 0
+      "groups": 9,
+      "complete_count": 3,
+      "successful_mean_cost": 9.626666564941406,
+      "matched_decided_groups": 6,
+      "matched_decided_complete_count": 3
     },
     {
       "candidate_id": "v2.0_a1.0",
-      "groups": 6,
-      "complete_count": 1,
-      "successful_mean_cost": 8.660000381469725,
-      "matched_decided_groups": 0,
-      "matched_decided_complete_count": 0
+      "groups": 9,
+      "complete_count": 2,
+      "successful_mean_cost": 9.23000015258789,
+      "matched_decided_groups": 6,
+      "matched_decided_complete_count": 1
     }
   ],
-  "observed_oracle_complete_groups": 5,
+  "observed_oracle_complete_groups": 8,
   "role": "leave-one-origin-run-out DEV; not independent TEST or deployed planning success",
-  "groups": 6,
-  "selected_groups": 0,
-  "unknown_groups": 6,
-  "no_feasible_groups": 0,
+  "groups": 9,
+  "selected_groups": 6,
+  "unknown_groups": 0,
+  "no_feasible_groups": 3,
   "selection_rule": {
     "minimum_completion": 0.7,
     "probability_tolerance": 0.05
   },
-  "selected_complete_count": 0,
+  "selected_complete_count": 6,
   "false_clearance_count": 0,
-  "clearance_denominator": 0,
-  "selection_coverage": 0.0,
+  "clearance_denominator": 6,
+  "selection_coverage": 0.6666666666666666,
   "false_clearance_scope": "Selected candidate fails the full task; abstentions excluded from clearance denominator and retained in query coverage",
-  "brier_score": null,
-  "brier_count": 0,
+  "brier_score": 0.2027035526444338,
+  "brier_count": 54,
   "rows": [
     {
       "origin_id": "rb_upstream_offset_01",
@@ -74,7 +74,7 @@
       "decision_id": "rb_upstream_offset_01:approach_5.6",
       "task_id": "ch3_jump_connection_hold_v1:approach_5.6",
       "skill_id": "{\"dt\": 0.0025, \"model\": \"f2dfa98a787f06153174a94e0ca25eddc44d159671ab25dbac1b02a5abf8df03\", \"policies\": {\"ground\": \"03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b\", \"jump\": \"80529e5c6ffdc4036da9ee08a4218193d706ae55e23ce02e9cc7cd840c01be39\"}, \"zero_lower\": true}",
-      "selection_status": "unknown",
+      "selection_status": "no_feasible",
       "selected_candidate": null,
       "selected_complete": null,
       "selected_success_cost": null,
@@ -83,54 +83,91 @@
       "predictions": [
         {
           "candidate_id": "v1.8_a0.0",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
+          "known": true,
+          "support": 1.4432164419368323,
+          "complete_probability": 0.0,
           "success_cost": null,
-          "sample_count": 1
+          "sample_count": 2
         },
         {
           "candidate_id": "v1.8_a0.5",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
+          "known": true,
+          "support": 1.4432164419368323,
+          "complete_probability": 0.0,
           "success_cost": null,
-          "sample_count": 1
+          "sample_count": 2
         },
         {
           "candidate_id": "v1.8_a1.0",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
+          "known": true,
+          "support": 1.4432164419368323,
+          "complete_probability": 0.0,
           "success_cost": null,
-          "sample_count": 1
+          "sample_count": 2
         },
         {
           "candidate_id": "v2.0_a0.0",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
+          "known": true,
+          "support": 1.4432164419368323,
+          "complete_probability": 0.0,
           "success_cost": null,
-          "sample_count": 1
+          "sample_count": 2
         },
         {
           "candidate_id": "v2.0_a0.5",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
+          "known": true,
+          "support": 1.4432164419368323,
+          "complete_probability": 0.0,
           "success_cost": null,
-          "sample_count": 1
+          "sample_count": 2
         },
         {
           "candidate_id": "v2.0_a1.0",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
-          "success_cost": null,
-          "sample_count": 1
+          "known": true,
+          "support": 1.4432164419368323,
+          "complete_probability": 0.6690743421478484,
+          "success_cost": 9.799999923706054,
+          "sample_count": 2
         }
       ],
-      "calibration": []
+      "calibration": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "probability": 0.0,
+          "actual_complete": 0,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "probability": 0.0,
+          "actual_complete": 0,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "probability": 0.0,
+          "actual_complete": 0,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "probability": 0.0,
+          "actual_complete": 1,
+          "squared_error": 1.0
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "probability": 0.0,
+          "actual_complete": 0,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "probability": 0.6690743421478484,
+          "actual_complete": 0,
+          "squared_error": 0.4476604753205762
+        }
+      ]
     },
     {
       "origin_id": "rb_upstream_offset_01",
@@ -139,63 +176,100 @@
       "decision_id": "rb_upstream_offset_01:approach_7.6",
       "task_id": "ch3_jump_connection_hold_v1:approach_7.6",
       "skill_id": "{\"dt\": 0.0025, \"model\": \"f2dfa98a787f06153174a94e0ca25eddc44d159671ab25dbac1b02a5abf8df03\", \"policies\": {\"ground\": \"03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b\", \"jump\": \"80529e5c6ffdc4036da9ee08a4218193d706ae55e23ce02e9cc7cd840c01be39\"}, \"zero_lower\": true}",
-      "selection_status": "unknown",
-      "selected_candidate": null,
-      "selected_complete": null,
-      "selected_success_cost": null,
+      "selection_status": "selected",
+      "selected_candidate": "v1.8_a0.0",
+      "selected_complete": 1,
+      "selected_success_cost": 8.979999809265138,
       "observed_oracle_candidate": "v2.0_a0.0",
       "observed_oracle_success_cost": 8.639999656677247,
       "predictions": [
         {
           "candidate_id": "v1.8_a0.0",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
-          "success_cost": null,
-          "sample_count": 1
+          "known": true,
+          "support": 1.4432164419368323,
+          "complete_probability": 1.0,
+          "success_cost": 9.144740386317642,
+          "sample_count": 2
         },
         {
           "candidate_id": "v1.8_a0.5",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
-          "success_cost": null,
-          "sample_count": 1
+          "known": true,
+          "support": 1.4432164419368323,
+          "complete_probability": 0.6690743421478484,
+          "success_cost": 9.039999694824218,
+          "sample_count": 2
         },
         {
           "candidate_id": "v1.8_a1.0",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
+          "known": true,
+          "support": 1.4432164419368323,
+          "complete_probability": 0.0,
           "success_cost": null,
-          "sample_count": 1
+          "sample_count": 2
         },
         {
           "candidate_id": "v2.0_a0.0",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
-          "success_cost": null,
-          "sample_count": 1
+          "known": true,
+          "support": 1.4432164419368323,
+          "complete_probability": 1.0,
+          "success_cost": 9.689941244734078,
+          "sample_count": 2
         },
         {
           "candidate_id": "v2.0_a0.5",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
+          "known": true,
+          "support": 1.4432164419368323,
+          "complete_probability": 0.0,
           "success_cost": null,
-          "sample_count": 1
+          "sample_count": 2
         },
         {
           "candidate_id": "v2.0_a1.0",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
-          "success_cost": null,
-          "sample_count": 1
+          "known": true,
+          "support": 1.4432164419368323,
+          "complete_probability": 0.3309256578521515,
+          "success_cost": 8.660000381469724,
+          "sample_count": 2
         }
       ],
-      "calibration": []
+      "calibration": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "probability": 0.6690743421478484,
+          "actual_complete": 0,
+          "squared_error": 0.4476604753205762
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "probability": 0.0,
+          "actual_complete": 0,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "probability": 0.0,
+          "actual_complete": 0,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "probability": 0.3309256578521515,
+          "actual_complete": 0,
+          "squared_error": 0.10951179102487923
+        }
+      ]
     },
     {
       "origin_id": "rb_upstream_offset_01",
@@ -204,63 +278,100 @@
       "decision_id": "rb_upstream_offset_01:approach_9.6",
       "task_id": "ch3_jump_connection_hold_v1:approach_9.6",
       "skill_id": "{\"dt\": 0.0025, \"model\": \"f2dfa98a787f06153174a94e0ca25eddc44d159671ab25dbac1b02a5abf8df03\", \"policies\": {\"ground\": \"03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b\", \"jump\": \"80529e5c6ffdc4036da9ee08a4218193d706ae55e23ce02e9cc7cd840c01be39\"}, \"zero_lower\": true}",
-      "selection_status": "unknown",
-      "selected_candidate": null,
-      "selected_complete": null,
-      "selected_success_cost": null,
+      "selection_status": "selected",
+      "selected_candidate": "v2.0_a0.5",
+      "selected_complete": 1,
+      "selected_success_cost": 9.679999618530275,
       "observed_oracle_candidate": "v2.0_a0.5",
       "observed_oracle_success_cost": 9.679999618530275,
       "predictions": [
         {
           "candidate_id": "v1.8_a0.0",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
-          "success_cost": null,
-          "sample_count": 1
+          "known": true,
+          "support": 1.4432164419368323,
+          "complete_probability": 0.3309256578521515,
+          "success_cost": 11.500000534057616,
+          "sample_count": 2
         },
         {
           "candidate_id": "v1.8_a0.5",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
-          "success_cost": null,
-          "sample_count": 1
+          "known": true,
+          "support": 1.4432164419368323,
+          "complete_probability": 1.0,
+          "success_cost": 10.196533073545217,
+          "sample_count": 2
         },
         {
           "candidate_id": "v1.8_a1.0",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
-          "success_cost": null,
-          "sample_count": 1
+          "known": true,
+          "support": 1.4432164419368323,
+          "complete_probability": 1.0,
+          "success_cost": 10.180722608646745,
+          "sample_count": 2
         },
         {
           "candidate_id": "v2.0_a0.0",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
-          "success_cost": null,
-          "sample_count": 1
+          "known": true,
+          "support": 1.4432164419368323,
+          "complete_probability": 0.3309256578521515,
+          "success_cost": 9.259999809265135,
+          "sample_count": 2
         },
         {
           "candidate_id": "v2.0_a0.5",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
-          "success_cost": null,
-          "sample_count": 1
+          "known": true,
+          "support": 1.4432164419368323,
+          "complete_probability": 1.0,
+          "success_cost": 9.593236935467571,
+          "sample_count": 2
         },
         {
           "candidate_id": "v2.0_a1.0",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
+          "known": true,
+          "support": 1.4432164419368323,
+          "complete_probability": 0.0,
           "success_cost": null,
-          "sample_count": 1
+          "sample_count": 2
         }
       ],
-      "calibration": []
+      "calibration": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "probability": 0.3309256578521515,
+          "actual_complete": 0,
+          "squared_error": 0.10951179102487923
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "probability": 1.0,
+          "actual_complete": 0,
+          "squared_error": 1.0
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "probability": 0.3309256578521515,
+          "actual_complete": 1,
+          "squared_error": 0.4476604753205762
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "probability": 0.0,
+          "actual_complete": 0,
+          "squared_error": 0.0
+        }
+      ]
     },
     {
       "origin_id": "rb_upstream_offset_03",
@@ -269,7 +380,7 @@
       "decision_id": "rb_upstream_offset_03:approach_5.6",
       "task_id": "ch3_jump_connection_hold_v1:approach_5.6",
       "skill_id": "{\"dt\": 0.0025, \"model\": \"f2dfa98a787f06153174a94e0ca25eddc44d159671ab25dbac1b02a5abf8df03\", \"policies\": {\"ground\": \"03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b\", \"jump\": \"80529e5c6ffdc4036da9ee08a4218193d706ae55e23ce02e9cc7cd840c01be39\"}, \"zero_lower\": true}",
-      "selection_status": "unknown",
+      "selection_status": "no_feasible",
       "selected_candidate": null,
       "selected_complete": null,
       "selected_success_cost": null,
@@ -278,54 +389,91 @@
       "predictions": [
         {
           "candidate_id": "v1.8_a0.0",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
+          "known": true,
+          "support": 1.0993589968167548,
+          "complete_probability": 0.0,
           "success_cost": null,
-          "sample_count": 1
+          "sample_count": 2
         },
         {
           "candidate_id": "v1.8_a0.5",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
+          "known": true,
+          "support": 1.0993589968167548,
+          "complete_probability": 0.0,
           "success_cost": null,
-          "sample_count": 1
+          "sample_count": 2
         },
         {
           "candidate_id": "v1.8_a1.0",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
+          "known": true,
+          "support": 1.0993589968167548,
+          "complete_probability": 0.0,
           "success_cost": null,
-          "sample_count": 1
+          "sample_count": 2
         },
         {
           "candidate_id": "v2.0_a0.0",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
-          "success_cost": null,
-          "sample_count": 1
+          "known": true,
+          "support": 1.0993589968167548,
+          "complete_probability": 0.43443256648091577,
+          "success_cost": 8.479999809265138,
+          "sample_count": 2
         },
         {
           "candidate_id": "v2.0_a0.5",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
+          "known": true,
+          "support": 1.0993589968167548,
+          "complete_probability": 0.0,
           "success_cost": null,
-          "sample_count": 1
+          "sample_count": 2
         },
         {
           "candidate_id": "v2.0_a1.0",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
-          "success_cost": null,
-          "sample_count": 1
+          "known": true,
+          "support": 1.0993589968167548,
+          "complete_probability": 0.5655674335190842,
+          "success_cost": 9.799999923706054,
+          "sample_count": 2
         }
       ],
-      "calibration": []
+      "calibration": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "probability": 0.0,
+          "actual_complete": 0,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "probability": 0.0,
+          "actual_complete": 0,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "probability": 0.0,
+          "actual_complete": 0,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "probability": 0.43443256648091577,
+          "actual_complete": 0,
+          "squared_error": 0.1887316548191953
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "probability": 0.0,
+          "actual_complete": 0,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "probability": 0.5655674335190842,
+          "actual_complete": 0,
+          "squared_error": 0.31986652185736375
+        }
+      ]
     },
     {
       "origin_id": "rb_upstream_offset_03",
@@ -334,63 +482,100 @@
       "decision_id": "rb_upstream_offset_03:approach_7.6",
       "task_id": "ch3_jump_connection_hold_v1:approach_7.6",
       "skill_id": "{\"dt\": 0.0025, \"model\": \"f2dfa98a787f06153174a94e0ca25eddc44d159671ab25dbac1b02a5abf8df03\", \"policies\": {\"ground\": \"03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b\", \"jump\": \"80529e5c6ffdc4036da9ee08a4218193d706ae55e23ce02e9cc7cd840c01be39\"}, \"zero_lower\": true}",
-      "selection_status": "unknown",
-      "selected_candidate": null,
-      "selected_complete": null,
-      "selected_success_cost": null,
+      "selection_status": "selected",
+      "selected_candidate": "v1.8_a0.0",
+      "selected_complete": 1,
+      "selected_success_cost": 9.67999988555908,
       "observed_oracle_candidate": "v2.0_a1.0",
       "observed_oracle_success_cost": 8.660000381469725,
       "predictions": [
         {
           "candidate_id": "v1.8_a0.0",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
-          "success_cost": null,
-          "sample_count": 1
+          "known": true,
+          "support": 1.0993589968167548,
+          "complete_probability": 1.0,
+          "success_cost": 8.923443087487913,
+          "sample_count": 2
         },
         {
           "candidate_id": "v1.8_a0.5",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
-          "success_cost": null,
-          "sample_count": 1
+          "known": true,
+          "support": 1.0993589968167548,
+          "complete_probability": 0.5655674335190842,
+          "success_cost": 9.039999694824218,
+          "sample_count": 2
         },
         {
           "candidate_id": "v1.8_a1.0",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
+          "known": true,
+          "support": 1.0993589968167548,
+          "complete_probability": 0.0,
           "success_cost": null,
-          "sample_count": 1
+          "sample_count": 2
         },
         {
           "candidate_id": "v2.0_a0.0",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
-          "success_cost": null,
-          "sample_count": 1
+          "known": true,
+          "support": 1.0993589968167548,
+          "complete_probability": 1.0,
+          "success_cost": 9.488351044277412,
+          "sample_count": 2
         },
         {
           "candidate_id": "v2.0_a0.5",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
+          "known": true,
+          "support": 1.0993589968167548,
+          "complete_probability": 0.0,
           "success_cost": null,
-          "sample_count": 1
+          "sample_count": 2
         },
         {
           "candidate_id": "v2.0_a1.0",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
+          "known": true,
+          "support": 1.0993589968167548,
+          "complete_probability": 0.0,
           "success_cost": null,
-          "sample_count": 1
+          "sample_count": 2
         }
       ],
-      "calibration": []
+      "calibration": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "probability": 0.5655674335190842,
+          "actual_complete": 0,
+          "squared_error": 0.31986652185736375
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "probability": 0.0,
+          "actual_complete": 0,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "probability": 0.0,
+          "actual_complete": 0,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "probability": 0.0,
+          "actual_complete": 1,
+          "squared_error": 1.0
+        }
+      ]
     },
     {
       "origin_id": "rb_upstream_offset_03",
@@ -399,63 +584,406 @@
       "decision_id": "rb_upstream_offset_03:approach_9.6",
       "task_id": "ch3_jump_connection_hold_v1:approach_9.6",
       "skill_id": "{\"dt\": 0.0025, \"model\": \"f2dfa98a787f06153174a94e0ca25eddc44d159671ab25dbac1b02a5abf8df03\", \"policies\": {\"ground\": \"03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b\", \"jump\": \"80529e5c6ffdc4036da9ee08a4218193d706ae55e23ce02e9cc7cd840c01be39\"}, \"zero_lower\": true}",
-      "selection_status": "unknown",
-      "selected_candidate": null,
-      "selected_complete": null,
-      "selected_success_cost": null,
+      "selection_status": "selected",
+      "selected_candidate": "v2.0_a0.5",
+      "selected_complete": 1,
+      "selected_success_cost": 9.620000419616698,
       "observed_oracle_candidate": "v2.0_a0.0",
       "observed_oracle_success_cost": 9.259999809265135,
       "predictions": [
         {
           "candidate_id": "v1.8_a0.0",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
+          "known": true,
+          "support": 1.0993589968167548,
+          "complete_probability": 0.0,
           "success_cost": null,
-          "sample_count": 1
+          "sample_count": 2
         },
         {
           "candidate_id": "v1.8_a0.5",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
-          "success_cost": null,
-          "sample_count": 1
+          "known": true,
+          "support": 1.0993589968167548,
+          "complete_probability": 1.0,
+          "success_cost": 9.789509376359819,
+          "sample_count": 2
         },
         {
           "candidate_id": "v1.8_a1.0",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
-          "success_cost": null,
-          "sample_count": 1
+          "known": true,
+          "support": 1.0993589968167548,
+          "complete_probability": 0.5655674335190842,
+          "success_cost": 10.280000419616698,
+          "sample_count": 2
         },
         {
           "candidate_id": "v2.0_a0.0",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
-          "success_cost": null,
-          "sample_count": 1
+          "known": true,
+          "support": 1.0993589968167548,
+          "complete_probability": 0.43443256648091577,
+          "success_cost": 10.880000381469728,
+          "sample_count": 2
         },
         {
           "candidate_id": "v2.0_a0.5",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
-          "success_cost": null,
-          "sample_count": 1
+          "known": true,
+          "support": 1.0993589968167548,
+          "complete_probability": 1.0,
+          "success_cost": 9.62344289675305,
+          "sample_count": 2
         },
         {
           "candidate_id": "v2.0_a1.0",
-          "known": false,
-          "support": 0.47759735047098767,
-          "complete_probability": null,
+          "known": true,
+          "support": 1.0993589968167548,
+          "complete_probability": 0.0,
           "success_cost": null,
-          "sample_count": 1
+          "sample_count": 2
         }
       ],
-      "calibration": []
+      "calibration": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "probability": 0.0,
+          "actual_complete": 1,
+          "squared_error": 1.0
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "probability": 0.5655674335190842,
+          "actual_complete": 1,
+          "squared_error": 0.1887316548191953
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "probability": 0.43443256648091577,
+          "actual_complete": 1,
+          "squared_error": 0.31986652185736375
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "probability": 0.0,
+          "actual_complete": 0,
+          "squared_error": 0.0
+        }
+      ]
+    },
+    {
+      "origin_id": "rb_upstream_offset_06",
+      "disturbance_id": "D0",
+      "snapshot_id": null,
+      "decision_id": "rb_upstream_offset_06:approach_5.6",
+      "task_id": "ch3_jump_connection_hold_v1:approach_5.6",
+      "skill_id": "{\"dt\": 0.0025, \"model\": \"f2dfa98a787f06153174a94e0ca25eddc44d159671ab25dbac1b02a5abf8df03\", \"policies\": {\"ground\": \"03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b\", \"jump\": \"80529e5c6ffdc4036da9ee08a4218193d706ae55e23ce02e9cc7cd840c01be39\"}, \"zero_lower\": true}",
+      "selection_status": "no_feasible",
+      "selected_candidate": null,
+      "selected_complete": null,
+      "selected_success_cost": null,
+      "observed_oracle_candidate": "v2.0_a1.0",
+      "observed_oracle_success_cost": 9.799999923706054,
+      "predictions": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.5873807378116116,
+          "complete_probability": 0.0,
+          "success_cost": null,
+          "sample_count": 2
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.5873807378116116,
+          "complete_probability": 0.0,
+          "success_cost": null,
+          "sample_count": 2
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.5873807378116116,
+          "complete_probability": 0.0,
+          "success_cost": null,
+          "sample_count": 2
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.5873807378116116,
+          "complete_probability": 0.608309694369268,
+          "success_cost": 8.479999809265138,
+          "sample_count": 2
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.5873807378116116,
+          "complete_probability": 0.0,
+          "success_cost": null,
+          "sample_count": 2
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.5873807378116116,
+          "complete_probability": 0.0,
+          "success_cost": null,
+          "sample_count": 2
+        }
+      ],
+      "calibration": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "probability": 0.0,
+          "actual_complete": 0,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "probability": 0.0,
+          "actual_complete": 0,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "probability": 0.0,
+          "actual_complete": 0,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "probability": 0.608309694369268,
+          "actual_complete": 0,
+          "squared_error": 0.3700406842636322
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "probability": 0.0,
+          "actual_complete": 0,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "probability": 0.0,
+          "actual_complete": 1,
+          "squared_error": 1.0
+        }
+      ]
+    },
+    {
+      "origin_id": "rb_upstream_offset_06",
+      "disturbance_id": "D0",
+      "snapshot_id": null,
+      "decision_id": "rb_upstream_offset_06:approach_7.6",
+      "task_id": "ch3_jump_connection_hold_v1:approach_7.6",
+      "skill_id": "{\"dt\": 0.0025, \"model\": \"f2dfa98a787f06153174a94e0ca25eddc44d159671ab25dbac1b02a5abf8df03\", \"policies\": {\"ground\": \"03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b\", \"jump\": \"80529e5c6ffdc4036da9ee08a4218193d706ae55e23ce02e9cc7cd840c01be39\"}, \"zero_lower\": true}",
+      "selection_status": "selected",
+      "selected_candidate": "v2.0_a0.0",
+      "selected_complete": 1,
+      "selected_success_cost": 10.140000076293944,
+      "observed_oracle_candidate": "v1.8_a0.0",
+      "observed_oracle_success_cost": 8.879999847412108,
+      "predictions": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.5873807378116116,
+          "complete_probability": 1.0,
+          "success_cost": 9.254183053090248,
+          "sample_count": 2
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.5873807378116116,
+          "complete_probability": 0.0,
+          "success_cost": null,
+          "sample_count": 2
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.5873807378116116,
+          "complete_probability": 0.0,
+          "success_cost": null,
+          "sample_count": 2
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.5873807378116116,
+          "complete_probability": 1.0,
+          "success_cost": 8.694836538534338,
+          "sample_count": 2
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.5873807378116116,
+          "complete_probability": 0.0,
+          "success_cost": null,
+          "sample_count": 2
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.5873807378116116,
+          "complete_probability": 0.39169030563073204,
+          "success_cost": 8.660000381469725,
+          "sample_count": 2
+        }
+      ],
+      "calibration": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "probability": 0.0,
+          "actual_complete": 1,
+          "squared_error": 1.0
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "probability": 0.0,
+          "actual_complete": 0,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "probability": 0.0,
+          "actual_complete": 0,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "probability": 0.39169030563073204,
+          "actual_complete": 0,
+          "squared_error": 0.15342129552509629
+        }
+      ]
+    },
+    {
+      "origin_id": "rb_upstream_offset_06",
+      "disturbance_id": "D0",
+      "snapshot_id": null,
+      "decision_id": "rb_upstream_offset_06:approach_9.6",
+      "task_id": "ch3_jump_connection_hold_v1:approach_9.6",
+      "skill_id": "{\"dt\": 0.0025, \"model\": \"f2dfa98a787f06153174a94e0ca25eddc44d159671ab25dbac1b02a5abf8df03\", \"policies\": {\"ground\": \"03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b\", \"jump\": \"80529e5c6ffdc4036da9ee08a4218193d706ae55e23ce02e9cc7cd840c01be39\"}, \"zero_lower\": true}",
+      "selection_status": "selected",
+      "selected_candidate": "v2.0_a0.5",
+      "selected_complete": 1,
+      "selected_success_cost": 9.579999656677245,
+      "observed_oracle_candidate": "v2.0_a0.5",
+      "observed_oracle_success_cost": 9.579999656677245,
+      "predictions": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.5873807378116116,
+          "complete_probability": 0.39169030563073204,
+          "success_cost": 11.500000534057616,
+          "sample_count": 2
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.5873807378116116,
+          "complete_probability": 1.0,
+          "success_cost": 10.381363972677065,
+          "sample_count": 2
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.5873807378116116,
+          "complete_probability": 0.39169030563073204,
+          "success_cost": 9.980000076293944,
+          "sample_count": 2
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.5873807378116116,
+          "complete_probability": 1.0,
+          "success_cost": 10.24546186222095,
+          "sample_count": 2
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.5873807378116116,
+          "complete_probability": 1.0,
+          "success_cost": 9.656498513970217,
+          "sample_count": 2
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.5873807378116116,
+          "complete_probability": 0.0,
+          "success_cost": null,
+          "sample_count": 2
+        }
+      ],
+      "calibration": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "probability": 0.39169030563073204,
+          "actual_complete": 0,
+          "squared_error": 0.15342129552509629
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "probability": 0.39169030563073204,
+          "actual_complete": 1,
+          "squared_error": 0.3700406842636322
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "probability": 1.0,
+          "actual_complete": 0,
+          "squared_error": 1.0
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "probability": 1.0,
+          "actual_complete": 1,
+          "squared_error": 0.0
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "probability": 0.0,
+          "actual_complete": 0,
+          "squared_error": 0.0
+        }
+      ]
     }
   ],
   "inputs": {

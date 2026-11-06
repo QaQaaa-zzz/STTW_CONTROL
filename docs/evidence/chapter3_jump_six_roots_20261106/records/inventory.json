@@ -1,6 +1,6 @@
 {
   "declared_cases": 108,
-  "evaluated_cases": 97,
+  "evaluated_cases": 108,
   "independent_origins": 6,
   "role": "Pilot DEV only; no train/validation/test split or fitted model",
   "cases": [
@@ -491,47 +491,58 @@
     },
     {
       "case_id": "rb_upstream_offset_06_L9.6_v2.0_a1.0",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_06_L5.6_v1.8_a0.0",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_06_L5.6_v1.8_a0.5",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_06_L5.6_v1.8_a1.0",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_06_L5.6_v2.0_a0.0",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_06_L5.6_v2.0_a1.0",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_06_L7.6_v1.8_a0.0",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_06_L7.6_v1.8_a0.5",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_06_L7.6_v1.8_a1.0",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_06_L7.6_v2.0_a0.0",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_06_L7.6_v2.0_a1.0",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     }
   ]
 }

@@ -2,7 +2,7 @@
   "protocol_id": "ch3_jump_connection_hold_v1",
   "role": "Six new parametric DEV roots; all descendants grouped by origin; not independent TEST",
   "declared_cases": 108,
-  "evaluated_cases": 97,
+  "evaluated_cases": 108,
   "rows": [
     {
       "case_id": "rb_upstream_offset_01_L9.6_v2.0_a0.5",
@@ -13419,8 +13419,186 @@
       "panel_key": [
         9.6
       ],
-      "status": "started_no_final_result",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.3593671917915344,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": 9.22,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": {
+        "time": 5.28,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.28,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 2.0,
+          "alpha": 1.0
+        },
+        "root": [
+          [
+            -1.9998353719711304,
+            0.3574826121330261,
+            0.11787278950214386,
+            0.7571491599082947,
+            0.028202449902892113,
+            0.02369602397084236,
+            0.6522026658058167,
+            1.9888101816177368,
+            0.07551361620426178,
+            0.0012425726745277643,
+            -0.1431560069322586,
+            -0.01248555351048708,
+            -0.7694575190544128
+          ]
+        ],
+        "measurement": [
+          [
+            -0.1486877202987671,
+            0.1429906189441681,
+            -0.10561034828424454,
+            0.12236970663070679,
+            -0.7608124613761902,
+            28.66415786743164,
+            28.871503829956055
+          ]
+        ],
+        "position": [
+          [
+            -1.2002003192901611,
+            -2.6765706539154053,
+            -0.10561034828424454,
+            2.499999523162842,
+            -2.2308597564697266
+          ]
+        ],
+        "velocity": [
+          [
+            5.565436254073575e-07,
+            -28.66415786743164,
+            0.12236970663070679,
+            -0.0005928658647462726,
+            -28.871503829956055
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.008434772491455,
+            -0.06084035336971283
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 9.22,
+        "root": [
+          [
+            6.01350736618042,
+            0.25902268290519714,
+            0.11893829703330994,
+            0.7153910398483276,
+            0.0057010953314602375,
+            0.004912115167826414,
+            0.6986838579177856,
+            2.039897918701172,
+            0.02107273042201996,
+            -0.0036303866654634476,
+            -0.003731581848114729,
+            -0.009466242976486683,
+            -0.08798591792583466
+          ]
+        ],
+        "position": [
+          [
+            -1.2002017498016357,
+            -4.5885443687438965,
+            -0.011984499171376228,
+            2.499999523162842,
+            -4.1685791015625
+          ]
+        ],
+        "velocity": [
+          [
+            0.03148450329899788,
+            -28.961071014404297,
+            -0.0009346014121547341,
+            -3.068482783419313e-06,
+            -29.172107696533203
+          ]
+        ],
+        "distance": [
+          1.3520216941833496
+        ]
+      },
+      "observed_duration_s": 10.675000190734863,
+      "decision_prefix": {
+        "decision_time_s": 5.28,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.3574826121330261,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "jump_or_landing",
+      "decision_state": {
+        "time_s": 5.28,
+        "x_m": -1.9998353719711304,
+        "y_m": 0.3574826121330261,
+        "forward_speed_m_s": 1.9889729022979736,
+        "lateral_velocity_heading_frame_m_s": -0.07109987241816093,
+        "heading_rad": 0.07368282715174797,
+        "world_yaw_rate_rad_s": -0.7694575190544128,
+        "roll_rad": -0.1486877202987671,
+        "roll_rate_rad_s": 0.1429906189441681,
+        "steer_rad": -0.10561034828424454,
+        "steer_rate_rad_s": 0.12236970663070679
+      },
+      "handoff_state": {
+        "time_s": 9.22,
+        "x_m": 6.01350736618042,
+        "y_m": 0.25902268290519714,
+        "forward_speed_m_s": 2.0399844646453857,
+        "lateral_velocity_heading_frame_m_s": -0.00957108179885505,
+        "heading_rad": 0.015021627730133819,
+        "world_yaw_rate_rad_s": -0.08798591792583466,
+        "roll_rad": -0.0236358642578125,
+        "roll_rate_rad_s": 0.0037907897494733334,
+        "steer_rad": -0.011984499171376228,
+        "steer_rate_rad_s": -0.0009346014121547341
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_06_L9.6_v2.0_a0.5",
+        "matched_samples": 265,
+        "through_time_s": 5.28000020980835,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
     },
     {
       "case_id": "rb_upstream_offset_06_L5.6_v1.8_a0.0",
@@ -13432,8 +13610,186 @@
       "panel_key": [
         5.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.38351359963417053,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": 7.5200000000000005,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": {
+        "time": 5.28,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.28,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 1.8,
+          "alpha": 0.0
+        },
+        "root": [
+          [
+            -1.9998353719711304,
+            0.3574826121330261,
+            0.11787278950214386,
+            0.7571491599082947,
+            0.028202449902892113,
+            0.02369602397084236,
+            0.6522026658058167,
+            1.9888101816177368,
+            0.07551361620426178,
+            0.0012425726745277643,
+            -0.1431560069322586,
+            -0.01248555351048708,
+            -0.7694575190544128
+          ]
+        ],
+        "measurement": [
+          [
+            -0.1486877202987671,
+            0.1429906189441681,
+            -0.10561034828424454,
+            0.12236970663070679,
+            -0.7608124613761902,
+            28.66415786743164,
+            28.871503829956055
+          ]
+        ],
+        "position": [
+          [
+            -1.2002003192901611,
+            -2.6765706539154053,
+            -0.10561034828424454,
+            2.499999523162842,
+            -2.2308597564697266
+          ]
+        ],
+        "velocity": [
+          [
+            5.565436254073575e-07,
+            -28.66415786743164,
+            0.12236970663070679,
+            -0.0005928658647462726,
+            -28.871503829956055
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.008434772491455,
+            -0.06084035336971283
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 7.5200000000000005,
+        "root": [
+          [
+            2.0207059383392334,
+            0.01720936968922615,
+            0.11893411725759506,
+            0.7116541266441345,
+            0.07924413681030273,
+            0.07660003006458282,
+            0.6938309073448181,
+            1.7864736318588257,
+            0.3680543303489685,
+            -0.0003481379244476557,
+            0.17089851200580597,
+            0.037824176251888275,
+            -0.09930986166000366
+          ]
+        ],
+        "position": [
+          [
+            -1.2001993656158447,
+            1.357471227645874,
+            -0.015020796097815037,
+            2.499999523162842,
+            1.6543760299682617
+          ]
+        ],
+        "velocity": [
+          [
+            -0.0036503069568425417,
+            -26.012529373168945,
+            -0.19285570085048676,
+            0.0023152593057602644,
+            -26.007219314575195
+          ]
+        ],
+        "distance": [
+          1.35029935836792
+        ]
+      },
+      "observed_duration_s": 8.835000038146973,
+      "decision_prefix": {
+        "decision_time_s": 5.28,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.3574826121330261,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "jump_or_landing",
+      "decision_state": {
+        "time_s": 5.28,
+        "x_m": -1.9998353719711304,
+        "y_m": 0.3574826121330261,
+        "forward_speed_m_s": 1.9889729022979736,
+        "lateral_velocity_heading_frame_m_s": -0.07109987241816093,
+        "heading_rad": 0.07368282715174797,
+        "world_yaw_rate_rad_s": -0.7694575190544128,
+        "roll_rad": -0.1486877202987671,
+        "roll_rate_rad_s": 0.1429906189441681,
+        "steer_rad": -0.10561034828424454,
+        "steer_rate_rad_s": 0.12236970663070679
+      },
+      "handoff_state": {
+        "time_s": 7.5200000000000005,
+        "x_m": 2.0207059383392334,
+        "y_m": 0.01720936968922615,
+        "forward_speed_m_s": 1.8237078189849854,
+        "lateral_velocity_heading_frame_m_s": -0.032274720767141385,
+        "heading_rad": 0.2208754272075813,
+        "world_yaw_rate_rad_s": -0.09930986166000366,
+        "roll_rad": -0.02546525001525879,
+        "roll_rate_rad_s": -0.17512650787830353,
+        "steer_rad": -0.015020796097815037,
+        "steer_rate_rad_s": -0.19285570085048676
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_06_L9.6_v2.0_a0.5",
+        "matched_samples": 265,
+        "through_time_s": 5.28000020980835,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
     },
     {
       "case_id": "rb_upstream_offset_06_L5.6_v1.8_a0.5",
@@ -13445,8 +13801,186 @@
       "panel_key": [
         5.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.4148659110069275,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": 7.48,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": {
+        "time": 5.28,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.28,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 1.8,
+          "alpha": 0.5
+        },
+        "root": [
+          [
+            -1.9998353719711304,
+            0.3574826121330261,
+            0.11787278950214386,
+            0.7571491599082947,
+            0.028202449902892113,
+            0.02369602397084236,
+            0.6522026658058167,
+            1.9888101816177368,
+            0.07551361620426178,
+            0.0012425726745277643,
+            -0.1431560069322586,
+            -0.01248555351048708,
+            -0.7694575190544128
+          ]
+        ],
+        "measurement": [
+          [
+            -0.1486877202987671,
+            0.1429906189441681,
+            -0.10561034828424454,
+            0.12236970663070679,
+            -0.7608124613761902,
+            28.66415786743164,
+            28.871503829956055
+          ]
+        ],
+        "position": [
+          [
+            -1.2002003192901611,
+            -2.6765706539154053,
+            -0.10561034828424454,
+            2.499999523162842,
+            -2.2308597564697266
+          ]
+        ],
+        "velocity": [
+          [
+            5.565436254073575e-07,
+            -28.66415786743164,
+            0.12236970663070679,
+            -0.0005928658647462726,
+            -28.871503829956055
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.008434772491455,
+            -0.06084035336971283
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 7.48,
+        "root": [
+          [
+            2.03326678276062,
+            0.036140695214271545,
+            0.11894363164901733,
+            0.7084814310073853,
+            0.03726913034915924,
+            0.03636062145233154,
+            0.7038061022758484,
+            1.8340590000152588,
+            0.18068362772464752,
+            -2.759676135610789e-05,
+            0.0649554431438446,
+            0.0061009288765490055,
+            -0.028026744723320007
+          ]
+        ],
+        "position": [
+          [
+            -1.2001994848251343,
+            1.8273495435714722,
+            -0.004206140525639057,
+            2.499999523162842,
+            2.195556402206421
+          ]
+        ],
+        "velocity": [
+          [
+            -0.0038340562023222446,
+            -26.262165069580078,
+            -0.04868680611252785,
+            0.002544472459703684,
+            -26.279996871948242
+          ]
+        ],
+        "distance": [
+          1.3334376811981201
+        ]
+      },
+      "observed_duration_s": 9.40999984741211,
+      "decision_prefix": {
+        "decision_time_s": 5.28,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.3574826121330261,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "jump_or_landing",
+      "decision_state": {
+        "time_s": 5.28,
+        "x_m": -1.9998353719711304,
+        "y_m": 0.3574826121330261,
+        "forward_speed_m_s": 1.9889729022979736,
+        "lateral_velocity_heading_frame_m_s": -0.07109987241816093,
+        "heading_rad": 0.07368282715174797,
+        "world_yaw_rate_rad_s": -0.7694575190544128,
+        "roll_rad": -0.1486877202987671,
+        "roll_rate_rad_s": 0.1429906189441681,
+        "steer_rad": -0.10561034828424454,
+        "steer_rate_rad_s": 0.12236970663070679
+      },
+      "handoff_state": {
+        "time_s": 7.48,
+        "x_m": 2.03326678276062,
+        "y_m": 0.036140695214271545,
+        "forward_speed_m_s": 1.8429046869277954,
+        "lateral_velocity_heading_frame_m_s": -0.01102102113637582,
+        "heading_rad": 0.10417901882389495,
+        "world_yaw_rate_rad_s": -0.028026744723320007,
+        "roll_rad": -0.006669759750366211,
+        "roll_rate_rad_s": -0.06526399403810501,
+        "steer_rad": -0.004206140525639057,
+        "steer_rate_rad_s": -0.04868680611252785
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_06_L9.6_v2.0_a0.5",
+        "matched_samples": 265,
+        "through_time_s": 5.28000020980835,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
     },
     {
       "case_id": "rb_upstream_offset_06_L5.6_v1.8_a1.0",
@@ -13458,8 +13992,186 @@
       "panel_key": [
         5.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": false,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "max_original_path_error_m": 1.3220995664596558,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": true,
+        "ground_return": true,
+        "continued": true
+      },
+      "stage_times": {
+        "release": 7.46,
+        "strict_support": 11.0600004196167,
+        "ground_return": 11.82,
+        "final_conditions": 14.199999809265137
+      },
+      "decision": {
+        "time": 5.28,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.28,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 1.8,
+          "alpha": 1.0
+        },
+        "root": [
+          [
+            -1.9998353719711304,
+            0.3574826121330261,
+            0.11787278950214386,
+            0.7571491599082947,
+            0.028202449902892113,
+            0.02369602397084236,
+            0.6522026658058167,
+            1.9888101816177368,
+            0.07551361620426178,
+            0.0012425726745277643,
+            -0.1431560069322586,
+            -0.01248555351048708,
+            -0.7694575190544128
+          ]
+        ],
+        "measurement": [
+          [
+            -0.1486877202987671,
+            0.1429906189441681,
+            -0.10561034828424454,
+            0.12236970663070679,
+            -0.7608124613761902,
+            28.66415786743164,
+            28.871503829956055
+          ]
+        ],
+        "position": [
+          [
+            -1.2002003192901611,
+            -2.6765706539154053,
+            -0.10561034828424454,
+            2.499999523162842,
+            -2.2308597564697266
+          ]
+        ],
+        "velocity": [
+          [
+            5.565436254073575e-07,
+            -28.66415786743164,
+            0.12236970663070679,
+            -0.0005928658647462726,
+            -28.871503829956055
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.008434772491455,
+            -0.06084035336971283
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 7.46,
+        "root": [
+          [
+            2.020334243774414,
+            0.04932958632707596,
+            0.11894112825393677,
+            0.7040007710456848,
+            0.02602793090045452,
+            0.025555741041898727,
+            0.7092618346214294,
+            1.8435202836990356,
+            0.13409355282783508,
+            -7.193374040070921e-05,
+            0.048549141734838486,
+            0.0028733103536069393,
+            0.04525860399007797
+          ]
+        ],
+        "position": [
+          [
+            -1.2001993656158447,
+            2.2260704040527344,
+            0.006755885202437639,
+            2.499999523162842,
+            2.6172187328338623
+          ]
+        ],
+        "velocity": [
+          [
+            -0.003875062335282564,
+            -26.338777542114258,
+            -0.055824071168899536,
+            0.002515915548428893,
+            -26.358434677124023
+          ]
+        ],
+        "distance": [
+          1.3457515239715576
+        ]
+      },
+      "observed_duration_s": 22.0,
+      "decision_prefix": {
+        "decision_time_s": 5.28,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.3574826121330261,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": 12.5,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "continuation_or_corridor",
+      "decision_state": {
+        "time_s": 5.28,
+        "x_m": -1.9998353719711304,
+        "y_m": 0.3574826121330261,
+        "forward_speed_m_s": 1.9889729022979736,
+        "lateral_velocity_heading_frame_m_s": -0.07109987241816093,
+        "heading_rad": 0.07368282715174797,
+        "world_yaw_rate_rad_s": -0.7694575190544128,
+        "roll_rad": -0.1486877202987671,
+        "roll_rate_rad_s": 0.1429906189441681,
+        "steer_rad": -0.10561034828424454,
+        "steer_rate_rad_s": 0.12236970663070679
+      },
+      "handoff_state": {
+        "time_s": 7.46,
+        "x_m": 2.020334243774414,
+        "y_m": 0.04932958632707596,
+        "forward_speed_m_s": 1.8483905792236328,
+        "lateral_velocity_heading_frame_m_s": -0.0006536823251369339,
+        "heading_rad": 0.0729635443686278,
+        "world_yaw_rate_rad_s": 0.04525860399007797,
+        "roll_rad": 0.007411003112792969,
+        "roll_rate_rad_s": -0.048586923629045486,
+        "steer_rad": 0.006755885202437639,
+        "steer_rate_rad_s": -0.055824071168899536
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_06_L9.6_v2.0_a0.5",
+        "matched_samples": 265,
+        "through_time_s": 5.28000020980835,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
     },
     {
       "case_id": "rb_upstream_offset_06_L5.6_v2.0_a0.0",
@@ -13471,8 +14183,186 @@
       "panel_key": [
         5.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.39703336358070374,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": 7.28,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": {
+        "time": 5.28,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.28,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 2.0,
+          "alpha": 0.0
+        },
+        "root": [
+          [
+            -1.9998353719711304,
+            0.3574826121330261,
+            0.11787278950214386,
+            0.7571491599082947,
+            0.028202449902892113,
+            0.02369602397084236,
+            0.6522026658058167,
+            1.9888101816177368,
+            0.07551361620426178,
+            0.0012425726745277643,
+            -0.1431560069322586,
+            -0.01248555351048708,
+            -0.7694575190544128
+          ]
+        ],
+        "measurement": [
+          [
+            -0.1486877202987671,
+            0.1429906189441681,
+            -0.10561034828424454,
+            0.12236970663070679,
+            -0.7608124613761902,
+            28.66415786743164,
+            28.871503829956055
+          ]
+        ],
+        "position": [
+          [
+            -1.2002003192901611,
+            -2.6765706539154053,
+            -0.10561034828424454,
+            2.499999523162842,
+            -2.2308597564697266
+          ]
+        ],
+        "velocity": [
+          [
+            5.565436254073575e-07,
+            -28.66415786743164,
+            0.12236970663070679,
+            -0.0005928658647462726,
+            -28.871503829956055
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.008434772491455,
+            -0.06084035336971283
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 7.28,
+        "root": [
+          [
+            2.001441478729248,
+            -0.04240722581744194,
+            0.11894037574529648,
+            0.7011997699737549,
+            0.05031619220972061,
+            0.05023612082004547,
+            0.7094106674194336,
+            2.0148792266845703,
+            0.2796681523323059,
+            6.407074579328764e-06,
+            0.17005160450935364,
+            0.023710807785391808,
+            0.10069049894809723
+          ]
+        ],
+        "position": [
+          [
+            -1.2001994848251343,
+            2.089036226272583,
+            0.013684912584722042,
+            2.499999523162842,
+            2.449795961380005
+          ]
+        ],
+        "velocity": [
+          [
+            -0.0038410855922847986,
+            -28.99721908569336,
+            -0.156865656375885,
+            0.002523859031498432,
+            -29.01449966430664
+          ]
+        ],
+        "distance": [
+          1.3663489818572998
+        ]
+      },
+      "observed_duration_s": 9.0600004196167,
+      "decision_prefix": {
+        "decision_time_s": 5.28,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.3574826121330261,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "jump_or_landing",
+      "decision_state": {
+        "time_s": 5.28,
+        "x_m": -1.9998353719711304,
+        "y_m": 0.3574826121330261,
+        "forward_speed_m_s": 1.9889729022979736,
+        "lateral_velocity_heading_frame_m_s": -0.07109987241816093,
+        "heading_rad": 0.07368282715174797,
+        "world_yaw_rate_rad_s": -0.7694575190544128,
+        "roll_rad": -0.1486877202987671,
+        "roll_rate_rad_s": 0.1429906189441681,
+        "steer_rad": -0.10561034828424454,
+        "steer_rate_rad_s": 0.12236970663070679
+      },
+      "handoff_state": {
+        "time_s": 7.28,
+        "x_m": 2.001441478729248,
+        "y_m": -0.04240722581744194,
+        "forward_speed_m_s": 2.0341761112213135,
+        "lateral_velocity_heading_frame_m_s": -0.008948944570326578,
+        "heading_rad": 0.14231950411137567,
+        "world_yaw_rate_rad_s": 0.10069049894809723,
+        "roll_rad": 0.011574625968933105,
+        "roll_rate_rad_s": -0.17160087823867798,
+        "steer_rad": 0.013684912584722042,
+        "steer_rate_rad_s": -0.156865656375885
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_06_L9.6_v2.0_a0.5",
+        "matched_samples": 265,
+        "through_time_s": 5.28000020980835,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
     },
     {
       "case_id": "rb_upstream_offset_06_L5.6_v2.0_a1.0",
@@ -13484,8 +14374,186 @@
       "panel_key": [
         5.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": true,
+      "success_time_s": 15.079999923706055,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "max_original_path_error_m": 0.8934248089790344,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": true,
+        "ground_return": true,
+        "continued": true
+      },
+      "stage_times": {
+        "release": 7.26,
+        "strict_support": 12.255000114440918,
+        "ground_return": 13.08,
+        "final_conditions": 15.079999923706055
+      },
+      "decision": {
+        "time": 5.28,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.28,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 2.0,
+          "alpha": 1.0
+        },
+        "root": [
+          [
+            -1.9998353719711304,
+            0.3574826121330261,
+            0.11787278950214386,
+            0.7571491599082947,
+            0.028202449902892113,
+            0.02369602397084236,
+            0.6522026658058167,
+            1.9888101816177368,
+            0.07551361620426178,
+            0.0012425726745277643,
+            -0.1431560069322586,
+            -0.01248555351048708,
+            -0.7694575190544128
+          ]
+        ],
+        "measurement": [
+          [
+            -0.1486877202987671,
+            0.1429906189441681,
+            -0.10561034828424454,
+            0.12236970663070679,
+            -0.7608124613761902,
+            28.66415786743164,
+            28.871503829956055
+          ]
+        ],
+        "position": [
+          [
+            -1.2002003192901611,
+            -2.6765706539154053,
+            -0.10561034828424454,
+            2.499999523162842,
+            -2.2308597564697266
+          ]
+        ],
+        "velocity": [
+          [
+            5.565436254073575e-07,
+            -28.66415786743164,
+            0.12236970663070679,
+            -0.0005928658647462726,
+            -28.871503829956055
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.008434772491455,
+            -0.06084035336971283
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 7.26,
+        "root": [
+          [
+            2.012209177017212,
+            0.03727611154317856,
+            0.11893831193447113,
+            0.7008008360862732,
+            0.01622527651488781,
+            0.015837930142879486,
+            0.7129965424537659,
+            2.0419745445251465,
+            0.09818965196609497,
+            -0.0036447078455239534,
+            0.04106003791093826,
+            -0.008108938112854958,
+            0.09108839184045792
+          ]
+        ],
+        "position": [
+          [
+            -1.2002017498016357,
+            2.4171929359436035,
+            0.012352203950285912,
+            2.499999523162842,
+            2.822791814804077
+          ]
+        ],
+        "velocity": [
+          [
+            0.032204460352659225,
+            -29.021190643310547,
+            -0.031053777784109116,
+            -3.188567234246875e-06,
+            -29.23405647277832
+          ]
+        ],
+        "distance": [
+          1.3535099029541016
+        ]
+      },
+      "observed_duration_s": 22.0,
+      "decision_prefix": {
+        "decision_time_s": 5.28,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.3574826121330261,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "none",
+      "decision_state": {
+        "time_s": 5.28,
+        "x_m": -1.9998353719711304,
+        "y_m": 0.3574826121330261,
+        "forward_speed_m_s": 1.9889729022979736,
+        "lateral_velocity_heading_frame_m_s": -0.07109987241816093,
+        "heading_rad": 0.07368282715174797,
+        "world_yaw_rate_rad_s": -0.7694575190544128,
+        "roll_rad": -0.1486877202987671,
+        "roll_rate_rad_s": 0.1429906189441681,
+        "steer_rad": -0.10561034828424454,
+        "steer_rate_rad_s": 0.12236970663070679
+      },
+      "handoff_state": {
+        "time_s": 7.26,
+        "x_m": 2.012209177017212,
+        "y_m": 0.03727611154317856,
+        "forward_speed_m_s": 2.0443265438079834,
+        "lateral_velocity_heading_frame_m_s": 0.0055338441106622255,
+        "heading_rad": 0.04534170804308783,
+        "world_yaw_rate_rad_s": 0.09108839184045792,
+        "roll_rad": 0.017230749130249023,
+        "roll_rate_rad_s": -0.04056477174162865,
+        "steer_rad": 0.012352203950285912,
+        "steer_rate_rad_s": -0.031053777784109116
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_06_L9.6_v2.0_a0.5",
+        "matched_samples": 265,
+        "through_time_s": 5.28000020980835,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
     },
     {
       "case_id": "rb_upstream_offset_06_L7.6_v1.8_a0.0",
@@ -13497,8 +14565,186 @@
       "panel_key": [
         7.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": true,
+      "success_time_s": 14.15999984741211,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "max_original_path_error_m": 0.3595319986343384,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": true,
+        "ground_return": true,
+        "continued": true
+      },
+      "stage_times": {
+        "release": 8.620000000000001,
+        "strict_support": 11.21500015258789,
+        "ground_return": 11.88,
+        "final_conditions": 14.15999984741211
+      },
+      "decision": {
+        "time": 5.28,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.28,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 1.8,
+          "alpha": 0.0
+        },
+        "root": [
+          [
+            -1.9998353719711304,
+            0.3574826121330261,
+            0.11787278950214386,
+            0.7571491599082947,
+            0.028202449902892113,
+            0.02369602397084236,
+            0.6522026658058167,
+            1.9888101816177368,
+            0.07551361620426178,
+            0.0012425726745277643,
+            -0.1431560069322586,
+            -0.01248555351048708,
+            -0.7694575190544128
+          ]
+        ],
+        "measurement": [
+          [
+            -0.1486877202987671,
+            0.1429906189441681,
+            -0.10561034828424454,
+            0.12236970663070679,
+            -0.7608124613761902,
+            28.66415786743164,
+            28.871503829956055
+          ]
+        ],
+        "position": [
+          [
+            -1.2002003192901611,
+            -2.6765706539154053,
+            -0.10561034828424454,
+            2.499999523162842,
+            -2.2308597564697266
+          ]
+        ],
+        "velocity": [
+          [
+            5.565436254073575e-07,
+            -28.66415786743164,
+            0.12236970663070679,
+            -0.0005928658647462726,
+            -28.871503829956055
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.008434772491455,
+            -0.06084035336971283
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 8.620000000000001,
+        "root": [
+          [
+            4.017143249511719,
+            0.08806177973747253,
+            0.11891412734985352,
+            0.7177335619926453,
+            -0.04607409983873367,
+            -0.04516047239303589,
+            0.6933226585388184,
+            1.833450436592102,
+            -0.24906198680400848,
+            0.00028880382888019085,
+            -0.13515634834766388,
+            0.01684514991939068,
+            -0.23629175126552582
+          ]
+        ],
+        "position": [
+          [
+            -1.2001994848251343,
+            -2.237361192703247,
+            -0.03526708111166954,
+            2.499999523162842,
+            -1.9662501811981201
+          ]
+        ],
+        "velocity": [
+          [
+            -0.003687080927193165,
+            -26.36659049987793,
+            0.12607698142528534,
+            0.0024545376654714346,
+            -26.410947799682617
+          ]
+        ],
+        "distance": [
+          1.3503532409667969
+        ]
+      },
+      "observed_duration_s": 22.0,
+      "decision_prefix": {
+        "decision_time_s": 5.28,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.3574826121330261,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "none",
+      "decision_state": {
+        "time_s": 5.28,
+        "x_m": -1.9998353719711304,
+        "y_m": 0.3574826121330261,
+        "forward_speed_m_s": 1.9889729022979736,
+        "lateral_velocity_heading_frame_m_s": -0.07109987241816093,
+        "heading_rad": 0.07368282715174797,
+        "world_yaw_rate_rad_s": -0.7694575190544128,
+        "roll_rad": -0.1486877202987671,
+        "roll_rate_rad_s": 0.1429906189441681,
+        "steer_rad": -0.10561034828424454,
+        "steer_rate_rad_s": 0.12236970663070679
+      },
+      "handoff_state": {
+        "time_s": 8.620000000000001,
+        "x_m": 4.017143249511719,
+        "y_m": 0.08806177973747253,
+        "forward_speed_m_s": 1.8502576351165771,
+        "lateral_velocity_heading_frame_m_s": -0.010914652446444684,
+        "heading_rad": -0.12911793444698624,
+        "world_yaw_rate_rad_s": -0.23629175126552582,
+        "roll_rad": -0.03453552722930908,
+        "roll_rate_rad_s": 0.135978564620018,
+        "steer_rad": -0.03526708111166954,
+        "steer_rate_rad_s": 0.12607698142528534
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_06_L9.6_v2.0_a0.5",
+        "matched_samples": 265,
+        "through_time_s": 5.28000020980835,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
     },
     {
       "case_id": "rb_upstream_offset_06_L7.6_v1.8_a0.5",
@@ -13510,8 +14756,186 @@
       "panel_key": [
         7.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": true,
+      "success_time_s": 14.319999694824219,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "max_original_path_error_m": 0.6278818249702454,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": true,
+        "ground_return": true,
+        "continued": true
+      },
+      "stage_times": {
+        "release": 8.56,
+        "strict_support": 11.524999618530273,
+        "ground_return": 12.26,
+        "final_conditions": 14.319999694824219
+      },
+      "decision": {
+        "time": 5.28,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.28,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 1.8,
+          "alpha": 0.5
+        },
+        "root": [
+          [
+            -1.9998353719711304,
+            0.3574826121330261,
+            0.11787278950214386,
+            0.7571491599082947,
+            0.028202449902892113,
+            0.02369602397084236,
+            0.6522026658058167,
+            1.9888101816177368,
+            0.07551361620426178,
+            0.0012425726745277643,
+            -0.1431560069322586,
+            -0.01248555351048708,
+            -0.7694575190544128
+          ]
+        ],
+        "measurement": [
+          [
+            -0.1486877202987671,
+            0.1429906189441681,
+            -0.10561034828424454,
+            0.12236970663070679,
+            -0.7608124613761902,
+            28.66415786743164,
+            28.871503829956055
+          ]
+        ],
+        "position": [
+          [
+            -1.2002003192901611,
+            -2.6765706539154053,
+            -0.10561034828424454,
+            2.499999523162842,
+            -2.2308597564697266
+          ]
+        ],
+        "velocity": [
+          [
+            5.565436254073575e-07,
+            -28.66415786743164,
+            0.12236970663070679,
+            -0.0005928658647462726,
+            -28.871503829956055
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.008434772491455,
+            -0.06084035336971283
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 8.56,
+        "root": [
+          [
+            4.019321441650391,
+            0.13553480803966522,
+            0.11891797184944153,
+            0.7186763286590576,
+            -0.006533576641231775,
+            -0.0069735790602862835,
+            0.6952791213989258,
+            1.8450069427490234,
+            -0.05171139910817146,
+            -8.654460543766618e-06,
+            -0.02812526375055313,
+            -0.00012338368105702102,
+            -0.1723882108926773
+          ]
+        ],
+        "position": [
+          [
+            -1.2001993656158447,
+            -1.4793978929519653,
+            -0.025771906599402428,
+            2.499999523162842,
+            -1.107265830039978
+          ]
+        ],
+        "velocity": [
+          [
+            -0.00366549426689744,
+            -26.301179885864258,
+            0.022830160334706306,
+            0.0025045075453817844,
+            -26.33284568786621
+          ]
+        ],
+        "distance": [
+          1.346238613128662
+        ]
+      },
+      "observed_duration_s": 22.0,
+      "decision_prefix": {
+        "decision_time_s": 5.28,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.3574826121330261,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "none",
+      "decision_state": {
+        "time_s": 5.28,
+        "x_m": -1.9998353719711304,
+        "y_m": 0.3574826121330261,
+        "forward_speed_m_s": 1.9889729022979736,
+        "lateral_velocity_heading_frame_m_s": -0.07109987241816093,
+        "heading_rad": 0.07368282715174797,
+        "world_yaw_rate_rad_s": -0.7694575190544128,
+        "roll_rad": -0.1486877202987671,
+        "roll_rate_rad_s": 0.1429906189441681,
+        "steer_rad": -0.10561034828424454,
+        "steer_rate_rad_s": 0.12236970663070679
+      },
+      "handoff_state": {
+        "time_s": 8.56,
+        "x_m": 4.019321441650391,
+        "y_m": 0.13553480803966522,
+        "forward_speed_m_s": 1.8456578254699707,
+        "lateral_velocity_heading_frame_m_s": -0.016484060594614443,
+        "heading_rad": -0.019089389347798608,
+        "world_yaw_rate_rad_s": -0.1723882108926773,
+        "roll_rad": -0.03308272361755371,
+        "roll_rate_rad_s": 0.0279560424387455,
+        "steer_rad": -0.025771906599402428,
+        "steer_rate_rad_s": 0.022830160334706306
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_06_L9.6_v2.0_a0.5",
+        "matched_samples": 265,
+        "through_time_s": 5.28000020980835,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
     },
     {
       "case_id": "rb_upstream_offset_06_L7.6_v1.8_a1.0",
@@ -13523,8 +14947,186 @@
       "panel_key": [
         7.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": false,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "max_original_path_error_m": 1.416073203086853,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": true,
+        "ground_return": true,
+        "continued": true
+      },
+      "stage_times": {
+        "release": 8.540000000000001,
+        "strict_support": 12.0649995803833,
+        "ground_return": 12.82,
+        "final_conditions": 15.220000267028809
+      },
+      "decision": {
+        "time": 5.28,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.28,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 1.8,
+          "alpha": 1.0
+        },
+        "root": [
+          [
+            -1.9998353719711304,
+            0.3574826121330261,
+            0.11787278950214386,
+            0.7571491599082947,
+            0.028202449902892113,
+            0.02369602397084236,
+            0.6522026658058167,
+            1.9888101816177368,
+            0.07551361620426178,
+            0.0012425726745277643,
+            -0.1431560069322586,
+            -0.01248555351048708,
+            -0.7694575190544128
+          ]
+        ],
+        "measurement": [
+          [
+            -0.1486877202987671,
+            0.1429906189441681,
+            -0.10561034828424454,
+            0.12236970663070679,
+            -0.7608124613761902,
+            28.66415786743164,
+            28.871503829956055
+          ]
+        ],
+        "position": [
+          [
+            -1.2002003192901611,
+            -2.6765706539154053,
+            -0.10561034828424454,
+            2.499999523162842,
+            -2.2308597564697266
+          ]
+        ],
+        "velocity": [
+          [
+            5.565436254073575e-07,
+            -28.66415786743164,
+            0.12236970663070679,
+            -0.0005928658647462726,
+            -28.871503829956055
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.008434772491455,
+            -0.06084035336971283
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 8.540000000000001,
+        "root": [
+          [
+            4.011756420135498,
+            0.1924387812614441,
+            0.11893557012081146,
+            0.7153602242469788,
+            0.020607508718967438,
+            0.019456755369901657,
+            0.6981809735298157,
+            1.8450629711151123,
+            0.09168259054422379,
+            -9.973577107302845e-05,
+            0.022829603403806686,
+            0.0006341085536405444,
+            -0.08892565220594406
+          ]
+        ],
+        "position": [
+          [
+            -1.2001993656158447,
+            -1.172420620918274,
+            -0.01325062196701765,
+            2.499999523162842,
+            -0.7731724977493286
+          ]
+        ],
+        "velocity": [
+          [
+            -0.0036831835750490427,
+            -26.329179763793945,
+            -0.027373630553483963,
+            0.002472328720614314,
+            -26.345083236694336
+          ]
+        ],
+        "distance": [
+          1.354116439819336
+        ]
+      },
+      "observed_duration_s": 22.0,
+      "decision_prefix": {
+        "decision_time_s": 5.28,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.3574826121330261,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": 13.260000228881836,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "continuation_or_corridor",
+      "decision_state": {
+        "time_s": 5.28,
+        "x_m": -1.9998353719711304,
+        "y_m": 0.3574826121330261,
+        "forward_speed_m_s": 1.9889729022979736,
+        "lateral_velocity_heading_frame_m_s": -0.07109987241816093,
+        "heading_rad": 0.07368282715174797,
+        "world_yaw_rate_rad_s": -0.7694575190544128,
+        "roll_rad": -0.1486877202987671,
+        "roll_rate_rad_s": 0.1429906189441681,
+        "steer_rad": -0.10561034828424454,
+        "steer_rate_rad_s": 0.12236970663070679
+      },
+      "handoff_state": {
+        "time_s": 8.540000000000001,
+        "x_m": 4.011756420135498,
+        "y_m": 0.1924387812614441,
+        "forward_speed_m_s": 1.847293734550476,
+        "lateral_velocity_heading_frame_m_s": -0.012991681945669256,
+        "heading_rad": 0.05668262977782566,
+        "world_yaw_rate_rad_s": -0.08892565220594406,
+        "roll_rad": -0.024332284927368164,
+        "roll_rate_rad_s": -0.022912295535206795,
+        "steer_rad": -0.01325062196701765,
+        "steer_rate_rad_s": -0.027373630553483963
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_06_L9.6_v2.0_a0.5",
+        "matched_samples": 265,
+        "through_time_s": 5.28000020980835,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
     },
     {
       "case_id": "rb_upstream_offset_06_L7.6_v2.0_a0.0",
@@ -13536,8 +15138,186 @@
       "panel_key": [
         7.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": true,
+      "success_time_s": 15.420000076293945,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "max_original_path_error_m": 0.9111772179603577,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": true,
+        "ground_return": true,
+        "continued": true
+      },
+      "stage_times": {
+        "release": 8.28,
+        "strict_support": 12.604999542236328,
+        "ground_return": 13.42,
+        "final_conditions": 15.420000076293945
+      },
+      "decision": {
+        "time": 5.28,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.28,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 2.0,
+          "alpha": 0.0
+        },
+        "root": [
+          [
+            -1.9998353719711304,
+            0.3574826121330261,
+            0.11787278950214386,
+            0.7571491599082947,
+            0.028202449902892113,
+            0.02369602397084236,
+            0.6522026658058167,
+            1.9888101816177368,
+            0.07551361620426178,
+            0.0012425726745277643,
+            -0.1431560069322586,
+            -0.01248555351048708,
+            -0.7694575190544128
+          ]
+        ],
+        "measurement": [
+          [
+            -0.1486877202987671,
+            0.1429906189441681,
+            -0.10561034828424454,
+            0.12236970663070679,
+            -0.7608124613761902,
+            28.66415786743164,
+            28.871503829956055
+          ]
+        ],
+        "position": [
+          [
+            -1.2002003192901611,
+            -2.6765706539154053,
+            -0.10561034828424454,
+            2.499999523162842,
+            -2.2308597564697266
+          ]
+        ],
+        "velocity": [
+          [
+            5.565436254073575e-07,
+            -28.66415786743164,
+            0.12236970663070679,
+            -0.0005928658647462726,
+            -28.871503829956055
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.008434772491455,
+            -0.06084035336971283
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 8.28,
+        "root": [
+          [
+            4.021090507507324,
+            0.1164008155465126,
+            0.11885301768779755,
+            0.7249196767807007,
+            -0.004343623761087656,
+            -0.004773291293531656,
+            0.6888031959533691,
+            2.037360668182373,
+            -0.05245007947087288,
+            4.6806104364804924e-05,
+            -0.03443087264895439,
+            -0.000253659876761958,
+            -0.2632986009120941
+          ]
+        ],
+        "position": [
+          [
+            -1.2001992464065552,
+            -1.7695480585098267,
+            -0.03562791645526886,
+            2.499999523162842,
+            -1.409412145614624
+          ]
+        ],
+        "velocity": [
+          [
+            -0.003643473843112588,
+            -29.05107879638672,
+            0.01926901377737522,
+            0.00247300136834383,
+            -29.097736358642578
+          ]
+        ],
+        "distance": [
+          1.3444609642028809
+        ]
+      },
+      "observed_duration_s": 22.0,
+      "decision_prefix": {
+        "decision_time_s": 5.28,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.3574826121330261,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "none",
+      "decision_state": {
+        "time_s": 5.28,
+        "x_m": -1.9998353719711304,
+        "y_m": 0.3574826121330261,
+        "forward_speed_m_s": 1.9889729022979736,
+        "lateral_velocity_heading_frame_m_s": -0.07109987241816093,
+        "heading_rad": 0.07368282715174797,
+        "world_yaw_rate_rad_s": -0.7694575190544128,
+        "roll_rad": -0.1486877202987671,
+        "roll_rate_rad_s": 0.1429906189441681,
+        "steer_rad": -0.10561034828424454,
+        "steer_rate_rad_s": 0.12236970663070679
+      },
+      "handoff_state": {
+        "time_s": 8.28,
+        "x_m": 4.021090507507324,
+        "y_m": 0.1164008155465126,
+        "forward_speed_m_s": 2.0378670692443848,
+        "lateral_velocity_heading_frame_m_s": -0.026218221121432253,
+        "heading_rad": -0.012873634499123137,
+        "world_yaw_rate_rad_s": -0.2632986009120941,
+        "roll_rad": -0.05107700824737549,
+        "roll_rate_rad_s": 0.03417810797691345,
+        "steer_rad": -0.03562791645526886,
+        "steer_rate_rad_s": 0.01926901377737522
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_06_L9.6_v2.0_a0.5",
+        "matched_samples": 265,
+        "through_time_s": 5.28000020980835,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
     },
     {
       "case_id": "rb_upstream_offset_06_L7.6_v2.0_a1.0",
@@ -13549,8 +15329,186 @@
       "panel_key": [
         7.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": false,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 1.6740221977233887,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": true,
+        "ground_return": true,
+        "continued": true
+      },
+      "stage_times": {
+        "release": 8.24,
+        "strict_support": 11.75,
+        "ground_return": 12.5,
+        "final_conditions": null
+      },
+      "decision": {
+        "time": 5.28,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.28,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 2.0,
+          "alpha": 1.0
+        },
+        "root": [
+          [
+            -1.9998353719711304,
+            0.3574826121330261,
+            0.11787278950214386,
+            0.7571491599082947,
+            0.028202449902892113,
+            0.02369602397084236,
+            0.6522026658058167,
+            1.9888101816177368,
+            0.07551361620426178,
+            0.0012425726745277643,
+            -0.1431560069322586,
+            -0.01248555351048708,
+            -0.7694575190544128
+          ]
+        ],
+        "measurement": [
+          [
+            -0.1486877202987671,
+            0.1429906189441681,
+            -0.10561034828424454,
+            0.12236970663070679,
+            -0.7608124613761902,
+            28.66415786743164,
+            28.871503829956055
+          ]
+        ],
+        "position": [
+          [
+            -1.2002003192901611,
+            -2.6765706539154053,
+            -0.10561034828424454,
+            2.499999523162842,
+            -2.2308597564697266
+          ]
+        ],
+        "velocity": [
+          [
+            5.565436254073575e-07,
+            -28.66415786743164,
+            0.12236970663070679,
+            -0.0005928658647462726,
+            -28.871503829956055
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.008434772491455,
+            -0.06084035336971283
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 8.24,
+        "root": [
+          [
+            4.012999534606934,
+            0.16577735543251038,
+            0.11894673109054565,
+            0.7100483179092407,
+            0.026085615158081055,
+            0.025173336267471313,
+            0.7032191753387451,
+            2.0396556854248047,
+            0.14473304152488708,
+            -0.0036721345968544483,
+            0.02896997332572937,
+            -0.007854384370148182,
+            -0.0005492052296176553
+          ]
+        ],
+        "position": [
+          [
+            -1.2002017498016357,
+            -1.0996371507644653,
+            -6.725874845869839e-05,
+            2.499999523162842,
+            -0.6867087483406067
+          ]
+        ],
+        "velocity": [
+          [
+            0.032155539840459824,
+            -29.030317306518555,
+            -0.036812327802181244,
+            -3.1745366868562996e-06,
+            -29.238819122314453
+          ]
+        ],
+        "distance": [
+          1.3531079292297363
+        ]
+      },
+      "observed_duration_s": 22.0,
+      "decision_prefix": {
+        "decision_time_s": 5.28,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.3574826121330261,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": 12.720000267028809,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "continuation_or_corridor",
+      "decision_state": {
+        "time_s": 5.28,
+        "x_m": -1.9998353719711304,
+        "y_m": 0.3574826121330261,
+        "forward_speed_m_s": 1.9889729022979736,
+        "lateral_velocity_heading_frame_m_s": -0.07109987241816093,
+        "heading_rad": 0.07368282715174797,
+        "world_yaw_rate_rad_s": -0.7694575190544128,
+        "roll_rad": -0.1486877202987671,
+        "roll_rate_rad_s": 0.1429906189441681,
+        "steer_rad": -0.10561034828424454,
+        "steer_rate_rad_s": 0.12236970663070679
+      },
+      "handoff_state": {
+        "time_s": 8.24,
+        "x_m": 4.012999534606934,
+        "y_m": 0.16577735543251038,
+        "forward_speed_m_s": 2.044781446456909,
+        "lateral_velocity_heading_frame_m_s": -0.003418051767960617,
+        "heading_rad": 0.07251240074346084,
+        "world_yaw_rate_rad_s": -0.0005492052296176553,
+        "roll_rad": -0.009698271751403809,
+        "roll_rate_rad_s": -0.028325306251645088,
+        "steer_rad": -6.725874845869839e-05,
+        "steer_rate_rad_s": -0.036812327802181244
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_06_L9.6_v2.0_a0.5",
+        "matched_samples": 265,
+        "through_time_s": 5.28000020980835,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
     }
   ]
 }
