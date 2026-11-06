@@ -42,7 +42,7 @@ if s.get('fixed_randomization_groups'):
     from sttw_control.isaaclab_randomization import apply_fixed_evaluation_groups
     apply_fixed_evaluation_groups(env,s['fixed_randomization_groups'])
 if intervention:env.policy.channel_intervention_mode=intervention.get('kind','hold')
-contract=dict(backend=a.backend,settings=s,bundle=str(a.bundle.resolve()),identity=identity,terrain=env.plant.terrain_identity,bodies=env.plant.bodies,origin=env.plant.origin.cpu().tolist(),role=s.get('evaluation_role','fixed preference DEV; Zero is frozen LOCAL300 plus ECBC/ESO, no H75 correction'),physics_dt=.0002,lower_dt=.005,policy_dt=.02)
+contract=dict(backend=a.backend,settings=s,bundle=str(a.bundle.resolve()),identity=identity,terrain=env.plant.terrain_identity,bodies=env.plant.bodies,origin=env.plant.origin.cpu().tolist(),role=s.get('evaluation_role','fixed preference DEV; Zero is frozen LOCAL300 plus ECBC/ESO, no H75 correction'),physics_dt=env.physics_dt,lower_dt=.005,policy_dt=.02)
 if lower is not None:
     contract['lower_identity']=lower.identity
     contract['role']='fixed preference DEV; Zero uses the same selected frozen lower plus ECBC/ESO, with no H75 correction'
@@ -83,14 +83,14 @@ for step in range(env.horizon):
 if rows:
     row_chunks.append(transfer(rows));detail_chunks.append(transfer(detail))
 arrays={key:np.concatenate([chunk[key] for chunk in chunks]) for chunks in (row_chunks,detail_chunks) for key in chunks[0]}
-summary=dict(post_fork_failures=arrays['failure'][fork_step:].sum(0).tolist() if fork_step is not None else None,fork_policy_step=fork_step,stage='complete',policy_steps=len(arrays['reward']),physics_steps=len(arrays['reward'])*s['num_envs']*100,elapsed_s=time.time()-started,failures=arrays['failure'].sum(0).tolist(),valid_steps=arrays['valid'].sum(0).tolist(),push_events=env.push_events)
+summary=dict(post_fork_failures=arrays['failure'][fork_step:].sum(0).tolist() if fork_step is not None else None,fork_policy_step=fork_step,stage='complete',policy_steps=len(arrays['reward']),physics_steps=len(arrays['reward'])*s['num_envs']*4*env.physics_substeps,elapsed_s=time.time()-started,failures=arrays['failure'].sum(0).tolist(),valid_steps=arrays['valid'].sum(0).tolist(),push_events=env.push_events)
 if cases:
     for index,case in enumerate(cases):
         run=Path(case['output']);run.mkdir(parents=True,exist_ok=False)
         part,part_contract=split_case(arrays,contract,{**case,'batch_output':str(a.output.resolve())},index)
         np.savez_compressed(run/'trajectory.npz',**part)
         (run/'contract.json').write_text(json.dumps(part_contract,indent=2))
-        part_summary=dict(summary,physics_steps=len(part['reward'])*6*100,failures=part['failure'].sum(0).tolist(),valid_steps=part['valid'].sum(0).tolist(),elapsed_scope='shared batch elapsed, not additive per case')
+        part_summary=dict(summary,physics_steps=len(part['reward'])*6*4*env.physics_substeps,failures=part['failure'].sum(0).tolist(),valid_steps=part['valid'].sum(0).tolist(),elapsed_scope='shared batch elapsed, not additive per case')
         (run/'status.json').write_text(json.dumps(part_summary,indent=2))
 else:
     np.savez_compressed(a.output/'trajectory.npz',**arrays)
