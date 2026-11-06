@@ -112,13 +112,14 @@ if spec.get('connection_selector'):
  (out/'connection_selector.json').write_text(json.dumps(dict(config=selector_config,evidence_sha256={file:hashlib.sha256(text.encode()).hexdigest() for file,text in evidence_texts.items()},accepted_rows=selector.evidence_rows,excluded_origin_id=spec['origin_id']),indent=2))
 root_acceleration=torch.zeros(n,3,device='cuda:0')
 branch_decided=False;bypass_selected=False;route_selector=None;route_planner=None
+branch_executor=None;branch_future=None;branch_query_start=None;branch_query_state=None
 if spec.get('forward_branch'):
  from sttw_control.continuous_task import available_forward_routes
  branch_config=spec['forward_branch'];branch_map=json.loads(Path(branch_config['map_contract']).read_text())
  branch_routes=[dict(route_id='original_jump'),dict(route_id='bypass',first_entry_progress_m=branch_map['first_entry_progress_m'],last_entry_progress_m=branch_map['last_entry_progress_m'],minimum_dwell_s=branch_map['minimum_dwell_s'])]
  common_route=ground.route;furthest_common_progress=0.
  if branch_config.get('planner_config'):
-  from sttw_control.jump_connection import ForwardRouteSelector,decision_features
+  from sttw_control.jump_connection import ForwardRouteSelector,decision_features,plan_forward_route
   import hashlib
   route_planner=json.loads(Path(branch_config['planner_config']).read_text())
   if route_planner['mode'] not in ('rule','capability'):raise ValueError('Route planner mode must be rule or capability')
@@ -126,6 +127,10 @@ if spec.get('forward_branch'):
    route_records=[json.loads(line) for file in route_planner['record_files'] for line in Path(file).read_text().splitlines() if line.strip()]
    route_selector=ForwardRouteSelector(route_records,route_planner,origin_id=spec['origin_id'],policy_sha256=dict(ground=ground.upper_sha256,jump=policies[0].identity['artifact_sha256']),model_contract_sha256=hashlib.sha256(Path(cfg['asset']).with_name('contract.json').read_bytes()).hexdigest(),physics_dt=plant.physics_dt,zero_lower=spec['zero_lower'])
   (out/'forward_planner.json').write_text(json.dumps(route_planner,indent=2)+'\n')
+  if branch_config.get('asynchronous',False):
+   from concurrent.futures import ThreadPoolExecutor
+   if branch_config['query_deadline_wall_s']<=0:raise ValueError('Positive route query deadline required')
+   branch_executor=ThreadPoolExecutor(max_workers=1)
 pulse_started=False;pulse_remaining=0;pulse_start_time=None;pulse_rows=[]
 if pulse:
  from sttw_control.torch_observation import rotate_inverse
@@ -169,30 +174,34 @@ for k in range(steps+1):
  if spec.get('forward_branch') and not branch_decided and not active and not returned:
   furthest_common_progress=max(furthest_common_progress,float(ground.middle.projection['progress'][0]))
   if float(root[0,0])>=branch_config['decision_x_m']:
-   branch_decided=True;query_start=time.perf_counter()
    projection=common_route.project(pose[:,:2],torch.full_like(speed,furthest_common_progress),speed*.02)
    furthest_common_progress=max(furthest_common_progress,float(projection['progress'][0]))
    availability=available_forward_routes(branch_routes,['original_jump','bypass'],furthest_progress_m=furthest_common_progress,time_s=k*.005,current_route='original_jump')
-   requested=branch_config['requested_route'];route_choice=None;observable_state=None
+   requested=branch_config['requested_route'];route_choice=None;observable_state=None;query_ready=True
    decision_state=dict(time=k*.005,root=root.cpu().tolist(),measurement=m.cpu().tolist(),position=plant.dofs[:,:,0].cpu().tolist(),velocity=plant.dofs[:,:,1].cpu().tolist(),previous_reference=ground.previous_reference.cpu().tolist(),previous_alpha=ground.alpha.cpu().tolist(),previous_alpha_duration_s=k*.005-previous_alpha_since_s)
+   if branch_query_start is None:branch_query_start=time.perf_counter();branch_query_state=decision_state
    if route_planner is not None:
-    features,observable_state=decision_features(decision_state,out,dict(joint_names=plant.joints),spec)
-    if route_planner['mode']=='rule':
-     violated=[name for name,limit in route_planner['absolute_limits'].items() if abs(observable_state[name])>limit]
-     requested='bypass' if violated else 'original_jump'
-     route_choice=dict(status='rule_selected',violated=violated)
+    if branch_executor is None:
+     requested,route_choice,observable_state=plan_forward_route(decision_state,out,dict(joint_names=plant.joints),spec,route_planner,route_selector,availability['available_routes'])
     else:
-     route_choice=route_selector.choose(features,availability['available_routes'])
-     requested=route_choice['reference']['route_id'] if route_choice['status']=='reference_selected' else 'original_jump'
-   executed=requested if requested in availability['available_routes'] else 'original_jump'
-   if route_choice is not None and route_choice['status']=='reference_selected' and executed==requested:
-    reference=route_choice['reference']
-    if float(ground.alpha[0])!=reference['alpha']:previous_alpha_since_s=k*.005
-    ground.speed.fill_(reference['speed_m_s']);ground.alpha.fill_(reference['alpha'])
-   if executed=='bypass':
-    branch_reference=dict(np.load(branch_map['branch_reference']));np.savez_compressed(out/'executed_branch_reference.npz',**branch_reference)
-    ground.begin_connection(TorchPathReference(branch_reference,ground.config,ground.device),ground.speed.clone(),ground.alpha.clone());bypass_selected=True
-   (out/'forward_branch_decision.json').write_text(json.dumps(dict(time_s=k*.005,requested_route=requested,executed_route=executed,furthest_common_progress_m=furthest_common_progress,availability=availability,root=root.cpu().tolist(),selection_wall_s=time.perf_counter()-query_start,history='existing begin_connection; controller/filter/ESO/observation history retained',role='Forced-route pilot' if route_planner is None else route_planner['mode']+' route decision',decision_state=decision_state,observable_state=observable_state,selection=route_choice),indent=2))
+     if branch_future is None:
+      branch_future=branch_executor.submit(plan_forward_route,branch_query_state,out,dict(joint_names=plant.joints),spec,route_planner,route_selector,availability['available_routes'])
+     if time.perf_counter()-branch_query_start>=branch_config['query_deadline_wall_s']:
+      requested='original_jump';route_choice=dict(status='query_timeout',fallback='retain_current_reference')
+     elif branch_future.done():
+      requested,route_choice,observable_state=branch_future.result()
+     else:query_ready=False
+   if query_ready:
+    branch_decided=True
+    executed=requested if requested in availability['available_routes'] else 'original_jump'
+    if route_choice is not None and route_choice['status']=='reference_selected' and executed==requested:
+     reference=route_choice['reference']
+     if float(ground.alpha[0])!=reference['alpha']:previous_alpha_since_s=k*.005
+     ground.speed.fill_(reference['speed_m_s']);ground.alpha.fill_(reference['alpha'])
+    if executed=='bypass':
+     branch_reference=dict(np.load(branch_map['branch_reference']));np.savez_compressed(out/'executed_branch_reference.npz',**branch_reference)
+     ground.begin_connection(TorchPathReference(branch_reference,ground.config,ground.device),ground.speed.clone(),ground.alpha.clone());bypass_selected=True
+    (out/'forward_branch_decision.json').write_text(json.dumps(dict(time_s=k*.005,requested_route=requested,executed_route=executed,furthest_common_progress_m=furthest_common_progress,availability=availability,root=root.cpu().tolist(),selection_wall_s=time.perf_counter()-branch_query_start,history='existing begin_connection; controller/filter/ESO/observation history retained',role='Forced-route pilot' if route_planner is None else route_planner['mode']+' route decision',decision_state=decision_state,observable_state=observable_state,selection=route_choice,query_state=branch_query_state,asynchronous=branch_executor is not None,application_delay_sim_s=k*.005-branch_query_state['time']),indent=2))
  if k%4==0:
   inside=(root[:,0]>=spec.get('platform_front_x',3.6)-1.1)&(root[:,0]<=spec.get('platform_front_x',3.6)+.4);consumed|=entered&~inside;entered|=inside
   signal=(inside&~consumed).float()
@@ -291,4 +300,7 @@ for i,name in enumerate(spec['skills']):
  tr=trace[mask[:,i],i];result['cases'].append(dict(skill=name,duration_s=float(tr[-1,0]),physical_termination=not bool(alive[i]),peak_root_z=float(tr[:,3].max()),final_xyz=tr[-1,1:4].tolist(),peak_abs_roll_deg=float(np.rad2deg(abs(tr[:,5])).max()),full_jump_success='not adjudicated; requires clearance and landing evidence'))
  result['cases'][-1]['terminal_flags']=dict(ground_domain_exit=bool(ground.middle.domain_exit[i]) if ground is not None else None,ground_policy_fault=bool(ground.middle.fault[i]) if ground is not None else None,ground_alive=bool(ground.alive[i]) if ground is not None else None,roll_limit=bool(abs(float(m[i,0]))>=np.pi/4),low_root=bool(root[i,2]<=.05),nonfinite_state=not bool(torch.isfinite(row[i]).all()),legacy_physical_termination_scope='Legacy field includes controller/domain termination; inspect flags before attributing a physical fall')
 (out/'results.json').write_text(json.dumps(result,indent=2));print(result,flush=True)
+if branch_executor is not None:
+ if not branch_decided:(out/'forward_query_unapplied.json').write_text(json.dumps(dict(status='execution_ended_before_application',query_state=branch_query_state,active_jump=active,returned=returned)))
+ branch_executor.shutdown(wait=False,cancel_futures=True)
 os.sync();os._exit(0)

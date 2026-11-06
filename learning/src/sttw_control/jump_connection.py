@@ -78,3 +78,16 @@ class ForwardRouteSelector:
             self.config['minimum_completion'], self.config['probability_tolerance'], self.config['time_tolerance_s'])
         return dict(result, evidence_rows=self.evidence_rows, excluded_origin_id=self.excluded_origin_id,
             scope='Empirical route recommendation; unavailable support retains current execution, not proof of safety')
+
+
+def plan_forward_route(decision, run, protocol, spec, planner, selector, available):
+    """CPU-only plan from a copied observation; never access the live simulator."""
+    features, named = decision_features(decision, run, protocol, spec)
+    if planner['mode'] == 'rule':
+        violated = [name for name, limit in planner['absolute_limits'].items() if abs(named[name]) > limit]
+        requested = 'bypass' if violated else 'original_jump'
+        choice = dict(status='rule_selected', violated=violated)
+    else:
+        choice = selector.choose(features, available)
+        requested = choice['reference']['route_id'] if choice['status'] == 'reference_selected' else 'original_jump'
+    return requested, choice, named

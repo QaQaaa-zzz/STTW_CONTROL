@@ -31,3 +31,33 @@ def test_unavailable_bypass_cannot_be_selected_and_jump_goal_remains_pending():
     assert result['reference']['route_id']=='bypass'
     assert not s.task.observe_goal('goal',arrived=True,upright=True,within_allowed_region=True,completed_skills=[])
     assert s.task.completed==[]
+
+
+def test_cpu_route_query_uses_copied_state_and_shared_rule(monkeypatch):
+    from sttw_control import jump_connection
+    monkeypatch.setattr(jump_connection, 'decision_features', lambda *args: ([.12], {'roll': .12}))
+    requested, choice, named = jump_connection.plan_forward_route(
+        {'time': 1.}, None, {}, {}, {'mode': 'rule', 'absolute_limits': {'roll': .1}}, None, ['original_jump', 'bypass'])
+    assert requested == 'bypass' and choice['violated'] == ['roll']
+    assert named == {'roll': .12}
+
+
+def test_pending_cpu_query_does_not_block_executor(monkeypatch):
+    from concurrent.futures import ThreadPoolExecutor
+    from threading import Event
+    from sttw_control import jump_connection
+    release = Event()
+    entered = Event()
+    def features(*args):
+        entered.set()
+        release.wait(2.)
+        return [0.], {'roll': 0.}
+    monkeypatch.setattr(jump_connection, 'decision_features', features)
+    with ThreadPoolExecutor(max_workers=1) as executor:
+        future = executor.submit(jump_connection.plan_forward_route, {}, None, {}, {},
+                                 {'mode': 'rule', 'absolute_limits': {'roll': .1}}, None, ['original_jump'])
+        assert entered.wait(1.)
+        assert not future.done()
+        # Executor can continue applying its existing reference before query completion.
+        release.set()
+        assert future.result(timeout=1.)[0] == 'original_jump'
