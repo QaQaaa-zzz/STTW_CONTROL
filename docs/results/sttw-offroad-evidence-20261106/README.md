@@ -78,3 +78,7 @@ source_manifest.json给出来源、提取方式和文件哈希；内部历史绝
 [几何实测](terrain_preparation/geometry_metrics.json)的max_grid_grade是离散高程梯度，不是已测车辆爬坡能力。[场景配置](../../../learning/configs/isaac_h75_route_terrain_scenes.json)、[生成器](../../../learning/cli/place_isaac_terrain.py)复用NVIDIA terrain_utils；逐场景把scene对象保存为JSON，使用`--scene-config <scene.json> --terrain route_rough或route_waves --output <目录>`生成。使用既有Go2 IsaacGym环境及其库路径。新场景属于DEV准备，不混入先前10条件的结果表或拟合。
 
 低速坡段筛查正在另行执行，尚未确认alpha0摔倒而更大alpha通过。新增全路段评测配置为`learning/configs/isaac_h75_route_terrain_sweep.json`，14条件×6轨迹，10秒，上限420万physics lane steps，0optimizer；等待低速筛查完成后再登记启动。
+
+## 当前小车物理模型
+
+[完整物理资产及说明](../../../assets/sttw_bicycle/README.md)已随同分支提交：当前实际URDF、轮子OBJ、转换契约、ECBC参数和Isaac Lab物理选项，并链接原MuJoCo XML/STL。身份与已评测模型一致；此处为小车物理模型，不是H75/Local300策略权重。
