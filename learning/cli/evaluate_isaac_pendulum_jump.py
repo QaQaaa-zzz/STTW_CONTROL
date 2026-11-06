@@ -76,7 +76,7 @@ for k in range(steps+1):
   signal=(inside&~consumed).float()
   obs=history.advance(root,plant.dofs[:,:,0],plant.dofs[:,:,1],plant.robot.data.body_com_acc_w[:,plant.bodies.index('chasis'),:3],distance,last,signal)
   observations.append(obs)
-  if not active and bool(inside.any()):
+  if not active and bool((root[:,0]>=spec.get('handoff_x',2.5)).any()):
    plant.set_pendulum_locked(False);active=True
    (out/'handoff.json').write_text(json.dumps(dict(time=k*.005,root=root.cpu().tolist(),position=plant.dofs[:,:,0].cpu().tolist(),velocity=plant.dofs[:,:,1].cpu().tolist(),distance=distance.cpu().tolist()),indent=2))
   if active:
