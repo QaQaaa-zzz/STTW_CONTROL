@@ -2,15 +2,16 @@
 import argparse,hashlib,json
 from pathlib import Path
 import numpy as np
-p=argparse.ArgumentParser();p.add_argument('--manifest',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--manifest',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--summary',type=Path,help='Export only cases evaluated in this frozen collection summary');a=p.parse_args()
 m=json.loads(a.manifest.read_text());a.output.mkdir(parents=True,exist_ok=True)
+allowed={r['case_id'] for r in json.loads(a.summary.read_text())['rows'] if r['status']=='evaluated'} if a.summary else None
 from sttw_control.jump_connection import fields, decision_features
 schema=dict(schema_version='rb_jump_decision_features_v2',features=[dict(name=n,unit=u) for n,u in fields],candidate_features=[dict(name='speed_m_s',unit='m/s'),dict(name='alpha',unit='1')],categorical_features=[dict(name='decision_stage',values=['exit','midpoint'])],deployment_sources='IMU, localization/velocity estimation, joint encoders, command history and known map. Simulation state substitutes measurements in this DEV; deployment estimation not validated.',missing_joint_velocity='Older protocol lacks live joint ordering: retain null, never assume donor or URDF order. These rows cannot train the full feature set.',previous_alpha_duration='Recorded duration since last alpha change; legacy exit records use episode time under unchanged upstream alpha.',excluded_inputs=['handoff_state','future_contacts','future_disturbance','max_path_error','terminal_outcome'],normalization='Not fitted; fit only on training roots if supervised learning is justified')
 
 rows=[];midpoint_rows=[];inventory=[];identities={}
 for case in m['cases']:
  spec=json.loads(Path(case['config']).read_text());run=Path(spec['output']);result=run/'chain_summary.json'
- if not result.exists():
+ if not result.exists() or (allowed is not None and case['case_id'] not in allowed):
   inventory.append(dict(case_id=case['case_id'],status='not_evaluated'));continue
  result=json.loads(result.read_text());protocol=json.loads((run/'protocol.json').read_text());decision_path=run/'connection_decision.json'
  decision=json.loads(decision_path.read_text()) if decision_path.exists() else None

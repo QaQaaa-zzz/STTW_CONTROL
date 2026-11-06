@@ -1,0 +1,98 @@
+{
+  "decision_prefix": {
+    "decision_time_s": null,
+    "decision_reached": false,
+    "max_path_error_before_decision_m": 0.22254371643066406,
+    "corridor_intact_at_decision": null,
+    "first_corridor_violation_s": null,
+    "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+  },
+  "stages": {
+    "reached_release_line": false,
+    "airborne_after_handoff": false,
+    "strict_support": false,
+    "ground_return": false,
+    "continued": false
+  },
+  "stage_times": {
+    "release": null,
+    "strict_support": null,
+    "ground_return": null,
+    "final_conditions": null
+  },
+  "role": "Single nominal DEV, no robustness claim",
+  "complete": false,
+  "success_time_s": null,
+  "first_final_conditions_time_s": null,
+  "checks": {
+    "full_window": false,
+    "ordered_approach": false,
+    "original_path_corridor": true,
+    "stable_landing": false,
+    "ground_return": false,
+    "continued_time": false,
+    "continued_forward": false,
+    "final_goal": false
+  },
+  "criteria": {
+    "corridor_half_width_m": 1.0,
+    "waypoints": [
+      [
+        -4.0,
+        -8.0
+      ],
+      [
+        -4.0,
+        -4.8
+      ],
+      [
+        -4.0,
+        -2
+      ],
+      [
+        -2.0,
+        0
+      ],
+      [
+        2.0,
+        0
+      ]
+    ],
+    "waypoint_radius_m": 1.0,
+    "minimum_post_handoff_s": 2.0,
+    "minimum_post_handoff_forward_m": 2.0,
+    "final_goal_xy": [
+      10.6,
+      0.0
+    ]
+  },
+  "passed_waypoints": [
+    {
+      "point": [
+        -4.0,
+        -8.0
+      ],
+      "time_s": 0.019999999552965164
+    },
+    {
+      "point": [
+        -4.0,
+        -4.8
+      ],
+      "time_s": 1.6200000047683716
+    }
+  ],
+  "max_original_path_error_m": 0.22254371643066406,
+  "path_rmse_m": 0.07277116246147959,
+  "post_handoff_s": 0.0,
+  "post_handoff_forward_m": 0.0,
+  "landing": {
+    "skill": "update2",
+    "first_strict_support_completion_s": null,
+    "airborne_after_handoff": false,
+    "first_airborne_interval_s": null,
+    "landing_hold_1s": false,
+    "longest_hold_s": 0.0,
+    "interval_s": null
+  }
+}

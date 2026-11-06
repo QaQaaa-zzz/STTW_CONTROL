@@ -1,0 +1,10 @@
+{
+  "common_sample_times_equal": true,
+  "common_samples": 1645,
+  "first_recorded_difference_s": 21.559999465942383,
+  "max_state_difference_through_goal": 0.0,
+  "goal_arrival_s": 18.760000228881836,
+  "old_duration_s": 22.200000762939453,
+  "new_duration_s": 30.0,
+  "change": "Append original straight reference after x25 to x51.6 only; physical clocks/model/controllers/window/goal unchanged"
+}

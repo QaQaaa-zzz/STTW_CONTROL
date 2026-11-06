@@ -4,16 +4,16 @@
   "collection_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/summary.json",
   "declared_origins": 6,
   "declared_tasks": 18,
-  "complete_matched_tasks": 8,
+  "complete_matched_tasks": 15,
   "anchor": {
     "speed": 2.0,
     "alpha": 0.5
   },
   "scores": {
     "fixed_v1.8_a0.0": {
-      "successes": 2,
-      "evaluated_tasks": 8,
-      "success_conditional_mean_T_s": 15.570000171661377,
+      "successes": 3,
+      "evaluated_tasks": 15,
+      "success_conditional_mean_T_s": 15.420000076293945,
       "per_root": {
         "rb_upstream_offset_01": {
           "successes": 1,
@@ -24,21 +24,29 @@
           "evaluated_tasks": 3
         },
         "rb_upstream_offset_03": {
-          "successes": 1,
-          "evaluated_tasks": 2
+          "successes": 2,
+          "evaluated_tasks": 3
+        },
+        "rb_upstream_offset_04": {
+          "successes": 0,
+          "evaluated_tasks": 3
+        },
+        "rb_upstream_offset_05": {
+          "successes": 0,
+          "evaluated_tasks": 3
         }
       },
       "paired_with_anchor": {
         "anchor": "fixed_v2.0_a0.5",
         "common_success_tasks": 1,
         "mean_time_saved_s": -1.880000114440918,
-        "gained_success_tasks": 1,
+        "gained_success_tasks": 2,
         "lost_success_tasks": 1
       }
     },
     "fixed_v1.8_a0.5": {
       "successes": 2,
-      "evaluated_tasks": 8,
+      "evaluated_tasks": 15,
       "success_conditional_mean_T_s": 15.850000381469727,
       "per_root": {
         "rb_upstream_offset_01": {
@@ -51,7 +59,15 @@
         },
         "rb_upstream_offset_03": {
           "successes": 1,
-          "evaluated_tasks": 2
+          "evaluated_tasks": 3
+        },
+        "rb_upstream_offset_04": {
+          "successes": 0,
+          "evaluated_tasks": 3
+        },
+        "rb_upstream_offset_05": {
+          "successes": 0,
+          "evaluated_tasks": 3
         }
       },
       "paired_with_anchor": {
@@ -64,7 +80,7 @@
     },
     "fixed_v1.8_a1.0": {
       "successes": 1,
-      "evaluated_tasks": 8,
+      "evaluated_tasks": 15,
       "success_conditional_mean_T_s": 15.420000076293945,
       "per_root": {
         "rb_upstream_offset_01": {
@@ -77,7 +93,15 @@
         },
         "rb_upstream_offset_03": {
           "successes": 1,
-          "evaluated_tasks": 2
+          "evaluated_tasks": 3
+        },
+        "rb_upstream_offset_04": {
+          "successes": 0,
+          "evaluated_tasks": 3
+        },
+        "rb_upstream_offset_05": {
+          "successes": 0,
+          "evaluated_tasks": 3
         }
       },
       "paired_with_anchor": {
@@ -89,9 +113,9 @@
       }
     },
     "fixed_v2.0_a0.0": {
-      "successes": 4,
-      "evaluated_tasks": 8,
-      "success_conditional_mean_T_s": 14.589999914169312,
+      "successes": 5,
+      "evaluated_tasks": 15,
+      "success_conditional_mean_T_s": 14.51599998474121,
       "per_root": {
         "rb_upstream_offset_01": {
           "successes": 3,
@@ -102,21 +126,29 @@
           "evaluated_tasks": 3
         },
         "rb_upstream_offset_03": {
-          "successes": 1,
-          "evaluated_tasks": 2
+          "successes": 2,
+          "evaluated_tasks": 3
+        },
+        "rb_upstream_offset_04": {
+          "successes": 0,
+          "evaluated_tasks": 3
+        },
+        "rb_upstream_offset_05": {
+          "successes": 0,
+          "evaluated_tasks": 3
         }
       },
       "paired_with_anchor": {
         "anchor": "fixed_v2.0_a0.5",
         "common_success_tasks": 2,
         "mean_time_saved_s": -0.4200000762939453,
-        "gained_success_tasks": 2,
+        "gained_success_tasks": 3,
         "lost_success_tasks": 0
       }
     },
     "fixed_v2.0_a0.5": {
       "successes": 2,
-      "evaluated_tasks": 8,
+      "evaluated_tasks": 15,
       "success_conditional_mean_T_s": 14.980000019073486,
       "per_root": {
         "rb_upstream_offset_01": {
@@ -129,7 +161,15 @@
         },
         "rb_upstream_offset_03": {
           "successes": 1,
-          "evaluated_tasks": 2
+          "evaluated_tasks": 3
+        },
+        "rb_upstream_offset_04": {
+          "successes": 0,
+          "evaluated_tasks": 3
+        },
+        "rb_upstream_offset_05": {
+          "successes": 0,
+          "evaluated_tasks": 3
         }
       },
       "paired_with_anchor": {
@@ -141,9 +181,9 @@
       }
     },
     "fixed_v2.0_a1.0": {
-      "successes": 0,
-      "evaluated_tasks": 8,
-      "success_conditional_mean_T_s": null,
+      "successes": 1,
+      "evaluated_tasks": 15,
+      "success_conditional_mean_T_s": 14.100000381469727,
       "per_root": {
         "rb_upstream_offset_01": {
           "successes": 0,
@@ -154,21 +194,29 @@
           "evaluated_tasks": 3
         },
         "rb_upstream_offset_03": {
+          "successes": 1,
+          "evaluated_tasks": 3
+        },
+        "rb_upstream_offset_04": {
           "successes": 0,
-          "evaluated_tasks": 2
+          "evaluated_tasks": 3
+        },
+        "rb_upstream_offset_05": {
+          "successes": 0,
+          "evaluated_tasks": 3
         }
       },
       "paired_with_anchor": {
         "anchor": "fixed_v2.0_a0.5",
         "common_success_tasks": 0,
         "mean_time_saved_s": null,
-        "gained_success_tasks": 0,
+        "gained_success_tasks": 1,
         "lost_success_tasks": 2
       }
     },
     "speed_only_oracle": {
       "successes": 2,
-      "evaluated_tasks": 8,
+      "evaluated_tasks": 15,
       "success_conditional_mean_T_s": 14.980000019073486,
       "per_root": {
         "rb_upstream_offset_01": {
@@ -181,7 +229,15 @@
         },
         "rb_upstream_offset_03": {
           "successes": 1,
-          "evaluated_tasks": 2
+          "evaluated_tasks": 3
+        },
+        "rb_upstream_offset_04": {
+          "successes": 0,
+          "evaluated_tasks": 3
+        },
+        "rb_upstream_offset_05": {
+          "successes": 0,
+          "evaluated_tasks": 3
         }
       },
       "paired_with_anchor": {
@@ -193,9 +249,9 @@
       }
     },
     "alpha_only_oracle": {
-      "successes": 4,
-      "evaluated_tasks": 8,
-      "success_conditional_mean_T_s": 14.289999723434448,
+      "successes": 5,
+      "evaluated_tasks": 15,
+      "success_conditional_mean_T_s": 14.251999855041504,
       "per_root": {
         "rb_upstream_offset_01": {
           "successes": 3,
@@ -206,22 +262,30 @@
           "evaluated_tasks": 3
         },
         "rb_upstream_offset_03": {
-          "successes": 1,
-          "evaluated_tasks": 2
+          "successes": 2,
+          "evaluated_tasks": 3
+        },
+        "rb_upstream_offset_04": {
+          "successes": 0,
+          "evaluated_tasks": 3
+        },
+        "rb_upstream_offset_05": {
+          "successes": 0,
+          "evaluated_tasks": 3
         }
       },
       "paired_with_anchor": {
         "anchor": "fixed_v2.0_a0.5",
         "common_success_tasks": 2,
         "mean_time_saved_s": 0.18000030517578125,
-        "gained_success_tasks": 2,
+        "gained_success_tasks": 3,
         "lost_success_tasks": 0
       }
     },
     "joint_oracle": {
-      "successes": 4,
-      "evaluated_tasks": 8,
-      "success_conditional_mean_T_s": 14.289999723434448,
+      "successes": 5,
+      "evaluated_tasks": 15,
+      "success_conditional_mean_T_s": 14.251999855041504,
       "per_root": {
         "rb_upstream_offset_01": {
           "successes": 3,
@@ -232,15 +296,23 @@
           "evaluated_tasks": 3
         },
         "rb_upstream_offset_03": {
-          "successes": 1,
-          "evaluated_tasks": 2
+          "successes": 2,
+          "evaluated_tasks": 3
+        },
+        "rb_upstream_offset_04": {
+          "successes": 0,
+          "evaluated_tasks": 3
+        },
+        "rb_upstream_offset_05": {
+          "successes": 0,
+          "evaluated_tasks": 3
         }
       },
       "paired_with_anchor": {
         "anchor": "fixed_v2.0_a0.5",
         "common_success_tasks": 2,
         "mean_time_saved_s": 0.18000030517578125,
-        "gained_success_tasks": 2,
+        "gained_success_tasks": 3,
         "lost_success_tasks": 0
       }
     }
@@ -682,63 +754,385 @@
       "origin_id": "rb_upstream_offset_03",
       "distance_m": 7.6,
       "declared_candidates": 6,
-      "evaluated_candidates": 4,
-      "matched_group_complete": false,
-      "selected": {}
+      "evaluated_candidates": 6,
+      "matched_group_complete": true,
+      "selected": {
+        "fixed_v1.8_a0.0": {
+          "Y": 1,
+          "T_s": 15.119999885559082,
+          "case_id": "rb_upstream_offset_03_L7.6_v1.8_a0.0"
+        },
+        "fixed_v1.8_a0.5": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v1.8_a1.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a0.0": {
+          "Y": 1,
+          "T_s": 14.220000267028809,
+          "case_id": "rb_upstream_offset_03_L7.6_v2.0_a0.0"
+        },
+        "fixed_v2.0_a0.5": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a1.0": {
+          "Y": 1,
+          "T_s": 14.100000381469727,
+          "case_id": "rb_upstream_offset_03_L7.6_v2.0_a1.0"
+        },
+        "speed_only_oracle": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "alpha_only_oracle": {
+          "Y": 1,
+          "T_s": 14.100000381469727,
+          "case_id": "rb_upstream_offset_03_L7.6_v2.0_a1.0"
+        },
+        "joint_oracle": {
+          "Y": 1,
+          "T_s": 14.100000381469727,
+          "case_id": "rb_upstream_offset_03_L7.6_v2.0_a1.0"
+        }
+      }
     },
     {
       "origin_id": "rb_upstream_offset_04",
       "distance_m": 9.6,
       "declared_candidates": 6,
-      "evaluated_candidates": 0,
-      "matched_group_complete": false,
-      "selected": {}
+      "evaluated_candidates": 6,
+      "matched_group_complete": true,
+      "selected": {
+        "fixed_v1.8_a0.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v1.8_a0.5": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v1.8_a1.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a0.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a0.5": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a1.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "speed_only_oracle": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "alpha_only_oracle": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "joint_oracle": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        }
+      }
     },
     {
       "origin_id": "rb_upstream_offset_04",
       "distance_m": 5.6,
       "declared_candidates": 6,
-      "evaluated_candidates": 0,
-      "matched_group_complete": false,
-      "selected": {}
+      "evaluated_candidates": 6,
+      "matched_group_complete": true,
+      "selected": {
+        "fixed_v1.8_a0.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v1.8_a0.5": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v1.8_a1.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a0.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a0.5": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a1.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "speed_only_oracle": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "alpha_only_oracle": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "joint_oracle": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        }
+      }
     },
     {
       "origin_id": "rb_upstream_offset_04",
       "distance_m": 7.6,
       "declared_candidates": 6,
-      "evaluated_candidates": 0,
-      "matched_group_complete": false,
-      "selected": {}
+      "evaluated_candidates": 6,
+      "matched_group_complete": true,
+      "selected": {
+        "fixed_v1.8_a0.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v1.8_a0.5": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v1.8_a1.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a0.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a0.5": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a1.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "speed_only_oracle": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "alpha_only_oracle": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "joint_oracle": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        }
+      }
     },
     {
       "origin_id": "rb_upstream_offset_05",
       "distance_m": 9.6,
       "declared_candidates": 6,
-      "evaluated_candidates": 0,
-      "matched_group_complete": false,
-      "selected": {}
+      "evaluated_candidates": 6,
+      "matched_group_complete": true,
+      "selected": {
+        "fixed_v1.8_a0.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v1.8_a0.5": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v1.8_a1.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a0.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a0.5": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a1.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "speed_only_oracle": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "alpha_only_oracle": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "joint_oracle": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        }
+      }
     },
     {
       "origin_id": "rb_upstream_offset_05",
       "distance_m": 5.6,
       "declared_candidates": 6,
-      "evaluated_candidates": 0,
-      "matched_group_complete": false,
-      "selected": {}
+      "evaluated_candidates": 6,
+      "matched_group_complete": true,
+      "selected": {
+        "fixed_v1.8_a0.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v1.8_a0.5": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v1.8_a1.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a0.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a0.5": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a1.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "speed_only_oracle": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "alpha_only_oracle": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "joint_oracle": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        }
+      }
     },
     {
       "origin_id": "rb_upstream_offset_05",
       "distance_m": 7.6,
       "declared_candidates": 6,
-      "evaluated_candidates": 0,
-      "matched_group_complete": false,
-      "selected": {}
+      "evaluated_candidates": 6,
+      "matched_group_complete": true,
+      "selected": {
+        "fixed_v1.8_a0.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v1.8_a0.5": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v1.8_a1.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a0.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a0.5": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a1.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "speed_only_oracle": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "alpha_only_oracle": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "joint_oracle": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        }
+      }
     },
     {
       "origin_id": "rb_upstream_offset_06",
       "distance_m": 9.6,
       "declared_candidates": 6,
-      "evaluated_candidates": 0,
+      "evaluated_candidates": 5,
       "matched_group_complete": false,
       "selected": {}
     },
@@ -746,7 +1140,7 @@
       "origin_id": "rb_upstream_offset_06",
       "distance_m": 5.6,
       "declared_candidates": 6,
-      "evaluated_candidates": 0,
+      "evaluated_candidates": 1,
       "matched_group_complete": false,
       "selected": {}
     },
@@ -754,7 +1148,7 @@
       "origin_id": "rb_upstream_offset_06",
       "distance_m": 7.6,
       "declared_candidates": 6,
-      "evaluated_candidates": 0,
+      "evaluated_candidates": 1,
       "matched_group_complete": false,
       "selected": {}
     }

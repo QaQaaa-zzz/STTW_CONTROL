@@ -2,7 +2,7 @@
   "protocol_id": "ch3_jump_connection_hold_v1",
   "role": "Six new parametric DEV roots; all descendants grouped by origin; not independent TEST",
   "declared_cases": 108,
-  "evaluated_cases": 52,
+  "evaluated_cases": 97,
   "rows": [
     {
       "case_id": "rb_upstream_offset_01_L9.6_v2.0_a0.5",
@@ -9900,8 +9900,186 @@
       "panel_key": [
         7.6
       ],
-      "status": "started_no_final_result",
-      "complete": null
+      "status": "evaluated",
+      "complete": true,
+      "success_time_s": 14.220000267028809,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "max_original_path_error_m": 0.694674015045166,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": true,
+        "ground_return": true,
+        "continued": true
+      },
+      "stage_times": {
+        "release": 8.44,
+        "strict_support": 11.345000267028809,
+        "ground_return": 12.040000000000001,
+        "final_conditions": 14.220000267028809
+      },
+      "decision": {
+        "time": 5.44,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.44,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 2.0,
+          "alpha": 0.0
+        },
+        "root": [
+          [
+            -1.9807265996932983,
+            0.5466662645339966,
+            0.11797113716602325,
+            0.7551982998847961,
+            0.012177398428320885,
+            0.009961805306375027,
+            0.6553074717521667,
+            1.9880855083465576,
+            -0.002719101496040821,
+            -0.002674960996955633,
+            -0.11536244302988052,
+            -0.01545257680118084,
+            -0.6908875107765198
+          ]
+        ],
+        "measurement": [
+          [
+            -0.1414165496826172,
+            0.11516010016202927,
+            -0.09544657915830612,
+            0.11416022479534149,
+            -0.6824293732643127,
+            28.470256805419922,
+            28.724117279052734
+          ]
+        ],
+        "position": [
+          [
+            -1.2002016305923462,
+            5.32518196105957,
+            -0.09544657915830612,
+            2.499999523162842,
+            2.868497610092163
+          ]
+        ],
+        "velocity": [
+          [
+            0.03691064566373825,
+            -28.470256805419922,
+            0.11416022479534149,
+            -3.045232006115839e-06,
+            -28.724117279052734
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.0093438625335693,
+            -0.06457311660051346
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 8.44,
+        "root": [
+          [
+            4.003290176391602,
+            0.12183641642332077,
+            0.11886869370937347,
+            0.7236954569816589,
+            -0.010653526522219181,
+            -0.010802061296999454,
+            0.6899526715278625,
+            2.035891056060791,
+            -0.08462250232696533,
+            7.225920126074925e-05,
+            -0.04905493184924126,
+            0.00276434188708663,
+            -0.24942876398563385
+          ]
+        ],
+        "position": [
+          [
+            -1.2002007961273193,
+            -6.152947425842285,
+            -0.034074217081069946,
+            2.499999523162842,
+            3.83223295211792
+          ]
+        ],
+        "velocity": [
+          [
+            0.0030505794566124678,
+            -29.11017608642578,
+            0.021318349987268448,
+            -6.795934837100504e-07,
+            -29.13572120666504
+          ]
+        ],
+        "distance": [
+          1.3623433113098145
+        ]
+      },
+      "observed_duration_s": 22.0,
+      "decision_prefix": {
+        "decision_time_s": 5.44,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.5511850467811801,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "none",
+      "decision_state": {
+        "time_s": 5.44,
+        "x_m": -1.9807265996932983,
+        "y_m": 0.5466662645339966,
+        "forward_speed_m_s": 1.9870165586471558,
+        "lateral_velocity_heading_frame_m_s": -0.06524067041450352,
+        "heading_rad": 0.0314539914688321,
+        "world_yaw_rate_rad_s": -0.6908875107765198,
+        "roll_rad": -0.1414165496826172,
+        "roll_rate_rad_s": 0.11516010016202927,
+        "steer_rad": -0.09544657915830612,
+        "steer_rate_rad_s": 0.11416022479534149
+      },
+      "handoff_state": {
+        "time_s": 8.44,
+        "x_m": 4.003290176391602,
+        "y_m": 0.12183641642332077,
+        "forward_speed_m_s": 2.0375211238861084,
+        "lateral_velocity_heading_frame_m_s": -0.022843856700044025,
+        "heading_rad": -0.03033030288067493,
+        "world_yaw_rate_rad_s": -0.24942876398563385,
+        "roll_rad": -0.04771530628204346,
+        "roll_rate_rad_s": 0.04888322204351425,
+        "steer_rad": -0.034074217081069946,
+        "steer_rate_rad_s": 0.021318349987268448
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_03_L9.6_v2.0_a0.5",
+        "matched_samples": 273,
+        "through_time_s": 5.440000057220459,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
     },
     {
       "case_id": "rb_upstream_offset_03_L7.6_v2.0_a1.0",
@@ -9913,8 +10091,186 @@
       "panel_key": [
         7.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": true,
+      "success_time_s": 14.100000381469727,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "max_original_path_error_m": 0.936983048915863,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": true,
+        "ground_return": true,
+        "continued": true
+      },
+      "stage_times": {
+        "release": 8.4,
+        "strict_support": 11.164999961853027,
+        "ground_return": 11.88,
+        "final_conditions": 14.100000381469727
+      },
+      "decision": {
+        "time": 5.44,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.44,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 2.0,
+          "alpha": 1.0
+        },
+        "root": [
+          [
+            -1.9807265996932983,
+            0.5466662645339966,
+            0.11797113716602325,
+            0.7551982998847961,
+            0.012177398428320885,
+            0.009961805306375027,
+            0.6553074717521667,
+            1.9880855083465576,
+            -0.002719101496040821,
+            -0.002674960996955633,
+            -0.11536244302988052,
+            -0.01545257680118084,
+            -0.6908875107765198
+          ]
+        ],
+        "measurement": [
+          [
+            -0.1414165496826172,
+            0.11516010016202927,
+            -0.09544657915830612,
+            0.11416022479534149,
+            -0.6824293732643127,
+            28.470256805419922,
+            28.724117279052734
+          ]
+        ],
+        "position": [
+          [
+            -1.2002016305923462,
+            5.32518196105957,
+            -0.09544657915830612,
+            2.499999523162842,
+            2.868497610092163
+          ]
+        ],
+        "velocity": [
+          [
+            0.03691064566373825,
+            -28.470256805419922,
+            0.11416022479534149,
+            -3.045232006115839e-06,
+            -28.724117279052734
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.0093438625335693,
+            -0.06457311660051346
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 8.4,
+        "root": [
+          [
+            4.014510154724121,
+            0.21335700154304504,
+            0.11894559860229492,
+            0.7108774781227112,
+            0.02082544006407261,
+            0.019928747788071632,
+            0.7027250528335571,
+            2.0415213108062744,
+            0.11289548873901367,
+            -0.00024150902754627168,
+            0.02534836158156395,
+            0.001313755172304809,
+            -0.016416503116488457
+          ]
+        ],
+        "position": [
+          [
+            -1.2002004384994507,
+            -5.583228588104248,
+            -0.0022358475252985954,
+            2.499999523162842,
+            4.4676194190979
+          ]
+        ],
+        "velocity": [
+          [
+            -5.196252095629461e-05,
+            -29.204805374145508,
+            -0.037043314427137375,
+            -2.282355922034185e-07,
+            -29.21150016784668
+          ]
+        ],
+        "distance": [
+          1.3513731956481934
+        ]
+      },
+      "observed_duration_s": 22.0,
+      "decision_prefix": {
+        "decision_time_s": 5.44,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.5511850467811801,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "none",
+      "decision_state": {
+        "time_s": 5.44,
+        "x_m": -1.9807265996932983,
+        "y_m": 0.5466662645339966,
+        "forward_speed_m_s": 1.9870165586471558,
+        "lateral_velocity_heading_frame_m_s": -0.06524067041450352,
+        "heading_rad": 0.0314539914688321,
+        "world_yaw_rate_rad_s": -0.6908875107765198,
+        "roll_rad": -0.1414165496826172,
+        "roll_rate_rad_s": 0.11516010016202927,
+        "steer_rad": -0.09544657915830612,
+        "steer_rate_rad_s": 0.11416022479534149
+      },
+      "handoff_state": {
+        "time_s": 8.4,
+        "x_m": 4.014510154724121,
+        "y_m": 0.21335700154304504,
+        "forward_speed_m_s": 2.0446345806121826,
+        "lateral_velocity_heading_frame_m_s": -0.0049195348672672334,
+        "heading_rad": 0.05764948585234436,
+        "world_yaw_rate_rad_s": -0.016416503116488457,
+        "roll_rad": -0.011561155319213867,
+        "roll_rate_rad_s": -0.025397291406989098,
+        "steer_rad": -0.0022358475252985954,
+        "steer_rate_rad_s": -0.037043314427137375
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_03_L9.6_v2.0_a0.5",
+        "matched_samples": 273,
+        "through_time_s": 5.440000057220459,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
     },
     {
       "case_id": "rb_upstream_offset_04_L9.6_v2.0_a0.5",
@@ -9926,8 +10282,45 @@
       "panel_key": [
         9.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.27785229682922363,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.6799999475479126,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.27785229682922363,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_04_L5.6_v2.0_a0.5",
@@ -9939,8 +10332,45 @@
       "panel_key": [
         5.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.27785229682922363,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.6799999475479126,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.27785229682922363,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_04_L7.6_v2.0_a0.5",
@@ -9952,8 +10382,45 @@
       "panel_key": [
         7.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.27785229682922363,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.6799999475479126,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.27785229682922363,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_04_L9.6_v1.8_a0.0",
@@ -9965,8 +10432,45 @@
       "panel_key": [
         9.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.27785229682922363,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.6799999475479126,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.27785229682922363,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_04_L9.6_v1.8_a0.5",
@@ -9978,8 +10482,45 @@
       "panel_key": [
         9.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.27785229682922363,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.6799999475479126,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.27785229682922363,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_04_L9.6_v1.8_a1.0",
@@ -9991,8 +10532,45 @@
       "panel_key": [
         9.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.27785229682922363,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.6799999475479126,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.27785229682922363,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_04_L9.6_v2.0_a0.0",
@@ -10004,8 +10582,45 @@
       "panel_key": [
         9.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.27785229682922363,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.6799999475479126,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.27785229682922363,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_04_L9.6_v2.0_a1.0",
@@ -10017,8 +10632,45 @@
       "panel_key": [
         9.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.27785229682922363,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.6799999475479126,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.27785229682922363,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_04_L5.6_v1.8_a0.0",
@@ -10030,8 +10682,45 @@
       "panel_key": [
         5.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.27785229682922363,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.6799999475479126,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.27785229682922363,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_04_L5.6_v1.8_a0.5",
@@ -10043,8 +10732,45 @@
       "panel_key": [
         5.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.27785229682922363,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.6799999475479126,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.27785229682922363,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_04_L5.6_v1.8_a1.0",
@@ -10056,8 +10782,45 @@
       "panel_key": [
         5.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.27785229682922363,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.6799999475479126,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.27785229682922363,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_04_L5.6_v2.0_a0.0",
@@ -10069,8 +10832,45 @@
       "panel_key": [
         5.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.27785229682922363,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.6799999475479126,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.27785229682922363,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_04_L5.6_v2.0_a1.0",
@@ -10082,8 +10882,45 @@
       "panel_key": [
         5.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.27785229682922363,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.6799999475479126,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.27785229682922363,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_04_L7.6_v1.8_a0.0",
@@ -10095,8 +10932,45 @@
       "panel_key": [
         7.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.27785229682922363,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.6799999475479126,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.27785229682922363,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_04_L7.6_v1.8_a0.5",
@@ -10108,8 +10982,45 @@
       "panel_key": [
         7.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.27785229682922363,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.6799999475479126,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.27785229682922363,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_04_L7.6_v1.8_a1.0",
@@ -10121,8 +11032,45 @@
       "panel_key": [
         7.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.27785229682922363,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.6799999475479126,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.27785229682922363,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_04_L7.6_v2.0_a0.0",
@@ -10134,8 +11082,45 @@
       "panel_key": [
         7.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.27785229682922363,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.6799999475479126,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.27785229682922363,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_04_L7.6_v2.0_a1.0",
@@ -10147,8 +11132,45 @@
       "panel_key": [
         7.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.27785229682922363,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.6799999475479126,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.27785229682922363,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_05_L9.6_v2.0_a0.5",
@@ -10160,8 +11182,45 @@
       "panel_key": [
         9.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.22254371643066406,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.659999966621399,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.22254371643066406,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_05_L5.6_v2.0_a0.5",
@@ -10173,8 +11232,45 @@
       "panel_key": [
         5.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.22254371643066406,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.659999966621399,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.22254371643066406,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_05_L7.6_v2.0_a0.5",
@@ -10186,8 +11282,45 @@
       "panel_key": [
         7.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.22254371643066406,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.659999966621399,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.22254371643066406,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_05_L9.6_v1.8_a0.0",
@@ -10199,8 +11332,45 @@
       "panel_key": [
         9.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.22254371643066406,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.659999966621399,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.22254371643066406,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_05_L9.6_v1.8_a0.5",
@@ -10212,8 +11382,45 @@
       "panel_key": [
         9.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.22254371643066406,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.659999966621399,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.22254371643066406,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_05_L9.6_v1.8_a1.0",
@@ -10225,8 +11432,45 @@
       "panel_key": [
         9.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.22254371643066406,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.659999966621399,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.22254371643066406,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_05_L9.6_v2.0_a0.0",
@@ -10238,8 +11482,45 @@
       "panel_key": [
         9.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.22254371643066406,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.659999966621399,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.22254371643066406,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_05_L9.6_v2.0_a1.0",
@@ -10251,8 +11532,45 @@
       "panel_key": [
         9.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.22254371643066406,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.659999966621399,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.22254371643066406,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_05_L5.6_v1.8_a0.0",
@@ -10264,8 +11582,45 @@
       "panel_key": [
         5.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.22254371643066406,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.659999966621399,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.22254371643066406,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_05_L5.6_v1.8_a0.5",
@@ -10277,8 +11632,45 @@
       "panel_key": [
         5.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.22254371643066406,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.659999966621399,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.22254371643066406,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_05_L5.6_v1.8_a1.0",
@@ -10290,8 +11682,45 @@
       "panel_key": [
         5.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.22254371643066406,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.659999966621399,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.22254371643066406,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_05_L5.6_v2.0_a0.0",
@@ -10303,8 +11732,45 @@
       "panel_key": [
         5.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.22254371643066406,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.659999966621399,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.22254371643066406,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_05_L5.6_v2.0_a1.0",
@@ -10316,8 +11782,45 @@
       "panel_key": [
         5.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.22254371643066406,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.659999966621399,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.22254371643066406,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_05_L7.6_v1.8_a0.0",
@@ -10329,8 +11832,45 @@
       "panel_key": [
         7.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.22254371643066406,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.659999966621399,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.22254371643066406,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_05_L7.6_v1.8_a0.5",
@@ -10342,8 +11882,45 @@
       "panel_key": [
         7.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.22254371643066406,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.659999966621399,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.22254371643066406,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_05_L7.6_v1.8_a1.0",
@@ -10355,8 +11932,45 @@
       "panel_key": [
         7.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.22254371643066406,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.659999966621399,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.22254371643066406,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_05_L7.6_v2.0_a0.0",
@@ -10368,8 +11982,45 @@
       "panel_key": [
         7.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.22254371643066406,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.659999966621399,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.22254371643066406,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_05_L7.6_v2.0_a1.0",
@@ -10381,8 +12032,45 @@
       "panel_key": [
         7.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.22254371643066406,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "observed_duration_s": 1.659999966621399,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.22254371643066406,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
     },
     {
       "case_id": "rb_upstream_offset_06_L9.6_v2.0_a0.5",
@@ -10394,8 +12082,186 @@
       "panel_key": [
         9.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": true,
+      "success_time_s": 14.859999656677246,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "max_original_path_error_m": 0.37664151191711426,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": true,
+        "ground_return": true,
+        "continued": true
+      },
+      "stage_times": {
+        "release": 9.24,
+        "strict_support": 12.005000114440918,
+        "ground_return": 12.700000000000001,
+        "final_conditions": 14.859999656677246
+      },
+      "decision": {
+        "time": 5.28,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.28,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 2.0,
+          "alpha": 0.5
+        },
+        "root": [
+          [
+            -1.9998353719711304,
+            0.3574826121330261,
+            0.11787278950214386,
+            0.7571491599082947,
+            0.028202449902892113,
+            0.02369602397084236,
+            0.6522026658058167,
+            1.9888101816177368,
+            0.07551361620426178,
+            0.0012425726745277643,
+            -0.1431560069322586,
+            -0.01248555351048708,
+            -0.7694575190544128
+          ]
+        ],
+        "measurement": [
+          [
+            -0.1486877202987671,
+            0.1429906189441681,
+            -0.10561034828424454,
+            0.12236970663070679,
+            -0.7608124613761902,
+            28.66415786743164,
+            28.871503829956055
+          ]
+        ],
+        "position": [
+          [
+            -1.2002003192901611,
+            -2.6765706539154053,
+            -0.10561034828424454,
+            2.499999523162842,
+            -2.2308597564697266
+          ]
+        ],
+        "velocity": [
+          [
+            5.565436254073575e-07,
+            -28.66415786743164,
+            0.12236970663070679,
+            -0.0005928658647462726,
+            -28.871503829956055
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.008434772491455,
+            -0.06084035336971283
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 9.24,
+        "root": [
+          [
+            6.033257007598877,
+            0.09199881553649902,
+            0.11894437670707703,
+            0.7100363969802856,
+            -0.02024996280670166,
+            -0.020726501941680908,
+            0.7035686373710632,
+            2.042083501815796,
+            -0.11579349637031555,
+            -7.587187428725883e-05,
+            -0.04137006029486656,
+            0.0017183723393827677,
+            -0.019019408151507378
+          ]
+        ],
+        "position": [
+          [
+            -1.2001993656158447,
+            -5.034376621246338,
+            -0.0025305375456809998,
+            2.499999523162842,
+            -4.629276275634766
+          ]
+        ],
+        "velocity": [
+          [
+            -0.003701625857502222,
+            -29.150360107421875,
+            0.03532557189464569,
+            0.0024561674799770117,
+            -29.172353744506836
+          ]
+        ],
+        "distance": [
+          1.3326129913330078
+        ]
+      },
+      "observed_duration_s": 22.0,
+      "decision_prefix": {
+        "decision_time_s": 5.28,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.3574826121330261,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "none",
+      "decision_state": {
+        "time_s": 5.28,
+        "x_m": -1.9998353719711304,
+        "y_m": 0.3574826121330261,
+        "forward_speed_m_s": 1.9889729022979736,
+        "lateral_velocity_heading_frame_m_s": -0.07109987241816093,
+        "heading_rad": 0.07368282715174797,
+        "world_yaw_rate_rad_s": -0.7694575190544128,
+        "roll_rad": -0.1486877202987671,
+        "roll_rate_rad_s": 0.1429906189441681,
+        "steer_rad": -0.10561034828424454,
+        "steer_rate_rad_s": 0.12236970663070679
+      },
+      "handoff_state": {
+        "time_s": 9.24,
+        "x_m": 6.033257007598877,
+        "y_m": 0.09199881553649902,
+        "forward_speed_m_s": 2.0453619956970215,
+        "lateral_velocity_heading_frame_m_s": 0.002681403648597161,
+        "heading_rad": -0.05795391598641363,
+        "world_yaw_rate_rad_s": -0.019019408151507378,
+        "roll_rad": -0.009123682975769043,
+        "roll_rate_rad_s": 0.04138226434588432,
+        "steer_rad": -0.0025305375456809998,
+        "steer_rate_rad_s": 0.03532557189464569
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_06_L9.6_v2.0_a0.5",
+        "matched_samples": 265,
+        "through_time_s": 5.28000020980835,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
     },
     {
       "case_id": "rb_upstream_offset_06_L5.6_v2.0_a0.5",
@@ -10407,8 +12273,186 @@
       "panel_key": [
         5.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": true,
+        "original_path_corridor": false,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": false,
+        "continued_forward": true,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 1.021065592765808,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": true,
+        "ground_return": true,
+        "continued": false
+      },
+      "stage_times": {
+        "release": 7.28,
+        "strict_support": 9.5649995803833,
+        "ground_return": 10.200000000000001,
+        "final_conditions": null
+      },
+      "decision": {
+        "time": 5.28,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.28,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 2.0,
+          "alpha": 0.5
+        },
+        "root": [
+          [
+            -1.9998353719711304,
+            0.3574826121330261,
+            0.11787278950214386,
+            0.7571491599082947,
+            0.028202449902892113,
+            0.02369602397084236,
+            0.6522026658058167,
+            1.9888101816177368,
+            0.07551361620426178,
+            0.0012425726745277643,
+            -0.1431560069322586,
+            -0.01248555351048708,
+            -0.7694575190544128
+          ]
+        ],
+        "measurement": [
+          [
+            -0.1486877202987671,
+            0.1429906189441681,
+            -0.10561034828424454,
+            0.12236970663070679,
+            -0.7608124613761902,
+            28.66415786743164,
+            28.871503829956055
+          ]
+        ],
+        "position": [
+          [
+            -1.2002003192901611,
+            -2.6765706539154053,
+            -0.10561034828424454,
+            2.499999523162842,
+            -2.2308597564697266
+          ]
+        ],
+        "velocity": [
+          [
+            5.565436254073575e-07,
+            -28.66415786743164,
+            0.12236970663070679,
+            -0.0005928658647462726,
+            -28.871503829956055
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.008434772491455,
+            -0.06084035336971283
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 7.28,
+        "root": [
+          [
+            2.0371854305267334,
+            -0.003277644980698824,
+            0.118940070271492,
+            0.7021826505661011,
+            0.02695062756538391,
+            0.026620354503393173,
+            0.7109884023666382,
+            2.0363621711730957,
+            0.15313124656677246,
+            -2.3962016712175682e-05,
+            0.08289100229740143,
+            0.005618967115879059,
+            0.07387303560972214
+          ]
+        ],
+        "position": [
+          [
+            -1.2001993656158447,
+            1.889458179473877,
+            0.009979281574487686,
+            2.499999523162842,
+            2.282308340072632
+          ]
+        ],
+        "velocity": [
+          [
+            -0.003698773216456175,
+            -29.103729248046875,
+            -0.07525907456874847,
+            0.0025711040943861008,
+            -29.126131057739258
+          ]
+        ],
+        "distance": [
+          1.3289451599121094
+        ]
+      },
+      "observed_duration_s": 11.960000038146973,
+      "decision_prefix": {
+        "decision_time_s": 5.28,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.3574826121330261,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": 11.460000038146973,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "continuation_or_corridor",
+      "decision_state": {
+        "time_s": 5.28,
+        "x_m": -1.9998353719711304,
+        "y_m": 0.3574826121330261,
+        "forward_speed_m_s": 1.9889729022979736,
+        "lateral_velocity_heading_frame_m_s": -0.07109987241816093,
+        "heading_rad": 0.07368282715174797,
+        "world_yaw_rate_rad_s": -0.7694575190544128,
+        "roll_rad": -0.1486877202987671,
+        "roll_rate_rad_s": 0.1429906189441681,
+        "steer_rad": -0.10561034828424454,
+        "steer_rate_rad_s": 0.12236970663070679
+      },
+      "handoff_state": {
+        "time_s": 7.28,
+        "x_m": 2.0371854305267334,
+        "y_m": -0.003277644980698824,
+        "forward_speed_m_s": 2.0421111583709717,
+        "lateral_velocity_heading_frame_m_s": -0.0014650311800711302,
+        "heading_rad": 0.07577457894300443,
+        "world_yaw_rate_rad_s": 0.07387303560972214,
+        "roll_rad": 0.01242673397064209,
+        "roll_rate_rad_s": -0.08300914615392685,
+        "steer_rad": 0.009979281574487686,
+        "steer_rate_rad_s": -0.07525907456874847
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_06_L9.6_v2.0_a0.5",
+        "matched_samples": 265,
+        "through_time_s": 5.28000020980835,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
     },
     {
       "case_id": "rb_upstream_offset_06_L7.6_v2.0_a0.5",
@@ -10420,8 +12464,186 @@
       "panel_key": [
         7.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": true,
+        "original_path_corridor": false,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 1.0500097274780273,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": true,
+        "ground_return": true,
+        "continued": false
+      },
+      "stage_times": {
+        "release": 8.26,
+        "strict_support": 10.9350004196167,
+        "ground_return": 11.64,
+        "final_conditions": null
+      },
+      "decision": {
+        "time": 5.28,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.28,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 2.0,
+          "alpha": 0.5
+        },
+        "root": [
+          [
+            -1.9998353719711304,
+            0.3574826121330261,
+            0.11787278950214386,
+            0.7571491599082947,
+            0.028202449902892113,
+            0.02369602397084236,
+            0.6522026658058167,
+            1.9888101816177368,
+            0.07551361620426178,
+            0.0012425726745277643,
+            -0.1431560069322586,
+            -0.01248555351048708,
+            -0.7694575190544128
+          ]
+        ],
+        "measurement": [
+          [
+            -0.1486877202987671,
+            0.1429906189441681,
+            -0.10561034828424454,
+            0.12236970663070679,
+            -0.7608124613761902,
+            28.66415786743164,
+            28.871503829956055
+          ]
+        ],
+        "position": [
+          [
+            -1.2002003192901611,
+            -2.6765706539154053,
+            -0.10561034828424454,
+            2.499999523162842,
+            -2.2308597564697266
+          ]
+        ],
+        "velocity": [
+          [
+            5.565436254073575e-07,
+            -28.66415786743164,
+            0.12236970663070679,
+            -0.0005928658647462726,
+            -28.871503829956055
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.008434772491455,
+            -0.06084035336971283
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 8.26,
+        "root": [
+          [
+            4.032786846160889,
+            0.132674902677536,
+            0.11892552673816681,
+            0.7173979878425598,
+            0.016092747449874878,
+            0.01496594026684761,
+            0.6963170170783997,
+            2.0394704341888428,
+            0.07400647550821304,
+            -0.00011020314559573308,
+            0.01778208278119564,
+            0.00010204654245171696,
+            -0.11726062744855881
+          ]
+        ],
+        "position": [
+          [
+            -1.2001993656158447,
+            -1.5616387128829956,
+            -0.015831058844923973,
+            2.499999523162842,
+            -1.1616393327713013
+          ]
+        ],
+        "velocity": [
+          [
+            -0.0035172253847122192,
+            -29.085582733154297,
+            -0.014144700951874256,
+            0.002448971848934889,
+            -29.111377716064453
+          ]
+        ],
+        "distance": [
+          1.33294677734375
+        ]
+      },
+      "observed_duration_s": 12.600000381469727,
+      "decision_prefix": {
+        "decision_time_s": 5.28,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.3574826121330261,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": 12.5,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "continuation_or_corridor",
+      "decision_state": {
+        "time_s": 5.28,
+        "x_m": -1.9998353719711304,
+        "y_m": 0.3574826121330261,
+        "forward_speed_m_s": 1.9889729022979736,
+        "lateral_velocity_heading_frame_m_s": -0.07109987241816093,
+        "heading_rad": 0.07368282715174797,
+        "world_yaw_rate_rad_s": -0.7694575190544128,
+        "roll_rad": -0.1486877202987671,
+        "roll_rate_rad_s": 0.1429906189441681,
+        "steer_rad": -0.10561034828424454,
+        "steer_rate_rad_s": 0.12236970663070679
+      },
+      "handoff_state": {
+        "time_s": 8.26,
+        "x_m": 4.032786846160889,
+        "y_m": 0.132674902677536,
+        "forward_speed_m_s": 2.040752649307251,
+        "lateral_velocity_heading_frame_m_s": -0.015662799860308205,
+        "heading_rad": 0.043946050182817546,
+        "world_yaw_rate_rad_s": -0.11726062744855881,
+        "roll_rad": -0.029842138290405273,
+        "roll_rate_rad_s": -0.017879407852888107,
+        "steer_rad": -0.015831058844923973,
+        "steer_rate_rad_s": -0.014144700951874256
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_06_L9.6_v2.0_a0.5",
+        "matched_samples": 265,
+        "through_time_s": 5.28000020980835,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
     },
     {
       "case_id": "rb_upstream_offset_06_L9.6_v1.8_a0.0",
@@ -10433,8 +12655,186 @@
       "panel_key": [
         9.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.3595319986343384,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": 9.72,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": {
+        "time": 5.28,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.28,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 1.8,
+          "alpha": 0.0
+        },
+        "root": [
+          [
+            -1.9998353719711304,
+            0.3574826121330261,
+            0.11787278950214386,
+            0.7571491599082947,
+            0.028202449902892113,
+            0.02369602397084236,
+            0.6522026658058167,
+            1.9888101816177368,
+            0.07551361620426178,
+            0.0012425726745277643,
+            -0.1431560069322586,
+            -0.01248555351048708,
+            -0.7694575190544128
+          ]
+        ],
+        "measurement": [
+          [
+            -0.1486877202987671,
+            0.1429906189441681,
+            -0.10561034828424454,
+            0.12236970663070679,
+            -0.7608124613761902,
+            28.66415786743164,
+            28.871503829956055
+          ]
+        ],
+        "position": [
+          [
+            -1.2002003192901611,
+            -2.6765706539154053,
+            -0.10561034828424454,
+            2.499999523162842,
+            -2.2308597564697266
+          ]
+        ],
+        "velocity": [
+          [
+            5.565436254073575e-07,
+            -28.66415786743164,
+            0.12236970663070679,
+            -0.0005928658647462726,
+            -28.871503829956055
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.008434772491455,
+            -0.06084035336971283
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 9.72,
+        "root": [
+          [
+            6.03450345993042,
+            -0.09135130047798157,
+            0.11888659000396729,
+            0.6931595802307129,
+            0.008215191774070263,
+            0.007865160703659058,
+            0.7206944227218628,
+            1.8416813611984253,
+            0.06472571194171906,
+            -0.003484706860035658,
+            0.054421499371528625,
+            -0.008211635984480381,
+            0.25725463032722473
+          ]
+        ],
+        "position": [
+          [
+            -1.2002017498016357,
+            -6.103956699371338,
+            0.03870074078440666,
+            2.499999523162842,
+            -5.839784145355225
+          ]
+        ],
+        "velocity": [
+          [
+            0.03164747357368469,
+            -26.149904251098633,
+            -0.0404440201818943,
+            -3.107635166088585e-06,
+            -26.37986946105957
+          ]
+        ],
+        "distance": [
+          1.331101894378662
+        ]
+      },
+      "observed_duration_s": 11.029999732971191,
+      "decision_prefix": {
+        "decision_time_s": 5.28,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.3574826121330261,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "jump_or_landing",
+      "decision_state": {
+        "time_s": 5.28,
+        "x_m": -1.9998353719711304,
+        "y_m": 0.3574826121330261,
+        "forward_speed_m_s": 1.9889729022979736,
+        "lateral_velocity_heading_frame_m_s": -0.07109987241816093,
+        "heading_rad": 0.07368282715174797,
+        "world_yaw_rate_rad_s": -0.7694575190544128,
+        "roll_rad": -0.1486877202987671,
+        "roll_rate_rad_s": 0.1429906189441681,
+        "steer_rad": -0.10561034828424454,
+        "steer_rate_rad_s": 0.12236970663070679
+      },
+      "handoff_state": {
+        "time_s": 9.72,
+        "x_m": 6.03450345993042,
+        "y_m": -0.09135130047798157,
+        "forward_speed_m_s": 1.8426766395568848,
+        "lateral_velocity_heading_frame_m_s": 0.02285560332260999,
+        "heading_rad": 0.022727599242188458,
+        "world_yaw_rate_rad_s": 0.25725463032722473,
+        "roll_rad": 0.03893446922302246,
+        "roll_rate_rad_s": -0.05397959053516388,
+        "steer_rad": 0.03870074078440666,
+        "steer_rate_rad_s": -0.0404440201818943
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_06_L9.6_v2.0_a0.5",
+        "matched_samples": 265,
+        "through_time_s": 5.28000020980835,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
     },
     {
       "case_id": "rb_upstream_offset_06_L9.6_v1.8_a0.5",
@@ -10446,8 +12846,186 @@
       "panel_key": [
         9.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": true,
+      "success_time_s": 15.0,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "max_original_path_error_m": 0.35944339632987976,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": true,
+        "ground_return": true,
+        "continued": true
+      },
+      "stage_times": {
+        "release": 9.64,
+        "strict_support": 12.074999809265137,
+        "ground_return": 12.72,
+        "final_conditions": 15.0
+      },
+      "decision": {
+        "time": 5.28,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.28,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 1.8,
+          "alpha": 0.5
+        },
+        "root": [
+          [
+            -1.9998353719711304,
+            0.3574826121330261,
+            0.11787278950214386,
+            0.7571491599082947,
+            0.028202449902892113,
+            0.02369602397084236,
+            0.6522026658058167,
+            1.9888101816177368,
+            0.07551361620426178,
+            0.0012425726745277643,
+            -0.1431560069322586,
+            -0.01248555351048708,
+            -0.7694575190544128
+          ]
+        ],
+        "measurement": [
+          [
+            -0.1486877202987671,
+            0.1429906189441681,
+            -0.10561034828424454,
+            0.12236970663070679,
+            -0.7608124613761902,
+            28.66415786743164,
+            28.871503829956055
+          ]
+        ],
+        "position": [
+          [
+            -1.2002003192901611,
+            -2.6765706539154053,
+            -0.10561034828424454,
+            2.499999523162842,
+            -2.2308597564697266
+          ]
+        ],
+        "velocity": [
+          [
+            5.565436254073575e-07,
+            -28.66415786743164,
+            0.12236970663070679,
+            -0.0005928658647462726,
+            -28.871503829956055
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.008434772491455,
+            -0.06084035336971283
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 9.64,
+        "root": [
+          [
+            6.010043144226074,
+            0.013200993649661541,
+            0.11894048005342484,
+            0.7035417556762695,
+            -0.020732639357447624,
+            -0.021590476855635643,
+            0.7100233435630798,
+            1.8448034524917603,
+            -0.1041443720459938,
+            -6.752788613084704e-05,
+            -0.024638518691062927,
+            0.0007971872109919786,
+            0.0307952631264925
+          ]
+        ],
+        "position": [
+          [
+            -1.2001993656158447,
+            -4.850276947021484,
+            0.004580100532621145,
+            2.499999523162842,
+            -4.471816539764404
+          ]
+        ],
+        "velocity": [
+          [
+            -0.0037323790602385998,
+            -26.3298397064209,
+            0.01950066164135933,
+            0.002449945081025362,
+            -26.348400115966797
+          ]
+        ],
+        "distance": [
+          1.3558802604675293
+        ]
+      },
+      "observed_duration_s": 22.0,
+      "decision_prefix": {
+        "decision_time_s": 5.28,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.3574826121330261,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "none",
+      "decision_state": {
+        "time_s": 5.28,
+        "x_m": -1.9998353719711304,
+        "y_m": 0.3574826121330261,
+        "forward_speed_m_s": 1.9889729022979736,
+        "lateral_velocity_heading_frame_m_s": -0.07109987241816093,
+        "heading_rad": 0.07368282715174797,
+        "world_yaw_rate_rad_s": -0.7694575190544128,
+        "roll_rad": -0.1486877202987671,
+        "roll_rate_rad_s": 0.1429906189441681,
+        "steer_rad": -0.10561034828424454,
+        "steer_rate_rad_s": 0.12236970663070679
+      },
+      "handoff_state": {
+        "time_s": 9.64,
+        "x_m": 6.010043144226074,
+        "y_m": 0.013200993649661541,
+        "forward_speed_m_s": 1.8477295637130737,
+        "lateral_velocity_heading_frame_m_s": 0.0064206098052803084,
+        "heading_rad": -0.05986782263756059,
+        "world_yaw_rate_rad_s": 0.0307952631264925,
+        "roll_rad": 0.009198427200317383,
+        "roll_rate_rad_s": 0.024670958518981934,
+        "steer_rad": 0.004580100532621145,
+        "steer_rate_rad_s": 0.01950066164135933
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_06_L9.6_v2.0_a0.5",
+        "matched_samples": 265,
+        "through_time_s": 5.28000020980835,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
     },
     {
       "case_id": "rb_upstream_offset_06_L9.6_v1.8_a1.0",
@@ -10459,8 +13037,186 @@
       "panel_key": [
         9.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": true,
+      "success_time_s": 15.5600004196167,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "max_original_path_error_m": 0.6662377715110779,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": true,
+        "ground_return": true,
+        "continued": true
+      },
+      "stage_times": {
+        "release": 9.620000000000001,
+        "strict_support": 12.744999885559082,
+        "ground_return": 13.48,
+        "final_conditions": 15.5600004196167
+      },
+      "decision": {
+        "time": 5.28,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.28,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 1.8,
+          "alpha": 1.0
+        },
+        "root": [
+          [
+            -1.9998353719711304,
+            0.3574826121330261,
+            0.11787278950214386,
+            0.7571491599082947,
+            0.028202449902892113,
+            0.02369602397084236,
+            0.6522026658058167,
+            1.9888101816177368,
+            0.07551361620426178,
+            0.0012425726745277643,
+            -0.1431560069322586,
+            -0.01248555351048708,
+            -0.7694575190544128
+          ]
+        ],
+        "measurement": [
+          [
+            -0.1486877202987671,
+            0.1429906189441681,
+            -0.10561034828424454,
+            0.12236970663070679,
+            -0.7608124613761902,
+            28.66415786743164,
+            28.871503829956055
+          ]
+        ],
+        "position": [
+          [
+            -1.2002003192901611,
+            -2.6765706539154053,
+            -0.10561034828424454,
+            2.499999523162842,
+            -2.2308597564697266
+          ]
+        ],
+        "velocity": [
+          [
+            5.565436254073575e-07,
+            -28.66415786743164,
+            0.12236970663070679,
+            -0.0005928658647462726,
+            -28.871503829956055
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.008434772491455,
+            -0.06084035336971283
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 9.620000000000001,
+        "root": [
+          [
+            6.0022430419921875,
+            0.17260093986988068,
+            0.11894474923610687,
+            0.7111784219741821,
+            -0.01904270611703396,
+            -0.019470004364848137,
+            0.7024838328361511,
+            1.8421963453292847,
+            -0.10123974829912186,
+            -5.748429975938052e-05,
+            -0.032551247626543045,
+            0.001086150063201785,
+            -0.04023772105574608
+          ]
+        ],
+        "position": [
+          [
+            -1.2001993656158447,
+            -4.501637935638428,
+            -0.005989243276417255,
+            2.499999523162842,
+            -4.097019672393799
+          ]
+        ],
+        "velocity": [
+          [
+            -0.0037836083211004734,
+            -26.29224967956543,
+            0.03373138606548309,
+            0.0022978312335908413,
+            -26.309879302978516
+          ]
+        ],
+        "distance": [
+          1.3635869026184082
+        ]
+      },
+      "observed_duration_s": 22.0,
+      "decision_prefix": {
+        "decision_time_s": 5.28,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.3574826121330261,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "none",
+      "decision_state": {
+        "time_s": 5.28,
+        "x_m": -1.9998353719711304,
+        "y_m": 0.3574826121330261,
+        "forward_speed_m_s": 1.9889729022979736,
+        "lateral_velocity_heading_frame_m_s": -0.07109987241816093,
+        "heading_rad": 0.07368282715174797,
+        "world_yaw_rate_rad_s": -0.7694575190544128,
+        "roll_rad": -0.1486877202987671,
+        "roll_rate_rad_s": 0.1429906189441681,
+        "steer_rad": -0.10561034828424454,
+        "steer_rate_rad_s": 0.12236970663070679
+      },
+      "handoff_state": {
+        "time_s": 9.620000000000001,
+        "x_m": 6.0022430419921875,
+        "y_m": 0.17260093986988068,
+        "forward_speed_m_s": 1.8449759483337402,
+        "lateral_velocity_heading_frame_m_s": -0.0007999389419543479,
+        "heading_rad": -0.05446720104779692,
+        "world_yaw_rate_rad_s": -0.04023772105574608,
+        "roll_rad": -0.012275099754333496,
+        "roll_rate_rad_s": 0.032524313777685165,
+        "steer_rad": -0.005989243276417255,
+        "steer_rate_rad_s": 0.03373138606548309
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_06_L9.6_v2.0_a0.5",
+        "matched_samples": 265,
+        "through_time_s": 5.28000020980835,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
     },
     {
       "case_id": "rb_upstream_offset_06_L9.6_v2.0_a0.0",
@@ -10472,8 +13228,186 @@
       "panel_key": [
         9.6
       ],
-      "status": "pending",
-      "complete": null
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": false,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 1.2582714557647705,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": true,
+        "ground_return": true,
+        "continued": true
+      },
+      "stage_times": {
+        "release": 9.26,
+        "strict_support": 12.975000381469727,
+        "ground_return": 13.74,
+        "final_conditions": null
+      },
+      "decision": {
+        "time": 5.28,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.28,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 2.0,
+          "alpha": 0.0
+        },
+        "root": [
+          [
+            -1.9998353719711304,
+            0.3574826121330261,
+            0.11787278950214386,
+            0.7571491599082947,
+            0.028202449902892113,
+            0.02369602397084236,
+            0.6522026658058167,
+            1.9888101816177368,
+            0.07551361620426178,
+            0.0012425726745277643,
+            -0.1431560069322586,
+            -0.01248555351048708,
+            -0.7694575190544128
+          ]
+        ],
+        "measurement": [
+          [
+            -0.1486877202987671,
+            0.1429906189441681,
+            -0.10561034828424454,
+            0.12236970663070679,
+            -0.7608124613761902,
+            28.66415786743164,
+            28.871503829956055
+          ]
+        ],
+        "position": [
+          [
+            -1.2002003192901611,
+            -2.6765706539154053,
+            -0.10561034828424454,
+            2.499999523162842,
+            -2.2308597564697266
+          ]
+        ],
+        "velocity": [
+          [
+            5.565436254073575e-07,
+            -28.66415786743164,
+            0.12236970663070679,
+            -0.0005928658647462726,
+            -28.871503829956055
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.008434772491455,
+            -0.06084035336971283
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 9.26,
+        "root": [
+          [
+            6.015675067901611,
+            -0.04831947386264801,
+            0.11892548948526382,
+            0.6979653239250183,
+            -0.027710897848010063,
+            -0.029059920459985733,
+            0.7150048017501831,
+            2.038867473602295,
+            -0.14481520652770996,
+            -0.00014728795213159174,
+            -0.03927527368068695,
+            0.0025305356830358505,
+            0.12728771567344666
+          ]
+        ],
+        "position": [
+          [
+            -1.2001994848251343,
+            -5.243558406829834,
+            0.017195498570799828,
+            2.499999523162842,
+            -4.8812336921691895
+          ]
+        ],
+        "velocity": [
+          [
+            -0.0037884532939642668,
+            -29.130247116088867,
+            0.030806591734290123,
+            0.002574732294306159,
+            -29.155231475830078
+          ]
+        ],
+        "distance": [
+          1.350583553314209
+        ]
+      },
+      "observed_duration_s": 22.0,
+      "decision_prefix": {
+        "decision_time_s": 5.28,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.3574826121330261,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": 16.100000381469727,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "continuation_or_corridor",
+      "decision_state": {
+        "time_s": 5.28,
+        "x_m": -1.9998353719711304,
+        "y_m": 0.3574826121330261,
+        "forward_speed_m_s": 1.9889729022979736,
+        "lateral_velocity_heading_frame_m_s": -0.07109987241816093,
+        "heading_rad": 0.07368282715174797,
+        "world_yaw_rate_rad_s": -0.7694575190544128,
+        "roll_rad": -0.1486877202987671,
+        "roll_rate_rad_s": 0.1429906189441681,
+        "steer_rad": -0.10561034828424454,
+        "steer_rate_rad_s": 0.12236970663070679
+      },
+      "handoff_state": {
+        "time_s": 9.26,
+        "x_m": 6.015675067901611,
+        "y_m": -0.04831947386264801,
+        "forward_speed_m_s": 2.0439133644104004,
+        "lateral_velocity_heading_frame_m_s": 0.019247374121521166,
+        "heading_rad": -0.08032484151263461,
+        "world_yaw_rate_rad_s": 0.12728771567344666,
+        "roll_rad": 0.024155378341674805,
+        "roll_rate_rad_s": 0.03947116434574127,
+        "steer_rad": 0.017195498570799828,
+        "steer_rate_rad_s": 0.030806591734290123
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_06_L9.6_v2.0_a0.5",
+        "matched_samples": 265,
+        "through_time_s": 5.28000020980835,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
     },
     {
       "case_id": "rb_upstream_offset_06_L9.6_v2.0_a1.0",
@@ -10485,7 +13419,7 @@
       "panel_key": [
         9.6
       ],
-      "status": "pending",
+      "status": "started_no_final_result",
       "complete": null
     },
     {
