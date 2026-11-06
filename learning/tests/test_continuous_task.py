@@ -75,3 +75,23 @@ def test_near_tie_retains_active_reference_without_claiming_goal_completion():
     second=m.choose([0.],['left_route'])
     assert second['reference']==first and second['held_previous']
     assert m.completed==[]
+
+
+def test_missed_branch_and_dwell_share_one_geometry_filter():
+    from sttw_control.continuous_task import available_forward_routes
+    routes=[dict(route_id='main'),dict(route_id='bypass',first_entry_progress_m=1.,last_entry_progress_m=3.,minimum_dwell_s=.5)]
+    assert available_forward_routes(routes,['main','bypass'],furthest_progress_m=2.,time_s=1.,current_route='main',last_switch_time_s=.8)['available_routes']==['main']
+    assert available_forward_routes(routes,['main','bypass'],furthest_progress_m=2.,time_s=1.4,current_route='main',last_switch_time_s=.8)['available_routes']==['main','bypass']
+    missed=available_forward_routes(routes,['main','bypass'],furthest_progress_m=3.1,time_s=2.,current_route='main',last_switch_time_s=.8)
+    assert missed['available_routes']==['main']
+    assert missed['blocked_routes']==[dict(route_id='bypass',reason='missed_diversion')]
+    # Once already executing a branch, passing its entry deadline does not revoke it.
+    assert 'bypass' in available_forward_routes(routes,['main','bypass'],furthest_progress_m=4.,time_s=3.,current_route='bypass')['available_routes']
+
+
+def test_mandatory_platform_skill_cannot_be_replaced_by_goal_arrival():
+    m=manager();m.program['goals'][0]['required_skills']=['platform_jump']
+    m.choose([0.],['left_route'])
+    assert not m.observe_goal('checkpoint',arrived=True,upright=True,within_allowed_region=True)
+    assert m.completed==[] and m.events[-1]['missing_required_skills']==['platform_jump']
+    assert m.observe_goal('checkpoint',arrived=True,upright=True,within_allowed_region=True,completed_skills=['platform_jump'])

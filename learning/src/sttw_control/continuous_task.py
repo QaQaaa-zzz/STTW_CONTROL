@@ -6,6 +6,27 @@ select speed/alpha. Recommendations never constitute physical task completion.
 
 from .empirical_capability import select_connection_estimate, connection_selection_status
 
+def available_forward_routes(routes, geometric_routes, *, furthest_progress_m, time_s,
+                             current_route=None, last_switch_time_s=None):
+    """Shared map-entry filter for rule and capability planners.
+
+    The executor supplies geometric reachability and monotone progress on the
+    common approach. A missed branch cannot reopen after reversing or replanning.
+    Dwell uses the actual executed switch time, not recommendation timestamps.
+    """
+    available=[];blocked=[]
+    for route in routes:
+        rid=route['route_id'];reason=None
+        if rid not in geometric_routes:reason='geometrically_unavailable'
+        elif rid!=current_route:
+            if furthest_progress_m>route.get('last_entry_progress_m',float('inf')):reason='missed_diversion'
+            elif furthest_progress_m<route.get('first_entry_progress_m',float('-inf')):reason='before_entry'
+            elif last_switch_time_s is not None and time_s-last_switch_time_s<route.get('minimum_dwell_s',0.):reason='minimum_dwell'
+        if reason is None:available.append(rid)
+        else:blocked.append(dict(route_id=rid,reason=reason))
+    return dict(available_routes=available,blocked_routes=blocked)
+
+
 class ContinuousTask:
     def __init__(self, program, routes, candidates, capability):
         self.program=program
@@ -71,10 +92,12 @@ class ContinuousTask:
         self.events.append(event)
         return event
 
-    def observe_goal(self, goal_id, *, arrived, upright, within_allowed_region):
+    def observe_goal(self, goal_id, *, arrived, upright, within_allowed_region, completed_skills=()):
         """Executor supplies physical evidence; a plan or LLM cannot acknowledge it."""
-        accepted=bool(self.active and goal_id==self.active['goal_id'] and arrived and upright and within_allowed_region)
+        goal=next(g for g in self.program['goals'] if g['goal_id']==goal_id)
+        missing_skills=sorted(set(goal.get('required_skills',()))-set(completed_skills))
+        accepted=bool(not missing_skills and self.active and goal_id==self.active['goal_id'] and arrived and upright and within_allowed_region)
         if accepted:
             self.completed.append(goal_id);self.active=None
-        self.events.append(dict(status='goal_observed',goal_id=goal_id,accepted=accepted,arrived=bool(arrived),upright=bool(upright),within_allowed_region=bool(within_allowed_region)))
+        self.events.append(dict(status='goal_observed',goal_id=goal_id,accepted=accepted,arrived=bool(arrived),upright=bool(upright),within_allowed_region=bool(within_allowed_region),missing_required_skills=missing_skills,completed_skills=list(completed_skills)))
         return accepted
