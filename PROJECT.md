@@ -1,3 +1,7 @@
+## User decision: retain current simulation frequency
+
+User confirmed keeping the current setup. Retain5000Hz physics and200/50Hz control; close the pending1000Hz proposal without execution. Continue the already-running150-update H75 horizon continuation and declared stage-end candidate review. No additional acceleration experiments queued.
+
 ## Original-horizon H75 continuation registered
 
 Configuration `learning/configs/go2_h75_offroad_horizon.json` restores original50Hz gamma .997 and GAE lambda .99, matching the unchanged terminal-reward discount. All other repaired Go2 continuation settings remain:4096×24×150, original320-prefix TRAIN task and signed pulses, shared Go2 DR, switches and replicated terrain, fixed1e-5 learning rate, unchanged network and selected Local300. Starts from originalu77 Actor/Critic/std with fresh optimizer, not rejected continuation candidates. Output `runs/go2_h75_offroad_horizon150`; budget14745600 policy transitions/1474560000 physics lane steps,150 iterations, estimated~4hours. No claim that discount mismatch is the sole cause of previous regression.
