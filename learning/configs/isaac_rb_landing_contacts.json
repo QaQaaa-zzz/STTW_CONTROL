@@ -1,0 +1,35 @@
+{
+  "output": "runs/rb_sttw_platform/landing_contact_comparison",
+  "plant_config": "learning/configs/isaac_rb_jump_plant.json",
+  "model_config": "learning/configs/rb_sttw_platform.json",
+  "initial_state": "runs/rb_sttw_platform/jump_input/initial_state.npz",
+  "geometry": "runs/rb_sttw_platform/jump_input/geometry.json",
+  "bundles": "runs/rb_sttw_platform/evaluation_bundles",
+  "skills": [
+    "update2",
+    "update126",
+    "update150",
+    "historical01966080"
+  ],
+  "start_x": 1.5,
+  "approach_speed": 2.0,
+  "seconds": 8.0,
+  "handoff_x": 1.5,
+  "physics_dt": 0.005,
+  "gpu_pair_capacities": [
+    1048576,
+    1048576,
+    1048576
+  ],
+  "zero_initial_history": true,
+  "root_acceleration_difference": true,
+  "jump_steering_gains": [
+    2.5,
+    0.4
+  ],
+  "optimizer_updates": 0,
+  "maximum_physics_lane_steps": 6400,
+  "role": "Same four-candidate nominal DEV with added body/contact telemetry to adjudicate landing; no new optimization",
+  "scene_terrain": "runs/rb_isaac150/terrain",
+  "record_body_states": true
+}

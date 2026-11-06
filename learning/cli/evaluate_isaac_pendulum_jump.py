@@ -54,7 +54,7 @@ policies=[TorchPendulumSkill(Path(spec['bundles'])/s) for s in spec['skills']]
 history=TorchPendulumObservation(plant.joints,json.loads(Path(spec.get('model_config','learning/configs/pendulum_common_asset.json')).read_text())['mount_rotation_wxyz'],n,'cuda:0')
 geometry=TorchPendulumGeometry(json.loads(Path(spec['geometry']).read_text()),plant.bodies)
 last=torch.zeros(n,4,device='cuda:0');alive=torch.ones(n,dtype=torch.bool,device='cuda:0');entered=torch.zeros_like(alive);consumed=torch.zeros_like(alive)
-active=False;rows=[];actions=[];observations=[];valid=[];arm_rows=[];start=time.monotonic();steps=round(spec['seconds']/.005)
+active=False;rows=[];actions=[];observations=[];valid=[];arm_rows=[];body_rows=[];contact_rows=[];start=time.monotonic();steps=round(spec['seconds']/.005)
 (out/'protocol.json').write_text(json.dumps(dict(spec=spec,plant=plant.metadata,policies=[s.identity for s in policies],ground_history='last_action zero means no prior jump action; physical FIFO sampled throughout ground approach',initial_translation='common saved snapshot translated to start_x/y0; optional rigid world-yaw alignment rotates pose and both velocities together',role='nominal paired DEV integration; not original donor benchmark',physics_dt=plant.physics_dt,ground_dt=.005,jump_dt=.02,optimizer_updates=0),indent=2))
 ground=None
 if spec.get('ground_bundle'):
@@ -82,6 +82,8 @@ for k in range(steps+1):
  distance=3.6-(geometry.frontmost_x(plant.rigid)-plant.origin[:,0])
  row=torch.cat((torch.full((n,1),k*.005,device='cuda:0'),root[:,:3],speed[:,None],m[:,:4],plant.dofs[:,plant.pendulum_servos.indices,0],distance[:,None]),-1)
  rows.append(row);valid.append(alive.clone());actions.append(last.clone())
+ if spec.get('record_body_states',False):
+  body=plant.rigid.clone();body[:,:,:3]-=plant.origin[:,None,:];body_rows.append(body);contact_rows.append(plant.contact.clone())
  if camera is not None and k%4==0:
   plant.sim.render();camera.update(.02,force_recompute=True)
   writer.append_data(camera.data.output['rgb'][0,:,:,:3].cpu().numpy())
@@ -113,9 +115,15 @@ for k in range(steps+1):
  else:
   request=torch.stack((m[:,5]*plant.wheel_radius_m,m[:,2],m[:,3],m[:,0],m[:,1],torch.zeros_like(speed)),-1)
   control=controller.step(request,torch.ones_like(alive));command=torch.stack((control[:,0].clamp(-3,3),torch.full_like(speed,spec['approach_speed']/plant.wheel_radius_m)),-1)
-  for _ in range(substeps):plant.step(command,refresh_diagnostics=False)
+  for _ in range(substeps):
+   plant.step(command,refresh_diagnostics=False)
+   velocity=plant.robot.data.root_link_lin_vel_w
+   root_acceleration=(velocity-previous_root_velocity)/plant.physics_dt;previous_root_velocity=velocity.clone()
+ if spec.get('record_body_states',False):plant.sensor.update(.005,force_recompute=True)
  plant.refresh()
 if writer is not None:writer.close()
+if body_rows:
+ np.savez(out/'body_contact.npz',time=torch.stack(rows)[:,0,0].cpu().numpy(),body_state=torch.stack(body_rows).cpu().numpy(),contact=torch.stack(contact_rows).cpu().numpy(),body_names=plant.bodies,valid=torch.stack(valid).cpu().numpy(),semantics='world states relative to lane origin; actual per-body net contact forces; no post-termination samples scored')
 if arm_rows:
  np.savez(out/'arm_commands.npz',trace=torch.stack(arm_rows).cpu().numpy(),columns=['time','hip_target','knee_target','hip_position','knee_position','hip_velocity','knee_velocity','hip_command_torque','knee_command_torque','alive_before_step'],semantics='pre-step state and actual clipped PD effort command each physics step; not solver-measured reaction torque')
 trace=torch.stack(rows).cpu().numpy();mask=torch.stack(valid).cpu().numpy();np.savez(out/'trajectory.npz',trace=trace,valid=mask,action=torch.stack(actions).cpu().numpy(),observations=torch.stack(observations).cpu().numpy(),columns=['time','x','y','z','speed','roll','roll_rate','steer','steer_rate','hip','knee','obstacle_relative_x'])
