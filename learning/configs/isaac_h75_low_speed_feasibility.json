@@ -1,0 +1,38 @@
+{
+  "role": "DEV low-speed feasibility screen; outcome unknown; fixed alpha comparison before dynamic-switch experiment",
+  "reference_bundle": "runs/h75_selected_local300_flat/bundle",
+  "base_evaluation_config": "runs/h75_selected_local300_bend/lab_config.json",
+  "terrain_generator": "learning/cli/place_isaac_terrain.py --terrain bend_ramp",
+  "terrain_base_config": "runs/h75_uphill/ramp_8cm.json",
+  "terrain_overrides": [
+    {
+      "name": "flat_control"
+    },
+    {
+      "name": "ramp_16cm",
+      "height_m": 0.16
+    },
+    {
+      "name": "ramp_24cm",
+      "height_m": 0.24
+    }
+  ],
+  "user_speed_m_s": [
+    1.4,
+    1.55
+  ],
+  "initial_state_protocol": "Matched saved 2.3 m/s state, immediately request 1.4 or 1.55 m/s; record measured approach and ramp-entry speeds. This is a deceleration approach, not a settled low-speed initial state.",
+  "alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "include_zero": true,
+  "seconds": 10,
+  "max_physics_lane_steps": 1800000,
+  "optimizer_updates": 0,
+  "reuse": "Existing mesh assets only; six new conditions, five fixed alphas plus Zero each.",
+  "start_condition": "User requests low-speed uphill feasibility contrast; no training; retain every outcome"
+}
