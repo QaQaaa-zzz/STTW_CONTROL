@@ -1,6 +1,6 @@
 {
   "learning/src/sttw_control/connection_predictor.py": "126939401a1e068bbf8f626283e91815a05c663981bfcec3f3e5077eb39f13b9",
   "learning/cli/pilot_connection_predictor.py": "6a37c78a26e818b58e8ca56ed509db414343b2530ae05e5b21db1c384fcccbf5",
-  "learning/cli/summarize_connection_predictor.py": "fd62e8d09589db1ee0caafd4f367621772e517943e052a9668cc5f82cc803646",
+  "learning/cli/summarize_connection_predictor.py": "3ba65eaadc0a94cdaf87b8749129290a99dafc88d016fa3b53ba869574792ce0",
   "learning/configs/jump_connection_capability_dev.json": "c64e4361bdcb1a4ce48851ebf9eac51a102cdd7b3551dce716f3a991c3ef3256"
 }

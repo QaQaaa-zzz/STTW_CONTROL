@@ -1,0 +1,287 @@
+{
+  "methods": {
+    "mlp": {
+      "known_branches": 30,
+      "total_branches": 30,
+      "brier": 0.25080700978533166,
+      "reliability_bins": [
+        {
+          "left": 0.0,
+          "right": 0.2,
+          "branches": 0,
+          "roots": 0,
+          "mean_probability": null,
+          "observed_fraction": null
+        },
+        {
+          "left": 0.2,
+          "right": 0.4,
+          "branches": 0,
+          "roots": 0,
+          "mean_probability": null,
+          "observed_fraction": null
+        },
+        {
+          "left": 0.4,
+          "right": 0.6000000000000001,
+          "branches": 24,
+          "roots": 4,
+          "mean_probability": 0.5045374458034834,
+          "observed_fraction": 0.625
+        },
+        {
+          "left": 0.6000000000000001,
+          "right": 0.8,
+          "branches": 6,
+          "roots": 1,
+          "mean_probability": 0.6262203653653463,
+          "observed_fraction": 0.5
+        },
+        {
+          "left": 0.8,
+          "right": 1.0,
+          "branches": 0,
+          "roots": 0,
+          "mean_probability": null,
+          "observed_fraction": null
+        }
+      ],
+      "selected_outcomes": [
+        {
+          "origin": "rb_connection_seed20261106_root000",
+          "fallback": true,
+          "candidate_id": "v2.0_a0.5",
+          "complete": 0,
+          "checks": {
+            "full_window": false,
+            "ordered_approach": true,
+            "original_path_corridor": true,
+            "stable_landing": false,
+            "ground_return": false,
+            "continued_time": false,
+            "continued_forward": false,
+            "final_goal": false
+          }
+        },
+        {
+          "origin": "rb_connection_seed20261106_root002",
+          "fallback": true,
+          "candidate_id": "v2.0_a0.5",
+          "complete": 1,
+          "checks": {
+            "full_window": true,
+            "ordered_approach": true,
+            "original_path_corridor": true,
+            "stable_landing": true,
+            "ground_return": true,
+            "continued_time": true,
+            "continued_forward": true,
+            "final_goal": true
+          }
+        },
+        {
+          "origin": "rb_upstream_offset_01",
+          "fallback": true,
+          "candidate_id": "v2.0_a0.5",
+          "complete": 1,
+          "checks": {
+            "full_window": true,
+            "ordered_approach": true,
+            "original_path_corridor": true,
+            "stable_landing": true,
+            "ground_return": true,
+            "continued_time": true,
+            "continued_forward": true,
+            "final_goal": true
+          }
+        },
+        {
+          "origin": "rb_upstream_offset_03",
+          "fallback": true,
+          "candidate_id": "v2.0_a0.5",
+          "complete": 1,
+          "checks": {
+            "full_window": true,
+            "ordered_approach": true,
+            "original_path_corridor": true,
+            "stable_landing": true,
+            "ground_return": true,
+            "continued_time": true,
+            "continued_forward": true,
+            "final_goal": true
+          }
+        },
+        {
+          "origin": "rb_upstream_offset_06",
+          "fallback": true,
+          "candidate_id": "v2.0_a0.5",
+          "complete": 1,
+          "checks": {
+            "full_window": true,
+            "ordered_approach": true,
+            "original_path_corridor": true,
+            "stable_landing": true,
+            "ground_return": true,
+            "continued_time": true,
+            "continued_forward": true,
+            "final_goal": true
+          }
+        }
+      ],
+      "common_success_origins": [
+        "rb_connection_seed20261106_root002",
+        "rb_upstream_offset_01",
+        "rb_upstream_offset_03",
+        "rb_upstream_offset_06"
+      ],
+      "time_difference_vs_fixed_s": [
+        0.0,
+        -1.2000007629394531,
+        0.0,
+        -0.1400003433227539
+      ]
+    },
+    "kernel": {
+      "known_branches": 30,
+      "total_branches": 30,
+      "brier": 0.19167393900142943,
+      "reliability_bins": [
+        {
+          "left": 0.0,
+          "right": 0.2,
+          "branches": 7,
+          "roots": 5,
+          "mean_probability": 0.0,
+          "observed_fraction": 0.14285714285714285
+        },
+        {
+          "left": 0.2,
+          "right": 0.4,
+          "branches": 2,
+          "roots": 2,
+          "mean_probability": 0.336539271556876,
+          "observed_fraction": 0.5
+        },
+        {
+          "left": 0.4,
+          "right": 0.6000000000000001,
+          "branches": 2,
+          "roots": 2,
+          "mean_probability": 0.4942163487345521,
+          "observed_fraction": 0.5
+        },
+        {
+          "left": 0.6000000000000001,
+          "right": 0.8,
+          "branches": 5,
+          "roots": 3,
+          "mean_probability": 0.7077039501109825,
+          "observed_fraction": 0.8
+        },
+        {
+          "left": 0.8,
+          "right": 1.0,
+          "branches": 14,
+          "roots": 5,
+          "mean_probability": 0.9678876801367329,
+          "observed_fraction": 0.7857142857142857
+        }
+      ],
+      "selected_outcomes": [
+        {
+          "origin": "rb_connection_seed20261106_root000",
+          "fallback": false,
+          "candidate_id": "v2.0_a0.5",
+          "complete": 0,
+          "checks": {
+            "full_window": false,
+            "ordered_approach": true,
+            "original_path_corridor": true,
+            "stable_landing": false,
+            "ground_return": false,
+            "continued_time": false,
+            "continued_forward": false,
+            "final_goal": false
+          }
+        },
+        {
+          "origin": "rb_connection_seed20261106_root002",
+          "fallback": false,
+          "candidate_id": "v1.8_a1.0",
+          "complete": 1,
+          "checks": {
+            "full_window": true,
+            "ordered_approach": true,
+            "original_path_corridor": true,
+            "stable_landing": true,
+            "ground_return": true,
+            "continued_time": true,
+            "continued_forward": true,
+            "final_goal": true
+          }
+        },
+        {
+          "origin": "rb_upstream_offset_01",
+          "fallback": false,
+          "candidate_id": "v1.8_a0.5",
+          "complete": 1,
+          "checks": {
+            "full_window": true,
+            "ordered_approach": true,
+            "original_path_corridor": true,
+            "stable_landing": true,
+            "ground_return": true,
+            "continued_time": true,
+            "continued_forward": true,
+            "final_goal": true
+          }
+        },
+        {
+          "origin": "rb_upstream_offset_03",
+          "fallback": false,
+          "candidate_id": "v1.8_a0.5",
+          "complete": 1,
+          "checks": {
+            "full_window": true,
+            "ordered_approach": true,
+            "original_path_corridor": true,
+            "stable_landing": true,
+            "ground_return": true,
+            "continued_time": true,
+            "continued_forward": true,
+            "final_goal": true
+          }
+        },
+        {
+          "origin": "rb_upstream_offset_06",
+          "fallback": false,
+          "candidate_id": "v2.0_a0.5",
+          "complete": 1,
+          "checks": {
+            "full_window": true,
+            "ordered_approach": true,
+            "original_path_corridor": true,
+            "stable_landing": true,
+            "ground_return": true,
+            "continued_time": true,
+            "continued_forward": true,
+            "final_goal": true
+          }
+        }
+      ],
+      "common_success_origins": [
+        "rb_connection_seed20261106_root002",
+        "rb_upstream_offset_01",
+        "rb_upstream_offset_03",
+        "rb_upstream_offset_06"
+      ],
+      "time_difference_vs_fixed_s": [
+        0.04000091552734375,
+        -1.0,
+        1.5399999618530273,
+        -0.1400003433227539
+      ]
+    }
+  },
+  "note": "Five held-out DEV roots with six dependent branches each; folds share training data. Fixed bins [0,.2,.4,.6,.8,1], final bin includes 1. No fitted calibration, confidence intervals, or independent TEST claim. Positive paired time difference means slower than validation-selected fixed choice."
+}

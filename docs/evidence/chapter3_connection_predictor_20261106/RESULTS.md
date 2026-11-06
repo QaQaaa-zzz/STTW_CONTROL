@@ -31,3 +31,11 @@ PYTHONPATH=learning/src python learning/cli/summarize_connection_predictor.py \
   --records docs/evidence/chapter3_connection_predictor_20261106/records.jsonl
 ```
 复算仅刷新派生图和诊断，不重新训练，不改原结果。
+
+## 概率质量与共同成功耗时
+
+![未校准预测分箱](prediction_reliability.png)
+
+按五个留出DEV根的30条候选记录复算：MLP Brier=0.250807，核=0.191674（越低越好）。两者均有30/30候选得到支持，但“有支持”不等于过风险门槛；MLP没有主动放行。固定等宽五箱及空箱计数完整保存在 `prediction_quality.json`。候选同根相关，各折训练数据也重叠，不提供把30分支当独立样本的置信区间，不声称已完成概率校准。
+
+与调参固定档共同成功的4根中，MLP实际回退策略耗时差为0、−1.20、0、−0.14秒，核为+.04、−1.00、+1.54、−.14秒（正值更慢）。两个方法均丢失固定档成功的另1根，不能只用共同成功耗时宣称整体更好。逐根选择的完整检查项、原始差值及根ID保存在 `prediction_quality.json`，不以最终到达代替走廊和全任务条件。
