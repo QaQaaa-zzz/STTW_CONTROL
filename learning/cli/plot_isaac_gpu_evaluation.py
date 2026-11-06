@@ -6,7 +6,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True);p.add_argument('--output',type=Path);p.add_argument('--baseline-run',type=Path);p.add_argument('--rescore-zero',action='store_true',help='Use the Zero lane in this run for same-alpha paired rewards');p.add_argument('--title',default='H75 fixed-alpha GPU evaluation');a=p.parse_args();out=a.run if a.output is None else a.output;out.mkdir(parents=True,exist_ok=True)
-from sttw_control.isaac_path_reporting import load_case,write_zero_scores
+from sttw_control.isaac_path_reporting import load_case,write_zero_scores,static_case_metrics
 if a.rescore_zero:
  write_zero_scores(a.run);a.baseline_run=a.run
 r,c=load_case(a.run,a.baseline_run);user_speed=float(c["settings"].get("user_speed_m_s",2.3));palette_markers=['o','s','^','D','v','x'];route=np.load(Path(c['bundle'])/'route.npz');labels=['alpha 0','alpha .25','alpha .5','alpha .75','alpha 1','Zero'];colors=['#0072B2','#D55E00','#009E73','#CC79A7','#8A6500','#333333'];styles=['-']*5+['--'];summary=[]
@@ -74,3 +74,5 @@ if a.baseline_run:
   fig.savefig(out/(stem+'_diagnostics.png'),dpi=150);plt.close(fig)
   np.savez_compressed(out/(stem+'_replayed.npz'),time=time,reward=replayed[ids,lane],**{key:value[ids,lane] for key,value in parts.items()})
  manifest=json.loads((out/'figure_manifest.json').read_text());manifest.update(reward_replay_error=closure,paired_baseline_scores=str(a.baseline_run.resolve()),additional_outputs=[stem+'_diagnostics.png' for stem in ['alpha0','alpha025','alpha05','alpha075','alpha1']]);(out/'figure_manifest.json').write_text(json.dumps(manifest,indent=2))
+
+(out/'condition_metrics.json').write_text(json.dumps(static_case_metrics(r,c),indent=2)+'\n')

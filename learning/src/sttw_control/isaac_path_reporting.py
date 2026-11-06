@@ -73,6 +73,23 @@ def write_zero_scores(run):
         np.savez_compressed(run/(stem+'_zero_rescored.npz'),time=time,reward=reward,**{key:np.asarray(value) for key,value in terms['effective'].items()})
 
 
+def static_case_metrics(data,contract):
+    """Original bend-report task criteria, evaluated on each actual trajectory."""
+    cfg=json.loads((Path(contract['bundle'])/'config.json').read_text())
+    route=np.load(Path(contract['bundle'])/'route.npz');b=cfg['stage_B_baseline']
+    speed=float(contract['settings'].get('user_speed_m_s',2.3))
+    goal=float(route['goal']);goal_xy=np.array([np.interp(goal,route['s'],route['xy'][:,k]) for k in (0,1)])
+    yaw=np.interp(goal,route['s'],route['heading']);rows=[]
+    for lane in range(data['reward'].shape[1]):
+        trace=data['lower_trace'][:,:,lane].reshape(-1,11);ids=np.flatnonzero(trace[:,6]);time=ids*.005+trace[ids,7]*.0002
+        progress=data['progress'][ids,lane];heading=(np.interp(progress,route['s'],route['heading'])-data['pose'][ids,lane,2]+np.pi)%(2*np.pi)-np.pi
+        signed=(trace[ids,:2]-goal_xy)@np.array([np.cos(yaw),np.sin(yaw)])
+        failed=bool(data['failure'][:,lane].any());tail=time>contract['settings']['episode_s']-b['hold_s']+1e-5
+        hold=bool(tail.sum()==round(b['hold_s']/.005) and np.all(abs(trace[ids,3][tail])<=b['final_y_error_m']) and np.all(abs(heading[tail])<=b['final_path_heading_error_rad']) and np.all(abs(trace[ids,2][tail]-speed)<=b['final_speed_error_m_s']) and not failed)
+        rows.append(dict(lane=lane,failed=failed,observed_seconds=float(time[-1]),goal_crossed=bool(np.any((signed>=0)&(progress>=goal))),final_hold=hold,working_roll_exceeded=bool(np.any(trace[ids,4]>b['working_roll_rad'])),path_rmse_m=float(np.sqrt(np.mean(trace[ids,3]**2))),speed_rmse_m_s=float(np.sqrt(np.mean((trace[ids,2]-speed)**2))),peak_roll_rad=float(trace[ids,4].max()),requested_speed_m_s=speed))
+    return rows
+
+
 def raised_contact_phases(data,contract,lane):
     """Reuse the original switch report's measured mean-point convention."""
     terrain=Path(next(iter(contract['settings']['terrains'].values())));meta=json.loads((terrain/'identity.json').read_text());vertices=np.load(terrain/'terrain.npz')['vertices'];side=int(np.sqrt(len(vertices)));height=vertices[:,2].reshape(side,side);lo=meta['bounds_m'][0];spacing=meta['horizontal_scale_m']
