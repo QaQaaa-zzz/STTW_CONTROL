@@ -29,6 +29,8 @@ class IsaacLabVectorPlant:
         self.pendulum_rest=pendulum_rest
         if pendulum_locked and pendulum_rest is None:raise ValueError("pendulum_locked requires pendulum_rest")
         self.pendulum_is_locked=False
+        self.pendulum_lock_mask=torch.zeros(self.count,device=self.device,dtype=torch.bool)
+        self.pendulum_mixed_lock=False
         if pendulum_rest is not None and servo_mode not in ('explicit','hybrid'):
             raise ValueError('Pendulum candidate uses explicit source actuators')
         staged=output/'input';staged.mkdir();tree=ET.parse(asset);mapping={}
@@ -176,23 +178,29 @@ class IsaacLabVectorPlant:
             self.metadata['pendulum_lock_model']='joint brake with 1e-4 rad half-play, clipped to native limits; not finite motor holding'
             self.set_pendulum_locked(pendulum_locked)
 
-    def set_pendulum_locked(self,locked):
-        """Engage at current joint positions or release to native limits; never reset state."""
+    def set_pendulum_locked(self,locked,env_ids=None):
+        """Brake selected lanes at current posture; omitted IDs retain whole-batch API."""
         indices=self.pendulum_servos.indices
-        self.pendulum_target=self.robot.data.joint_pos[:,indices].clone()
-        limits=torch.stack((torch.maximum(self.pendulum_target-1e-4,self.pendulum_original_limits[:,:,0]),torch.minimum(self.pendulum_target+1e-4,self.pendulum_original_limits[:,:,1])),dim=-1) if locked else self.pendulum_original_limits
-        # Tensor API rewrites every DOF, including unbounded continuous wheel joints.
-        # USD notices update only these two joint limits, with native degree units.
-        bounds=limits.cpu().numpy()
+        ids=torch.arange(self.count,device=self.device) if env_ids is None else env_ids
+        self.pendulum_target[ids]=self.robot.data.joint_pos[ids][:,indices]
+        native=self.pendulum_original_limits[ids]
+        target=self.pendulum_target[ids]
+        limits=torch.stack((torch.maximum(target-1e-4,native[:,:,0]),torch.minimum(target+1e-4,native[:,:,1])),dim=-1) if locked else native
+        # Keep USD notices: full-DOF tensor limit writes alter continuous wheels.
+        bounds=limits.cpu().numpy();selected={int(env):i for i,env in enumerate(ids.cpu().tolist())}
         for prim in self.pendulum_joint_prims:
             env_id=int(str(prim.GetPath()).split('/Env_')[1].split('/')[0])
+            if env_id not in selected:continue
             joint_id=0 if prim.GetName()=='hip_joint' else 1
             joint=UsdPhysics.RevoluteJoint(prim)
-            joint.GetLowerLimitAttr().Set(float(np.rad2deg(bounds[env_id,joint_id,0])))
-            joint.GetUpperLimitAttr().Set(float(np.rad2deg(bounds[env_id,joint_id,1])))
-        self.robot.data.joint_pos_limits[:,indices]=limits
-        self.pendulum_is_locked=bool(locked)
-        self.metadata['pendulum_locked']=bool(locked)
+            joint.GetLowerLimitAttr().Set(float(np.rad2deg(bounds[selected[env_id],joint_id,0])))
+            joint.GetUpperLimitAttr().Set(float(np.rad2deg(bounds[selected[env_id],joint_id,1])))
+        self.robot.data.joint_pos_limits[ids[:,None],torch.as_tensor(indices,device=self.device)[None,:]]=limits
+        self.pendulum_lock_mask[ids]=locked
+        self.pendulum_is_locked=bool(self.pendulum_lock_mask.all())
+        self.pendulum_mixed_lock=bool(self.pendulum_lock_mask.any()) and not self.pendulum_is_locked
+        self.metadata['pendulum_locked']=self.pendulum_is_locked
+        self.metadata['pendulum_locked_lanes']=self.pendulum_lock_mask.cpu().tolist()
 
     def refresh(self):
         self.roots=self.robot.data.root_link_state_w.clone();self.roots[:,3:7]=self.roots[:,[4,5,6,3]];self.dofs=torch.stack((self.robot.data.joint_pos,self.robot.data.joint_vel),dim=-1);self.contact=self.sensor.data.net_forces_w[:,self.contact_order]
@@ -272,6 +280,7 @@ class IsaacLabVectorPlant:
         if self.pendulum_servos is not None and not self.pendulum_is_locked:
             if pendulum_target is not None:self.pendulum_target=pendulum_target
             self.last_pendulum_torque=self.pendulum_servos.torque(self.pendulum_target,self.dofs[:,:,0],self.dofs[:,:,1])
+            if self.pendulum_mixed_lock:self.last_pendulum_torque=self.last_pendulum_torque*(~self.pendulum_lock_mask)[:,None]
             torque=torque+self.last_pendulum_torque
         if self.diagnostic_joint_torque is not None:
             torque=torque+self.diagnostic_joint_torque
