@@ -1,4 +1,115 @@
 {
+  "distance_rule": {
+    "8.0": {
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "T_s": 14.880000114440918,
+      "case_id": "L9.6_v2.0_a1.0"
+    },
+    "4.0": null,
+    "6.0": {
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "T_s": 14.0,
+      "case_id": "L7.6_v2.0_a0.0"
+    }
+  },
+  "distance_rule_sources": [
+    {
+      "case_id": "L9.6_v2.0_a0.5",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L9.6_v2.0_a0.5.json",
+      "origin_id": "rb_nominal_upstream_01"
+    },
+    {
+      "case_id": "L5.6_v2.0_a0.5",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L5.6_v2.0_a0.5.json",
+      "origin_id": "rb_nominal_upstream_01"
+    },
+    {
+      "case_id": "L7.6_v2.0_a0.5",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L7.6_v2.0_a0.5.json",
+      "origin_id": "rb_nominal_upstream_01"
+    },
+    {
+      "case_id": "L9.6_v1.8_a0.0",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L9.6_v1.8_a0.0.json",
+      "origin_id": "rb_nominal_upstream_01"
+    },
+    {
+      "case_id": "L9.6_v1.8_a0.5",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L9.6_v1.8_a0.5.json",
+      "origin_id": "rb_nominal_upstream_01"
+    },
+    {
+      "case_id": "L9.6_v1.8_a1.0",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L9.6_v1.8_a1.0.json",
+      "origin_id": "rb_nominal_upstream_01"
+    },
+    {
+      "case_id": "L9.6_v2.0_a0.0",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L9.6_v2.0_a0.0.json",
+      "origin_id": "rb_nominal_upstream_01"
+    },
+    {
+      "case_id": "L9.6_v2.0_a1.0",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L9.6_v2.0_a1.0.json",
+      "origin_id": "rb_nominal_upstream_01"
+    },
+    {
+      "case_id": "L5.6_v1.8_a0.0",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L5.6_v1.8_a0.0.json",
+      "origin_id": "rb_nominal_upstream_01"
+    },
+    {
+      "case_id": "L5.6_v1.8_a0.5",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L5.6_v1.8_a0.5.json",
+      "origin_id": "rb_nominal_upstream_01"
+    },
+    {
+      "case_id": "L5.6_v1.8_a1.0",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L5.6_v1.8_a1.0.json",
+      "origin_id": "rb_nominal_upstream_01"
+    },
+    {
+      "case_id": "L5.6_v2.0_a0.0",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L5.6_v2.0_a0.0.json",
+      "origin_id": "rb_nominal_upstream_01"
+    },
+    {
+      "case_id": "L5.6_v2.0_a1.0",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L5.6_v2.0_a1.0.json",
+      "origin_id": "rb_nominal_upstream_01"
+    },
+    {
+      "case_id": "L7.6_v1.8_a0.0",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L7.6_v1.8_a0.0.json",
+      "origin_id": "rb_nominal_upstream_01"
+    },
+    {
+      "case_id": "L7.6_v1.8_a0.5",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L7.6_v1.8_a0.5.json",
+      "origin_id": "rb_nominal_upstream_01"
+    },
+    {
+      "case_id": "L7.6_v1.8_a1.0",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L7.6_v1.8_a1.0.json",
+      "origin_id": "rb_nominal_upstream_01"
+    },
+    {
+      "case_id": "L7.6_v2.0_a0.0",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L7.6_v2.0_a0.0.json",
+      "origin_id": "rb_nominal_upstream_01"
+    },
+    {
+      "case_id": "L7.6_v2.0_a1.0",
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L7.6_v2.0_a1.0.json",
+      "origin_id": "rb_nominal_upstream_01"
+    }
+  ],
   "role": "Offline paired DEV ablation, not online execution or independent TEST",
   "scores": {
     "fixed_2.0_0.5": {
@@ -61,6 +172,32 @@
       "false_release": 0,
       "common_success_with_anchor": 3,
       "mean_time_saved_against_anchor_s": 0.0
+    },
+    "exact_distance_only_kernel": {
+      "successes": 6,
+      "task_groups": 18,
+      "statuses": {
+        "no_feasible": 3,
+        "selected": 6,
+        "upstream_unavailable": 9
+      },
+      "released": 6,
+      "false_release": 0,
+      "common_success_with_anchor": 3,
+      "mean_time_saved_against_anchor_s": 0.0
+    },
+    "nominal_distance_rule": {
+      "successes": 3,
+      "task_groups": 18,
+      "statuses": {
+        "no_feasible": 3,
+        "distance_rule": 6,
+        "upstream_unavailable": 9
+      },
+      "released": 6,
+      "false_release": 3,
+      "common_success_with_anchor": 0,
+      "mean_time_saved_against_anchor_s": null
     }
   },
   "groups": [
@@ -303,6 +440,88 @@
             "fallback": "retain_current_reference",
             "scope": "Empirical Q_hold recommendation, not a calibrated or guaranteed success probability"
           }
+        },
+        "exact_distance_only_kernel": {
+          "status": "no_feasible",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_01_L5.6_v2.0_a0.5",
+          "query": {
+            "status": "no_feasible",
+            "candidate": {
+              "speed_m_s": 2.0,
+              "alpha": 0.5
+            },
+            "estimates": [
+              {
+                "candidate_id": "v1.8_a0.0",
+                "known": true,
+                "support": 1.9999538931507304,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v1.8_a0.5",
+                "known": true,
+                "support": 1.9999538931507304,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v1.8_a1.0",
+                "known": true,
+                "support": 1.9999538931507304,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a0.0",
+                "known": true,
+                "support": 1.9999538931507304,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a0.5",
+                "known": true,
+                "support": 1.9999538931507304,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a1.0",
+                "known": true,
+                "support": 1.9999538931507304,
+                "complete_probability": 0.4999884736075748,
+                "success_cost": 9.799999923706054,
+                "sample_count": 2
+              }
+            ],
+            "evidence_rows": 12,
+            "excluded_origin_id": "rb_upstream_offset_01",
+            "fallback": "retain_current_reference",
+            "scope": "Empirical Q_hold recommendation, not a calibrated or guaranteed success probability"
+          }
+        },
+        "nominal_distance_rule": {
+          "status": "no_feasible",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_01_L5.6_v2.0_a0.5",
+          "query": null
         }
       }
     },
@@ -545,6 +764,88 @@
             "fallback": null,
             "scope": "Empirical Q_hold recommendation, not a calibrated or guaranteed success probability"
           }
+        },
+        "exact_distance_only_kernel": {
+          "status": "selected",
+          "candidate": {
+            "speed_m_s": 1.8,
+            "alpha": 0.0
+          },
+          "Y": 1,
+          "T_s": 14.199999809265137,
+          "case_id": "rb_upstream_offset_01_L7.6_v1.8_a0.0",
+          "query": {
+            "status": "selected",
+            "candidate": {
+              "speed_m_s": 1.8,
+              "alpha": 0.0
+            },
+            "estimates": [
+              {
+                "candidate_id": "v1.8_a0.0",
+                "known": true,
+                "support": 1.9999538931507304,
+                "complete_probability": 1.0,
+                "success_cost": 9.280009087599973,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v1.8_a0.5",
+                "known": true,
+                "support": 1.9999538931507304,
+                "complete_probability": 0.4999884736075748,
+                "success_cost": 9.039999694824218,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v1.8_a1.0",
+                "known": true,
+                "support": 1.9999538931507304,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a0.0",
+                "known": true,
+                "support": 1.9999538931507304,
+                "complete_probability": 1.0,
+                "success_cost": 9.459984495769877,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a0.5",
+                "known": true,
+                "support": 1.9999538931507304,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a1.0",
+                "known": true,
+                "support": 1.9999538931507304,
+                "complete_probability": 0.5000115263924251,
+                "success_cost": 8.660000381469725,
+                "sample_count": 2
+              }
+            ],
+            "evidence_rows": 12,
+            "excluded_origin_id": "rb_upstream_offset_01",
+            "fallback": null,
+            "scope": "Empirical Q_hold recommendation, not a calibrated or guaranteed success probability"
+          }
+        },
+        "nominal_distance_rule": {
+          "status": "distance_rule",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.0
+          },
+          "Y": 1,
+          "T_s": 13.859999656677246,
+          "case_id": "rb_upstream_offset_01_L7.6_v2.0_a0.0",
+          "query": null
         }
       }
     },
@@ -787,6 +1088,88 @@
             "fallback": null,
             "scope": "Empirical Q_hold recommendation, not a calibrated or guaranteed success probability"
           }
+        },
+        "exact_distance_only_kernel": {
+          "status": "selected",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 1,
+          "T_s": 14.899999618530273,
+          "case_id": "rb_upstream_offset_01_L9.6_v2.0_a0.5",
+          "query": {
+            "status": "selected",
+            "candidate": {
+              "speed_m_s": 2.0,
+              "alpha": 0.5
+            },
+            "estimates": [
+              {
+                "candidate_id": "v1.8_a0.0",
+                "known": true,
+                "support": 1.9999538931507304,
+                "complete_probability": 0.5000115263924251,
+                "success_cost": 11.500000534057616,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v1.8_a0.5",
+                "known": true,
+                "support": 1.9999538931507304,
+                "complete_probability": 1.0,
+                "success_cost": 10.440016788744352,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v1.8_a1.0",
+                "known": true,
+                "support": 1.9999538931507304,
+                "complete_probability": 1.0,
+                "success_cost": 10.129996790033635,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a0.0",
+                "known": true,
+                "support": 1.9999538931507304,
+                "complete_probability": 0.5000115263924251,
+                "success_cost": 9.259999809265135,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a0.5",
+                "known": true,
+                "support": 1.9999538931507304,
+                "complete_probability": 1.0,
+                "success_cost": 9.600000499211463,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a1.0",
+                "known": true,
+                "support": 1.9999538931507304,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              }
+            ],
+            "evidence_rows": 12,
+            "excluded_origin_id": "rb_upstream_offset_01",
+            "fallback": null,
+            "scope": "Empirical Q_hold recommendation, not a calibrated or guaranteed success probability"
+          }
+        },
+        "nominal_distance_rule": {
+          "status": "distance_rule",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 1.0
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_01_L9.6_v2.0_a1.0",
+          "query": null
         }
       }
     },
@@ -840,6 +1223,28 @@
           "query": null
         },
         "exact_distance_full_state_kernel": {
+          "status": "upstream_unavailable",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_02_L5.6_v2.0_a0.5",
+          "query": null
+        },
+        "exact_distance_only_kernel": {
+          "status": "upstream_unavailable",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_02_L5.6_v2.0_a0.5",
+          "query": null
+        },
+        "nominal_distance_rule": {
           "status": "upstream_unavailable",
           "candidate": {
             "speed_m_s": 2.0,
@@ -911,6 +1316,28 @@
           "T_s": null,
           "case_id": "rb_upstream_offset_02_L7.6_v2.0_a0.5",
           "query": null
+        },
+        "exact_distance_only_kernel": {
+          "status": "upstream_unavailable",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_02_L7.6_v2.0_a0.5",
+          "query": null
+        },
+        "nominal_distance_rule": {
+          "status": "upstream_unavailable",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_02_L7.6_v2.0_a0.5",
+          "query": null
         }
       }
     },
@@ -964,6 +1391,28 @@
           "query": null
         },
         "exact_distance_full_state_kernel": {
+          "status": "upstream_unavailable",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_02_L9.6_v2.0_a0.5",
+          "query": null
+        },
+        "exact_distance_only_kernel": {
+          "status": "upstream_unavailable",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_02_L9.6_v2.0_a0.5",
+          "query": null
+        },
+        "nominal_distance_rule": {
           "status": "upstream_unavailable",
           "candidate": {
             "speed_m_s": 2.0,
@@ -1215,6 +1664,88 @@
             "fallback": "retain_current_reference",
             "scope": "Empirical Q_hold recommendation, not a calibrated or guaranteed success probability"
           }
+        },
+        "exact_distance_only_kernel": {
+          "status": "no_feasible",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_03_L5.6_v2.0_a0.5",
+          "query": {
+            "status": "no_feasible",
+            "candidate": {
+              "speed_m_s": 2.0,
+              "alpha": 0.5
+            },
+            "estimates": [
+              {
+                "candidate_id": "v1.8_a0.0",
+                "known": true,
+                "support": 1.9999543567231566,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v1.8_a0.5",
+                "known": true,
+                "support": 1.9999543567231566,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v1.8_a1.0",
+                "known": true,
+                "support": 1.9999543567231566,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a0.0",
+                "known": true,
+                "support": 1.9999543567231566,
+                "complete_probability": 0.5000114104940019,
+                "success_cost": 8.479999809265138,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a0.5",
+                "known": true,
+                "support": 1.9999543567231566,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a1.0",
+                "known": true,
+                "support": 1.9999543567231566,
+                "complete_probability": 0.4999885895059981,
+                "success_cost": 9.799999923706054,
+                "sample_count": 2
+              }
+            ],
+            "evidence_rows": 12,
+            "excluded_origin_id": "rb_upstream_offset_03",
+            "fallback": "retain_current_reference",
+            "scope": "Empirical Q_hold recommendation, not a calibrated or guaranteed success probability"
+          }
+        },
+        "nominal_distance_rule": {
+          "status": "no_feasible",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_03_L5.6_v2.0_a0.5",
+          "query": null
         }
       }
     },
@@ -1457,6 +1988,88 @@
             "fallback": null,
             "scope": "Empirical Q_hold recommendation, not a calibrated or guaranteed success probability"
           }
+        },
+        "exact_distance_only_kernel": {
+          "status": "selected",
+          "candidate": {
+            "speed_m_s": 1.8,
+            "alpha": 0.0
+          },
+          "Y": 1,
+          "T_s": 15.119999885559082,
+          "case_id": "rb_upstream_offset_03_L7.6_v1.8_a0.0",
+          "query": {
+            "status": "selected",
+            "candidate": {
+              "speed_m_s": 1.8,
+              "alpha": 0.0
+            },
+            "estimates": [
+              {
+                "candidate_id": "v1.8_a0.0",
+                "known": true,
+                "support": 1.9999543567231566,
+                "complete_probability": 1.0,
+                "success_cost": 8.930000969387589,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v1.8_a0.5",
+                "known": true,
+                "support": 1.9999543567231566,
+                "complete_probability": 0.4999885895059981,
+                "success_cost": 9.039999694824218,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v1.8_a1.0",
+                "known": true,
+                "support": 1.9999543567231566,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a0.0",
+                "known": true,
+                "support": 1.9999543567231566,
+                "complete_probability": 1.0,
+                "success_cost": 9.389982750739804,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a0.5",
+                "known": true,
+                "support": 1.9999543567231566,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a1.0",
+                "known": true,
+                "support": 1.9999543567231566,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              }
+            ],
+            "evidence_rows": 12,
+            "excluded_origin_id": "rb_upstream_offset_03",
+            "fallback": null,
+            "scope": "Empirical Q_hold recommendation, not a calibrated or guaranteed success probability"
+          }
+        },
+        "nominal_distance_rule": {
+          "status": "distance_rule",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.0
+          },
+          "Y": 1,
+          "T_s": 14.220000267028809,
+          "case_id": "rb_upstream_offset_03_L7.6_v2.0_a0.0",
+          "query": null
         }
       }
     },
@@ -1699,6 +2312,88 @@
             "fallback": null,
             "scope": "Empirical Q_hold recommendation, not a calibrated or guaranteed success probability"
           }
+        },
+        "exact_distance_only_kernel": {
+          "status": "selected",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 1,
+          "T_s": 15.0600004196167,
+          "case_id": "rb_upstream_offset_03_L9.6_v2.0_a0.5",
+          "query": {
+            "status": "selected",
+            "candidate": {
+              "speed_m_s": 2.0,
+              "alpha": 0.5
+            },
+            "estimates": [
+              {
+                "candidate_id": "v1.8_a0.0",
+                "known": true,
+                "support": 1.9999543567231566,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v1.8_a0.5",
+                "known": true,
+                "support": 1.9999543567231566,
+                "complete_probability": 1.0,
+                "success_cost": 9.800002016418258,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v1.8_a1.0",
+                "known": true,
+                "support": 1.9999543567231566,
+                "complete_probability": 0.4999885895059981,
+                "success_cost": 10.280000419616698,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a0.0",
+                "known": true,
+                "support": 1.9999543567231566,
+                "complete_probability": 0.5000114104940019,
+                "success_cost": 10.880000381469728,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a0.5",
+                "known": true,
+                "support": 1.9999543567231566,
+                "complete_probability": 1.0,
+                "success_cost": 9.630000778652725,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a1.0",
+                "known": true,
+                "support": 1.9999543567231566,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              }
+            ],
+            "evidence_rows": 12,
+            "excluded_origin_id": "rb_upstream_offset_03",
+            "fallback": null,
+            "scope": "Empirical Q_hold recommendation, not a calibrated or guaranteed success probability"
+          }
+        },
+        "nominal_distance_rule": {
+          "status": "distance_rule",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 1.0
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_03_L9.6_v2.0_a1.0",
+          "query": null
         }
       }
     },
@@ -1752,6 +2447,28 @@
           "query": null
         },
         "exact_distance_full_state_kernel": {
+          "status": "upstream_unavailable",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_04_L5.6_v2.0_a0.5",
+          "query": null
+        },
+        "exact_distance_only_kernel": {
+          "status": "upstream_unavailable",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_04_L5.6_v2.0_a0.5",
+          "query": null
+        },
+        "nominal_distance_rule": {
           "status": "upstream_unavailable",
           "candidate": {
             "speed_m_s": 2.0,
@@ -1823,6 +2540,28 @@
           "T_s": null,
           "case_id": "rb_upstream_offset_04_L7.6_v2.0_a0.5",
           "query": null
+        },
+        "exact_distance_only_kernel": {
+          "status": "upstream_unavailable",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_04_L7.6_v2.0_a0.5",
+          "query": null
+        },
+        "nominal_distance_rule": {
+          "status": "upstream_unavailable",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_04_L7.6_v2.0_a0.5",
+          "query": null
         }
       }
     },
@@ -1876,6 +2615,28 @@
           "query": null
         },
         "exact_distance_full_state_kernel": {
+          "status": "upstream_unavailable",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_04_L9.6_v2.0_a0.5",
+          "query": null
+        },
+        "exact_distance_only_kernel": {
+          "status": "upstream_unavailable",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_04_L9.6_v2.0_a0.5",
+          "query": null
+        },
+        "nominal_distance_rule": {
           "status": "upstream_unavailable",
           "candidate": {
             "speed_m_s": 2.0,
@@ -1947,6 +2708,28 @@
           "T_s": null,
           "case_id": "rb_upstream_offset_05_L5.6_v2.0_a0.5",
           "query": null
+        },
+        "exact_distance_only_kernel": {
+          "status": "upstream_unavailable",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_05_L5.6_v2.0_a0.5",
+          "query": null
+        },
+        "nominal_distance_rule": {
+          "status": "upstream_unavailable",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_05_L5.6_v2.0_a0.5",
+          "query": null
         }
       }
     },
@@ -2009,6 +2792,28 @@
           "T_s": null,
           "case_id": "rb_upstream_offset_05_L7.6_v2.0_a0.5",
           "query": null
+        },
+        "exact_distance_only_kernel": {
+          "status": "upstream_unavailable",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_05_L7.6_v2.0_a0.5",
+          "query": null
+        },
+        "nominal_distance_rule": {
+          "status": "upstream_unavailable",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_05_L7.6_v2.0_a0.5",
+          "query": null
         }
       }
     },
@@ -2062,6 +2867,28 @@
           "query": null
         },
         "exact_distance_full_state_kernel": {
+          "status": "upstream_unavailable",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_05_L9.6_v2.0_a0.5",
+          "query": null
+        },
+        "exact_distance_only_kernel": {
+          "status": "upstream_unavailable",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_05_L9.6_v2.0_a0.5",
+          "query": null
+        },
+        "nominal_distance_rule": {
           "status": "upstream_unavailable",
           "candidate": {
             "speed_m_s": 2.0,
@@ -2313,6 +3140,88 @@
             "fallback": "retain_current_reference",
             "scope": "Empirical Q_hold recommendation, not a calibrated or guaranteed success probability"
           }
+        },
+        "exact_distance_only_kernel": {
+          "status": "no_feasible",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_06_L5.6_v2.0_a0.5",
+          "query": {
+            "status": "no_feasible",
+            "candidate": {
+              "speed_m_s": 2.0,
+              "alpha": 0.5
+            },
+            "estimates": [
+              {
+                "candidate_id": "v1.8_a0.0",
+                "known": true,
+                "support": 1.9999082522163474,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v1.8_a0.5",
+                "known": true,
+                "support": 1.9999082522163474,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v1.8_a1.0",
+                "known": true,
+                "support": 1.9999082522163474,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a0.0",
+                "known": true,
+                "support": 1.9999082522163474,
+                "complete_probability": 0.4999998841015767,
+                "success_cost": 8.479999809265138,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a0.5",
+                "known": true,
+                "support": 1.9999082522163474,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a1.0",
+                "known": true,
+                "support": 1.9999082522163474,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              }
+            ],
+            "evidence_rows": 12,
+            "excluded_origin_id": "rb_upstream_offset_06",
+            "fallback": "retain_current_reference",
+            "scope": "Empirical Q_hold recommendation, not a calibrated or guaranteed success probability"
+          }
+        },
+        "nominal_distance_rule": {
+          "status": "no_feasible",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_06_L5.6_v2.0_a0.5",
+          "query": null
         }
       }
     },
@@ -2555,6 +3464,88 @@
             "fallback": null,
             "scope": "Empirical Q_hold recommendation, not a calibrated or guaranteed success probability"
           }
+        },
+        "exact_distance_only_kernel": {
+          "status": "selected",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.0
+          },
+          "Y": 1,
+          "T_s": 15.420000076293945,
+          "case_id": "rb_upstream_offset_06_L7.6_v2.0_a0.0",
+          "query": {
+            "status": "selected",
+            "candidate": {
+              "speed_m_s": 2.0,
+              "alpha": 0.0
+            },
+            "estimates": [
+              {
+                "candidate_id": "v1.8_a0.0",
+                "known": true,
+                "support": 1.9999082522163474,
+                "complete_probability": 1.0,
+                "success_cost": 9.329999928541016,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v1.8_a0.5",
+                "known": true,
+                "support": 1.9999082522163474,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v1.8_a1.0",
+                "known": true,
+                "support": 1.9999082522163474,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a0.0",
+                "known": true,
+                "support": 1.9999082522163474,
+                "complete_probability": 1.0,
+                "success_cost": 8.709999978078876,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a0.5",
+                "known": true,
+                "support": 1.9999082522163474,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a1.0",
+                "known": true,
+                "support": 1.9999082522163474,
+                "complete_probability": 0.5000001158984233,
+                "success_cost": 8.660000381469725,
+                "sample_count": 2
+              }
+            ],
+            "evidence_rows": 12,
+            "excluded_origin_id": "rb_upstream_offset_06",
+            "fallback": null,
+            "scope": "Empirical Q_hold recommendation, not a calibrated or guaranteed success probability"
+          }
+        },
+        "nominal_distance_rule": {
+          "status": "distance_rule",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.0
+          },
+          "Y": 1,
+          "T_s": 15.420000076293945,
+          "case_id": "rb_upstream_offset_06_L7.6_v2.0_a0.0",
+          "query": null
         }
       }
     },
@@ -2797,6 +3788,88 @@
             "fallback": null,
             "scope": "Empirical Q_hold recommendation, not a calibrated or guaranteed success probability"
           }
+        },
+        "exact_distance_only_kernel": {
+          "status": "selected",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "Y": 1,
+          "T_s": 14.859999656677246,
+          "case_id": "rb_upstream_offset_06_L9.6_v2.0_a0.5",
+          "query": {
+            "status": "selected",
+            "candidate": {
+              "speed_m_s": 2.0,
+              "alpha": 0.5
+            },
+            "estimates": [
+              {
+                "candidate_id": "v1.8_a0.0",
+                "known": true,
+                "support": 1.9999082522163474,
+                "complete_probability": 0.5000001158984233,
+                "success_cost": 11.500000534057616,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v1.8_a0.5",
+                "known": true,
+                "support": 1.9999082522163474,
+                "complete_probability": 1.0,
+                "success_cost": 10.520000529819708,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v1.8_a1.0",
+                "known": true,
+                "support": 1.9999082522163474,
+                "complete_probability": 0.5000001158984233,
+                "success_cost": 9.980000076293944,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a0.0",
+                "known": true,
+                "support": 1.9999082522163474,
+                "complete_probability": 1.0,
+                "success_cost": 10.069999907611919,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a0.5",
+                "known": true,
+                "support": 1.9999082522163474,
+                "complete_probability": 1.0,
+                "success_cost": 9.650000012119673,
+                "sample_count": 2
+              },
+              {
+                "candidate_id": "v2.0_a1.0",
+                "known": true,
+                "support": 1.9999082522163474,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 2
+              }
+            ],
+            "evidence_rows": 12,
+            "excluded_origin_id": "rb_upstream_offset_06",
+            "fallback": null,
+            "scope": "Empirical Q_hold recommendation, not a calibrated or guaranteed success probability"
+          }
+        },
+        "nominal_distance_rule": {
+          "status": "distance_rule",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 1.0
+          },
+          "Y": 0,
+          "T_s": null,
+          "case_id": "rb_upstream_offset_06_L9.6_v2.0_a1.0",
+          "query": null
         }
       }
     }
