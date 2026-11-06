@@ -24,6 +24,9 @@ for case in manifest[a.group]:
     roots.append(dict(origin_id=case['origin_id'], output=str(folder), status=status,
         recorded_suffixes=len(rows)))
     for task in spec['tasks']:
+        envelope_file = folder / task['task_id'] / 'envelope_summary.json'
+        envelope = json.loads(envelope_file.read_text()) if envelope_file.exists() else None
+        envelope_by_lane = {r['lane']: r for r in envelope['rows']} if envelope else {}
         selected = [r for r in rows if r['task_id'] == task['task_id']]
         by_id = {r['candidate_id']: r for r in selected}
         if len(by_id) != len(selected) or set(by_id) - set(candidates):
@@ -37,6 +40,9 @@ for case in manifest[a.group]:
             success_costs=[by_id[c]['success_cost'] if c in by_id else None for c in candidates],
             state_named=selected[0].get('state_named') if selected else None,
             successful_candidates=successes,
+            sampled_envelope_half_width_m=envelope['half_width_m'] if envelope else None,
+            sampled_envelope_scope=envelope['scope'] if envelope else None,
+            sampled_envelope=[envelope_by_lane.get(i) for i in range(len(candidates))],
             original_path_max_m=[by_id[c]['max_original_path_error_m'] if c in by_id else None for c in candidates],
             b_entries=[by_id[c].get('b_entry') if c in by_id else None for c in candidates],
             input_target_limits=[by_id[c].get('input_target_limit') if c in by_id else None for c in candidates]))
@@ -65,6 +71,14 @@ summary = dict(role=manifest['role'], manifest=str(a.manifest.resolve()),
     fixed_candidates=fixed, paired_comparisons=pairs,
     oracle_success_groups=sum(bool(g['successful_candidates']) for g in complete),
     limits='Descriptive DEV matrix; repeated roots are clustered, not independent trials. Source failures remain in root accounting and have no invented suffix labels. Pending entries are null. Own-success mean costs are not matched method comparisons; use the pairwise common-success costs. No online selector result.')
+envelope_groups = [g for g in groups if all(r is not None for r in g['sampled_envelope'])]
+summary['sampled_envelope_comparison'] = dict(
+    evaluated_groups=len(envelope_groups), pending_or_unrecorded_groups=len(groups)-len(envelope_groups),
+    rows=[dict(origin_id=g['origin_id'], task_id=g['task_id'], candidate_id=c,
+               original_complete=g['success_vector'][i],
+               **g['sampled_envelope'][i])
+          for g in envelope_groups for i,c in enumerate(g['candidates'])],
+    scope='Sampled authored collision vertices only; not exact wheel contact tracks or continuous clearance. Original complete labels remain unchanged. Missing body records are null, not passes.')
 a.output.mkdir(parents=True, exist_ok=True)
 (a.output/'summary.json').write_text(json.dumps(summary, indent=2) + '\n')
 (a.output/'records.jsonl').write_text(''.join(json.dumps(r)+'\n' for r in records))
