@@ -26,7 +26,7 @@ def _values(values):
     return ' '.join(format(float(x), '.17g') for x in values)
 
 
-def export_isaac_urdf(output, source=DEFAULT_XML, wheel_vertices=226, *, preserve_self_collisions=False):
+def export_isaac_urdf(output, source=DEFAULT_XML, wheel_vertices=226, *, preserve_self_collisions=False, wheel_sectors=0):
     if not 6 <= wheel_vertices <= 226:
         raise ValueError('wheel_vertices must be between 6 and 226')
     output = Path(output)
@@ -109,7 +109,22 @@ def export_isaac_urdf(output, source=DEFAULT_XML, wheel_vertices=226, *, preserv
                 (output/mesh_name).write_text(text)
                 meshes[mesh_name] = dict(sha256=hashlib.sha256(text.encode()).hexdigest(), vertices=len(vertices),
                     faces=len(faces), source_semiaxes_m=size.tolist(), source_polar_segments=8, source_azimuth_segments=32, sampling='original mesh' if wheel_vertices == 226 else 'farthest normalized coverage subset; all six extrema retained')
+            sector_meshes = []
+            if wheel_sectors and kind == mujoco.mjtGeom.mjGEOM_ELLIPSOID:
+                from .collision_geometry import ellipsoid_sectors
+                for sector, (vertices, faces) in enumerate(ellipsoid_sectors(size, sectors=wheel_sectors)):
+                    filename = mesh_name.removesuffix('.obj')+f'_sector_{sector}.obj'
+                    text = '\n'.join(['v '+_values(v) for v in vertices]+['f '+_values(f+1) for f in faces])+'\n'
+                    (output/filename).write_text(text)
+                    meshes[filename] = dict(sha256=hashlib.sha256(text.encode()).hexdigest(), vertices=len(vertices), faces=len(faces), source_semiaxes_m=size.tolist())
+                    sector_meshes.append(filename)
             for tag in ('collision', 'visual'):
+                if tag == 'collision' and sector_meshes:
+                    for sector, filename in enumerate(sector_meshes):
+                        parent = ET.SubElement(link, tag, name=f'geom_{g}_sector_{sector}')
+                        ET.SubElement(parent, 'origin', xyz=_values(model.geom_pos[g]-offsets[i]), rpy=_values(_rpy(model.geom_quat[g])))
+                        ET.SubElement(ET.SubElement(parent, 'geometry'), 'mesh', filename=filename)
+                    continue
                 geometry_parent = ET.SubElement(link, tag, name='geom_'+str(g))
                 ET.SubElement(geometry_parent, 'origin', xyz=_values(model.geom_pos[g]-offsets[i]), rpy=_values(_rpy(model.geom_quat[g])))
                 geometry = ET.SubElement(geometry_parent, 'geometry')
@@ -144,6 +159,9 @@ def export_isaac_urdf(output, source=DEFAULT_XML, wheel_vertices=226, *, preserv
                     meshes=meshes, link_frame_offsets={name(mujoco.mjtObj.mjOBJ_BODY,i):offsets[i].tolist() for i in range(1,model.nbody)}, urdf_joint_effort_semantics='1000 is importer metadata; runtime source actuator limits and passive torques are authoritative',
                     root_quat_wxyz=contract['bodies'][0]['quat_wxyz'])
     contract['differences'][0] = f'Ellipsoid wheels explicitly sampled to {wheel_vertices}-vertex convex OBJ; analytic contact not preserved.'
+    if wheel_sectors:
+        contract['differences'][0] = f'Ellipsoid wheels use historical RB {wheel_sectors} convex sectors, polar32/per-sector4; analytic contact not preserved.'
+    contract['wheel_sectors'] = wheel_sectors
     contract['wheel_vertices'] = wheel_vertices
     (output/'contract.json').write_text(json.dumps(contract, indent=2))
     return contract

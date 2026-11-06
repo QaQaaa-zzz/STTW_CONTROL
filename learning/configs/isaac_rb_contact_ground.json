@@ -1,0 +1,47 @@
+{
+  "duration_s": 8.0,
+  "warmup_s": 3.0,
+  "return_s": 7.0,
+  "speed_m_s": 2.0,
+  "steer_slew_rad_s": 0.8,
+  "cases": [
+    {
+      "name": "positive_ecbc",
+      "steer_rad": 0.12,
+      "local300": false
+    },
+    {
+      "name": "positive_local300",
+      "steer_rad": 0.12,
+      "local300": true
+    },
+    {
+      "name": "negative_ecbc",
+      "steer_rad": -0.12,
+      "local300": false
+    },
+    {
+      "name": "negative_local300",
+      "steer_rad": -0.12,
+      "local300": true
+    }
+  ],
+  "pendulum_locked": true,
+  "plant_options": {
+    "physics_dt": 0.005,
+    "wheel_radius_m": 0.07,
+    "gpu_pair_capacities": [
+      1048576,
+      1048576,
+      1048576
+    ],
+    "servo_mode": "hybrid",
+    "compliant_wheels": null,
+    "wheel_collision": "convexHull",
+    "hull_vertices": 64,
+    "robot_contact_offset": 0.001
+  },
+  "role": "Nominal DEV: historical RB sector collision with contact offset .001; no mass, friction, controller or timestep change",
+  "save_warmup_state": true,
+  "controller_config": "learning/configs/rb_sttw_controller.json"
+}
