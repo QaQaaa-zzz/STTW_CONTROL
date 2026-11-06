@@ -143,5 +143,12 @@
     "status": "after single-ridge recovery time measurement"
   },
   "resource_policy": "one heavy queued GPU job across threads, GPU-parallel lanes within job; at least50GB data-disk free; no repeated polling",
-  "claim_policy": "negative trail magnitude, migration, unloading and real torque effects distinguished; no presupposed causal dominance"
+  "claim_policy": "negative trail magnitude, migration, unloading and real torque effects distinguished; no presupposed causal dominance",
+  "conditional_completion": {
+    "user_authorization": "If the main premise is judged false on evidence, terminate this research task and count the goal complete.",
+    "main_premise": "Contact migration and its angular impulse provide practically relevant causal recovery effects or additional recovery-alpha selection information beyond speed, posture, front load and available road width.",
+    "decision": "Evaluate actual evidence before launching the next stage. Preserve negative results and explicit applicability limits. A single failed alpha or small negative trail alone does not reject the main premise.",
+    "sequence": "P0 characterizes loading and impulses; targeted causal/paired selection evidence is needed where P0 cannot distinguish competing explanations. Do not automatically run G7 or retrain policies if the mechanism premise fails.",
+    "status": "not yet rejected"
+  }
 }

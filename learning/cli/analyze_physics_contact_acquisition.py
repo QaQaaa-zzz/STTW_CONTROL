@@ -10,28 +10,39 @@ for chunk in idx['chunks']:
  archive=np.load(a.run/'physics_contacts'/chunk['file']);d={key:archive[key] for key in archive.files};archive.close();count=len(d['physics_step']);f=np.zeros((count,n,2,3));moment=np.zeros((count,n,2));normal_force=np.zeros_like(f);ridge=np.zeros((count,n,2),bool);components=np.zeros((count,n,3));front=d['body_state'][:,:,fork];axis=Rotation.from_quat(front[:,:,3:7].reshape(-1,4)).apply([0,1,0]).reshape(count,n,3)
  for wi,wheel in enumerate(['frontwheel','rearwheel']):
   for kind in ['normal','friction']:
-   counts=d[wheel+'_'+kind+'_count'];starts=d[wheel+'_'+kind+'_start'];force=d[wheel+'_'+kind+'_force'];points=d[wheel+'_'+kind+'_point'];maxcounts[wi,int(kind=='friction')]=max(maxcounts[wi,int(kind=='friction')],int(counts.max()))
-   if kind=='normal':force=force*d[wheel+'_normal_direction']
-   for t in range(count):
-    for lane in range(n):
-     for filter_id in range(counts.shape[2]):
-      start=int(starts[t,lane,filter_id]);k=int(counts[t,lane,filter_id]);sl=slice(start,start+k);values=force[t,sl];f[t,lane,wi]+=values.sum(0)
-      if kind=='normal':
-       normal_force[t,lane,wi]+=values.sum(0)
-       ridge[t,lane,wi]=bool(np.any((points[t,sl,2]>0.003)&(np.linalg.norm(values,axis=1)>0.01)))
-      if wi==0:
-       moment[t,lane,int(kind=='friction')]+=(np.cross(points[t,sl]-front[t,lane,:3],values)*axis[t,lane]).sum()
-       if kind=='friction' and k:
-        ns=int(d[wheel+'_normal_start'][t,lane,filter_id]);nk=int(d[wheel+'_normal_count'][t,lane,filter_id])
-        if nk:
-         normals=d[wheel+'_normal_direction'][t,ns:ns+nk];npnt=d[wheel+'_normal_point'][t,ns:ns+nk]
-         nearest=np.linalg.norm(points[t,sl,None,:]-npnt[None,:,:],axis=-1).argmin(1);normal=normals[nearest]
-         axle=Rotation.from_quat(d['body_state'][t,lane,idx['body_order'].index(wheel),3:7]).apply([0,0,1])
-         longitudinal=np.cross(axle,normal);longitudinal/=np.linalg.norm(longitudinal,axis=1,keepdims=True)
-         lateral=np.cross(normal,longitudinal)
-         for ci,direction in enumerate([longitudinal,lateral,normal]):
-          part=(values*direction).sum(1)[:,None]*direction
-          components[t,lane,ci]+=(np.cross(points[t,sl]-front[t,lane,:3],part)*axis[t,lane]).sum()
+   counts=d[wheel+'_'+kind+'_count'];starts=d[wheel+'_'+kind+'_start']
+   maxcounts[wi,int(kind=='friction')]=max(maxcounts[wi,int(kind=='friction')],int(counts.max()))
+   # Gather only active patches; one vectorized reduction replaces per-step/lane Python loops.
+   patch=np.arange(int(counts.max()))
+   ti,li,fi,pi=np.nonzero(patch[None,None,None,:]<counts[...,None])
+   indices=starts[ti,li,fi]+pi
+   values=d[wheel+'_'+kind+'_force'][ti,indices]
+   points=d[wheel+'_'+kind+'_point'][ti,indices]
+   if kind=='normal':values=values*d[wheel+'_normal_direction'][ti,indices]
+   np.add.at(f[:,:,wi],(ti,li),values)
+   if kind=='normal':
+    np.add.at(normal_force[:,:,wi],(ti,li),values)
+    raised=(points[:,2]>.003)&(np.linalg.norm(values,axis=1)>.01)
+    np.logical_or.at(ridge[:,:,wi],(ti,li),raised)
+   if wi==0:
+    lever=points-front[ti,li,:3];steer_axis=axis[ti,li]
+    np.add.at(moment[:,:,int(kind=='friction')],(ti,li),(np.cross(lever,values)*steer_axis).sum(1))
+    if kind=='friction' and len(ti):
+     ns=d[wheel+'_normal_start'][ti,li,fi];nk=d[wheel+'_normal_count'][ti,li,fi]
+     keep=nk>0;ti,li,fi,ns,nk,values,points,lever,steer_axis=[x[keep] for x in (ti,li,fi,ns,nk,values,points,lever,steer_axis)]
+     if len(ti):
+      slots=np.arange(int(nk.max()));ni=ns[:,None]+np.minimum(slots[None,:],nk[:,None]-1)
+      candidates=d[wheel+'_normal_point'][ti[:,None],ni]
+      distance=np.linalg.norm(points[:,None,:]-candidates,axis=-1)
+      distance=np.where(slots[None,:]<nk[:,None],distance,np.inf)
+      nearest=ni[np.arange(len(ti)),distance.argmin(1)]
+      normal=d[wheel+'_normal_direction'][ti,nearest]
+      axle=Rotation.from_quat(d['body_state'][ti,li,idx['body_order'].index(wheel),3:7]).apply([0,0,1])
+      longitudinal=np.cross(axle,normal);longitudinal/=np.linalg.norm(longitudinal,axis=1,keepdims=True)
+      lateral=np.cross(normal,longitudinal)
+      for ci,direction in enumerate([longitudinal,lateral,normal]):
+       part=(values*direction).sum(1)[:,None]*direction
+       np.add.at(components[:,:,ci],(ti,li),(np.cross(lever,part)*steer_axis).sum(1))
 
  if not np.isfinite(f).all() or not np.isfinite(moment).all():raise ValueError('Nonfinite active contact buffer')
  frames.append(dict(force=f,normal_force=normal_force,ridge_contact=ridge,friction_components=components,moment=moment,steer_velocity=d['joint_velocity'][:,:,idx['joint_order'].index('steering_joint')],motor=d['motor_torque'],alive=d['alive_before']))
