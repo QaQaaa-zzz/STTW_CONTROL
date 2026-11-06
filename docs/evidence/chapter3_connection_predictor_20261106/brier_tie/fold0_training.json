@@ -1,0 +1,2837 @@
+[
+  {
+    "epoch": 1,
+    "classification_loss": 0.6823854446411133,
+    "time_loss": 0.44651326537132263,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5279871225357056,
+          "success_cost": 9.940994262695312,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5259041786193848,
+          "success_cost": 9.953619956970215,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5275168418884277,
+          "success_cost": 9.9670991897583,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5466547012329102,
+          "success_cost": 9.932303428649902,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5413216352462769,
+          "success_cost": 9.934913635253906,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5404651761054993,
+          "success_cost": 9.949885368347168,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.23913133215054985
+    }
+  },
+  {
+    "epoch": 2,
+    "classification_loss": 0.6789136528968811,
+    "time_loss": 0.43846064805984497,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5358095765113831,
+          "success_cost": 9.908426284790039,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5339052081108093,
+          "success_cost": 9.921248435974121,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5351920127868652,
+          "success_cost": 9.933549880981445,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5538312196731567,
+          "success_cost": 9.894219398498535,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5490514636039734,
+          "success_cost": 9.898276329040527,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5477514863014221,
+          "success_cost": 9.913676261901855,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.23713926267435662
+    }
+  },
+  {
+    "epoch": 3,
+    "classification_loss": 0.6754772663116455,
+    "time_loss": 0.43139439821243286,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5430455207824707,
+          "success_cost": 9.879446983337402,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5412978529930115,
+          "success_cost": 9.891922950744629,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.542175829410553,
+          "success_cost": 9.903210639953613,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5603025555610657,
+          "success_cost": 9.858400344848633,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5564539432525635,
+          "success_cost": 9.866045951843262,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5541571974754333,
+          "success_cost": 9.881072998046875,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.23534436918379953
+    }
+  },
+  {
+    "epoch": 4,
+    "classification_loss": 0.672057569026947,
+    "time_loss": 0.4246557950973511,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5504406094551086,
+          "success_cost": 9.853006362915039,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5485368967056274,
+          "success_cost": 9.864542961120605,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5487796068191528,
+          "success_cost": 9.875030517578125,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5666983127593994,
+          "success_cost": 9.823848724365234,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5632615685462952,
+          "success_cost": 9.834081649780273,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5606594681739807,
+          "success_cost": 9.850341796875,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.23387224838718326
+    }
+  },
+  {
+    "epoch": 5,
+    "classification_loss": 0.6687514781951904,
+    "time_loss": 0.4184492230415344,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5576172471046448,
+          "success_cost": 9.827425956726074,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5555478930473328,
+          "success_cost": 9.838027954101562,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5552910566329956,
+          "success_cost": 9.847626686096191,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.57313472032547,
+          "success_cost": 9.790783882141113,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5699719786643982,
+          "success_cost": 9.802483558654785,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5666894912719727,
+          "success_cost": 9.820905685424805,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.23241929326622332
+    }
+  },
+  {
+    "epoch": 6,
+    "classification_loss": 0.6654917597770691,
+    "time_loss": 0.41277438402175903,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5644462704658508,
+          "success_cost": 9.80206298828125,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5622828602790833,
+          "success_cost": 9.812539100646973,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5614487528800964,
+          "success_cost": 9.822054862976074,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5795964002609253,
+          "success_cost": 9.759451866149902,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5766737461090088,
+          "success_cost": 9.771784782409668,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5724952220916748,
+          "success_cost": 9.791163444519043,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.23103636103723998
+    }
+  },
+  {
+    "epoch": 7,
+    "classification_loss": 0.6622580289840698,
+    "time_loss": 0.4075949490070343,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5704043507575989,
+          "success_cost": 9.775518417358398,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5682040452957153,
+          "success_cost": 9.786934852600098,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5669010877609253,
+          "success_cost": 9.797900199890137,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5855535268783569,
+          "success_cost": 9.729124069213867,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5825258493423462,
+          "success_cost": 9.742889404296875,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5778012871742249,
+          "success_cost": 9.761608123779297,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.22988140177589025
+    }
+  },
+  {
+    "epoch": 8,
+    "classification_loss": 0.6590396165847778,
+    "time_loss": 0.40317443013191223,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5761677026748657,
+          "success_cost": 9.752306938171387,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5736015439033508,
+          "success_cost": 9.761757850646973,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5718057751655579,
+          "success_cost": 9.773301124572754,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5913756489753723,
+          "success_cost": 9.702591896057129,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5879946351051331,
+          "success_cost": 9.715730667114258,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5820195078849792,
+          "success_cost": 9.736285209655762,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.2287673579433219
+    }
+  },
+  {
+    "epoch": 9,
+    "classification_loss": 0.6556844115257263,
+    "time_loss": 0.39925992488861084,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.581436812877655,
+          "success_cost": 9.73203182220459,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5783573985099792,
+          "success_cost": 9.739171981811523,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5758434534072876,
+          "success_cost": 9.74880313873291,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5959206223487854,
+          "success_cost": 9.680596351623535,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5916128754615784,
+          "success_cost": 9.692922592163086,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5850354433059692,
+          "success_cost": 9.714224815368652,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.22801444727233644
+    }
+  },
+  {
+    "epoch": 10,
+    "classification_loss": 0.6523217558860779,
+    "time_loss": 0.3950698673725128,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.585609495639801,
+          "success_cost": 9.715140342712402,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5814504623413086,
+          "success_cost": 9.720755577087402,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5781660079956055,
+          "success_cost": 9.729188919067383,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5993527770042419,
+          "success_cost": 9.66250991821289,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5946699380874634,
+          "success_cost": 9.672931671142578,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.587492823600769,
+          "success_cost": 9.693950653076172,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.22767076463913463
+    }
+  },
+  {
+    "epoch": 11,
+    "classification_loss": 0.6489720344543457,
+    "time_loss": 0.39092379808425903,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5887597799301147,
+          "success_cost": 9.702786445617676,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5840329527854919,
+          "success_cost": 9.70683479309082,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5801820158958435,
+          "success_cost": 9.713297843933105,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6021915078163147,
+          "success_cost": 9.64628791809082,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5975047945976257,
+          "success_cost": 9.657169342041016,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.589646577835083,
+          "success_cost": 9.675347328186035,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.2273084793644955
+    }
+  },
+  {
+    "epoch": 12,
+    "classification_loss": 0.6457599997520447,
+    "time_loss": 0.3870684504508972,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5911930203437805,
+          "success_cost": 9.694289207458496,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5865576863288879,
+          "success_cost": 9.697784423828125,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5820705890655518,
+          "success_cost": 9.702765464782715,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6046453714370728,
+          "success_cost": 9.634257316589355,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6001576781272888,
+          "success_cost": 9.646771430969238,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5917338728904724,
+          "success_cost": 9.661535263061523,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.2269061445955979
+    }
+  },
+  {
+    "epoch": 13,
+    "classification_loss": 0.6426050066947937,
+    "time_loss": 0.383318692445755,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5937908291816711,
+          "success_cost": 9.689314842224121,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5890832543373108,
+          "success_cost": 9.692519187927246,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5840120911598206,
+          "success_cost": 9.69680118560791,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6075954437255859,
+          "success_cost": 9.626693725585938,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6028169393539429,
+          "success_cost": 9.639979362487793,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5938833951950073,
+          "success_cost": 9.652831077575684,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.2264865445874893
+    }
+  },
+  {
+    "epoch": 14,
+    "classification_loss": 0.6393324732780457,
+    "time_loss": 0.379581093788147,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5967242121696472,
+          "success_cost": 9.686967849731445,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5918394327163696,
+          "success_cost": 9.690218925476074,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5862722396850586,
+          "success_cost": 9.694944381713867,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6110131740570068,
+          "success_cost": 9.622308731079102,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.605556309223175,
+          "success_cost": 9.634979248046875,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5963457822799683,
+          "success_cost": 9.64750862121582,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.22606172695399232
+    }
+  },
+  {
+    "epoch": 15,
+    "classification_loss": 0.6360133290290833,
+    "time_loss": 0.3758642375469208,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6003038883209229,
+          "success_cost": 9.690701484680176,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5950495600700378,
+          "success_cost": 9.692954063415527,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.588865339756012,
+          "success_cost": 9.696812629699707,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.615361213684082,
+          "success_cost": 9.624755859375,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.608931303024292,
+          "success_cost": 9.635110855102539,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5990687608718872,
+          "success_cost": 9.645353317260742,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.22552440465534454
+    }
+  },
+  {
+    "epoch": 16,
+    "classification_loss": 0.6327106952667236,
+    "time_loss": 0.3721655011177063,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.604163646697998,
+          "success_cost": 9.698533058166504,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5983937382698059,
+          "success_cost": 9.69927978515625,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5914413332939148,
+          "success_cost": 9.700833320617676,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6205876469612122,
+          "success_cost": 9.631575584411621,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6127083897590637,
+          "success_cost": 9.639409065246582,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.601883590221405,
+          "success_cost": 9.646102905273438,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.22490564446203898
+    }
+  },
+  {
+    "epoch": 17,
+    "classification_loss": 0.6293904781341553,
+    "time_loss": 0.3683271110057831,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6076767444610596,
+          "success_cost": 9.708759307861328,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6014335751533508,
+          "success_cost": 9.708006858825684,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5942744612693787,
+          "success_cost": 9.707913398742676,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6256868243217468,
+          "success_cost": 9.641082763671875,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.616287887096405,
+          "success_cost": 9.64590835571289,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6045871376991272,
+          "success_cost": 9.649978637695312,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.2242683966164313
+    }
+  },
+  {
+    "epoch": 18,
+    "classification_loss": 0.6260276436805725,
+    "time_loss": 0.3643856942653656,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6109129190444946,
+          "success_cost": 9.719987869262695,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6042847037315369,
+          "success_cost": 9.718097686767578,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5970219373703003,
+          "success_cost": 9.715688705444336,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6307364702224731,
+          "success_cost": 9.651569366455078,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6203597187995911,
+          "success_cost": 9.652644157409668,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6072362661361694,
+          "success_cost": 9.654407501220703,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.22356911496029497
+    }
+  },
+  {
+    "epoch": 19,
+    "classification_loss": 0.6226323246955872,
+    "time_loss": 0.36030447483062744,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6139154434204102,
+          "success_cost": 9.732563018798828,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.607346773147583,
+          "success_cost": 9.729683876037598,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.5993098020553589,
+          "success_cost": 9.724568367004395,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6354156732559204,
+          "success_cost": 9.66263198852539,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6239069700241089,
+          "success_cost": 9.660520553588867,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6097667813301086,
+          "success_cost": 9.659491539001465,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.22296743151236184
+    }
+  },
+  {
+    "epoch": 20,
+    "classification_loss": 0.6192702054977417,
+    "time_loss": 0.3558207154273987,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6171491742134094,
+          "success_cost": 9.745932579040527,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6101025938987732,
+          "success_cost": 9.740262031555176,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6012834906578064,
+          "success_cost": 9.732391357421875,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6396113634109497,
+          "success_cost": 9.673254013061523,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6271786093711853,
+          "success_cost": 9.667301177978516,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6127083897590637,
+          "success_cost": 9.662993431091309,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.22269254581880737
+    }
+  },
+  {
+    "epoch": 21,
+    "classification_loss": 0.6160366535186768,
+    "time_loss": 0.3514060378074646,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6201744079589844,
+          "success_cost": 9.75941276550293,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6123791933059692,
+          "success_cost": 9.750553131103516,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6029646992683411,
+          "success_cost": 9.739778518676758,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6435658931732178,
+          "success_cost": 9.683725357055664,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6302418112754822,
+          "success_cost": 9.673615455627441,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6154450178146362,
+          "success_cost": 9.665990829467773,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.22250702944793113
+    }
+  },
+  {
+    "epoch": 22,
+    "classification_loss": 0.6127368211746216,
+    "time_loss": 0.3467612564563751,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6236311197280884,
+          "success_cost": 9.772547721862793,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6144250631332397,
+          "success_cost": 9.759339332580566,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6046963930130005,
+          "success_cost": 9.746369361877441,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6476843357086182,
+          "success_cost": 9.693109512329102,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.634029746055603,
+          "success_cost": 9.680388450622559,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.617920458316803,
+          "success_cost": 9.6683931350708,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.22228916566894993
+    }
+  },
+  {
+    "epoch": 23,
+    "classification_loss": 0.6094167232513428,
+    "time_loss": 0.3421097695827484,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6269493103027344,
+          "success_cost": 9.784429550170898,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.616486132144928,
+          "success_cost": 9.766883850097656,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6063941717147827,
+          "success_cost": 9.752445220947266,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6518564820289612,
+          "success_cost": 9.701107025146484,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6377745866775513,
+          "success_cost": 9.684887886047363,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6204877495765686,
+          "success_cost": 9.669342041015625,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.22208167985379804
+    }
+  },
+  {
+    "epoch": 24,
+    "classification_loss": 0.6061028242111206,
+    "time_loss": 0.33748501539230347,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6300575733184814,
+          "success_cost": 9.794662475585938,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6184905171394348,
+          "success_cost": 9.773262023925781,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6079960465431213,
+          "success_cost": 9.757002830505371,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.655997633934021,
+          "success_cost": 9.70736312866211,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6412385106086731,
+          "success_cost": 9.688030242919922,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6230505704879761,
+          "success_cost": 9.668676376342773,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.22190476304149995
+    }
+  },
+  {
+    "epoch": 25,
+    "classification_loss": 0.6028264760971069,
+    "time_loss": 0.3326566815376282,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6339197158813477,
+          "success_cost": 9.802698135375977,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.620668351650238,
+          "success_cost": 9.778071403503418,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.609745442867279,
+          "success_cost": 9.759598731994629,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6603233814239502,
+          "success_cost": 9.711507797241211,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6448436379432678,
+          "success_cost": 9.689169883728027,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6259006857872009,
+          "success_cost": 9.666050910949707,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.22188554002853542
+    }
+  },
+  {
+    "epoch": 26,
+    "classification_loss": 0.5995805859565735,
+    "time_loss": 0.3275449573993683,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6383383274078369,
+          "success_cost": 9.807984352111816,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6234467625617981,
+          "success_cost": 9.779478073120117,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.611555278301239,
+          "success_cost": 9.759190559387207,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6648694276809692,
+          "success_cost": 9.712362289428711,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6486749053001404,
+          "success_cost": 9.68687629699707,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6292648911476135,
+          "success_cost": 9.660234451293945,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.22197893142973632
+    }
+  },
+  {
+    "epoch": 27,
+    "classification_loss": 0.5963823795318604,
+    "time_loss": 0.32216334342956543,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6429940462112427,
+          "success_cost": 9.811413764953613,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6269921064376831,
+          "success_cost": 9.778681755065918,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.613507091999054,
+          "success_cost": 9.756756782531738,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6696749925613403,
+          "success_cost": 9.711174011230469,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6526455283164978,
+          "success_cost": 9.682269096374512,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6328529715538025,
+          "success_cost": 9.652142524719238,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.22203760386671392
+    }
+  },
+  {
+    "epoch": 28,
+    "classification_loss": 0.5932286381721497,
+    "time_loss": 0.31642577052116394,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6477301716804504,
+          "success_cost": 9.811851501464844,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6305205225944519,
+          "success_cost": 9.774846076965332,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6160629987716675,
+          "success_cost": 9.751031875610352,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6745768785476685,
+          "success_cost": 9.707010269165039,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6565857529640198,
+          "success_cost": 9.674408912658691,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6364456415176392,
+          "success_cost": 9.640731811523438,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.22206228134852246
+    }
+  },
+  {
+    "epoch": 29,
+    "classification_loss": 0.5901231169700623,
+    "time_loss": 0.3104822337627411,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6524457335472107,
+          "success_cost": 9.80873966217041,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6340480446815491,
+          "success_cost": 9.767377853393555,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6188046932220459,
+          "success_cost": 9.741495132446289,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6794604659080505,
+          "success_cost": 9.699224472045898,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6604883074760437,
+          "success_cost": 9.662751197814941,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6399919986724854,
+          "success_cost": 9.6254243850708,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.2220866118960103
+    }
+  },
+  {
+    "epoch": 30,
+    "classification_loss": 0.587078869342804,
+    "time_loss": 0.3043207824230194,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6571769118309021,
+          "success_cost": 9.803812026977539,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6377646923065186,
+          "success_cost": 9.758914947509766,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6217264533042908,
+          "success_cost": 9.73082447052002,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6843122243881226,
+          "success_cost": 9.68998908996582,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6643537878990173,
+          "success_cost": 9.649519920349121,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6435341835021973,
+          "success_cost": 9.609073638916016,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.222106697402916
+    }
+  },
+  {
+    "epoch": 31,
+    "classification_loss": 0.5841267704963684,
+    "time_loss": 0.2978168725967407,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6620213985443115,
+          "success_cost": 9.798809051513672,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6418808102607727,
+          "success_cost": 9.751312255859375,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6248429417610168,
+          "success_cost": 9.719884872436523,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6891825199127197,
+          "success_cost": 9.680208206176758,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6682540774345398,
+          "success_cost": 9.635644912719727,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6471561789512634,
+          "success_cost": 9.59231948852539,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.22212308125966493
+    }
+  },
+  {
+    "epoch": 32,
+    "classification_loss": 0.5812250971794128,
+    "time_loss": 0.29103508591651917,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6669183969497681,
+          "success_cost": 9.794116973876953,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6462091207504272,
+          "success_cost": 9.743767738342285,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6279183030128479,
+          "success_cost": 9.708282470703125,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6933242678642273,
+          "success_cost": 9.66824722290039,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6720381379127502,
+          "success_cost": 9.620827674865723,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6507168412208557,
+          "success_cost": 9.5746488571167,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.2222390531293783
+    }
+  },
+  {
+    "epoch": 33,
+    "classification_loss": 0.5784708857536316,
+    "time_loss": 0.28421053290367126,
+    "validation": {
+      "candidate_id": "v2.0_a0.5",
+      "complete": 1,
+      "time_s": 15.479999542236328,
+      "fallback": true,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6718159914016724,
+          "success_cost": 9.790020942687988,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6505125761032104,
+          "success_cost": 9.736760139465332,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6308530569076538,
+          "success_cost": 9.697210311889648,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.697268009185791,
+          "success_cost": 9.655288696289062,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6750676035881042,
+          "success_cost": 9.604625701904297,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6536012887954712,
+          "success_cost": 9.556039810180664,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.5",
+      "brier": 0.2223616694291438
+    }
+  },
+  {
+    "epoch": 34,
+    "classification_loss": 0.5758086442947388,
+    "time_loss": 0.27720382809638977,
+    "validation": {
+      "candidate_id": "v2.0_a0.0",
+      "complete": 1,
+      "time_s": 15.819999694824219,
+      "fallback": false,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6756390333175659,
+          "success_cost": 9.785398483276367,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6544586420059204,
+          "success_cost": 9.730402946472168,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6335370540618896,
+          "success_cost": 9.68713665008545,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.7006720304489136,
+          "success_cost": 9.64250659942627,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6775168180465698,
+          "success_cost": 9.588486671447754,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.654940128326416,
+          "success_cost": 9.53550910949707,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.0",
+      "brier": 0.22212020531048893
+    }
+  },
+  {
+    "epoch": 35,
+    "classification_loss": 0.5732025504112244,
+    "time_loss": 0.2700965106487274,
+    "validation": {
+      "candidate_id": "v2.0_a0.0",
+      "complete": 1,
+      "time_s": 15.819999694824219,
+      "fallback": false,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6786210536956787,
+          "success_cost": 9.78120231628418,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6571983695030212,
+          "success_cost": 9.723319053649902,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6357529163360596,
+          "success_cost": 9.677905082702637,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.7034350037574768,
+          "success_cost": 9.630218505859375,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6792688965797424,
+          "success_cost": 9.572685241699219,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6555547118186951,
+          "success_cost": 9.515156745910645,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.0",
+      "brier": 0.2218811080388837
+    }
+  },
+  {
+    "epoch": 36,
+    "classification_loss": 0.5706501007080078,
+    "time_loss": 0.2626560926437378,
+    "validation": {
+      "candidate_id": "v2.0_a0.0",
+      "complete": 1,
+      "time_s": 15.819999694824219,
+      "fallback": false,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6813291907310486,
+          "success_cost": 9.776606559753418,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6593530774116516,
+          "success_cost": 9.715275764465332,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6368203163146973,
+          "success_cost": 9.666336059570312,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.7058141827583313,
+          "success_cost": 9.616862297058105,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6805939078330994,
+          "success_cost": 9.555646896362305,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6557514667510986,
+          "success_cost": 9.493584632873535,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.0",
+      "brier": 0.22178746792976511
+    }
+  },
+  {
+    "epoch": 37,
+    "classification_loss": 0.5682339668273926,
+    "time_loss": 0.2551867663860321,
+    "validation": {
+      "candidate_id": "v2.0_a0.0",
+      "complete": 1,
+      "time_s": 15.819999694824219,
+      "fallback": false,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6839903593063354,
+          "success_cost": 9.772799491882324,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6606956720352173,
+          "success_cost": 9.70703411102295,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6374543309211731,
+          "success_cost": 9.654674530029297,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.7080166935920715,
+          "success_cost": 9.60378646850586,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.681727945804596,
+          "success_cost": 9.53872299194336,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6557072401046753,
+          "success_cost": 9.471972465515137,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.0",
+      "brier": 0.2218188228659693
+    }
+  },
+  {
+    "epoch": 38,
+    "classification_loss": 0.565873384475708,
+    "time_loss": 0.24761156737804413,
+    "validation": {
+      "candidate_id": "v2.0_a0.0",
+      "complete": 1,
+      "time_s": 15.819999694824219,
+      "fallback": false,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6867353916168213,
+          "success_cost": 9.766302108764648,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6620246767997742,
+          "success_cost": 9.695839881896973,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6380555629730225,
+          "success_cost": 9.64001750946045,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.710234522819519,
+          "success_cost": 9.58765697479248,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6828657984733582,
+          "success_cost": 9.51859188079834,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6557061672210693,
+          "success_cost": 9.447066307067871,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.0",
+      "brier": 0.22188755066024987
+    }
+  },
+  {
+    "epoch": 39,
+    "classification_loss": 0.5635089874267578,
+    "time_loss": 0.23985019326210022,
+    "validation": {
+      "candidate_id": "v2.0_a0.0",
+      "complete": 1,
+      "time_s": 15.819999694824219,
+      "fallback": false,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6890573501586914,
+          "success_cost": 9.757213592529297,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6630431413650513,
+          "success_cost": 9.682146072387695,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6382680535316467,
+          "success_cost": 9.622669219970703,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.7120258212089539,
+          "success_cost": 9.56881046295166,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6835421919822693,
+          "success_cost": 9.49560546875,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6553688049316406,
+          "success_cost": 9.419258117675781,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.0",
+      "brier": 0.2219621499779875
+    }
+  },
+  {
+    "epoch": 40,
+    "classification_loss": 0.5611799359321594,
+    "time_loss": 0.2319355607032776,
+    "validation": {
+      "candidate_id": "v2.0_a0.0",
+      "complete": 1,
+      "time_s": 15.819999694824219,
+      "fallback": false,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6903935670852661,
+          "success_cost": 9.745285034179688,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6632010340690613,
+          "success_cost": 9.665738105773926,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6377013325691223,
+          "success_cost": 9.602587699890137,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.7128258943557739,
+          "success_cost": 9.546854019165039,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6833309531211853,
+          "success_cost": 9.469663619995117,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6541723608970642,
+          "success_cost": 9.388330459594727,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.0",
+      "brier": 0.22200447921873234
+    }
+  },
+  {
+    "epoch": 41,
+    "classification_loss": 0.558873176574707,
+    "time_loss": 0.2237967848777771,
+    "validation": {
+      "candidate_id": "v2.0_a0.0",
+      "complete": 1,
+      "time_s": 15.819999694824219,
+      "fallback": false,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6910145282745361,
+          "success_cost": 9.731639862060547,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6627363562583923,
+          "success_cost": 9.64772891998291,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6364155411720276,
+          "success_cost": 9.58080005645752,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.7127894163131714,
+          "success_cost": 9.522576332092285,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6822875142097473,
+          "success_cost": 9.441412925720215,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6522345542907715,
+          "success_cost": 9.35513687133789,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.0",
+      "brier": 0.2220470931995345
+    }
+  },
+  {
+    "epoch": 42,
+    "classification_loss": 0.5566521286964417,
+    "time_loss": 0.21551822125911713,
+    "validation": {
+      "candidate_id": "v2.0_a0.0",
+      "complete": 1,
+      "time_s": 15.819999694824219,
+      "fallback": false,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.691041111946106,
+          "success_cost": 9.717931747436523,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.661552906036377,
+          "success_cost": 9.629339218139648,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6343995332717896,
+          "success_cost": 9.558614730834961,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.7118093371391296,
+          "success_cost": 9.49646282196045,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6805711984634399,
+          "success_cost": 9.41265869140625,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.649766743183136,
+          "success_cost": 9.322127342224121,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.0",
+      "brier": 0.22217223217368462
+    }
+  },
+  {
+    "epoch": 43,
+    "classification_loss": 0.5545318722724915,
+    "time_loss": 0.20736971497535706,
+    "validation": {
+      "candidate_id": "v2.0_a0.0",
+      "complete": 1,
+      "time_s": 15.819999694824219,
+      "fallback": false,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6898752450942993,
+          "success_cost": 9.70582103729248,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6591877937316895,
+          "success_cost": 9.6123685836792,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6311601400375366,
+          "success_cost": 9.537691116333008,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.7096676230430603,
+          "success_cost": 9.471746444702148,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6775530576705933,
+          "success_cost": 9.384702682495117,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6461707353591919,
+          "success_cost": 9.290610313415527,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.0",
+      "brier": 0.22232086583236862
+    }
+  },
+  {
+    "epoch": 44,
+    "classification_loss": 0.5523054003715515,
+    "time_loss": 0.19913621246814728,
+    "validation": {
+      "candidate_id": "v2.0_a0.0",
+      "complete": 1,
+      "time_s": 15.819999694824219,
+      "fallback": false,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6885066032409668,
+          "success_cost": 9.694844245910645,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6566026210784912,
+          "success_cost": 9.596303939819336,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6263889670372009,
+          "success_cost": 9.516858100891113,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.7070270776748657,
+          "success_cost": 9.447378158569336,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6741816401481628,
+          "success_cost": 9.357093811035156,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6422438621520996,
+          "success_cost": 9.259510040283203,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.0",
+      "brier": 0.22266937030207026
+    }
+  },
+  {
+    "epoch": 45,
+    "classification_loss": 0.5499759316444397,
+    "time_loss": 0.19082680344581604,
+    "validation": {
+      "candidate_id": "v2.0_a0.0",
+      "complete": 1,
+      "time_s": 15.819999694824219,
+      "fallback": false,
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6872167587280273,
+          "success_cost": 9.683592796325684,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6540716290473938,
+          "success_cost": 9.579764366149902,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.621370792388916,
+          "success_cost": 9.495158195495605,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.7044627666473389,
+          "success_cost": 9.422629356384277,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.6707677841186523,
+          "success_cost": 9.328560829162598,
+          "sample_count": 3
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 1.4036362585823519,
+          "complete_probability": 0.638288140296936,
+          "success_cost": 9.227490425109863,
+          "sample_count": 3
+        }
+      ],
+      "source_case_id": "rb_connection_seed20261106_root002_L9.6_v2.0_a0.0",
+      "brier": 0.22307354107973096
+    }
+  }
+]

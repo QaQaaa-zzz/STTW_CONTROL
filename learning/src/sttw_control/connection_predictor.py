@@ -13,7 +13,7 @@ class ConnectionPredictor(nn.Module):
         return self.network(inputs)
 
 
-def fit_predictor(inputs, labels, times, validate, *, seed, epochs=100, patience=20):
+def fit_predictor(inputs, labels, times, validate, *, seed, epochs=100, patience=20, brier_tiebreak=False):
     """One equal-root full batch; caller supplies observed validation outcomes."""
     torch.manual_seed(seed)
     x = torch.tensor(inputs, dtype=torch.float32)
@@ -36,6 +36,8 @@ def fit_predictor(inputs, labels, times, validate, *, seed, epochs=100, patience
         optimizer.step()
         score = validate(model, mean, scale, time_mean, time_scale)
         key = (-score['complete'], score['time_s'] if score['complete'] else float('inf'))
+        if brier_tiebreak:
+            key += (score['brier'],)
         history.append(dict(epoch=epoch, classification_loss=float(classification.detach()),
                             time_loss=float(regression.detach()), validation=score))
         if best_key is None or key < best_key:

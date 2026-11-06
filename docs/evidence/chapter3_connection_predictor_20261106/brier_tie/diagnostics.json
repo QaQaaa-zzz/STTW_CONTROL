@@ -1,0 +1,111 @@
+{
+  "folds": [
+    {
+      "origin": "rb_connection_seed20261106_root000",
+      "selected_epoch": 25,
+      "epochs": 45,
+      "metrics": {
+        "mlp": {
+          "known_candidates": 6,
+          "brier": 0.3298334086617736,
+          "success_time_mae_s": 0.333513043721517
+        },
+        "kernel": {
+          "known_candidates": 6,
+          "brier": 0.25663509170095317,
+          "success_time_mae_s": 0.6980629360753513
+        }
+      },
+      "tuning_selected_candidates": [
+        "v2.0_a0.0",
+        "v2.0_a0.5"
+      ],
+      "max_selected_model_probability": 0.8154727816581726
+    },
+    {
+      "origin": "rb_connection_seed20261106_root002",
+      "selected_epoch": 1,
+      "epochs": 21,
+      "metrics": {
+        "mlp": {
+          "known_candidates": 6,
+          "brier": 0.2463225651835407,
+          "success_time_mae_s": 0.25403429985046344
+        },
+        "kernel": {
+          "known_candidates": 6,
+          "brier": 0.05979308368905009,
+          "success_time_mae_s": 0.416734532935672
+        }
+      },
+      "tuning_selected_candidates": [
+        "v2.0_a0.5"
+      ],
+      "max_selected_model_probability": 0.5153892040252686
+    },
+    {
+      "origin": "rb_upstream_offset_01",
+      "selected_epoch": 46,
+      "epochs": 66,
+      "metrics": {
+        "mlp": {
+          "known_candidates": 6,
+          "brier": 0.27902675972019947,
+          "success_time_mae_s": 0.45915308634440066
+        },
+        "kernel": {
+          "known_candidates": 6,
+          "brier": 0.2322535346413904,
+          "success_time_mae_s": 0.23086919043771145
+        }
+      },
+      "tuning_selected_candidates": [
+        "v2.0_a0.5"
+      ],
+      "max_selected_model_probability": 0.5868521332740784
+    },
+    {
+      "origin": "rb_upstream_offset_03",
+      "selected_epoch": 1,
+      "epochs": 21,
+      "metrics": {
+        "mlp": {
+          "known_candidates": 6,
+          "brier": 0.23962359278352943,
+          "success_time_mae_s": 0.8045334701538088
+        },
+        "kernel": {
+          "known_candidates": 6,
+          "brier": 0.19733901434553092,
+          "success_time_mae_s": 0.7457936996818995
+        }
+      },
+      "tuning_selected_candidates": [
+        "v2.0_a0.5"
+      ],
+      "max_selected_model_probability": 0.5201874375343323
+    },
+    {
+      "origin": "rb_upstream_offset_06",
+      "selected_epoch": 1,
+      "epochs": 21,
+      "metrics": {
+        "mlp": {
+          "known_candidates": 6,
+          "brier": 0.2516954185288487,
+          "success_time_mae_s": 0.3615361150105798
+        },
+        "kernel": {
+          "known_candidates": 6,
+          "brier": 0.21234897063022262,
+          "success_time_mae_s": 0.3028914579480754
+        }
+      },
+      "tuning_selected_candidates": [
+        "v2.0_a0.5"
+      ],
+      "max_selected_model_probability": 0.5122083425521851
+    }
+  ],
+  "note": "Brier is descriptive on held-out DEV; 6 candidates per root are dependent. Losses are pre-update; selected epoch is post-update. No calibration claim."
+}

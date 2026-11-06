@@ -1,0 +1,5 @@
+{
+  "learning/src/sttw_control/connection_predictor.py": "a73cfd1a81a12ca5cbad22da630862fd0cc146da8801bb2ac27f34d32595149e",
+  "learning/cli/pilot_connection_predictor.py": "f4acdc9130fe697e6e290cb5f805c64cb9b461975dd34d35f635dd89e6f04b19",
+  "learning/cli/summarize_connection_predictor.py": "3ba65eaadc0a94cdaf87b8749129290a99dafc88d016fa3b53ba869574792ce0"
+}

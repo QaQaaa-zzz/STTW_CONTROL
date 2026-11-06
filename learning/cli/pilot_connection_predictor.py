@@ -11,6 +11,7 @@ p = argparse.ArgumentParser(description=__doc__)
 p.add_argument('--records', type=Path, required=True)
 p.add_argument('--config', type=Path, default=Path('learning/configs/jump_connection_capability_dev.json'))
 p.add_argument('--output', type=Path, required=True)
+p.add_argument('--brier-tiebreak', action='store_true', help='Use tuning Brier only when actual chosen completion/time tie')
 a = p.parse_args()
 records = [json.loads(line) for line in a.records.read_text().splitlines() if line.strip()]
 config = json.loads(a.config.read_text())
@@ -43,7 +44,8 @@ def score(estimates, rows):
     selected = choice['candidate_id'] if choice else 'v2.0_a0.5'
     actual = rows[ids.index(selected)]
     return dict(candidate_id=selected,complete=actual['Y'],time_s=actual['T_total_s'],
-                fallback=choice is None,estimates=estimates,source_case_id=actual['case_id'])
+                fallback=choice is None,estimates=estimates,source_case_id=actual['case_id'],
+                brier=float(np.mean([(e['complete_probability']-r['Y'])**2 for e,r in zip(estimates,rows) if e['complete_probability'] is not None])))
 
 for fold, held in enumerate(origins):
     tuning = origins[(fold + 1) % len(origins)]
@@ -64,7 +66,7 @@ for fold, held in enumerate(origins):
 
     model,best,history = fit_predictor(inputs(train),[r['Y'] for r in train],
         [r['T_after_decision_s'] if r['Y'] else 0. for r in train],
-        lambda model,mean,scale,tm,ts:predict(model,mean,scale,tm,ts,groups[tuning]),seed=20261106+fold)
+        lambda model,mean,scale,tm,ts:predict(model,mean,scale,tm,ts,groups[tuning]),seed=20261106+fold,brier_tiebreak=a.brier_tiebreak)
     mlp = predict(model,best['input_mean'],best['input_scale'],best['time_mean'],best['time_scale'],groups[held])
     baseline = score(kernel.query(groups[held][0]['state'],'hold','frozen',ids)['estimates'],groups[held])
     fixed_id = min(range(len(ids)),key=lambda i:(-groups[tuning][i]['Y'],groups[tuning][i]['T_after_decision_s'] if groups[tuning][i]['Y'] else float('inf'),i))
@@ -85,7 +87,7 @@ for method in ('mlp','kernel','validation_selected_fixed'):
         explicit_choices=len(selected),false_clearances=sum(not r['complete'] for r in selected))
 report = dict(role='Five-root nested pilot DEV; small sample, uncalibrated probabilities, no deployment adoption',
     records=str(a.records.resolve()),config=config,excluded_origins=excluded,summary=summary,folds=results,
-    optimizer_steps=sum(r['epochs'] for r in results),new_physics_steps=0,device='cpu',
+    brier_tiebreak=a.brier_tiebreak, optimizer_steps=sum(r['epochs'] for r in results),new_physics_steps=0,device='cpu',
     limits='Three train roots, one tuning root, one held-out DEV root per fold. Root-balanced full batch; success-only standardized Huber plus all-row BCE. Early stopping uses tuning selected-action outcome. Kernel uses identical observable fields and candidate set. Both retain actual 2.0/.5 when support/risk thresholds reject choices. Missing-input origin retained in exclusion inventory. No probability calibration or independent TEST; estimates are not guarantees.')
 (a.output/'results.json').write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps(summary,indent=2))
