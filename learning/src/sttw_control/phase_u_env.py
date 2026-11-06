@@ -11,6 +11,7 @@ from .isaaclab_randomization import randomize_vehicle_properties,PendulumControl
 from .pendulum_skill import TorchPendulumObservation,TorchPendulumGeometry,TorchPendulumSkill
 from .phase_u_events import initial_events,advance_events,classify_terminal
 from .phase_u_reward import phase_u_reward,phase_u_episode_reward
+from .reachable_jump_bank import ReachableJumpBank
 
 
 class PhaseUEnv:
@@ -49,6 +50,12 @@ class PhaseUEnv:
         self.airborne=torch.zeros(self.num_envs,dtype=torch.bool,device=self.device)
         self.events=initial_events(torch.full((self.num_envs,),1.5,device=self.device),self.task)
         self.total_physics_steps=0
+        self.entry_bank=None
+        if cfg.get('reachable_entry_bank'):
+            self.entry_probability=cfg['reachable_entry_probability']
+            if not 0 <= self.entry_probability <= 1-self.task['reset']['airborne_rsi_probability']:
+                raise ValueError('Reachable and airborne reset probabilities must sum to at most one')
+            self.entry_bank=ReachableJumpBank(cfg['reachable_entry_bank'],self.plant.joints,self.device)
 
     def get_observations(self):return self.obs_buf
     def get_privileged_observations(self):return self.privileged_obs_buf
@@ -63,17 +70,34 @@ class PhaseUEnv:
         n=len(ids);r=self.task['reset'];plant=self.plant
         pose=plant.robot.data.default_root_state[ids,:7].clone();pose[:,0]=1.5;pose[:,1]=0.
         velocity=torch.zeros(n,6,device=self.device);velocity[:,0]=r['initial_forward_velocity']
-        self.airborne[ids]=torch.rand(n,device=self.device)<r['airborne_rsi_probability']
+        if self.entry_bank is None:
+            self.airborne[ids]=torch.rand(n,device=self.device)<r['airborne_rsi_probability']
+        else:
+            # One draw partitions the population; retain the original unconditional RSI share.
+            draw=torch.rand(n,device=self.device)
+            entry_mask=draw<self.entry_probability
+            self.airborne[ids]=(draw>=self.entry_probability)&(draw<self.entry_probability+r['airborne_rsi_probability'])
         for tensor,column,label in ((pose,0,'x'),(pose,2,'z'),(velocity,0,'vx'),(velocity,2,'vz')):
             lo,hi=r[f'airborne_rsi_{label}_min'],r[f'airborne_rsi_{label}_max']
             tensor[:,column]=torch.where(self.airborne[ids],lo+(hi-lo)*torch.rand(n,device=self.device),tensor[:,column])
         position=plant.robot.data.default_joint_pos[ids].clone();joint_velocity=torch.zeros_like(position)
+        if self.entry_bank is not None:
+            entry=self.entry_bank.sample(int(entry_mask.sum()))
+            pose[entry_mask]=entry['root_pose'];velocity[entry_mask]=entry['root_velocity']
+            position[entry_mask]=entry['joint_position'];joint_velocity[entry_mask]=entry['joint_velocity']
         plant.reset_idx(ids,state=dict(root_pose=pose,root_velocity=velocity,joint_position=position,joint_velocity=joint_velocity))
         self.randomization.reset(ids);self.history.frames[ids]=0;self.history.valid_count[ids]=0
         self.last_action[ids]=0;self.episode_length_buf[ids]=0;self.episode_return[ids]=0
         fresh=initial_events(pose[:,0],self.task)
         for k in self.events:self.events[k][ids]=fresh[k]
         self.obs_buf[ids]=0;self.obs_buf[ids,-1]=fresh['jump_signal'].float()
+        if self.entry_bank is not None:
+            entry_ids=ids[entry_mask]
+            self.obs_buf[entry_ids]=entry['observation']
+            frames=entry['observation'][:,:75].reshape(-1,3,25)
+            self.history.frames[entry_ids]=frames
+            self.history.valid_count[entry_ids]=frames[:,:,-1].sum(-1).long()
+            self.last_action[entry_ids]=entry['last_action']
         self.privileged_obs_buf[ids]=self.physical()[2][ids]
 
     def reset(self):
