@@ -5,8 +5,15 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-p=argparse.ArgumentParser();p.add_argument('--manifest',type=Path,required=True);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--manifest',type=Path,required=True);p.add_argument('--include-comparison-references',action='store_true');a=p.parse_args()
 m=json.loads(a.manifest.read_text());rows=[];prefixes={}
+if a.include_comparison_references:
+ references={}
+ for c in m['cases']:
+  spec=json.loads(Path(c['config']).read_text());ref=spec['comparison_reference']
+  references[ref['config']]=dict(c,case_id=c['origin_id']+'_reference_'+ref['skill'],config=ref['config'],skill=ref['skill'],reused_reference=True)
+ m['cases'].extend(references.values())
+skills=sorted({c['skill'] for c in m['cases'] if 'skill' in c})
 sequences=any('second_candidate' in c for c in m['cases'])
 for c in m['cases']:
  if sequences:c.update(speed_m_s=c['second_candidate']['speed_m_s'],alpha=c['second_candidate']['alpha'])
@@ -23,6 +30,8 @@ for c in m['cases']:
   row['decision']=json.loads(decision.read_text()) if decision.exists() else None
   row['handoff']=json.loads(handoff.read_text()) if handoff.exists() else None
   d=np.load(run/'trajectory.npz');t=d['trace'][d['valid'][:,0],0];i=panels.index(tuple(c['panel_key']));color={0.:'tab:blue',.5:'tab:orange',1.:'tab:green'}[c['alpha']];style='--' if c['speed_m_s']==1.8 else '-';label=f"v={c['speed_m_s']}, alpha={c['alpha']}"+(" after midpoint" if sequences else "")
+  if skills:
+   color=plt.get_cmap('tab10')(skills.index(c['skill']));label=c['skill']+' | '+label
   row['observed_duration_s']=float(t[-1,0])
   if sequences:
    midpoint=run/'midpoint_decision.json'
@@ -69,5 +78,5 @@ for origin,(fig,axes) in figures.items():
  name='xy_candidates.png' if len(figures)==1 else f'xy_candidates_{origin}.png'
  fig.savefig(a.manifest.parent/name,dpi=150)
  plt.close(fig)
-(a.manifest.parent/'summary.json').write_text(json.dumps(dict(protocol_id=m['protocol_id'],role=m['role'],declared_cases=len(rows),evaluated_cases=sum(r['status']=='evaluated' for r in rows),rows=rows),indent=2)+'\n')
+(a.manifest.parent/'summary.json').write_text(json.dumps(dict(protocol_id=m.get('protocol_id',json.loads(Path(m['cases'][0]['config']).read_text())['protocol_id']),role=m['role'],declared_cases=len(rows),evaluated_cases=sum(r['status']=='evaluated' for r in rows),rows=rows),indent=2)+'\n')
 print(json.dumps({r['case_id']:dict(status=r['status'],complete=r['complete']) for r in rows},indent=2))
