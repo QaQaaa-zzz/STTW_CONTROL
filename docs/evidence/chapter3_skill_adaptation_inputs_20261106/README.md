@@ -72,3 +72,15 @@ nominal regression and retaining an earlier best). CLI syntax checked. No actual
 PPO or end-to-end orchestration run yet; TensorBoard/notifications and GPU
 allocation remain launch-time work. Frozen task/data/checkpoint evidence must
 still be reviewed after execution.
+
+### Original nominal baseline collection
+
+Six original-policy8s cases are running separately in
+`/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_nominal_skill_retention`
+(max19200physics steps,0optimizer updates). These are part of the already
+budgeted108 evaluations, not six additional conditions. The pipeline accepts
+`--nominal-baseline-manifest .../chapter3_nominal_skill_retention/manifest.json`:
+reuse requires initial exported policy arrays identical to the original bundle,
+identical frozen configuration apart from output location, and matching executed
+policy identity. Reused paths remain in the selection evidence; no trajectory
+is attributed to an adapted policy. Pending runs are not yet retention results.
