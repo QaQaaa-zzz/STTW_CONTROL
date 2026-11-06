@@ -106,11 +106,11 @@ class TorchVelocityServos:
 
 class TorchPositionServos:
     """Original affine position actuators, with source target and force bounds."""
-    def __init__(self, contract, joint_names, names, device='cpu'):
+    def __init__(self, contract, joint_names, names, device='cpu', *, allow_inactive=False):
         rows={a['name']:a for a in contract['actuators']}
         selected=[rows[n] for n in names]
         for a in selected:
-            if not a['enabled'] or a['gear'] != [1.,0.,0.,0.,0.,0.] or a['bias'][0] != 0 or a['bias'][1] != -a['gain'][0]:
+            if (not a['enabled'] and not allow_inactive) or a['gear'] != [1.,0.,0.,0.,0.,0.] or a['bias'][0] != 0 or a['bias'][1] != -a['gain'][0]:
                 raise ValueError('Expected enabled unit-gear affine position servo')
         self.indices=[joint_names.index(a['joint']) for a in selected]
         self.kp=torch.tensor([a['gain'][0] for a in selected],device=device)

@@ -1,3 +1,11 @@
+## RB交接动作接口：复用原车备用转向位置伺服
+
+源码核对：原RB的四动作映射为转向角/后轮轴转速/hip角/knee角，而地面STTW为转向角速度/后轮轴转速，不能直接串接。共同STTW模型已保留未启用的cmd_steering_p（kp10、kd0.1、角度±0.8rad、力矩±1Nm），因此复用它作为显式跳跃位置接口，不自行拼角度到角速度转换。旧RB donor的转向力矩±5Nm、后轮±6Nm与共同车不同；共同车仍保留转向±1Nm、后轮±3Nm，不能假设原RB直接成功。
+
+IsaacLabVectorPlant.step新增可选steering_position_target（batch×1），显式选择时关闭同关节速度servo扭矩，只使用原位置servo；hip/knee目标沿用已有接口。TorchPositionServos的allow_inactive仅用于显式选择已有备用执行器，缺省保持旧检查。两个servo行为测试通过（包括原力矩限制与阻尼），尚未执行RB闭环或跳跃接管。进入跳跃需要先释放摆，持续保存真实历史；原RB 3×25+signal观测尚需接入真实共同车坐标/IMU/轮速，未用零历史替代。
+
+锁摆H75批次session25963已完成预热进入left90_R2，沿原预算运行，右弯稍后；不重启、不训练。当前新增为复用原执行器的接管接口，不是跳跃成功证据。
+
 ## 地面锁摆接口已修复，进入H75左右弯执行
 
 `runs/pendulum_isaac_locked_jointonly`：3秒转弯/15000physics/0optimizer，髋摆角最大漂移0.000100017rad（0.00573°）、膝4.768e-7rad；约束瞬时角速峰值仍0.09054/0.00223rad/s，不宣称完全零微振。无PhysX限位报错，peakroll5.59°、未终止。释放接口恢复原limits缓存且位置未重置，释放后RB动态控制尚未验证。旧等限位/窄限位tensorAPI均会全关节回写，两个带报错记录保留；最终用独立USD摆关节更新避免碰车轮。

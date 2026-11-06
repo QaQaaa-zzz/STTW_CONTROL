@@ -127,6 +127,7 @@ class IsaacLabVectorPlant:
         for sensor in self.wheel_sensors:sensor.update(.0002,force_recompute=True)
         self.joints=self.robot.joint_names;self.bodies=self.robot.body_names;self.signals=TorchVehicleSignals(self.contract,self.joints,self.device);self.servos=TorchVelocityServos(self.contract,self.joints,self.device,additional_actuators=(() if pendulum_rest is None else ("cmd_hip_f","cmd_knee_f")));self.contact_order=[self.sensor.body_names.index(name) for name in self.bodies];self.nonwheel=[i for i,name in enumerate(self.bodies) if name not in ('frontwheel','rearwheel')]
         self.pendulum_servos=None if pendulum_rest is None else TorchPositionServos(self.contract,self.joints,['cmd_hip_f','cmd_knee_f'],self.device)
+        self.jump_steering_servo=None if pendulum_rest is None else TorchPositionServos(self.contract,self.joints,['cmd_steering_p'],self.device,allow_inactive=True)
         self.pendulum_target=None if pendulum_rest is None else torch.tensor(pendulum_rest,device=self.device).expand(self.count,-1).clone()
         self.metadata=dict(env_origins=origins.tolist(),env_spacing=env_spacing,friction_offset_threshold=PhysxSchema.PhysxSceneAPI(self.sim.stage.GetPrimAtPath(self.sim.cfg.physics_prim_path)).GetFrictionOffsetThresholdAttr().Get(),wheel_collision=wheel_collision,external_forces_every_iteration=PhysxSchema.PhysxSceneAPI(self.sim.stage.GetPrimAtPath(self.sim.cfg.physics_prim_path)).GetEnableExternalForcesEveryIterationAttr().Get(),friction_correlation_distance=PhysxSchema.PhysxSceneAPI(self.sim.stage.GetPrimAtPath(self.sim.cfg.physics_prim_path)).GetFrictionCorrelationDistanceAttr().Get(),compliant_wheels=compliant_wheels,mesh_collision_on_geometry=mesh_collision_on_geometry,collision_cooking=self.collision_cooking,servo_mode=servo_mode,device=self.device,num_envs=self.count,replicate_physics=True,terrain_asset_count=len(terrain_sources),masses=self.robot.root_physx_view.get_masses().cpu().tolist(),materials=self.robot.root_physx_view.get_material_properties().cpu().tolist(),contact_sensor_bodies=self.sensor.body_names,mesh_filename_mapping=mapping,scope='original meshes imported by Isaac Sim 5.1; contact representation may be recooked')
         self.metadata['self_collision']=dict(enabled=self_collision,filtered_body_pairs=self.contract.get('filtered_body_pairs',[]))
@@ -192,13 +193,17 @@ class IsaacLabVectorPlant:
     def observe(self):
         measurement,pose,speed=self.signals.observe(self.roots,self.dofs[:,:,0],self.dofs[:,:,1]);return measurement,pose-self.origin,speed
 
-    def step(self,command,pendulum_target=None):
+    def step(self,command,pendulum_target=None,steering_position_target=None):
         torque=self.signals.passive_torque(self.dofs[:,:,0],self.dofs[:,:,1])
         if self.servo_mode == 'implicit':
             target=torch.maximum(self.servos.control[:,0],torch.minimum(self.servos.control[:,1],command*self.servos.sign))
             self.robot.set_joint_velocity_target(target,joint_ids=self.servos.indices)
         else:
-            torque=torque+self.servos.torque(command,self.dofs[:,:,1])
+            motor=self.servos.torque(command,self.dofs[:,:,1])
+            if steering_position_target is not None:
+                motor[:,self.signals.steer]=0.
+                motor+=self.jump_steering_servo.torque(steering_position_target,self.dofs[:,:,0],self.dofs[:,:,1])
+            torque=torque+motor
         if self.pendulum_servos is not None and not self.pendulum_is_locked:
             if pendulum_target is not None:self.pendulum_target=pendulum_target
             torque=torque+self.pendulum_servos.torque(self.pendulum_target,self.dofs[:,:,0],self.dofs[:,:,1])

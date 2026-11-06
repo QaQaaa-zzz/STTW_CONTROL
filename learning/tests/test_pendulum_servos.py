@@ -10,3 +10,9 @@ class PositionServoTests(unittest.TestCase):
         vel=torch.tensor([[0.,0.,1.],[0.,1.,0.]])
         result=servos.torque(torch.tensor([[2.,3.],[.5,-2.]]),pos,vel)
         torch.testing.assert_close(result,torch.tensor([[0.,30.,-6.],[0.,4.,-30.]]))
+
+    def test_selected_inactive_steering_preserves_native_effort(self):
+        row=dict(name='steer_pos',joint='steer',enabled=False,gear=[1.,0.,0.,0.,0.,0.],gain=[10.],bias=[0.,-10.,-.1],ctrlrange=[-.8,.8],forcerange=[-1.,1.])
+        servo=TorchPositionServos({'actuators':[row]},['steer','wheel'],['steer_pos'],allow_inactive=True)
+        torque=servo.torque(torch.tensor([[.8],[.05]]),torch.zeros(2,2),torch.tensor([[0.,0.],[1.,0.]]))
+        torch.testing.assert_close(torque,torch.tensor([[1.,0.],[.4,0.]]))
