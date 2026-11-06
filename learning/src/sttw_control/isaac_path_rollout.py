@@ -34,6 +34,8 @@ class IsaacPathRollout:
         self.initial_state=None;self.initial_physical_tick=0
         self.auto_reset_horizon=settings.get('auto_reset_horizon',True)
         self.training_pulse=None
+        self.before_lower_step=None
+        self.physics_step_override=None
         self.initial_alpha=self.alpha.clone();self.switch=settings.get('alpha_switch')
         self.preference_route=self.route if self.switch and self.switch.get('progress_frame')=='original_route' else None
         if self.switch is not None:
@@ -87,6 +89,7 @@ class IsaacPathRollout:
         self.update_preference()
         valid=self.alive.clone();start_task_tick=self.task_tick.clone();initial_offsets=self.policy.offsets.clone();reward=torch.zeros(self.n,device=self.device);new_failure=torch.zeros_like(valid);logs=[];details=[];command_logs=[];body_poses=[];first_action=None
         for lower_tick in range(4):
+            if self.before_lower_step is not None:self.before_lower_step(lower_tick)
             if self.randomization is not None:
                 push_ticks=round(self.randomization.config['push_interval_s']/.005)
                 ids=(self.alive&(self.since_reset_tick>0)&(self.since_reset_tick%push_ticks==0)).nonzero(as_tuple=False).flatten()
@@ -107,7 +110,7 @@ class IsaacPathRollout:
                 motor_command=torch.where(self.alive[:,None],torch.nan_to_num(command),torch.zeros_like(command))
                 executed=motor_command if self.randomization is None else self.randomization.command(motor_command)
                 if self.record_control_commands:command_logs.append(torch.cat((torch.full((self.n,1),lower_tick*.005+physics_tick*self.physics_dt,device=self.device),executed,self.alive[:,None]),-1))
-                contact=self.plant.step(executed)
+                contact=self.plant.step(executed) if self.physics_step_override is None else self.physics_step_override(executed)
                 if self.physics_recorder is not None:self.physics_recorder.record(self, lower_tick, physics_tick)
                 if self.randomization is not None:self.measurement=self.randomization.observe(self.plant.observe()[0])
                 if self.diagnostics and getattr(self.plant,'wheel_sensors',[]):
@@ -202,6 +205,28 @@ class IsaacPathRollout:
         self.policy.channel_intervention_mode=snapshot['channel_intervention_mode']
 
     @torch.no_grad()
+    def resume_ground_lanes(self,indices,speed,alpha):
+        """Resume ground control after landing; keep all other lanes and physics intact."""
+        self.controller.reset(indices);self.lower.reset(indices);self.alive[indices]=True
+        self.speed[indices]=speed;self.alpha[indices]=alpha
+        measurement,pose,velocity=self.plant.observe();self.measurement[indices]=measurement[indices]
+        self.previous_reference[indices]=torch.stack((velocity,measurement[:,2]),-1)[indices]
+        self.previous_command[indices]=torch.stack((measurement[:,3],measurement[:,5]),-1)[indices]
+        args=(measurement,pose,velocity,self.previous_reference,self.previous_reference,self.previous_command,self.controller)
+        if len(indices)==self.n:
+            self.middle.reset(*args);self.tick=0
+        else:self.middle.reset_lanes(indices,*args)
+        self.task_tick[indices]=0
+        points=self.route.xy if self.route.batched else self.route.xy[None]
+        nearest=(points-pose[:,None,:2]).square().sum(-1).argmin(-1)
+        projection=self.route.project(pose[:,:2],self.route.s[nearest],torch.zeros_like(velocity))
+        follower=self.route.pursuit(projection['progress'],pose,velocity,self.speed)
+        for key,value in projection.items():self.middle.projection[key][indices]=value[indices]
+        for key,value in follower.items():self.middle.follower[key][indices]=value[indices]
+        self.preference_progress[indices]=projection['progress'][indices]
+        self.middle.fault[indices]=follower['numerical_fault'][indices]
+        self.middle.domain_exit[indices]=follower['invalid'][indices]
+
     def begin_connection(self,route,speeds,alphas):
         """Assign a new A-to-B task while retaining inherited control dynamics."""
         self.route=route;self.middle.route=route

@@ -46,6 +46,22 @@ class TorchMiddleControl:
         self.fault=self.follower['numerical_fault'].clone();self.domain_exit=self.follower['invalid'].clone()
         self.record(measurement,speed,previous_reference,previous_command,torch.zeros_like(raw),controller)
 
+    def reset_lanes(self,indices,measurement,pose,speed,raw,previous_reference,previous_command,controller):
+        """Initialize returning lanes at a policy boundary without resetting peers."""
+        self.policy.reset(indices);self.frames[indices]=0.;self.mask[indices]=0.
+        self.pose[indices]=pose[indices];self.yaw_rate[indices]=0.
+        projection=self.route.project(pose[:,:2],torch.zeros_like(speed),torch.zeros_like(speed))
+        follower=self.route.pursuit(projection['progress'],pose,speed,self.v_user)
+        nominal,rates=self.route.publish(raw,follower['command'])
+        for key,value in projection.items():self.projection[key][indices]=value[indices]
+        for key,value in follower.items():self.follower[key][indices]=value[indices]
+        self.nominal[indices]=nominal[indices];self.rates[indices]=rates[indices]
+        self.fault[indices]=follower['numerical_fault'][indices]
+        self.domain_exit[indices]=follower['invalid'][indices]
+        frame=local_frame(measurement,speed,self.nominal,previous_reference,previous_command,
+            torch.zeros_like(raw),self.yaw_rate,self.rates,controller)
+        self.frames[indices,-1]=frame[indices];self.mask[indices,-1]=1.
+
     def before(self,pose,zero_middle=False,noise_std=None,zero_mask=None,latent_override=None):
         if self.tick%4==0:
             self.obs,fault=self.observation(pose)
