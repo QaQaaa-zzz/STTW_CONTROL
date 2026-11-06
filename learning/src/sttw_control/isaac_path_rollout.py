@@ -19,6 +19,7 @@ class IsaacPathRollout:
             plant=IsaacVectorPlant(settings['asset'],list(settings['terrains'].values()),terrain_ids)
         self.zero_lower=torch.tensor(settings.get('zero_lower',[False]*n),device=self.device)
         self.upper_sha256=identity['files']['actor.npz'];self.lower_sha256=settings['lower_sha256']
+        self.record_control_commands=settings.get('record_control_commands',False)
         self.physics_recorder=None;self.plant=plant;self.wheel_radius_m=getattr(plant,'wheel_radius_m',.1);self.cc=json.loads(Path(settings['controller_config']).read_text());self.cc['wheel_radius_m']=self.wheel_radius_m;self.controller=TorchController(self.cc,n,self.device)
         self.lower=lower if lower is not None else TorchLocalLower(settings['lower_actor'],settings['lower_sha256'],n,self.device);self.policy=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],self.config,n,self.device);self.policy.weights=actor.weights
         self.physics_dt=getattr(self.plant,'physics_dt',.0002);self.physics_substeps=round(.005/self.physics_dt)
@@ -83,7 +84,7 @@ class IsaacPathRollout:
     @torch.no_grad()
     def step(self,std=None,latent=None):
         self.update_preference()
-        valid=self.alive.clone();start_task_tick=self.task_tick.clone();initial_offsets=self.policy.offsets.clone();reward=torch.zeros(self.n,device=self.device);new_failure=torch.zeros_like(valid);logs=[];details=[];first_action=None
+        valid=self.alive.clone();start_task_tick=self.task_tick.clone();initial_offsets=self.policy.offsets.clone();reward=torch.zeros(self.n,device=self.device);new_failure=torch.zeros_like(valid);logs=[];details=[];command_logs=[];first_action=None
         for lower_tick in range(4):
             if self.randomization is not None:
                 push_ticks=round(self.randomization.config['push_interval_s']/.005)
@@ -103,7 +104,9 @@ class IsaacPathRollout:
             for physics_tick in range(self.physics_substeps):
                 if self.training_pulse is not None:self.training_pulse(physics_tick)
                 motor_command=torch.where(self.alive[:,None],torch.nan_to_num(command),torch.zeros_like(command))
-                contact=self.plant.step(motor_command if self.randomization is None else self.randomization.command(motor_command))
+                executed=motor_command if self.randomization is None else self.randomization.command(motor_command)
+                if self.record_control_commands:command_logs.append(torch.cat((torch.full((self.n,1),lower_tick*.005+physics_tick*self.physics_dt,device=self.device),executed,self.alive[:,None]),-1))
+                contact=self.plant.step(executed)
                 if self.physics_recorder is not None:self.physics_recorder.record(self, lower_tick, physics_tick)
                 if self.randomization is not None:self.measurement=self.randomization.observe(self.plant.observe()[0])
                 if self.diagnostics and getattr(self.plant,'wheel_sensors',[]):
@@ -131,6 +134,7 @@ class IsaacPathRollout:
         rate=(self.policy.offsets-initial_offsets)/.02;c=self.config['path_reward'];rate_cost=c['offset_rate_weight']*((rate/torch.tensor(c['offset_rate_scales'],device=self.device))**2).sum(-1);reward-=c['scale']*.02*rate_cost.clamp_max(c['component_caps']['offset_rate'])
         reward=torch.where(new_failure,failure_reward(self.horizon-start_task_tick//4,self.config),reward);reward=torch.where(valid,reward,0);self.tick+=1;horizon_done=self.task_tick>=self.horizon*4;done=new_failure|horizon_done
         result=dict(action=first_action,reward=reward,done=done,valid=valid,failure=new_failure,lower_trace=torch.stack(logs),episode=self.episode,episode_tick=self.tick,tracking_error=torch.stack((post_v-self.speed,projection['cross_track'],post_m[:,0]),dim=-1))
+        if self.record_control_commands:result['executed_commands']=torch.stack(command_logs)
         if self.diagnostics:result['diagnostics']=details
         if self.auto_reset_horizon and self.tick==self.horizon:self.episode+=1;self.reset()
         return result
