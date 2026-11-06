@@ -2,11 +2,11 @@
 import argparse,json
 from pathlib import Path
 import numpy as np
-p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--root',type=Path,required=True);p.add_argument('--terrains',nargs='+',choices=['oblique_4cm','oblique_6cm'],default=['oblique_4cm','oblique_6cm']);a=p.parse_args()
 lanes=json.loads((a.root/'lanes.json').read_text())
 flat=np.load(a.root/'flat/physics_wrench.npz');flat={k:flat[k] for k in flat.files}
 rows=[]
-for terrain in ['oblique_4cm','oblique_6cm']:
+for terrain in a.terrains:
     archive=np.load(a.root/terrain/'physics_wrench.npz');d={k:archive[k] for k in archive.files}
     np.testing.assert_array_equal(d['time_s'],flat['time_s'])
     events=json.loads((a.root/terrain/'contact_event_windows.json').read_text())
@@ -32,5 +32,6 @@ for terrain in ['oblique_4cm','oblique_6cm']:
             row['windows'][name]=dict(start_s=lo,end_s=hi,paired_steps=int(paired.sum()),**measurements,terrain_minus_flat=delta)
         rows.append(row)
 report=dict(role='same speed/alpha/frozen parameter seed; same clock windows and shared alive mask; descriptive terrain-minus-flat differences, not same-state causal intervention',components=['normal','longitudinal_friction','lateral_friction'],conditions=rows)
-(a.root/'paired_contact_summary.json').write_text(json.dumps(report,indent=2)+'\n')
+name='paired_contact_summary.json' if set(a.terrains)=={'oblique_4cm','oblique_6cm'} else 'paired_contact_'+ '_'.join(a.terrains)+'.json'
+(a.root/name).write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps(dict(paired_conditions=len(rows))))
