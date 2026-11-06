@@ -58,7 +58,7 @@ geometry=TorchPendulumGeometry(json.loads(Path(spec['geometry']).read_text()),pl
 last=torch.zeros(n,4,device='cuda:0');alive=torch.ones(n,dtype=torch.bool,device='cuda:0');entered=torch.zeros_like(alive);consumed=torch.zeros_like(alive)
 returned=False;landing_ticks=0;landing_ready=False;transition_speed=None
 if spec.get('landing_return'):assert n==1, 'Landing return currently uses a single lane'
-ground_rows=[]
+ground_rows=[];approach_selected=False;executed_rows=[]
 active=False;rows=[];actions=[];observations=[];valid=[];arm_rows=[];body_rows=[];contact_rows=[];start=time.monotonic();steps=round(spec['seconds']/.005)
 (out/'protocol.json').write_text(json.dumps(dict(spec=spec,plant=plant.metadata,policies=[s.identity for s in policies],ground_history='last_action zero means no prior jump action; physical FIFO sampled throughout ground approach',initial_translation='common saved snapshot translated to start_x/y0; optional rigid world-yaw alignment rotates pose and both velocities together',role='nominal paired DEV integration; not original donor benchmark',physics_dt=plant.physics_dt,ground_dt=.005,jump_dt=.02,optimizer_updates=0),indent=2))
 ground=None
@@ -100,6 +100,10 @@ for k in range(steps+1):
  if ground is not None and not active and (returned or not spec.get('ground_after_landing_only',False)):alive &= ground.alive
  alive &= torch.isfinite(row).all(-1)&(m[:,0].abs()<torch.pi/4)&(root[:,2]>0.05)
  if k==steps or not bool(alive.any()):break
+ if ground is not None and not active and not returned and not approach_selected and spec.get('connection_candidate') and float(root[0,0])>=spec['connection_candidate']['decision_x_m']:
+  candidate=spec['connection_candidate'];approach_selected=True
+  (out/'connection_decision.json').write_text(json.dumps(dict(time=k*.005,candidate=candidate,root=root.cpu().tolist(),measurement=m.cpu().tolist(),position=plant.dofs[:,:,0].cpu().tolist(),velocity=plant.dofs[:,:,1].cpu().tolist(),previous_reference=ground.previous_reference.cpu().tolist(),previous_alpha=ground.alpha.cpu().tolist(),history='retained, no reset'),indent=2))
+  ground.speed.fill_(candidate['speed_m_s']);ground.alpha.fill_(candidate['alpha'])
  if k%4==0:
   inside=(root[:,0]>=spec.get('platform_front_x',3.6)-1.1)&(root[:,0]<=spec.get('platform_front_x',3.6)+.4);consumed|=entered&~inside;entered|=inside
   signal=(inside&~consumed).float()
@@ -134,6 +138,7 @@ for k in range(steps+1):
    if ground is not None:
     ground.controller.reset(slice(None));ground.lower.reset(slice(None));ground.alive.fill_(True)
     ground.speed.fill_(spec['landing_return']['speed_m_s'])
+    ground.alpha.fill_(spec['landing_return'].get('alpha',spec['ground_alpha']))
     ground.measurement=m;ground.previous_reference=torch.stack((speed,m[:,2]),-1)
     ground.previous_command=torch.stack((m[:,3],m[:,5]),-1)
     ground.middle.reset(m,pose,speed,ground.previous_reference,ground.previous_reference,ground.previous_command,ground.controller)
@@ -148,6 +153,7 @@ for k in range(steps+1):
   for substep in range(substeps):
    ids=plant.pendulum_servos.indices
    before=torch.cat((torch.full((n,1),k*.005+substep*plant.physics_dt,device='cuda:0'),target[:,2:],plant.dofs[:,ids,0],plant.dofs[:,ids,1]),-1)
+   executed_rows.append(torch.cat((torch.full((n,1),k*.005+substep*plant.physics_dt,device='cuda:0'),torch.full((n,1),2. if landing_ready else 1.,device='cuda:0'),target.clone()),-1))
    plant.step(command,pendulum_target=target[:,2:],steering_position_target=target[:,:1],refresh_diagnostics=False)
    velocity=plant.robot.data.root_link_lin_vel_w
    root_acceleration=(velocity-previous_root_velocity)/plant.physics_dt;previous_root_velocity=velocity.clone()
@@ -165,6 +171,7 @@ for k in range(steps+1):
    root_acceleration=(velocity-previous_root_velocity)/plant.physics_dt;previous_root_velocity=velocity.clone()
  if spec.get('record_body_states',False):plant.sensor.update(.005,force_recompute=True)
  plant.refresh()
+if executed_rows:np.savez_compressed(out/'executed_jump_targets.npz',trace=torch.stack(executed_rows).cpu().numpy(),columns=['time','phase_1_jump_2_landing_transition','steering_position_rad','rear_axis_speed_rad_s','hip_position_rad','knee_position_rad'],semantics='Actual target after landing override, before plant servo dynamics; not measured torque')
 if ground_rows:np.savez(out/'ground_tracking.npz',trace=torch.cat(ground_rows).cpu().numpy(),columns=['x','y','speed','cross_track','abs_roll','reward','alive','physics_ticks','speed_reference','steer_reference','wheel_speed_estimate'])
 if writer is not None:writer.close()
 if body_rows:

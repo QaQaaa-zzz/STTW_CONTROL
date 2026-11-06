@@ -21,5 +21,10 @@ post_time=float(post[-1,0]-post[0,0]) if len(post) else 0.
 post_distance=float(post[-1,1]-post[0,1]) if len(post) else 0.
 results=json.loads((a.run/'results.json').read_text());case=results['cases'][0]
 checks=dict(full_window=bool(case['duration_s']>=spec['seconds']-.006 and not case['physical_termination']),ordered_approach=len(passed)==len(criteria['waypoints']),original_path_corridor=bool((error<=criteria['corridor_half_width_m']).all()),stable_landing=landing['landing_hold_1s'],ground_return=handoff is not None,continued_time=post_time>=criteria['minimum_post_handoff_s'],continued_forward=post_distance>=criteria['minimum_post_handoff_forward_m'])
-report=dict(role='Single nominal DEV, no robustness claim',complete=all(checks.values()),checks=checks,criteria=criteria,passed_waypoints=passed,max_original_path_error_m=float(error.max()),path_rmse_m=float(np.sqrt(np.mean(error**2))),post_handoff_s=post_time,post_handoff_forward_m=post_distance,landing=landing)
+task_time=None
+if 'final_goal_xy' in criteria:
+ final_hits=np.flatnonzero((np.linalg.norm(post[:,1:3]-criteria['final_goal_xy'],axis=1)<=criteria['waypoint_radius_m']) & (post[:,0]-post[0,0]>=criteria['minimum_post_handoff_s']) & (post[:,1]-post[0,1]>=criteria['minimum_post_handoff_forward_m'])) if len(post) else np.array([],dtype=int)
+ checks['final_goal']=bool(len(final_hits))
+ if len(final_hits):task_time=float(post[final_hits[0],0])
+report=dict(role='Single nominal DEV, no robustness claim',complete=all(checks.values()),success_time_s=task_time if all(checks.values()) else None,first_final_conditions_time_s=task_time,checks=checks,criteria=criteria,passed_waypoints=passed,max_original_path_error_m=float(error.max()),path_rmse_m=float(np.sqrt(np.mean(error**2))),post_handoff_s=post_time,post_handoff_forward_m=post_distance,landing=landing)
 (a.run/'chain_summary.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))

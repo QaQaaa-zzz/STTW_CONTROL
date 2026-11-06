@@ -1,0 +1,32 @@
+{
+  "protocol_id": "ch3_jump_connection_hold_v1",
+  "distances_m": [
+    5.6,
+    7.6,
+    9.6
+  ],
+  "speeds_m_s": [
+    1.8,
+    2.0
+  ],
+  "alphas": [
+    0,
+    0.5,
+    1
+  ],
+  "decision_x_m": -2.0,
+  "upstream_speed_m_s": 2.0,
+  "upstream_alpha": 0.5,
+  "return_speed_m_s": 1.5,
+  "return_alpha": 0.5,
+  "seconds": 22,
+  "physics_dt": 0.0025,
+  "ground_dt": 0.005,
+  "policy_dt": 0.02,
+  "final_goal_after_platform_back_m": 3.0,
+  "original_path_corridor_half_width_m": 1.0,
+  "nominal_roots": 1,
+  "maximum_physics_steps": 158400,
+  "execution": "single-lane sequential; initial three baseline cases first",
+  "source_plan": "/home/qy/\u4e0b\u8f7d/\u53cc\u8f6e\u673a\u5668\u4eba\u63a5\u7eed\u89c4\u5212\u5b9e\u9a8c\u4efb\u52a1\u4e66.docx"
+}
