@@ -1,0 +1,14 @@
+{
+  "stage": "prepared_not_started",
+  "purpose": "Resolve prior independent-prefix differences with one shared full exported state",
+  "physics_lane_steps": 250000,
+  "optimizer_updates": 0,
+  "horizon_s": 10,
+  "initial_alpha": 1,
+  "switch_progress_m": 5.3,
+  "goal_after_turn_m": 5,
+  "arrival_radius_m": 2,
+  "baseline": "restored independent switch",
+  "limits": "Original asymmetric speed/steer correction limits; no learned weights changed",
+  "scope": "One mechanism case; first0.5s after switch before any replan is primary limiter comparison; full trajectory is integrated system outcome"
+}

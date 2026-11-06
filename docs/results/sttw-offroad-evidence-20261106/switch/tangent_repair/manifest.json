@@ -1,0 +1,16 @@
+{
+  "question": "Single closed-loop confirmation of analytic tangent headings",
+  "source_run": "runs/h75_shared_switch",
+  "code_revision": "6df55c27",
+  "change": "Free terminal heading candidates only; original model/control/goal/protocol unchanged",
+  "physics_lane_steps": 250000,
+  "optimizer_updates": 0,
+  "seconds": 10,
+  "branches": 5,
+  "role": "DEV repair confirmation",
+  "stop_rule": "One run, no retry or parameter sweep",
+  "execution_status": "completed",
+  "evaluation_status": "complete",
+  "adoption_status": "adopted_for_current_simulation",
+  "evidence": "DECISION.md"
+}

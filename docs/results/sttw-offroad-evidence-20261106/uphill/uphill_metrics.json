@@ -1,0 +1,668 @@
+[
+  {
+    "terrain": "ramp_8cm",
+    "label": "alpha0",
+    "lane": 0,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": true,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.07207431644201279,
+    "speed_rmse_m_s": 0.12602917850017548,
+    "peak_roll_rad": 0.21987390518188477,
+    "requested_speed_m_s": 2.3,
+    "wheel_height_change_m": {
+      "frontwheel": 0.08348269760608673,
+      "rearwheel": 0.08346094936132431
+    },
+    "entry": {
+      "reached": true,
+      "time_s": 1.6949999998882412,
+      "speed_m_s": 1.8624387979507446,
+      "path_error_m": 0.10998572409152985
+    },
+    "crest": {
+      "reached": true,
+      "time_s": 2.2499999998882414,
+      "speed_m_s": 2.0062012672424316,
+      "path_error_m": 0.19669443368911743
+    },
+    "post": {
+      "reached": true,
+      "time_s": 2.5149999998882415,
+      "speed_m_s": 2.101900815963745,
+      "path_error_m": 0.1907990425825119
+    },
+    "slope_min_speed_m_s": 1.8522257804870605
+  },
+  {
+    "terrain": "ramp_8cm",
+    "label": "alpha.25",
+    "lane": 1,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": true,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.05819081887602806,
+    "speed_rmse_m_s": 0.10567852109670639,
+    "peak_roll_rad": 0.22907698154449463,
+    "requested_speed_m_s": 2.3,
+    "wheel_height_change_m": {
+      "frontwheel": 0.08350618183612823,
+      "rearwheel": 0.08345763385295868
+    },
+    "entry": {
+      "reached": true,
+      "time_s": 1.6749999998882412,
+      "speed_m_s": 1.9011273384094238,
+      "path_error_m": 0.10159777104854584
+    },
+    "crest": {
+      "reached": true,
+      "time_s": 2.2249999998882415,
+      "speed_m_s": 2.12583589553833,
+      "path_error_m": 0.1546412706375122
+    },
+    "post": {
+      "reached": true,
+      "time_s": 2.4849999998882413,
+      "speed_m_s": 2.1812925338745117,
+      "path_error_m": 0.12904566526412964
+    },
+    "slope_min_speed_m_s": 1.9011273384094238
+  },
+  {
+    "terrain": "ramp_8cm",
+    "label": "alpha.5",
+    "lane": 2,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": true,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.051725659519433975,
+    "speed_rmse_m_s": 0.08686395734548569,
+    "peak_roll_rad": 0.23415696620941162,
+    "requested_speed_m_s": 2.3,
+    "wheel_height_change_m": {
+      "frontwheel": 0.08355613052845001,
+      "rearwheel": 0.08342153578996658
+    },
+    "entry": {
+      "reached": true,
+      "time_s": 1.6599999998882413,
+      "speed_m_s": 1.9685578346252441,
+      "path_error_m": 0.09847591817378998
+    },
+    "crest": {
+      "reached": true,
+      "time_s": 2.199999999888241,
+      "speed_m_s": 2.2012572288513184,
+      "path_error_m": 0.11649159342050552
+    },
+    "post": {
+      "reached": true,
+      "time_s": 2.4599999998882414,
+      "speed_m_s": 2.2778501510620117,
+      "path_error_m": 0.06375761330127716
+    },
+    "slope_min_speed_m_s": 1.9459842443466187
+  },
+  {
+    "terrain": "ramp_8cm",
+    "label": "alpha.75",
+    "lane": 3,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": true,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.07446840405464172,
+    "speed_rmse_m_s": 0.0700782984495163,
+    "peak_roll_rad": 0.24317800998687744,
+    "requested_speed_m_s": 2.3,
+    "wheel_height_change_m": {
+      "frontwheel": 0.08361120522022247,
+      "rearwheel": 0.0835004448890686
+    },
+    "entry": {
+      "reached": true,
+      "time_s": 1.6449999998882414,
+      "speed_m_s": 2.0321409702301025,
+      "path_error_m": 0.09485118091106415
+    },
+    "crest": {
+      "reached": true,
+      "time_s": 2.174999999888241,
+      "speed_m_s": 2.3110079765319824,
+      "path_error_m": 0.07567170262336731
+    },
+    "post": {
+      "reached": true,
+      "time_s": 2.4299999998882416,
+      "speed_m_s": 2.2862942218780518,
+      "path_error_m": -0.0013698292896151543
+    },
+    "slope_min_speed_m_s": 1.984226942062378
+  },
+  {
+    "terrain": "ramp_8cm",
+    "label": "alpha1",
+    "lane": 4,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": true,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.09006720036268234,
+    "speed_rmse_m_s": 0.060614220798015594,
+    "peak_roll_rad": 0.2584261894226074,
+    "requested_speed_m_s": 2.3,
+    "wheel_height_change_m": {
+      "frontwheel": 0.08347107470035553,
+      "rearwheel": 0.08349310606718063
+    },
+    "entry": {
+      "reached": true,
+      "time_s": 1.6349999998882414,
+      "speed_m_s": 2.1048941612243652,
+      "path_error_m": 0.09523708373308182
+    },
+    "crest": {
+      "reached": true,
+      "time_s": 2.154999999888241,
+      "speed_m_s": 2.3499045372009277,
+      "path_error_m": 0.03435525670647621
+    },
+    "post": {
+      "reached": true,
+      "time_s": 2.4149999998882414,
+      "speed_m_s": 2.3190548419952393,
+      "path_error_m": -0.0644390657544136
+    },
+    "slope_min_speed_m_s": 2.052698850631714
+  },
+  {
+    "terrain": "ramp_8cm",
+    "label": "Zero",
+    "lane": 5,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": true,
+    "working_roll_exceeded": true,
+    "path_rmse_m": 0.05171361193060875,
+    "speed_rmse_m_s": 0.03425726294517517,
+    "peak_roll_rad": 0.32836318016052246,
+    "requested_speed_m_s": 2.3,
+    "wheel_height_change_m": {
+      "frontwheel": 0.08350294828414917,
+      "rearwheel": 0.08333937078714371
+    },
+    "entry": {
+      "reached": true,
+      "time_s": 1.6499999998882413,
+      "speed_m_s": 2.1336216926574707,
+      "path_error_m": 0.09859708696603775
+    },
+    "crest": {
+      "reached": true,
+      "time_s": 2.1499999998882413,
+      "speed_m_s": 2.3527626991271973,
+      "path_error_m": 0.17034770548343658
+    },
+    "post": {
+      "reached": true,
+      "time_s": 2.384999999888241,
+      "speed_m_s": 2.3071348667144775,
+      "path_error_m": 0.17082080245018005
+    },
+    "slope_min_speed_m_s": 2.0927634239196777
+  },
+  {
+    "terrain": "ramp_16cm",
+    "label": "alpha0",
+    "lane": 0,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": true,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.08987542241811752,
+    "speed_rmse_m_s": 0.1319848895072937,
+    "peak_roll_rad": 0.2210456132888794,
+    "requested_speed_m_s": 2.3,
+    "wheel_height_change_m": {
+      "frontwheel": 0.1634535938501358,
+      "rearwheel": 0.16337327659130096
+    },
+    "entry": {
+      "reached": true,
+      "time_s": 1.6949999998882412,
+      "speed_m_s": 1.7947704792022705,
+      "path_error_m": 0.11048083752393723
+    },
+    "crest": {
+      "reached": true,
+      "time_s": 2.2549999998882413,
+      "speed_m_s": 2.0706629753112793,
+      "path_error_m": 0.21741223335266113
+    },
+    "post": {
+      "reached": true,
+      "time_s": 2.5149999998882415,
+      "speed_m_s": 2.07470965385437,
+      "path_error_m": 0.206000417470932
+    },
+    "slope_min_speed_m_s": 1.7150282859802246
+  },
+  {
+    "terrain": "ramp_16cm",
+    "label": "alpha.25",
+    "lane": 1,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": true,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.08846405148506165,
+    "speed_rmse_m_s": 0.11463672667741776,
+    "peak_roll_rad": 0.23583853244781494,
+    "requested_speed_m_s": 2.3,
+    "wheel_height_change_m": {
+      "frontwheel": 0.16359107196331024,
+      "rearwheel": 0.16348931193351746
+    },
+    "entry": {
+      "reached": true,
+      "time_s": 1.6749999998882412,
+      "speed_m_s": 1.8579628467559814,
+      "path_error_m": 0.1022518053650856
+    },
+    "crest": {
+      "reached": true,
+      "time_s": 2.2299999998882414,
+      "speed_m_s": 2.1342825889587402,
+      "path_error_m": 0.1932053565979004
+    },
+    "post": {
+      "reached": true,
+      "time_s": 2.4849999998882413,
+      "speed_m_s": 2.1327948570251465,
+      "path_error_m": 0.17788919806480408
+    },
+    "slope_min_speed_m_s": 1.757833480834961
+  },
+  {
+    "terrain": "ramp_16cm",
+    "label": "alpha.5",
+    "lane": 2,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": true,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.10443240404129028,
+    "speed_rmse_m_s": 0.09798290580511093,
+    "peak_roll_rad": 0.24446046352386475,
+    "requested_speed_m_s": 2.3,
+    "wheel_height_change_m": {
+      "frontwheel": 0.16351176798343658,
+      "rearwheel": 0.1633911430835724
+    },
+    "entry": {
+      "reached": true,
+      "time_s": 1.6599999998882413,
+      "speed_m_s": 1.8908697366714478,
+      "path_error_m": 0.09946519136428833
+    },
+    "crest": {
+      "reached": true,
+      "time_s": 2.2049999998882415,
+      "speed_m_s": 2.216683864593506,
+      "path_error_m": 0.16111117601394653
+    },
+    "post": {
+      "reached": true,
+      "time_s": 2.4549999998882415,
+      "speed_m_s": 2.1986324787139893,
+      "path_error_m": 0.1292554885149002
+    },
+    "slope_min_speed_m_s": 1.8060567378997803
+  },
+  {
+    "terrain": "ramp_16cm",
+    "label": "alpha.75",
+    "lane": 3,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": true,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.12034142017364502,
+    "speed_rmse_m_s": 0.081890769302845,
+    "peak_roll_rad": 0.26131296157836914,
+    "requested_speed_m_s": 2.3,
+    "wheel_height_change_m": {
+      "frontwheel": 0.16352593898773193,
+      "rearwheel": 0.16343088448047638
+    },
+    "entry": {
+      "reached": true,
+      "time_s": 1.6449999998882414,
+      "speed_m_s": 1.9517494440078735,
+      "path_error_m": 0.09413653612136841
+    },
+    "crest": {
+      "reached": true,
+      "time_s": 2.1799999998882416,
+      "speed_m_s": 2.337482213973999,
+      "path_error_m": 0.12676875293254852
+    },
+    "post": {
+      "reached": true,
+      "time_s": 2.4299999998882416,
+      "speed_m_s": 2.2739150524139404,
+      "path_error_m": 0.07816850394010544
+    },
+    "slope_min_speed_m_s": 1.849424958229065
+  },
+  {
+    "terrain": "ramp_16cm",
+    "label": "alpha1",
+    "lane": 4,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": true,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.12370844930410385,
+    "speed_rmse_m_s": 0.07354375720024109,
+    "peak_roll_rad": 0.2630525827407837,
+    "requested_speed_m_s": 2.3,
+    "wheel_height_change_m": {
+      "frontwheel": 0.1635769158601761,
+      "rearwheel": 0.16338852047920227
+    },
+    "entry": {
+      "reached": true,
+      "time_s": 1.6349999998882414,
+      "speed_m_s": 2.015028953552246,
+      "path_error_m": 0.09916624426841736
+    },
+    "crest": {
+      "reached": true,
+      "time_s": 2.1599999998882415,
+      "speed_m_s": 2.4221084117889404,
+      "path_error_m": 0.08903023600578308
+    },
+    "post": {
+      "reached": true,
+      "time_s": 2.4099999998882415,
+      "speed_m_s": 2.2916674613952637,
+      "path_error_m": 0.00870648305863142
+    },
+    "slope_min_speed_m_s": 1.8982954025268555
+  },
+  {
+    "terrain": "ramp_16cm",
+    "label": "Zero",
+    "lane": 5,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": true,
+    "working_roll_exceeded": true,
+    "path_rmse_m": 0.06648727506399155,
+    "speed_rmse_m_s": 0.05294400453567505,
+    "peak_roll_rad": 0.3355604410171509,
+    "requested_speed_m_s": 2.3,
+    "wheel_height_change_m": {
+      "frontwheel": 0.16346652805805206,
+      "rearwheel": 0.16336195170879364
+    },
+    "entry": {
+      "reached": true,
+      "time_s": 1.6549999998882414,
+      "speed_m_s": 2.04067325592041,
+      "path_error_m": 0.10210119932889938
+    },
+    "crest": {
+      "reached": true,
+      "time_s": 2.154999999888241,
+      "speed_m_s": 2.4389896392822266,
+      "path_error_m": 0.2328832745552063
+    },
+    "post": {
+      "reached": true,
+      "time_s": 2.3799999998882413,
+      "speed_m_s": 2.2986819744110107,
+      "path_error_m": 0.23050154745578766
+    },
+    "slope_min_speed_m_s": 1.9551516771316528
+  },
+  {
+    "terrain": "ramp_24cm",
+    "label": "alpha0",
+    "lane": 0,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": false,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.16649073362350464,
+    "speed_rmse_m_s": 0.14643990993499756,
+    "peak_roll_rad": 0.23183798789978027,
+    "requested_speed_m_s": 2.3,
+    "wheel_height_change_m": {
+      "frontwheel": 0.24357888102531433,
+      "rearwheel": 0.24341119825839996
+    },
+    "entry": {
+      "reached": true,
+      "time_s": 1.6999999998882414,
+      "speed_m_s": 1.7005802392959595,
+      "path_error_m": 0.11088784039020538
+    },
+    "crest": {
+      "reached": true,
+      "time_s": 2.2499999998882414,
+      "speed_m_s": 2.2621583938598633,
+      "path_error_m": 0.2584211230278015
+    },
+    "post": {
+      "reached": true,
+      "time_s": 2.4949999998882415,
+      "speed_m_s": 2.0747580528259277,
+      "path_error_m": 0.2375599443912506
+    },
+    "slope_min_speed_m_s": 1.6115291118621826
+  },
+  {
+    "terrain": "ramp_24cm",
+    "label": "alpha.25",
+    "lane": 1,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": true,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.14873428642749786,
+    "speed_rmse_m_s": 0.12395470589399338,
+    "peak_roll_rad": 0.24417436122894287,
+    "requested_speed_m_s": 2.3,
+    "wheel_height_change_m": {
+      "frontwheel": 0.24348565936088562,
+      "rearwheel": 0.24339835345745087
+    },
+    "entry": {
+      "reached": true,
+      "time_s": 1.6799999998882413,
+      "speed_m_s": 1.771153211593628,
+      "path_error_m": 0.1081218346953392
+    },
+    "crest": {
+      "reached": true,
+      "time_s": 2.2249999998882415,
+      "speed_m_s": 2.272137403488159,
+      "path_error_m": 0.24281856417655945
+    },
+    "post": {
+      "reached": true,
+      "time_s": 2.469999999888241,
+      "speed_m_s": 2.140350818634033,
+      "path_error_m": 0.22221529483795166
+    },
+    "slope_min_speed_m_s": 1.6403061151504517
+  },
+  {
+    "terrain": "ramp_24cm",
+    "label": "alpha.5",
+    "lane": 2,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": true,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.14050516486167908,
+    "speed_rmse_m_s": 0.1117124855518341,
+    "peak_roll_rad": 0.26193881034851074,
+    "requested_speed_m_s": 2.3,
+    "wheel_height_change_m": {
+      "frontwheel": 0.24352851510047913,
+      "rearwheel": 0.2433508336544037
+    },
+    "entry": {
+      "reached": true,
+      "time_s": 1.6649999998882414,
+      "speed_m_s": 1.832654356956482,
+      "path_error_m": 0.1008579358458519
+    },
+    "crest": {
+      "reached": true,
+      "time_s": 2.2099999998882414,
+      "speed_m_s": 2.2729125022888184,
+      "path_error_m": 0.221950501203537
+    },
+    "post": {
+      "reached": true,
+      "time_s": 2.449999999888241,
+      "speed_m_s": 2.198559284210205,
+      "path_error_m": 0.20639100670814514
+    },
+    "slope_min_speed_m_s": 1.688443899154663
+  },
+  {
+    "terrain": "ramp_24cm",
+    "label": "alpha.75",
+    "lane": 3,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": true,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.16798388957977295,
+    "speed_rmse_m_s": 0.09835157543420792,
+    "peak_roll_rad": 0.27633440494537354,
+    "requested_speed_m_s": 2.3,
+    "wheel_height_change_m": {
+      "frontwheel": 0.24354365468025208,
+      "rearwheel": 0.24346861243247986
+    },
+    "entry": {
+      "reached": true,
+      "time_s": 1.6499999998882413,
+      "speed_m_s": 1.8615450859069824,
+      "path_error_m": 0.09762908518314362
+    },
+    "crest": {
+      "reached": true,
+      "time_s": 2.1899999998882413,
+      "speed_m_s": 2.330512523651123,
+      "path_error_m": 0.18507136404514313
+    },
+    "post": {
+      "reached": true,
+      "time_s": 2.4299999998882416,
+      "speed_m_s": 2.235154867172241,
+      "path_error_m": 0.15875467658042908
+    },
+    "slope_min_speed_m_s": 1.7488176822662354
+  },
+  {
+    "terrain": "ramp_24cm",
+    "label": "alpha1",
+    "lane": 4,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": true,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.18923458456993103,
+    "speed_rmse_m_s": 0.08999968320131302,
+    "peak_roll_rad": 0.281399130821228,
+    "requested_speed_m_s": 2.3,
+    "wheel_height_change_m": {
+      "frontwheel": 0.24356739223003387,
+      "rearwheel": 0.24330300092697144
+    },
+    "entry": {
+      "reached": true,
+      "time_s": 1.6399999998882413,
+      "speed_m_s": 1.9373323917388916,
+      "path_error_m": 0.10235686600208282
+    },
+    "crest": {
+      "reached": true,
+      "time_s": 2.174999999888241,
+      "speed_m_s": 2.372749090194702,
+      "path_error_m": 0.16271059215068817
+    },
+    "post": {
+      "reached": true,
+      "time_s": 2.4099999998882415,
+      "speed_m_s": 2.283438205718994,
+      "path_error_m": 0.11920160800218582
+    },
+    "slope_min_speed_m_s": 1.7815011739730835
+  },
+  {
+    "terrain": "ramp_24cm",
+    "label": "Zero",
+    "lane": 5,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": true,
+    "working_roll_exceeded": true,
+    "path_rmse_m": 0.0992339551448822,
+    "speed_rmse_m_s": 0.07593934237957001,
+    "peak_roll_rad": 0.36895501613616943,
+    "requested_speed_m_s": 2.3,
+    "wheel_height_change_m": {
+      "frontwheel": 0.24352669715881348,
+      "rearwheel": 0.24339409172534943
+    },
+    "entry": {
+      "reached": true,
+      "time_s": 1.6549999998882414,
+      "speed_m_s": 1.9783973693847656,
+      "path_error_m": 0.1020689457654953
+    },
+    "crest": {
+      "reached": true,
+      "time_s": 2.174999999888241,
+      "speed_m_s": 2.4529075622558594,
+      "path_error_m": 0.31639033555984497
+    },
+    "post": {
+      "reached": true,
+      "time_s": 2.3799999998882413,
+      "speed_m_s": 2.328312873840332,
+      "path_error_m": 0.3523390293121338
+    },
+    "slope_min_speed_m_s": 1.8015034198760986
+  }
+]

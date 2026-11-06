@@ -1,0 +1,67 @@
+[
+  {
+    "alpha": 0,
+    "contacts": {
+      "front_first_s": 1.6002,
+      "front_last_s": 1.907,
+      "rear_first_s": 1.8170000000000002,
+      "rear_last_s": 2.1156
+    },
+    "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/entry_projection/alpha0/evaluation",
+    "physical_samples": 50000,
+    "front_peak_resultant_N": 234.5587615966797,
+    "rear_peak_resultant_N": 313.7436218261719
+  },
+  {
+    "alpha": 0.25,
+    "contacts": {
+      "front_first_s": 1.5838,
+      "front_last_s": 1.8864,
+      "rear_first_s": 1.7890000000000001,
+      "rear_last_s": 2.083
+    },
+    "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/entry_projection/alpha0.25/evaluation",
+    "physical_samples": 50000,
+    "front_peak_resultant_N": 191.7465362548828,
+    "rear_peak_resultant_N": 227.72567749023438
+  },
+  {
+    "alpha": 0.5,
+    "contacts": {
+      "front_first_s": 1.5674000000000001,
+      "front_last_s": 1.8806,
+      "rear_first_s": 1.7718,
+      "rear_last_s": 2.0406
+    },
+    "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/entry_projection/alpha0.5/evaluation",
+    "physical_samples": 50000,
+    "front_peak_resultant_N": 200.5135498046875,
+    "rear_peak_resultant_N": 304.00848388671875
+  },
+  {
+    "alpha": 0.75,
+    "contacts": {
+      "front_first_s": 1.5574000000000001,
+      "front_last_s": 1.8728,
+      "rear_first_s": 1.7574,
+      "rear_last_s": 2.025
+    },
+    "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/entry_projection/alpha0.75/evaluation",
+    "physical_samples": 50000,
+    "front_peak_resultant_N": 257.5221252441406,
+    "rear_peak_resultant_N": 293.6084289550781
+  },
+  {
+    "alpha": 1,
+    "contacts": {
+      "front_first_s": 1.5506,
+      "front_last_s": 1.8594000000000002,
+      "rear_first_s": 1.7448000000000001,
+      "rear_last_s": 2.0106
+    },
+    "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_common_state_channels/entry_projection/alpha1/evaluation",
+    "physical_samples": 50000,
+    "front_peak_resultant_N": 220.61956787109375,
+    "rear_peak_resultant_N": 369.0829772949219
+  }
+]

@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--evaluation', type=Path, required=True)
+    parser.add_argument('--route', type=Path, default=Path('runs/h75_selected_local300_flat/bundle/route.npz'))
     args = parser.parse_args()
     rows = json.loads((args.evaluation / 'tradeoff_common_window.json').read_text())
     groups = {}
@@ -54,7 +55,7 @@ def main():
         diagnostics, indent=2) + '\n')
     # Saved roll, speed and pose are post-step signals. Yaw rate is the backward
     # difference between consecutive post-step poses; no smoothing is applied.
-    route_path = Path('runs/h75_selected_local300_flat/bundle/route.npz')
+    route_path = args.route
     route = np.load(route_path)
     dynamics = []
     for case in json.loads((args.evaluation / 'index.json').read_text()):

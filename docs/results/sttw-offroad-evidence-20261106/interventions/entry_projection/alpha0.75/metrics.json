@@ -1,0 +1,203 @@
+{
+  "phase": "entry_projection",
+  "alpha": 0.75,
+  "run": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_zero_correction_channels/entry_projection/alpha0.75/evaluation",
+  "fork_reached": true,
+  "fork_time_s": 1.56,
+  "fork_progress_m": 3.618077039718628,
+  "reward_replay_error": 4.0917423727027114e-08,
+  "branches": [
+    {
+      "branch": "natural_continuation",
+      "failed_after_fork": false,
+      "observed_end_s": 3.5599999998882415,
+      "postfork_speed_rmse_m_s": 0.1134079098701477,
+      "postfork_path_rmse_m": 0.1761806160211563,
+      "peak_roll_rad": 0.2495732307434082,
+      "held_lower_ticks": 0,
+      "contacts": {
+        "measurement": "net world force only; no contact-point phase timing"
+      },
+      "windows": {
+        "hold": {
+          "lower_ticks": 40,
+          "end_s": 1.7599999998882414,
+          "xy_difference_rmse_m": 4.4476535549620166e-05,
+          "xy_difference_max_m": 0.000107325438875705,
+          "speed_error_rmse_m_s": 0.3121211528778076,
+          "path_rmse_m": 0.09718668460845947
+        },
+        "after_release_0p5": {
+          "lower_ticks": 100,
+          "end_s": 2.259999999888241,
+          "xy_difference_rmse_m": 0.0007136125350371003,
+          "xy_difference_max_m": 0.0009862673468887806,
+          "speed_error_rmse_m_s": 0.09499114751815796,
+          "path_rmse_m": 0.0681672915816307
+        },
+        "whole_common": {
+          "lower_ticks": 400,
+          "end_s": 3.5599999998882415,
+          "xy_difference_rmse_m": 0.005341553129255772,
+          "xy_difference_max_m": 0.009382723830640316,
+          "speed_error_rmse_m_s": 0.1134079098701477,
+          "path_rmse_m": 0.1761806160211563
+        }
+      }
+    },
+    {
+      "branch": "restored_control",
+      "failed_after_fork": false,
+      "observed_end_s": 3.5599999998882415,
+      "postfork_speed_rmse_m_s": 0.11308953166007996,
+      "postfork_path_rmse_m": 0.18106167018413544,
+      "peak_roll_rad": 0.24695146083831787,
+      "held_lower_ticks": 0,
+      "contacts": {
+        "measurement": "net world force only; no contact-point phase timing"
+      },
+      "windows": {
+        "hold": {
+          "lower_ticks": 40,
+          "end_s": 1.7599999998882414,
+          "xy_difference_rmse_m": 0.0,
+          "xy_difference_max_m": 0.0,
+          "speed_error_rmse_m_s": 0.31180229783058167,
+          "path_rmse_m": 0.09719230234622955
+        },
+        "after_release_0p5": {
+          "lower_ticks": 100,
+          "end_s": 2.259999999888241,
+          "xy_difference_rmse_m": 0.0,
+          "xy_difference_max_m": 0.0,
+          "speed_error_rmse_m_s": 0.09370467811822891,
+          "path_rmse_m": 0.06803031265735626
+        },
+        "whole_common": {
+          "lower_ticks": 400,
+          "end_s": 3.5599999998882415,
+          "xy_difference_rmse_m": 0.0,
+          "xy_difference_max_m": 0.0,
+          "speed_error_rmse_m_s": 0.11308953166007996,
+          "path_rmse_m": 0.18106167018413544
+        }
+      }
+    },
+    {
+      "branch": "zero_speed_correction",
+      "failed_after_fork": false,
+      "observed_end_s": 3.5599999998882415,
+      "postfork_speed_rmse_m_s": 0.08748112618923187,
+      "postfork_path_rmse_m": 0.187400221824646,
+      "peak_roll_rad": 0.25178396701812744,
+      "held_lower_ticks": 40,
+      "contacts": {
+        "measurement": "net world force only; no contact-point phase timing"
+      },
+      "windows": {
+        "hold": {
+          "lower_ticks": 40,
+          "end_s": 1.7599999998882414,
+          "xy_difference_rmse_m": 0.012997639365494251,
+          "xy_difference_max_m": 0.024693800136446953,
+          "speed_error_rmse_m_s": 0.20015129446983337,
+          "path_rmse_m": 0.09540609270334244
+        },
+        "after_release_0p5": {
+          "lower_ticks": 100,
+          "end_s": 2.259999999888241,
+          "xy_difference_rmse_m": 0.03371712192893028,
+          "xy_difference_max_m": 0.03533640876412392,
+          "speed_error_rmse_m_s": 0.1063491553068161,
+          "path_rmse_m": 0.05660976469516754
+        },
+        "whole_common": {
+          "lower_ticks": 400,
+          "end_s": 3.5599999998882415,
+          "xy_difference_rmse_m": 0.023438284173607826,
+          "xy_difference_max_m": 0.03533640876412392,
+          "speed_error_rmse_m_s": 0.08748112618923187,
+          "path_rmse_m": 0.187400221824646
+        }
+      }
+    },
+    {
+      "branch": "zero_steer_correction",
+      "failed_after_fork": false,
+      "observed_end_s": 3.5599999998882415,
+      "postfork_speed_rmse_m_s": 0.1333305388689041,
+      "postfork_path_rmse_m": 0.1288313865661621,
+      "peak_roll_rad": 0.26321732997894287,
+      "held_lower_ticks": 40,
+      "contacts": {
+        "measurement": "net world force only; no contact-point phase timing"
+      },
+      "windows": {
+        "hold": {
+          "lower_ticks": 40,
+          "end_s": 1.7599999998882414,
+          "xy_difference_rmse_m": 0.003916662186384201,
+          "xy_difference_max_m": 0.00943130161613226,
+          "speed_error_rmse_m_s": 0.3561447858810425,
+          "path_rmse_m": 0.09807582944631577
+        },
+        "after_release_0p5": {
+          "lower_ticks": 100,
+          "end_s": 2.259999999888241,
+          "xy_difference_rmse_m": 0.03947225585579872,
+          "xy_difference_max_m": 0.05966244265437126,
+          "speed_error_rmse_m_s": 0.12917719781398773,
+          "path_rmse_m": 0.08696574717760086
+        },
+        "whole_common": {
+          "lower_ticks": 400,
+          "end_s": 3.5599999998882415,
+          "xy_difference_rmse_m": 0.06570350378751755,
+          "xy_difference_max_m": 0.08457726985216141,
+          "speed_error_rmse_m_s": 0.1333305388689041,
+          "path_rmse_m": 0.1288313865661621
+        }
+      }
+    },
+    {
+      "branch": "zero_both_corrections",
+      "failed_after_fork": false,
+      "observed_end_s": 3.5599999998882415,
+      "postfork_speed_rmse_m_s": 0.09828725457191467,
+      "postfork_path_rmse_m": 0.12908262014389038,
+      "peak_roll_rad": 0.27909958362579346,
+      "held_lower_ticks": 40,
+      "contacts": {
+        "measurement": "net world force only; no contact-point phase timing"
+      },
+      "windows": {
+        "hold": {
+          "lower_ticks": 40,
+          "end_s": 1.7599999998882414,
+          "xy_difference_rmse_m": 0.011663137003779411,
+          "xy_difference_max_m": 0.021632878109812737,
+          "speed_error_rmse_m_s": 0.21125710010528564,
+          "path_rmse_m": 0.09615548700094223
+        },
+        "after_release_0p5": {
+          "lower_ticks": 100,
+          "end_s": 2.259999999888241,
+          "xy_difference_rmse_m": 0.024111256003379822,
+          "xy_difference_max_m": 0.030546527355909348,
+          "speed_error_rmse_m_s": 0.13028360903263092,
+          "path_rmse_m": 0.0633443221449852
+        },
+        "whole_common": {
+          "lower_ticks": 400,
+          "end_s": 3.5599999998882415,
+          "xy_difference_rmse_m": 0.06788761168718338,
+          "xy_difference_max_m": 0.1067814901471138,
+          "speed_error_rmse_m_s": 0.09828725457191467,
+          "path_rmse_m": 0.12908262014389038
+        }
+      }
+    }
+  ],
+  "intervention_kind": "zero",
+  "first_postfork_observation_difference_natural_vs_restored": 0.0
+}

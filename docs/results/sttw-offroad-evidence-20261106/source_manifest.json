@@ -1,0 +1,748 @@
+{
+  "role": "DEV simulation handoff, not submission-ready",
+  "source_commit": "39f1e4d4",
+  "artifacts": [
+    {
+      "source": "runs/h75_terrain_speed_sweep/evaluation/tradeoff_common_window.json",
+      "artifact": "terrain/tradeoff_common_window.json",
+      "sha256": "2e1c15f964faf6f09d312dcd93ef2489e446cc4e8c695221b7a32c24bd37d9c5"
+    },
+    {
+      "source": "runs/h75_terrain_speed_sweep/evaluation/tradeoff_common_window.png",
+      "artifact": "terrain/tradeoff_common_window.png",
+      "sha256": "1cc76eec80b88600a76a3bb6c45f8a189c31c307b559e19a5f02e2cea933d2ba"
+    },
+    {
+      "source": "runs/h75_terrain_speed_sweep/evaluation/tradeoff_common_window_connected.png",
+      "artifact": "terrain/tradeoff_common_window_connected.png",
+      "sha256": "f1fa90d6742eed80a09485f969a130309424ff637a33c23db49c64776d80fe50"
+    },
+    {
+      "source": "runs/h75_terrain_speed_sweep/evaluation/tradeoff_common_window_connected_detail.png",
+      "artifact": "terrain/tradeoff_common_window_connected_detail.png",
+      "sha256": "f4e1019bc9df6d4592634743c2baccb52a23222280a5d4160e020bcdb173e772"
+    },
+    {
+      "source": "runs/h75_terrain_speed_sweep/evaluation/tradeoff_curve_segments.json",
+      "artifact": "terrain/tradeoff_curve_segments.json",
+      "sha256": "7cee43f4a9f650759c3e4a7e731141d8a574f3576c58b3dc3d81317af61c884e"
+    },
+    {
+      "source": "runs/h75_terrain_speed_sweep/evaluation/tradeoff_shape_analysis.json",
+      "artifact": "terrain/tradeoff_shape_analysis.json",
+      "sha256": "bb14a6c2a903f40d6fbfe14e71be15b4397fcd82dfccfbae0b922600c33b3803"
+    },
+    {
+      "source": "runs/h75_terrain_speed_sweep/evaluation/tradeoff_shape_analysis.png",
+      "artifact": "terrain/tradeoff_shape_analysis.png",
+      "sha256": "2a3e42e4957d712bde2bb3ee4af479c265a5533714678649b29d2cfe8ede4a1f"
+    },
+    {
+      "source": "runs/h75_terrain_speed_sweep/evaluation/tradeoff_bend_dynamics.json",
+      "artifact": "terrain/tradeoff_bend_dynamics.json",
+      "sha256": "31a47defb1888ac5c4591cf1082fc47c06238737a25fa7b7c6e2049b4a6fb408"
+    },
+    {
+      "source": "runs/h75_terrain_speed_sweep/evaluation/tradeoff_bend_dynamics.png",
+      "artifact": "terrain/tradeoff_bend_dynamics.png",
+      "sha256": "0f97652ba1c79c492764dcd3340fbd84623ea3ea72ce54fe24ff168bb82bdc49"
+    },
+    {
+      "source": "runs/h75_terrain_speed_sweep/evaluation/metrics.json",
+      "artifact": "terrain/metrics.json",
+      "sha256": "228653ce583ba0264ed88465c86165ed37bd27743ac24c25b4293200edf63766"
+    },
+    {
+      "source": "runs/h75_terrain_speed_sweep/evaluation/xy_matrix_full.png",
+      "artifact": "terrain/xy_matrix_full.png",
+      "sha256": "06422ff7941ae77a0cbeff7fd9e1d67bbbc59cdea80a1ec03687fd2e4ed64e54"
+    },
+    {
+      "source": "runs/h75_terrain_speed_sweep/evaluation/xy_matrix_bend.png",
+      "artifact": "terrain/xy_matrix_bend.png",
+      "sha256": "7e7c5f990c45d1d0583de539b780acb55cd91c44fd6740516ba783a3e66e423b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_selected_local300_bend/flat_mesh/trajectory.npz",
+      "artifact": "terrain/flat_v2p3/trajectory.npz",
+      "transformation": "Exact arrays: lower_trace, progress, pose, measurement; all six lanes and saved steps; no model weights",
+      "sha256": "00b67cbf1546abdf9587d217c5bfd98b1bb4e806aef28c13955048ea672d683f"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_selected_local300_bend/flat_mesh/xy_all_alpha.png",
+      "artifact": "terrain/flat_v2p3/xy_all_alpha.png",
+      "sha256": "d36fc1166f7b5a1871755fc8c78f94889f14cf37ddd6e9c3195758ffd5e27e88"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_selected_local300_bend/flat_mesh/overview.png",
+      "artifact": "terrain/flat_v2p3/overview.png",
+      "sha256": "ee86015aa3a878740b8b029e7e7904f0877f9e94fd8c63f30921b21074333f2f"
+    },
+    {
+      "source": "runs/h75_terrain_speed_sweep/evaluation/flat_v2p3_progress.png",
+      "artifact": "terrain/flat_v2p3/progress.png",
+      "sha256": "06115d2e7155f1f562ca7f6c482aede835991e29cd0f9fc0c8e50721d4bf9638"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_terrain_speed_sweep/evaluation/oblique_2cm_v2p3/evaluation/trajectory.npz",
+      "artifact": "terrain/oblique_2cm_v2p3/trajectory.npz",
+      "transformation": "Exact arrays: lower_trace, progress, pose, measurement; all six lanes and saved steps; no model weights",
+      "sha256": "47b96240967a8e457e5175ee1abedb10f1323a68fd9d5ed7c7d035f2bcb30262"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_terrain_speed_sweep/evaluation/oblique_2cm_v2p3/evaluation/xy_all_alpha.png",
+      "artifact": "terrain/oblique_2cm_v2p3/xy_all_alpha.png",
+      "sha256": "80fc461445580a31c2b303fd49c0d596dfecf8610099361e359b415f8b9a3952"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_terrain_speed_sweep/evaluation/oblique_2cm_v2p3/evaluation/overview.png",
+      "artifact": "terrain/oblique_2cm_v2p3/overview.png",
+      "sha256": "239c16796072e3fb2504d6ea8fbfb2217106a319411dd5e902167573b7d2c88c"
+    },
+    {
+      "source": "runs/h75_terrain_speed_sweep/evaluation/oblique_2cm_v2p3_progress.png",
+      "artifact": "terrain/oblique_2cm_v2p3/progress.png",
+      "sha256": "f7fdf23ea4f0b8adc7b6771998be291e61cc11f8ac936d1dce1c247a8cfba532"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_selected_local300_bend/bump/trajectory.npz",
+      "artifact": "terrain/oblique_4cm_v2p3/trajectory.npz",
+      "transformation": "Exact arrays: lower_trace, progress, pose, measurement; all six lanes and saved steps; no model weights",
+      "sha256": "12ee86a678a5184e88931c5ded664e284967ce26ec9205076a63d0714aa000e5"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_selected_local300_bend/bump/xy_all_alpha.png",
+      "artifact": "terrain/oblique_4cm_v2p3/xy_all_alpha.png",
+      "sha256": "22d1126cc271b37ebc6b334af006474e9a143e98b631bc3791f68b047d4d36ff"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_selected_local300_bend/bump/overview.png",
+      "artifact": "terrain/oblique_4cm_v2p3/overview.png",
+      "sha256": "9c0ae4799bdc476d3ab566692b0e34e7e250131ac78a66b04a32c25191077bc9"
+    },
+    {
+      "source": "runs/h75_terrain_speed_sweep/evaluation/oblique_4cm_v2p3_progress.png",
+      "artifact": "terrain/oblique_4cm_v2p3/progress.png",
+      "sha256": "4192e85b8bf1728f21b0326bf7d98c0da74b1953dbbc9f839dbac201f32ec43e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_terrain_speed_sweep/evaluation/oblique_6cm_v2p3/evaluation/trajectory.npz",
+      "artifact": "terrain/oblique_6cm_v2p3/trajectory.npz",
+      "transformation": "Exact arrays: lower_trace, progress, pose, measurement; all six lanes and saved steps; no model weights",
+      "sha256": "89a71f6e26230a7a67796506a6cd5346b0e32bd2a492ee93476c1744e103c7c4"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_terrain_speed_sweep/evaluation/oblique_6cm_v2p3/evaluation/xy_all_alpha.png",
+      "artifact": "terrain/oblique_6cm_v2p3/xy_all_alpha.png",
+      "sha256": "62fe2649878214fb8bcf05db6283c47ca0ef38384255d1b42cb37e098bf4636b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_terrain_speed_sweep/evaluation/oblique_6cm_v2p3/evaluation/overview.png",
+      "artifact": "terrain/oblique_6cm_v2p3/overview.png",
+      "sha256": "4570a8ae96b5f74c0906efb21ea22a35536a94e6d2045661684795952dfc49e1"
+    },
+    {
+      "source": "runs/h75_terrain_speed_sweep/evaluation/oblique_6cm_v2p3_progress.png",
+      "artifact": "terrain/oblique_6cm_v2p3/progress.png",
+      "sha256": "1258f777ece70ebff420cd6bb672dd61eb4200379d0372efba8ced306e4c643e"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_terrain_speed_sweep/evaluation/reverse_oblique_4cm_v2p3/evaluation/trajectory.npz",
+      "artifact": "terrain/reverse_oblique_4cm_v2p3/trajectory.npz",
+      "transformation": "Exact arrays: lower_trace, progress, pose, measurement; all six lanes and saved steps; no model weights",
+      "sha256": "cd4307ae493501e983ea457e30382e398d97499fb2354b94d4f0fa394f7e2781"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_terrain_speed_sweep/evaluation/reverse_oblique_4cm_v2p3/evaluation/xy_all_alpha.png",
+      "artifact": "terrain/reverse_oblique_4cm_v2p3/xy_all_alpha.png",
+      "sha256": "b7245394a6b571c4243eb269af190db14015c54319628c093384f811c77cf40b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_terrain_speed_sweep/evaluation/reverse_oblique_4cm_v2p3/evaluation/overview.png",
+      "artifact": "terrain/reverse_oblique_4cm_v2p3/overview.png",
+      "sha256": "c67a9ba415bf055171b93fd01ae68194d7dd052ba1306e4cd0a64ab5adfcb06f"
+    },
+    {
+      "source": "runs/h75_terrain_speed_sweep/evaluation/reverse_oblique_4cm_v2p3_progress.png",
+      "artifact": "terrain/reverse_oblique_4cm_v2p3/progress.png",
+      "sha256": "b3a51a46bdfde4d04848ac87e560b68005a79fa314f34314e884f94bcd1e77c0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_terrain_speed_sweep/evaluation/flat_v2p6/evaluation/trajectory.npz",
+      "artifact": "terrain/flat_v2p6/trajectory.npz",
+      "transformation": "Exact arrays: lower_trace, progress, pose, measurement; all six lanes and saved steps; no model weights",
+      "sha256": "c7730af48092d120eed36ce2a83dbf711a409be7ff7b6bc7f770d66009d2f971"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_terrain_speed_sweep/evaluation/flat_v2p6/evaluation/xy_all_alpha.png",
+      "artifact": "terrain/flat_v2p6/xy_all_alpha.png",
+      "sha256": "80f43e34968016dd334287e83494453a8a9de6a414946dc4df2c09c4bd8119d8"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_terrain_speed_sweep/evaluation/flat_v2p6/evaluation/overview.png",
+      "artifact": "terrain/flat_v2p6/overview.png",
+      "sha256": "d3d18334111918892615070a9257072a9046b34b5ce6c982cdae4441175f63dd"
+    },
+    {
+      "source": "runs/h75_terrain_speed_sweep/evaluation/flat_v2p6_progress.png",
+      "artifact": "terrain/flat_v2p6/progress.png",
+      "sha256": "04fb6004e755c186c980a6813e720c1dbf1a54cc28443d942f9babe16f6a2940"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_terrain_speed_sweep/evaluation/oblique_2cm_v2p6/evaluation/trajectory.npz",
+      "artifact": "terrain/oblique_2cm_v2p6/trajectory.npz",
+      "transformation": "Exact arrays: lower_trace, progress, pose, measurement; all six lanes and saved steps; no model weights",
+      "sha256": "8d93fd1ef4bfbf78f000da04853a99efb3b64fe5c091c0987e3f06452d5d8452"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_terrain_speed_sweep/evaluation/oblique_2cm_v2p6/evaluation/xy_all_alpha.png",
+      "artifact": "terrain/oblique_2cm_v2p6/xy_all_alpha.png",
+      "sha256": "76f8a1728e29432046066cbfe2e166cbc4b5181bd6cc3a0a27f63b38ec653e2b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_terrain_speed_sweep/evaluation/oblique_2cm_v2p6/evaluation/overview.png",
+      "artifact": "terrain/oblique_2cm_v2p6/overview.png",
+      "sha256": "bd626b5d1eaefe6e1ad49a40dbb90f900c2b4b8fb03880fb879dd1114d0eae15"
+    },
+    {
+      "source": "runs/h75_terrain_speed_sweep/evaluation/oblique_2cm_v2p6_progress.png",
+      "artifact": "terrain/oblique_2cm_v2p6/progress.png",
+      "sha256": "1f3d5cc415014a63f8c3eaaa263a4d20e8e7eda33f5c19e0c118c69fbff3558b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_terrain_speed_sweep/evaluation/oblique_4cm_v2p6/evaluation/trajectory.npz",
+      "artifact": "terrain/oblique_4cm_v2p6/trajectory.npz",
+      "transformation": "Exact arrays: lower_trace, progress, pose, measurement; all six lanes and saved steps; no model weights",
+      "sha256": "8cb3cd1ac7db7da2aefded0edfc24035ff4a3af482258326fd764ac4128ef104"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_terrain_speed_sweep/evaluation/oblique_4cm_v2p6/evaluation/xy_all_alpha.png",
+      "artifact": "terrain/oblique_4cm_v2p6/xy_all_alpha.png",
+      "sha256": "2093b5f28e4e3dea345e0105fad8fad130ddc5ccf05edbc8766f4ef1981ec426"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_terrain_speed_sweep/evaluation/oblique_4cm_v2p6/evaluation/overview.png",
+      "artifact": "terrain/oblique_4cm_v2p6/overview.png",
+      "sha256": "e412dcf82ce4824c06d6d441cda2c0f902a03a6ef73d3ae7e3fab3fc1053f469"
+    },
+    {
+      "source": "runs/h75_terrain_speed_sweep/evaluation/oblique_4cm_v2p6_progress.png",
+      "artifact": "terrain/oblique_4cm_v2p6/progress.png",
+      "sha256": "d09f2a447e0e1dfbc295887f1a29622ca79e0d6b2ed6d65717d04a5daf2e40f0"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_terrain_speed_sweep/evaluation/oblique_6cm_v2p6/evaluation/trajectory.npz",
+      "artifact": "terrain/oblique_6cm_v2p6/trajectory.npz",
+      "transformation": "Exact arrays: lower_trace, progress, pose, measurement; all six lanes and saved steps; no model weights",
+      "sha256": "639f4d20a5d0a7a06ef04d9fe4433c705cc957250eeeac1f22835c1259f174ac"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_terrain_speed_sweep/evaluation/oblique_6cm_v2p6/evaluation/xy_all_alpha.png",
+      "artifact": "terrain/oblique_6cm_v2p6/xy_all_alpha.png",
+      "sha256": "1eba27e342b1b2b0eb9078ed446a34fbdd7d8c47a7a4ef81f93a9434e812366b"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_terrain_speed_sweep/evaluation/oblique_6cm_v2p6/evaluation/overview.png",
+      "artifact": "terrain/oblique_6cm_v2p6/overview.png",
+      "sha256": "868b706bdc27c9a79672e07aa3162f394e4036e6d9c0971b0ed597674a788716"
+    },
+    {
+      "source": "runs/h75_terrain_speed_sweep/evaluation/oblique_6cm_v2p6_progress.png",
+      "artifact": "terrain/oblique_6cm_v2p6/progress.png",
+      "sha256": "90b0169baa6b4f9df8ece78c6c4840b2620759b81b9cf8e62ba150fd59f006b9"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_terrain_speed_sweep/evaluation/reverse_oblique_4cm_v2p6/evaluation/trajectory.npz",
+      "artifact": "terrain/reverse_oblique_4cm_v2p6/trajectory.npz",
+      "transformation": "Exact arrays: lower_trace, progress, pose, measurement; all six lanes and saved steps; no model weights",
+      "sha256": "3b164dddff8cf99782694d8f63c95e8da2b9b06305bc53c87e6d6ac1aa1b8494"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_terrain_speed_sweep/evaluation/reverse_oblique_4cm_v2p6/evaluation/xy_all_alpha.png",
+      "artifact": "terrain/reverse_oblique_4cm_v2p6/xy_all_alpha.png",
+      "sha256": "4de201f1e04bda60ab3c0dc7bd83e15ffb69b2841e81b8c377c33cf4702b7737"
+    },
+    {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_terrain_speed_sweep/evaluation/reverse_oblique_4cm_v2p6/evaluation/overview.png",
+      "artifact": "terrain/reverse_oblique_4cm_v2p6/overview.png",
+      "sha256": "03490035f3c0583878974a93942fd60804691a800524bae166b2c5f7ad17a87a"
+    },
+    {
+      "source": "runs/h75_terrain_speed_sweep/evaluation/reverse_oblique_4cm_v2p6_progress.png",
+      "artifact": "terrain/reverse_oblique_4cm_v2p6/progress.png",
+      "sha256": "281abcdceeffddd0148103621784519eb6b9ad7e93005045dbe1a81beae4ccc1"
+    },
+    {
+      "source": "runs/h75_selected_local300_flat/bundle/route.npz",
+      "artifact": "route.npz",
+      "sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+    },
+    {
+      "source": "runs/h75_selected_local300_bend/bump/contract.json",
+      "artifact": "selected_contract.json",
+      "sha256": "7011aad05bb9b144a18ac8ea964c85b6f410fefca62b5236cc64d3ecca1e42a7"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/exit_projection/alpha0/xy.png",
+      "artifact": "interventions/exit_projection/alpha0/xy.png",
+      "sha256": "ce78f298e7ae8f90b3aad1d069de1952d9ffdd5b8047ac45c051960844787206"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/exit_projection/alpha0/responses_short.png",
+      "artifact": "interventions/exit_projection/alpha0/responses_short.png",
+      "sha256": "8e55f9088806892734a6116be7deb36d3efae8dc272c45cc2295cec8ddb88f45"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/exit_projection/alpha0/metrics.json",
+      "artifact": "interventions/exit_projection/alpha0/metrics.json",
+      "sha256": "68cd03576a16958505767b30162ab4519e3107e1682726e530310da2be0c34a4"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/exit_projection/alpha0.75/xy.png",
+      "artifact": "interventions/exit_projection/alpha0.75/xy.png",
+      "sha256": "e9d7288282d5219c02ca696317f9fddad490df7b51673722e391f87964b791c5"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/exit_projection/alpha0.75/responses_short.png",
+      "artifact": "interventions/exit_projection/alpha0.75/responses_short.png",
+      "sha256": "a5b51adf96243f262177af4e048665a09d62a49aaa5292f30cd9eda6b3043421"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/exit_projection/alpha0.75/metrics.json",
+      "artifact": "interventions/exit_projection/alpha0.75/metrics.json",
+      "sha256": "3085ff4d3ed95b91541703af84976fb8d0fbff455fb7c22625ec85c206dba67c"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/exit_projection/alpha0.25/xy.png",
+      "artifact": "interventions/exit_projection/alpha0.25/xy.png",
+      "sha256": "711a72702e63f9de2263fb4fd86b05a198a150794a30941840523dbff0ca77f9"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/exit_projection/alpha0.25/responses_short.png",
+      "artifact": "interventions/exit_projection/alpha0.25/responses_short.png",
+      "sha256": "5ae5a5edd9676a78fc0775df423495ae7b5901877e57cfb474a07fcfe0a7a97c"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/exit_projection/alpha0.25/metrics.json",
+      "artifact": "interventions/exit_projection/alpha0.25/metrics.json",
+      "sha256": "efd738619453098e5a91dd83380ed6743b655f2f1474ef783bd2df2d0dc92337"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/exit_projection/alpha1/xy.png",
+      "artifact": "interventions/exit_projection/alpha1/xy.png",
+      "sha256": "425e7a63c1b3da994b4302a076950b0f0589ee19b773d91c7ca00ec120c2a870"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/exit_projection/alpha1/responses_short.png",
+      "artifact": "interventions/exit_projection/alpha1/responses_short.png",
+      "sha256": "95c6ba9470219e03bbcdbf9168bbb036f4f8d8ccc79c6c57292518fc00da544a"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/exit_projection/alpha1/metrics.json",
+      "artifact": "interventions/exit_projection/alpha1/metrics.json",
+      "sha256": "bed5f6e77774ac13b6197a92390a03c2b8336c02309a5ca68a2d9f246b41019e"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/exit_projection/alpha0.5/xy.png",
+      "artifact": "interventions/exit_projection/alpha0.5/xy.png",
+      "sha256": "e86b71eef2818b4974046e0fbe7bd55d6ca231cfb6cebb28fb635fb26c4bda42"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/exit_projection/alpha0.5/responses_short.png",
+      "artifact": "interventions/exit_projection/alpha0.5/responses_short.png",
+      "sha256": "b84248ee09dbaf1304e2e25177002b372a8d7a7d1351b16d9543b1d37a055388"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/exit_projection/alpha0.5/metrics.json",
+      "artifact": "interventions/exit_projection/alpha0.5/metrics.json",
+      "sha256": "a09af2291ea766dd4b1edbe332a46b14b4af3c0a159a49070b6bb5cbf0fbe689"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/entry_projection/alpha0/xy.png",
+      "artifact": "interventions/entry_projection/alpha0/xy.png",
+      "sha256": "39482fd441be301323df7ee32f93f8640d4b9e3288ec78c16d089410fff8f593"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/entry_projection/alpha0/responses_short.png",
+      "artifact": "interventions/entry_projection/alpha0/responses_short.png",
+      "sha256": "6bb31d286d7d1bb4bdfe2c2c2c327d2df5ea3cd2971636e8d8f8956c51e0da1e"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/entry_projection/alpha0/metrics.json",
+      "artifact": "interventions/entry_projection/alpha0/metrics.json",
+      "sha256": "fafc29970790e5d5c7f6c03f8e9839c6a9a418d955520c29d222c07b18e34ed3"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/entry_projection/alpha0.75/xy.png",
+      "artifact": "interventions/entry_projection/alpha0.75/xy.png",
+      "sha256": "96ab830ccca0e9eec16eea0d9eb7e8201e7cab0283069c300a7fdc0d1b5fa169"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/entry_projection/alpha0.75/responses_short.png",
+      "artifact": "interventions/entry_projection/alpha0.75/responses_short.png",
+      "sha256": "ae3e3c0b76d84b3165504100e4d5ec95ea1a72777e5be96b58ac5b4c64df460c"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/entry_projection/alpha0.75/metrics.json",
+      "artifact": "interventions/entry_projection/alpha0.75/metrics.json",
+      "sha256": "3ea8fd0c9aad7b990ecdf7a83a9ef50f31bd9af06ace56c2f863f0c919a00706"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/entry_projection/alpha0.25/xy.png",
+      "artifact": "interventions/entry_projection/alpha0.25/xy.png",
+      "sha256": "ab37016530cd90bdc446ae5fdf9772c85daf424b237ef2df3df665d7eed4298b"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/entry_projection/alpha0.25/responses_short.png",
+      "artifact": "interventions/entry_projection/alpha0.25/responses_short.png",
+      "sha256": "c3b4ca3bfa9bd93667b0ced8c947d2b16348a06163b25a782571786ce9eef59c"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/entry_projection/alpha0.25/metrics.json",
+      "artifact": "interventions/entry_projection/alpha0.25/metrics.json",
+      "sha256": "77059ed01da8166087d0b8cd75c603a530ad9377b5fea6156075dc9e59358a27"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/entry_projection/alpha1/xy.png",
+      "artifact": "interventions/entry_projection/alpha1/xy.png",
+      "sha256": "0076f35822c50424b59eb6c6c94c0c676b387d2bbe9f3174b294f1a6dc8127da"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/entry_projection/alpha1/responses_short.png",
+      "artifact": "interventions/entry_projection/alpha1/responses_short.png",
+      "sha256": "7bb869beb8bce7fe9eba096d9ee081fd2b80f75ee43d89d1b9133f156f3250cc"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/entry_projection/alpha1/metrics.json",
+      "artifact": "interventions/entry_projection/alpha1/metrics.json",
+      "sha256": "16505b0fec37c6f59727358c6372a3e7ab600c0264ef3cd45f91199e8d6cece4"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/entry_projection/alpha0.5/xy.png",
+      "artifact": "interventions/entry_projection/alpha0.5/xy.png",
+      "sha256": "390a5216167c148908497fb4a5d6d135f2091bb7eb2e756906812930abc2de57"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/entry_projection/alpha0.5/responses_short.png",
+      "artifact": "interventions/entry_projection/alpha0.5/responses_short.png",
+      "sha256": "8eb62402260ea6d1f28f7590b321c39b601288e169c0241729da12ff29a05702"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/entry_projection/alpha0.5/metrics.json",
+      "artifact": "interventions/entry_projection/alpha0.5/metrics.json",
+      "sha256": "1f612074fc87fadf3e9739b47bca5b89315aab3815081436cb3d953cdacf63cb"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/hold_zero_comparison.json",
+      "artifact": "interventions/hold_zero_comparison.json",
+      "sha256": "831457f17eb68925a0f5bc123736f617e2a9ba47524c288bdc0a91589072691e"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/entry_projection_hold_zero_xy.png",
+      "artifact": "interventions/entry_projection_hold_zero_xy.png",
+      "sha256": "c369192a19ede2ae01b9846f8f3833da6f89e58229acccbc8e6ec67b46330217"
+    },
+    {
+      "source": "runs/h75_zero_correction_channels/analysis/exit_projection_hold_zero_xy.png",
+      "artifact": "interventions/exit_projection_hold_zero_xy.png",
+      "sha256": "fe2f2e0ccfcabe9d09ea0868b2c959cb8f558cef7c006893bc42d954513e936e"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/contact_alignment/alpha0.25.npz",
+      "artifact": "contact/alpha0.25.npz",
+      "sha256": "12731be6c32583c52043b0cf8f435486948e8da2df9f6622f8c09412efae9afb"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/contact_alignment/front_aligned.png",
+      "artifact": "contact/front_aligned.png",
+      "sha256": "94932d15ad252e6cd5fe68435c8ccc3f992c7165c8385b7f28846078a862d7d8"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/contact_alignment/summary.json",
+      "artifact": "contact/summary.json",
+      "sha256": "997ee18e582c06ecb831f64852b5a07d0a99a6760ae9adcae6dc6128d159b8de"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/contact_alignment/alpha0.75.npz",
+      "artifact": "contact/alpha0.75.npz",
+      "sha256": "f3be2dbbb1869abed9a258d5a9b30b84883d2213be727f3afdf47de9fe0f46dd"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/contact_alignment/alpha1.npz",
+      "artifact": "contact/alpha1.npz",
+      "sha256": "aea693d652a8a426cc02bae651faa1abacc5fa5546ac84787ecef14fe42a684b"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/contact_alignment/alpha0.5.npz",
+      "artifact": "contact/alpha0.5.npz",
+      "sha256": "3c86b81fde897108ede35df176e566a616063149b7e7b6e341f87bd893188a75"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/contact_alignment/rear_aligned.png",
+      "artifact": "contact/rear_aligned.png",
+      "sha256": "dce9a5f84f3d7742316e7eda2831630311470cfb581db40dd3acd6feb67d928f"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/contact_alignment/alpha0.npz",
+      "artifact": "contact/alpha0.npz",
+      "sha256": "ac47b34a281e8996d9ecf8a10a95e2184e1e9168cf5cfbc529ec82f8f4fab09a"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/exit_projection/alpha0/same_state_alpha/queries.csv",
+      "artifact": "queries/exit_projection/alpha0/same_state_alpha/queries.csv",
+      "sha256": "39a565af50ba7e3ea14ee1ad2ba787a31859b9443159c109a56d868b80c7eb2f"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/exit_projection/alpha0/same_state_alpha/identity.json",
+      "artifact": "queries/exit_projection/alpha0/same_state_alpha/identity.json",
+      "sha256": "2a7d6d558c8916752054052f04917550fbe6a9e841a27749aaaa4e50a127708a"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/exit_projection/alpha0/same_state_alpha/summary.json",
+      "artifact": "queries/exit_projection/alpha0/same_state_alpha/summary.json",
+      "sha256": "ea1ab01bca6e6e249a27ed4e350ff8bdc7a7cb572cb3b300fb3656c869af4dda"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/exit_projection/alpha0.75/same_state_alpha/queries.csv",
+      "artifact": "queries/exit_projection/alpha0.75/same_state_alpha/queries.csv",
+      "sha256": "74f6dd72bc7c94723711e1e234c972e4bdf7cf2bf8caa1e774892fe338937db7"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/exit_projection/alpha0.75/same_state_alpha/identity.json",
+      "artifact": "queries/exit_projection/alpha0.75/same_state_alpha/identity.json",
+      "sha256": "344248c08ae0cb2be3e9412ad8a5b7c377d7a15afd61bc878326c705cf50ee25"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/exit_projection/alpha0.75/same_state_alpha/summary.json",
+      "artifact": "queries/exit_projection/alpha0.75/same_state_alpha/summary.json",
+      "sha256": "6a48da55b0d89a1525d1bea1f1d2859a8d4f372325ebe245fc2f7227c0c20a71"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/exit_projection/alpha0.25/same_state_alpha/queries.csv",
+      "artifact": "queries/exit_projection/alpha0.25/same_state_alpha/queries.csv",
+      "sha256": "d197246fb3e1b35db07b9d0b6d222fe1d4084a5c3f1f921cf4f4f5e5fdbe202b"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/exit_projection/alpha0.25/same_state_alpha/identity.json",
+      "artifact": "queries/exit_projection/alpha0.25/same_state_alpha/identity.json",
+      "sha256": "2aa40c145aa17333b9d7439d53be5e05e9191199f41b78f356e3cb28e42f707d"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/exit_projection/alpha0.25/same_state_alpha/summary.json",
+      "artifact": "queries/exit_projection/alpha0.25/same_state_alpha/summary.json",
+      "sha256": "00da7babdb8527051b5c48921b0c024afd9814153ba4994cdfb8c9e35dc4da50"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/exit_projection/alpha1/same_state_alpha/queries.csv",
+      "artifact": "queries/exit_projection/alpha1/same_state_alpha/queries.csv",
+      "sha256": "da0f41b3b4a86c8bfb77722f1f4bee1879a7c88cbd9cb9c5eb5cb4621427115f"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/exit_projection/alpha1/same_state_alpha/identity.json",
+      "artifact": "queries/exit_projection/alpha1/same_state_alpha/identity.json",
+      "sha256": "15f7f5f2ecbca2cde3546e8fad0199eaec453dfa585dc000eb82d202ab520f66"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/exit_projection/alpha1/same_state_alpha/summary.json",
+      "artifact": "queries/exit_projection/alpha1/same_state_alpha/summary.json",
+      "sha256": "adaf4768458d707061e941639e94772c4affbcd65e74ec39ecef7b319502ef6f"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/exit_projection/alpha0.5/same_state_alpha/queries.csv",
+      "artifact": "queries/exit_projection/alpha0.5/same_state_alpha/queries.csv",
+      "sha256": "b2ec46e1c82ef4d2114907a8e79e381dac8cf936a1db93a3a70cf2e76805a274"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/exit_projection/alpha0.5/same_state_alpha/identity.json",
+      "artifact": "queries/exit_projection/alpha0.5/same_state_alpha/identity.json",
+      "sha256": "3fcc30c2f7dd5972d468508f6aabe75b1b260c0a475bc2dc9ab3e4be54d89f54"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/exit_projection/alpha0.5/same_state_alpha/summary.json",
+      "artifact": "queries/exit_projection/alpha0.5/same_state_alpha/summary.json",
+      "sha256": "9ff684cdeacbe624a0420c29af1d0b5b6f9a939950fb93610419cc9d1341f366"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/entry_projection/alpha0/same_state_alpha/queries.csv",
+      "artifact": "queries/entry_projection/alpha0/same_state_alpha/queries.csv",
+      "sha256": "7dfd0110319e795393e26076e8e55097707e5035f50de9493bf7a6100752e751"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/entry_projection/alpha0/same_state_alpha/identity.json",
+      "artifact": "queries/entry_projection/alpha0/same_state_alpha/identity.json",
+      "sha256": "6e930f8a8bd03d1a84893fbf5a3bdb390f4efbdb3cdbd6db7414e820a5199fd3"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/entry_projection/alpha0/same_state_alpha/summary.json",
+      "artifact": "queries/entry_projection/alpha0/same_state_alpha/summary.json",
+      "sha256": "eaa3d370823efbff6c3913e644f6c0eec53e386e9dc7ee624374ee5a3abb4a0c"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/entry_projection/alpha0.75/same_state_alpha/queries.csv",
+      "artifact": "queries/entry_projection/alpha0.75/same_state_alpha/queries.csv",
+      "sha256": "306fe80ddaf70904b3895826f9ae772750395456371ba3434fa05979593cd617"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/entry_projection/alpha0.75/same_state_alpha/identity.json",
+      "artifact": "queries/entry_projection/alpha0.75/same_state_alpha/identity.json",
+      "sha256": "9118ba45ca4a68c13139a14416a9d9858f4573de11c794b11cc0264623d619de"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/entry_projection/alpha0.75/same_state_alpha/summary.json",
+      "artifact": "queries/entry_projection/alpha0.75/same_state_alpha/summary.json",
+      "sha256": "55ac508e89f6dce9c163961761f333e38a9b1087a83f4cbec235f88194c37356"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/entry_projection/alpha0.25/same_state_alpha/queries.csv",
+      "artifact": "queries/entry_projection/alpha0.25/same_state_alpha/queries.csv",
+      "sha256": "ebcbd4ed95d6a20a9bc4d8cf3100bb7b629119fb5cb4ebefa77a74328b93026a"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/entry_projection/alpha0.25/same_state_alpha/identity.json",
+      "artifact": "queries/entry_projection/alpha0.25/same_state_alpha/identity.json",
+      "sha256": "1e48192cb03028ee2661017ff486ebdbc057b7711c0ae1cb6dd8cda11676f1bf"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/entry_projection/alpha0.25/same_state_alpha/summary.json",
+      "artifact": "queries/entry_projection/alpha0.25/same_state_alpha/summary.json",
+      "sha256": "c5fd9a8e616d8f200f8d593ecbfad964353ec9003e21e8833265b4c7394469bc"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/entry_projection/alpha1/same_state_alpha/queries.csv",
+      "artifact": "queries/entry_projection/alpha1/same_state_alpha/queries.csv",
+      "sha256": "48a033558a35b62e329a57234a728c88a2a98472b17890cfdc53779bccbbccf8"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/entry_projection/alpha1/same_state_alpha/identity.json",
+      "artifact": "queries/entry_projection/alpha1/same_state_alpha/identity.json",
+      "sha256": "a0bb050924db2e12818cbcb9574d71a5aec7237e66276e60df392e36aab06404"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/entry_projection/alpha1/same_state_alpha/summary.json",
+      "artifact": "queries/entry_projection/alpha1/same_state_alpha/summary.json",
+      "sha256": "8f3c12414878711e07e94158d6ab9ec1061d111b36447ae3bb223cee2a7fe1b8"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/entry_projection/alpha0.5/same_state_alpha/queries.csv",
+      "artifact": "queries/entry_projection/alpha0.5/same_state_alpha/queries.csv",
+      "sha256": "1d997cef1a36b8b6275c039df470d2e53ec59089060f525caefbacc61f918c7e"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/entry_projection/alpha0.5/same_state_alpha/identity.json",
+      "artifact": "queries/entry_projection/alpha0.5/same_state_alpha/identity.json",
+      "sha256": "165ffa79736d92bd23f2aa7b0fcbbdb807c5a7e5dce760d6b731f2fad3eafe48"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/entry_projection/alpha0.5/same_state_alpha/summary.json",
+      "artifact": "queries/entry_projection/alpha0.5/same_state_alpha/summary.json",
+      "sha256": "d2fb831eb1e43878f5f17a2737fec48d76016996b940a3b388524037c3a2016e"
+    },
+    {
+      "source": "runs/h75_common_state_channels/analysis/same_state_alpha_overview.png",
+      "artifact": "queries/same_state_alpha_overview.png",
+      "sha256": "1600dbb841a4f93edfa522a53d2fb1fc6ea776597c587af3d209b131042408c9"
+    },
+    {
+      "source": "runs/h75_shared_switch/analysis/exit_projection/alpha1/responses.png",
+      "artifact": "switch/original/responses.png",
+      "sha256": "b971426ce248ff98ba72f35926fbfd1aa30d67c7a1955c3c014a16e66e4811e4"
+    },
+    {
+      "source": "runs/h75_shared_switch/analysis/exit_projection/alpha1/responses_short.png",
+      "artifact": "switch/original/responses_short.png",
+      "sha256": "b38b49ecd95997aeea6030aef669ad901769f2f95f185ded261e7c4a7c18db11"
+    },
+    {
+      "source": "runs/h75_shared_switch/analysis/exit_projection/alpha1/components.png",
+      "artifact": "switch/original/components.png",
+      "sha256": "1a1f8420aa8e0e6311c9ced1dac220b771dc234d666d6bf3cc883e3dc0b24505"
+    },
+    {
+      "source": "runs/h75_shared_switch/analysis/exit_projection/alpha1/local_effects.png",
+      "artifact": "switch/original/local_effects.png",
+      "sha256": "231352a3827ef97fe77e59186e2bda52560340132efc7cde040ed7a827b8a788"
+    },
+    {
+      "source": "runs/h75_shared_switch/analysis/exit_projection/alpha1/metrics.json",
+      "artifact": "switch/original/metrics.json",
+      "sha256": "8a110d8863f093bb6d3e7c053f41c569379a368811076f87b094e1bf766863a4"
+    },
+    {
+      "source": "runs/h75_shared_switch/analysis/exit_projection/alpha1/xy.png",
+      "artifact": "switch/original/xy.png",
+      "sha256": "bd6d3335fcb4ef9ae1fc9750d143ea4855bbfba301bfbc80f2bc9e9c572f8a1c"
+    },
+    {
+      "source": "runs/h75_shared_switch/analysis/exit_projection/alpha1/loads.png",
+      "artifact": "switch/original/loads.png",
+      "sha256": "5693e7395a387a88665f303aea866cb3f6c57499cb80fc42727e0248a777cdc4"
+    },
+    {
+      "source": "runs/h75_shared_switch/analysis/switch_summary.json",
+      "artifact": "switch/original/switch_summary.json",
+      "sha256": "ad18a6a5b61184c7214aeded0c7d25e7f32defff8d18fe43d536c56fdc457eea"
+    },
+    {
+      "source": "runs/h75_shared_switch/protocol.json",
+      "artifact": "switch/original/protocol.json",
+      "sha256": "c2af9a45f002604847de9ae79f794d47a8a03ff7c13b662b3ad3e3c8cede83e2"
+    },
+    {
+      "source": "runs/h75_shared_switch/manifest.json",
+      "artifact": "switch/original/manifest.json",
+      "sha256": "4f039557e2dd720b75114a349abb50e833d526ef6653317099fc97fb7462ee3f"
+    },
+    {
+      "source": "runs/h75_shared_switch_tangent/analysis/exit_projection/alpha1/responses.png",
+      "artifact": "switch/tangent_repair/responses.png",
+      "sha256": "ab16f109e77848671c269d28befe2c5921c0be5caff34ca027df952490e8e15f"
+    },
+    {
+      "source": "runs/h75_shared_switch_tangent/analysis/exit_projection/alpha1/responses_short.png",
+      "artifact": "switch/tangent_repair/responses_short.png",
+      "sha256": "b38b49ecd95997aeea6030aef669ad901769f2f95f185ded261e7c4a7c18db11"
+    },
+    {
+      "source": "runs/h75_shared_switch_tangent/analysis/exit_projection/alpha1/components.png",
+      "artifact": "switch/tangent_repair/components.png",
+      "sha256": "09eb7bf42b66e16b49d5531649e4026900fdca76cbdb7c9e1f4c768f1cfbebb7"
+    },
+    {
+      "source": "runs/h75_shared_switch_tangent/analysis/exit_projection/alpha1/local_effects.png",
+      "artifact": "switch/tangent_repair/local_effects.png",
+      "sha256": "231352a3827ef97fe77e59186e2bda52560340132efc7cde040ed7a827b8a788"
+    },
+    {
+      "source": "runs/h75_shared_switch_tangent/analysis/exit_projection/alpha1/metrics.json",
+      "artifact": "switch/tangent_repair/metrics.json",
+      "sha256": "a8637a041c19058feb140bc9cfa8344cf750912c1899a16e1bb0dfff25059131"
+    },
+    {
+      "source": "runs/h75_shared_switch_tangent/analysis/exit_projection/alpha1/xy.png",
+      "artifact": "switch/tangent_repair/xy.png",
+      "sha256": "205384f887d80eb3361f06aafe2fd439bb359e8c4a91613fe4c9d4d032960e6f"
+    },
+    {
+      "source": "runs/h75_shared_switch_tangent/analysis/exit_projection/alpha1/loads.png",
+      "artifact": "switch/tangent_repair/loads.png",
+      "sha256": "3cf4b817e6c4d570f7e61aac7dde4edbdc2d776ca266b17c39ba9f43a2021743"
+    },
+    {
+      "source": "runs/h75_shared_switch_tangent/outcomes.json",
+      "artifact": "switch/tangent_repair/outcomes.json",
+      "sha256": "e98622cc4461b02f05e7b74d9ceba1ef8ab1af793aaadedd4f56e02d697e7073"
+    },
+    {
+      "source": "runs/h75_shared_switch_tangent/protocol.json",
+      "artifact": "switch/tangent_repair/protocol.json",
+      "sha256": "c2af9a45f002604847de9ae79f794d47a8a03ff7c13b662b3ad3e3c8cede83e2"
+    },
+    {
+      "source": "runs/h75_shared_switch_tangent/manifest.json",
+      "artifact": "switch/tangent_repair/manifest.json",
+      "sha256": "dcd882f05777c789bf149db797bcc225ecd8a620a01aff67f39e39991c70a8a0"
+    }
+  ],
+  "excluded": "Model weights, checkpoints and full physics snapshots are not packaged. Compressed terrain arrays reproduce fits; other panels retain metrics and source locators.",
+  "packaged_fit_reproduced": true
+}

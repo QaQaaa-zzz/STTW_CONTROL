@@ -1,0 +1,33 @@
+{
+  "rows": [
+    {
+      "label": "natural_independent_1to0",
+      "arrival_s": 4.235,
+      "failed": false
+    },
+    {
+      "label": "restored_independent_1to0",
+      "arrival_s": 4.225,
+      "failed": false
+    },
+    {
+      "label": "restored_common_1to0",
+      "arrival_s": 4.205,
+      "failed": false
+    },
+    {
+      "label": "restored_steer_priority_1to0",
+      "arrival_s": 4.21,
+      "failed": false
+    },
+    {
+      "label": "restored_keep_alpha1",
+      "arrival_s": 4.075,
+      "failed": false
+    }
+  ],
+  "plan_count": 11,
+  "loop_count": 0,
+  "min_plan_m": 2.178446995080612,
+  "max_plan_m": 4.505533817355175
+}

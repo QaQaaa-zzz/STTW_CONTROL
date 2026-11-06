@@ -1,0 +1,62 @@
+[
+  {
+    "terrain": "flat",
+    "user_speed_m_s": 2.3,
+    "run": "docs/results/sttw-offroad-evidence-20261106/terrain/flat_v2p3",
+    "role": "reused original matched run"
+  },
+  {
+    "terrain": "oblique_2cm",
+    "user_speed_m_s": 2.3,
+    "run": "docs/results/sttw-offroad-evidence-20261106/terrain/oblique_2cm_v2p3",
+    "role": "new matched six-lane run"
+  },
+  {
+    "terrain": "oblique_4cm",
+    "user_speed_m_s": 2.3,
+    "run": "docs/results/sttw-offroad-evidence-20261106/terrain/oblique_4cm_v2p3",
+    "role": "reused original matched run"
+  },
+  {
+    "terrain": "oblique_6cm",
+    "user_speed_m_s": 2.3,
+    "run": "docs/results/sttw-offroad-evidence-20261106/terrain/oblique_6cm_v2p3",
+    "role": "new matched six-lane run"
+  },
+  {
+    "terrain": "reverse_oblique_4cm",
+    "user_speed_m_s": 2.3,
+    "run": "docs/results/sttw-offroad-evidence-20261106/terrain/reverse_oblique_4cm_v2p3",
+    "role": "new matched six-lane run"
+  },
+  {
+    "terrain": "flat",
+    "user_speed_m_s": 2.6,
+    "run": "docs/results/sttw-offroad-evidence-20261106/terrain/flat_v2p6",
+    "role": "new matched six-lane run"
+  },
+  {
+    "terrain": "oblique_2cm",
+    "user_speed_m_s": 2.6,
+    "run": "docs/results/sttw-offroad-evidence-20261106/terrain/oblique_2cm_v2p6",
+    "role": "new matched six-lane run"
+  },
+  {
+    "terrain": "oblique_4cm",
+    "user_speed_m_s": 2.6,
+    "run": "docs/results/sttw-offroad-evidence-20261106/terrain/oblique_4cm_v2p6",
+    "role": "new matched six-lane run"
+  },
+  {
+    "terrain": "oblique_6cm",
+    "user_speed_m_s": 2.6,
+    "run": "docs/results/sttw-offroad-evidence-20261106/terrain/oblique_6cm_v2p6",
+    "role": "new matched six-lane run"
+  },
+  {
+    "terrain": "reverse_oblique_4cm",
+    "user_speed_m_s": 2.6,
+    "run": "docs/results/sttw-offroad-evidence-20261106/terrain/reverse_oblique_4cm_v2p6",
+    "role": "new matched six-lane run"
+  }
+]

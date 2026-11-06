@@ -1,0 +1,57 @@
+{
+  "alphas": [
+    1
+  ],
+  "fork_phases_m": {
+    "exit_projection": 5.3
+  },
+  "hold_s": 0.0,
+  "hold_channels": [
+    [
+      false,
+      false
+    ],
+    [
+      false,
+      false
+    ],
+    [
+      false,
+      false
+    ],
+    [
+      false,
+      false
+    ],
+    [
+      false,
+      false
+    ]
+  ],
+  "kind": "switch",
+  "post_fork_seconds": null,
+  "track_wheel_contacts": false,
+  "target_alpha": [
+    0,
+    0,
+    0,
+    0,
+    1
+  ],
+  "execution_modes": [
+    0,
+    0,
+    1,
+    2,
+    0
+  ],
+  "case_labels": [
+    "natural_independent_1to0",
+    "restored_independent_1to0",
+    "restored_common_1to0",
+    "restored_steer_priority_1to0",
+    "restored_keep_alpha1"
+  ],
+  "semantics": "At one shared full exported state, switch four branches1to0; compare independent/common/steer-priority original correction slew. Fifth branch retainsalpha1. No correction masking. All use required goal replanning with turn_end+5m/radius2m.",
+  "evaluation_role": "single-state matched-switch DEV, natural/restored controls for PhysX cache limitation, not independent seeds or guaranteed improvement"
+}

@@ -1,0 +1,127 @@
+{
+  "fork_time_s": 2.3000000000000003,
+  "first_replan_s": 3.0,
+  "reward_replay_error": 6.43089160812238e-08,
+  "rows": [
+    {
+      "branch": "natural_independent_1to0",
+      "early": {
+        "lower_ticks": 100,
+        "end_s": 2.799999999888241,
+        "xy_difference_rmse_m": 0.0003428486525081098,
+        "xy_difference_max_m": 0.0005056785885244608,
+        "speed_error_rmse_m_s": 0.06155817583203316,
+        "path_rmse_m": 0.21937835216522217
+      },
+      "peak_abs_roll_first_half_s": 0.2642245292663574,
+      "steer_slower_ticks": 0,
+      "speed_slower_ticks": 0,
+      "first_goal_s": 4.23,
+      "failed": false
+    },
+    {
+      "branch": "restored_independent_1to0",
+      "early": {
+        "lower_ticks": 100,
+        "end_s": 2.799999999888241,
+        "xy_difference_rmse_m": 0.0,
+        "xy_difference_max_m": 0.0,
+        "speed_error_rmse_m_s": 0.0625530257821083,
+        "path_rmse_m": 0.21915674209594727
+      },
+      "peak_abs_roll_first_half_s": 0.2639986276626587,
+      "steer_slower_ticks": 0,
+      "speed_slower_ticks": 0,
+      "first_goal_s": 4.225,
+      "failed": false
+    },
+    {
+      "branch": "restored_common_1to0",
+      "early": {
+        "lower_ticks": 100,
+        "end_s": 2.799999999888241,
+        "xy_difference_rmse_m": 0.00034990423591807485,
+        "xy_difference_max_m": 0.0006248379359021783,
+        "speed_error_rmse_m_s": 0.06178327277302742,
+        "path_rmse_m": 0.21909235417842865
+      },
+      "peak_abs_roll_first_half_s": 0.26520073413848877,
+      "steer_slower_ticks": 0,
+      "speed_slower_ticks": 1,
+      "first_goal_s": 4.2,
+      "failed": false
+    },
+    {
+      "branch": "restored_steer_priority_1to0",
+      "early": {
+        "lower_ticks": 100,
+        "end_s": 2.799999999888241,
+        "xy_difference_rmse_m": 0.00024262066290248185,
+        "xy_difference_max_m": 0.0005271388799883425,
+        "speed_error_rmse_m_s": 0.06288538873195648,
+        "path_rmse_m": 0.2189425528049469
+      },
+      "peak_abs_roll_first_half_s": 0.26435232162475586,
+      "steer_slower_ticks": 0,
+      "speed_slower_ticks": 0,
+      "first_goal_s": 4.21,
+      "failed": false
+    },
+    {
+      "branch": "restored_keep_alpha1",
+      "early": {
+        "lower_ticks": 100,
+        "end_s": 2.799999999888241,
+        "xy_difference_rmse_m": 0.028144193813204765,
+        "xy_difference_max_m": 0.05187994986772537,
+        "speed_error_rmse_m_s": 0.028453193604946136,
+        "path_rmse_m": 0.23882615566253662
+      },
+      "peak_abs_roll_first_half_s": 0.24467599391937256,
+      "steer_slower_ticks": 0,
+      "speed_slower_ticks": 0,
+      "first_goal_s": 4.075,
+      "failed": false
+    }
+  ],
+  "loop_events": [
+    {
+      "planner": "PythonRobotics Dubins; six path families and finite goal-heading candidates",
+      "upstream_commit": "8c392897c7f41a6e4d9aab9cb2e9737a7a6fa031",
+      "radius_m": 1.8,
+      "modes": [
+        "L",
+        "R",
+        "L"
+      ],
+      "segment_lengths_m": [
+        1.7666049046314583,
+        8.507392283903721,
+        0.2061643357374951
+      ],
+      "goal_heading_rad": 4.71238898038469,
+      "goal_heading_candidates": 9,
+      "goal_heading_mode": "free",
+      "goal_arclength_m": 10.480161524272676,
+      "goal_xy": [
+        12.949442863464355,
+        7.052823066711426
+      ],
+      "start_pose": [
+        12.400750160217285,
+        4.727596759796143,
+        2.0595498085021973
+      ],
+      "curvature_continuous": false,
+      "position_heading_continuous": true,
+      "shortest_path_certificate": false,
+      "safety_certificate": false,
+      "lane": 0,
+      "task_tick": 800,
+      "time_s": 4.0,
+      "cross_track_before": 0.3850143849849701,
+      "file": "replanned_path_00_tick0800.npz",
+      "planning_seconds": 0.01354556500155013
+    }
+  ]
+}

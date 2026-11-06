@@ -1,0 +1,9 @@
+[
+  {
+    "time_s": 1.58,
+    "target_speed_span": 0.2708706259727478,
+    "target_steer_span": 0.027907423675060272,
+    "rate_active_count": 3,
+    "steer_limited_more_than_speed": 0
+  }
+]
