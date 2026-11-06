@@ -1,0 +1,137 @@
+{
+  "go2_checkout": "/home/qy/projects/My_unitree_go2_gym",
+  "device": "cuda:0",
+  "seed": 20261105,
+  "num_envs": 4096,
+  "updates": 150,
+  "rollout_steps": 24,
+  "save_interval": 25,
+  "bundle": "runs/h75_selected_local300_flat/bundle",
+  "initial_policy": "runs/h75_original_training_portable/original_policy.pt",
+  "training_bank": "runs/h75_original_training_portable",
+  "initial_state": "runs/h75_selected_local300_flat/initial_state.npz",
+  "asset": "runs/isaac_urdf_drive/vehicle.urdf",
+  "controller_config": "runs/isaac_signals_parity/dynamic.json",
+  "lower_actor": "runs/local300_torch_portable_parity/actor.npz",
+  "lower_sha256": "517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125",
+  "plant_options": {
+    "wheel_collision": "sdf",
+    "friction_offset_threshold": 0.0,
+    "compliant_wheels": {
+      "frontwheel": {
+        "stiffness": 5324.4083452801915,
+        "damping": 112.38579318769304
+      },
+      "rearwheel": {
+        "stiffness": 7833.38122453075,
+        "damping": 173.11038721684574
+      }
+    },
+    "env_spacing": 200.0,
+    "terrain_layout": "replicated"
+  },
+  "randomization": {
+    "base_body": "chasis",
+    "friction_range": [
+      0.3,
+      1.0
+    ],
+    "mass_scale": [
+      0.9,
+      1.1
+    ],
+    "base_com_m": [
+      -0.03,
+      0.03
+    ],
+    "servo_gain_scale": [
+      0.9,
+      1.1
+    ],
+    "steer_zero_offset_rad": [
+      -0.035,
+      0.035
+    ],
+    "latency_s": [
+      0.005,
+      0.015
+    ],
+    "measurement_noise": [
+      0.01,
+      0.2,
+      0.01,
+      0.15,
+      0.2,
+      1.5,
+      1.5
+    ],
+    "push_interval_s": 4,
+    "push_velocity_range": {
+      "x": [
+        -0.4,
+        0.4
+      ],
+      "y": [
+        -0.4,
+        0.4
+      ],
+      "roll": [
+        -0.6,
+        0.6
+      ],
+      "pitch": [
+        -0.6,
+        0.6
+      ],
+      "yaw": [
+        -0.6,
+        0.6
+      ]
+    },
+    "base_mass_add_kg": [
+      -1,
+      1
+    ],
+    "mapping_note": "Go2 source ranges; velocity-servo gain maps damping multiplier. Angle-target stiffness and leg joint offsets do not exist on wheel velocity interfaces. Sensor representation requires task-specific mapping."
+  },
+  "alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "terrains": {
+    "flat": "runs/h75_offroad_training_terrain/flat_compact",
+    "waves": "runs/h75_offroad_training_terrain/waves_compact"
+  },
+  "switch_probability": 0.5,
+  "pulse": {
+    "probability": 0.8,
+    "duration_s": 0.1,
+    "forces_N": [
+      -32,
+      -24,
+      -16,
+      -8,
+      8,
+      16,
+      24,
+      32
+    ],
+    "site_body_position_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "ppo_overrides": {
+    "learning_rate": 1e-05,
+    "schedule": "fixed",
+    "gamma": 0.997,
+    "lam": 0.99
+  },
+  "task_note": "Original320 TRAIN prefixes/full routes/speeds/signed pulses/10s remaining deadline; add switches, SDK wave band and shared Go2 DR; no old trajectories used as new samples. Restore original H75 gamma=.997 and GAE lambda=.99 at50Hz; terminal reward already uses .997. All other settings unchanged from repaired replicated150 continuation; restart originalu77 weights, fresh optimizer.",
+  "selection_note": "Episode/reward peak plus periodic/final candidates; physical fixed-case comparison before adoption.",
+  "terrain_layout_note": "Clone vehicle and both original compact terrain templates together using native PhysX environment IDs. Templates are100m apart within each200m clone; each lane selects the same flat/waves terrain through its local origin. Original mesh assets, heights, task and physics clocks retained."
+}

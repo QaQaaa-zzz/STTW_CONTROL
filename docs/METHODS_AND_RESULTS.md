@@ -1,3 +1,9 @@
+## Original-horizon H75 continuation registered
+
+Configuration `learning/configs/go2_h75_offroad_horizon.json` restores original50Hz gamma .997 and GAE lambda .99, matching the unchanged terminal-reward discount. All other repaired Go2 continuation settings remain:4096×24×150, original320-prefix TRAIN task and signed pulses, shared Go2 DR, switches and replicated terrain, fixed1e-5 learning rate, unchanged network and selected Local300. Starts from originalu77 Actor/Critic/std with fresh optimizer, not rejected continuation candidates. Output `runs/go2_h75_offroad_horizon150`; budget14745600 policy transitions/1474560000 physics lane steps,150 iterations, estimated~4hours. No claim that discount mismatch is the sole cause of previous regression.
+
+Stage-end review uses `learning/configs/go2_h75_horizon_review.json`, no earlier segments, at most reward peak/periodic/final candidates. Same flat/bump/switch DEV, cached original/Zero reused, at most2400000 additional physics lane steps. No automatic adoption or unlimited continuation. TensorBoard6006 and stage notification retained; active process identity is in the research ledger.
+
 ## Matched low-speed flat controls completed
 
 `runs/h75_low_speed_flat/comparison/RESULTS.md` and `xy_matrix_full.png` compare all24 saved flat/ramp lanes at2.0/1.7m/s. Two new flat cases completed600000 physics lane steps/0 optimizer updates in279s, old ramp trajectories reused. At2.0m/s all flat lanes pass original hold; alpha0 flat path RMSE .0506m versus ramp .435m, indicating terrain-triggered subsequent oscillation in this matched case. At1.7m/s alpha1 already oscillates on flat (path RMSE .179m versus ramp .220m); final1s flat path/heading peaks .248m/.349rad are substantive. Thus low-speed alpha1 behavior is not solely a hill effect. Flat Zero's hold miss is marginal heading .051365rad versus .05, with path .01284m and speed .02935m/s; do not group it with alpha1 instability.
