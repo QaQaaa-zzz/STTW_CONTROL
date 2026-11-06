@@ -1,3 +1,9 @@
+## 地面固定摆、跳跃释放及继续推进
+
+用户认可当前行驶表现，要求继续推进，不为缩小误差重复调参/训练；但地面摆应固定，跳跃才由RB接管。新增显式pendulum_locked选项，地面以当前hip/knee角±1e-4rad极小游隙制动（裁到native limits），不额外添加摆位置servo扭矩；set_pendulum_locked(False)恢复原范围、目标对齐当前角、不reset车体/关节。此为仿真制动模型，不是已验证实机机械锁或原30Nm电机能力。
+
+首版等上下限受到PhysX报错，runs/pendulum_isaac_locked保留不作为接口通过证据；现有极小游隙修复正运行同3秒/15000physics/0optimizer短测，session52089，runs/pendulum_isaac_locked_clearance，记录实际角度/角速及释放前后状态。默认旧plant行为不变。旧H75 PD保持straight已完成并出图，左右弯调度因用户固定摆要求停止，避免继续错误合同。修好接口后直接往H75/跨技能推进，不重跑全七工况；完整RB交接尚未验证。
+
 ## 带摆原七工况结果与H75路径闭环接续
 
 标准评测已正常退出，14lane均完成10s，无物理终止；包括预热总945000physics、0optimizer、416.604s。`runs/pendulum_local300_standard/RESULTS.md`先展示实际/原参考XY、逐时刻最近路径距离及速度误差，保留原轨迹、所有方法指标及原奖励重建。带摆Local300回正/回正后小转向峰值偏离1.08–1.47m，超过0.5m持续2.05–4.30秒，不能因存活判跟踪合格；持续正负转弯优于纯ECBC。原车历史对照初态不同，图按首记录位姿对齐，不能宣称严格单因素效果。

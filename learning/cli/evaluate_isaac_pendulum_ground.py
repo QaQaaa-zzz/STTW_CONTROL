@@ -13,7 +13,7 @@ cfg=json.loads(Path('runs/isaac_signals_parity/dynamic.json').read_text())
 options=json.loads(Path('learning/configs/isaaclab_h75_offroad_selected.json').read_text())['plant_options']
 spec=json.loads(a.config.read_text()) if a.config else dict(duration_s=3.,warmup_s=3.,return_s=3.,speed_m_s=2.,steer_slew_rad_s=.8,cases=[dict(name='ecbc',steer_rad=0.,local300=False)])
 cases=spec['cases'];n=len(cases);steps=round(spec['duration_s']/.005)
-plant=IsaacLabVectorPlant(a.asset,['plane'],[0]*n,a.output,pendulum_rest=[-1.2,2.499999],**options)
+plant=IsaacLabVectorPlant(a.asset,['plane'],[0]*n,a.output,pendulum_rest=[-1.2,2.499999],pendulum_locked=spec.get('pendulum_locked',False),**options)
 controller=TorchController(cfg,n,'cuda:0')
 from sttw_control.torch_local_lower import TorchLocalLower
 from sttw_control.torch_path_reference import wrap
@@ -27,7 +27,7 @@ turn=torch.tensor([c['steer_rad'] for c in cases],device=device)
 alive=torch.ones(n,dtype=torch.bool,device=device);rows=[];masks=[];references=[];commands=[];start=time.monotonic()
 for k in range(steps+1):
  m,pose,v=plant.observe()
- row=torch.cat((torch.full((n,1),k*.005,device=device),pose,v[:,None],m[:,:4],plant.dofs[:,plant.pendulum_servos.indices,0]),dim=1)
+ row=torch.cat((torch.full((n,1),k*.005,device=device),pose,v[:,None],m[:,:4],plant.dofs[:,plant.pendulum_servos.indices,0],plant.dofs[:,plant.pendulum_servos.indices,1]),dim=1)
  rows.append(row.cpu().numpy());masks.append(alive.cpu().numpy().copy());references.append(raw.cpu().numpy().copy());commands.append(command.cpu().numpy().copy())
  alive &= (m[:,0].abs()<=torch.pi/4)&torch.isfinite(row).all(-1)
  if k==steps or not bool(alive.any()):break
@@ -42,10 +42,13 @@ for k in range(steps+1):
  for _ in range(25):plant.step(torch.where(alive[:,None],command,0.))
  _,new_pose,_=plant.observe();lower.finish(applied,wrap(new_pose[:,2]-pose[:,2])/.005);previous=raw.clone()
  if (k+1)%200==0:print(dict(control_steps=k+1,alive=int(alive.sum()),elapsed_s=time.monotonic()-start),flush=True)
-trace=np.asarray(rows);valid=np.asarray(masks);np.savez(a.output/'trajectory.npz',trace=trace,valid=valid,reference=np.asarray(references),command=np.asarray(commands),columns=['time','x','y','yaw','speed','roll','roll_rate','steer','steer_rate','hip','knee'])
+trace=np.asarray(rows);valid=np.asarray(masks);np.savez(a.output/'trajectory.npz',trace=trace,valid=valid,reference=np.asarray(references),command=np.asarray(commands),columns=['time','x','y','yaw','speed','roll','roll_rate','steer','steer_rate','hip','knee','hip_velocity','knee_velocity'])
 results=[]
 for i,case in enumerate(cases):
- tr=trace[valid[:,i],i];results.append(dict(name=case['name'],failed=not bool(alive[i]),duration_s=float(tr[-1,0]),peak_roll_deg=float(np.rad2deg(abs(tr[:,5])).max()),final_speed=float(tr[-1,4]),final_xy=tr[-1,1:3].tolist()))
+ tr=trace[valid[:,i],i];results.append(dict(name=case['name'],failed=not bool(alive[i]),duration_s=float(tr[-1,0]),peak_roll_deg=float(np.rad2deg(abs(tr[:,5])).max()),final_speed=float(tr[-1,4]),final_xy=tr[-1,1:3].tolist(),max_pendulum_position_drift_rad=np.max(np.abs(tr[:,9:11]-tr[0,9:11]),axis=0).tolist(),max_pendulum_speed_rad_s=np.max(np.abs(tr[:,11:13]),axis=0).tolist()))
 result=dict(status='complete',cases=results,physics_steps=k*25*n,elapsed_s=time.monotonic()-start)
 (a.output/'results.json').write_text(json.dumps(result,indent=2));print(result,flush=True)
-app.close(wait_for_replicator=False)
+if spec.get('pendulum_locked',False):
+ before=plant.robot.data.joint_pos.clone();plant.set_pendulum_locked(False)
+ (a.output/'release.json').write_text(json.dumps(dict(state_reset=False,position_change_without_step=float((plant.robot.data.joint_pos-before).abs().max()),restored_limits=plant.robot.data.joint_pos_limits[:,plant.pendulum_servos.indices].cpu().tolist(),original_limits=plant.pendulum_original_limits.cpu().tolist()),indent=2))
+app.close(wait_for_replicator=False,skip_cleanup=True)

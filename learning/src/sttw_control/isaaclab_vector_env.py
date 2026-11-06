@@ -15,12 +15,14 @@ from .torch_controller import TorchVelocityServos,TorchPositionServos
 from .torch_observation import TorchVehicleSignals
 
 class IsaacLabVectorPlant:
-    def __init__(self,asset,terrain_paths,terrain_ids,output,servo_mode="explicit",hull_vertices=None,mesh_collision_on_geometry=False,compliant_wheels=None,friction_correlation_distance=.025,external_forces_every_iteration=False,wheel_collision="convexHull",friction_offset_threshold=.04,env_spacing=None,track_wheel_contacts=False,terrain_layout="external",pendulum_rest=None):
+    def __init__(self,asset,terrain_paths,terrain_ids,output,servo_mode="explicit",hull_vertices=None,mesh_collision_on_geometry=False,compliant_wheels=None,friction_correlation_distance=.025,external_forces_every_iteration=False,wheel_collision="convexHull",friction_offset_threshold=.04,env_spacing=None,track_wheel_contacts=False,terrain_layout="external",pendulum_rest=None,pendulum_locked=False):
         self.servo_mode=servo_mode
         asset=Path(asset);output=Path(output);self.contract=json.loads(asset.with_name('contract.json').read_text());self.device='cuda:0';self.count=len(terrain_ids)
         if hashlib.sha256(asset.read_bytes()).hexdigest()!=self.contract['exported_xml_sha256']:raise ValueError('asset identity mismatch')
         self_collision=self.contract.get('requires_self_collision_filtering', False)
         self.pendulum_rest=pendulum_rest
+        if pendulum_locked and pendulum_rest is None:raise ValueError("pendulum_locked requires pendulum_rest")
+        self.pendulum_is_locked=False
         if pendulum_rest is not None and servo_mode != 'explicit':
             raise ValueError('Pendulum candidate uses explicit source actuators')
         staged=output/'input';staged.mkdir();tree=ET.parse(asset);mapping={}
@@ -131,6 +133,19 @@ class IsaacLabVectorPlant:
         self.metadata['terrain_layout']=dict(mode=terrain_layout,clone_origins=clone_origins.tolist(),template_offsets=terrain_offsets.tolist(),filtering='native replicated environment IDs' if replicated_terrain else 'explicit collision groups')
         self.metadata['wheel_contact_tracking']=dict(enabled=track_wheel_contacts,body_order=['frontwheel','rearwheel'],aggregation='official ContactSensor mean contact position per body/filter; force_matrix_w per filter',sample_dt_s=.0002)
         self.reset()
+        if self.pendulum_servos is not None:
+            self.pendulum_original_limits=self.robot.data.joint_pos_limits[:,self.pendulum_servos.indices].clone()
+            self.metadata['pendulum_lock_model']='joint brake with 1e-4 rad half-play, clipped to native limits; not finite motor holding'
+            self.set_pendulum_locked(pendulum_locked)
+
+    def set_pendulum_locked(self,locked):
+        """Engage at current joint positions or release to native limits; never reset state."""
+        indices=self.pendulum_servos.indices
+        self.pendulum_target=self.robot.data.joint_pos[:,indices].clone()
+        limits=torch.stack((torch.maximum(self.pendulum_target-1e-4,self.pendulum_original_limits[:,:,0]),torch.minimum(self.pendulum_target+1e-4,self.pendulum_original_limits[:,:,1])),dim=-1) if locked else self.pendulum_original_limits
+        self.robot.write_joint_position_limit_to_sim(limits,joint_ids=indices)
+        self.pendulum_is_locked=bool(locked)
+        self.metadata['pendulum_locked']=bool(locked)
 
     def refresh(self):
         self.roots=self.robot.data.root_link_state_w.clone();self.roots[:,3:7]=self.roots[:,[4,5,6,3]];self.dofs=torch.stack((self.robot.data.joint_pos,self.robot.data.joint_vel),dim=-1);self.rigid=self.robot.data.body_link_state_w.clone();self.rigid[:,:,3:7]=self.rigid[:,:,[4,5,6,3]];self.contact=self.sensor.data.net_forces_w[:,self.contact_order]
@@ -174,7 +189,7 @@ class IsaacLabVectorPlant:
             self.robot.set_joint_velocity_target(target,joint_ids=self.servos.indices)
         else:
             torque=torque+self.servos.torque(command,self.dofs[:,:,1])
-        if self.pendulum_servos is not None:
+        if self.pendulum_servos is not None and not self.pendulum_is_locked:
             if pendulum_target is not None:self.pendulum_target=pendulum_target
             torque=torque+self.pendulum_servos.torque(self.pendulum_target,self.dofs[:,:,0],self.dofs[:,:,1])
         self.robot.set_joint_effort_target(torque);self.robot.write_data_to_sim();self.sim.step(render=False);self.robot.update(.0002);self.sensor.update(.0002,force_recompute=True)
