@@ -1,0 +1,21 @@
+{
+  "status": "prepared_code_only_waiting_for_complete_frozen_evidence",
+  "templates": {
+    "rb_upstream_offset_01": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v2.0_a0.5.json",
+    "rb_upstream_offset_03": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_03_L9.6_v2.0_a0.5.json",
+    "rb_upstream_offset_06": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_06_L9.6_v2.0_a0.5.json",
+    "rb_nominal_upstream_01": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L9.6_v2.0_a0.5.json",
+    "rb_connection_seed20261106_root000": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root000_L9.6_v2.0_a0.5.json",
+    "rb_connection_seed20261106_root002": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root002_L9.6_v2.0_a0.5.json"
+  },
+  "methods": [
+    "C6",
+    "R6"
+  ],
+  "cases": 12,
+  "maximum_physics_steps": 105600,
+  "optimizer_updates": 0,
+  "evidence_requirement": "All declared 216 sequence outcomes and 36 hold outcomes exported; exclude queried origin; use same frozen evidence for both methods",
+  "wiring_check": "/tmp/ch3_online_six_roots_2x4lpeig/prepared",
+  "queued": false
+}
