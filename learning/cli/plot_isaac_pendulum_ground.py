@@ -32,6 +32,6 @@ axes[1,0].set(xlabel='Time (s)',ylabel='Roll (deg)');axes[1,1].set(xlabel='Time 
 for ax in [axes[0,1],axes[1,0],axes[1,1]]:
  for key in ('warmup_s','return_s'):
   if key in protocol.get('spec',{}):ax.axvline(protocol['spec'][key],color='gray',ls=':',lw=.7)
-f.suptitle('Common STTW chassis + pendulum / Isaac Lab GPU\nNominal DEV; original controller/weights; actual endpoints marked x')
+f.suptitle('Isaac Lab ground control / ECBC and frozen Local300\nNominal DEV; controller configuration recorded in protocol; endpoints marked x')
 f.savefig(a.run/'xy_response.png',dpi=160);plt.close(f)
 (a.run/'RESULTS.md').write_text('# Isaac Lab pendulum ground diagnostic\n\n![Actual XY and response](xy_response.png)\n\n```json\n'+json.dumps(results,indent=2)+'\n```\n\nSingle nominal initialization, fixed hip/knee targets. No H75, training or jump handoff. Gray XY reference integrates requested speed and steering through the original bicycle kinematics; it is not a feasibility guarantee. Each method stops at its actual recorded endpoint. Raw states, applied references and commands remain in trajectory.npz; configuration in protocol.json.\n')
