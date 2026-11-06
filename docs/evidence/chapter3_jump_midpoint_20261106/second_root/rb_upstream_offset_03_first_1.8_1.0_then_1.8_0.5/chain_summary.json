@@ -1,0 +1,132 @@
+{
+  "decision_prefix": {
+    "decision_time_s": 5.44,
+    "decision_reached": true,
+    "max_path_error_before_decision_m": 0.5511850467811801,
+    "corridor_intact_at_decision": true,
+    "first_corridor_violation_s": null,
+    "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+  },
+  "stages": {
+    "reached_release_line": true,
+    "airborne_after_handoff": true,
+    "strict_support": true,
+    "ground_return": true,
+    "continued": true
+  },
+  "stage_times": {
+    "release": 9.8,
+    "strict_support": 13.729999542236328,
+    "ground_return": 14.52,
+    "final_conditions": 16.520000457763672
+  },
+  "role": "Single nominal DEV, no robustness claim",
+  "complete": true,
+  "success_time_s": 16.520000457763672,
+  "first_final_conditions_time_s": 16.520000457763672,
+  "checks": {
+    "full_window": true,
+    "ordered_approach": true,
+    "original_path_corridor": true,
+    "stable_landing": true,
+    "ground_return": true,
+    "continued_time": true,
+    "continued_forward": true,
+    "final_goal": true
+  },
+  "criteria": {
+    "corridor_half_width_m": 1.0,
+    "waypoints": [
+      [
+        -4.0,
+        -8.0
+      ],
+      [
+        -4.0,
+        -4.8
+      ],
+      [
+        -4.0,
+        -2
+      ],
+      [
+        -2.0,
+        0
+      ],
+      [
+        6.0,
+        0
+      ]
+    ],
+    "waypoint_radius_m": 1.0,
+    "minimum_post_handoff_s": 2.0,
+    "minimum_post_handoff_forward_m": 2.0,
+    "final_goal_xy": [
+      14.6,
+      0.0
+    ]
+  },
+  "passed_waypoints": [
+    {
+      "point": [
+        -4.0,
+        -8.0
+      ],
+      "time_s": 0.019999999552965164
+    },
+    {
+      "point": [
+        -4.0,
+        -4.8
+      ],
+      "time_s": 1.559999942779541
+    },
+    {
+      "point": [
+        -4.0,
+        -2
+      ],
+      "time_s": 2.9600000381469727
+    },
+    {
+      "point": [
+        -2.0,
+        0
+      ],
+      "time_s": 4.960000038146973
+    },
+    {
+      "point": [
+        6.0,
+        0
+      ],
+      "time_s": 9.260000228881836
+    }
+  ],
+  "max_original_path_error_m": 0.6738856434822083,
+  "path_rmse_m": 0.2017337254320036,
+  "post_handoff_s": 7.479999542236328,
+  "post_handoff_forward_m": 11.505223274230957,
+  "landing": {
+    "skill": "update2",
+    "first_strict_support_completion_s": 13.729999542236328,
+    "airborne_after_handoff": true,
+    "first_airborne_interval_s": [
+      10.364999771118164,
+      10.875
+    ],
+    "landing_hold_1s": true,
+    "longest_hold_s": 1.7900009155273438,
+    "interval_s": [
+      12.729999542236328,
+      14.520000457763672
+    ]
+  },
+  "midpoint_prefix": {
+    "decision_time_s": 7.62,
+    "decision_reached": true,
+    "max_path_error_before_decision_m": 0.5511850467811801,
+    "corridor_intact_at_decision": true,
+    "scope": "Observed corridor history through actual midpoint, including the first connection segment"
+  }
+}

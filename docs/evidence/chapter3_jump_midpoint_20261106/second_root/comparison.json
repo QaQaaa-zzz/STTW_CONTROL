@@ -1,0 +1,72 @@
+{
+  "origin_id": "rb_upstream_offset_03",
+  "evaluated": 36,
+  "successes": 21,
+  "hold_successes": 5,
+  "best_sequence": {
+    "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_2.0_0.0",
+    "time_s": 14.699999809265137
+  },
+  "best_hold": {
+    "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_2.0_0.0",
+    "time_s": 14.699999809265137
+  },
+  "diagonal_match": true,
+  "diagonal_max_position_difference_m": 0.0,
+  "midpoint_max_observed_difference": 0.0,
+  "failure_phase": {
+    "none": 21,
+    "jump_or_landing": 11,
+    "continuation_or_corridor": 4
+  },
+  "first_candidate_groups": [
+    {
+      "first": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "successes": 4,
+      "hold_complete": true
+    },
+    {
+      "first": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "successes": 3,
+      "hold_complete": true
+    },
+    {
+      "first": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "successes": 4,
+      "hold_complete": true
+    },
+    {
+      "first": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "successes": 3,
+      "hold_complete": true
+    },
+    {
+      "first": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "successes": 4,
+      "hold_complete": true
+    },
+    {
+      "first": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "successes": 3,
+      "hold_complete": false
+    }
+  ]
+}
