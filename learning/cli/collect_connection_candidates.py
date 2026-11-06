@@ -59,10 +59,25 @@ snapshot_id=hashlib.sha256((a.output/'exit_snapshot.pt').read_bytes()).hexdigest
 skill_id=env.upper_sha256+':'+('ecbc_zero_residual' if bool(env.zero_lower.all()) else env.lower_sha256)
 if spec['replanning'].get('arrival_reference')=='original_route':skill_id+=':arrival_original_route'
 speeds=torch.tensor([c['speed_m_s'] for c in candidates],device=env.device);alphas=torch.tensor([c['alpha'] for c in candidates],device=env.device)
+capability=None
+if spec.get('capability_records'):
+    from sttw_control.empirical_capability import ConnectionCapability
+    from sttw_control.continuous_task import ContinuousTask
+    cc=json.loads(Path(spec['capability_config']).read_text())
+    evidence=[json.loads(line) for line in Path(spec['capability_records']).read_text().splitlines() if line.strip()]
+    evidence=[r for r in evidence if r['origin_id']!=spec['origin_id']]
+    capability=ConnectionCapability(evidence,cc['feature_scales'],cc['bandwidth'],cc['minimum_support'])
 completed_tasks={r['task_id'] for r in records}
 for task in spec['tasks']:
     if task['task_id'] in completed_tasks:continue
     folder=a.output/task['task_id'];folder.mkdir()
+    decision=None
+    if capability is not None:
+        route=dict(route_id=task['task_id'],goal_id=task['task_id'],task_id=task['task_id'],skill_id=skill_id,candidates=[c['candidate_id'] for c in candidates],reference_path=task['route'])
+        manager=ContinuousTask(dict(goals=[dict(goal_id=task['task_id'],allowed_routes=[task['task_id']])]),[route],candidates,capability)
+        decision=manager.choose(feature,[task['task_id']])
+        decision.update(role='Prospective recommendation before candidate rollouts; selected lane is executed in the paired batch',evidence_rows=len(evidence),evidence_records=spec['capability_records'])
+        (folder/'prospective_decision.json').write_text(json.dumps(decision,indent=2))
     data=np.load(task['route']);original=TorchPathReference(data,env.config,env.device)
     env.restore_connection_state(snapshot);env.horizon=round(task['seconds']/.02);env.begin_connection(original,speeds,alphas)
     planner=IsaacGoalReplanning(env,{**spec['replanning'],'original_route':task['route']},folder)
@@ -86,6 +101,11 @@ for task in spec['tasks']:
         valid=trace[:,i,6]>0;path_errors=errors[valid,i]
         completed=bool(env.alive[i]) and np.isfinite(arrivals[i]) and bool((path_errors<=spec['corridor_half_width_m']).all())
         records.append(dict(origin_id=spec['origin_id'],snapshot_id=snapshot_id,task_id=task['task_id'],skill_id=skill_id,candidate_id=candidate['candidate_id'],state=feature,complete=int(completed),success_cost=float(arrivals[i]) if completed else None,path_rmse_m=float(np.sqrt(np.mean(path_errors**2))) if len(path_errors) else None,observed_lower_steps=int(valid.sum()),physical_or_controller_failure=not bool(env.alive[i]),trace=str((folder/'trajectory.npz').resolve()),snapshot=str((a.output/'exit_snapshot.pt').resolve())))
+    if decision is not None and decision['status']=='reference_selected':
+        selected=next(r for r in records if r['task_id']==task['task_id'] and r['candidate_id']==decision['reference']['candidate_id'])
+        lane=next(i for i,c in enumerate(candidates) if c['candidate_id']==selected['candidate_id'])
+        manager.observe_goal(task['task_id'],arrived=bool(np.isfinite(arrivals[lane])),upright=not selected['physical_or_controller_failure'],within_allowed_region=bool((errors[trace[:,lane,6]>0,lane]<=spec['corridor_half_width_m']).all()))
+        (folder/'prospective_outcome.json').write_text(json.dumps(dict(decision=decision,observed=selected,completed=manager.completed,events=manager.events),indent=2))
     (a.output/'records.jsonl').write_text(''.join(json.dumps(row)+'\n' for row in records))
 (a.output/'status.json').write_text(json.dumps(dict(status='complete',rows=len(records),elapsed_s=time.monotonic()-start,optimizer_updates=0),indent=2))
 os.sync();os._exit(0)
