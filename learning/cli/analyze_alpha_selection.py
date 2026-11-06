@@ -57,6 +57,22 @@ common_feasible=set.intersection(*(set(r['full_window_feasible_alpha']) for r in
 speed_mean=np.mean([seed['speed_rmse'] for r in calibration for seed in r['per_seed']],axis=0)
 constraint_choice=min(common_feasible,key=lambda x:speed_mean[list(alpha).index(x)]) if common_feasible else None
 output['calibration_repetition']=dict(terrains=a.calibration_terrains,speed_m_s=a.calibration_speed,mean_cost=calibration_cost.tolist(),cost_best_alpha=float(alpha[calibration_cost.argmin()]),alpha075_vs05_cost_change_percent=float(100*(calibration_cost[3]/calibration_cost[2]-1)),common_feasible_alpha=sorted(common_feasible),constraint_choice=constraint_choice)
+# Each discrete candidate is a line A + eta^2 B; intersect its pairwise optimality intervals.
+calibration_seeds=[seed for r in calibration for seed in r['per_seed']]
+speed_squared=np.mean([np.square(seed['speed_rmse']) for seed in calibration_seeds],axis=0)
+path_squared=np.mean([np.square(seed['path_rmse']) for seed in calibration_seeds],axis=0)
+weight_intervals=[]
+for i in range(len(alpha)):
+ lo,hi=0.,float('inf')
+ for j in range(len(alpha)):
+  if i==j:continue
+  slope=path_squared[i]-path_squared[j];rhs=speed_squared[j]-speed_squared[i]
+  if slope>0:hi=min(hi,rhs/slope)
+  elif slope<0:lo=max(lo,rhs/slope)
+  elif rhs<0:hi=-1.
+ if hi>=lo and hi>=0:
+  weight_intervals.append(dict(alpha=float(alpha[i]),eta_min_per_s=float(max(lo,0)**.5),eta_max_per_s=float(hi**.5) if np.isfinite(hi) else None))
+output['calibration_repetition']['optimal_eta_intervals']=weight_intervals
 (a.evaluation/'alpha_selection.json').write_text(json.dumps(output,indent=2))
 lines=['# Alpha selection: two distinct task rules','','[Actual/reference trajectories and repeated tradeoffs](RESULTS.md) · [All seeds and five-alpha costs](alpha_selection.json)','',
  'Original calibration: eta=.533 selects alpha=.75 among five levels, only about1% below alpha=.5. A0.40m peak path bound permits .75 on2cm and .5 on4cm; requiring both picks .5. These are different rules, not a universal optimal alpha.','',
@@ -69,5 +85,9 @@ lines += ['', '## Full-window bound feasibility', '', 'Counts require a full10s 
 for r in result:
  lines.append(f"|{r['terrain']}|{r['speed_m_s']:g}|{' / '.join(map(str,r['per_alpha_feasible_seed_counts']))}|{r['n']}|")
 lines += ['', '## Calibration-condition repetition', '', f"For {a.calibration_terrains} at {a.calibration_speed:g}m/s, the repeated mean-cost choice is alpha={output['calibration_repetition']['cost_best_alpha']:g}; .75 versus .5 cost change is {output['calibration_repetition']['alpha075_vs05_cost_change_percent']:+.2f}%. Common full-window bound-feasible levels are {sorted(common_feasible)}, giving alpha={constraint_choice} under the speed-priority constrained rule. These are task-conditioned choices, not a universal optimum.", '', 'Negative percentage favors .75; positive favors .5. No feasible candidate is reported as None rather than forcing a recommendation. These are paired physical-parameter repeats of one trained policy, not independent training seeds or a significance test.']
+lines += ['', '## Task-weight sensitivity', '', 'For the same calibration repeats, the mean cost is A + eta^2 B. Pairwise line intersections give these discrete optimality intervals; boundary values are ties. These are empirical policy choices, not a fitted continuous alpha law.', '', '|Alpha|Minimum eta (1/s)|Maximum eta (1/s)|', '|---|---:|---:|']
+for r in weight_intervals:
+ upper='unbounded' if r['eta_max_per_s'] is None else f"{r['eta_max_per_s']:.6f}"
+ lines.append(f"|{r['alpha']:g}|{r['eta_min_per_s']:.6f}|{upper}|")
 (a.evaluation/'ALPHA_SELECTION.md').write_text('\n'.join(lines)+'\n')
 print(json.dumps(dict(panels=len(result),cost_best_counts={str(x):int(sum(r['cost_best_alpha']==x for r in result)) for x in alpha},bound_choice_counts={str(x):int(sum(r['constraint_selected_alpha']==x for r in result)) for x in [*alpha,None]})))
