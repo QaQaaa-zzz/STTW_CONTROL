@@ -7,7 +7,7 @@ original STTW; hidden PhysX contact caches are not serialized by the state API.
 import os,argparse,hashlib,json,time
 from pathlib import Path
 import numpy as np
-p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--resume-from',type=Path);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--source-snapshot',type=Path);p.add_argument('--resume-from',type=Path);a=p.parse_args()
 spec=json.loads(a.config.read_text());candidates=spec['candidates']
 if len(candidates)!=6 or len({(c['speed_m_s'],c['alpha']) for c in candidates})!=6:
     p.error('six distinct speed/alpha candidates required')
@@ -28,16 +28,18 @@ policy=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],cfg,6,'
 plant=IsaacLabVectorPlant(s['asset'],[spec['terrain']],[0]*6,a.output,**s['plant_options']);env=IsaacPathRollout(bundle,s,policy,plant=plant)
 source_route=TorchPathReference(np.load(spec['source_route']),env.config,env.device)
 env.begin_connection(source_route,env.speed.clone(),env.alpha.clone())
-(a.output/'protocol.json').write_text(json.dumps(dict(spec=spec,settings=s,plant=plant.metadata,source_identity=identity,role='same exposed exit state paired DEV; not exact hidden PhysX cache replay'),indent=2))
+(a.output/'protocol.json').write_text(json.dumps(dict(spec=spec,settings=s,plant=plant.metadata,source_identity=identity,source_snapshot=str(a.source_snapshot) if a.source_snapshot else None,role='same exposed exit state paired DEV; not exact hidden PhysX cache replay'),indent=2))
 start=time.monotonic()
 records=[]
-if a.resume_from:
+if a.resume_from or a.source_snapshot:
     import shutil
-    parent=json.loads((a.resume_from/'protocol.json').read_text())
-    if parent['spec']!=spec or parent['settings']!=s:raise ValueError('resume requires unchanged collection contract')
-    record_path=a.resume_from/'records.jsonl'
-    records=[json.loads(line) for line in record_path.read_text().splitlines() if line.strip()] if record_path.exists() else []
-    shutil.copy2(a.resume_from/'exit_snapshot.pt',a.output/'exit_snapshot.pt')
+    if a.resume_from:
+        parent=json.loads((a.resume_from/'protocol.json').read_text())
+        if parent['spec']!=spec or parent['settings']!=s:raise ValueError('resume requires unchanged collection contract')
+        record_path=a.resume_from/'records.jsonl'
+        records=[json.loads(line) for line in record_path.read_text().splitlines() if line.strip()] if record_path.exists() else []
+    source=a.source_snapshot if a.source_snapshot else a.resume_from/'exit_snapshot.pt'
+    shutil.copy2(source,a.output/'exit_snapshot.pt')
     snapshot=torch.load(a.output/'exit_snapshot.pt',map_location='cpu',weights_only=False)
     env.restore_connection_state(snapshot)
     m,pose,v=plant.observe()
@@ -55,6 +57,7 @@ else:
     m,pose,v=plant.observe();feature=[float(v[0]),float(m[0,0]),float(m[0,1]),float(env.middle.projection['cross_track'][0]),float(wrap(env.middle.projection['heading'][0]-pose[0,2])),float(m[0,2]),float(m[0,3]),float(env.previous_reference[0,0])]
 snapshot_id=hashlib.sha256((a.output/'exit_snapshot.pt').read_bytes()).hexdigest()
 skill_id=env.upper_sha256+':'+('ecbc_zero_residual' if bool(env.zero_lower.all()) else env.lower_sha256)
+if spec['replanning'].get('arrival_reference')=='original_route':skill_id+=':arrival_original_route'
 speeds=torch.tensor([c['speed_m_s'] for c in candidates],device=env.device);alphas=torch.tensor([c['alpha'] for c in candidates],device=env.device)
 completed_tasks={r['task_id'] for r in records}
 for task in spec['tasks']:

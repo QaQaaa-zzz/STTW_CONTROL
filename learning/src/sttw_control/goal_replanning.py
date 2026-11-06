@@ -139,6 +139,7 @@ class IsaacGoalReplanning:
         original=env.route
         self.grid=original.s.cpu().numpy()
         route_data=np.load(config['original_route'])
+        self.original_route={key:route_data[key].copy() for key in ('xy','heading','curvature')}
         self.goal_s=float(route_data['turn_end'])+config['goal_after_turn_m'] if 'goal_after_turn_m' in config else float(route_data['goal'])
         self.goal=original.at(torch.tensor([self.goal_s],device=env.device))[0][0].cpu().numpy()
         self.arrived=np.zeros(env.n,dtype=bool);self.exit_bound=np.zeros(env.n,dtype=bool);self.replanned=np.zeros(env.n,dtype=bool)
@@ -155,16 +156,22 @@ class IsaacGoalReplanning:
         due=env.tick>0 and env.tick%self.period==0
         cross=env.middle.projection['cross_track'].cpu().numpy()
         invalid=env.middle.follower['invalid'].cpu().numpy();alive=env.alive.cpu().numpy()
-        changed=[]
+        changed=[];projection_starts={}
         for i,enabled in enumerate(c['enabled']):
             if enabled and alive[i] and self.arrived[i] and self.replanned[i] and not self.exit_bound[i]:
-                # Finite-goal handoff: do not keep following a pre-arrival loop.
-                xy=poses[i,:2]+self.grid[:,None]*np.array([np.cos(poses[i,2]),np.sin(poses[i,2])])
-                heading=np.full_like(self.grid,poses[i,2]);curvature=np.zeros_like(self.grid)
+                if c.get('arrival_reference','forward_exit')=='original_route':
+                    xy=self.original_route['xy'];heading=self.original_route['heading'];curvature=self.original_route['curvature']
+                    nearest=np.square(xy-poses[i,:2]).sum(-1).argmin()
+                    projection_starts[i]=float(self.grid[nearest])
+                    event='goal_arrival_original_route'
+                else:
+                    xy=poses[i,:2]+self.grid[:,None]*np.array([np.cos(poses[i,2]),np.sin(poses[i,2])])
+                    heading=np.full_like(self.grid,poses[i,2]);curvature=np.zeros_like(self.grid)
+                    event='goal_arrival_forward_exit'
                 for key,value in dict(xy=xy,heading=heading,curvature=curvature).items():getattr(env.route,key)[i]=torch.as_tensor(value,device=env.device,dtype=torch.float32)
-                file=f'forward_exit_{i:02d}_tick{env.tick*4:04d}.npz'
-                np.savez_compressed(self.output/file,s=self.grid,xy=xy,heading=heading,curvature=curvature,goal=0.,original_goal_xy=self.goal)
-                self.events.append(dict(lane=i,task_tick=env.tick*4,time_s=env.tick*.02,event='goal_arrival_forward_exit',file=file,start_pose=poses[i].tolist(),goal_xy=self.goal.tolist(),planning_seconds=0.))
+                file=f'{event}_{i:02d}_tick{env.tick*4:04d}.npz'
+                np.savez_compressed(self.output/file,s=self.grid,xy=xy,heading=heading,curvature=curvature,goal=self.goal_s if event=='goal_arrival_original_route' else 0.,original_goal_xy=self.goal)
+                self.events.append(dict(lane=i,task_tick=env.tick*4,time_s=env.tick*.02,event=event,file=file,start_pose=poses[i].tolist(),goal_xy=self.goal.tolist(),planning_seconds=0.))
                 self.exit_bound[i]=True;changed.append(i)
                 continue
             if not due or not enabled or not replan_requested(xy=poses[i,:2],goal_xy=self.goal,cross_track_m=cross[i],follower_invalid=invalid[i],already_replanned=self.replanned[i],contact=not alive[i],fault=bool(env.middle.fault[i]),ever_arrived=self.arrived[i],arrival_radius_m=c['arrival_radius_m'],departure_m=c['departure_m'],continuous_replanning=True):continue
@@ -180,6 +187,7 @@ class IsaacGoalReplanning:
         if changed:
             ids=torch.tensor(changed,device=env.device)
             previous=env.middle.projection['progress'].clone();previous[ids]=0
+            for lane,progress in projection_starts.items():previous[lane]=progress
             projection=env.route.project(pose[:,:2],previous,torch.zeros_like(speed))
             follower=env.route.pursuit(projection['progress'],pose,speed,env.speed)
             for key,value in projection.items():env.middle.projection[key][ids]=value[ids]
