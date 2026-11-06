@@ -11,10 +11,11 @@ parser.add_argument('--source', type=Path, default=DEFAULT_XML)
 parser.add_argument('--output', type=Path, required=True)
 parser.add_argument('--format', choices=('mjcf', 'urdf'), default='mjcf')
 parser.add_argument('--wheel-vertices', type=int, default=226, help='Ellipsoid convex mesh vertex budget; historical default 226')
+parser.add_argument('--preserve-self-collisions', action='store_true', help='Record source collision masks for an importer that implements pair filtering')
 args = parser.parse_args()
 if args.format == 'urdf':
     from sttw_control.isaac_urdf import export_isaac_urdf
-    contract = export_isaac_urdf(args.output, args.source, wheel_vertices=args.wheel_vertices)
+    contract = export_isaac_urdf(args.output, args.source, wheel_vertices=args.wheel_vertices, preserve_self_collisions=args.preserve_self_collisions)
 else:
-    contract = export_isaac_asset(args.output, args.source)
+    contract = export_isaac_asset(args.output, args.source, preserve_self_collisions=args.preserve_self_collisions)
 print(args.output/'contract.json', contract['exported_xml_sha256'])

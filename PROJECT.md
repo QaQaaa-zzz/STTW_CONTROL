@@ -1,3 +1,9 @@
+## 带摆 URDF 导出与运动学检查
+
+现有 `isaac_urdf.py` 原位支持非原点单hinge和圆柱碰撞；URDF link改以hinge为原点，COM/geom/子节点origin同步平移，`link_frame_offsets`记录变换。`export_isaac_asset.py --preserve-self-collisions`记录源contype/conaffinity及显式exclude，不再用原无自碰撞假设拒绝候选；默认原STTW路径不变。实际候选在 `runs/pendulum_common_asset/isaac_urdf/{vehicle.urdf,contract.json}`。
+
+2项带摆测试＋1项原URDF回归通过。独立MuJoCo URDF读取在(hip,knee)=(0,0),(-1.2,2.5),(.3,-.7)三姿态核对所有link质量与世界质心，确认膝轴偏置映射未改变运动学。这是导出验证，无物理步/训练，不是Isaac仿真通过。现有Isaac地面plant仍关闭self_collision，针对需要pair filtering的资产明确拒绝导入，防止静默丢掉摆碰撞；下一步原位实现源body/geom碰撞规则和摆位置执行器后运行短闭环。
+
 ## 第三章共同车体候选资产
 
 `pendulum_asset.py` 与 `learning/configs/pendulum_common_asset.json` 构造 STTW 原车体＋RB 双节摆及髋电机的仿真候选，不修改两份原XML。完整候选在 `runs/pendulum_common_asset/complete_mechanism/{vehicle.xml,contract.json}`；最初仅双臂的中间产物保留在父目录，不作为完整机构。安装旋转Rx(-90deg)、平移0是显式仿真设计，不是已测实机安装。

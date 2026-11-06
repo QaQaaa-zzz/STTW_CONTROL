@@ -26,15 +26,27 @@ def _values(values):
     return ' '.join(format(float(x), '.17g') for x in values)
 
 
-def export_isaac_urdf(output, source=DEFAULT_XML, wheel_vertices=226):
+def export_isaac_urdf(output, source=DEFAULT_XML, wheel_vertices=226, *, preserve_self_collisions=False):
     if not 6 <= wheel_vertices <= 226:
         raise ValueError('wheel_vertices must be between 6 and 226')
     output = Path(output)
-    contract = export_isaac_asset(output, source)
+    contract = export_isaac_asset(output, source, preserve_self_collisions=preserve_self_collisions)
     model = load_model(source).model
     root = ET.Element('robot', name='sttw_source_contract')
     bodies = {b['name']: b for b in contract['bodies']}
     meshes = {}
+    # URDF child links are based at their hinge. Shift COM/geometries and
+    # descendant origins together, preserving the physical rigid-body tree.
+    offsets = np.zeros((model.nbody, 3))
+    for i in range(1, model.nbody):
+        ids = list(range(model.body_jntadr[i], model.body_jntadr[i]+model.body_jntnum[i]))
+        if model.body_parentid[i] == 0:
+            continue
+        if len(ids)>1 or (ids and model.jnt_type[ids[0]] != mujoco.mjtJoint.mjJNT_HINGE):
+            raise ValueError('converter requires one hinge or fixed joint per body')
+        if ids:
+            offsets[i] = model.jnt_pos[ids[0]]
+
     def name(kind, i):
         return mujoco.mj_id2name(model, kind, i)
     for i in range(1, model.nbody):
@@ -42,7 +54,7 @@ def export_isaac_urdf(output, source=DEFAULT_XML, wheel_vertices=226):
         record = bodies[body_name]
         link = ET.SubElement(root, 'link', name=body_name)
         inertial = ET.SubElement(link, 'inertial')
-        ET.SubElement(inertial, 'origin', xyz=_values(record['inertial_pos']), rpy='0 0 0')
+        ET.SubElement(inertial, 'origin', xyz=_values(np.asarray(record['inertial_pos'])-offsets[i]), rpy='0 0 0')
         ET.SubElement(inertial, 'mass', value=str(record['mass']))
         inertia = record['inertia_body']
         ET.SubElement(inertial, 'inertia', **{key: str(inertia[a][b]) for key, a, b in
@@ -52,7 +64,7 @@ def export_isaac_urdf(output, source=DEFAULT_XML, wheel_vertices=226):
                 continue
             kind = model.geom_type[g]
             size = model.geom_size[g]
-            if kind not in (mujoco.mjtGeom.mjGEOM_BOX, mujoco.mjtGeom.mjGEOM_ELLIPSOID):
+            if kind not in (mujoco.mjtGeom.mjGEOM_BOX, mujoco.mjtGeom.mjGEOM_ELLIPSOID, mujoco.mjtGeom.mjGEOM_CYLINDER):
                 raise ValueError('source collision geometry is outside this STTW converter')
             mesh_name = 'ellipsoid_'+('_'.join(format(x, '.6g') for x in size))+'.obj'
             if kind == mujoco.mjtGeom.mjGEOM_ELLIPSOID and mesh_name not in meshes:
@@ -98,24 +110,27 @@ def export_isaac_urdf(output, source=DEFAULT_XML, wheel_vertices=226):
                 meshes[mesh_name] = dict(sha256=hashlib.sha256(text.encode()).hexdigest(), vertices=len(vertices),
                     faces=len(faces), source_semiaxes_m=size.tolist(), source_polar_segments=8, source_azimuth_segments=32, sampling='original mesh' if wheel_vertices == 226 else 'farthest normalized coverage subset; all six extrema retained')
             for tag in ('collision', 'visual'):
-                geometry_parent = ET.SubElement(link, tag)
-                ET.SubElement(geometry_parent, 'origin', xyz=_values(model.geom_pos[g]), rpy=_values(_rpy(model.geom_quat[g])))
+                geometry_parent = ET.SubElement(link, tag, name='geom_'+str(g))
+                ET.SubElement(geometry_parent, 'origin', xyz=_values(model.geom_pos[g]-offsets[i]), rpy=_values(_rpy(model.geom_quat[g])))
                 geometry = ET.SubElement(geometry_parent, 'geometry')
                 if kind == mujoco.mjtGeom.mjGEOM_BOX:
                     ET.SubElement(geometry, 'box', size=_values(2*size))
+                elif kind == mujoco.mjtGeom.mjGEOM_CYLINDER:
+                    ET.SubElement(geometry, 'cylinder', radius=str(size[0]), length=str(2*size[1]))
                 else:
                     ET.SubElement(geometry, 'mesh', filename=mesh_name)
         if model.body_parentid[i] == 0:
             continue
         joint_ids = list(range(model.body_jntadr[i], model.body_jntadr[i]+model.body_jntnum[i]))
-        if len(joint_ids) > 1 or (joint_ids and (model.jnt_type[joint_ids[0]] != mujoco.mjtJoint.mjJNT_HINGE or np.any(model.jnt_pos[joint_ids[0]]))):
-            raise ValueError('converter requires one origin-centred hinge or fixed joint per body')
         j = joint_ids[0] if joint_ids else None
         joint = ET.SubElement(root, 'joint', name=name(mujoco.mjtObj.mjOBJ_JOINT, j) if j is not None else body_name+'_fixed',
                               type=('revolute' if model.jnt_limited[j] else 'continuous') if j is not None else 'fixed')
         ET.SubElement(joint, 'parent', link=name(mujoco.mjtObj.mjOBJ_BODY, int(model.body_parentid[i])))
         ET.SubElement(joint, 'child', link=body_name)
-        ET.SubElement(joint, 'origin', xyz=_values(model.body_pos[i]), rpy=_values(_rpy(model.body_quat[i])))
+        rotation=np.empty(9)
+        mujoco.mju_quat2Mat(rotation, model.body_quat[i])
+        origin=model.body_pos[i]+rotation.reshape(3,3)@offsets[i]-offsets[model.body_parentid[i]]
+        ET.SubElement(joint, 'origin', xyz=_values(origin), rpy=_values(_rpy(model.body_quat[i])))
         if j is not None:
             ET.SubElement(joint, 'axis', xyz=_values(model.jnt_axis[j]))
             limit = dict(effort='1000', velocity='1000')
@@ -126,7 +141,7 @@ def export_isaac_urdf(output, source=DEFAULT_XML, wheel_vertices=226):
     xml = ET.tostring(root, encoding='unicode')
     (output/'vehicle.urdf').write_text(xml)
     contract.update(exported_xml_sha256=hashlib.sha256(xml.encode()).hexdigest(), asset_format='urdf',
-                    meshes=meshes, urdf_joint_effort_semantics='1000 is importer metadata; runtime source actuator limits and passive torques are authoritative',
+                    meshes=meshes, link_frame_offsets={name(mujoco.mjtObj.mjOBJ_BODY,i):offsets[i].tolist() for i in range(1,model.nbody)}, urdf_joint_effort_semantics='1000 is importer metadata; runtime source actuator limits and passive torques are authoritative',
                     root_quat_wxyz=contract['bodies'][0]['quat_wxyz'])
     contract['differences'][0] = f'Ellipsoid wheels explicitly sampled to {wheel_vertices}-vertex convex OBJ; analytic contact not preserved.'
     contract['wheel_vertices'] = wheel_vertices

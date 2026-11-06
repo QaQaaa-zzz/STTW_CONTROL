@@ -12,7 +12,7 @@ import numpy as np
 from .model import load_model, DEFAULT_XML
 
 
-def export_isaac_asset(output, source=DEFAULT_XML):
+def export_isaac_asset(output, source=DEFAULT_XML, *, preserve_self_collisions=False):
     output = Path(output)
     if output.exists():
         raise FileExistsError(output)
@@ -45,7 +45,7 @@ def export_isaac_asset(output, source=DEFAULT_XML):
     vehicle = [int(i) for i in active if model.geom_bodyid[i] != 0]
     if any(model.geom_type[i] == mujoco.mjtGeom.mjGEOM_MESH for i in vehicle):
         raise ValueError('active mesh cannot be discarded by the primitive MJCF exporter')
-    if any((model.geom_contype[i] & model.geom_conaffinity[j]) or
+    if not preserve_self_collisions and any((model.geom_contype[i] & model.geom_conaffinity[j]) or
            (model.geom_contype[j] & model.geom_conaffinity[i])
            for i in vehicle for j in vehicle):
         raise ValueError('actor filter=1 requires all vehicle self-collision pairs disabled at source')
@@ -84,9 +84,11 @@ def export_isaac_asset(output, source=DEFAULT_XML):
                     imu_site_quat_wxyz=model.site_quat[gyro_site].tolist(),
                     timestep_s=float(model.opt.timestep), bodies=bodies, joints=joints, actuators=actuators,
                     ground_friction=model.geom_friction[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, 'floor')].tolist(),
-                    actor_collision_filter=1,
+                    actor_collision_filter=None if preserve_self_collisions else 1,
+                    requires_self_collision_filtering=preserve_self_collisions,
+                    contact_exclusions=[dict(node.attrib) for node in ET.fromstring(bundle.portable_xml).findall("contact/exclude")],
                     root_translation=root.find('worldbody/body').get('pos', '0 0 0'),
-                    vehicle_geoms=[dict(body=name(mujoco.mjtObj.mjOBJ_BODY, int(model.geom_bodyid[i])),
+                    vehicle_geoms=[dict(name=name(mujoco.mjtObj.mjOBJ_GEOM,i), contype=int(model.geom_contype[i]), conaffinity=int(model.geom_conaffinity[i]), body=name(mujoco.mjtObj.mjOBJ_BODY, int(model.geom_bodyid[i])),
                                         type=int(model.geom_type[i]), size=model.geom_size[i].tolist(),
                                         friction=model.geom_friction[i].tolist()) for i in vehicle],
                     differences=['Ellipsoids are tessellated by Isaac; analytic MuJoCo contact is not preserved.',

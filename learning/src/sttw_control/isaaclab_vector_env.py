@@ -19,6 +19,8 @@ class IsaacLabVectorPlant:
         self.servo_mode=servo_mode
         asset=Path(asset);output=Path(output);self.contract=json.loads(asset.with_name('contract.json').read_text());self.device='cuda:0';self.count=len(terrain_ids)
         if hashlib.sha256(asset.read_bytes()).hexdigest()!=self.contract['exported_xml_sha256']:raise ValueError('asset identity mismatch')
+        if self.contract.get('requires_self_collision_filtering', False):
+            raise ValueError('This asset requires source collision-pair filtering; the current ground plant disables self collisions')
         staged=output/'input';staged.mkdir();tree=ET.parse(asset);mapping={}
         for mesh in tree.findall('.//mesh'):
             original=mesh.get('filename')

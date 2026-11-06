@@ -1,3 +1,9 @@
+## 带摆 URDF 导出与运动学检查
+
+现有 `isaac_urdf.py` 原位支持非原点单hinge和圆柱碰撞；URDF link改以hinge为原点，COM/geom/子节点origin同步平移，`link_frame_offsets`记录变换。`export_isaac_asset.py --preserve-self-collisions`记录源contype/conaffinity及显式exclude，不再用原无自碰撞假设拒绝候选；默认原STTW路径不变。实际候选在 `runs/pendulum_common_asset/isaac_urdf/{vehicle.urdf,contract.json}`。
+
+2项带摆测试＋1项原URDF回归通过。独立MuJoCo URDF读取在(hip,knee)=(0,0),(-1.2,2.5),(.3,-.7)三姿态核对所有link质量与世界质心，确认膝轴偏置映射未改变运动学。这是导出验证，无物理步/训练，不是Isaac仿真通过。现有Isaac地面plant仍关闭self_collision，针对需要pair filtering的资产明确拒绝导入，防止静默丢掉摆碰撞；下一步原位实现源body/geom碰撞规则和摆位置执行器后运行短闭环。
+
 ## 用户指定1.5m/s筛查完成，转入整路粗糙/波形场景
 
 `runs/h75_low_speed_1p5/evaluation/FEASIBILITY.md`及`feasibility_overview.png`为完整18轨迹结果，原始配对奖励与XY保留在各case。平地/16cm坡/24cm坡各五alpha+Zero全部10秒无提前失败且goal。H75末段保持13/15，Zero0/3；H75未保持为平地alpha1、24cm坡alpha1。不能称高alpha保证通过或排序更优。
