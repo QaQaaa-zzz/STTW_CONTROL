@@ -32,5 +32,6 @@ curvature=np.r_[np.zeros_like(a1),np.full_like(ang,-.5),np.zeros_like(a3)]
 s=np.r_[0,np.cumsum(np.linalg.norm(np.diff(xy,axis=0),axis=1))]
 np.savez(a.output/'route.npz',s=s,xy=xy,heading=heading,curvature=curvature)
 c.update(output=str(a.output/'evaluation'),scene_terrain=str(terrain),ground_route=str(a.output/'route.npz'),start_x=-4.,start_y=-7.,start_heading_rad=float(np.pi/2),ground_after_landing_only=False,seconds=18.,maximum_physics_lane_steps=3600,role='Nominal DEV full rolling terrain, right turn, flat approach, platform jump and resumed path tracking; same frozen controllers; no training')
+c['completion']=dict(corridor_half_width_m=1.,waypoints=[[-4,-6.2],[-4,-4.6],[-4,-2],[-2,0],[2,0]],waypoint_radius_m=1.,minimum_post_handoff_s=2.,minimum_post_handoff_forward_m=2.)
 (a.output/'config.json').write_text(json.dumps(c,indent=2)+'\n')
 print(a.output/'config.json')
