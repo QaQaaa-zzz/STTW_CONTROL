@@ -9,10 +9,11 @@ import torch
 def local_frame(measurement, true_speed, governed, previous_reference,
                 previous_command, previous_applied, yaw_rate, rates, controller):
     m = measurement
-    a4 = controller._system(m[:, 5]*.1)[2]
+    radius=controller.config.get("wheel_radius_m",.1)
+    a4 = controller._system(m[:, 5]*radius)[2]
     ratio = controller._system(governed[:, 0])[3]
     frame = torch.stack((m[:,0],m[:,1],m[:,2],m[:,3],true_speed,yaw_rate,
-    m[:,5]*.1,m[:,6]*.1,governed[:,0],governed[:,1],rates[:,0],rates[:,1],
+    m[:,5]*radius,m[:,6]*radius,governed[:,0],governed[:,1],rates[:,0],rates[:,1],
     previous_reference[:,0],previous_reference[:,1],previous_command[:,0],previous_command[:,1],
     previous_applied[:,0],previous_applied[:,1],-controller.disturbance/a4,
     governed[:,1]/ratio), dim=-1)

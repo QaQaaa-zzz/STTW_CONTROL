@@ -1,5 +1,5 @@
 """Single-lane ground diagnostic on the common pendulum chassis in Isaac Lab."""
-import argparse,json,time
+import os,argparse,json,time
 from pathlib import Path
 import numpy as np
 p=argparse.ArgumentParser();p.add_argument('--asset',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--config',type=Path);a=p.parse_args()
@@ -12,6 +12,8 @@ from sttw_control.torch_controller import TorchController
 cfg=json.loads(Path('runs/isaac_signals_parity/dynamic.json').read_text())
 options=json.loads(Path('learning/configs/isaaclab_h75_offroad_selected.json').read_text())['plant_options']
 spec=json.loads(a.config.read_text()) if a.config else dict(duration_s=3.,warmup_s=3.,return_s=3.,speed_m_s=2.,steer_slew_rad_s=.8,cases=[dict(name='ecbc',steer_rad=0.,local300=False)])
+options.update(spec.get('plant_options',{}));radius=options.get('wheel_radius_m',.1);cfg['wheel_radius_m']=radius
+substeps=round(.005/options.get('physics_dt',.0002))
 cases=spec['cases'];n=len(cases);steps=round(spec['duration_s']/.005)
 plant=IsaacLabVectorPlant(a.asset,['plane'],[0]*n,a.output,pendulum_rest=[-1.2,2.499999],pendulum_locked=spec.get('pendulum_locked',False),**options)
 controller=TorchController(cfg,n,'cuda:0')
@@ -20,8 +22,8 @@ from sttw_control.torch_path_reference import wrap
 selected=json.loads(Path('learning/configs/isaaclab_h75_offroad_selected.json').read_text())
 lower=TorchLocalLower(selected['lower_actor'],selected['lower_sha256'],n,'cuda:0')
 plant.reset(speed=spec['speed_m_s'])
-(a.output/'protocol.json').write_text(json.dumps(dict(asset=str(a.asset),controller=cfg,plant=plant.metadata,spec=spec,lower_actor=selected['lower_actor'],lower_sha256=selected['lower_sha256'],role='ground compatibility DEV; no H75 or training',pendulum_rest_rad=[-1.2,2.499999],max_physics_steps=steps*n*25,optimizer_updates=0),indent=2))
-device='cuda:0';raw=torch.tensor([spec['speed_m_s'],0.],device=device).repeat(n,1);previous=raw.clone();command=torch.tensor([0.,spec['speed_m_s']/.1],device=device).repeat(n,1)
+(a.output/'protocol.json').write_text(json.dumps(dict(asset=str(a.asset),controller=cfg,plant=plant.metadata,spec=spec,lower_actor=selected['lower_actor'],lower_sha256=selected['lower_sha256'],role='ground compatibility DEV; no H75 or training',pendulum_rest_rad=[-1.2,2.499999],max_physics_steps=steps*n*substeps,optimizer_updates=0),indent=2))
+device='cuda:0';raw=torch.tensor([spec['speed_m_s'],0.],device=device).repeat(n,1);previous=raw.clone();command=torch.tensor([0.,spec['speed_m_s']/radius],device=device).repeat(n,1)
 use_lower=torch.tensor([c['local300'] for c in cases],device=device)
 turn=torch.tensor([c['steer_rad'] for c in cases],device=device)
 alive=torch.ones(n,dtype=torch.bool,device=device);rows=[];masks=[];references=[];commands=[];start=time.monotonic()
@@ -35,20 +37,20 @@ for k in range(steps+1):
  raw=raw.clone();raw[:,1]+=torch.clamp(desired-raw[:,1],-spec['steer_slew_rad_s']*.005,spec['steer_slew_rad_s']*.005)
  action,obs,finite=lower.prepare(m,v,raw,previous,command,controller)
  applied=torch.where((use_lower & (k*.005>=spec['warmup_s']))[:,None],action*torch.tensor([1.5,10.],device=device),0.)
- request=torch.stack((m[:,5]*.1,m[:,2],m[:,3],m[:,0],m[:,1],raw[:,1]),dim=-1)
+ request=torch.stack((m[:,5]*radius,m[:,2],m[:,3],m[:,0],m[:,1],raw[:,1]),dim=-1)
  out=controller.step(request,torch.ones(n,dtype=torch.bool,device=device))
  steer=(out[:,0]+applied[:,0]).clamp(-3,3);steer=torch.maximum(torch.maximum(torch.full_like(steer,-3),(-.8-m[:,2])/.005),torch.minimum(torch.minimum(torch.full_like(steer,3),(.8-m[:,2])/.005),steer))
- command=torch.stack((steer,(raw[:,0]/.1+applied[:,1]).clamp(-60,60)),dim=-1)
- for _ in range(25):plant.step(torch.where(alive[:,None],command,0.))
+ command=torch.stack((steer,(raw[:,0]/radius+applied[:,1]).clamp(-60,60)),dim=-1)
+ for _ in range(substeps):plant.step(torch.where(alive[:,None],command,0.))
  _,new_pose,_=plant.observe();lower.finish(applied,wrap(new_pose[:,2]-pose[:,2])/.005);previous=raw.clone()
  if (k+1)%200==0:print(dict(control_steps=k+1,alive=int(alive.sum()),elapsed_s=time.monotonic()-start),flush=True)
 trace=np.asarray(rows);valid=np.asarray(masks);np.savez(a.output/'trajectory.npz',trace=trace,valid=valid,reference=np.asarray(references),command=np.asarray(commands),columns=['time','x','y','yaw','speed','roll','roll_rate','steer','steer_rate','hip','knee','hip_velocity','knee_velocity'])
 results=[]
 for i,case in enumerate(cases):
  tr=trace[valid[:,i],i];results.append(dict(name=case['name'],failed=not bool(alive[i]),duration_s=float(tr[-1,0]),peak_roll_deg=float(np.rad2deg(abs(tr[:,5])).max()),final_speed=float(tr[-1,4]),final_xy=tr[-1,1:3].tolist(),max_pendulum_position_drift_rad=np.max(np.abs(tr[:,9:11]-tr[0,9:11]),axis=0).tolist(),max_pendulum_speed_rad_s=np.max(np.abs(tr[:,11:13]),axis=0).tolist()))
-result=dict(status='complete',cases=results,physics_steps=k*25*n,elapsed_s=time.monotonic()-start)
+result=dict(status='complete',cases=results,physics_steps=k*substeps*n,elapsed_s=time.monotonic()-start)
 (a.output/'results.json').write_text(json.dumps(result,indent=2));print(result,flush=True)
 if spec.get('pendulum_locked',False):
  before=plant.robot.data.joint_pos.clone();plant.set_pendulum_locked(False)
  (a.output/'release.json').write_text(json.dumps(dict(state_reset=False,position_change_without_step=float((plant.robot.data.joint_pos-before).abs().max()),restored_limits=plant.robot.data.joint_pos_limits[:,plant.pendulum_servos.indices].cpu().tolist(),original_limits=plant.pendulum_original_limits.cpu().tolist()),indent=2))
-app.close(wait_for_replicator=False,skip_cleanup=True)
+os.sync();os._exit(0)
