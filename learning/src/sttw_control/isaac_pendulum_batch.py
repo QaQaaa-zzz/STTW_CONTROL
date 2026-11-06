@@ -31,7 +31,7 @@ def run_connection_batch(spec, out, plant, ground, policy, history, geometry):
             velocity=plant.dofs[lane:lane+1,:,1].cpu().tolist(),**extra)
 
     def before_lower(lower_tick,final=False):
-        nonlocal global_tick,last,target,active,returned,alive,entered,consumed,physics_tick
+        nonlocal global_tick,last,target,active,returned,alive,entered,consumed,physics_tick,decided,ready
         global_tick=block_tick*4+lower_tick;physics_tick=0
         m,pose,speed=plant.observe();root=plant.roots.clone();root[:,:3]-=plant.origin
         distance=spec['platform_front_x']-(geometry.frontmost_x(plant.rigid)-plant.origin[:,0])

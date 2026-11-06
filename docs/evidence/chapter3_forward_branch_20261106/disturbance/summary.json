@@ -1,0 +1,358 @@
+{
+  "role": "Paired forced-route disturbed DEV feasibility, not online planner benefit",
+  "rows": [
+    {
+      "case_id": "worldFy-2N_original_jump",
+      "task": {
+        "executed_route": "original_jump",
+        "branch_event": {
+          "time_s": 5.22,
+          "requested_route": "original_jump",
+          "executed_route": "original_jump",
+          "furthest_common_progress_m": 10.16106128692627,
+          "availability": {
+            "available_routes": [
+              "original_jump",
+              "bypass"
+            ],
+            "blocked_routes": []
+          },
+          "root": [
+            [
+              -1.9805188179016113,
+              0.3116413950920105,
+              0.11779463291168213,
+              0.7586947679519653,
+              0.03473334014415741,
+              0.02916118875145912,
+              0.6498658061027527,
+              1.9834083318710327,
+              0.09814336895942688,
+              0.0014378632185980678,
+              -0.14918354153633118,
+              -0.01515403762459755,
+              -0.8704211115837097
+            ]
+          ],
+          "selection_wall_s": 0.0005565470019064378,
+          "history": "existing begin_connection; controller/filter/ESO/observation history retained",
+          "role": "Forced-route pilot, no capability-based route decision"
+        },
+        "common_goal_xy": [
+          21.6,
+          0.0
+        ],
+        "full_window": true,
+        "common_prefix_passed": true,
+        "first_goal_arrival_s": 18.979999542236328,
+        "max_mapped_path_error_m": 0.510082483291626,
+        "mapped_corridor_half_width_m": 1.0,
+        "mapped_corridor_complete": true,
+        "optional_platform_task_complete": true,
+        "mandatory_platform_task_complete": true,
+        "platform_skill_complete": true,
+        "bypass_exit_complete": false,
+        "scope": "E5 declared mapped-route center corridor and full window; bypass cannot complete mandatory platform skill. Not a body-envelope clearance guarantee. Original jump-task labels retained separately."
+      },
+      "force": {
+        "protocol": {
+          "kind": "external_force_N",
+          "body": "chasis",
+          "site_body_position_m": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "force_world_N": [
+            0.0,
+            -2.0,
+            0.0
+          ],
+          "duration_s": 0.12,
+          "trigger_x_m": -2.5
+        },
+        "triggered": true,
+        "trigger_time_s": 4.96,
+        "impulse_world_Ns": [
+          [
+            0.0,
+            -0.23999999463558197,
+            0.0
+          ]
+        ],
+        "scope": "Prescribed world-frame force at body-local site; position crossing sampled at current execution rate; omitted intervals have zero force, not velocity replacement"
+      }
+    },
+    {
+      "case_id": "worldFy-2N_bypass",
+      "task": {
+        "executed_route": "bypass",
+        "branch_event": {
+          "time_s": 5.22,
+          "requested_route": "bypass",
+          "executed_route": "bypass",
+          "furthest_common_progress_m": 10.16106128692627,
+          "availability": {
+            "available_routes": [
+              "original_jump",
+              "bypass"
+            ],
+            "blocked_routes": []
+          },
+          "root": [
+            [
+              -1.9805188179016113,
+              0.3116413950920105,
+              0.11779463291168213,
+              0.7586947679519653,
+              0.03473334014415741,
+              0.02916118875145912,
+              0.6498658061027527,
+              1.9834083318710327,
+              0.09814336895942688,
+              0.0014378632185980678,
+              -0.14918354153633118,
+              -0.01515403762459755,
+              -0.8704211115837097
+            ]
+          ],
+          "selection_wall_s": 0.15906104399982723,
+          "history": "existing begin_connection; controller/filter/ESO/observation history retained",
+          "role": "Forced-route pilot, no capability-based route decision"
+        },
+        "common_goal_xy": [
+          21.6,
+          0.0
+        ],
+        "full_window": true,
+        "common_prefix_passed": true,
+        "first_goal_arrival_s": 16.540000915527344,
+        "max_mapped_path_error_m": 0.44953286626526456,
+        "mapped_corridor_half_width_m": 0.6,
+        "mapped_corridor_complete": true,
+        "optional_platform_task_complete": true,
+        "mandatory_platform_task_complete": false,
+        "platform_skill_complete": false,
+        "bypass_exit_complete": true,
+        "scope": "E5 declared mapped-route center corridor and full window; bypass cannot complete mandatory platform skill. Not a body-envelope clearance guarantee. Original jump-task labels retained separately."
+      },
+      "force": {
+        "protocol": {
+          "kind": "external_force_N",
+          "body": "chasis",
+          "site_body_position_m": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "force_world_N": [
+            0.0,
+            -2.0,
+            0.0
+          ],
+          "duration_s": 0.12,
+          "trigger_x_m": -2.5
+        },
+        "triggered": true,
+        "trigger_time_s": 4.96,
+        "impulse_world_Ns": [
+          [
+            0.0,
+            -0.23999999463558197,
+            0.0
+          ]
+        ],
+        "scope": "Prescribed world-frame force at body-local site; position crossing sampled at current execution rate; omitted intervals have zero force, not velocity replacement"
+      }
+    },
+    {
+      "case_id": "worldFy+2N_original_jump",
+      "task": {
+        "executed_route": "original_jump",
+        "branch_event": {
+          "time_s": 5.22,
+          "requested_route": "original_jump",
+          "executed_route": "original_jump",
+          "furthest_common_progress_m": 10.160726547241211,
+          "availability": {
+            "available_routes": [
+              "original_jump",
+              "bypass"
+            ],
+            "blocked_routes": []
+          },
+          "root": [
+            [
+              -1.9808534383773804,
+              0.32113513350486755,
+              0.11787007004022598,
+              0.7563332319259644,
+              0.04595870524644852,
+              0.038982562720775604,
+              0.651404857635498,
+              1.9823616743087769,
+              0.17206871509552002,
+              0.0007514118915423751,
+              -0.10397301614284515,
+              -0.014610975049436092,
+              -0.6984899640083313
+            ]
+          ],
+          "selection_wall_s": 0.0005914190005569253,
+          "history": "existing begin_connection; controller/filter/ESO/observation history retained",
+          "role": "Forced-route pilot, no capability-based route decision"
+        },
+        "common_goal_xy": [
+          21.6,
+          0.0
+        ],
+        "full_window": true,
+        "common_prefix_passed": true,
+        "first_goal_arrival_s": 18.739999771118164,
+        "max_mapped_path_error_m": 0.35037311911582947,
+        "mapped_corridor_half_width_m": 1.0,
+        "mapped_corridor_complete": true,
+        "optional_platform_task_complete": true,
+        "mandatory_platform_task_complete": true,
+        "platform_skill_complete": true,
+        "bypass_exit_complete": false,
+        "scope": "E5 declared mapped-route center corridor and full window; bypass cannot complete mandatory platform skill. Not a body-envelope clearance guarantee. Original jump-task labels retained separately."
+      },
+      "force": {
+        "protocol": {
+          "kind": "external_force_N",
+          "body": "chasis",
+          "site_body_position_m": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "force_world_N": [
+            0.0,
+            2.0,
+            0.0
+          ],
+          "duration_s": 0.12,
+          "trigger_x_m": -2.5
+        },
+        "triggered": true,
+        "trigger_time_s": 4.96,
+        "impulse_world_Ns": [
+          [
+            0.0,
+            0.23999999463558197,
+            0.0
+          ]
+        ],
+        "scope": "Prescribed world-frame force at body-local site; position crossing sampled at current execution rate; omitted intervals have zero force, not velocity replacement"
+      }
+    },
+    {
+      "case_id": "worldFy+2N_bypass",
+      "task": {
+        "executed_route": "bypass",
+        "branch_event": {
+          "time_s": 5.22,
+          "requested_route": "bypass",
+          "executed_route": "bypass",
+          "furthest_common_progress_m": 10.160726547241211,
+          "availability": {
+            "available_routes": [
+              "original_jump",
+              "bypass"
+            ],
+            "blocked_routes": []
+          },
+          "root": [
+            [
+              -1.9808534383773804,
+              0.32113513350486755,
+              0.11787007004022598,
+              0.7563332319259644,
+              0.04595870524644852,
+              0.038982562720775604,
+              0.651404857635498,
+              1.9823616743087769,
+              0.17206871509552002,
+              0.0007514118915423751,
+              -0.10397301614284515,
+              -0.014610975049436092,
+              -0.6984899640083313
+            ]
+          ],
+          "selection_wall_s": 0.010422458999528317,
+          "history": "existing begin_connection; controller/filter/ESO/observation history retained",
+          "role": "Forced-route pilot, no capability-based route decision"
+        },
+        "common_goal_xy": [
+          21.6,
+          0.0
+        ],
+        "full_window": true,
+        "common_prefix_passed": true,
+        "first_goal_arrival_s": 16.559999465942383,
+        "max_mapped_path_error_m": 0.488432278888669,
+        "mapped_corridor_half_width_m": 0.6,
+        "mapped_corridor_complete": true,
+        "optional_platform_task_complete": true,
+        "mandatory_platform_task_complete": false,
+        "platform_skill_complete": false,
+        "bypass_exit_complete": true,
+        "scope": "E5 declared mapped-route center corridor and full window; bypass cannot complete mandatory platform skill. Not a body-envelope clearance guarantee. Original jump-task labels retained separately."
+      },
+      "force": {
+        "protocol": {
+          "kind": "external_force_N",
+          "body": "chasis",
+          "site_body_position_m": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "force_world_N": [
+            0.0,
+            2.0,
+            0.0
+          ],
+          "duration_s": 0.12,
+          "trigger_x_m": -2.5
+        },
+        "triggered": true,
+        "trigger_time_s": 4.96,
+        "impulse_world_Ns": [
+          [
+            0.0,
+            0.23999999463558197,
+            0.0
+          ]
+        ],
+        "scope": "Prescribed world-frame force at body-local site; position crossing sampled at current execution rate; omitted intervals have zero force, not velocity replacement"
+      }
+    }
+  ],
+  "prefix_comparison": [
+    {
+      "force_world_y_N": -2,
+      "branch_times_s": [
+        5.22,
+        5.22
+      ],
+      "matched_prefix_samples": 262,
+      "reference_prefix_samples": 262,
+      "bypass_prefix_samples": 262,
+      "max_abs_full_trace_prefix_difference": 0.0
+    },
+    {
+      "force_world_y_N": 2,
+      "branch_times_s": [
+        5.22,
+        5.22
+      ],
+      "matched_prefix_samples": 262,
+      "reference_prefix_samples": 262,
+      "bypass_prefix_samples": 262,
+      "max_abs_full_trace_prefix_difference": 0.0
+    }
+  ],
+  "optimizer_updates": 0
+}

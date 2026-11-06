@@ -1,0 +1,33 @@
+{
+  "time_s": 5.22,
+  "requested_route": "bypass",
+  "executed_route": "bypass",
+  "furthest_common_progress_m": 10.16106128692627,
+  "availability": {
+    "available_routes": [
+      "original_jump",
+      "bypass"
+    ],
+    "blocked_routes": []
+  },
+  "root": [
+    [
+      -1.9805188179016113,
+      0.3116413950920105,
+      0.11779463291168213,
+      0.7586947679519653,
+      0.03473334014415741,
+      0.02916118875145912,
+      0.6498658061027527,
+      1.9834083318710327,
+      0.09814336895942688,
+      0.0014378632185980678,
+      -0.14918354153633118,
+      -0.01515403762459755,
+      -0.8704211115837097
+    ]
+  ],
+  "selection_wall_s": 0.15906104399982723,
+  "history": "existing begin_connection; controller/filter/ESO/observation history retained",
+  "role": "Forced-route pilot, no capability-based route decision"
+}

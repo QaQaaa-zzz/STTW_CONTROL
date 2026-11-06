@@ -1,5 +1,5 @@
 {
-  "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_batch_pilot/evaluation",
+  "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_batch_pilot/evaluation_repaired_scope",
   "plant_config": "runs/rb_h75_ecbc_ground/left90_R2/config.json",
   "model_config": "learning/configs/rb_sttw_platform.json",
   "initial_state": "runs/rb_ground_standard1500/initial_state.npz",
