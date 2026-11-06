@@ -87,3 +87,45 @@ class ConnectionCapability:
         return dict(estimates=estimates,ranked_candidates=[e['candidate_id'] for e in ranked],
                     best_candidate=ranked[0]['candidate_id'] if ranked else None,
                     scope='Empirical complete-task outcomes; executor must apply feasibility threshold and fallback')
+
+
+def evaluate_connection_groups(records, candidates, feature_scales, bandwidth, minimum_support):
+    """Leave-one-origin-run-out DEV evaluation of complete paired candidate sets.
+
+    origin_id groups every exit/branch from one upstream physical run; snapshot_id
+    identifies the actual saved closed-loop state. Neither identifies an RL seed.
+    This consumes executed outcomes only. Missing candidate results remain missing.
+    """
+    from collections import defaultdict
+    rows=list(records);groups=defaultdict(list)
+    for row in rows:
+        groups[(row['origin_id'],row['snapshot_id'],row['task_id'],row['skill_id'])].append(row)
+    folds={origin:ConnectionCapability([r for r in rows if r['origin_id']!=origin],feature_scales,bandwidth,minimum_support)
+           for origin in {r['origin_id'] for r in rows}}
+    results=[]
+    for (origin,snapshot,task,skill),paired in sorted(groups.items()):
+        actual={r['candidate_id']:r for r in paired}
+        if len(actual)!=len(paired) or set(actual)!=set(candidates):
+            raise ValueError('Each snapshot/task/skill requires exactly one executed outcome for every candidate')
+        state=paired[0]['state']
+        if any(r['state']!=state for r in paired):
+            raise ValueError('Paired candidates must share the saved observable exit state')
+        query=folds[origin].query(state,task,skill,candidates)
+        selected=query['best_candidate'];observed=actual[selected] if selected is not None else None
+        successful=[r for r in paired if r['complete']]
+        oracle=min(successful,key=lambda r:r['success_cost']) if successful else None
+        calibration=[dict(candidate_id=e['candidate_id'],probability=e['complete_probability'],actual_complete=actual[e['candidate_id']]['complete'],squared_error=(e['complete_probability']-actual[e['candidate_id']]['complete'])**2)
+                     for e in query['estimates'] if e['known']]
+        results.append(dict(origin_id=origin,snapshot_id=snapshot,task_id=task,skill_id=skill,
+            selected_candidate=selected,selected_complete=observed['complete'] if observed else None,
+            selected_success_cost=observed['success_cost'] if observed and observed['complete'] else None,
+            observed_oracle_candidate=oracle['candidate_id'] if oracle else None,
+            observed_oracle_success_cost=oracle['success_cost'] if oracle else None,
+            predictions=query['estimates'],calibration=calibration))
+    decided=[r for r in results if r['selected_candidate'] is not None]
+    errors=[e['squared_error'] for r in results for e in r['calibration']]
+    return dict(role='leave-one-origin-run-out DEV; not independent TEST or deployed planning success',
+        groups=len(results),selected_groups=len(decided),unknown_groups=len(results)-len(decided),
+        selected_complete_count=sum(r['selected_complete'] for r in decided),
+        brier_score=sum(errors)/len(errors) if errors else None,brier_count=len(errors),
+        rows=results)

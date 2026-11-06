@@ -1,3 +1,9 @@
+## 第三章接续评价补充按原始运行整体留出的DEV评估
+
+在训练等待期间复用ConnectionCapability，新增evaluate_connection_groups和薄CLI evaluate_connection_capability.py。输入是实际执行的同snapshot/task/skill全候选配对结果；origin_id将一次上游运行产生的所有出口、左右支路和候选整体留出，避免同源状态进入查询库。每组输出预测、支持量、所选候选真实完成标签与成功条件代价、实际候选中最优参考，以及有支持预测的Brier；未知保持None并单独计数，不能当失败/成功或凭空给备选路线。
+
+候选缺项/重复或同snapshot候选状态不一致在输入处报错，避免把未执行候选当负样本。四项ConnectionCapability测试通过，新增单来源多出口左右支路全留出后应全部unknown，以及缺候选拒绝；均为明确单元fixture，不是机器人实验数据。真实6候选同出口bank尚未采集，现有非配对H75曲线不回填此bank；因此未声称能力评价准确率/第三章实验完成。工具角色为leave-one-origin-run-out DEV，不是独立TEST、规划器闭环成功率或实机证据。本轮没有新物理/训练查询，既有PhaseU进程按UTC07:55检查安排保留。
+
 ## 训练后冻结导出与多候选接管比较入口准备完成
 
 `export_trained_phase_u.py`显式指定checkpoint和source-bundle，严格加载原网络state_dict后导出Actor/critic/normalizer，继承动作映射并记录当前checkpoint路径/SHA及selection infos；不默认用last，不改权重。`evaluate_isaac_pendulum_jump.py`按skills数量创建lane，可同场比较source/RB/训练best或last。新增plot_isaac_pendulum_jump.py直接复用已保存NPZ，已用aligned旧轨迹出图并查看，无重跑物理。训练后候选尚未执行。

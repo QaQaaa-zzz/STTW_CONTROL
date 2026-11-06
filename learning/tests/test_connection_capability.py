@@ -22,3 +22,22 @@ class ConnectionCapabilityTests(unittest.TestCase):
         self.assertEqual(b['complete_probability'],.5)
         self.assertEqual(b['success_cost'],1.)
         self.assertIsNone(c['success_cost'])
+
+    def test_origin_run_is_held_out_across_all_snapshots_and_branches(self):
+        from sttw_control.empirical_capability import evaluate_connection_groups
+        # Unit fixture, not experimental outcomes. Same origin has two exits;
+        # its own successful records must never support its held-out queries.
+        rows=[dict(origin_id='one_run',snapshot_id=s,task_id=t,skill_id='frozen',
+                   candidate_id=c,state=[0.],complete=1,success_cost=1.)
+              for s in ['exit_a','exit_b'] for t in ['left','right'] for c in ['slow','fast']]
+        result=evaluate_connection_groups(rows,['slow','fast'],[1.],1.,.5)
+        self.assertEqual(result['groups'],4)
+        self.assertEqual(result['selected_groups'],0)
+        self.assertEqual(result['unknown_groups'],4)
+        self.assertIsNone(result['brier_score'])
+
+    def test_missing_candidate_is_not_silently_treated_as_failure(self):
+        from sttw_control.empirical_capability import evaluate_connection_groups
+        rows=[dict(origin_id='r',snapshot_id='s',task_id='left',skill_id='frozen',candidate_id='slow',state=[0.],complete=1,success_cost=1.)]
+        with self.assertRaises(ValueError):
+            evaluate_connection_groups(rows,['slow','fast'],[1.],1.,.5)
