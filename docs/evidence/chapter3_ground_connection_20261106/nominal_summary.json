@@ -4,12 +4,12 @@
   "declared_cases": 24,
   "distinct_origins": 24,
   "root_status_counts": {
-    "complete": 10,
-    "pending": 14
+    "complete": 13,
+    "pending": 11
   },
   "group_counts": {
-    "all_success": 20,
-    "incomplete": 28
+    "all_success": 26,
+    "incomplete": 22
   },
   "roots": [
     {
@@ -126,25 +126,34 @@
       "origin_id": "v2.1_lat-0.04_yaw2_oblique-0.4",
       "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat-0.04_yaw2_oblique-0.4/evaluation",
       "status": {
-        "status": "pending"
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 837.0692489079956,
+        "optimizer_updates": 0
       },
-      "recorded_suffixes": 0
+      "recorded_suffixes": 12
     },
     {
       "origin_id": "v2.1_lat-0.04_yaw2_oblique0.4",
       "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat-0.04_yaw2_oblique0.4/evaluation",
       "status": {
-        "status": "pending"
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 824.9926248959964,
+        "optimizer_updates": 0
       },
-      "recorded_suffixes": 0
+      "recorded_suffixes": 12
     },
     {
       "origin_id": "v2.1_lat0.04_yaw-2_oblique-0.4",
       "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat0.04_yaw-2_oblique-0.4/evaluation",
       "status": {
-        "status": "pending"
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 966.5976714950011,
+        "optimizer_updates": 0
       },
-      "recorded_suffixes": 0
+      "recorded_suffixes": 12
     },
     {
       "origin_id": "v2.1_lat0.04_yaw-2_oblique0.4",
@@ -10049,7 +10058,7 @@
       "case_id": "v2.1_lat-0.04_yaw2_oblique-0.4",
       "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat-0.04_yaw2_oblique-0.4/evaluation",
       "task_id": "left90_R2_connection_hold_v1_L1.0_W2.0",
-      "classification": "incomplete",
+      "classification": "all_success",
       "candidates": [
         "v1.5_a0.0",
         "v1.5_a0.5",
@@ -10059,46 +10068,480 @@
         "v2.3_a1.0"
       ],
       "success_vector": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
       ],
       "success_costs": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        3.619999885559082,
+        3.5399999618530273,
+        3.4600000381469727,
+        3.240000009536743,
+        3.2200000286102295,
+        3.2200000286102295
       ],
-      "state_named": null,
-      "successful_candidates": [],
+      "state_named": {
+        "speed": 2.1620113849639893,
+        "roll": 0.011740446090698242,
+        "roll_rate": -0.039071228355169296,
+        "cross_track": 0.008320359513163567,
+        "heading_error": -0.01133495569229126,
+        "steer": 0.02135048434138298,
+        "steer_rate": -0.14151570200920105,
+        "previous_speed_reference": 2.144109010696411,
+        "lateral_velocity_heading_frame": 0.003259548917412758,
+        "world_yaw_rate": 0.0794735923409462,
+        "previous_alpha": 0.5,
+        "previous_alpha_duration_s": 1.44
+      },
+      "successful_candidates": [
+        "v1.5_a0.0",
+        "v1.5_a0.5",
+        "v1.5_a1.0",
+        "v2.3_a0.0",
+        "v2.3_a0.5",
+        "v2.3_a1.0"
+      ],
       "original_path_max_m": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        1.0132627487182617,
+        0.8130674362182617,
+        0.5243463516235352,
+        0.21475887298583984,
+        0.1745758056640625,
+        0.19243717193603516
       ],
       "b_entries": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        {
+          "lane": 0,
+          "candidate_id": "v1.5_a0.0",
+          "time_s": 0.54,
+          "original_progress_m": 1.0165936946868896,
+          "speed_m_s": 1.6103302240371704,
+          "lateral_velocity_heading_frame_m_s": 0.05968658626079559,
+          "world_yaw_rate_rad_s": 0.21362464129924774,
+          "measurement": [
+            0.047214388847351074,
+            0.10623970627784729,
+            0.05351612716913223,
+            0.14381946623325348,
+            0.2132934033870697,
+            16.013723373413086,
+            16.389379501342773
+          ],
+          "pose": [
+            12.012191772460938,
+            0.0467376708984375,
+            0.05517418310046196
+          ],
+          "root": [
+            132.01219177246094,
+            -79.95326232910156,
+            0.2491215318441391,
+            0.690086305141449,
+            0.013605382293462753,
+            0.02514110505580902,
+            0.7231621742248535,
+            1.604588270187378,
+            0.14839935302734375,
+            0.00837055966258049,
+            -0.1064259335398674,
+            -0.01919517107307911,
+            0.21362464129924774
+          ],
+          "previous_reference": [
+            1.655972957611084,
+            0.08580800145864487
+          ],
+          "previous_alpha": 0.0,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 0
+        },
+        {
+          "lane": 1,
+          "candidate_id": "v1.5_a0.5",
+          "time_s": 0.52,
+          "original_progress_m": 1.01872980594635,
+          "speed_m_s": 1.71454918384552,
+          "lateral_velocity_heading_frame_m_s": 0.06759517639875412,
+          "world_yaw_rate_rad_s": 0.22998981177806854,
+          "measurement": [
+            0.05492889881134033,
+            0.129330575466156,
+            0.05611378699541092,
+            0.2898417115211487,
+            0.23004978895187378,
+            17.38407325744629,
+            17.434965133666992
+          ],
+          "pose": [
+            12.014328002929688,
+            0.04966147243976593,
+            0.05778946354985237
+          ],
+          "root": [
+            132.0143280029297,
+            0.04966147243976593,
+            0.2490256130695343,
+            0.687272310256958,
+            0.014461827464401722,
+            0.02609063871204853,
+            0.7257869243621826,
+            1.7077828645706177,
+            0.16651007533073425,
+            0.013046184554696083,
+            -0.1300058215856552,
+            -0.011587759479880333,
+            0.22998981177806854
+          ],
+          "previous_reference": [
+            1.7539360523223877,
+            0.08901549875736237
+          ],
+          "previous_alpha": 0.5,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 1
+        },
+        {
+          "lane": 2,
+          "candidate_id": "v1.5_a1.0",
+          "time_s": 0.5,
+          "original_progress_m": 1.003318428993225,
+          "speed_m_s": 1.8046499490737915,
+          "lateral_velocity_heading_frame_m_s": 0.06985730677843094,
+          "world_yaw_rate_rad_s": 0.22319267690181732,
+          "measurement": [
+            0.05752217769622803,
+            0.14517277479171753,
+            0.051433105021715164,
+            0.22707223892211914,
+            0.2280019223690033,
+            18.218204498291016,
+            18.099952697753906
+          ],
+          "pose": [
+            11.998916625976562,
+            0.048095703125,
+            0.05548984184861183
+          ],
+          "root": [
+            131.99891662597656,
+            80.048095703125,
+            0.24918009340763092,
+            0.6863475441932678,
+            0.013602718710899353,
+            0.025307882577180862,
+            0.72670578956604,
+            1.7979979515075684,
+            0.16983814537525177,
+            0.007039691787213087,
+            -0.1503184586763382,
+            0.06931047141551971,
+            0.22319267690181732
+          ],
+          "previous_reference": [
+            1.8386549949645996,
+            0.08913060277700424
+          ],
+          "previous_alpha": 1.0,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 2
+        },
+        {
+          "lane": 3,
+          "candidate_id": "v2.3_a0.0",
+          "time_s": 0.44,
+          "original_progress_m": 1.0118407011032104,
+          "speed_m_s": 2.2725706100463867,
+          "lateral_velocity_heading_frame_m_s": 0.11312352865934372,
+          "world_yaw_rate_rad_s": 0.2081695795059204,
+          "measurement": [
+            0.08906328678131104,
+            0.3105493187904358,
+            0.042202211916446686,
+            0.32957854866981506,
+            0.21801623702049255,
+            22.350914001464844,
+            22.70937728881836
+          ],
+          "pose": [
+            12.007438659667969,
+            0.04436492919921875,
+            0.033962398767471313
+          ],
+          "root": [
+            52.00743865966797,
+            -79.95563507080078,
+            0.24871179461479187,
+            0.6749075651168823,
+            0.005693167448043823,
+            0.017804142087697983,
+            0.7376654148101807,
+            2.26741886138916,
+            0.19022540748119354,
+            -0.02614085003733635,
+            -0.31487876176834106,
+            0.08985585719347,
+            0.2081695795059204
+          ],
+          "previous_reference": [
+            2.2995073795318604,
+            0.11614218354225159
+          ],
+          "previous_alpha": 0.0,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 3
+        },
+        {
+          "lane": 4,
+          "candidate_id": "v2.3_a0.5",
+          "time_s": 0.44,
+          "original_progress_m": 1.015598177909851,
+          "speed_m_s": 2.312772035598755,
+          "lateral_velocity_heading_frame_m_s": 0.11646541953086853,
+          "world_yaw_rate_rad_s": 0.23348739743232727,
+          "measurement": [
+            0.08879613876342773,
+            0.32070687413215637,
+            0.03853118047118187,
+            0.25221940875053406,
+            0.23158448934555054,
+            22.861446380615234,
+            23.43573760986328
+          ],
+          "pose": [
+            12.01119613647461,
+            0.04582320526242256,
+            0.034094005823135376
+          ],
+          "root": [
+            52.01119613647461,
+            0.04582320526242256,
+            0.24889156222343445,
+            0.6750044226646423,
+            0.005870905239135027,
+            0.01773214526474476,
+            0.7375770807266235,
+            2.30745792388916,
+            0.19523411989212036,
+            0.008072086609899998,
+            -0.3207702040672302,
+            -0.040954168885946274,
+            0.23348739743232727
+          ],
+          "previous_reference": [
+            2.3261070251464844,
+            0.11376131325960159
+          ],
+          "previous_alpha": 0.5,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 4
+        },
+        {
+          "lane": 5,
+          "candidate_id": "v2.3_a1.0",
+          "time_s": 0.44,
+          "original_progress_m": 1.0154989957809448,
+          "speed_m_s": 2.3226699829101562,
+          "lateral_velocity_heading_frame_m_s": 0.11174259334802628,
+          "world_yaw_rate_rad_s": 0.2316409945487976,
+          "measurement": [
+            0.08613049983978271,
+            0.308673232793808,
+            0.03809209540486336,
+            0.2551584243774414,
+            0.22503766417503357,
+            22.99802589416504,
+            23.69877815246582
+          ],
+          "pose": [
+            12.011096954345703,
+            0.04460906982421875,
+            0.03527991101145744
+          ],
+          "root": [
+            52.0110969543457,
+            80.04460906982422,
+            0.2489503175020218,
+            0.6759810447692871,
+            0.006502913311123848,
+            0.01797075942158699,
+            0.7366711497306824,
+            2.3172831535339355,
+            0.1935996562242508,
+            0.0067125665955245495,
+            -0.3067101240158081,
+            -0.09441570937633514,
+            0.2316409945487976
+          ],
+          "previous_reference": [
+            2.3327724933624268,
+            0.11019806563854218
+          ],
+          "previous_alpha": 1.0,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 5
+        }
       ],
       "input_target_limits": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        }
       ]
     },
     {
@@ -10106,7 +10549,7 @@
       "case_id": "v2.1_lat-0.04_yaw2_oblique-0.4",
       "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat-0.04_yaw2_oblique-0.4/evaluation",
       "task_id": "right90_R2_connection_hold_v1_L1.0_W2.0",
-      "classification": "incomplete",
+      "classification": "all_success",
       "candidates": [
         "v1.5_a0.0",
         "v1.5_a0.5",
@@ -10116,46 +10559,480 @@
         "v2.3_a1.0"
       ],
       "success_vector": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
       ],
       "success_costs": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        3.5199999809265137,
+        3.5399999618530273,
+        3.559999942779541,
+        3.359999895095825,
+        3.4000000953674316,
+        3.4800000190734863
       ],
-      "state_named": null,
-      "successful_candidates": [],
+      "state_named": {
+        "speed": 2.1620113849639893,
+        "roll": 0.011740446090698242,
+        "roll_rate": -0.039071228355169296,
+        "cross_track": 0.008320359513163567,
+        "heading_error": -0.01133495569229126,
+        "steer": 0.02135048434138298,
+        "steer_rate": -0.14151570200920105,
+        "previous_speed_reference": 2.144109010696411,
+        "lateral_velocity_heading_frame": 0.003259548917412758,
+        "world_yaw_rate": 0.0794735923409462,
+        "previous_alpha": 0.5,
+        "previous_alpha_duration_s": 1.44
+      },
+      "successful_candidates": [
+        "v1.5_a0.0",
+        "v1.5_a0.5",
+        "v1.5_a1.0",
+        "v2.3_a0.0",
+        "v2.3_a0.5",
+        "v2.3_a1.0"
+      ],
       "original_path_max_m": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        0.43814563751220703,
+        0.48503684997558594,
+        0.5932607650756836,
+        0.3505239486694336,
+        0.4425020217895508,
+        0.5953149795532227
       ],
       "b_entries": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        {
+          "lane": 0,
+          "candidate_id": "v1.5_a0.0",
+          "time_s": 0.52,
+          "original_progress_m": 1.0328556299209595,
+          "speed_m_s": 1.720785140991211,
+          "lateral_velocity_heading_frame_m_s": -0.0954306423664093,
+          "world_yaw_rate_rad_s": -0.33434203267097473,
+          "measurement": [
+            -0.07359683513641357,
+            -0.1896691471338272,
+            -0.07321352511644363,
+            -0.36829566955566406,
+            -0.32080042362213135,
+            17.40884780883789,
+            18.013832092285156
+          ],
+          "pose": [
+            12.028451919555664,
+            0.00760650634765625,
+            -0.003974058665335178
+          ],
+          "root": [
+            -27.971548080444336,
+            -79.99239349365234,
+            0.2485288381576538,
+            0.73260897397995,
+            -0.0066979252733290195,
+            0.004290565382689238,
+            0.6806030869483948,
+            1.7203923463821411,
+            -0.10226836800575256,
+            0.005858017597347498,
+            0.1908847689628601,
+            -0.18654577434062958,
+            -0.33434203267097473
+          ],
+          "previous_reference": [
+            1.78121817111969,
+            -0.11978375911712646
+          ],
+          "previous_alpha": 0.0,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 6
+        },
+        {
+          "lane": 1,
+          "candidate_id": "v1.5_a0.5",
+          "time_s": 0.5,
+          "original_progress_m": 1.0101679563522339,
+          "speed_m_s": 1.8391687870025635,
+          "lateral_velocity_heading_frame_m_s": -0.08250242471694946,
+          "world_yaw_rate_rad_s": -0.23422871530056,
+          "measurement": [
+            -0.06353092193603516,
+            -0.16626259684562683,
+            -0.05302103981375694,
+            -0.32572636008262634,
+            -0.23968490958213806,
+            18.110349655151367,
+            18.49577522277832
+          ],
+          "pose": [
+            12.00576400756836,
+            0.01204518973827362,
+            0.007073819637298584
+          ],
+          "root": [
+            -27.99423599243164,
+            0.01204518973827362,
+            0.24891754984855652,
+            0.72920161485672,
+            -0.0023969176691025496,
+            0.007722813170403242,
+            0.6842509508132935,
+            1.839706301689148,
+            -0.06949052214622498,
+            -0.010161844082176685,
+            0.16670064628124237,
+            0.08271592855453491,
+            -0.23422871530056
+          ],
+          "previous_reference": [
+            1.8653215169906616,
+            -0.09999606758356094
+          ],
+          "previous_alpha": 0.5,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 7
+        },
+        {
+          "lane": 2,
+          "candidate_id": "v1.5_a1.0",
+          "time_s": 0.5,
+          "original_progress_m": 1.0163112878799438,
+          "speed_m_s": 1.8592164516448975,
+          "lateral_velocity_heading_frame_m_s": -0.07539571076631546,
+          "world_yaw_rate_rad_s": -0.203963041305542,
+          "measurement": [
+            -0.055252790451049805,
+            -0.1780649870634079,
+            -0.04444504529237747,
+            -0.23233970999717712,
+            -0.19973528385162354,
+            18.637367248535156,
+            19.091209411621094
+          ],
+          "pose": [
+            12.011907577514648,
+            0.0151824951171875,
+            0.01187457237392664
+          ],
+          "root": [
+            -27.98809242248535,
+            80.01518249511719,
+            0.24908150732517242,
+            0.7263667583465576,
+            -0.0007835713331587613,
+            0.009466328658163548,
+            0.6872414946556091,
+            1.859980583190918,
+            -0.053313516080379486,
+            0.020199401304125786,
+            0.18011726438999176,
+            -0.08434431999921799,
+            -0.203963041305542
+          ],
+          "previous_reference": [
+            1.885732889175415,
+            -0.08674567937850952
+          ],
+          "previous_alpha": 1.0,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 8
+        },
+        {
+          "lane": 3,
+          "candidate_id": "v2.3_a0.0",
+          "time_s": 0.44,
+          "original_progress_m": 1.0196324586868286,
+          "speed_m_s": 2.305569648742676,
+          "lateral_velocity_heading_frame_m_s": -0.11672503501176834,
+          "world_yaw_rate_rad_s": -0.2737005352973938,
+          "measurement": [
+            -0.09003496170043945,
+            -0.3227325677871704,
+            -0.047344472259283066,
+            -0.3471507430076599,
+            -0.26407545804977417,
+            23.044214248657227,
+            23.618684768676758
+          ],
+          "pose": [
+            12.015228271484375,
+            0.00884246826171875,
+            0.01010021474212408
+          ],
+          "root": [
+            -107.98477172851562,
+            -79.99115753173828,
+            0.24880756437778473,
+            0.7382074594497681,
+            -0.0012487012427300215,
+            0.008852697908878326,
+            0.6745144128799438,
+            2.306631088256836,
+            -0.09343273192644119,
+            0.0002757939219009131,
+            0.3252602815628052,
+            -0.1083454042673111,
+            -0.2737005352973938
+          ],
+          "previous_reference": [
+            2.3151943683624268,
+            -0.10873525589704514
+          ],
+          "previous_alpha": 0.0,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 9
+        },
+        {
+          "lane": 4,
+          "candidate_id": "v2.3_a0.5",
+          "time_s": 0.44,
+          "original_progress_m": 1.0220195055007935,
+          "speed_m_s": 2.329319953918457,
+          "lateral_velocity_heading_frame_m_s": -0.1025991216301918,
+          "world_yaw_rate_rad_s": -0.2327638417482376,
+          "measurement": [
+            -0.07831263542175293,
+            -0.2867159843444824,
+            -0.03912060707807541,
+            -0.2520592212677002,
+            -0.2231539487838745,
+            23.627225875854492,
+            23.847875595092773
+          ],
+          "pose": [
+            12.017616271972656,
+            0.011852221563458443,
+            0.012037942185997963
+          ],
+          "root": [
+            -107.98238372802734,
+            0.011852221563458443,
+            0.24922339618206024,
+            0.7342422008514404,
+            -0.0006220192881301045,
+            0.00953842606395483,
+            0.678820013999939,
+            2.330386161804199,
+            -0.07455214858055115,
+            0.008399969898164272,
+            0.2895195484161377,
+            -0.12791387736797333,
+            -0.2327638417482376
+          ],
+          "previous_reference": [
+            2.33636474609375,
+            -0.0929221510887146
+          ],
+          "previous_alpha": 0.5,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 10
+        },
+        {
+          "lane": 5,
+          "candidate_id": "v2.3_a1.0",
+          "time_s": 0.44,
+          "original_progress_m": 1.0234688520431519,
+          "speed_m_s": 2.3394899368286133,
+          "lateral_velocity_heading_frame_m_s": -0.08820858597755432,
+          "world_yaw_rate_rad_s": -0.19914674758911133,
+          "measurement": [
+            -0.06679511070251465,
+            -0.2522597312927246,
+            -0.03275909274816513,
+            -0.1837760955095291,
+            -0.1912371963262558,
+            23.82933235168457,
+            23.920270919799805
+          ],
+          "pose": [
+            12.019065856933594,
+            0.0137481689453125,
+            0.014281432144343853
+          ],
+          "root": [
+            -107.9809341430664,
+            80.01374816894531,
+            0.24943943321704865,
+            0.7303210496902466,
+            -1.7528916941955686e-05,
+            0.010471728630363941,
+            0.6830235719680786,
+            2.3405110836029053,
+            -0.0547894649207592,
+            0.005494540557265282,
+            0.2552729845046997,
+            -0.12825845181941986,
+            -0.19914674758911133
+          ],
+          "previous_reference": [
+            2.3469631671905518,
+            -0.07920120656490326
+          ],
+          "previous_alpha": 1.0,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 11
+        }
       ],
       "input_target_limits": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        }
       ]
     },
     {
@@ -10163,7 +11040,7 @@
       "case_id": "v2.1_lat-0.04_yaw2_oblique0.4",
       "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat-0.04_yaw2_oblique0.4/evaluation",
       "task_id": "left90_R2_connection_hold_v1_L1.0_W2.0",
-      "classification": "incomplete",
+      "classification": "all_success",
       "candidates": [
         "v1.5_a0.0",
         "v1.5_a0.5",
@@ -10173,46 +11050,480 @@
         "v2.3_a1.0"
       ],
       "success_vector": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
       ],
       "success_costs": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        3.5199999809265137,
+        3.4600000381469727,
+        3.4200000762939453,
+        3.2799999713897705,
+        3.2799999713897705,
+        3.299999952316284
       ],
-      "state_named": null,
-      "successful_candidates": [],
+      "state_named": {
+        "speed": 2.1432785987854004,
+        "roll": -0.017779827117919922,
+        "roll_rate": 0.04304337501525879,
+        "cross_track": 0.008893173187971115,
+        "heading_error": 0.01760224811732769,
+        "steer": -0.02905976213514805,
+        "steer_rate": 0.3043394684791565,
+        "previous_speed_reference": 2.1402854919433594,
+        "lateral_velocity_heading_frame": -0.0065114907920360565,
+        "world_yaw_rate": -0.1121850460767746,
+        "previous_alpha": 0.5,
+        "previous_alpha_duration_s": 1.44
+      },
+      "successful_candidates": [
+        "v1.5_a0.0",
+        "v1.5_a0.5",
+        "v1.5_a1.0",
+        "v2.3_a0.0",
+        "v2.3_a0.5",
+        "v2.3_a1.0"
+      ],
       "original_path_max_m": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        0.38155174255371094,
+        0.3949756622314453,
+        0.33199310302734375,
+        0.23583698272705078,
+        0.23638439178466797,
+        0.2674694061279297
       ],
       "b_entries": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        {
+          "lane": 0,
+          "candidate_id": "v1.5_a0.0",
+          "time_s": 0.54,
+          "original_progress_m": 1.0172374248504639,
+          "speed_m_s": 1.5191636085510254,
+          "lateral_velocity_heading_frame_m_s": 0.09324896335601807,
+          "world_yaw_rate_rad_s": 0.3805862367153168,
+          "measurement": [
+            0.07311928272247314,
+            0.1363210678100586,
+            0.10263127088546753,
+            0.6283972859382629,
+            0.38343971967697144,
+            15.832658767700195,
+            15.48864459991455
+          ],
+          "pose": [
+            12.012832641601562,
+            -0.00032806396484375,
+            -0.0014610200887545943
+          ],
+          "root": [
+            132.01283264160156,
+            -80.00032806396484,
+            0.24863013625144958,
+            0.6807704567909241,
+            -0.005254472140222788,
+            0.0038863718509674072,
+            0.732467532157898,
+            1.5192983150482178,
+            0.0910293385386467,
+            -0.023172125220298767,
+            -0.137365460395813,
+            0.04764603078365326,
+            0.3805862367153168
+          ],
+          "previous_reference": [
+            1.5853114128112793,
+            0.12512698769569397
+          ],
+          "previous_alpha": 0.0,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 0
+        },
+        {
+          "lane": 1,
+          "candidate_id": "v1.5_a0.5",
+          "time_s": 0.52,
+          "original_progress_m": 1.0218455791473389,
+          "speed_m_s": 1.6609125137329102,
+          "lateral_velocity_heading_frame_m_s": 0.10071495175361633,
+          "world_yaw_rate_rad_s": 0.35101357102394104,
+          "measurement": [
+            0.0780707597732544,
+            0.18724140524864197,
+            0.0879807397723198,
+            0.4395148456096649,
+            0.34100261330604553,
+            16.22823715209961,
+            17.33439826965332
+          ],
+          "pose": [
+            12.017440795898438,
+            -8.097536920104176e-05,
+            -0.004344293847680092
+          ],
+          "root": [
+            132.01744079589844,
+            -8.097536920104176e-05,
+            0.24853242933750153,
+            0.6789460182189941,
+            -0.006325114518404007,
+            0.0028910248074680567,
+            0.7341551780700684,
+            1.6613342761993408,
+            0.09349852800369263,
+            -0.014516090974211693,
+            -0.18900594115257263,
+            -0.12147638201713562,
+            0.35101357102394104
+          ],
+          "previous_reference": [
+            1.7154872417449951,
+            0.12527285516262054
+          ],
+          "previous_alpha": 0.5,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 1
+        },
+        {
+          "lane": 2,
+          "candidate_id": "v1.5_a1.0",
+          "time_s": 0.5,
+          "original_progress_m": 1.009257197380066,
+          "speed_m_s": 1.7902157306671143,
+          "lateral_velocity_heading_frame_m_s": 0.09652090817689896,
+          "world_yaw_rate_rad_s": 0.3143058717250824,
+          "measurement": [
+            0.07564961910247803,
+            0.19502848386764526,
+            0.07327856123447418,
+            0.449664443731308,
+            0.31414130330085754,
+            18.22382164001465,
+            18.195497512817383
+          ],
+          "pose": [
+            12.004852294921875,
+            -0.00186920166015625,
+            -0.008878827095031738
+          ],
+          "root": [
+            132.00485229492188,
+            79.99813079833984,
+            0.24896883964538574,
+            0.6798128485679626,
+            -0.00835084542632103,
+            0.0016883470816537738,
+            0.7333360314369202,
+            1.7910021543502808,
+            0.08062229305505753,
+            -0.0012376527301967144,
+            -0.19647876918315887,
+            -0.00020020577358081937,
+            0.3143058717250824
+          ],
+          "previous_reference": [
+            1.838675618171692,
+            0.1132487803697586
+          ],
+          "previous_alpha": 1.0,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 2
+        },
+        {
+          "lane": 3,
+          "candidate_id": "v2.3_a0.0",
+          "time_s": 0.44,
+          "original_progress_m": 1.022871732711792,
+          "speed_m_s": 2.2753210067749023,
+          "lateral_velocity_heading_frame_m_s": 0.13073331117630005,
+          "world_yaw_rate_rad_s": 0.23632724583148956,
+          "measurement": [
+            0.09334301948547363,
+            0.38361233472824097,
+            0.041725218296051025,
+            0.3996168375015259,
+            0.24083071947097778,
+            21.838497161865234,
+            22.900957107543945
+          ],
+          "pose": [
+            12.01846694946289,
+            -0.007568359375,
+            -0.035268016159534454
+          ],
+          "root": [
+            52.01846694946289,
+            -80.007568359375,
+            0.248549684882164,
+            0.6731148362159729,
+            -0.017854051664471626,
+            -0.007588723208755255,
+            0.7392833828926086,
+            2.2785158157348633,
+            0.050422586500644684,
+            -0.03333726152777672,
+            -0.38361603021621704,
+            0.04770632088184357,
+            0.23632724583148956
+          ],
+          "previous_reference": [
+            2.2981255054473877,
+            0.12577731907367706
+          ],
+          "previous_alpha": 0.0,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 3
+        },
+        {
+          "lane": 4,
+          "candidate_id": "v2.3_a0.5",
+          "time_s": 0.44,
+          "original_progress_m": 1.0249354839324951,
+          "speed_m_s": 2.311168670654297,
+          "lateral_velocity_heading_frame_m_s": 0.1318889707326889,
+          "world_yaw_rate_rad_s": 0.23257994651794434,
+          "measurement": [
+            0.09346330165863037,
+            0.38271647691726685,
+            0.04142507538199425,
+            0.38215315341949463,
+            0.23162078857421875,
+            22.74165153503418,
+            23.386566162109375
+          ],
+          "pose": [
+            12.020530700683594,
+            -0.006281012669205666,
+            -0.03374975919723511
+          ],
+          "root": [
+            52.020530700683594,
+            -0.006281012669205666,
+            0.24880146980285645,
+            0.6730906367301941,
+            -0.01705685257911682,
+            -0.007288874126970768,
+            0.7393272519111633,
+            2.314302921295166,
+            0.05382728949189186,
+            -0.009271792136132717,
+            -0.3845122754573822,
+            -0.008377334102988243,
+            0.23257994651794434
+          ],
+          "previous_reference": [
+            2.327180862426758,
+            0.12151084840297699
+          ],
+          "previous_alpha": 0.5,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 4
+        },
+        {
+          "lane": 5,
+          "candidate_id": "v2.3_a1.0",
+          "time_s": 0.44,
+          "original_progress_m": 1.0249621868133545,
+          "speed_m_s": 2.326862096786499,
+          "lateral_velocity_heading_frame_m_s": 0.12871508300304413,
+          "world_yaw_rate_rad_s": 0.2345016747713089,
+          "measurement": [
+            0.09180033206939697,
+            0.3666021525859833,
+            0.0419326089322567,
+            0.4034823477268219,
+            0.23771411180496216,
+            22.892745971679688,
+            23.43168067932129
+          ],
+          "pose": [
+            12.020557403564453,
+            -0.007293701171875,
+            -0.03236188367009163
+          ],
+          "root": [
+            52.02055740356445,
+            79.99270629882812,
+            0.24889478087425232,
+            0.6737194657325745,
+            -0.01648007705807686,
+            -0.0068672471679747105,
+            0.738771378993988,
+            2.329808473587036,
+            0.05335918813943863,
+            -0.0033843389246612787,
+            -0.3667663037776947,
+            0.037538204342126846,
+            0.2345016747713089
+          ],
+          "previous_reference": [
+            2.3355045318603516,
+            0.11616645753383636
+          ],
+          "previous_alpha": 1.0,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 5
+        }
       ],
       "input_target_limits": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        }
       ]
     },
     {
@@ -10220,7 +11531,7 @@
       "case_id": "v2.1_lat-0.04_yaw2_oblique0.4",
       "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat-0.04_yaw2_oblique0.4/evaluation",
       "task_id": "right90_R2_connection_hold_v1_L1.0_W2.0",
-      "classification": "incomplete",
+      "classification": "all_success",
       "candidates": [
         "v1.5_a0.0",
         "v1.5_a0.5",
@@ -10230,46 +11541,480 @@
         "v2.3_a1.0"
       ],
       "success_vector": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
       ],
       "success_costs": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        3.5,
+        3.5,
+        3.5199999809265137,
+        3.259999990463257,
+        3.299999952316284,
+        3.359999895095825
       ],
-      "state_named": null,
-      "successful_candidates": [],
+      "state_named": {
+        "speed": 2.1432785987854004,
+        "roll": -0.017779827117919922,
+        "roll_rate": 0.04304337501525879,
+        "cross_track": 0.008893173187971115,
+        "heading_error": 0.01760224811732769,
+        "steer": -0.02905976213514805,
+        "steer_rate": 0.3043394684791565,
+        "previous_speed_reference": 2.1402854919433594,
+        "lateral_velocity_heading_frame": -0.0065114907920360565,
+        "world_yaw_rate": -0.1121850460767746,
+        "previous_alpha": 0.5,
+        "previous_alpha_duration_s": 1.44
+      },
+      "successful_candidates": [
+        "v1.5_a0.0",
+        "v1.5_a0.5",
+        "v1.5_a1.0",
+        "v2.3_a0.0",
+        "v2.3_a0.5",
+        "v2.3_a1.0"
+      ],
       "original_path_max_m": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        0.4934711456298828,
+        0.5314712524414062,
+        0.5968074798583984,
+        0.2381305694580078,
+        0.32253265380859375,
+        0.4158916473388672
       ],
       "b_entries": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        {
+          "lane": 0,
+          "candidate_id": "v1.5_a0.0",
+          "time_s": 0.5,
+          "original_progress_m": 1.011228322982788,
+          "speed_m_s": 1.809213399887085,
+          "lateral_velocity_heading_frame_m_s": -0.06616578251123428,
+          "world_yaw_rate_rad_s": -0.21461717784404755,
+          "measurement": [
+            -0.05650627613067627,
+            -0.1389710158109665,
+            -0.04999883100390434,
+            -0.35255172848701477,
+            -0.21545585989952087,
+            18.444292068481445,
+            18.314517974853516
+          ],
+          "pose": [
+            12.006820678710938,
+            -0.04254150390625,
+            -0.06784675270318985
+          ],
+          "root": [
+            -27.993179321289062,
+            -80.04254150390625,
+            0.24912019073963165,
+            0.7261818647384644,
+            -0.029910540208220482,
+            -0.017728636041283607,
+            0.6866227984428406,
+            1.800565242767334,
+            -0.1886686533689499,
+            -0.007459919434040785,
+            0.14032265543937683,
+            -0.001702589332126081,
+            -0.21461717784404755
+          ],
+          "previous_reference": [
+            1.8557956218719482,
+            -0.08776005357503891
+          ],
+          "previous_alpha": 0.0,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 6
+        },
+        {
+          "lane": 1,
+          "candidate_id": "v1.5_a0.5",
+          "time_s": 0.5,
+          "original_progress_m": 1.0170303583145142,
+          "speed_m_s": 1.8457317352294922,
+          "lateral_velocity_heading_frame_m_s": -0.06081829220056534,
+          "world_yaw_rate_rad_s": -0.16246241331100464,
+          "measurement": [
+            -0.051560401916503906,
+            -0.13880468904972076,
+            -0.042756423354148865,
+            -0.23423120379447937,
+            -0.1728294938802719,
+            18.33584976196289,
+            18.24136734008789
+          ],
+          "pose": [
+            12.012622833251953,
+            -0.04111181199550629,
+            -0.06313864141702652
+          ],
+          "root": [
+            -27.987377166748047,
+            -0.04111181199550629,
+            0.24916835129261017,
+            0.724561333656311,
+            -0.027873655781149864,
+            -0.016484687104821205,
+            0.6884489059448242,
+            1.8382165431976318,
+            -0.17715668678283691,
+            -0.022360648959875107,
+            0.15135714411735535,
+            0.18411791324615479,
+            -0.16246241331100464
+          ],
+          "previous_reference": [
+            1.8744878768920898,
+            -0.0814194604754448
+          ],
+          "previous_alpha": 0.5,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 7
+        },
+        {
+          "lane": 2,
+          "candidate_id": "v1.5_a1.0",
+          "time_s": 0.5,
+          "original_progress_m": 1.0198436975479126,
+          "speed_m_s": 1.8657777309417725,
+          "lateral_velocity_heading_frame_m_s": -0.05510120093822479,
+          "world_yaw_rate_rad_s": -0.15944993495941162,
+          "measurement": [
+            -0.04558062553405762,
+            -0.12028457969427109,
+            -0.035313934087753296,
+            -0.21400433778762817,
+            -0.1614334136247635,
+            18.298860549926758,
+            18.84654426574707
+          ],
+          "pose": [
+            12.015434265136719,
+            -0.03713226318359375,
+            -0.058416709303855896
+          ],
+          "root": [
+            -27.98456573486328,
+            79.9628677368164,
+            0.24927695095539093,
+            0.7225666046142578,
+            -0.026031602174043655,
+            -0.015028245747089386,
+            0.6906473636627197,
+            1.8593780994415283,
+            -0.16393782198429108,
+            0.0008751102141104639,
+            0.12284166365861893,
+            0.028862973675131798,
+            -0.15944993495941162
+          ],
+          "previous_reference": [
+            1.887577772140503,
+            -0.07290834188461304
+          ],
+          "previous_alpha": 1.0,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 8
+        },
+        {
+          "lane": 3,
+          "candidate_id": "v2.3_a0.0",
+          "time_s": 0.44,
+          "original_progress_m": 1.0276492834091187,
+          "speed_m_s": 2.320185422897339,
+          "lateral_velocity_heading_frame_m_s": -0.10805317759513855,
+          "world_yaw_rate_rad_s": -0.2596178352832794,
+          "measurement": [
+            -0.09074103832244873,
+            -0.29821956157684326,
+            -0.0468013621866703,
+            -0.11766912788152695,
+            -0.24957968294620514,
+            23.314834594726562,
+            23.745485305786133
+          ],
+          "pose": [
+            12.023239135742188,
+            -0.042877197265625,
+            -0.05678216367959976
+          ],
+          "root": [
+            -107.97676086425781,
+            -80.04287719726562,
+            0.24895437061786652,
+            0.7379943132400513,
+            -0.025844553485512733,
+            -0.013794305734336376,
+            0.6741706132888794,
+            2.3103137016296387,
+            -0.23955337703227997,
+            -0.0020019933581352234,
+            0.2925712466239929,
+            -0.13042226433753967,
+            -0.2596178352832794
+          ],
+          "previous_reference": [
+            2.3248116970062256,
+            -0.10612653940916061
+          ],
+          "previous_alpha": 0.0,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 9
+        },
+        {
+          "lane": 4,
+          "candidate_id": "v2.3_a0.5",
+          "time_s": 0.44,
+          "original_progress_m": 1.0307466983795166,
+          "speed_m_s": 2.3280436992645264,
+          "lateral_velocity_heading_frame_m_s": -0.09343414008617401,
+          "world_yaw_rate_rad_s": -0.23524750769138336,
+          "measurement": [
+            -0.07924044132232666,
+            -0.2505399286746979,
+            -0.040110357105731964,
+            -0.11347531527280807,
+            -0.22656318545341492,
+            23.687339782714844,
+            23.773210525512695
+          ],
+          "pose": [
+            12.026336669921875,
+            -0.04115050286054611,
+            -0.05537034571170807
+          ],
+          "root": [
+            -107.97366333007812,
+            -0.04115050286054611,
+            0.24918968975543976,
+            0.7341139316558838,
+            -0.025512736290693283,
+            -0.013175559230148792,
+            0.6784188747406006,
+            2.319304943084717,
+            -0.2221296727657318,
+            0.0031781638972461224,
+            0.24502386152744293,
+            -0.13074184954166412,
+            -0.23524750769138336
+          ],
+          "previous_reference": [
+            2.339038133621216,
+            -0.0916067436337471
+          ],
+          "previous_alpha": 0.5,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 10
+        },
+        {
+          "lane": 5,
+          "candidate_id": "v2.3_a1.0",
+          "time_s": 0.44,
+          "original_progress_m": 1.0290220975875854,
+          "speed_m_s": 2.337625741958618,
+          "lateral_velocity_heading_frame_m_s": -0.07913097739219666,
+          "world_yaw_rate_rad_s": -0.18154925107955933,
+          "measurement": [
+            -0.06757497787475586,
+            -0.22908447682857513,
+            -0.03242064267396927,
+            -0.13502934575080872,
+            -0.17184396088123322,
+            23.721145629882812,
+            23.97810935974121
+          ],
+          "pose": [
+            12.024612426757812,
+            -0.03858184814453125,
+            -0.05383458733558655
+          ],
+          "root": [
+            -107.97538757324219,
+            79.96141815185547,
+            0.24936331808567047,
+            0.7301668524742126,
+            -0.024785833433270454,
+            -0.012895130552351475,
+            0.6826971769332886,
+            2.3299813270568848,
+            -0.20480069518089294,
+            -0.0002284577494719997,
+            0.221456840634346,
+            -0.1666988581418991,
+            -0.18154925107955933
+          ],
+          "previous_reference": [
+            2.346344232559204,
+            -0.07873942703008652
+          ],
+          "previous_alpha": 1.0,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 11
+        }
       ],
       "input_target_limits": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        }
       ]
     },
     {
@@ -10277,7 +12022,7 @@
       "case_id": "v2.1_lat0.04_yaw-2_oblique-0.4",
       "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat0.04_yaw-2_oblique-0.4/evaluation",
       "task_id": "left90_R2_connection_hold_v1_L1.0_W2.0",
-      "classification": "incomplete",
+      "classification": "all_success",
       "candidates": [
         "v1.5_a0.0",
         "v1.5_a0.5",
@@ -10287,46 +12032,480 @@
         "v2.3_a1.0"
       ],
       "success_vector": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
       ],
       "success_costs": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        3.619999885559082,
+        3.5399999618530273,
+        3.4800000190734863,
+        3.240000009536743,
+        3.240000009536743,
+        3.240000009536743
       ],
-      "state_named": null,
-      "successful_candidates": [],
+      "state_named": {
+        "speed": 2.1537716388702393,
+        "roll": 0.010051965713500977,
+        "roll_rate": -0.05426524579524994,
+        "cross_track": 0.011875439435243607,
+        "heading_error": -0.02108350396156311,
+        "steer": 0.01838797703385353,
+        "steer_rate": -0.3057658076286316,
+        "previous_speed_reference": 2.142263650894165,
+        "lateral_velocity_heading_frame": -0.0014017783105373383,
+        "world_yaw_rate": 0.07383537292480469,
+        "previous_alpha": 0.5,
+        "previous_alpha_duration_s": 1.44
+      },
+      "successful_candidates": [
+        "v1.5_a0.0",
+        "v1.5_a0.5",
+        "v1.5_a1.0",
+        "v2.3_a0.0",
+        "v2.3_a0.5",
+        "v2.3_a1.0"
+      ],
       "original_path_max_m": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        1.0400896072387695,
+        0.7609281539916992,
+        0.6134920120239258,
+        0.1959552764892578,
+        0.1930999755859375,
+        0.2032299041748047
       ],
       "b_entries": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        {
+          "lane": 0,
+          "candidate_id": "v1.5_a0.0",
+          "time_s": 0.54,
+          "original_progress_m": 1.0175395011901855,
+          "speed_m_s": 1.6320191621780396,
+          "lateral_velocity_heading_frame_m_s": 0.05803339183330536,
+          "world_yaw_rate_rad_s": 0.1608443409204483,
+          "measurement": [
+            0.04439055919647217,
+            0.12773756682872772,
+            0.04435887932777405,
+            0.2460612803697586,
+            0.17020708322525024,
+            16.029937744140625,
+            16.04323387145996
+          ],
+          "pose": [
+            12.013137817382812,
+            0.0517578125,
+            0.052570901811122894
+          ],
+          "root": [
+            132.0131378173828,
+            -79.9482421875,
+            0.24920916557312012,
+            0.6911245584487915,
+            0.01270350068807602,
+            0.02421794831752777,
+            0.7222179770469666,
+            1.6267149448394775,
+            0.1437104195356369,
+            0.00926985777914524,
+            -0.13879802823066711,
+            0.19277215003967285,
+            0.1608443409204483
+          ],
+          "previous_reference": [
+            1.6673071384429932,
+            0.08402109146118164
+          ],
+          "previous_alpha": 0.0,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 0
+        },
+        {
+          "lane": 1,
+          "candidate_id": "v1.5_a0.5",
+          "time_s": 0.52,
+          "original_progress_m": 1.017142415046692,
+          "speed_m_s": 1.7223457098007202,
+          "lateral_velocity_heading_frame_m_s": 0.06684733182191849,
+          "world_yaw_rate_rad_s": 0.1939169019460678,
+          "measurement": [
+            0.05184757709503174,
+            0.153267040848732,
+            0.04813545197248459,
+            0.15075135231018066,
+            0.2003450095653534,
+            17.24945831298828,
+            17.18682098388672
+          ],
+          "pose": [
+            12.012741088867188,
+            0.05639149621129036,
+            0.05533473566174507
+          ],
+          "root": [
+            132.0127410888672,
+            0.05639149621129036,
+            0.2491234987974167,
+            0.6884078979492188,
+            0.01361188106238842,
+            0.025221707299351692,
+            0.7247572541236877,
+            1.7160124778747559,
+            0.16200193762779236,
+            0.014806331135332584,
+            -0.16026702523231506,
+            0.10560488700866699,
+            0.1939169019460678
+          ],
+          "previous_reference": [
+            1.7627785205841064,
+            0.08778874576091766
+          ],
+          "previous_alpha": 0.5,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 1
+        },
+        {
+          "lane": 2,
+          "candidate_id": "v1.5_a1.0",
+          "time_s": 0.5,
+          "original_progress_m": 1.000342607498169,
+          "speed_m_s": 1.8156089782714844,
+          "lateral_velocity_heading_frame_m_s": 0.06747860461473465,
+          "world_yaw_rate_rad_s": 0.17782942950725555,
+          "measurement": [
+            0.05348694324493408,
+            0.159129336476326,
+            0.04335984215140343,
+            0.2564585506916046,
+            0.1840420961380005,
+            18.07332992553711,
+            18.14207649230957
+          ],
+          "pose": [
+            11.995941162109375,
+            0.05446624755859375,
+            0.05487905070185661
+          ],
+          "root": [
+            131.99594116210938,
+            80.0544662475586,
+            0.24917128682136536,
+            0.6878153085708618,
+            0.013502683490514755,
+            0.025002989917993546,
+            0.7253290414810181,
+            1.8091742992401123,
+            0.16696591675281525,
+            0.01233623269945383,
+            -0.16554267704486847,
+            0.0977509394288063,
+            0.17782942950725555
+          ],
+          "previous_reference": [
+            1.8437798023223877,
+            0.08763541281223297
+          ],
+          "previous_alpha": 1.0,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 2
+        },
+        {
+          "lane": 3,
+          "candidate_id": "v2.3_a0.0",
+          "time_s": 0.44,
+          "original_progress_m": 1.0091547966003418,
+          "speed_m_s": 2.278933525085449,
+          "lateral_velocity_heading_frame_m_s": 0.10671469569206238,
+          "world_yaw_rate_rad_s": 0.1763475090265274,
+          "measurement": [
+            0.08151113986968994,
+            0.33955609798431396,
+            0.034453075379133224,
+            0.45576614141464233,
+            0.18753239512443542,
+            22.493165969848633,
+            22.654911041259766
+          ],
+          "pose": [
+            12.004753112792969,
+            0.0511474609375,
+            0.03576736897230148
+          ],
+          "root": [
+            52.00475311279297,
+            -79.9488525390625,
+            0.2489316463470459,
+            0.6776849627494812,
+            0.006161685101687908,
+            0.01863967441022396,
+            0.7350901365280151,
+            2.2736597061157227,
+            0.18814051151275635,
+            -0.026445815339684486,
+            -0.34459927678108215,
+            0.10661808401346207,
+            0.1763475090265274
+          ],
+          "previous_reference": [
+            2.3092455863952637,
+            0.11022307723760605
+          ],
+          "previous_alpha": 0.0,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 3
+        },
+        {
+          "lane": 4,
+          "candidate_id": "v2.3_a0.5",
+          "time_s": 0.44,
+          "original_progress_m": 1.0118592977523804,
+          "speed_m_s": 2.315579652786255,
+          "lateral_velocity_heading_frame_m_s": 0.10749359428882599,
+          "world_yaw_rate_rad_s": 0.17736122012138367,
+          "measurement": [
+            0.08094167709350586,
+            0.307312935590744,
+            0.03237893804907799,
+            0.23770469427108765,
+            0.17574730515480042,
+            22.746313095092773,
+            23.458547592163086
+          ],
+          "pose": [
+            12.007457733154297,
+            0.053543709218502045,
+            0.03649846091866493
+          ],
+          "root": [
+            52.0074577331543,
+            0.053543709218502045,
+            0.2490440309047699,
+            0.6778879165649414,
+            0.006781516596674919,
+            0.018568478524684906,
+            0.7348992824554443,
+            2.310115098953247,
+            0.19191834330558777,
+            -0.00527492118999362,
+            -0.306884765625,
+            -0.04364307224750519,
+            0.17736122012138367
+          ],
+          "previous_reference": [
+            2.328955888748169,
+            0.10828442126512527
+          ],
+          "previous_alpha": 0.5,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 4
+        },
+        {
+          "lane": 5,
+          "candidate_id": "v2.3_a1.0",
+          "time_s": 0.44,
+          "original_progress_m": 1.0128587484359741,
+          "speed_m_s": 2.324537992477417,
+          "lateral_velocity_heading_frame_m_s": 0.10548191517591476,
+          "world_yaw_rate_rad_s": 0.19117982685565948,
+          "measurement": [
+            0.07942235469818115,
+            0.2944183647632599,
+            0.03070247545838356,
+            0.2521287500858307,
+            0.1930842101573944,
+            22.841245651245117,
+            23.39326286315918
+          ],
+          "pose": [
+            12.00845718383789,
+            0.05210113525390625,
+            0.037056904286146164
+          ],
+          "root": [
+            52.00845718383789,
+            80.0521011352539,
+            0.24919940531253815,
+            0.6784456372261047,
+            0.006849723868072033,
+            0.01889333315193653,
+            0.7343754172325134,
+            2.3190343379974365,
+            0.19152997434139252,
+            0.0020430791191756725,
+            -0.295693039894104,
+            9.685676923254505e-05,
+            0.19117982685565948
+          ],
+          "previous_reference": [
+            2.3346288204193115,
+            0.10563516616821289
+          ],
+          "previous_alpha": 1.0,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 5
+        }
       ],
       "input_target_limits": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        }
       ]
     },
     {
@@ -10334,7 +12513,7 @@
       "case_id": "v2.1_lat0.04_yaw-2_oblique-0.4",
       "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat0.04_yaw-2_oblique-0.4/evaluation",
       "task_id": "right90_R2_connection_hold_v1_L1.0_W2.0",
-      "classification": "incomplete",
+      "classification": "all_success",
       "candidates": [
         "v1.5_a0.0",
         "v1.5_a0.5",
@@ -10344,46 +12523,480 @@
         "v2.3_a1.0"
       ],
       "success_vector": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
       ],
       "success_costs": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        3.4800000190734863,
+        3.5199999809265137,
+        3.5399999618530273,
+        3.319999933242798,
+        3.4000000953674316,
+        3.4600000381469727
       ],
-      "state_named": null,
-      "successful_candidates": [],
+      "state_named": {
+        "speed": 2.1537716388702393,
+        "roll": 0.010051965713500977,
+        "roll_rate": -0.05426524579524994,
+        "cross_track": 0.011875439435243607,
+        "heading_error": -0.02108350396156311,
+        "steer": 0.01838797703385353,
+        "steer_rate": -0.3057658076286316,
+        "previous_speed_reference": 2.142263650894165,
+        "lateral_velocity_heading_frame": -0.0014017783105373383,
+        "world_yaw_rate": 0.07383537292480469,
+        "previous_alpha": 0.5,
+        "previous_alpha_duration_s": 1.44
+      },
+      "successful_candidates": [
+        "v1.5_a0.0",
+        "v1.5_a0.5",
+        "v1.5_a1.0",
+        "v2.3_a0.0",
+        "v2.3_a0.5",
+        "v2.3_a1.0"
+      ],
       "original_path_max_m": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        0.36844921112060547,
+        0.4584207534790039,
+        0.5291814804077148,
+        0.2741060256958008,
+        0.41173839569091797,
+        0.5187368392944336
       ],
       "b_entries": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        {
+          "lane": 0,
+          "candidate_id": "v1.5_a0.0",
+          "time_s": 0.52,
+          "original_progress_m": 1.0263606309890747,
+          "speed_m_s": 1.717476725578308,
+          "lateral_velocity_heading_frame_m_s": -0.09973452985286713,
+          "world_yaw_rate_rad_s": -0.3409131169319153,
+          "measurement": [
+            -0.07823657989501953,
+            -0.18708409368991852,
+            -0.081029511988163,
+            -0.4789229929447174,
+            -0.34252071380615234,
+            17.495737075805664,
+            17.487001419067383
+          ],
+          "pose": [
+            12.021957397460938,
+            0.01120758056640625,
+            -0.004811567720025778
+          ],
+          "root": [
+            -27.978042602539062,
+            -79.9887924194336,
+            0.2485361397266388,
+            0.7341867685317993,
+            -0.006645868066698313,
+            0.003643781878054142,
+            0.6789051294326782,
+            1.7169770002365112,
+            -0.1079970970749855,
+            0.010354334488511086,
+            0.18868036568164825,
+            0.02259627915918827,
+            -0.3409131169319153
+          ],
+          "previous_reference": [
+            1.7724947929382324,
+            -0.12355645000934601
+          ],
+          "previous_alpha": 0.0,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 6
+        },
+        {
+          "lane": 1,
+          "candidate_id": "v1.5_a0.5",
+          "time_s": 0.5,
+          "original_progress_m": 1.00662362575531,
+          "speed_m_s": 1.8328715562820435,
+          "lateral_velocity_heading_frame_m_s": -0.08710050582885742,
+          "world_yaw_rate_rad_s": -0.2437545359134674,
+          "measurement": [
+            -0.06820940971374512,
+            -0.20649003982543945,
+            -0.05929645523428917,
+            -0.4546058177947998,
+            -0.25469499826431274,
+            18.69915008544922,
+            18.257774353027344
+          ],
+          "pose": [
+            12.002220153808594,
+            0.019014419987797737,
+            0.0068333945237100124
+          ],
+          "root": [
+            -27.997779846191406,
+            0.019014419987797737,
+            0.24889937043190002,
+            0.7308007478713989,
+            -0.002278941450640559,
+            0.007445338182151318,
+            0.6825463175773621,
+            1.8334239721298218,
+            -0.07457383722066879,
+            -0.01246502622961998,
+            0.20628748834133148,
+            0.1582421511411667,
+            -0.2437545359134674
+          ],
+          "previous_reference": [
+            1.8647725582122803,
+            -0.10402733087539673
+          ],
+          "previous_alpha": 0.5,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 7
+        },
+        {
+          "lane": 2,
+          "candidate_id": "v1.5_a1.0",
+          "time_s": 0.5,
+          "original_progress_m": 1.0122655630111694,
+          "speed_m_s": 1.8587021827697754,
+          "lateral_velocity_heading_frame_m_s": -0.0776367262005806,
+          "world_yaw_rate_rad_s": -0.23980532586574554,
+          "measurement": [
+            -0.059375882148742676,
+            -0.16872426867485046,
+            -0.050232961773872375,
+            -0.1998135894536972,
+            -0.2351398766040802,
+            18.363426208496094,
+            19.092092514038086
+          ],
+          "pose": [
+            12.007862091064453,
+            0.01889801025390625,
+            0.012346746399998665
+          ],
+          "root": [
+            -27.992137908935547,
+            80.0188980102539,
+            0.2491111010313034,
+            0.7277823686599731,
+            -0.00045230778050608933,
+            0.009481340646743774,
+            0.6857422590255737,
+            1.8595190048217773,
+            -0.05468246713280678,
+            0.003793820971623063,
+            0.17086517810821533,
+            -0.08194927871227264,
+            -0.23980532586574554
+          ],
+          "previous_reference": [
+            1.8859801292419434,
+            -0.08977549523115158
+          ],
+          "previous_alpha": 1.0,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 8
+        },
+        {
+          "lane": 3,
+          "candidate_id": "v2.3_a0.0",
+          "time_s": 0.44,
+          "original_progress_m": 1.0142608880996704,
+          "speed_m_s": 2.2956089973449707,
+          "lateral_velocity_heading_frame_m_s": -0.12086376547813416,
+          "world_yaw_rate_rad_s": -0.3055335581302643,
+          "measurement": [
+            -0.09603869915008545,
+            -0.3145730495452881,
+            -0.05209870636463165,
+            -0.3119758367538452,
+            -0.2903444170951843,
+            22.571922302246094,
+            23.622472763061523
+          ],
+          "pose": [
+            12.009857177734375,
+            0.01479339599609375,
+            0.012573949061334133
+          ],
+          "root": [
+            -107.99014282226562,
+            -79.9852066040039,
+            0.24854430556297302,
+            0.7402289509773254,
+            -0.0007182076806202531,
+            0.010141109116375446,
+            0.6722779870033264,
+            2.2969470024108887,
+            -0.09199010580778122,
+            -0.01223065797239542,
+            0.3186032474040985,
+            -0.15918374061584473,
+            -0.3055335581302643
+          ],
+          "previous_reference": [
+            2.310654878616333,
+            -0.11304501444101334
+          ],
+          "previous_alpha": 0.0,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 9
+        },
+        {
+          "lane": 4,
+          "candidate_id": "v2.3_a0.5",
+          "time_s": 0.44,
+          "original_progress_m": 1.0182812213897705,
+          "speed_m_s": 2.3298299312591553,
+          "lateral_velocity_heading_frame_m_s": -0.10675700008869171,
+          "world_yaw_rate_rad_s": -0.254964143037796,
+          "measurement": [
+            -0.08364832401275635,
+            -0.2878035604953766,
+            -0.043670814484357834,
+            -0.1630721241235733,
+            -0.24783730506896973,
+            23.425312042236328,
+            23.76218605041504
+          ],
+          "pose": [
+            12.013877868652344,
+            0.01993226632475853,
+            0.014342115260660648
+          ],
+          "root": [
+            -107.98612213134766,
+            0.01993226632475853,
+            0.24896973371505737,
+            0.7360504865646362,
+            1.3932398360338993e-05,
+            0.010578052140772343,
+            0.6768438220024109,
+            2.3311212062835693,
+            -0.07333247363567352,
+            -0.00031963069341145456,
+            0.2906244397163391,
+            -0.08947709202766418,
+            -0.254964143037796
+          ],
+          "previous_reference": [
+            2.3347997665405273,
+            -0.09678694605827332
+          ],
+          "previous_alpha": 0.5,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 10
+        },
+        {
+          "lane": 5,
+          "candidate_id": "v2.3_a1.0",
+          "time_s": 0.44,
+          "original_progress_m": 1.0188076496124268,
+          "speed_m_s": 2.3424434661865234,
+          "lateral_velocity_heading_frame_m_s": -0.09243325144052505,
+          "world_yaw_rate_rad_s": -0.20302815735340118,
+          "measurement": [
+            -0.07199275493621826,
+            -0.25721779465675354,
+            -0.03680909425020218,
+            -0.22754958271980286,
+            -0.1988241821527481,
+            23.68225860595703,
+            23.78877830505371
+          ],
+          "pose": [
+            12.014404296875,
+            0.02106475830078125,
+            0.016535701230168343
+          ],
+          "root": [
+            -107.985595703125,
+            80.02106475830078,
+            0.2492646723985672,
+            0.732093095779419,
+            0.0006893114768899977,
+            0.01139584369957447,
+            0.6811087727546692,
+            2.343651533126831,
+            -0.05368844047188759,
+            0.006090919487178326,
+            0.2595943510532379,
+            -0.06731577962636948,
+            -0.20302815735340118
+          ],
+          "previous_reference": [
+            2.34714937210083,
+            -0.08279232680797577
+          ],
+          "previous_alpha": 1.0,
+          "common_reference": {
+            "speed_m_s": 2.3,
+            "alpha": 0.5
+          },
+          "history": "retained; no reset",
+          "global_lane": 11
+        }
       ],
       "input_target_limits": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        },
+        {
+          "cmd_steering_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -3.0,
+              3.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          },
+          "cmd_rearwheel_v": {
+            "at_limit_samples": 0,
+            "active_physics_samples": 50000,
+            "fraction": 0.0,
+            "ctrlrange": [
+              -60.0,
+              60.0
+            ],
+            "scope": "Plant input target limit, not measured torque saturation"
+          }
+        }
       ]
     },
     {
@@ -11644,163 +14257,163 @@
   "fixed_candidates": [
     {
       "candidate_id": "v1.5_a0.0",
-      "successes": 20,
-      "evaluated_groups": 20,
-      "mean_cost_on_own_successes": 3.6450000405311584
+      "successes": 26,
+      "evaluated_groups": 26,
+      "mean_cost_on_own_successes": 3.6215384831795325
     },
     {
       "candidate_id": "v1.5_a0.5",
-      "successes": 20,
-      "evaluated_groups": 20,
-      "mean_cost_on_own_successes": 3.6350000143051147
+      "successes": 26,
+      "evaluated_groups": 26,
+      "mean_cost_on_own_successes": 3.607692315028264
     },
     {
       "candidate_id": "v1.5_a1.0",
-      "successes": 20,
-      "evaluated_groups": 20,
-      "mean_cost_on_own_successes": 3.628000009059906
+      "successes": 26,
+      "evaluated_groups": 26,
+      "mean_cost_on_own_successes": 3.597692315395062
     },
     {
       "candidate_id": "v2.3_a0.0",
-      "successes": 20,
-      "evaluated_groups": 20,
-      "mean_cost_on_own_successes": 3.3319999814033507
+      "successes": 26,
+      "evaluated_groups": 26,
+      "mean_cost_on_own_successes": 3.3207692091281595
     },
     {
       "candidate_id": "v2.3_a0.5",
-      "successes": 20,
-      "evaluated_groups": 20,
-      "mean_cost_on_own_successes": 3.355000007152557
+      "successes": 26,
+      "evaluated_groups": 26,
+      "mean_cost_on_own_successes": 3.343846165216886
     },
     {
       "candidate_id": "v2.3_a1.0",
-      "successes": 20,
-      "evaluated_groups": 20,
-      "mean_cost_on_own_successes": 3.3769999980926513
+      "successes": 26,
+      "evaluated_groups": 26,
+      "mean_cost_on_own_successes": 3.369230765562791
     }
   ],
   "paired_comparisons": [
     {
       "first": "v1.5_a0.0",
       "second": "v1.5_a0.5",
-      "common_success_groups": 20,
-      "mean_first_minus_second_s": 0.010000026226043702,
+      "common_success_groups": 26,
+      "mean_first_minus_second_s": 0.013846168151268592,
       "only_first": [],
       "only_second": []
     },
     {
       "first": "v1.5_a0.0",
       "second": "v1.5_a1.0",
-      "common_success_groups": 20,
-      "mean_first_minus_second_s": 0.017000031471252442,
+      "common_success_groups": 26,
+      "mean_first_minus_second_s": 0.023846167784470778,
       "only_first": [],
       "only_second": []
     },
     {
       "first": "v1.5_a0.0",
       "second": "v2.3_a0.0",
-      "common_success_groups": 20,
-      "mean_first_minus_second_s": 0.3130000591278076,
+      "common_success_groups": 26,
+      "mean_first_minus_second_s": 0.3007692740513728,
       "only_first": [],
       "only_second": []
     },
     {
       "first": "v1.5_a0.0",
       "second": "v2.3_a0.5",
-      "common_success_groups": 20,
-      "mean_first_minus_second_s": 0.2900000333786011,
+      "common_success_groups": 26,
+      "mean_first_minus_second_s": 0.2776923179626465,
       "only_first": [],
       "only_second": []
     },
     {
       "first": "v1.5_a0.0",
       "second": "v2.3_a1.0",
-      "common_success_groups": 20,
-      "mean_first_minus_second_s": 0.26800004243850706,
+      "common_success_groups": 26,
+      "mean_first_minus_second_s": 0.2523077176167415,
       "only_first": [],
       "only_second": []
     },
     {
       "first": "v1.5_a0.5",
       "second": "v1.5_a1.0",
-      "common_success_groups": 20,
-      "mean_first_minus_second_s": 0.007000005245208741,
+      "common_success_groups": 26,
+      "mean_first_minus_second_s": 0.009999999633202186,
       "only_first": [],
       "only_second": []
     },
     {
       "first": "v1.5_a0.5",
       "second": "v2.3_a0.0",
-      "common_success_groups": 20,
-      "mean_first_minus_second_s": 0.3030000329017639,
+      "common_success_groups": 26,
+      "mean_first_minus_second_s": 0.2869231059001042,
       "only_first": [],
       "only_second": []
     },
     {
       "first": "v1.5_a0.5",
       "second": "v2.3_a0.5",
-      "common_success_groups": 20,
-      "mean_first_minus_second_s": 0.28000000715255735,
+      "common_success_groups": 26,
+      "mean_first_minus_second_s": 0.2638461498113779,
       "only_first": [],
       "only_second": []
     },
     {
       "first": "v1.5_a0.5",
       "second": "v2.3_a1.0",
-      "common_success_groups": 20,
-      "mean_first_minus_second_s": 0.2580000162124634,
+      "common_success_groups": 26,
+      "mean_first_minus_second_s": 0.23846154946547288,
       "only_first": [],
       "only_second": []
     },
     {
       "first": "v1.5_a1.0",
       "second": "v2.3_a0.0",
-      "common_success_groups": 20,
-      "mean_first_minus_second_s": 0.2960000276565552,
+      "common_success_groups": 26,
+      "mean_first_minus_second_s": 0.27692310626690203,
       "only_first": [],
       "only_second": []
     },
     {
       "first": "v1.5_a1.0",
       "second": "v2.3_a0.5",
-      "common_success_groups": 20,
-      "mean_first_minus_second_s": 0.27300000190734863,
+      "common_success_groups": 26,
+      "mean_first_minus_second_s": 0.2538461501781757,
       "only_first": [],
       "only_second": []
     },
     {
       "first": "v1.5_a1.0",
       "second": "v2.3_a1.0",
-      "common_success_groups": 20,
-      "mean_first_minus_second_s": 0.25100001096725466,
+      "common_success_groups": 26,
+      "mean_first_minus_second_s": 0.22846154983227068,
       "only_first": [],
       "only_second": []
     },
     {
       "first": "v2.3_a0.0",
       "second": "v2.3_a0.5",
-      "common_success_groups": 20,
-      "mean_first_minus_second_s": -0.023000025749206544,
+      "common_success_groups": 26,
+      "mean_first_minus_second_s": -0.023076956088726338,
       "only_first": [],
       "only_second": []
     },
     {
       "first": "v2.3_a0.0",
       "second": "v2.3_a1.0",
-      "common_success_groups": 20,
-      "mean_first_minus_second_s": -0.04500001668930054,
+      "common_success_groups": 26,
+      "mean_first_minus_second_s": -0.04846155643463135,
       "only_first": [],
       "only_second": []
     },
     {
       "first": "v2.3_a0.5",
       "second": "v2.3_a1.0",
-      "common_success_groups": 20,
-      "mean_first_minus_second_s": -0.021999990940093993,
+      "common_success_groups": 26,
+      "mean_first_minus_second_s": -0.02538460034590501,
       "only_first": [],
       "only_second": []
     }
   ],
-  "oracle_success_groups": 20,
+  "oracle_success_groups": 26,
   "limits": "Descriptive DEV matrix; repeated roots are clustered, not independent trials. Source failures remain in root accounting and have no invented suffix labels. Pending entries are null. Own-success mean costs are not matched method comparisons; use the pairwise common-success costs. No online selector result."
 }

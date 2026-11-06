@@ -47,7 +47,8 @@ for skill in ('source','rb_run1_candidate'):
  panelpath=a.output/f'{skill}_panel.json'
  panelpath.write_text(json.dumps(dict(simulation_python=manifest['simulation_python'],analysis_python=manifest['analysis_python'],cases=panel),indent=2)+'\n')
  panels.append(str(panelpath))
-plan=dict(status='prepared_pending_evaluation_orchestration_and_gpu_allocation',training_configs=configs,panels=panels,
+plan=dict(status='orchestration_prepared_not_launched',training_configs=configs,panels=panels,
+ evaluation_timing='Save exact post-update5/10/15/20/25; evaluate update0 and saved candidates after bounded25 training exits. No early stop within25; no simultaneous resident training/evaluation apps.',
  evaluated_updates=[0,5,10,15,20,25],training_transitions=2*25*4096*24,training_physics_lane_steps=2*25*4096*24*8,
  evaluation_rollouts=2*6*9,evaluation_max_physics_lane_steps=2*6*(3*8+6*22)/.0025,
  comparison='Each original policy versus its own adapted checkpoints. Source and RB identical budgets; update2 is separate engineering reference.',
