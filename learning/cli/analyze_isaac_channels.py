@@ -72,7 +72,7 @@ for case in cases:
  ax[0].legend(fontsize=7);fig.suptitle(title+' | normal-force vertical component at control steps; not resultant magnitude');fig.savefig(target/'loads.png',dpi=150);plt.close(fig)
  (target/'metrics.json').write_text(json.dumps(entry,indent=2));report+=['',f'## {case["phase"]} alpha {case["alpha"]}',f'![XY]({target.relative_to(out)}/xy.png)',f'[Full responses]({target.relative_to(out)}/responses.png), [intervention/release window]({target.relative_to(out)}/responses_short.png), [local effects vs restored control]({target.relative_to(out)}/local_effects.png), [reward components]({target.relative_to(out)}/components.png), [paired windows and contact phases]({target.relative_to(out)}/metrics.json).','','| Branch | Failed after fork | End s | Speed RMSE m/s | Path RMSE m | Intervention ticks |','|---|---|---:|---:|---:|---:|']
  for row in entry['branches']:report.append(f"|{row['branch']}|{row['failed_after_fork']}|{row['observed_end_s']:.3f}|{row['postfork_speed_rmse_m_s']:.4f}|{row['postfork_path_rmse_m']:.4f}|{row['held_lower_ticks']}|")
- report+=['','| Matched observation window | Natural vs restored max XY m | Speed intervention vs restored m | Steer intervention vs restored m | Both intervention vs restored m |','|---|---:|---:|---:|---:|']
+ report+=['',f'All position contrasts below are against `{labels[1]}`; columns identify the actual executed branches.','| Matched observation window | '+' | '.join(labels[lane]+' max XY difference (m)' for lane in (0,2,3,4))+' |','|---|---:|---:|---:|---:|']
  for window in ('hold','after_release_0p5','whole_common'):
   values=[]
   for lane in (0,2,3,4):
