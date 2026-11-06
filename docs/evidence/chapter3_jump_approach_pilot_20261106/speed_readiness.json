@@ -1,0 +1,28 @@
+{
+  "1.8": {
+    "role": "Flat ground speed readiness, not a jump task",
+    "requested_speed_m_s": 1.8,
+    "full_window": true,
+    "measured_last2s_mean_m_s": 1.8488041162490845,
+    "measured_last2s_std_m_s": 0.0005002440884709358,
+    "max_abs_roll_deg": 0.9176973104476929,
+    "plant_target_limit_fraction": {
+      "steering": 0.0,
+      "rear": 0.0
+    },
+    "limit_scope": "Input target limits only; not measured motor torque saturation"
+  },
+  "2.0": {
+    "role": "Flat ground speed readiness, not a jump task",
+    "requested_speed_m_s": 2.0,
+    "full_window": true,
+    "measured_last2s_mean_m_s": 2.0458977222442627,
+    "measured_last2s_std_m_s": 0.0004119411751162261,
+    "max_abs_roll_deg": 0.8926851749420166,
+    "plant_target_limit_fraction": {
+      "steering": 0.0,
+      "rear": 0.0
+    },
+    "limit_scope": "Input target limits only; not measured motor torque saturation"
+  }
+}

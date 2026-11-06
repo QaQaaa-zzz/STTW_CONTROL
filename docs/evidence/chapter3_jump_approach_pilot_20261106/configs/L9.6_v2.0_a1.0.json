@@ -1,0 +1,91 @@
+{
+  "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L9.6_v2.0_a1.0",
+  "plant_config": "runs/rb_h75_ecbc_ground/left90_R2/config.json",
+  "model_config": "learning/configs/rb_sttw_platform.json",
+  "initial_state": "runs/rb_ground_standard1500/initial_state.npz",
+  "geometry": "runs/rb_sttw_platform/jump_input/geometry.json",
+  "bundles": "runs/rb_sttw_platform/evaluation_bundles",
+  "skills": [
+    "update2"
+  ],
+  "start_x": -4.0,
+  "approach_speed": 2.0,
+  "seconds": 22.0,
+  "handoff_x": 6.0,
+  "physics_dt": 0.0025,
+  "gpu_pair_capacities": [
+    1048576,
+    1048576,
+    1048576
+  ],
+  "zero_initial_history": true,
+  "root_acceleration_difference": true,
+  "jump_steering_gains": [
+    2.5,
+    0.4
+  ],
+  "optimizer_updates": 0,
+  "maximum_physics_lane_steps": 8800,
+  "role": "Nominal DEV full rolling terrain, right turn, flat approach, platform jump and resumed path tracking; same frozen controllers; no training",
+  "scene_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/scene_L9.6/terrain",
+  "record_body_states": true,
+  "landing_return": {
+    "support_s": 1.0,
+    "speed_m_s": 1.5,
+    "minimum_handoff_speed_m_s": 1.2,
+    "acceleration_m_s2": 0.8,
+    "alpha": 0.5
+  },
+  "ground_bundle": "runs/rb_h75_ecbc_ground/left90_R2/bundle",
+  "ground_settings": "runs/rb_h75_ecbc_ground/left90_R2/config.json",
+  "ground_initial_state": "runs/rb_ground_standard1500/initial_state.npz",
+  "zero_lower": true,
+  "ground_alpha": 0.5,
+  "ground_after_landing_only": false,
+  "terrain_base_plane": true,
+  "ground_route": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/scene_L9.6/route.npz",
+  "start_y": -9.0,
+  "start_heading_rad": 1.5707963267948966,
+  "platform_front_x": 7.6,
+  "platform_back_x": 11.6,
+  "completion": {
+    "corridor_half_width_m": 1.0,
+    "waypoints": [
+      [
+        -4.0,
+        -8.0
+      ],
+      [
+        -4.0,
+        -4.8
+      ],
+      [
+        -4.0,
+        -2
+      ],
+      [
+        -2.0,
+        0
+      ],
+      [
+        6.0,
+        0
+      ]
+    ],
+    "waypoint_radius_m": 1.0,
+    "minimum_post_handoff_s": 2.0,
+    "minimum_post_handoff_forward_m": 2.0,
+    "final_goal_xy": [
+      14.6,
+      0.0
+    ]
+  },
+  "protocol_id": "ch3_jump_connection_hold_v1",
+  "origin_id": "rb_nominal_upstream_01",
+  "candidate_id": "v2.0_a1.0",
+  "connection_candidate": {
+    "decision_x_m": -2.0,
+    "speed_m_s": 2.0,
+    "alpha": 1.0
+  }
+}
