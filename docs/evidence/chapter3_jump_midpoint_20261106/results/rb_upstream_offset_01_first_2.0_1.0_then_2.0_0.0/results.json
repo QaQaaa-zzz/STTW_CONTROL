@@ -1,0 +1,31 @@
+{
+  "status": "complete",
+  "elapsed_s": 88.57686066700262,
+  "physics_lane_steps": 4288,
+  "landing_return_executed": false,
+  "ground_controller": "H75+ECBC (zero lower residual)",
+  "cases": [
+    {
+      "skill": "update2",
+      "duration_s": 10.720000267028809,
+      "physical_termination": true,
+      "peak_root_z": 0.5595095157623291,
+      "final_xyz": [
+        8.215863227844238,
+        -0.120878204703331,
+        0.3478320240974426
+      ],
+      "peak_abs_roll_deg": 46.48704147338867,
+      "full_jump_success": "not adjudicated; requires clearance and landing evidence",
+      "terminal_flags": {
+        "ground_domain_exit": false,
+        "ground_policy_fault": false,
+        "ground_alive": true,
+        "roll_limit": true,
+        "low_root": false,
+        "nonfinite_state": false,
+        "legacy_physical_termination_scope": "Legacy field includes controller/domain termination; inspect flags before attributing a physical fall"
+      }
+    }
+  ]
+}

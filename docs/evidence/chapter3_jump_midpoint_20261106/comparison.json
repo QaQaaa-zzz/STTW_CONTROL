@@ -1,0 +1,1582 @@
+{
+  "role": "Six predefined upstream DEV roots, 36 sequences each; same origin grouping as C6",
+  "interpretation": "Descriptive DEV coverage and hindsight oracle upper bounds; not learned or deployed selection. Distances share upstream roots. Incomplete groups remain pending, not failures.",
+  "collection_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/summary.json",
+  "declared_origins": 6,
+  "declared_tasks": 6,
+  "complete_matched_tasks": 1,
+  "anchor": {
+    "speed": 2.0,
+    "alpha": 0.5
+  },
+  "scores": {
+    "fixed_v1.8_a0.0": {
+      "successes": 0,
+      "evaluated_tasks": 1,
+      "success_conditional_mean_T_s": null,
+      "per_root": {
+        "rb_upstream_offset_01": {
+          "successes": 0,
+          "evaluated_tasks": 1
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 0,
+        "mean_time_saved_s": null,
+        "gained_success_tasks": 0,
+        "lost_success_tasks": 1
+      }
+    },
+    "fixed_v1.8_a0.5": {
+      "successes": 1,
+      "evaluated_tasks": 1,
+      "success_conditional_mean_T_s": 15.100000381469727,
+      "per_root": {
+        "rb_upstream_offset_01": {
+          "successes": 1,
+          "evaluated_tasks": 1
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 1,
+        "mean_time_saved_s": -0.20000076293945312,
+        "gained_success_tasks": 0,
+        "lost_success_tasks": 0
+      }
+    },
+    "fixed_v1.8_a1.0": {
+      "successes": 0,
+      "evaluated_tasks": 1,
+      "success_conditional_mean_T_s": null,
+      "per_root": {
+        "rb_upstream_offset_01": {
+          "successes": 0,
+          "evaluated_tasks": 1
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 0,
+        "mean_time_saved_s": null,
+        "gained_success_tasks": 0,
+        "lost_success_tasks": 1
+      }
+    },
+    "fixed_v2.0_a0.0": {
+      "successes": 1,
+      "evaluated_tasks": 1,
+      "success_conditional_mean_T_s": 16.100000381469727,
+      "per_root": {
+        "rb_upstream_offset_01": {
+          "successes": 1,
+          "evaluated_tasks": 1
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 1,
+        "mean_time_saved_s": -1.2000007629394531,
+        "gained_success_tasks": 0,
+        "lost_success_tasks": 0
+      }
+    },
+    "fixed_v2.0_a0.5": {
+      "successes": 1,
+      "evaluated_tasks": 1,
+      "success_conditional_mean_T_s": 14.899999618530273,
+      "per_root": {
+        "rb_upstream_offset_01": {
+          "successes": 1,
+          "evaluated_tasks": 1
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 1,
+        "mean_time_saved_s": 0.0,
+        "gained_success_tasks": 0,
+        "lost_success_tasks": 0
+      }
+    },
+    "fixed_v2.0_a1.0": {
+      "successes": 0,
+      "evaluated_tasks": 1,
+      "success_conditional_mean_T_s": null,
+      "per_root": {
+        "rb_upstream_offset_01": {
+          "successes": 0,
+          "evaluated_tasks": 1
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 0,
+        "mean_time_saved_s": null,
+        "gained_success_tasks": 0,
+        "lost_success_tasks": 1
+      }
+    },
+    "hold6_oracle": {
+      "successes": 1,
+      "evaluated_tasks": 1,
+      "success_conditional_mean_T_s": 14.899999618530273,
+      "per_root": {
+        "rb_upstream_offset_01": {
+          "successes": 1,
+          "evaluated_tasks": 1
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 1,
+        "mean_time_saved_s": 0.0,
+        "gained_success_tasks": 0,
+        "lost_success_tasks": 0
+      }
+    },
+    "sequence36_oracle": {
+      "successes": 1,
+      "evaluated_tasks": 1,
+      "success_conditional_mean_T_s": 14.739999771118164,
+      "per_root": {
+        "rb_upstream_offset_01": {
+          "successes": 1,
+          "evaluated_tasks": 1
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 1,
+        "mean_time_saved_s": 0.15999984741210938,
+        "gained_success_tasks": 0,
+        "lost_success_tasks": 0
+      },
+      "paired_with_hold6": {
+        "complete_root_tasks": 1,
+        "common_success_tasks": 1,
+        "mean_time_saved_s": 0.15999984741210938,
+        "gained_success_tasks": 0,
+        "lost_success_tasks": 0
+      }
+    }
+  },
+  "groups": [
+    {
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "declared_candidates": 36,
+      "evaluated_candidates": 36,
+      "matched_group_complete": true,
+      "selected": {
+        "fixed_v1.8_a0.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v1.8_a0.5": {
+          "Y": 1,
+          "T_s": 15.100000381469727,
+          "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_1.8_0.5"
+        },
+        "fixed_v1.8_a1.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a0.0": {
+          "Y": 1,
+          "T_s": 16.100000381469727,
+          "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_2.0_0.0"
+        },
+        "fixed_v2.0_a0.5": {
+          "Y": 1,
+          "T_s": 14.899999618530273,
+          "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.5"
+        },
+        "fixed_v2.0_a1.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "hold6_oracle": {
+          "Y": 1,
+          "T_s": 14.899999618530273,
+          "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.5"
+        },
+        "sequence36_oracle": {
+          "Y": 1,
+          "T_s": 14.739999771118164,
+          "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_2.0_0.5"
+        }
+      },
+      "candidate_order": [
+        {
+          "speed_m_s": 1.8,
+          "alpha": 0.0
+        },
+        {
+          "speed_m_s": 1.8,
+          "alpha": 0.5
+        },
+        {
+          "speed_m_s": 1.8,
+          "alpha": 1.0
+        },
+        {
+          "speed_m_s": 2.0,
+          "alpha": 0.0
+        },
+        {
+          "speed_m_s": 2.0,
+          "alpha": 0.5
+        },
+        {
+          "speed_m_s": 2.0,
+          "alpha": 1.0
+        }
+      ],
+      "matrix": [
+        [
+          {
+            "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_1.8_0.0",
+            "Y": 0,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_1.8_0.5",
+            "Y": 0,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_1.8_1.0",
+            "Y": 1,
+            "T_s": 15.600000381469727
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_2.0_0.0",
+            "Y": 0,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_2.0_0.5",
+            "Y": 1,
+            "T_s": 14.739999771118164
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_2.0_1.0",
+            "Y": 0,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_1.8_0.0",
+            "Y": 1,
+            "T_s": 15.0
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_1.8_0.5",
+            "Y": 1,
+            "T_s": 15.100000381469727
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_1.8_1.0",
+            "Y": 1,
+            "T_s": 16.780000686645508
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_2.0_0.0",
+            "Y": 1,
+            "T_s": 16.280000686645508
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_2.0_0.5",
+            "Y": 0,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_2.0_1.0",
+            "Y": 1,
+            "T_s": 15.5600004196167
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_1.8_0.0",
+            "Y": 0,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_1.8_0.5",
+            "Y": 1,
+            "T_s": 14.9399995803833
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_1.8_1.0",
+            "Y": 0,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_2.0_0.0",
+            "Y": 1,
+            "T_s": 15.600000381469727
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_2.0_0.5",
+            "Y": 0,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_2.0_1.0",
+            "Y": 0,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_1.8_0.0",
+            "Y": 1,
+            "T_s": 14.800000190734863
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_1.8_0.5",
+            "Y": 1,
+            "T_s": 15.0600004196167
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_1.8_1.0",
+            "Y": 0,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_2.0_0.0",
+            "Y": 1,
+            "T_s": 16.100000381469727
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_2.0_0.5",
+            "Y": 0,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_2.0_1.0",
+            "Y": 1,
+            "T_s": 14.84000015258789
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_1.8_0.0",
+            "Y": 0,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_1.8_0.5",
+            "Y": 1,
+            "T_s": 16.100000381469727
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_1.8_1.0",
+            "Y": 1,
+            "T_s": 15.100000381469727
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.0",
+            "Y": 0,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.5",
+            "Y": 1,
+            "T_s": 14.899999618530273
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_1.0",
+            "Y": 0,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_1.8_0.0",
+            "Y": 0,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_1.8_0.5",
+            "Y": 1,
+            "T_s": 16.360000610351562
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_1.8_1.0",
+            "Y": 1,
+            "T_s": 15.279999732971191
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_2.0_0.0",
+            "Y": 0,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_2.0_0.5",
+            "Y": 1,
+            "T_s": 15.420000076293945
+          },
+          {
+            "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_2.0_1.0",
+            "Y": 0,
+            "T_s": null
+          }
+        ]
+      ],
+      "matrix_axes": "Rows: first candidate; columns: second candidate; null is pending."
+    },
+    {
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "declared_candidates": 36,
+      "evaluated_candidates": 0,
+      "matched_group_complete": false,
+      "selected": {},
+      "candidate_order": [
+        {
+          "speed_m_s": 1.8,
+          "alpha": 0.0
+        },
+        {
+          "speed_m_s": 1.8,
+          "alpha": 0.5
+        },
+        {
+          "speed_m_s": 1.8,
+          "alpha": 1.0
+        },
+        {
+          "speed_m_s": 2.0,
+          "alpha": 0.0
+        },
+        {
+          "speed_m_s": 2.0,
+          "alpha": 0.5
+        },
+        {
+          "speed_m_s": 2.0,
+          "alpha": 1.0
+        }
+      ],
+      "matrix": [
+        [
+          {
+            "case_id": "rb_upstream_offset_02_first_1.8_0.0_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_1.8_0.0_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_1.8_0.0_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_1.8_0.0_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_1.8_0.0_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_1.8_0.0_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_02_first_1.8_0.5_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_1.8_0.5_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_1.8_0.5_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_1.8_0.5_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_1.8_0.5_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_1.8_0.5_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_02_first_1.8_1.0_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_1.8_1.0_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_1.8_1.0_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_1.8_1.0_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_1.8_1.0_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_1.8_1.0_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_02_first_2.0_0.0_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_2.0_0.0_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_2.0_0.0_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_2.0_0.0_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_2.0_0.0_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_2.0_0.0_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_02_first_2.0_0.5_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_2.0_0.5_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_2.0_0.5_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_2.0_0.5_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_2.0_0.5_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_2.0_0.5_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_02_first_2.0_1.0_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_2.0_1.0_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_2.0_1.0_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_2.0_1.0_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_2.0_1.0_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_02_first_2.0_1.0_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ]
+      ],
+      "matrix_axes": "Rows: first candidate; columns: second candidate; null is pending."
+    },
+    {
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "declared_candidates": 36,
+      "evaluated_candidates": 0,
+      "matched_group_complete": false,
+      "selected": {},
+      "candidate_order": [
+        {
+          "speed_m_s": 1.8,
+          "alpha": 0.0
+        },
+        {
+          "speed_m_s": 1.8,
+          "alpha": 0.5
+        },
+        {
+          "speed_m_s": 1.8,
+          "alpha": 1.0
+        },
+        {
+          "speed_m_s": 2.0,
+          "alpha": 0.0
+        },
+        {
+          "speed_m_s": 2.0,
+          "alpha": 0.5
+        },
+        {
+          "speed_m_s": 2.0,
+          "alpha": 1.0
+        }
+      ],
+      "matrix": [
+        [
+          {
+            "case_id": "rb_upstream_offset_03_first_1.8_0.0_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_1.8_0.0_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_1.8_0.0_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_1.8_0.0_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_1.8_0.0_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_1.8_0.0_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_03_first_1.8_0.5_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_1.8_0.5_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_1.8_0.5_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_1.8_0.5_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_1.8_0.5_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_1.8_0.5_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_03_first_1.8_1.0_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_1.8_1.0_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_1.8_1.0_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_1.8_1.0_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_1.8_1.0_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_1.8_1.0_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_03_first_2.0_0.5_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_2.0_0.5_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_2.0_0.5_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_2.0_0.5_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_2.0_0.5_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_2.0_0.5_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_03_first_2.0_1.0_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_2.0_1.0_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_2.0_1.0_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_2.0_1.0_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_2.0_1.0_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_03_first_2.0_1.0_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ]
+      ],
+      "matrix_axes": "Rows: first candidate; columns: second candidate; null is pending."
+    },
+    {
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "declared_candidates": 36,
+      "evaluated_candidates": 0,
+      "matched_group_complete": false,
+      "selected": {},
+      "candidate_order": [
+        {
+          "speed_m_s": 1.8,
+          "alpha": 0.0
+        },
+        {
+          "speed_m_s": 1.8,
+          "alpha": 0.5
+        },
+        {
+          "speed_m_s": 1.8,
+          "alpha": 1.0
+        },
+        {
+          "speed_m_s": 2.0,
+          "alpha": 0.0
+        },
+        {
+          "speed_m_s": 2.0,
+          "alpha": 0.5
+        },
+        {
+          "speed_m_s": 2.0,
+          "alpha": 1.0
+        }
+      ],
+      "matrix": [
+        [
+          {
+            "case_id": "rb_upstream_offset_04_first_1.8_0.0_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_1.8_0.0_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_1.8_0.0_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_1.8_0.0_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_1.8_0.0_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_1.8_0.0_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_04_first_1.8_0.5_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_1.8_0.5_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_1.8_0.5_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_1.8_0.5_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_1.8_0.5_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_1.8_0.5_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_04_first_1.8_1.0_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_1.8_1.0_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_1.8_1.0_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_1.8_1.0_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_1.8_1.0_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_1.8_1.0_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_04_first_2.0_0.0_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_2.0_0.0_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_2.0_0.0_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_2.0_0.0_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_2.0_0.0_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_2.0_0.0_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_04_first_2.0_0.5_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_2.0_0.5_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_2.0_0.5_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_2.0_0.5_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_2.0_0.5_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_2.0_0.5_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_04_first_2.0_1.0_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_2.0_1.0_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_2.0_1.0_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_2.0_1.0_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_2.0_1.0_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_04_first_2.0_1.0_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ]
+      ],
+      "matrix_axes": "Rows: first candidate; columns: second candidate; null is pending."
+    },
+    {
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "declared_candidates": 36,
+      "evaluated_candidates": 0,
+      "matched_group_complete": false,
+      "selected": {},
+      "candidate_order": [
+        {
+          "speed_m_s": 1.8,
+          "alpha": 0.0
+        },
+        {
+          "speed_m_s": 1.8,
+          "alpha": 0.5
+        },
+        {
+          "speed_m_s": 1.8,
+          "alpha": 1.0
+        },
+        {
+          "speed_m_s": 2.0,
+          "alpha": 0.0
+        },
+        {
+          "speed_m_s": 2.0,
+          "alpha": 0.5
+        },
+        {
+          "speed_m_s": 2.0,
+          "alpha": 1.0
+        }
+      ],
+      "matrix": [
+        [
+          {
+            "case_id": "rb_upstream_offset_05_first_1.8_0.0_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_1.8_0.0_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_1.8_0.0_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_1.8_0.0_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_1.8_0.0_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_1.8_0.0_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_05_first_1.8_0.5_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_1.8_0.5_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_1.8_0.5_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_1.8_0.5_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_1.8_0.5_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_1.8_0.5_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_05_first_1.8_1.0_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_1.8_1.0_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_1.8_1.0_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_1.8_1.0_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_1.8_1.0_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_1.8_1.0_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_05_first_2.0_0.0_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_2.0_0.0_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_2.0_0.0_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_2.0_0.0_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_2.0_0.0_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_2.0_0.0_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_05_first_2.0_0.5_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_2.0_0.5_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_2.0_0.5_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_2.0_0.5_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_2.0_0.5_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_2.0_0.5_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_05_first_2.0_1.0_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_2.0_1.0_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_2.0_1.0_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_2.0_1.0_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_2.0_1.0_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_05_first_2.0_1.0_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ]
+      ],
+      "matrix_axes": "Rows: first candidate; columns: second candidate; null is pending."
+    },
+    {
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "declared_candidates": 36,
+      "evaluated_candidates": 0,
+      "matched_group_complete": false,
+      "selected": {},
+      "candidate_order": [
+        {
+          "speed_m_s": 1.8,
+          "alpha": 0.0
+        },
+        {
+          "speed_m_s": 1.8,
+          "alpha": 0.5
+        },
+        {
+          "speed_m_s": 1.8,
+          "alpha": 1.0
+        },
+        {
+          "speed_m_s": 2.0,
+          "alpha": 0.0
+        },
+        {
+          "speed_m_s": 2.0,
+          "alpha": 0.5
+        },
+        {
+          "speed_m_s": 2.0,
+          "alpha": 1.0
+        }
+      ],
+      "matrix": [
+        [
+          {
+            "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_06_first_1.8_0.5_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_1.8_0.5_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_1.8_0.5_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_1.8_0.5_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_1.8_0.5_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_1.8_0.5_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_06_first_1.8_1.0_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_1.8_1.0_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_1.8_1.0_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_1.8_1.0_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_1.8_1.0_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_1.8_1.0_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_06_first_2.0_0.0_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_2.0_0.0_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_2.0_0.0_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_2.0_0.0_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_2.0_0.0_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_2.0_0.0_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ],
+        [
+          {
+            "case_id": "rb_upstream_offset_06_first_2.0_1.0_then_1.8_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_2.0_1.0_then_1.8_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_2.0_1.0_then_1.8_1.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_2.0_1.0_then_2.0_0.0",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_2.0_1.0_then_2.0_0.5",
+            "Y": null,
+            "T_s": null
+          },
+          {
+            "case_id": "rb_upstream_offset_06_first_2.0_1.0_then_2.0_1.0",
+            "Y": null,
+            "T_s": null
+          }
+        ]
+      ],
+      "matrix_axes": "Rows: first candidate; columns: second candidate; null is pending."
+    }
+  ]
+}
