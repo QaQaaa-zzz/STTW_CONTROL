@@ -3,7 +3,10 @@ import os,argparse,json,time
 from pathlib import Path
 import numpy as np
 p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);a=p.parse_args()
-spec=json.loads(a.config.read_text());out=Path(spec['output']);out.mkdir(exist_ok=True,parents=True)
+spec=json.loads(a.config.read_text())
+if spec.get('connection_midpoint_candidate'):
+ if not spec.get('connection_candidate') or not spec['connection_candidate']['decision_x_m']<spec['connection_midpoint_candidate']['decision_x_m']<spec['handoff_x']:p.error('Midpoint decision must lie strictly between the exit decision and jump handoff')
+out=Path(spec['output']);out.mkdir(exist_ok=True,parents=True)
 from isaaclab.app import AppLauncher
 app=AppLauncher(headless=True,device='cuda:0',enable_cameras=bool(spec.get('video',False))).app
 import torch
@@ -58,7 +61,10 @@ geometry=TorchPendulumGeometry(json.loads(Path(spec['geometry']).read_text()),pl
 last=torch.zeros(n,4,device='cuda:0');alive=torch.ones(n,dtype=torch.bool,device='cuda:0');entered=torch.zeros_like(alive);consumed=torch.zeros_like(alive)
 returned=False;landing_ticks=0;landing_ready=False;transition_speed=None
 if spec.get('landing_return'):assert n==1, 'Landing return currently uses a single lane'
-ground_rows=[];ground_command_rows=[];approach_selected=False;executed_rows=[]
+ground_rows=[];ground_command_rows=[];executed_rows=[]
+connection_events=[('exit','connection_decision.json',spec['connection_candidate'])] if spec.get('connection_candidate') else []
+if spec.get('connection_midpoint_candidate'):connection_events.append(('midpoint','midpoint_decision.json',spec['connection_midpoint_candidate']))
+connection_event_index=0;previous_alpha_since_s=0.
 active=False;rows=[];actions=[];observations=[];valid=[];arm_rows=[];body_rows=[];contact_rows=[];start=time.monotonic();steps=round(spec['seconds']/.005)
 (out/'protocol.json').write_text(json.dumps(dict(spec=spec,plant=plant.metadata,joint_names=plant.joints,policies=[s.identity for s in policies],ground_history='last_action zero means no prior jump action; physical FIFO sampled throughout ground approach',initial_translation='common saved snapshot translated to start_x/y0; optional rigid world-yaw alignment rotates pose and both velocities together',role='nominal paired DEV integration; not original donor benchmark',physics_dt=plant.physics_dt,ground_dt=.005,jump_dt=.02,optimizer_updates=0),indent=2))
 ground=None
@@ -100,9 +106,10 @@ for k in range(steps+1):
  if ground is not None and not active and (returned or not spec.get('ground_after_landing_only',False)):alive &= ground.alive
  alive &= torch.isfinite(row).all(-1)&(m[:,0].abs()<torch.pi/4)&(root[:,2]>0.05)
  if k==steps or not bool(alive.any()):break
- if ground is not None and not active and not returned and not approach_selected and spec.get('connection_candidate') and float(root[0,0])>=spec['connection_candidate']['decision_x_m']:
-  candidate=spec['connection_candidate'];approach_selected=True
-  (out/'connection_decision.json').write_text(json.dumps(dict(time=k*.005,candidate=candidate,root=root.cpu().tolist(),measurement=m.cpu().tolist(),position=plant.dofs[:,:,0].cpu().tolist(),velocity=plant.dofs[:,:,1].cpu().tolist(),previous_reference=ground.previous_reference.cpu().tolist(),previous_alpha=ground.alpha.cpu().tolist(),history='retained, no reset'),indent=2))
+ if ground is not None and not active and not returned and connection_event_index<len(connection_events) and float(root[0,0])>=connection_events[connection_event_index][2]['decision_x_m']:
+  stage,event_file,candidate=connection_events[connection_event_index];connection_event_index+=1
+  (out/event_file).write_text(json.dumps(dict(time=k*.005,decision_stage=stage,previous_alpha_duration_s=k*.005-previous_alpha_since_s,candidate=candidate,root=root.cpu().tolist(),measurement=m.cpu().tolist(),position=plant.dofs[:,:,0].cpu().tolist(),velocity=plant.dofs[:,:,1].cpu().tolist(),previous_reference=ground.previous_reference.cpu().tolist(),previous_alpha=ground.alpha.cpu().tolist(),history='retained, no reset'),indent=2))
+  if float(ground.alpha[0])!=candidate['alpha']:previous_alpha_since_s=k*.005
   ground.speed.fill_(candidate['speed_m_s']);ground.alpha.fill_(candidate['alpha'])
  if k%4==0:
   inside=(root[:,0]>=spec.get('platform_front_x',3.6)-1.1)&(root[:,0]<=spec.get('platform_front_x',3.6)+.4);consumed|=entered&~inside;entered|=inside
