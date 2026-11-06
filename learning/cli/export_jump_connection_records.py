@@ -62,17 +62,18 @@ names=[f['name'] for f in base['features']]
 case_info={c['case_id']:c for c in m['cases']}
 paired=defaultdict(list)
 for row in rows:
-    paired[(row['origin_id'],case_info[row['case_id']]['distance_m'])].append(row)
+    skill=json.dumps(dict(policies=row['policy_sha256'],model=row['model_contract_sha256'],zero_lower=row['zero_lower'],dt=row['physics_dt']),sort_keys=True)
+    paired[(row['origin_id'],case_info[row['case_id']]['distance_m'],row['protocol_id'],skill)].append(row)
 kernel=[];groups=[]
-for (origin,distance),group in paired.items():
+for (origin,distance,protocol,skill),group in paired.items():
     ready=len(group)==6 and all(r['decision_reached'] and r['target_semantics']=='Q_hold' for r in group)
-    groups.append(dict(origin_id=origin,distance_m=distance,executed_rows=len(group),kernel_ready=ready,reason='complete_decision_group' if ready else 'upstream_failure_incomplete_group_or_non_hold_target'))
+    groups.append(dict(origin_id=origin,distance_m=distance,protocol_id=protocol,skill_id=skill,executed_rows=len(group),kernel_ready=ready,reason='complete_decision_group' if ready else 'upstream_failure_incomplete_group_or_non_hold_target'))
     if not ready:continue
     for row in group:
         candidate=row['candidate'];cid=f"v{candidate['speed_m_s']}_a{candidate['alpha']}"
         kernel.append(dict(origin_id=origin,decision_id=f'{origin}:approach_{distance}',
             task_id=f"{row['protocol_id']}:approach_{distance}",
-            skill_id=json.dumps(dict(policies=row['policy_sha256'],model=row['model_contract_sha256'],zero_lower=row['zero_lower'],dt=row['physics_dt']),sort_keys=True),
+            skill_id=skill,
             candidate_id=cid,state=[row['named_state'][name] for name in names],
             complete=row['Y'],success_cost=row['T_after_decision_s'],
             source_case_id=row['case_id'],scope='Uninterrupted decision record, not a serialized full simulator snapshot'))
