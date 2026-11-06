@@ -280,5 +280,28 @@ class IsaacLabVectorPlant:
         for sensor in self.wheel_sensors:sensor.update(self.physics_dt,force_recompute=True)
         self.refresh();return (self.contact[:,self.nonwheel].square().sum(-1)>0).any(-1)
 
+    def read_wheel_contact_samples(self):
+        """Copy solved-step normal and friction patch buffers at their own points.
+
+        Counts/start indices map the flat buffers to sensor/filter pairs. Passing
+        physics_dt asks PhysX for forces in N rather than impulses in N s.
+        Call immediately after step; these samples cannot affect that solved step.
+        """
+        samples = {}
+        for wheel, sensor in zip(('frontwheel', 'rearwheel'), self.wheel_sensors):
+            view = sensor.contact_physx_view
+            normal = view.get_contact_data(dt=self.physics_dt)
+            friction = view.get_friction_data(dt=self.physics_dt)
+            for key, value in zip(('normal_force', 'normal_point', 'normal_direction',
+                                   'separation', 'normal_count', 'normal_start'), normal):
+                samples[wheel + '_' + key] = value.clone()
+            for key, value in zip(('friction_force', 'friction_point',
+                                   'friction_count', 'friction_start'), friction):
+                samples[wheel + '_' + key] = value.clone()
+        samples['joint_position'] = self.dofs[..., 0].clone()
+        samples['joint_velocity'] = self.dofs[..., 1].clone()
+        samples['body_state'] = self.rigid.clone()
+        return samples
+
     def close(self):
         self.sim.stop()
