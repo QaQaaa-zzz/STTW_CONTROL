@@ -1,3 +1,11 @@
+## 用户指定1.5m/s筛查完成，转入整路粗糙/波形场景
+
+`runs/h75_low_speed_1p5/evaluation/FEASIBILITY.md`及`feasibility_overview.png`为完整18轨迹结果，原始配对奖励与XY保留在各case。平地/16cm坡/24cm坡各五alpha+Zero全部10秒无提前失败且goal。H75末段保持13/15，Zero0/3；H75未保持为平地alpha1、24cm坡alpha1。不能称高alpha保证通过或排序更优。
+
+1.5请求下已非所有H75坡段始终触底：16cm坡alpha0/1触底32.9%/1.28%，24cm坡12.18%/0.64%；但速度及通过性差异仍很小。24cm坡alpha0/1最低实际速度约1.179/1.175m/s，均通过。此处1.5是参考下限，不是实际车速的硬下限。实际查看全XY/速度/侧倾，不能将参考限幅解释成实际速度绝不低于1.5。
+
+随后启动`isaac_h75_route_terrain_sweep.json`七种SDK粗糙/波形×2.0/2.3m/s、84条轨迹、420万lane steps上限、0optimizer；输出`runs/h75_route_terrain/evaluation`，GPU持久会话32138。保留原模型/控制频率/物理约束，不训练、不改下限。预计35–45分钟。所有新增结果仅本地维护，遵循用户停止自动推送要求。
+
 ## 第三章共同车体候选资产
 
 `pendulum_asset.py` 与 `learning/configs/pendulum_common_asset.json` 构造 STTW 原车体＋RB 双节摆及髋电机的仿真候选，不修改两份原XML。完整候选在 `runs/pendulum_common_asset/complete_mechanism/{vehicle.xml,contract.json}`；最初仅双臂的中间产物保留在父目录，不作为完整机构。安装旋转Rx(-90deg)、平移0是显式仿真设计，不是已测实机安装。
