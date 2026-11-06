@@ -1,0 +1,14 @@
+{
+  "role": "One original-route replay after extending post-goal reference support; original failed evidence retained",
+  "simulation_python": "/home/qy/miniconda3/envs/env_isaaclab/bin/python",
+  "analysis_python": "/home/qy/miniconda3/envs/mjp/bin/python",
+  "cases": [
+    {
+      "case_id": "forced_original_jump_extended_reference",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/forced_original_jump_extended_reference.json"
+    }
+  ],
+  "physics_lane_steps_max": 12000,
+  "optimizer_updates": 0,
+  "status": "prepared_not_started"
+}

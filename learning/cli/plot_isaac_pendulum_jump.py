@@ -43,5 +43,5 @@ ax[5].axhline(0,ls=':',color='gray');ax[5].set(xlabel='Time (s)',ylabel='Frontmo
 if np.isfinite(handoff):
  for a in (ax[2],ax[3],ax[4],ax[5]):a.axvline(handoff,ls=':',color='black',alpha=.5,label='Ground-to-jump handoff')
 for a in ax:a.grid(alpha=.25);a.legend(fontsize=7)
-fig.suptitle('Common pendulum bicycle | selected frozen checkpoints | nominal paired DEV\nActual trajectories end at physical termination; root height is not wheel clearance')
+fig.suptitle('Common pendulum bicycle | selected frozen checkpoints | nominal paired DEV\nActual trajectories stop at the observed endpoint; root height is not wheel clearance')
 fig.savefig(p/'xy_jump.png',dpi=150)

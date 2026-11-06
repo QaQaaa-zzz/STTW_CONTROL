@@ -1,0 +1,6 @@
+{
+  "samples": 262,
+  "until_s": 5.22,
+  "max_absolute_state_difference": 0.0,
+  "scope": "Complete recorded prefix through route decision, same upstream initial state and controls; not independent origins"
+}
