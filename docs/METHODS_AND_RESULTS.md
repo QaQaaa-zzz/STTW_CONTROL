@@ -1,3 +1,9 @@
+## 全过程路径分析已接入，标准物理评测继续
+
+`compare_local300_sim2sim.py`新增显式`--start-relative`和`--historical-lab`，用于不同模型预热状态下对照完整轨迹。对每条实际轨迹及对应原指令参考按首个记录位姿平移/旋转，保留原始数据；同图可包含原MuJoCo、原Isaac Local300、带摆Local300与带摆ECBC。新增逐时刻到原参考折线的最近距离、全观察窗口RMSE/最大值、超过0.5m累计时间、速度误差及NPZ；0.5m只是描述统计，未新增任务合格门槛。最近几何距离不能代替沿程进度或最终任务完成。
+
+分析器以现有原车轨迹在`/tmp/sttw_standard_plot_check`执行成功并查看图，属于出图集成检查，不是带摆实验结果。session93823当前已完成3.5s预热，14lane仍active，继续原10s评测；无重启、无额外物理。
+
 ## 带摆模型按原STTW标准评测（运行中）
 
 用户要求以全过程XY路径跟踪判断底层是否够用，不能以末端/存活替代。`isaac_pendulum_local300_standard.json`复用原七个Local300指令流和10秒窗口，14lane配对原Local300与ECBC，另含3.5秒共同带摆车ECBC预热；最多945000 lane physics steps、0optimizer。原位复用`evaluate_isaaclab_local300.py`，支持显式asset、同模型fresh warmup与paired_original；旧保存状态模式继续可用。预热及真实终止保留，生成同模型initial_state用于后续H75接口。相较历史MuJoCo/无摆车有初态及质量差异，不能称完全配对sim2sim。
