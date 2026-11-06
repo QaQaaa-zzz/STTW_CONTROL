@@ -1,3 +1,15 @@
+## Pendulum-bicycle skill lineage located and model pair identified
+
+`learning/configs/pendulum_bike_skill_sources.json` binds the reviewed source and first Full/Run1 student record from the existing10k evaluation request. Actual payload hashes and checkpoint XML identities match: source actor`a06acbc8…`, Run1 actor`c3eae39c…`; payloads are accessible. Run1 is an interface-preparation candidate, not a new best-model selection or a claim that all historical Full labels share one recipe. Preserve the existing training-record audit differences.
+
+The checkpoint-bound model is `/home/qy/DVGC/assets/orange_bike_4kg_horizontal.xml`, SHA`0b56d3672773ef05a2b5982117fa53a7fdffcaf2b7f3f04a7a7941233d6e9c8a`; the previously found quadruped_jump_jit/framework asset is byte-identical. This selects the correct model family by checkpoint evidence rather than the2kg/4kg filename. No external file was modified.
+
+Direct MuJoCo model compilation (no stepping) gives current STTW mass5.43421kg/nq11/nv10 versus pendulum5.091kg/nq12/nv11. Both XMLs expose four actuator slots, but STTW has alternative steering interfaces while the skill controls steer/rear/hip/knee. `cmd_steering_v` in the pendulum XML is a POSITION actuator despite its name. Pendulum wheel joint addresses also differ; raw qpos/qvel copying is invalid. Compilation details: `runs/pendulum_bike_handoff/compiled_models.json`.
+
+Skill contract:76-D = three25-D history frames + jump_signal; action order steer/rear-wheel-drive/hip/knee. Original skill runtime uses5ms physics and20ms control (constants.py/env.py); XML default is1ms and is overridden by runtime. Current STTW uses0.2ms physics,5ms lower,20ms H75. A shared physical model cannot change integration timestep merely at policy handoff: unified timing and ground behavior on the pendulum model remain to be evaluated, without claiming existing checkpoints retain performance. Preserve actual vehicle/actuator/history/event states through handoff; do not use Go2 mapping or pad observations.
+
+Reusable upstream entries are `build_unified_formal_environment`, `load_checkpoint`, `make_checkpoint_policy`, and `unified_envelope_snapshot` for its own model. No new runtime wrapper, training or physics evaluation was launched in this identity pass. Next: read exact action mapping and state-history lifecycle, then implement a bounded interface on the pendulum model while leaving the completed STTW bicycle chapter intact.
+
 ## User clarification: STTW remains bicycle; cross-skill platform is pendulum bicycle
 
 User explicitly clarified the platform: STTW continues on the current bicycle, while cross-skill tasks use a bicycle with a pendulum. Go2 is a training/transfer reference, NOT the cross-skill robot or policy to attach. This corrects the preceding exploratory Go2 compatibility assumption; no Go2 adapter, training or model change was performed. Bark clarification notification was delivered and answered.
