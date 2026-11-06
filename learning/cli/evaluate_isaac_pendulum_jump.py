@@ -5,7 +5,7 @@ import numpy as np
 p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);a=p.parse_args()
 spec=json.loads(a.config.read_text());out=Path(spec['output']);out.mkdir(exist_ok=True,parents=True)
 from isaaclab.app import AppLauncher
-app=AppLauncher(headless=True,device='cuda:0').app
+app=AppLauncher(headless=True,device='cuda:0',enable_cameras=bool(spec.get('video',False))).app
 import torch
 import isaaclab.sim as sim_utils
 from sttw_control.isaaclab_vector_env import IsaacLabVectorPlant
@@ -23,6 +23,15 @@ plant=IsaacLabVectorPlant(Path(cfg['asset']),['plane'],[0]*n,out,**options)
 for i,origin in enumerate(plant.origin.cpu().numpy()):
  box=sim_utils.CuboidCfg(size=(4.,2.,.32),collision_props=sim_utils.CollisionPropertiesCfg(contact_offset=.01,rest_offset=0.),physics_material=sim_utils.RigidBodyMaterialCfg(static_friction=.8,dynamic_friction=.8))
  box.func(f'/World/JumpStep_{i}',box,translation=(float(origin[0]+5.6),float(origin[1]),0.))
+camera=None;writer=None
+if spec.get('video',False):
+ from isaaclab.sensors.camera import Camera,CameraCfg
+ import imageio.v2 as imageio
+ light=sim_utils.DomeLightCfg(intensity=2000.);light.func('/World/VideoLight',light)
+ camera=Camera(CameraCfg(prim_path='/World/VideoCamera',update_period=0,height=720,width=1280,data_types=['rgb'],spawn=sim_utils.PinholeCameraCfg(focal_length=24.,horizontal_aperture=28.,clipping_range=(.05,100.))))
+ plant.sim.reset()
+ camera.set_world_poses_from_view(torch.tensor([[4.,-5.,2.3]],device='cuda:0'),torch.tensor([[3.8,0.,.35]],device='cuda:0'))
+ writer=imageio.get_writer(out/'simulation.mp4',fps=50,codec='libx264',quality=8,macro_block_size=1)
 saved=np.load(spec['initial_state'])
 state={k:torch.tensor(saved[k],device='cuda:0') for k in ('root_pose','root_velocity','joint_position','joint_velocity')}
 state['root_pose']=state['root_pose'].clone();state['root_pose'][0]=spec['start_x'];state['root_pose'][1]=0.
@@ -68,6 +77,9 @@ for k in range(steps+1):
  distance=3.6-(geometry.frontmost_x(plant.rigid)-plant.origin[:,0])
  row=torch.cat((torch.full((n,1),k*.005,device='cuda:0'),root[:,:3],speed[:,None],m[:,:4],plant.dofs[:,plant.pendulum_servos.indices,0],distance[:,None]),-1)
  rows.append(row);valid.append(alive.clone());actions.append(last.clone())
+ if camera is not None and k%4==0:
+  plant.sim.render();camera.update(.02,force_recompute=True)
+  writer.append_data(camera.data.output['rgb'][0,:,:,:3].cpu().numpy())
  if ground is not None and not active:alive &= ground.alive
  alive &= torch.isfinite(row).all(-1)&(m[:,0].abs()<torch.pi/4)&(root[:,2]>0.05)
  if k==steps or not bool(alive.any()):break
@@ -91,6 +103,7 @@ for k in range(steps+1):
   control=controller.step(request,torch.ones_like(alive));command=torch.stack((control[:,0].clamp(-3,3),torch.full_like(speed,spec['approach_speed']/.1)),-1)
   for _ in range(substeps):plant.step(command,refresh_diagnostics=False)
  plant.refresh()
+if writer is not None:writer.close()
 trace=torch.stack(rows).cpu().numpy();mask=torch.stack(valid).cpu().numpy();np.savez(out/'trajectory.npz',trace=trace,valid=mask,action=torch.stack(actions).cpu().numpy(),observations=torch.stack(observations).cpu().numpy(),columns=['time','x','y','z','speed','roll','roll_rate','steer','steer_rate','hip','knee','obstacle_relative_x'])
 result=dict(status='complete',elapsed_s=time.monotonic()-start,physics_lane_steps=k*substeps*n,ground_controller=('H75+Local300' if ground is not None else 'ECBC+ESO'),cases=[])
 for i,name in enumerate(spec['skills']):
