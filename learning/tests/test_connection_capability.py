@@ -87,3 +87,11 @@ class ConnectionCapabilityTests(unittest.TestCase):
         self.assertEqual(select_connection_estimate(rows,previous_candidate='b',previous_route='right',time_tolerance=.02)['candidate_id'],'a')
         rows[1]['complete_probability']=.7
         self.assertEqual(select_connection_estimate(rows,previous_candidate='b',previous_route='left',time_tolerance=.02)['candidate_id'],'a')
+
+    def test_uninterrupted_decision_records_are_not_labeled_as_snapshots(self):
+        from sttw_control.empirical_capability import evaluate_connection_groups
+        rows=[dict(origin_id=o,decision_id=o+':exit',task_id='jump',skill_id='frozen',candidate_id='a',state=[0.],complete=1,success_cost=2.) for o in ['one','two']]
+        result=evaluate_connection_groups(rows,['a'],[1.],1.,.5)
+        self.assertEqual(result['selected_complete_count'],2)
+        self.assertEqual(result['fixed_candidates'][0]['matched_decided_groups'],2)
+        self.assertTrue(all(r['snapshot_id'] is None and r['decision_id'] for r in result['rows']))

@@ -56,3 +56,7 @@ configs保存完整18条配置，manifest记录执行顺序及本地依赖路径
 运行入口run_jump_approach_pilot.py；评估analyze_isaac_pendulum_landing.py、analyze_rb_continuous_task.py；同图summarize_jump_approach_pilot.py。模型参数与URDF见此前chapter3_motion_chain_20261106/CONFIGURATION.md；权重不入本精简包。原始运行位于数据盘STTW_runs/chapter3_jump_approach_pilot。
 
 records/保留决策时刻输入与完整任务标签。早期协议缺少live joint_names的行保留髋膝速度null，不猜测顺序或填零；后续完整输入行明确标识。全部18条只有一个上游origin，不拆成18个独立根。
+
+## 原高斯核评价器接口检查
+
+已用原八维特征及冻结尺度接入跳台数据，任务按距离区分，整条上游根跨所有距离/候选留出。18条只有一个根，留出后没有其他证据，因此三组均unknown、没有可报告Brier或选择成功率。这一结果验证分组边界，不是评价器性能退化。使用decision_id标识不中断运行的决策点，不冒称已保存完整PhysX快照。完整23维记录另保留；核基线不依赖早期缺失的髋膝速度。耗时代价用决策后到任务完成的时间，不能与整任务时间混为一列。

@@ -1,0 +1,68 @@
+{
+  "role": "Fixed eight-feature kernel DEV baseline for jump connection; no fitting or calibrated-probability claim",
+  "features": [
+    {
+      "name": "speed",
+      "unit": "m/s",
+      "scale": 0.5
+    },
+    {
+      "name": "roll",
+      "unit": "rad",
+      "scale": 0.1
+    },
+    {
+      "name": "roll_rate",
+      "unit": "rad/s",
+      "scale": 0.5
+    },
+    {
+      "name": "cross_track",
+      "unit": "m",
+      "scale": 0.2
+    },
+    {
+      "name": "heading_error",
+      "unit": "rad",
+      "scale": 0.2
+    },
+    {
+      "name": "steer",
+      "unit": "rad",
+      "scale": 0.2
+    },
+    {
+      "name": "steer_rate",
+      "unit": "rad/s",
+      "scale": 1.0
+    },
+    {
+      "name": "previous_speed_reference",
+      "unit": "m/s",
+      "scale": 0.5
+    }
+  ],
+  "candidates": [
+    "v1.8_a0.0",
+    "v1.8_a0.5",
+    "v1.8_a1.0",
+    "v2.0_a0.0",
+    "v2.0_a0.5",
+    "v2.0_a1.0"
+  ],
+  "feature_scales": [
+    0.5,
+    0.1,
+    0.5,
+    0.2,
+    0.2,
+    0.2,
+    1.0,
+    0.5
+  ],
+  "bandwidth": 1.0,
+  "minimum_support": 0.5,
+  "validation": "Hold out whole upstream origin across all distances and candidates; upstream failures retained in full records and coverage inventory",
+  "scope": "6 candidates; unsupported queries unknown; no claim of calibrated success probability",
+  "cost": "Time after decision to full-task completion, success conditional"
+}

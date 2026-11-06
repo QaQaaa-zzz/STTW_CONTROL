@@ -41,3 +41,33 @@ for case in m['cases']:
  inventory.append(dict(case_id=case['case_id'],status='evaluated',decision_reached=decision is not None))
 (a.output/'feature_schema.json').write_text(json.dumps(schema,indent=2)+'\n');(a.output/'records.jsonl').write_text(''.join(json.dumps(r)+'\n' for r in rows));(a.output/'inventory.json').write_text(json.dumps(dict(declared_cases=len(m['cases']),evaluated_cases=len(rows),independent_origins=len({r['origin_id'] for r in rows}),role='Pilot DEV only; no train/validation/test split or fitted model',cases=inventory),indent=2)+'\n')
 print(json.dumps(dict(exported_rows=len(rows),independent_origins=len({r['origin_id'] for r in rows}))))
+
+# Reuse the established eight-feature Gaussian baseline, without pretending the
+# richer schema or the nominal pilot constitutes a trained neural evaluator.
+from collections import defaultdict
+base=json.loads(Path('learning/configs/connection_capability_dev.json').read_text())
+names=[f['name'] for f in base['features']]
+case_info={c['case_id']:c for c in m['cases']}
+paired=defaultdict(list)
+for row in rows:
+    paired[(row['origin_id'],case_info[row['case_id']]['distance_m'])].append(row)
+kernel=[];groups=[]
+for (origin,distance),group in paired.items():
+    ready=len(group)==6 and all(r['decision_reached'] for r in group)
+    groups.append(dict(origin_id=origin,distance_m=distance,executed_rows=len(group),kernel_ready=ready,reason='complete_decision_group' if ready else 'upstream_failure_or_incomplete_group'))
+    if not ready:continue
+    for row in group:
+        candidate=row['candidate'];cid=f"v{candidate['speed_m_s']}_a{candidate['alpha']}"
+        kernel.append(dict(origin_id=origin,decision_id=f'{origin}:approach_{distance}',
+            task_id=f"{row['protocol_id']}:approach_{distance}",
+            skill_id=json.dumps(dict(policies=row['policy_sha256'],model=row['model_contract_sha256'],zero_lower=row['zero_lower'],dt=row['physics_dt']),sort_keys=True),
+            candidate_id=cid,state=[row['named_state'][name] for name in names],
+            complete=row['Y'],success_cost=row['T_after_decision_s'],
+            source_case_id=row['case_id'],scope='Uninterrupted decision record, not a serialized full simulator snapshot'))
+base.update(candidates=[f'v{v}_a{alpha}' for v in (1.8,2.) for alpha in (0.,.5,1.)],
+            role='Fixed eight-feature kernel DEV baseline for jump connection; no fitting or calibrated-probability claim',
+            cost='Time after decision to full-task completion, success conditional',
+            validation='Hold out whole upstream origin across all distances and candidates; upstream failures retained in full records and coverage inventory')
+(a.output/'kernel_records.jsonl').write_text(''.join(json.dumps(r)+'\n' for r in kernel))
+(a.output/'kernel_config.json').write_text(json.dumps(base,indent=2)+'\n')
+(a.output/'kernel_coverage.json').write_text(json.dumps(dict(groups=groups,full_records='records.jsonl',excluded_from_kernel_not_from_task_denominator=True),indent=2)+'\n')
