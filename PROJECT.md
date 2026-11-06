@@ -1,3 +1,9 @@
+## Matched low-speed flat controls completed
+
+`runs/h75_low_speed_flat/comparison/RESULTS.md` and `xy_matrix_full.png` compare all24 saved flat/ramp lanes at2.0/1.7m/s. Two new flat cases completed600000 physics lane steps/0 optimizer updates in279s, old ramp trajectories reused. At2.0m/s all flat lanes pass original hold; alpha0 flat path RMSE .0506m versus ramp .435m, indicating terrain-triggered subsequent oscillation in this matched case. At1.7m/s alpha1 already oscillates on flat (path RMSE .179m versus ramp .220m); final1s flat path/heading peaks .248m/.349rad are substantive. Thus low-speed alpha1 behavior is not solely a hill effect. Flat Zero's hold miss is marginal heading .051365rad versus .05, with path .01284m and speed .02935m/s; do not group it with alpha1 instability.
+
+Retain original selected models and all negative outcomes. Stop this bounded terrain/speed screen: no inability to climb was demonstrated, and alpha1 is not universally better. Next return to the declared preference-switch recovery work, taking the already identified training temporal-discount mismatch into account before any further continuation. No additional training or physics queued here.
+
 ## Active matched low-speed flat comparison
 
 Configuration `learning/configs/isaac_h75_low_speed_flat.json`: flat mesh at2.0/1.7m/s, original H75/Local300, same complete2.3m/s warm state as completed24cm ramp cases. Budget600000 physics lane steps/0 optimizer updates; output `runs/h75_low_speed_flat/evaluation`. Reuse all ramp trajectories and existing evaluator/plotting. Separates low-speed policy behavior from added terrain response; no new training or changed physical limits.
