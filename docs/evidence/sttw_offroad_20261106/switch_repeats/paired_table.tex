@@ -1,0 +1,15 @@
+\begin{tabular}{llrrrr}
+\hline
+Baseline & Metric & Baseline & Switch & Paired difference & Lower error \\
+\hline
+$\alpha=1$ & Path RMSE (m) & 0.3103 & 0.2566 & $-0.0537 \pm 0.0274$ & 5/5 \\
+$\alpha=1$ & Speed RMSE (m/s) & 0.1196 & 0.1187 & $-0.0010 \pm 0.0048$ & 4/5 \\
+$\alpha=1$ & Path peak (m) & 0.6742 & 0.5639 & $-0.1103 \pm 0.0648$ & 5/5 \\
+$\alpha=0.5$ & Path RMSE (m) & 0.1618 & 0.2543 & $+0.0925 \pm 0.0063$ & 0/5 \\
+$\alpha=0.5$ & Speed RMSE (m/s) & 0.1610 & 0.1196 & $-0.0414 \pm 0.0062$ & 5/5 \\
+$\alpha=0.5$ & Path peak (m) & 0.3302 & 0.5639 & $+0.2337 \pm 0.0145$ & 0/5 \\
+\hline
+\end{tabular}
+% Same-time paired pre-arrival windows; mean +/- sample SD of paired differences.
+% Five frozen parameter repeats (DEV), not independent training seeds. No significance claim.
+% Switch is prescribed alpha=1 to 0.5. Path constraint satisfaction is reported separately.

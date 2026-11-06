@@ -50,3 +50,19 @@ C1/C2是本文论证主轴；C3为条件选择的补充实证；C4/C5解释实�
 ## 投稿准备状态
 
 当前实验主线可进入成稿准备，不把更多训练、完全支配或实车实验擅自加成用户的前置门槛。真实平台验证缺失应在适用范围中说明。作者、期刊、文章类型、主稿具体修订范围与最终提交尚未确定；当前没有投稿操作，也未代改历史主稿。文献对比应基于已查原文进一步形成与目标期刊匹配的相关工作段，而不是凭本表宣称首次。
+
+## 与实际现有主稿的衔接位置
+
+已读取本工作树实际主稿 `docs/paper/MANUSCRIPT.tex`（不是不存在的同目录MANUSCRIPT.md）；当前标题为Preference-Conditioned Speed and Steering Control for a Single-Track Robot，摘要以旧504回合路线矩阵为主要实证。未修改它。若整合，采用下列逐段更新范围：
+
+|实际段落|所需处理|
+|---|---|
+|Abstract / Introduction|将越野五alpha工作点与任务选择设为当前主线；旧504路线矩阵保留为单独的路线证据，不与600越野轨迹相加制造总样本数|
+|Coupled speed steering and lean demand|保留基础耦合关系；有效拖距作为接触分析结果，不增加2.4硬上限或严格双曲线定律|
+|Hierarchical reference interface|核对原H75与橙色Local300身份，准确说明冻结策略与不同评价栈；不称本轮重新训练了越野策略|
+|Execution reference and tracking reference|将旧10Hz重连接限定为旧路线矩阵；新固定地形矩阵无在线重规划，切换实验period=.5s，不能写成全文统一10Hz|
+|Experimental questions and measurement|新增地形×速度×参数、五alpha、Zero定义、共享2.3m/s初态和数据角色；旧MAE与新RMSE分别命名，不能直接跨表排名|
+|Results|先展示新地形XY和工作点，再任务条件选择、通道/接触、既定切换；旧路线/力脉冲/几何分配表独立保留，不擅删反例|
+|Task interpretation and remaining validation|更新同状态干预与切换已执行的事实；仍保留未证明协调限速收益、未实车验证、不是普适最佳等限制|
+
+这是与源码逐段核对得到的编辑范围，不是第二份主稿。原504路线结论没有在本轮重新验证或改写，不能把它们当作新Isaac地形协议的证据。待用户确定直接整合主稿还是先供其他agent推理后，再按这个范围执行。

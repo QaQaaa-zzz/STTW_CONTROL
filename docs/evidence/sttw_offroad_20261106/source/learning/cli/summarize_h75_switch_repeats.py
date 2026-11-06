@@ -43,6 +43,21 @@ for base in ['alpha1','alpha05']:
  subset=[r for r in pairs if r['baseline']==base];summary[base]={}
  for key in ['path_rmse','speed_rmse','path_peak']:
   delta=np.array([r['delta'][key] for r in subset]);summary[base][key]=dict(mean_delta=float(delta.mean()),sample_sd=float(delta.std(ddof=1)),lower_count=int((delta<0).sum()),n=len(delta))
+# Export the same paired estimates for paper tables; no manual transcription.
+import csv
+with (a.root/'paired_table.csv').open('w',newline='') as f:
+ writer=csv.writer(f);writer.writerow(['baseline','metric','unit','n','baseline_mean','switch_mean','mean_delta','sample_sd_delta','lower_count'])
+ table=[r'\begin{tabular}{llrrrr}',r'\hline',r'Baseline & Metric & Baseline & Switch & Paired difference & Lower error \\',r'\hline']
+ for base in ['alpha1','alpha05']:
+  selected=[q for q in pairs if q['baseline']==base]
+  for key,unit in [('path_rmse','m'),('speed_rmse','m/s'),('path_peak','m')]:
+   b=float(np.mean([q['values'][base][key] for q in selected]));v=float(np.mean([q['values']['switch1to05'][key] for q in selected]));q=summary[base][key]
+   writer.writerow([base,key,unit,5,b,v,q['mean_delta'],q['sample_sd'],q['lower_count']])
+   name={'path_rmse':'Path RMSE (m)','speed_rmse':'Speed RMSE (m/s)','path_peak':'Path peak (m)'}[key]
+   label=r'$\alpha='+('1' if base=='alpha1' else '0.5')+'$'
+   table.append(f"{label} & {name} & {b:.4f} & {v:.4f} & ${q['mean_delta']:+.4f} \\pm {q['sample_sd']:.4f}$ & {q['lower_count']}/5 "+r'\\')
+ table.extend([r'\hline',r'\end{tabular}', '% Same-time paired pre-arrival windows; mean +/- sample SD of paired differences.', '% Five frozen parameter repeats (DEV), not independent training seeds. No significance claim.', '% Switch is prescribed alpha=1 to 0.5. Path constraint satisfaction is reported separately.'])
+ (a.root/'paired_table.tex').write_text('\n'.join(table)+'\n')
 (a.root/'summary.json').write_text(json.dumps(dict(role='DEV frozen parameter repeats, not independent training seeds; no exclusions',cases=rows,paired_common_windows=pairs,paired_summary=summary),indent=2)+'\n')
 lines=['# Prescribed bend-switch parameter repeats','','![All task-window XY](xy_repeats.png)','','![Paired differences](paired_differences.png)','','Original H75 + Local300, 6cm terrain, requested2.6m/s, same saved2.3m/s initial state. Five fixed alphas, prescribed1to.5 at original progress5.3m, and matched Zero. All methods replan. Seed101 reused;102–105 run as one28-lane GPU scene. No training or switch-point tuning. Error bars are parameter sample SD, not independent-policy confidence intervals.','','## Complete task before first goal entry (or termination)','','|Seed|Case|Goal|Full10s|Arrival s|Path RMSE m|Path peak m|Speed RMSE m/s|','|---|---|---|---|---|---|---|---|']
 for r in rows:
