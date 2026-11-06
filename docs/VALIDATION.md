@@ -1,3 +1,20 @@
+## STTW 当前证据与剩余任务（2026-11-06）
+
+本节覆盖下文历史阶段的“下一步/运行中”表述；具体当前事实仍以研究台账及运行产物为准。当前采用原H75 u77与用户选定的橙色原Local300，不追加曲线对照训练，不编写论文正文，不自动推送。
+
+|规划书要求|已有证据与入口|当前判断/缺口|
+|---|---|---|
+|非平坦地形双通道偏好|[原十工况五alpha曲线](../runs/h75_terrain_speed_sweep/evaluation/tradeoff_common_window.png)、[随机重复评测索引](../runs/h75_tradeoff_repeats/RESULTS.md)|固定策略的取舍已有DEV证据；多速度/幅度五次随机重复正在执行，不能用首seed表示均值稳定性。|
+|同物理/历史/滤波状态改变alpha|[十状态五alpha查询及实际XY](../runs/h75_common_state_channels/analysis/RESULTS.md)|50次前向查询证明目标同时改变；不是50条独立物理轨迹。|
+|接触阶段双通道作用|[30次短时通道干预](../runs/h75_common_state_channels/analysis/CHANNEL_EFFECTS.md)|0.2s保持修正后0.5s，所有XY差异大于各自自然/恢复差异，最小比3.85；方向依状态变化，不能称某通道普遍改善。出口干预实际在后轮离开后42.8–59.2ms。|
+|地形底层机制|[两速度6cm接触记录](../runs/h75_trail_verification/evaluation/MECHANISM_RESULTS.md)|有效拖距反转已测得；不支持负拖距必然失稳、简单决定alpha排序，亦不支持2.4m/s²硬能力边界。|
+|弯内给定偏好切换|[共享状态切换](../runs/h75_shared_switch/analysis/DECISION.md)、[修正重规划后轨迹](../runs/h75_shared_switch_tangent/analysis/RESULTS.md)|切换可执行，但没有动态alpha全面优于固定alpha的证据。短窗口路径/速度权衡与整尾段表现分开；后者还受重规划及恢复差异影响。|
+|转向优先执行收益|同上共享状态及50查询|没有测得转向更受限的激活机会；保留原独立限速，不作为已成立创新，不为制造激活而改滤波或额外训练。|
+
+下一步只收取已授权随机重复的均值、离散度和失败情况，判断偏好关系在哪些速度/幅度成立及折返；若动态切换没有实际任务收益，保留负结果，不把“可切换”写成“切换更优”。STTW尚未完成论文级证据闭合；新章节不作为本线程下一步。
+
+---
+
 
 ## H75 offroad continuation and channel evidence — current stage
 
