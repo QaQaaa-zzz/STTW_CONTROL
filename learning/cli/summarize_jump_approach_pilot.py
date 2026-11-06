@@ -11,14 +11,14 @@ if a.include_comparison_references:
  references={}
  for c in m['cases']:
   spec=json.loads(Path(c['config']).read_text());ref=spec['comparison_reference']
-  references[ref['config']]=dict(c,case_id=c['origin_id']+'_reference_'+ref['skill'],config=ref['config'],skill=ref['skill'],reused_reference=True)
+  references[ref['config']]=dict(c,case_id=c['case_id']+'_reference_'+ref['skill'],config=ref['config'],skill=ref['skill'],reused_reference=True)
  m['cases'].extend(references.values())
 skills=sorted({c['skill'] for c in m['cases'] if 'skill' in c})
 sequences=any('second_candidate' in c for c in m['cases'])
 for c in m['cases']:
  c['origin_id']=json.loads(Path(c['config']).read_text())['origin_id']
  if sequences:c.update(speed_m_s=c['second_candidate']['speed_m_s'],alpha=c['second_candidate']['alpha'])
- c['panel_key']=(c['distance_m'],c['first_candidate']['speed_m_s'],c['first_candidate']['alpha']) if sequences else (c['distance_m'],)
+ c['panel_key']=((c['distance_m'],c['skill']) if skills else (c['distance_m'],c['first_candidate']['speed_m_s'],c['first_candidate']['alpha']) if sequences else (c['distance_m'],))
 panels={origin:sorted({tuple(c['panel_key']) for c in m['cases'] if c['origin_id']==origin}) for origin in {c['origin_id'] for c in m['cases']}};figures={}
 for c in m['cases']:
  spec=json.loads(Path(c['config']).read_text());origin=spec['origin_id'];run=Path(spec['output']);row=dict(c,origin_id=origin,status='pending',complete=None)
@@ -31,8 +31,7 @@ for c in m['cases']:
   row['decision']=json.loads(decision.read_text()) if decision.exists() else None
   row['handoff']=json.loads(handoff.read_text()) if handoff.exists() else None
   d=np.load(run/'trajectory.npz');t=d['trace'][d['valid'][:,0],0];i=panels[origin].index(tuple(c['panel_key']));color={0.:'tab:blue',.5:'tab:orange',1.:'tab:green'}[c['alpha']];style='--' if c['speed_m_s']==1.8 else '-';label=f"v={c['speed_m_s']}, alpha={c['alpha']}"+(" after midpoint" if sequences else "")
-  if skills:
-   color=plt.get_cmap('tab10')(skills.index(c['skill']));label=c['skill']+' | '+label
+  if skills:label=c['skill']+' | '+label
   row['observed_duration_s']=float(t[-1,0])
   if sequences:
    midpoint=run/'midpoint_decision.json'
@@ -58,13 +57,13 @@ for c in m['cases']:
   axes[i,1].plot(t[:,0],t[:,4],style,color=color,label=label)
   if not axes[i,0].get_title():
    route=np.load(run/'ground_route.npz')['xy'];axes[i,0].plot(route[:,0],route[:,1],':',color='gray',label='Original map route')
-   axes[i,0].set_title(f"Approach {c['distance_m']} m"+(f" | first v={c['first_candidate']['speed_m_s']}, alpha={c['first_candidate']['alpha']}" if sequences else ""))
+   axes[i,0].set_title(f"Approach {c['distance_m']} m"+(f" | {c['skill']}" if skills else "")+(f" | first v={c['first_candidate']['speed_m_s']}, alpha={c['first_candidate']['alpha']}" if sequences else ""))
  elif (run/'results.json').exists():row['status']='simulation_complete_analysis_pending'
  elif (run/'runtime.log').exists():row['status']='started_no_final_result'
  rows.append(row)
 baselines={origin:next((r['case_id'] for r in rows if r['origin_id']==origin and r['speed_m_s']==2. and r['alpha']==.5 and r['case_id'] in prefixes),next((r['case_id'] for r in rows if r['origin_id']==origin and r['case_id'] in prefixes),None)) for origin in figures}
 for row in rows:
- baseline=baselines.get(row['origin_id'])
+ baseline=(next((r['case_id'] for r in rows if r['origin_id']==row['origin_id'] and r['distance_m']==row['distance_m'] and r['speed_m_s']==row['speed_m_s'] and r['alpha']==row['alpha'] and r['case_id'] in prefixes),None) if skills else baselines.get(row['origin_id']))
  if baseline is None or row['case_id'] not in prefixes:continue
  reference=prefixes[baseline];observed=prefixes[row['case_id']]
  times,ri,oi=np.intersect1d(reference[:,0],observed[:,0],return_indices=True)
