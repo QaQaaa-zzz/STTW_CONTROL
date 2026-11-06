@@ -1,0 +1,24 @@
+{
+  "output": "runs/phase_u300_handoff_comparison",
+  "initial_state": "runs/pendulum_h75_locked/warmup/initial_state.npz",
+  "geometry": "runs/pendulum_jump_pair/geometry.json",
+  "bundles": "runs/phase_u300_handoff_bundles",
+  "skills": [
+    "best151",
+    "last300"
+  ],
+  "start_x": 1.0,
+  "approach_speed": 2.0,
+  "seconds": 4.0,
+  "maximum_physics_lane_steps": 1600,
+  "optimizer_updates": 0,
+  "align_heading": true,
+  "physics_dt": 0.005,
+  "gpu_pair_capacities": [
+    1048576,
+    1048576,
+    1048576
+  ],
+  "ground_bundle": "runs/h75_selected_local300_flat/bundle",
+  "ground_alpha": 0.5
+}
