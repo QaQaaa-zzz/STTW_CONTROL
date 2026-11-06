@@ -85,6 +85,9 @@ class ContinuousTask:
         if len(ids)!=len(set(ids)) or set(ids)!=remaining or any(
             not g['allowed_routes'] or any(r not in self.routes or self.routes[r]['goal_id']!=g['goal_id'] for r in g['allowed_routes']) for g in goals):
             raise ValueError('Revision must preserve outstanding goals and use mapped routes to each goal')
+        required={g['goal_id']:set(g.get('required_skills',())) for g in self.program['goals']}
+        if any(not required[g['goal_id']].issubset(g.get('required_skills',())) for g in goals):
+            raise ValueError('Revision must preserve outstanding required skills')
         done=[g for g in self.program['goals'] if g['goal_id'] in self.completed]
         self.program={**self.program,'goals':done+goals}
         event=dict(status='task_revised',reason=reason,completed=list(self.completed),

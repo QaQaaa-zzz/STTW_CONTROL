@@ -13,3 +13,16 @@ E5共同终点改到x=21.6，使最后一弯结束后保留5m直行；原J4全�
 `forward_branch`使用共同原路progress、`available_forward_routes`分流截止和原`begin_connection`接口。切换不重置ESO/滤波/历史；bypass禁用跳跃触发，错过口则保留原路线。事件记录请求路线、实际路线、截止原因和耗时。新E5地图仅把原路目标位置改为共享21.6m，上游和原路径点列不变。
 
 分析新增`chain_summary.json.forward_task`，独立报告共同目标到达、地图走廊、满窗、是否完成平台技能、optional/mandatory任务完成及绕行退出。原J4标签继续单列，绘图同时显示原路、支路和共同目标。两条强制路线已按manifest顺序启动，尚无物理结果；不能称在线能力规划已验证。
+
+### Remaining-task revision preserves required skills
+
+`ContinuousTask.revise_remaining` previously preserved goal IDs but could accept
+a rewritten goal that omitted its `required_skills`. It now rejects removal of
+an outstanding skill requirement before mutating task state. Route/order changes
+remain possible; execution reference and completion evidence remain unchanged.
+This closes a concrete task-semantics gap: a mandatory platform goal cannot become
+an optional destination merely by revising the remaining program. Optional-route
+experiments and their separate mandatory/optional outcome labels are unchanged.
+Fourteen task-manager/route-selector CPU tests pass, including a rejected revision
+that keeps the goal ID but removes `platform_jump`. No new physical run; this is
+an interface fix, not additional evidence of closed-loop task performance.

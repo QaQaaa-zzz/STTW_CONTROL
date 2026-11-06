@@ -95,3 +95,15 @@ def test_mandatory_platform_skill_cannot_be_replaced_by_goal_arrival():
     assert not m.observe_goal('checkpoint',arrived=True,upright=True,within_allowed_region=True)
     assert m.completed==[] and m.events[-1]['missing_required_skills']==['platform_jump']
     assert m.observe_goal('checkpoint',arrived=True,upright=True,within_allowed_region=True,completed_skills=['platform_jump'])
+
+
+def test_revision_cannot_drop_required_skill_while_preserving_goal_id():
+    import pytest
+    m=manager();m.program['goals'][0]['required_skills']=['platform_jump']
+    m.choose([0.],['left_route']);active=m.active.copy()
+    with pytest.raises(ValueError,match='required skills'):
+        m.revise_remaining([dict(goal_id='checkpoint',allowed_routes=['left_route'])],reason='route unavailable')
+    assert m.program['goals'][0]['required_skills']==['platform_jump']
+    assert m.active==active and not m.completed
+    m.revise_remaining([dict(goal_id='checkpoint',allowed_routes=['left_route'],required_skills=['platform_jump'])],reason='new approach')
+    assert m.program['goals'][0]['required_skills']==['platform_jump']
