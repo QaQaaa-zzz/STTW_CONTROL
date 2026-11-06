@@ -43,7 +43,7 @@
   "ground_alpha": 0.5,
   "ground_after_landing_only": false,
   "terrain_base_plane": true,
-  "ground_route": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/original_reference.npz",
+  "ground_route": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/original_extended_reference.npz",
   "start_y": -9.0,
   "start_heading_rad": 1.53588974175501,
   "platform_front_x": 7.6,
@@ -113,5 +113,6 @@
     ],
     "duration_s": 0.12,
     "trigger_x_m": -2.5
-  }
+  },
+  "reference_change": "Only append original straight support x25.02..51.6 after fixed goal21.6. Original points and task contract unchanged."
 }
