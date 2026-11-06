@@ -1,0 +1,153 @@
+{
+  "time": 7.640000000000001,
+  "decision_stage": "midpoint",
+  "previous_alpha_duration_s": 7.640000000000001,
+  "candidate": {
+    "decision_x_m": 2.0,
+    "speed_m_s": 1.8,
+    "alpha": 0.5
+  },
+  "root": [
+    [
+      2.021536350250244,
+      0.055229946970939636,
+      0.11894173920154572,
+      0.7075149416923523,
+      0.032046180218458176,
+      0.031282201409339905,
+      0.7052780985832214,
+      1.8366761207580566,
+      0.15339422225952148,
+      -0.0007227174355648458,
+      0.08108717203140259,
+      0.002799052046611905,
+      -0.0167471244931221
+    ]
+  ],
+  "measurement": [
+    [
+      -0.003208637237548828,
+      -0.0810280591249466,
+      -0.0025405962951481342,
+      -0.07474204897880554,
+      -0.01665673591196537,
+      26.330217361450195,
+      26.340707778930664
+    ]
+  ],
+  "position": [
+    [
+      -1.2002005577087402,
+      -2.6183042526245117,
+      -0.0025405962951481342,
+      2.499999523162842,
+      -5.1746954917907715
+    ]
+  ],
+  "velocity": [
+    [
+      -0.00013110009604133666,
+      -26.330217361450195,
+      -0.07474204897880554,
+      -5.848086175319622e-07,
+      -26.340707778930664
+    ]
+  ],
+  "previous_reference": [
+    [
+      1.8427551984786987,
+      -0.016244515776634216
+    ]
+  ],
+  "previous_alpha": [
+    0.5
+  ],
+  "history": "retained, no reset",
+  "selection": {
+    "status": "selected",
+    "candidate": {
+      "speed_m_s": 1.8,
+      "alpha": 0.5
+    },
+    "estimates": [
+      {
+        "candidate_id": "v1.8_a0.0",
+        "known": true,
+        "support": 1.7481637116080102,
+        "complete_probability": 0.5613810729139449,
+        "success_cost": 7.599846728764683,
+        "sample_count": 6
+      },
+      {
+        "candidate_id": "v1.8_a0.5",
+        "known": true,
+        "support": 1.7481637116080102,
+        "complete_probability": 0.9940888340780579,
+        "success_cost": 8.213531855995154,
+        "sample_count": 6
+      },
+      {
+        "candidate_id": "v1.8_a1.0",
+        "known": true,
+        "support": 1.74816371160801,
+        "complete_probability": 0.9877595706191316,
+        "success_cost": 8.737148388672582,
+        "sample_count": 6
+      },
+      {
+        "candidate_id": "v2.0_a0.0",
+        "known": true,
+        "support": 1.7481637116080102,
+        "complete_probability": 0.5693192827391855,
+        "success_cost": 8.870798078585345,
+        "sample_count": 6
+      },
+      {
+        "candidate_id": "v2.0_a0.5",
+        "known": true,
+        "support": 1.7481637116080102,
+        "complete_probability": 0.4306807172608144,
+        "success_cost": 7.700460541261016,
+        "sample_count": 6
+      },
+      {
+        "candidate_id": "v2.0_a1.0",
+        "known": true,
+        "support": 1.7481637116080102,
+        "complete_probability": 0.5613810729139449,
+        "success_cost": 8.155862054750218,
+        "sample_count": 6
+      }
+    ],
+    "evidence_rows": 72,
+    "excluded_origin_id": "rb_upstream_offset_03",
+    "fallback": null,
+    "scope": "Empirical Q_hold recommendation, not a calibrated or guaranteed success probability"
+  },
+  "observable_state": {
+    "speed": 1.8430343254269566,
+    "roll": -0.003208637237548828,
+    "roll_rate": -0.0810280591249466,
+    "cross_track": 0.055229946970939636,
+    "heading_error": -0.08959144978655219,
+    "steer": -0.0025405962951481342,
+    "steer_rate": -0.07474204897880554,
+    "previous_speed_reference": 1.8427551984786987,
+    "lateral_velocity_heading_frame": -0.011551419110689992,
+    "world_yaw_rate": -0.0167471244931221,
+    "previous_alpha": 0.5,
+    "previous_alpha_duration": 7.640000000000001,
+    "remaining_path_to_release": 3.9784636497496706,
+    "path_curvature": 0.0,
+    "corridor_half_width": 1.0,
+    "pitch": 0.0009376883125999935,
+    "body_angular_y": -0.004520643410986763,
+    "hip": -1.2002005577087402,
+    "knee": 2.499999523162842,
+    "hip_velocity": -0.00013110009604133666,
+    "knee_velocity": -5.848086175319622e-07,
+    "platform_height": 0.16,
+    "remaining_path_to_platform": 5.578463649749651
+  },
+  "selection_wall_s": 0.0023175919995992444
+}

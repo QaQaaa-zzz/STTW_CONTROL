@@ -1,0 +1,62 @@
+{
+  "role": "Frozen full-feature empirical Q_hold lookup; no fitting or calibrated probability claim",
+  "schema_version": "rb_jump_decision_features_v2",
+  "feature_scales": [
+    0.5,
+    0.1,
+    0.5,
+    0.2,
+    0.2,
+    0.2,
+    1.0,
+    0.5,
+    0.3,
+    0.5,
+    0.5,
+    2.0,
+    2.0,
+    0.5,
+    0.5,
+    0.1,
+    0.5,
+    0.5,
+    0.5,
+    1.0,
+    1.0,
+    0.1,
+    2.0
+  ],
+  "bandwidth": 1.0,
+  "minimum_support": 0.5,
+  "minimum_completion": 0.7,
+  "probability_tolerance": 0.05,
+  "time_tolerance_s": 0.1,
+  "candidates": [
+    {
+      "speed_m_s": 1.8,
+      "alpha": 0.0
+    },
+    {
+      "speed_m_s": 1.8,
+      "alpha": 0.5
+    },
+    {
+      "speed_m_s": 1.8,
+      "alpha": 1.0
+    },
+    {
+      "speed_m_s": 2.0,
+      "alpha": 0.0
+    },
+    {
+      "speed_m_s": 2.0,
+      "alpha": 0.5
+    },
+    {
+      "speed_m_s": 2.0,
+      "alpha": 1.0
+    }
+  ],
+  "validation": "Exclude entire queried origin across exit, midpoint, distances and disturbance descendants; exact model, policies, zero-lower setting and physical clock must match",
+  "fallback": "Retain actual current speed and alpha request, preserving filters/history; no claim it guarantees feasibility"
+}

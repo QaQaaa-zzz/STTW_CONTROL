@@ -1,0 +1,153 @@
+{
+  "time": 5.44,
+  "decision_stage": "exit",
+  "previous_alpha_duration_s": 5.44,
+  "candidate": {
+    "decision_x_m": -2.0,
+    "speed_m_s": 1.8,
+    "alpha": 0.5
+  },
+  "root": [
+    [
+      -1.9807265996932983,
+      0.5466662645339966,
+      0.11797113716602325,
+      0.7551982998847961,
+      0.012177398428320885,
+      0.009961805306375027,
+      0.6553074717521667,
+      1.9880855083465576,
+      -0.002719101496040821,
+      -0.002674960996955633,
+      -0.11536244302988052,
+      -0.01545257680118084,
+      -0.6908875107765198
+    ]
+  ],
+  "measurement": [
+    [
+      -0.1414165496826172,
+      0.11516010016202927,
+      -0.09544657915830612,
+      0.11416022479534149,
+      -0.6824293732643127,
+      28.470256805419922,
+      28.724117279052734
+    ]
+  ],
+  "position": [
+    [
+      -1.2002016305923462,
+      5.32518196105957,
+      -0.09544657915830612,
+      2.499999523162842,
+      2.868497610092163
+    ]
+  ],
+  "velocity": [
+    [
+      0.03691064566373825,
+      -28.470256805419922,
+      0.11416022479534149,
+      -3.045232006115839e-06,
+      -28.724117279052734
+    ]
+  ],
+  "previous_reference": [
+    [
+      2.0093438625335693,
+      -0.06457311660051346
+    ]
+  ],
+  "previous_alpha": [
+    0.5
+  ],
+  "history": "retained, no reset",
+  "selection": {
+    "status": "selected",
+    "candidate": {
+      "speed_m_s": 1.8,
+      "alpha": 0.5
+    },
+    "estimates": [
+      {
+        "candidate_id": "v1.8_a0.0",
+        "known": true,
+        "support": 1.1858162812647284,
+        "complete_probability": 0.26701957901261386,
+        "success_cost": 8.934118950549985,
+        "sample_count": 6
+      },
+      {
+        "candidate_id": "v1.8_a0.5",
+        "known": true,
+        "support": 1.1858162812647284,
+        "complete_probability": 0.8420802439618658,
+        "success_cost": 9.695713965383463,
+        "sample_count": 6
+      },
+      {
+        "candidate_id": "v1.8_a1.0",
+        "known": true,
+        "support": 1.1858162812647284,
+        "complete_probability": 0.3267160408986831,
+        "success_cost": 10.280000419616698,
+        "sample_count": 6
+      },
+      {
+        "candidate_id": "v2.0_a0.0",
+        "known": true,
+        "support": 1.1858162812647284,
+        "complete_probability": 0.6670668255186099,
+        "success_cost": 10.232954056795254,
+        "sample_count": 6
+      },
+      {
+        "candidate_id": "v2.0_a0.5",
+        "known": true,
+        "support": 1.1858162812647284,
+        "complete_probability": 0.7195693214390835,
+        "success_cost": 9.634595248647885,
+        "sample_count": 6
+      },
+      {
+        "candidate_id": "v2.0_a1.0",
+        "known": true,
+        "support": 1.1858162812647284,
+        "complete_probability": 0.006217133582707151,
+        "success_cost": 9.799999923706054,
+        "sample_count": 6
+      }
+    ],
+    "evidence_rows": 72,
+    "excluded_origin_id": "rb_upstream_offset_03",
+    "fallback": null,
+    "scope": "Empirical Q_hold recommendation, not a calibrated or guaranteed success probability"
+  },
+  "observable_state": {
+    "speed": 1.9870166171762134,
+    "roll": -0.1414165496826172,
+    "roll_rate": 0.11516010016202927,
+    "cross_track": 0.5466662645339966,
+    "heading_error": -0.0314539914688321,
+    "steer": -0.09544657915830612,
+    "steer_rate": 0.11416022479534149,
+    "previous_speed_reference": 2.0093438625335693,
+    "lateral_velocity_heading_frame": -0.06524067041450352,
+    "world_yaw_rate": -0.6908875107765198,
+    "previous_alpha": 0.5,
+    "previous_alpha_duration": 5.44,
+    "remaining_path_to_release": 7.980726599693128,
+    "path_curvature": -0.018164992332448227,
+    "corridor_half_width": 1.0,
+    "pitch": 0.0009136037264041441,
+    "body_angular_y": -0.10909146244672793,
+    "hip": -1.2002016305923462,
+    "knee": 2.499999523162842,
+    "hip_velocity": 0.03691064566373825,
+    "knee_velocity": -3.045232006115839e-06,
+    "platform_height": 0.16,
+    "remaining_path_to_platform": 9.580726599693108
+  },
+  "selection_wall_s": 0.008655916994030122
+}
