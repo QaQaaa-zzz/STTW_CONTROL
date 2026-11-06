@@ -3,7 +3,7 @@
   "reference_bundle": "runs/h75_selected_local300_flat/bundle",
   "base_evaluation_config": "runs/h75_selected_local300_bend/lab_config.json",
   "terrain_generator": "learning/cli/place_isaac_terrain.py",
-  "terrain_base_config": "learning/configs/isaac_bend_bump.json",
+  "terrain_base_config": "runs/h75_selected_local300_bend/bump_terrain/identity.json",
   "terrain_overrides": [
     {
       "name": "flat",
