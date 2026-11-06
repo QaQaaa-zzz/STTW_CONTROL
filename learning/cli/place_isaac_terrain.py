@@ -9,10 +9,10 @@ import numpy as np
 p = argparse.ArgumentParser(description=__doc__)
 p.add_argument('--library', type=Path)
 p.add_argument('--scene-config', type=Path)
-p.add_argument('--terrain', choices=('slope', 'rough_slope', 'bend_bump'), required=True)
+p.add_argument('--terrain', choices=('slope', 'rough_slope', 'bend_bump', 'bend_ramp'), required=True)
 p.add_argument('--output', type=Path, required=True)
 a = p.parse_args()
-if a.terrain == 'bend_bump':
+if a.terrain in ('bend_bump', 'bend_ramp'):
     cfg = json.loads(a.scene_config.read_text())
     route_path = Path(cfg['route'])
     route = np.load(route_path)
@@ -35,21 +35,32 @@ if a.terrain == 'bend_bump':
         tangent = edge[nearest] / np.linalg.norm(edge[nearest], axis=-1)[:, None]
         lateral.append(tangent[:, 0] * offset[row, nearest, 1] - tangent[:, 1] * offset[row, nearest, 0])
     s, n = np.concatenate(ss), np.concatenate(lateral)
-    u = (s - cfg['center_s_m'] - cfg['oblique_s_per_lateral_m'] * n) / cfg['length_m'] + .5
-    width = np.clip(1 - np.abs(n) / cfg['half_width_m'], 0, 1)
-    profile = np.where((u > 0) & (u < 1), np.sin(np.pi * u)**2, 0)
-    height = np.rint(cfg['height_m'] * profile * np.sin(np.pi * width / 2)**2 / cfg['vertical_scale_m']).reshape(x.shape).astype(np.int16)
+    if a.terrain == 'bend_ramp':
+        u = np.clip((s - cfg['slope_start_s_m']) / cfg['length_m'], 0, 1)
+        profile = .5 * (1 - np.cos(np.pi * u))
+        surface = cfg['height_m'] * profile
+    else:
+        u = (s - cfg['center_s_m'] - cfg['oblique_s_per_lateral_m'] * n) / cfg['length_m'] + .5
+        width = np.clip(1 - np.abs(n) / cfg['half_width_m'], 0, 1)
+        profile = np.where((u > 0) & (u < 1), np.sin(np.pi * u)**2, 0)
+        surface = cfg['height_m'] * profile * np.sin(np.pi * width / 2)**2
+    height = np.rint(surface / cfg['vertical_scale_m']).reshape(x.shape).astype(np.int16)
     vertices, triangles = terrain_utils.convert_heightfield_to_trimesh(height, spacing, cfg['vertical_scale_m'], cfg['slope_threshold'])
     vertices[:, :2] += cfg['bounds_m'][0]
     a.output.mkdir(parents=True, exist_ok=False)
     np.savez_compressed(a.output / 'terrain.npz', vertices=vertices, triangles=triangles, height_field=height)
-    end = cfg['center_s_m'] + cfg['length_m'] / 2 + abs(cfg['oblique_s_per_lateral_m']) * cfg['half_width_m']
     meta = dict(cfg, route_sha256=hashlib.sha256(route_path.read_bytes()).hexdigest(),
-                terrain_support_end_s_m=end, turn_end_s_m=float(route['turn_end']),
+                turn_end_s_m=float(route['turn_end']),
                 switch_definition='first forward crossing of switch_s_m; preserve controller/history/filter state',
                 contact_phase_definition='wheel contact points inside nonzero height support; geometric progress alone is not contact',
                 vertices=len(vertices), triangles=len(triangles),
                 sha256=hashlib.sha256((a.output / 'terrain.npz').read_bytes()).hexdigest())
+    if a.terrain == 'bend_ramp':
+        meta.update(profile='raised cosine ascent to persistent plateau; height independent of lateral offset',
+                    slope_end_s_m=cfg['slope_start_s_m']+cfg['length_m'],
+                    nominal_peak_grade=cfg['height_m']*np.pi/(2*cfg['length_m']))
+    else:
+        meta['terrain_support_end_s_m'] = cfg['center_s_m'] + cfg['length_m']/2 + abs(cfg['oblique_s_per_lateral_m'])*cfg['half_width_m']
     (a.output / 'identity.json').write_text(json.dumps(meta, indent=2))
     print(json.dumps(meta))
     raise SystemExit

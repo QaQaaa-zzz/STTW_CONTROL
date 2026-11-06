@@ -32,7 +32,7 @@ for speed in spec['user_speed_m_s']:
             role='new matched six-lane run'
         index.append(dict(terrain=name,user_speed_m_s=speed,run=str(run.resolve()),role=role))
         status['completed_conditions']+=1;(a.output/'status.json').write_text(json.dumps(status,indent=2));(a.output/'index.json').write_text(json.dumps(index,indent=2))
-        lines=['# H75 terrain and requested-speed DEV','','All five alphas and matched Zero; same original path. Speed2.6 is a command change from the saved2.3 warm state. No training or generalization claim.','']
+        lines=['# H75 terrain and requested-speed DEV','','All five alphas and matched Zero; same original path. No training or generalization claim.',spec['initial_state_protocol'],spec['role'],'']
         for row in index:lines.extend([f"## {row['terrain']} / {row['user_speed_m_s']} m/s",'',f"{row['role']}",f"![XY]({row['run']}/xy_all_alpha.png)",f"[Per-step/cumulative rewards]({row['run']}/overview.png)",''])
         (a.output/'RESULTS.md').write_text('\n'.join(lines)+'\n')
 status.update(stage='complete',finished=time.time(),optimizer_updates=0);(a.output/'status.json').write_text(json.dumps(status,indent=2))

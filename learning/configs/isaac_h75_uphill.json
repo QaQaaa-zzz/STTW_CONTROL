@@ -1,0 +1,38 @@
+{
+  "role": "nominal DEV: alpha-dependent short-ramp traversal opportunity; all outcomes retained",
+  "reference_bundle": "runs/h75_selected_local300_flat/bundle",
+  "base_evaluation_config": "runs/h75_selected_local300_bend/lab_config.json",
+  "terrain_generator": "learning/cli/place_isaac_terrain.py --terrain bend_ramp",
+  "terrain_base_config": "runs/h75_uphill/ramp_8cm.json",
+  "terrain_overrides": [
+    {
+      "name": "ramp_8cm",
+      "height_m": 0.08
+    },
+    {
+      "name": "ramp_16cm",
+      "height_m": 0.16
+    },
+    {
+      "name": "ramp_24cm",
+      "height_m": 0.24
+    }
+  ],
+  "user_speed_m_s": [
+    2.3
+  ],
+  "initial_state_protocol": "same full saved2.3m/s warm state and original goal speed for every alpha",
+  "alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "include_zero": true,
+  "seconds": 10,
+  "max_physics_lane_steps": 900000,
+  "optimizer_updates": 0,
+  "reuse": "three new matched six-lane conditions; no reused uphill physics",
+  "start_condition": "finish existing terrain/speed sweep; record launch separately"
+}

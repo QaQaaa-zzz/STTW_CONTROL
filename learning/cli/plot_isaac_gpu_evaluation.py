@@ -63,14 +63,18 @@ if a.baseline_run:
   for ax,title,ylabel in zip(axes.flat,['Ordinary reward components','Cumulative ordinary components','Path error','Speed errors','Reward per lower step','Cumulative reward'],['Reward','Reward','m','m/s','Reward','Reward']):ax.set(title=title,xlabel='Time (s)',ylabel=ylabel);ax.grid(alpha=.2)
   terrain_meta=json.loads((Path(next(iter(c['settings']['terrains'].values())))/'identity.json').read_text())
   if terrain_meta.get('height_m',0)>0:
-   end=terrain_meta['terrain_support_end_s_m'];start=2*terrain_meta['center_s_m']-end;progress=r['progress'][ids,lane];span=time[(progress>=start)&(progress<=end)]
+   if 'slope_start_s_m' in terrain_meta:
+    start=terrain_meta['slope_start_s_m'];end=terrain_meta['slope_end_s_m']
+   else:
+    end=terrain_meta['terrain_support_end_s_m'];start=2*terrain_meta['center_s_m']-end
+   progress=r['progress'][ids,lane];span=time[(progress>=start)&(progress<=end)]
    if len(span):
     for ax in axes.flat:ax.axvspan(span[0],span[-1],color='.5',alpha=.12)
   if r['failure'][:,5].any():
    for ax in axes.flat:ax.axvline(bt[-1],color='.4',linestyle=':',alpha=.7)
   if r['failure'][:,lane].any():
    for ax in axes.flat:ax.axvline(time[-1],color=colors[lane],linestyle=':',alpha=.7)
-  components.legend(fontsize=7);errors.legend(fontsize=7);speeds.legend(fontsize=7);fig.suptitle(a.title+' | '+labels[lane]+' | policy solid / same-alpha Zero dashed; terminal cost in totals\nGray band: policy projection in terrain support; dotted lines: failures')
+  components.legend(fontsize=7);errors.legend(fontsize=7);speeds.legend(fontsize=7);fig.suptitle(a.title+' | '+labels[lane]+' | policy solid / same-alpha Zero dashed; terminal cost in totals\nGray band: policy projection in terrain support or ascent; dotted lines: failures')
   fig.savefig(out/(stem+'_diagnostics.png'),dpi=150);plt.close(fig)
   np.savez_compressed(out/(stem+'_replayed.npz'),time=time,reward=replayed[ids,lane],**{key:value[ids,lane] for key,value in parts.items()})
  manifest=json.loads((out/'figure_manifest.json').read_text());manifest.update(reward_replay_error=closure,paired_baseline_scores=str(a.baseline_run.resolve()),additional_outputs=[stem+'_diagnostics.png' for stem in ['alpha0','alpha025','alpha05','alpha075','alpha1']]);(out/'figure_manifest.json').write_text(json.dumps(manifest,indent=2))
