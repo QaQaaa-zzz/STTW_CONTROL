@@ -28,6 +28,7 @@ class ContactBranching:
             raise ValueError('Contact branches require wheel sensors and explicit servos')
 
     def record(self,env,lower_tick,physics_tick):
+        if len(self.completed)==len(self.groups):return
         samples=env.plant.read_wheel_contact_samples()
         ridge=[];rear_ground=None
         for wi,wheel in enumerate(['frontwheel','rearwheel']):
@@ -41,6 +42,7 @@ class ContactBranching:
         rear_xy=env.plant.robot.data.body_link_pos_w[:,self.rear,:2]-env.plant.origin[:,:2]
         beyond=(rear_xy*self.direction).sum(1)>self.bound
         self.events.update(torch.stack(ridge,1),beyond,rear_ground,env.alive)
+        if not bool((self.events.first_contact[:,0]>=0).any()):return
         torque=front_contact_torques(samples,env.plant.bodies)
         active=(self.events.first_contact[:,0]>=0)&env.alive
         for prefix,field in [('normal','normal_moment'),('lateral','lateral_moment'),('migration','reference_delta')]:
@@ -51,9 +53,11 @@ class ContactBranching:
         self.front_unloaded_s+=(active&(self.front_load.abs()<.1))*env.physics_dt
 
     def decision(self,policy_step):
+        if len(self.completed)==len(self.groups) and not self.active:return
         ready=self.events.take_ready(self.env.alive)
         if self.config.get('event','rear_clearance')=='front_contact':
             ready=(self.events.first_contact[:,0]>=0)&self.env.alive
+        ready=ready.cpu().tolist()
         for gi,group in enumerate(self.groups):
             source=group['source_lane']
             if gi in self.completed or not bool(ready[source]):continue
@@ -64,10 +68,13 @@ class ContactBranching:
             item['contact_features_oracle']=dict(impulse_Nms={key:float(value[source]) for key,value in self.impulses.items()},front_vertical_load_N=float(self.front_load[source]),front_near_zero_vertical_load_s=float(self.front_unloaded_s[source]),scope='first actual front ridge contact through confirmed clearance decision; simulator contact truth, not assumed deployable sensing')
             self.log.append(item);self.active.append(item)
         ramp=self.config.get('ramp_s',0.)
+        pending=[]
         for item in self.active:
             fraction=1. if ramp==0 else min(1.,(policy_step-item['policy_step'])*.02/ramp)
             ids=item['branch_lanes'];target=torch.tensor(item['target_alphas'],device=self.env.device)
             self.env.alpha[ids]=item['entry_alpha']+fraction*(target-item['entry_alpha'])
+            if fraction<1.:pending.append(item)
+        self.active=pending
         (self.output/'contact_forks.json').write_text(json.dumps(self.log,indent=2)+'\n') if len(self.log)>0 and any(x['policy_step']==policy_step for x in self.log) else None
 
     def close(self):
