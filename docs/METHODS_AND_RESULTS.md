@@ -1,3 +1,7 @@
+## User-directed lower-speed uphill screen
+
+The user directed lowering standard speed. Replace the unexecuted32/40cm height extension with existing24cm terrain at2.0 and1.7m/s requests, all five alphas plus Zero,600000 physics lane steps/0 optimizer updates. Configuration `learning/configs/isaac_h75_uphill_low_speed.json`; outputs `runs/h75_uphill_low_speed/evaluation`. Original H75/Local300 and physical/actuator limits unchanged. Both conditions reuse the complete2.3m/s warm initial state, then execute the lower request; actual entry speed will be measured rather than claiming equilibrated low-speed initialization. Reuse the existing runner/plotting and ramp asset. This is nominal single-state DEV, all outcomes retained. No higher ramp was generated or executed.
+
 ## Short-uphill screen completed: traversal hypothesis not yet observed
 
 `runs/h75_uphill/evaluation/UPHILL.md` and `uphill_comparison.png` summarize all three8/16/24cm ramps, five alphas plus Zero.18/18 lanes survive10s and cross the original goal/crest projection;900000 physics lane steps,0 optimizer updates,478s wall time. No alpha0 inability to climb was observed. At24cm alpha0→1 minimum ascent speeds are1.612/1.640/1.688/1.749/1.782m/s; Zero1.802m/s. All outcomes retained, including successful Zero. Actual wheel-height changes are stored in uphill_metrics.json.
