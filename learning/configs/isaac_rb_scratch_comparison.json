@@ -1,0 +1,145 @@
+{
+  "duration_s": 8.0,
+  "warmup_s": 3.0,
+  "return_s": 7.0,
+  "speed_m_s": 2.0,
+  "steer_slew_rad_s": 0.8,
+  "cases": [
+    {
+      "name": "reward_best_turn0.0",
+      "steer_rad": 0.0,
+      "local300": true,
+      "lower_start_s": 0.0,
+      "controller_wc": 8.0,
+      "controller_wo": 10.0,
+      "eso_enabled": true,
+      "actor": "reward_best"
+    },
+    {
+      "name": "reward_best_turn0.12",
+      "steer_rad": 0.12,
+      "local300": true,
+      "lower_start_s": 0.0,
+      "controller_wc": 8.0,
+      "controller_wo": 10.0,
+      "eso_enabled": true,
+      "actor": "reward_best"
+    },
+    {
+      "name": "reward_best_turn-0.12",
+      "steer_rad": -0.12,
+      "local300": true,
+      "lower_start_s": 0.0,
+      "controller_wc": 8.0,
+      "controller_wo": 10.0,
+      "eso_enabled": true,
+      "actor": "reward_best"
+    },
+    {
+      "name": "episode_peak_turn0.0",
+      "steer_rad": 0.0,
+      "local300": true,
+      "lower_start_s": 0.0,
+      "controller_wc": 8.0,
+      "controller_wo": 10.0,
+      "eso_enabled": true,
+      "actor": "episode_peak"
+    },
+    {
+      "name": "episode_peak_turn0.12",
+      "steer_rad": 0.12,
+      "local300": true,
+      "lower_start_s": 0.0,
+      "controller_wc": 8.0,
+      "controller_wo": 10.0,
+      "eso_enabled": true,
+      "actor": "episode_peak"
+    },
+    {
+      "name": "episode_peak_turn-0.12",
+      "steer_rad": -0.12,
+      "local300": true,
+      "lower_start_s": 0.0,
+      "controller_wc": 8.0,
+      "controller_wo": 10.0,
+      "eso_enabled": true,
+      "actor": "episode_peak"
+    },
+    {
+      "name": "last150_turn0.0",
+      "steer_rad": 0.0,
+      "local300": true,
+      "lower_start_s": 0.0,
+      "controller_wc": 8.0,
+      "controller_wo": 10.0,
+      "eso_enabled": true,
+      "actor": "last150"
+    },
+    {
+      "name": "last150_turn0.12",
+      "steer_rad": 0.12,
+      "local300": true,
+      "lower_start_s": 0.0,
+      "controller_wc": 8.0,
+      "controller_wo": 10.0,
+      "eso_enabled": true,
+      "actor": "last150"
+    },
+    {
+      "name": "last150_turn-0.12",
+      "steer_rad": -0.12,
+      "local300": true,
+      "lower_start_s": 0.0,
+      "controller_wc": 8.0,
+      "controller_wo": 10.0,
+      "eso_enabled": true,
+      "actor": "last150"
+    }
+  ],
+  "pendulum_locked": true,
+  "plant_options": {
+    "physics_dt": 0.005,
+    "wheel_radius_m": 0.07,
+    "gpu_pair_capacities": [
+      1048576,
+      1048576,
+      1048576
+    ],
+    "servo_mode": "hybrid",
+    "compliant_wheels": null,
+    "wheel_collision": "cylinder",
+    "hull_vertices": 64,
+    "robot_contact_offset": 0.001,
+    "mesh_collision_on_geometry": true,
+    "solver_position_iterations": 16,
+    "solver_velocity_iterations": 4,
+    "wheel_width_m": 0.05,
+    "wheel_profile_slices": 21
+  },
+  "role": "DEV scratch beststep episodepeak last150; matched wc8 wo10 ground baseline from rounded_eso",
+  "save_warmup_state": false,
+  "controller_config": "learning/configs/rb_sttw_rounded_controller.json",
+  "actor_catalog": {
+    "reward_best": {
+      "path": "runs/rb_scratch_local150/evaluation_actors/reward_best.npz",
+      "sha256": "db6fcc3c97f41c1d9b7d0f90b23cb6f4cbe37f4a09cb0adebd79500b3a9db97a",
+      "source_checkpoint": "runs/rb_scratch_local150/training/model_step_best.pt",
+      "source_sha256": "b76b4bd3384f516e6a6ee37495dadd3dc606c4ada418dcb0f2754b2f7ead3e18",
+      "iter": 9
+    },
+    "episode_peak": {
+      "path": "runs/rb_scratch_local150/evaluation_actors/episode_peak.npz",
+      "sha256": "0c7e09e123faefdbabe436b73d151291a89e80c2e169a6fa1f521880f6ca5491",
+      "source_checkpoint": "runs/rb_scratch_local150/training/model_best.pt",
+      "source_sha256": "6dab2acbe8d4cdea2dbf8c0d53c820e17f5bd57bf5400fec6f0b7fdf77c7721b",
+      "iter": 84
+    },
+    "last150": {
+      "path": "runs/rb_scratch_local150/evaluation_actors/last150.npz",
+      "sha256": "22a7e60d6eca0005f43bdd4f4ff52408d6cccedc6f8058204a23c8ccd3a56279",
+      "source_checkpoint": "runs/rb_scratch_local150/training/model_150.pt",
+      "source_sha256": "99d14e024b3942f5f98e99182bed8a6bb20b9c26b219b88134feda527869c0e5",
+      "iter": 150
+    }
+  }
+}

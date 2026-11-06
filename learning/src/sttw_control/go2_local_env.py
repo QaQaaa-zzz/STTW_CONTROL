@@ -168,6 +168,7 @@ class Go2LocalEnv(VecEnv):
             failure |= contact | (clean[:,0].abs()>.7) | ~torch.isfinite(self.plant.roots).all(-1) | ~torch.isfinite(clean).all(-1)
             peak = torch.maximum(peak, clean[:,0].abs())
             self.measurement = self.randomization.observe(clean)
+        yaw = torch.atan2(torch.sin(pose[:,2]-before[:,2]),torch.cos(pose[:,2]-before[:,2]))/self.dt
         self.episode_length_buf += 1
         r = self.cfg['reward']
         parts = dict(speed=torch.exp(-((speed-self.reference[:,0])/r['speed_scale'])**2),
@@ -188,6 +189,9 @@ class Go2LocalEnv(VecEnv):
                 roll_rate=r['roll_rate_weight']*huber(torch.relu(clean[:,1].abs()-r['roll_rate_start'])/r['roll_rate_scale']),
                 action=r['action_weight']*action.square().sum(-1),
                 action_change=r['action_change_weight']*(action-self.previous_action).square().sum(-1))
+            if 'yaw_rate_weight' in r:
+                yaw_target=self.reference[:,0]*torch.tan(self.reference[:,1])*math.cos(self.controller.config['caster'])/self.controller.config['wheelbase']
+                costs['yaw_rate']=r['yaw_rate_weight']*huber((yaw-yaw_target)/r['yaw_rate_scale'])
             terms={key:torch.where(failure,0.,-r['scale']*self.dt*value.clamp(max=caps[key])) for key,value in costs.items()}
             remaining=(self.max_episode_length-self.episode_length_buf+1).clamp_min(0)
             gamma=self.task_spec['gamma']
@@ -200,7 +204,6 @@ class Go2LocalEnv(VecEnv):
         done = failure | timeout
         self.episode_return += reward
         self.previous_action.copy_(action)
-        yaw = torch.atan2(torch.sin(pose[:,2]-before[:,2]),torch.cos(pose[:,2]-before[:,2]))/self.dt
         self.history.finish(applied,yaw)
         ids = done.nonzero(as_tuple=False).flatten()
         extras = {'time_outs': torch.zeros_like(timeout) if self.task_spec else timeout}
