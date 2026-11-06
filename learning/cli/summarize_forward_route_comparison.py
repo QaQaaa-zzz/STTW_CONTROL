@@ -9,7 +9,8 @@ a=p.parse_args();rows=[]
 for path in a.manifests:
  for case in json.loads(path.read_text())['cases']:
   spec=json.loads(Path(case['config']).read_text());run=Path(spec['output']);summary=run/'chain_summary.json'
-  row=dict(case_id=case['case_id'],config=case['config'],origin_id=spec['origin_id'],status='pending')
+  row=dict(case_id=case['case_id'],config=case['config'],origin_id=spec['origin_id'],status='pending',
+   method=case.get('method'),disturbance_protocol=spec.get('external_force_pulse'))
   if summary.exists():
    result=json.loads(summary.read_text());task=result['forward_task'];event=task['branch_event']
    if event is None:
@@ -31,6 +32,26 @@ for path in a.manifests:
      row['stored_samples_after_request_through_application']=len(window)
    row['source_summary']=str(summary)
   rows.append(row)
+paired={}
+for row in rows:
+ if row['method'] in ('rule','capability'):
+  key=(row['origin_id'],json.dumps(row['disturbance_protocol'],sort_keys=True))
+  if row['method'] in paired.setdefault(key,{}):raise ValueError('Repeated method for one origin/disturbance pair')
+  paired[key][row['method']]=row
+comparisons=[]
+for (origin,pulse),methods in paired.items():
+ ready=all(m in methods and methods[m]['status'].startswith('evaluated') for m in ('rule','capability'))
+ pair=dict(origin_id=origin,disturbance_protocol=json.loads(pulse),status='evaluated' if ready else 'pending')
+ if ready:
+  rule,capability=methods['rule'],methods['capability']
+  pair['case_ids']={m:r['case_id'] for m,r in methods.items()}
+  for task in ('optional_platform','mandatory_platform'):
+   a,b=rule[task+'_complete'],capability[task+'_complete']
+   pair[task]=dict(rule_complete=a,capability_complete=b,
+    outcome='both_complete' if a and b else 'capability_only' if b else 'rule_only' if a else 'both_failed',
+    capability_minus_rule_arrival_s=capability['arrival_s']-rule['arrival_s'] if a and b else None)
+ comparisons.append(pair)
 result=dict(role='Actual forward-route DEV and interface timing; no pooled success claim across task roles',declared_cases=len(rows),evaluated_cases=sum(r['status'].startswith('evaluated') for r in rows),rows=rows,
+ paired_comparisons=comparisons,paired_distinct_origins=len({r['origin_id'] for r in comparisons if r['status']=='evaluated'}),
  limits='Wall query latency and simulated control advance are distinct. A zero simulated delay does not demonstrate pending-query motion. Mandatory platform success requires the platform skill; bypass is at most safe exit. Pending rows are not failures; actual XY is retained in each source run.')
 a.output.write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(dict(declared_cases=result['declared_cases'],evaluated_cases=result['evaluated_cases'])))
