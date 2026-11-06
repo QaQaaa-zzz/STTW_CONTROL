@@ -21,7 +21,7 @@ from sttw_control.isaaclab_vector_env import IsaacLabVectorPlant
 from sttw_control.pendulum_skill import TorchPendulumObservation,TorchPendulumSkill,TorchPendulumGeometry
 from sttw_control.torch_controller import TorchController
 cfg=json.loads(Path(spec.get('plant_config','learning/configs/isaac_pendulum_local300_standard.json')).read_text())
-options=cfg['plant_options'].copy();options['env_spacing']=20.;options['pendulum_locked']=True
+options=cfg['plant_options'].copy();options['env_spacing']=spec.get('env_spacing',20.);options['pendulum_locked']=True
 options['physics_dt']=spec.get('physics_dt',.0002)
 if 'terrain_base_plane' in spec:options['terrain_base_plane']=spec['terrain_base_plane']
 options['gpu_pair_capacities']=spec.get('gpu_pair_capacities')
