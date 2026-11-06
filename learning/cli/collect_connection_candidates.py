@@ -52,7 +52,9 @@ else:
         if float(env.middle.projection['progress'][0])>=spec['source_exit_progress_m']:
             found=True;break
     np.savez(a.output/'source_trajectory.npz',trace=torch.stack(source_trace).cpu().numpy())
-    if not found:raise RuntimeError('Source lane did not produce the declared live exit; no candidate records emitted')
+    if not found:
+        (a.output/'status.json').write_text(json.dumps(dict(status='source_failed',origin_id=spec['origin_id'],protocol_id=spec.get('protocol_id','legacy_full_suffix'),reached_decision=False,root_complete=False,reason='physical_or_controller_failure' if not bool(env.alive[0]) else 'exit_not_reached_in_window',rows=0,elapsed_s=time.monotonic()-start,optimizer_updates=0),indent=2))
+        os.sync();os._exit(0)
     snapshot=env.capture_connection_state(0);torch.save(snapshot,a.output/'exit_snapshot.pt')
     m,pose,v=plant.observe();feature=[float(v[0]),float(m[0,0]),float(m[0,1]),float(env.middle.projection['cross_track'][0]),float(wrap(env.middle.projection['heading'][0]-pose[0,2])),float(m[0,2]),float(m[0,3]),float(env.previous_reference[0,0])]
 snapshot_id=hashlib.sha256((a.output/'exit_snapshot.pt').read_bytes()).hexdigest()
@@ -82,10 +84,18 @@ for task in spec['tasks']:
     env.restore_connection_state(snapshot);env.horizon=round(task['seconds']/.02);env.begin_connection(original,speeds,alphas)
     planner=IsaacGoalReplanning(env,{**spec['replanning'],'original_route':task['route']},folder)
     goal=torch.as_tensor(planner.goal,device=env.device);arrival=torch.full((6,),float('nan'),device=env.device)
-    rows=[];original_errors=[]
+    rows=[];original_errors=[];entry_events=[];common=spec.get('common_task_reference')
+    original_progress=torch.zeros(6,device=env.device);entered_b=torch.zeros(6,device=env.device,dtype=torch.bool)
     # Original fixed-path distance is measured independently of replanned references.
     points=original.xy;segments=points[1:]-points[:-1];segment_norm=segments.square().sum(-1)
     for k in range(env.horizon):
+        if common is not None:
+            measurement,pose,velocity=plant.observe()
+            original_progress=original.project(pose[:,:2],original_progress,velocity.abs()*.02)['progress']
+            crossing=env.alive&~entered_b&(original_progress>=spec['connection_end_progress_m'])
+            for lane in crossing.nonzero(as_tuple=False).flatten().tolist():
+                entry_events.append(dict(lane=lane,candidate_id=candidates[lane]['candidate_id'],time_s=k*.02,original_progress_m=float(original_progress[lane]),speed_m_s=float(velocity[lane]),measurement=measurement[lane].cpu().tolist(),pose=pose[lane].cpu().tolist(),root=plant.roots[lane].cpu().tolist(),previous_reference=env.previous_reference[lane].cpu().tolist(),previous_alpha=float(env.alpha[lane]),common_reference=common,history='retained; no reset'))
+            env.speed.copy_(torch.where(crossing,common['speed_m_s'],env.speed));env.alpha.copy_(torch.where(crossing,common['alpha'],env.alpha));entered_b|=crossing
         planner.update();result=env.step();trace=result['lower_trace'];rows.append(trace.clone())
         xy=trace[:,:,:2]
         delta=xy[:,:,None,:]-points[None,None,:-1,:]
@@ -97,10 +107,11 @@ for task in spec['tasks']:
         if not bool(env.alive.any()):break
     trace=torch.cat(rows).cpu().numpy();errors=torch.cat(original_errors).cpu().numpy();arrivals=arrival.cpu().numpy()
     np.savez(folder/'trajectory.npz',trace=trace,original_path_error=errors,original_xy=data['xy'],original_s=data['s'],arrival_time=arrivals,goal=planner.goal)
+    if common is not None:(folder/'b_entry_events.json').write_text(json.dumps(entry_events,indent=2)+'\n')
     for i,candidate in enumerate(candidates):
         valid=trace[:,i,6]>0;path_errors=errors[valid,i]
-        completed=bool(env.alive[i]) and np.isfinite(arrivals[i]) and bool((path_errors<=spec['corridor_half_width_m']).all())
-        records.append(dict(origin_id=spec['origin_id'],snapshot_id=snapshot_id,task_id=task['task_id'],skill_id=skill_id,candidate_id=candidate['candidate_id'],state=feature,complete=int(completed),success_cost=float(arrivals[i]) if completed else None,path_rmse_m=float(np.sqrt(np.mean(path_errors**2))) if len(path_errors) else None,observed_lower_steps=int(valid.sum()),physical_or_controller_failure=not bool(env.alive[i]),trace=str((folder/'trajectory.npz').resolve()),snapshot=str((a.output/'exit_snapshot.pt').resolve())))
+        completed=bool(env.alive[i]) and (common is None or bool(entered_b[i])) and np.isfinite(arrivals[i]) and bool((path_errors<=spec['corridor_half_width_m']).all())
+        records.append(dict(protocol_id=spec.get('protocol_id','legacy_full_suffix'),b_entry=next((e for e in entry_events if e['lane']==i),None),common_task_reference=common,origin_id=spec['origin_id'],snapshot_id=snapshot_id,task_id=task['task_id'],skill_id=skill_id,candidate_id=candidate['candidate_id'],state=feature,complete=int(completed),success_cost=float(arrivals[i]) if completed else None,path_rmse_m=float(np.sqrt(np.mean(path_errors**2))) if len(path_errors) else None,observed_lower_steps=int(valid.sum()),physical_or_controller_failure=not bool(env.alive[i]),trace=str((folder/'trajectory.npz').resolve()),snapshot=str((a.output/'exit_snapshot.pt').resolve())))
     if decision is not None and decision['status']=='reference_selected':
         selected=next(r for r in records if r['task_id']==task['task_id'] and r['candidate_id']==decision['reference']['candidate_id'])
         lane=next(i for i,c in enumerate(candidates) if c['candidate_id']==selected['candidate_id'])
