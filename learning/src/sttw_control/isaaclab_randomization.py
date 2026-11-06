@@ -11,10 +11,10 @@ from isaaclab.managers import EventTermCfg, SceneEntityCfg
 from isaaclab.utils.buffers import DelayBuffer
 
 
-def randomize_vehicle_properties(plant, config):
+def randomize_vehicle_properties(plant, config, env_ids=None):
     env = SimpleNamespace(scene={'robot': plant.robot}, num_envs=plant.count,
                           device=plant.device)
-    ids = torch.arange(plant.count, device=plant.device)
+    ids = torch.arange(plant.count, device=plant.device) if env_ids is None else env_ids
     bodies = SceneEntityCfg('robot')
     base = SceneEntityCfg('robot', body_ids=[plant.bodies.index(config['base_body'])])
     material = dict(asset_cfg=bodies,
@@ -52,6 +52,20 @@ def randomize_vehicle_properties(plant, config):
     return dict(materials=plant.robot.root_physx_view.get_material_properties().cpu().tolist(),
                 masses=plant.robot.root_physx_view.get_masses().cpu().tolist(),
                 coms=plant.robot.root_physx_view.get_coms().cpu().tolist())
+
+
+def apply_fixed_evaluation_groups(env, groups):
+    """Apply frozen per-seed parameters to one scene before its first step."""
+    randomization=env.randomization
+    for group in groups:
+        ids=torch.tensor(group['env_ids'],device=env.device,dtype=torch.long)
+        cfg=group['config']
+        env.randomization_properties=randomize_vehicle_properties(env.plant,cfg,ids)
+        randomization.plant.servos.gain[ids]=randomization.nominal_gain*cfg['servo_gain_scale'][0]
+        randomization.steer_offset[ids]=cfg['steer_zero_offset_rad'][0]
+        lag=round(cfg['latency_s'][0]/env.plant.physics_dt)
+        for buffer in randomization.buffers.values():
+            buffer.set_time_lag(torch.full((len(ids),),lag,device=env.device,dtype=torch.int),ids)
 
 
 class VehicleControlRandomization:

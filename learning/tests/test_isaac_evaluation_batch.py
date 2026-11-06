@@ -13,6 +13,23 @@ class BatchEvaluationTest(unittest.TestCase):
             self.assertEqual(s['lane_alphas'][6*i:6*i+6],[0,.25,.5,.75,1,0])
             self.assertEqual(s['zero_middle'][6*i:6*i+6],[False]*5+[True])
 
+    def test_mixed_seed_groups_preserve_frozen_parameters(self):
+        import json
+        from pathlib import Path
+        spec=json.loads(Path('learning/configs/isaac_h75_tradeoff_repeats.json').read_text())
+        cases=[dict(terrain_path='flat',user_speed_m_s=2.,seed=seed,
+                    randomization=spec['randomization_by_seed'][str(seed)])
+               for seed in spec['seeds'] for _ in range(20)]
+        settings=batch_settings({},cases)
+        self.assertEqual(settings['num_envs'],600)
+        self.assertEqual(len(settings['fixed_randomization_groups']),5)
+        for i,group in enumerate(settings['fixed_randomization_groups']):
+            self.assertEqual(group['env_ids'],list(range(120*i,120*(i+1))))
+            self.assertEqual(group['config'],cases[20*i]['randomization'])
+        self.assertEqual(settings['randomization']['latency_s'][1],
+                         max(c['randomization']['latency_s'][1] for c in cases))
+        self.assertFalse(settings['auto_reset_horizon'])
+
     def test_split_keeps_policy_control_contact_axes_and_identity(self):
         n=120; lane=np.arange(n)
         arrays={'reward':np.broadcast_to(lane,(2,n)).copy(),

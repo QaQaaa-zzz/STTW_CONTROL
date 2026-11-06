@@ -38,6 +38,9 @@ if a.lower_checkpoint:
     from sttw_control.torch_go2_lower import TorchGo2Lower
     lower=TorchGo2Lower(a.lower_training_run,a.lower_checkpoint,s['num_envs'],'cuda:0')
 env=IsaacPathRollout(a.bundle,s,policy,plant=plant,lower=lower)
+if s.get('fixed_randomization_groups'):
+    from sttw_control.isaaclab_randomization import apply_fixed_evaluation_groups
+    apply_fixed_evaluation_groups(env,s['fixed_randomization_groups'])
 if intervention:env.policy.channel_intervention_mode=intervention.get('kind','hold')
 contract=dict(backend=a.backend,settings=s,bundle=str(a.bundle.resolve()),identity=identity,terrain=env.plant.terrain_identity,bodies=env.plant.bodies,origin=env.plant.origin.cpu().tolist(),role=s.get('evaluation_role','fixed preference DEV; Zero is frozen LOCAL300 plus ECBC/ESO, no H75 correction'),physics_dt=.0002,lower_dt=.005,policy_dt=.02)
 if lower is not None:
