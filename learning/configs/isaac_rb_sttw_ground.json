@@ -34,7 +34,8 @@
       1048576,
       1048576,
       1048576
-    ]
+    ],
+    "servo_mode": "hybrid"
   },
   "role": "RB complete vehicle friction0.8; geometry-based locked-body ECBC versus frozen Local300, before gain tuning; nominal DEV",
   "save_warmup_state": true,
