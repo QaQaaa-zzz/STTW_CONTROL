@@ -6,38 +6,92 @@
   "upper_dt_s": 0.02,
   "optimizer_updates": 0,
   "P0": {
-    "terrain": ["flat", "oblique_4cm", "oblique_6cm"],
-    "requested_speed_m_s": [2.3, 2.6],
-    "alpha": [0, 0.25, 0.5, 0.75, 1],
-    "parameter_seeds": [101, 102, 103, 104, 105],
+    "terrain": [
+      "flat",
+      "oblique_4cm",
+      "oblique_6cm"
+    ],
+    "requested_speed_m_s": [
+      2.3,
+      2.6
+    ],
+    "alpha": [
+      0,
+      0.25,
+      0.5,
+      0.75,
+      1
+    ],
+    "parameter_seeds": [
+      101,
+      102,
+      103,
+      104,
+      105
+    ],
     "natural_trajectories": 150,
     "maximum_episode_s": 10,
     "maximum_lane_physics_steps": 7500000,
     "recording": "post-solve force and own contact point for each normal/friction patch, joint velocity, body pose, applied motor torque; no 5ms subsampling for G1/G2",
-    "status": "interface preparation, not launched"
+    "status": "configured three queued batches of50; execution in runs/h75_contact_p0"
   },
   "G1_G2": {
-    "force_components": ["normal", "longitudinal_friction", "lateral_friction"],
-    "impulses": ["signed integral", "integral of absolute torque"],
+    "force_components": [
+      "normal",
+      "longitudinal_friction",
+      "lateral_friction"
+    ],
+    "impulses": [
+      "signed integral",
+      "integral of absolute torque"
+    ],
     "normal_and_friction_points": "separate native PhysX buffers, no shared-point assumption",
-    "margin_metrics": ["motor saturation total and longest continuous duration", "front low-load total and longest continuous duration", "recontact events", "steering velocity before roll and path response"],
+    "margin_metrics": [
+      "motor saturation total and longest continuous duration",
+      "front low-load total and longest continuous duration",
+      "recontact events",
+      "steering velocity before roll and path response"
+    ],
     "low_load_static_fraction": 0.2
   },
   "G3_G4": {
     "terrain": "oblique_6cm",
-    "entry_alpha": [0, 0.25, 1],
-    "recovery_alpha": [0, 0.25, 1],
-    "parameter_seeds": [101, 102, 103, 104, 105],
-    "requested_speed_m_s": [2.3, 2.6],
+    "entry_alpha": [
+      0,
+      0.25,
+      1
+    ],
+    "recovery_alpha": [
+      0,
+      0.25,
+      1
+    ],
+    "parameter_seeds": [
+      101,
+      102,
+      103,
+      104,
+      105
+    ],
+    "requested_speed_m_s": [
+      2.3,
+      2.6
+    ],
     "recovery_branches": 90,
     "primary_event": "first 50Hz decision after rear-wheel confirmed obstacle clearance",
     "additional_event": "front-wheel first ridge contact",
-    "transitions": ["step", "0.10s ramp"],
+    "transitions": [
+      "step",
+      "0.10s ramp"
+    ],
     "snapshot": "same physical, controller, actuator, policy history and filter state; natural/restored comparison retained",
     "status": "event detector and branch implementation pending; transitions/additional event budget separately declared before execution"
   },
   "G5": {
-    "interventions": ["cancel negative-trail contribution only", "restore same-pose positive-reference contact contribution"],
+    "interventions": [
+      "cancel negative-trail contribution only",
+      "restore same-pose positive-reference contact contribution"
+    ],
     "minimum_causal_delay_s": 0.0002,
     "report": "actual delivered compensating angular impulse, steering-rate response, roll and task response",
     "flat_pulses": "positive and negative matched impulse sensitivity",
@@ -45,20 +99,47 @@
   },
   "G6": {
     "comparison": "same held-out conditions with and without contact migration/angular impulse features",
-    "keep": ["entry alpha", "clearance state", "actuator history", "filter history", "transition mode", "clearance event"],
+    "keep": [
+      "entry alpha",
+      "clearance state",
+      "actuator history",
+      "filter history",
+      "transition mode",
+      "clearance event"
+    ],
     "empty_feasible_set": "retain violation, prioritize balance/completion then violation extent",
     "contact_truth": "oracle feature set separate from deployable feature set",
     "status": "after event-matched branches"
   },
   "G7": {
     "status": "last priority, not authorized for immediate model mutation",
-    "preserve": ["actual reference wheel-centre geometry", "static load distribution", "steering inertia", "frozen networks"],
-    "controller_variants": ["geometry-updated ECBC", "fixed 24mm ECBC parameter"]
+    "preserve": [
+      "actual reference wheel-centre geometry",
+      "static load distribution",
+      "steering inertia",
+      "frozen networks"
+    ],
+    "controller_variants": [
+      "geometry-updated ECBC",
+      "fixed 24mm ECBC parameter"
+    ]
   },
   "three_ridges": {
-    "spacing_by_recovery_time": [2, 1, 0.5],
-    "hold_constant": ["ridge height", "approach slope", "ridge count", "total evaluation length"],
-    "orientations": ["same obliquity", "alternating obliquity"],
+    "spacing_by_recovery_time": [
+      2,
+      1,
+      0.5
+    ],
+    "hold_constant": [
+      "ridge height",
+      "approach slope",
+      "ridge count",
+      "total evaluation length"
+    ],
+    "orientations": [
+      "same obliquity",
+      "alternating obliquity"
+    ],
     "status": "after single-ridge recovery time measurement"
   },
   "resource_policy": "one heavy queued GPU job across threads, GPU-parallel lanes within job; at least50GB data-disk free; no repeated polling",
