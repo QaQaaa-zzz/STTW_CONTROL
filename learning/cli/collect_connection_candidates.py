@@ -4,7 +4,7 @@ A fixed source route/terrain and both fixed downstream routes are prepared befor
 execution. Replanning is active for every downstream candidate. This is nominal
 original STTW; hidden PhysX contact caches are not serialized by the state API.
 """
-import argparse,hashlib,json,time
+import os,argparse,hashlib,json,time
 from pathlib import Path
 import numpy as np
 p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--resume-from',type=Path);a=p.parse_args()
@@ -82,4 +82,4 @@ for task in spec['tasks']:
         records.append(dict(origin_id=spec['origin_id'],snapshot_id=snapshot_id,task_id=task['task_id'],skill_id=skill_id,candidate_id=candidate['candidate_id'],state=feature,complete=int(completed),success_cost=float(arrivals[i]) if completed else None,path_rmse_m=float(np.sqrt(np.mean(path_errors**2))) if len(path_errors) else None,observed_lower_steps=int(valid.sum()),physical_or_controller_failure=not bool(env.alive[i]),trace=str((folder/'trajectory.npz').resolve()),snapshot=str((a.output/'exit_snapshot.pt').resolve())))
     (a.output/'records.jsonl').write_text(''.join(json.dumps(row)+'\n' for row in records))
 (a.output/'status.json').write_text(json.dumps(dict(status='complete',rows=len(records),elapsed_s=time.monotonic()-start,optimizer_updates=0),indent=2))
-app.close(wait_for_replicator=False,skip_cleanup=True)
+plant.close();os.sync();os._exit(0)

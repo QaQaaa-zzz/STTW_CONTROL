@@ -1,5 +1,5 @@
 """Paired frozen Phase U / RB handoff on the common pendulum bicycle."""
-import argparse,json,time
+import os,argparse,json,time
 from pathlib import Path
 import numpy as np
 p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);a=p.parse_args()
@@ -96,4 +96,4 @@ result=dict(status='complete',elapsed_s=time.monotonic()-start,physics_lane_step
 for i,name in enumerate(spec['skills']):
  tr=trace[mask[:,i],i];result['cases'].append(dict(skill=name,duration_s=float(tr[-1,0]),physical_termination=not bool(alive[i]),peak_root_z=float(tr[:,3].max()),final_xyz=tr[-1,1:4].tolist(),peak_abs_roll_deg=float(np.rad2deg(abs(tr[:,5])).max()),full_jump_success='not adjudicated; requires clearance and landing evidence'))
 (out/'results.json').write_text(json.dumps(result,indent=2));print(result,flush=True)
-app.close(wait_for_replicator=False,skip_cleanup=True)
+plant.close();os.sync();os._exit(0)

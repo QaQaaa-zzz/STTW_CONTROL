@@ -28,6 +28,7 @@ runner=RecordedRunner(env,train,log_dir=str(a.output/'training'),device=cfg['dev
 initialization={'initialization':'original Phase U actor/critic/frozen normalizer; fresh optimizer'}
 if cfg.get('resume_checkpoint'):
     runner.load(cfg['resume_checkpoint'],load_optimizer=True)
+    runner.current_learning_iteration=cfg.get('resume_policy_update',runner.current_learning_iteration)
     runner.alg.learning_rate=runner.alg.optimizer.param_groups[0]['lr']
     initialization.update(initialization='checkpoint model and optimizer resume; fresh simulation and rollout state',resume_checkpoint=cfg['resume_checkpoint'],start_update=runner.current_learning_iteration,learning_rate=runner.alg.learning_rate)
 elif cfg.get('initial_checkpoint'):
@@ -52,4 +53,4 @@ def recorded_update():
 runner.alg.update=recorded_update
 runner.learn(cfg['updates'],init_at_random_ep_len=False)
 status.update(stage='training_complete',elapsed_s=time.time()-start,total_physics_steps=env.total_physics_steps)
-(a.output/'status.json').write_text(json.dumps(status,indent=2));runner.writer.close();env.plant.close();app.close(wait_for_replicator=False,skip_cleanup=True)
+(a.output/'status.json').write_text(json.dumps(status,indent=2));runner.writer.close();env.plant.close();os.sync();os._exit(0)
