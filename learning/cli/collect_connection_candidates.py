@@ -7,7 +7,7 @@ original STTW; hidden PhysX contact caches are not serialized by the state API.
 import os,argparse,hashlib,json,time
 from pathlib import Path
 import numpy as np
-p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--source-snapshot',type=Path);p.add_argument('--resume-from',type=Path);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--source-snapshot',type=Path);p.add_argument('--source-only',action='store_true');p.add_argument('--resume-from',type=Path);a=p.parse_args()
 spec=json.loads(a.config.read_text());candidates=spec['candidates']
 if len(candidates)!=6 or len({(c['speed_m_s'],c['alpha']) for c in candidates})!=6:
     p.error('six distinct speed/alpha candidates required')
@@ -21,7 +21,7 @@ from sttw_control.isaac_path_rollout import IsaacPathRollout
 from sttw_control.torch_path_policy import TorchPathPolicy
 from sttw_control.torch_path_reference import TorchPathReference,wrap
 from sttw_control.goal_replanning import IsaacGoalReplanning
-s=json.loads(Path(spec['settings']).read_text());s.update(num_envs=6,alphas=[spec['source_alpha']]*6,zero_middle=[False]*6,user_speed_m_s=spec['source_speed_m_s'],terrains={'source':spec['terrain']},episode_s=spec['source_seconds'],auto_reset_horizon=False,diagnostics=False)
+s=json.loads(Path(spec['settings']).read_text());s.update(num_envs=6,alphas=[spec['source_alpha']]*6,zero_middle=[False]*6,user_speed_m_s=spec['source_speed_m_s'],terrains={'source':spec['terrain']},episode_s=spec['source_seconds'],auto_reset_horizon=False,diagnostics=False,record_control_commands=True)
 torch.manual_seed(spec['seed']);torch.set_num_threads(2)
 bundle=Path(spec['source_bundle']);identity=json.loads((bundle/'identity.json').read_text());cfg=json.loads((bundle/'config.json').read_text())
 policy=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],cfg,6,'cuda:0')
@@ -45,18 +45,21 @@ if a.resume_from or a.source_snapshot:
     m,pose,v=plant.observe()
     feature=records[0]['state'] if records else [float(v[0]),float(m[0,0]),float(m[0,1]),float(env.middle.projection['cross_track'][0]),float(wrap(env.middle.projection['heading'][0]-pose[0,2])),float(m[0,2]),float(m[0,3]),float(env.previous_reference[0,0])]
 else:
-    source_trace=[];found=False
+    source_trace=[];source_commands=[];found=False
     for _ in range(round(spec['source_seconds']/.02)):
-        result=env.step();source_trace.append(result['lower_trace'].clone())
+        result=env.step();source_trace.append(result['lower_trace'].clone());source_commands.append(result['executed_commands'].clone())
         if not bool(env.alive[0]):break
         if float(env.middle.projection['progress'][0])>=spec['source_exit_progress_m']:
             found=True;break
-    np.savez(a.output/'source_trajectory.npz',trace=torch.stack(source_trace).cpu().numpy())
+    np.savez_compressed(a.output/'source_trajectory.npz',trace=torch.stack(source_trace).cpu().numpy(),executed_commands=torch.cat(source_commands).cpu().numpy())
     if not found:
         (a.output/'status.json').write_text(json.dumps(dict(status='source_failed',origin_id=spec['origin_id'],protocol_id=spec.get('protocol_id','legacy_full_suffix'),reached_decision=False,root_complete=False,reason='physical_or_controller_failure' if not bool(env.alive[0]) else 'exit_not_reached_in_window',rows=0,elapsed_s=time.monotonic()-start,optimizer_updates=0),indent=2))
         os.sync();os._exit(0)
     snapshot=env.capture_connection_state(0);torch.save(snapshot,a.output/'exit_snapshot.pt')
     m,pose,v=plant.observe();feature=[float(v[0]),float(m[0,0]),float(m[0,1]),float(env.middle.projection['cross_track'][0]),float(wrap(env.middle.projection['heading'][0]-pose[0,2])),float(m[0,2]),float(m[0,3]),float(env.previous_reference[0,0])]
+if a.source_only:
+    (a.output/'status.json').write_text(json.dumps(dict(status='source_complete',origin_id=spec['origin_id'],reached_decision=True,state=feature,elapsed_s=time.monotonic()-start,optimizer_updates=0),indent=2))
+    os.sync();os._exit(0)
 snapshot_id=hashlib.sha256((a.output/'exit_snapshot.pt').read_bytes()).hexdigest()
 skill_id=env.upper_sha256+':'+('ecbc_zero_residual' if bool(env.zero_lower.all()) else env.lower_sha256)
 if spec['replanning'].get('arrival_reference')=='original_route':skill_id+=':arrival_original_route'

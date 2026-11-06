@@ -12,6 +12,8 @@ p.add_argument('--height',type=float,default=.03)
 p.add_argument('--oblique',type=float,default=.4)
 p.add_argument('--source-speed',type=float,default=2.3)
 p.add_argument('--connection-only',action='store_true')
+p.add_argument('--initial-lateral',type=float,default=0.)
+p.add_argument('--initial-yaw-deg',type=float,default=0.)
 p.add_argument('--connection-length',type=float,default=1.)
 p.add_argument('--source-exit-progress',type=float,default=3.1)
 p.add_argument('--corridor-half-width',type=float,default=2.)
@@ -30,9 +32,22 @@ tasks=[dict(task_id=name,route=save(name,build_path(name,entry,cfg)),seconds=10.
 terrain=dict(route=source_path,bounds_m=[-30,35],horizontal_scale_m=.1,vertical_scale_m=.005,slope_threshold=1.5,height_m=a.height,center_s_m=2.,length_m=.8,oblique_s_per_lateral_m=a.oblique,half_width_m=1.5,role='fixed oblique bump before shared exit; paired DEV')
 (a.output/'terrain_scene.json').write_text(json.dumps(terrain,indent=2)+'\n')
 settings=json.loads(a.settings.read_text());settings['plant_options']['env_spacing']=80.
+initial_source=settings['initial_state']
+if a.initial_lateral or a.initial_yaw_deg:
+    from scipy.spatial.transform import Rotation
+    saved=np.load(initial_source);state={key:saved[key].copy() for key in saved.files}
+    state['root_pose'][:2]+=a.initial_lateral*np.array([-np.sin(pose[2]),np.cos(pose[2])])
+    rotation=Rotation.from_euler('z',a.initial_yaw_deg,degrees=True)
+    q=rotation*Rotation.from_quat(state['root_pose'][[4,5,6,3]])
+    state['root_pose'][3:7]=q.as_quat()[[3,0,1,2]]
+    state['root_velocity'][:3]=rotation.apply(state['root_velocity'][:3])
+    state['root_velocity'][3:]=rotation.apply(state['root_velocity'][3:])
+    np.savez(a.output/'initial_state.npz',**state)
+    settings['initial_state']=str(a.output/'initial_state.npz')
 settings['plant_options']['gpu_pair_capacities']=[2**22,2**22,2**24]
 (a.output/'settings.json').write_text(json.dumps(settings,indent=2)+'\n')
 spec=dict(settings=str(a.output/'settings.json'),source_bundle=str(a.bundle),source_route=source_path,terrain=str(a.output/'terrain'),source_alpha=.5,source_speed_m_s=a.source_speed,source_seconds=6.,source_exit_progress_m=exit_s,seed=28,origin_id=a.output.name, tasks=tasks,candidates=[dict(candidate_id=f'v{v}_a{alpha}',speed_m_s=v,alpha=alpha) for v in (1.5,2.3) for alpha in (0.,.5,1.)],replanning=dict(period_s=.5,departure_m=.3,arrival_radius_m=2.,radius_m=1.8,enabled=[True]*6,goal_after_turn_m=5.),corridor_half_width_m=a.corridor_half_width,role='paired nominal DEV; six candidates from accessible closed-loop snapshot, hidden PhysX cache excluded',completion_rule='goal reached and survive entire 10-second window and remain within declared original-path corridor',maximum_physics_lane_steps=round((6.+sum(t['seconds'] for t in tasks))*6/settings['plant_options'].get('physics_dt',.0002)),optimizer_updates=0)
+spec['initial_offset']=dict(lateral_m=a.initial_lateral,yaw_deg=a.initial_yaw_deg,source_state=initial_source,scope='Initial upstream pose offset; rotate world velocities consistently, preserve joints and controller warm state. Requested upstream speed is not assumed equal to measured obstacle-entry speed.')
 if a.connection_only:
     spec.update(protocol_id='ground_connection_hold_v1',connection_end_progress_m=a.connection_length,common_task_reference=dict(speed_m_s=2.3,alpha=.5))
     spec['replanning']['arrival_reference']='original_route'
