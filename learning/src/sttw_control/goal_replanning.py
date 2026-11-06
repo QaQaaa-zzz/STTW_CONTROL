@@ -138,12 +138,18 @@ class IsaacGoalReplanning:
         self.env=env;self.config=config;self.output=output;self.events=[]
         original=env.route
         self.grid=original.s.cpu().numpy()
-        route_data=np.load(config['original_route'])
-        self.original_route={key:route_data[key].copy() for key in ('xy','heading','curvature')}
-        self.goal_s=float(route_data['turn_end'])+config['goal_after_turn_m'] if 'goal_after_turn_m' in config else float(route_data['goal'])
-        self.goal=original.at(torch.tensor([self.goal_s],device=env.device))[0][0].cpu().numpy()
+        paths=config['original_route']
+        paths=paths if isinstance(paths,list) else [paths]*env.n
+        if len(paths)!=env.n:raise ValueError('One original route per lane required')
+        loaded={path:np.load(path) for path in set(paths)}
+        if any(not np.array_equal(data['s'].astype(self.grid.dtype),self.grid) for data in loaded.values()):raise ValueError('Batched replanning requires a shared arclength grid')
+        self.original_routes={key:np.stack([loaded[path][key] for path in paths]) for key in ('xy','heading','curvature')}
+        self.goal_progress=np.array([float(loaded[path]['turn_end'])+config['goal_after_turn_m'] if 'goal_after_turn_m' in config else float(loaded[path]['goal']) for path in paths])
+        self.goals=original.at(torch.as_tensor(self.goal_progress,device=env.device,dtype=torch.float32))[0].cpu().numpy()
+        self.original_route={key:value[0] for key,value in self.original_routes.items()}
+        self.goal_s=float(self.goal_progress[0]);self.goal=self.goals[0]
         self.arrived=np.zeros(env.n,dtype=bool);self.exit_bound=np.zeros(env.n,dtype=bool);self.replanned=np.zeros(env.n,dtype=bool)
-        route=dict(s=self.grid,**{key:getattr(original,key).cpu().numpy()[None].repeat(env.n,axis=0) for key in ('xy','heading','curvature')})
+        route=dict(s=self.grid,**{key:(getattr(original,key)[original.route_ids].cpu().numpy().copy() if original.batched else getattr(original,key).cpu().numpy()[None].repeat(env.n,axis=0)) for key in ('xy','heading','curvature')})
         env.route=TorchPathReference(route,env.config,env.device)
         env.middle.route=env.route
         self.period=round(config['period_s']/.02)
@@ -152,7 +158,7 @@ class IsaacGoalReplanning:
         import json,time,torch
         env=self.env;c=self.config;_,pose,speed=env.plant.observe()
         poses=pose.cpu().numpy()
-        self.arrived|=np.linalg.norm(poses[:,:2]-self.goal,axis=1)<=c['arrival_radius_m']
+        self.arrived|=np.linalg.norm(poses[:,:2]-self.goals,axis=1)<=c['arrival_radius_m']
         due=env.tick>0 and env.tick%self.period==0
         cross=env.middle.projection['cross_track'].cpu().numpy()
         invalid=env.middle.follower['invalid'].cpu().numpy();alive=env.alive.cpu().numpy()
@@ -160,7 +166,7 @@ class IsaacGoalReplanning:
         for i,enabled in enumerate(c['enabled']):
             if enabled and alive[i] and self.arrived[i] and self.replanned[i] and not self.exit_bound[i]:
                 if c.get('arrival_reference','forward_exit')=='original_route':
-                    xy=self.original_route['xy'];heading=self.original_route['heading'];curvature=self.original_route['curvature']
+                    xy=self.original_routes['xy'][i];heading=self.original_routes['heading'][i];curvature=self.original_routes['curvature'][i]
                     nearest=np.square(xy-poses[i,:2]).sum(-1).argmin()
                     projection_starts[i]=float(self.grid[nearest])
                     event='goal_arrival_original_route'
@@ -170,18 +176,18 @@ class IsaacGoalReplanning:
                     event='goal_arrival_forward_exit'
                 for key,value in dict(xy=xy,heading=heading,curvature=curvature).items():getattr(env.route,key)[i]=torch.as_tensor(value,device=env.device,dtype=torch.float32)
                 file=f'{event}_{i:02d}_tick{env.tick*4:04d}.npz'
-                np.savez_compressed(self.output/file,s=self.grid,xy=xy,heading=heading,curvature=curvature,goal=self.goal_s if event=='goal_arrival_original_route' else 0.,original_goal_xy=self.goal)
-                self.events.append(dict(lane=i,task_tick=env.tick*4,time_s=env.tick*.02,event=event,file=file,start_pose=poses[i].tolist(),goal_xy=self.goal.tolist(),planning_seconds=0.))
+                np.savez_compressed(self.output/file,s=self.grid,xy=xy,heading=heading,curvature=curvature,goal=self.goal_progress[i] if event=='goal_arrival_original_route' else 0.,original_goal_xy=self.goals[i])
+                self.events.append(dict(lane=i,task_tick=env.tick*4,time_s=env.tick*.02,event=event,file=file,start_pose=poses[i].tolist(),goal_xy=self.goals[i].tolist(),planning_seconds=0.))
                 self.exit_bound[i]=True;changed.append(i)
                 continue
-            if not due or not enabled or not replan_requested(xy=poses[i,:2],goal_xy=self.goal,cross_track_m=cross[i],follower_invalid=invalid[i],already_replanned=self.replanned[i],contact=not alive[i],fault=bool(env.middle.fault[i]),ever_arrived=self.arrived[i],arrival_radius_m=c['arrival_radius_m'],departure_m=c['departure_m'],continuous_replanning=True):continue
+            if not due or not enabled or not replan_requested(xy=poses[i,:2],goal_xy=self.goals[i],cross_track_m=cross[i],follower_invalid=invalid[i],already_replanned=self.replanned[i],contact=not alive[i],fault=bool(env.middle.fault[i]),ever_arrived=self.arrived[i],arrival_radius_m=c['arrival_radius_m'],departure_m=c['departure_m'],continuous_replanning=True):continue
             started=time.monotonic()
-            path,meta=dubins_goal_path(poses[i],self.goal,radius_m=c['radius_m'],numpy_output=True)
+            path,meta=dubins_goal_path(poses[i],self.goals[i],radius_m=c['radius_m'],numpy_output=True)
             xy=np.column_stack([np.interp(self.grid,path.s,path.xy[:,k]) for k in (0,1)])
             heading=np.interp(self.grid,path.s,np.unwrap(path.heading));curvature=np.interp(self.grid,path.s,path.curvature)
             for key,value in dict(xy=xy,heading=heading,curvature=curvature).items():getattr(env.route,key)[i]=torch.as_tensor(value,device=env.device,dtype=torch.float32)
             file=f'replanned_path_{i:02d}_tick{env.tick*4:04d}.npz'
-            np.savez_compressed(self.output/file,s=self.grid,xy=xy,heading=heading,curvature=curvature,goal=path.goal,original_goal_xy=self.goal)
+            np.savez_compressed(self.output/file,s=self.grid,xy=xy,heading=heading,curvature=curvature,goal=path.goal,original_goal_xy=self.goals[i])
             self.events.append(dict(meta,lane=i,task_tick=env.tick*4,time_s=env.tick*.02,cross_track_before=float(cross[i]),file=file,planning_seconds=time.monotonic()-started))
             self.replanned[i]=True;changed.append(i)
         if changed:
