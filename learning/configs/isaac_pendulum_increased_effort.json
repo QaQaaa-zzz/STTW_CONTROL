@@ -1,0 +1,32 @@
+{
+  "output": "runs/pendulum_increased_effort_comparison",
+  "initial_state": "runs/pendulum_h75_locked/warmup/initial_state.npz",
+  "geometry": "runs/pendulum_jump_pair/geometry.json",
+  "bundles": "runs/historical_jump_candidate",
+  "skills": [
+    "isaac01966080",
+    "traversal600_best",
+    "best151"
+  ],
+  "start_x": 1.0,
+  "approach_speed": 2.0,
+  "seconds": 4.0,
+  "maximum_physics_lane_steps": 2400,
+  "optimizer_updates": 0,
+  "align_heading": true,
+  "physics_dt": 0.005,
+  "gpu_pair_capacities": [
+    1048576,
+    1048576,
+    1048576
+  ],
+  "ground_bundle": "runs/h75_selected_local300_flat/bundle",
+  "ground_alpha": 0.5,
+  "handoff_x": 1.5,
+  "role": "user-authorized increased actuator capability: rear6Nm, arms45Nm; same common chassis and frozen policies; nominal paired DEV; physical domain differs from old runs",
+  "actuator_force_limits": {
+    "cmd_rearwheel_v": 6.0,
+    "cmd_hip_f": 45.0,
+    "cmd_knee_f": 45.0
+  }
+}

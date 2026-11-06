@@ -15,6 +15,7 @@ cfg=json.loads(Path('learning/configs/isaac_pendulum_local300_standard.json').re
 options=cfg['plant_options'].copy();options['env_spacing']=20.;options['pendulum_locked']=True
 options['physics_dt']=spec.get('physics_dt',.0002)
 options['gpu_pair_capacities']=spec.get('gpu_pair_capacities')
+options['actuator_force_limits']=spec.get('actuator_force_limits')
 substeps=round(.005/options['physics_dt'])
 if substeps<1 or abs(substeps*options['physics_dt']-.005)>1e-9:raise ValueError('physics_dt must divide ground/sensor period .005')
 n=len(spec['skills'])
