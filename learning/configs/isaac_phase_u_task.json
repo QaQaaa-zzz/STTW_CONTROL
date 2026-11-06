@@ -149,7 +149,7 @@
     "policy_initialization": "original Phase U actor, critic and frozen normalizer; optimizer fresh when training starts",
     "training_backend": "existing Go2 OnPolicyRunner, not connected yet",
     "randomization_reference": "learning/configs/go2_local_original_task.json:randomization",
-    "randomization_status": "not connected to four jump actuators/76D observation yet",
+    "randomization_status": "four-actuator gain/measurement/delay adapter implemented; physical training hookup pending",
     "actor_critic": "sttw_control.phase_u_actor_critic.PhaseUActorCritic",
     "training_bundle": "runs/phase_u_training_bundle/source",
     "critic_input": 106,
@@ -165,5 +165,92 @@
     "critic_observation": "TorchPendulumObservation.privileged",
     "critic_extra_joint_policy": "preserve original 106D; additional passive suspension is physically simulated but omitted as an independent critic input",
     "events_status": "384 sequential event and 384 terminal cases match original configured Phase U v4 branch; physical env not wired"
+  },
+  "randomization": {
+    "base_body": "chasis",
+    "friction_range": [
+      0.3,
+      1.0
+    ],
+    "mass_scale": [
+      0.9,
+      1.1
+    ],
+    "base_com_m": [
+      -0.03,
+      0.03
+    ],
+    "servo_gain_scale": [
+      0.9,
+      1.1
+    ],
+    "steer_zero_offset_rad": [
+      -0.035,
+      0.035
+    ],
+    "latency_s": [
+      0.005,
+      0.015
+    ],
+    "push_interval_s": 4,
+    "push_velocity_range": {
+      "x": [
+        -0.4,
+        0.4
+      ],
+      "y": [
+        -0.4,
+        0.4
+      ],
+      "roll": [
+        -0.6,
+        0.6
+      ],
+      "pitch": [
+        -0.6,
+        0.6
+      ],
+      "yaw": [
+        -0.6,
+        0.6
+      ]
+    },
+    "base_mass_add_kg": [
+      -1,
+      1
+    ],
+    "mapping_note": "Source Go2-style property/latency/gain/push ranges retained; position and velocity channels mapped to three angle joints and two wheels. Acceleration noise 0.2 m/s2 is an explicit task-specific IMU mapping; relative obstacle distance and root height are nominal known-map measurements. Sensor delay uses 5ms clock; action delay uses 0.2ms clock. Motor offsets are sensed angle biases, not changes to physical joint position.",
+    "sensor_dt_s": 0.005,
+    "joint_zero_offset_rad": [
+      -0.035,
+      0.035
+    ],
+    "frame_noise": [
+      0.01,
+      0.01,
+      0.01,
+      0.2,
+      0.2,
+      0.2,
+      0.2,
+      0.2,
+      0.2,
+      0.01,
+      0.01,
+      0.01,
+      0.15,
+      0.15,
+      0.15,
+      1.5,
+      1.5,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.1,
+      0.0,
+      0.0,
+      0.0
+    ]
   }
 }

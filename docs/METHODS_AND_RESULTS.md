@@ -1,3 +1,9 @@
+## 四动作Go2式随机化适配完成，实际GPU DelayBuffer检查通过
+
+`PendulumControlRandomization`复用Isaac Lab DelayBuffer，动作按物理0.2ms时钟延迟25–75tick（5–15ms），IMU/关节/速度按源Phase U 5ms采样时钟延迟1–3tick；50Hz策略历史与传感器采样拆开，不将延迟取整成0或20ms。转向位置、后轮速度及hip/knee位置servo均按原增益范围随机化，原力矩/动作范围不变。角度偏置仅进观测，物理状态/奖励终止不改。25维frame新通道噪声在isaac_phase_u_task.json明确：加速度0.2m/s²为显式任务映射，已知地图障碍距离/根高度不加噪声；不能称与Go2腿部观测逐字段相同。现有startup摩擦/质量惯量/质心函数继续复用，周期推扰仍待环境接线。
+
+实际env_isaaclab cuda:0调用原DelayBuffer测试：25tick精确延迟、原始frame未改、last_action和地图字段保留、批量gain可用且力矩仍≤30Nm、局部reset清空对应历史均通过，runs/phase_u_randomization_port/result.json。首次torch.long与原buffer int32索引赋值不兼容，已按既有模块改torch.int，错误日志保留。0物理/0优化，不是随机化训练已完成。两项已有观测行为测试通过；下一步环境闭环接线与正式runner调度，不再重复已验证纯数值模块。
+
 ## 原Phase U事件/终止与106维critic接口完成
 
 `phase_u_events.py`批量实现原一次性jump_signal、consumed锁存、ascending/height/apex、速度卡住与失败优先级，保留原step计数和timeout；原env需要先初判terminal→advance_events→同旧step终判，不能把apex当终止成功。runs/phase_u_event_port对只读原semantics.py比较32lane×12步，共384事件转移＋384终止组合、252字段比较一致；覆盖本配置velocity-stuck分支，不声称旧window-stuck分支已验证。没有物理/优化更新。

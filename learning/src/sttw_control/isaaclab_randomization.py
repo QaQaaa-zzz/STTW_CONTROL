@@ -98,3 +98,52 @@ class VehicleControlRandomization:
         observed[:, [2, 3, 5, 6]] = motor
         observed[:, [0, 1, 4]] = imu
         return observed
+
+
+class PendulumControlRandomization:
+    """Four physical targets at physics dt; measured frame at source 5 ms dt.
+
+    Reuses Isaac Lab DelayBuffer. No randomness touches reward/terminal signals.
+    Call sensor_frame every sensor_dt, then append its output to the 50 Hz FIFO.
+    """
+    def __init__(self,plant,config):
+        self.plant,self.config=plant,config
+        self.device,self.count=plant.device,plant.count
+        self.action_bounds=[round(t/plant.sim.cfg.dt) for t in config['latency_s']]
+        self.sensor_bounds=[round(t/config['sensor_dt_s']) for t in config['latency_s']]
+        self.action_buffer=DelayBuffer(self.action_bounds[1],self.count,self.device)
+        self.sensor_buffers={name:DelayBuffer(self.sensor_bounds[1],self.count,self.device) for name in ('imu','motor','speed')}
+        self.noise=torch.tensor(config['frame_noise'],device=self.device)
+        self.offset=torch.zeros(self.count,3,device=self.device)
+        self.nominal={}
+        # Scale all active jump servos, retaining nominal force/target bounds.
+        for label,servo,fields in (('drive',plant.servos,('gain',)),('steering',plant.jump_steering_servo,('kp','kd')),('pendulum',plant.pendulum_servos,('kp','kd'))):
+            for field in fields:
+                value=getattr(servo,field).clone();self.nominal[label,field]=value
+                setattr(servo,field,value.repeat(self.count,1))
+        self.reset(torch.arange(self.count,device=self.device))
+
+    def reset(self,ids):
+        n=len(ids)
+        for buffer,bounds in [(self.action_buffer,self.action_bounds)]+[(b,self.sensor_bounds) for b in self.sensor_buffers.values()]:
+            buffer.reset(ids)
+            buffer.set_time_lag(torch.randint(bounds[0],bounds[1]+1,(n,),device=self.device,dtype=torch.int),ids)
+        low,high=self.config['servo_gain_scale']
+        for label,servo,fields in (('drive',self.plant.servos,('gain',)),('steering',self.plant.jump_steering_servo,('kp','kd')),('pendulum',self.plant.pendulum_servos,('kp','kd'))):
+            for field in fields:
+                nominal=self.nominal[label,field]
+                getattr(servo,field)[ids]=nominal*(low+(high-low)*torch.rand(n,len(nominal),device=self.device))
+        low,high=self.config['joint_zero_offset_rad']
+        self.offset[ids]=low+(high-low)*torch.rand(n,3,device=self.device)
+
+    def command(self,target):
+        return self.action_buffer.compute(target)
+
+    def sensor_frame(self,frame):
+        observed=frame.clone()
+        observed[:,9:12]+=self.offset
+        observed+=(2*torch.rand_like(observed)-1)*self.noise
+        observed[:,:9]=self.sensor_buffers['imu'].compute(observed[:,:9])
+        observed[:,9:17]=self.sensor_buffers['motor'].compute(observed[:,9:17])
+        observed[:,21:22]=self.sensor_buffers['speed'].compute(observed[:,21:22])
+        return observed

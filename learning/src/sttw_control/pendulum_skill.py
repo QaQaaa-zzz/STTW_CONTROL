@@ -81,8 +81,8 @@ class TorchPendulumObservation:
         self.valid_count=torch.zeros(count,device=device,dtype=torch.long)
         self.gravity=torch.tensor([0.,0.,-1.],device=device).expand(count,3)
 
-    def advance(self, root, position, velocity, root_acceleration_world,
-                obstacle_relative_x, last_action, jump_signal):
+    def make_frame(self, root, position, velocity, root_acceleration_world,
+                   obstacle_relative_x, last_action):
         from .torch_observation import rotate_inverse
         torch=self.torch
         q=root[:,3:7]
@@ -93,10 +93,19 @@ class TorchPendulumObservation:
             -velocity[:,self.wheels],last_action,
             root[:,7:8],obstacle_relative_x[:,None],root[:,2:3],
             torch.ones_like(root[:,:1])),dim=-1)
+        return frame
+
+    def advance_frame(self, frame, jump_signal):
+        torch=self.torch
         self.frames=torch.cat((self.frames[:,1:],frame[:,None]),dim=1)
         self.valid_count=(self.valid_count+1).clamp_max(3)
-        self.frames[:,:,-1]=(torch.arange(3,device=root.device)[None]>=3-self.valid_count[:,None])
+        self.frames[:,:,-1]=(torch.arange(3,device=frame.device)[None]>=3-self.valid_count[:,None])
         return torch.cat((self.frames.flatten(1),jump_signal[:,None]),dim=-1)
+
+    def advance(self, root, position, velocity, root_acceleration_world,
+                obstacle_relative_x, last_action, jump_signal):
+        frame=self.make_frame(root,position,velocity,root_acceleration_world,obstacle_relative_x,last_action)
+        return self.advance_frame(frame,jump_signal)
 
     def privileged(self, actor_observation, root, position, velocity, illegal_contact):
         """Original 106-D critic order on a virtual upright root frame.
