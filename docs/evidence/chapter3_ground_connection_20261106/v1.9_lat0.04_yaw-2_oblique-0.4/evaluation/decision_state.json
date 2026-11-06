@@ -1,0 +1,21 @@
+{
+  "schema": "ground_connection_exit_v1",
+  "origin_id": "v1.9_lat0.04_yaw-2_oblique-0.4",
+  "state": {
+    "speed": 1.9431483745574951,
+    "roll": 0.0029420852661132812,
+    "roll_rate": -0.017922714352607727,
+    "cross_track": 0.017103059217333794,
+    "heading_error": -0.018382804468274117,
+    "steer": 0.005304299294948578,
+    "steer_rate": -0.03537791967391968,
+    "previous_speed_reference": 1.9436932802200317,
+    "lateral_velocity_heading_frame": -0.0010811351239681244,
+    "world_yaw_rate": 0.021468039602041245,
+    "previous_alpha": 0.5,
+    "previous_alpha_duration_s": 1.54
+  },
+  "history_scope": "Same constant alpha since source episode start; saved warm-state before episode excluded",
+  "snapshot": "exit_snapshot.pt",
+  "future_outcomes_excluded": true
+}

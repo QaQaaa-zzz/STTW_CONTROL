@@ -1,0 +1,239 @@
+{
+  "status": "completed_slice",
+  "start": 1,
+  "count": 23,
+  "started_unix": 1793987886.4137568,
+  "finished_unix": 1794006727.936737,
+  "completed": [
+    {
+      "origin_id": "v1.9_lat-0.04_yaw-2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique0.4/evaluation",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 644.4208018879981,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v1.9_lat-0.04_yaw2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw2_oblique-0.4/evaluation",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 692.3451783429991,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v1.9_lat-0.04_yaw2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw2_oblique0.4/evaluation",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 803.2707006550008,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v1.9_lat0.04_yaw-2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw-2_oblique-0.4/evaluation",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 839.9336773659998,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v1.9_lat0.04_yaw-2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw-2_oblique0.4/evaluation",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 840.1071124789996,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v1.9_lat0.04_yaw2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw2_oblique-0.4/evaluation",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 808.5404469579989,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v1.9_lat0.04_yaw2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw2_oblique0.4/evaluation",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 686.0773863739996,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.1_lat-0.04_yaw-2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat-0.04_yaw-2_oblique-0.4/evaluation",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 709.5167658400023,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.1_lat-0.04_yaw-2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat-0.04_yaw-2_oblique0.4/evaluation",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 897.692494566003,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.1_lat-0.04_yaw2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat-0.04_yaw2_oblique-0.4/evaluation",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 837.0692489079956,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.1_lat-0.04_yaw2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat-0.04_yaw2_oblique0.4/evaluation",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 824.9926248959964,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.1_lat0.04_yaw-2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat0.04_yaw-2_oblique-0.4/evaluation",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 966.5976714950011,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.1_lat0.04_yaw-2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat0.04_yaw-2_oblique0.4/evaluation",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 863.6915481269971,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.1_lat0.04_yaw2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat0.04_yaw2_oblique-0.4/evaluation",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 805.4517383950006,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.1_lat0.04_yaw2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.1_lat0.04_yaw2_oblique0.4/evaluation",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 836.8672687600047,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.3_lat-0.04_yaw-2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw-2_oblique-0.4/evaluation",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 693.820749475999,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.3_lat-0.04_yaw-2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw-2_oblique0.4/evaluation",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 849.7378190149975,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.3_lat-0.04_yaw2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw2_oblique-0.4/evaluation",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 838.3635362700006,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.3_lat-0.04_yaw2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw2_oblique0.4/evaluation",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 858.6000212190047,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.3_lat0.04_yaw-2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw-2_oblique-0.4/evaluation",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 821.1709003050055,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.3_lat0.04_yaw-2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw-2_oblique0.4/evaluation",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 805.7443724480036,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.3_lat0.04_yaw2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw2_oblique-0.4/evaluation",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 839.6087278739942,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.3_lat0.04_yaw2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw2_oblique0.4/evaluation",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 849.7980110749995,
+        "optimizer_updates": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,1105 @@
+{
+  "spec": {
+    "settings": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw2_oblique0.4/settings.json",
+    "source_bundle": "runs/h75_selected_local300_flat/bundle",
+    "source_route": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw2_oblique0.4/source.npz",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/terrain_positive",
+    "source_alpha": 0.5,
+    "source_speed_m_s": 1.9,
+    "source_seconds": 6.0,
+    "source_exit_progress_m": 3.1,
+    "seed": 28,
+    "origin_id": "v1.9_lat0.04_yaw2_oblique0.4",
+    "tasks": [
+      {
+        "task_id": "left90_R2_connection_hold_v1_L1.0_W2.0",
+        "route": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw2_oblique0.4/left90_R2.npz",
+        "seconds": 10.0
+      },
+      {
+        "task_id": "right90_R2_connection_hold_v1_L1.0_W2.0",
+        "route": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw2_oblique0.4/right90_R2.npz",
+        "seconds": 10.0
+      }
+    ],
+    "candidates": [
+      {
+        "candidate_id": "v1.5_a0.0",
+        "speed_m_s": 1.5,
+        "alpha": 0.0
+      },
+      {
+        "candidate_id": "v1.5_a0.5",
+        "speed_m_s": 1.5,
+        "alpha": 0.5
+      },
+      {
+        "candidate_id": "v1.5_a1.0",
+        "speed_m_s": 1.5,
+        "alpha": 1.0
+      },
+      {
+        "candidate_id": "v2.3_a0.0",
+        "speed_m_s": 2.3,
+        "alpha": 0.0
+      },
+      {
+        "candidate_id": "v2.3_a0.5",
+        "speed_m_s": 2.3,
+        "alpha": 0.5
+      },
+      {
+        "candidate_id": "v2.3_a1.0",
+        "speed_m_s": 2.3,
+        "alpha": 1.0
+      }
+    ],
+    "replanning": {
+      "period_s": 0.5,
+      "departure_m": 0.3,
+      "arrival_radius_m": 2.0,
+      "radius_m": 1.8,
+      "enabled": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "goal_after_turn_m": 5.0,
+      "arrival_reference": "original_route"
+    },
+    "corridor_half_width_m": 2.0,
+    "role": "paired nominal DEV; six candidates from accessible closed-loop snapshot, hidden PhysX cache excluded",
+    "completion_rule": "goal reached and survive entire 10-second window and remain within declared original-path corridor",
+    "maximum_physics_lane_steps": 780000,
+    "optimizer_updates": 0,
+    "initial_offset": {
+      "lateral_m": 0.04,
+      "yaw_deg": 2.0,
+      "source_state": "runs/h75_selected_local300_flat/initial_state.npz",
+      "scope": "Initial upstream pose offset; rotate world velocities consistently, preserve joints and controller warm state. Requested upstream speed is not assumed equal to measured obstacle-entry speed."
+    },
+    "protocol_id": "ground_connection_hold_v1",
+    "connection_end_progress_m": 1.0,
+    "common_task_reference": {
+      "speed_m_s": 2.3,
+      "alpha": 0.5
+    }
+  },
+  "settings": {
+    "asset": "runs/isaac_urdf_drive/vehicle.urdf",
+    "controller_config": "runs/isaac_signals_parity/dynamic.json",
+    "lower_actor": "runs/local300_torch_portable_parity/actor.npz",
+    "lower_sha256": "517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125",
+    "plant_options": {
+      "wheel_collision": "sdf",
+      "friction_offset_threshold": 0.0,
+      "compliant_wheels": {
+        "frontwheel": {
+          "stiffness": 5324.4083452801915,
+          "damping": 112.38579318769304
+        },
+        "rearwheel": {
+          "stiffness": 7833.38122453075,
+          "damping": 173.11038721684574
+        }
+      },
+      "env_spacing": 80.0,
+      "track_wheel_contacts": false,
+      "gpu_pair_capacities": [
+        4194304,
+        4194304,
+        16777216
+      ]
+    },
+    "initial_state": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw2_oblique0.4/initial_state.npz",
+    "selected_lower": "learning/configs/isaaclab_selected_lower.json",
+    "role": "Frozen original H75 u77 and user-selected orange Local300; offroad simulation",
+    "num_envs": 12,
+    "alphas": [
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5
+    ],
+    "zero_middle": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "evaluation_role": "Nominal DEV, five fixed alpha plus matched Zero; all lanes use required simple replanning",
+    "case_labels": [
+      "alpha0",
+      "alpha025",
+      "alpha05",
+      "alpha075",
+      "alpha1",
+      "Zero"
+    ],
+    "auto_reset_horizon": false,
+    "replanning": {
+      "original_route": "runs/h75_selected_local300_flat/bundle/route.npz",
+      "period_s": 0.5,
+      "departure_m": 0.3,
+      "arrival_radius_m": 2.0,
+      "radius_m": 1.8,
+      "enabled": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "goal_after_turn_m": 5.0
+    },
+    "user_speed_m_s": 1.9,
+    "trace_lanes": 12,
+    "terrains": {
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/terrain_positive"
+    },
+    "episode_s": 6.0,
+    "diagnostics": false,
+    "record_control_commands": true,
+    "record_body_poses": false
+  },
+  "plant": {
+    "wheel_profile_slices": 1,
+    "wheel_width_m": null,
+    "solver_iterations": [
+      4,
+      1
+    ],
+    "robot_contact_offset_m": 0.01,
+    "wheel_radius_m": 0.1,
+    "actuator_force_limits_Nm": null,
+    "gpu_pair_capacities": [
+      4194304,
+      4194304,
+      16777216
+    ],
+    "physics_dt_s": 0.0002,
+    "env_origins": [
+      [
+        120.0,
+        -80.0,
+        0.0
+      ],
+      [
+        120.0,
+        0.0,
+        0.0
+      ],
+      [
+        120.0,
+        80.0,
+        0.0
+      ],
+      [
+        40.0,
+        -80.0,
+        0.0
+      ],
+      [
+        40.0,
+        0.0,
+        0.0
+      ],
+      [
+        40.0,
+        80.0,
+        0.0
+      ],
+      [
+        -40.0,
+        -80.0,
+        0.0
+      ],
+      [
+        -40.0,
+        0.0,
+        0.0
+      ],
+      [
+        -40.0,
+        80.0,
+        0.0
+      ],
+      [
+        -120.0,
+        -80.0,
+        0.0
+      ],
+      [
+        -120.0,
+        0.0,
+        0.0
+      ],
+      [
+        -120.0,
+        80.0,
+        0.0
+      ]
+    ],
+    "env_spacing": 80.0,
+    "friction_offset_threshold": 0.0,
+    "wheel_collision": "sdf",
+    "external_forces_every_iteration": false,
+    "friction_correlation_distance": 0.02500000037252903,
+    "compliant_wheels": {
+      "frontwheel": {
+        "stiffness": 5324.4083452801915,
+        "damping": 112.38579318769304
+      },
+      "rearwheel": {
+        "stiffness": 7833.38122453075,
+        "damping": 173.11038721684574
+      }
+    },
+    "mesh_collision_on_geometry": false,
+    "collision_cooking": [
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/collisions/collision_mesh_0/World/mesh",
+        "points": 226,
+        "previous_hull_limit": null,
+        "hull_limit": null,
+        "approximation": "sdf"
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/collisions/collision_mesh_0/World/mesh",
+        "points": 226,
+        "previous_hull_limit": null,
+        "hull_limit": null,
+        "approximation": "sdf"
+      }
+    ],
+    "servo_mode": "explicit",
+    "device": "cuda:0",
+    "num_envs": 12,
+    "replicate_physics": true,
+    "terrain_asset_count": 1,
+    "masses": [
+      [
+        2.6709001064300537,
+        0.8334199786186218,
+        0.6005899906158447,
+        0.7195600271224976,
+        0.1373700052499771,
+        0.4723699986934662
+      ],
+      [
+        2.6709001064300537,
+        0.8334199786186218,
+        0.6005899906158447,
+        0.7195600271224976,
+        0.1373700052499771,
+        0.4723699986934662
+      ],
+      [
+        2.6709001064300537,
+        0.8334199786186218,
+        0.6005899906158447,
+        0.7195600271224976,
+        0.1373700052499771,
+        0.4723699986934662
+      ],
+      [
+        2.6709001064300537,
+        0.8334199786186218,
+        0.6005899906158447,
+        0.7195600271224976,
+        0.1373700052499771,
+        0.4723699986934662
+      ],
+      [
+        2.6709001064300537,
+        0.8334199786186218,
+        0.6005899906158447,
+        0.7195600271224976,
+        0.1373700052499771,
+        0.4723699986934662
+      ],
+      [
+        2.6709001064300537,
+        0.8334199786186218,
+        0.6005899906158447,
+        0.7195600271224976,
+        0.1373700052499771,
+        0.4723699986934662
+      ],
+      [
+        2.6709001064300537,
+        0.8334199786186218,
+        0.6005899906158447,
+        0.7195600271224976,
+        0.1373700052499771,
+        0.4723699986934662
+      ],
+      [
+        2.6709001064300537,
+        0.8334199786186218,
+        0.6005899906158447,
+        0.7195600271224976,
+        0.1373700052499771,
+        0.4723699986934662
+      ],
+      [
+        2.6709001064300537,
+        0.8334199786186218,
+        0.6005899906158447,
+        0.7195600271224976,
+        0.1373700052499771,
+        0.4723699986934662
+      ],
+      [
+        2.6709001064300537,
+        0.8334199786186218,
+        0.6005899906158447,
+        0.7195600271224976,
+        0.1373700052499771,
+        0.4723699986934662
+      ],
+      [
+        2.6709001064300537,
+        0.8334199786186218,
+        0.6005899906158447,
+        0.7195600271224976,
+        0.1373700052499771,
+        0.4723699986934662
+      ],
+      [
+        2.6709001064300537,
+        0.8334199786186218,
+        0.6005899906158447,
+        0.7195600271224976,
+        0.1373700052499771,
+        0.4723699986934662
+      ]
+    ],
+    "materials": [
+      [
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          -7833.38134765625
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          -5324.408203125
+        ]
+      ],
+      [
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          -7833.38134765625
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          -5324.408203125
+        ]
+      ],
+      [
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          -7833.38134765625
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          -5324.408203125
+        ]
+      ],
+      [
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          -7833.38134765625
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          -5324.408203125
+        ]
+      ],
+      [
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          -7833.38134765625
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          -5324.408203125
+        ]
+      ],
+      [
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          -7833.38134765625
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          -5324.408203125
+        ]
+      ],
+      [
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          -7833.38134765625
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          -5324.408203125
+        ]
+      ],
+      [
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          -7833.38134765625
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          -5324.408203125
+        ]
+      ],
+      [
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          -7833.38134765625
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          -5324.408203125
+        ]
+      ],
+      [
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          -7833.38134765625
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          -5324.408203125
+        ]
+      ],
+      [
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          -7833.38134765625
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          -5324.408203125
+        ]
+      ],
+      [
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          -7833.38134765625
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          -5324.408203125
+        ]
+      ]
+    ],
+    "contact_sensor_bodies": [
+      "chasis",
+      "rearsuspension",
+      "rearwheel",
+      "frontfork",
+      "frontsuspension",
+      "frontwheel"
+    ],
+    "mesh_filename_mapping": {
+      "ellipsoid_0.1_0.1_0.025.obj": "collision_mesh_0.obj"
+    },
+    "scope": "original meshes imported by Isaac Sim 5.1; contact representation may be recooked",
+    "wheel_contact_slop_m": {
+      "frontwheel": 0.0,
+      "rearwheel": 0.0
+    },
+    "runtime_inertial": {
+      "body_names": [
+        "chasis",
+        "rearsuspension",
+        "frontfork",
+        "rearwheel",
+        "frontsuspension",
+        "frontwheel"
+      ],
+      "coms": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.018743442371487617,
+          -0.005102558061480522,
+          0.1160850077867508,
+          0.9930492639541626
+        ],
+        [
+          -0.1104699969291687,
+          -0.0919639989733696,
+          0.0,
+          0.00382399745285511,
+          0.0017090631881728768,
+          0.3598096966743469,
+          0.9330163598060608
+        ],
+        [
+          0.015592999756336212,
+          -0.028725000098347664,
+          0.0,
+          0.0,
+          0.0,
+          0.004610791336745024,
+          0.99998939037323
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        [
+          0.0,
+          0.012835999950766563,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "inertias": [
+        [
+          0.0025768992491066456,
+          -0.0010382995242252946,
+          -6.738788215443492e-05,
+          -0.0010382995242252946,
+          0.006717398762702942,
+          -2.9357761377468705e-05,
+          -6.738788215443492e-05,
+          -2.9357761377468705e-05,
+          0.007323300465941429
+        ],
+        [
+          0.0009328912128694355,
+          -0.0005954418447799981,
+          4.1761268221307546e-07,
+          -0.0005954418447799981,
+          0.0010506021790206432,
+          3.2181469578063115e-07,
+          4.1761268221307546e-07,
+          3.2181469578063115e-07,
+          0.0015950994566082954
+        ],
+        [
+          0.0006527802906930447,
+          3.110809075224097e-06,
+          0.0,
+          3.110809075224097e-06,
+          0.00031547967228107154,
+          0.0,
+          0.0,
+          0.0,
+          0.00044825999066233635
+        ],
+        [
+          0.001142399967648089,
+          0.0,
+          0.0,
+          0.0,
+          0.0011425999691709876,
+          0.0,
+          0.0,
+          0.0,
+          0.0021738000214099884
+        ],
+        [
+          6.826099706813693e-05,
+          0.0,
+          0.0,
+          0.0,
+          6.156099698273465e-05,
+          0.0,
+          0.0,
+          0.0,
+          1.4166998880682513e-05
+        ],
+        [
+          0.0010677999816834927,
+          0.0,
+          0.0,
+          0.0,
+          0.0010676999809220433,
+          0.0,
+          0.0,
+          0.0,
+          0.002032000105828047
+        ]
+      ]
+    },
+    "collision_shapes": [
+      {
+        "path": "/World/Envs/Env_0/Robot/chasis/collisions/mesh_0/box",
+        "type": "Cube",
+        "contact_offset": 0.009999999776482582,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/rearsuspension/collisions/mesh_0/box",
+        "type": "Cube",
+        "contact_offset": 0.009999999776482582,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/collisions/collision_mesh_0/World/mesh",
+        "type": "Mesh",
+        "contact_offset": 0.009999999776482582,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontfork/collisions/mesh_0/box",
+        "type": "Cube",
+        "contact_offset": 0.009999999776482582,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontsuspension/collisions/mesh_0/box",
+        "type": "Cube",
+        "contact_offset": 0.009999999776482582,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/collisions/collision_mesh_0/World/mesh",
+        "type": "Mesh",
+        "contact_offset": 0.009999999776482582,
+        "rest_offset": 0.0
+      }
+    ],
+    "self_collision": {
+      "enabled": false,
+      "filtered_body_pairs": []
+    },
+    "terrain_layout": {
+      "mode": "external",
+      "clone_origins": [
+        [
+          120.0,
+          -80.0,
+          0.0
+        ],
+        [
+          120.0,
+          0.0,
+          0.0
+        ],
+        [
+          120.0,
+          80.0,
+          0.0
+        ],
+        [
+          40.0,
+          -80.0,
+          0.0
+        ],
+        [
+          40.0,
+          0.0,
+          0.0
+        ],
+        [
+          40.0,
+          80.0,
+          0.0
+        ],
+        [
+          -40.0,
+          -80.0,
+          0.0
+        ],
+        [
+          -40.0,
+          0.0,
+          0.0
+        ],
+        [
+          -40.0,
+          80.0,
+          0.0
+        ],
+        [
+          -120.0,
+          -80.0,
+          0.0
+        ],
+        [
+          -120.0,
+          0.0,
+          0.0
+        ],
+        [
+          -120.0,
+          80.0,
+          0.0
+        ]
+      ],
+      "template_offsets": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "filtering": "explicit collision groups"
+    },
+    "wheel_contact_tracking": {
+      "enabled": false,
+      "body_order": [
+        "frontwheel",
+        "rearwheel"
+      ],
+      "aggregation": "official ContactSensor mean contact position per body/filter; force_matrix_w per filter",
+      "sample_dt_s": 0.0002
+    }
+  },
+  "source_identity": {
+    "source_actor": {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+      "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+      "artifact": "actor.npz",
+      "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+      "conversion": "exact arrays, no optimization or architecture change"
+    },
+    "route_name": "left90_R2",
+    "world_anchor": [
+      7.8955950737,
+      -0.000246021285,
+      -6.4409869e-05
+    ],
+    "frame_scales": [
+      0.3,
+      1.5,
+      0.35,
+      3.0,
+      3.0,
+      2.0,
+      3.0,
+      3.0,
+      3.0,
+      0.35,
+      0.8,
+      0.45,
+      3.0,
+      0.35,
+      3.0,
+      60.0,
+      1.5,
+      10.0,
+      0.3,
+      0.3
+    ],
+    "files": {
+      "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+      "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+      "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+    }
+  },
+  "source_snapshot": null,
+  "parallel_tasks": true,
+  "lane_count": 12,
+  "role": "same exposed exit state paired DEV; not exact hidden PhysX cache replay"
+}

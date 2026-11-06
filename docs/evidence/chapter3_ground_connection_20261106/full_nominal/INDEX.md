@@ -1,0 +1,28 @@
+# 完整名义地面矩阵
+
+24 个独立上游根；各左右弯六候选，共 288 后缀。所有实际/原参考 XY 与原始轨迹如下。
+
+- [v1.9_lat-0.04_yaw-2_oblique-0.4](../v1.9_lat-0.04_yaw-2_oblique-0.4/evaluation/xy_candidates.png) — [逐条记录](../v1.9_lat-0.04_yaw-2_oblique-0.4/evaluation/records.jsonl)
+- [v1.9_lat-0.04_yaw-2_oblique0.4](../v1.9_lat-0.04_yaw-2_oblique0.4/evaluation/xy_candidates.png) — [逐条记录](../v1.9_lat-0.04_yaw-2_oblique0.4/evaluation/records.jsonl)
+- [v1.9_lat-0.04_yaw2_oblique-0.4](../v1.9_lat-0.04_yaw2_oblique-0.4/evaluation/xy_candidates.png) — [逐条记录](../v1.9_lat-0.04_yaw2_oblique-0.4/evaluation/records.jsonl)
+- [v1.9_lat-0.04_yaw2_oblique0.4](../v1.9_lat-0.04_yaw2_oblique0.4/evaluation/xy_candidates.png) — [逐条记录](../v1.9_lat-0.04_yaw2_oblique0.4/evaluation/records.jsonl)
+- [v1.9_lat0.04_yaw-2_oblique-0.4](../v1.9_lat0.04_yaw-2_oblique-0.4/evaluation/xy_candidates.png) — [逐条记录](../v1.9_lat0.04_yaw-2_oblique-0.4/evaluation/records.jsonl)
+- [v1.9_lat0.04_yaw-2_oblique0.4](../v1.9_lat0.04_yaw-2_oblique0.4/evaluation/xy_candidates.png) — [逐条记录](../v1.9_lat0.04_yaw-2_oblique0.4/evaluation/records.jsonl)
+- [v1.9_lat0.04_yaw2_oblique-0.4](../v1.9_lat0.04_yaw2_oblique-0.4/evaluation/xy_candidates.png) — [逐条记录](../v1.9_lat0.04_yaw2_oblique-0.4/evaluation/records.jsonl)
+- [v1.9_lat0.04_yaw2_oblique0.4](../v1.9_lat0.04_yaw2_oblique0.4/evaluation/xy_candidates.png) — [逐条记录](../v1.9_lat0.04_yaw2_oblique0.4/evaluation/records.jsonl)
+- [v2.1_lat-0.04_yaw-2_oblique-0.4](../v2.1_lat-0.04_yaw-2_oblique-0.4/evaluation/xy_candidates.png) — [逐条记录](../v2.1_lat-0.04_yaw-2_oblique-0.4/evaluation/records.jsonl)
+- [v2.1_lat-0.04_yaw-2_oblique0.4](../v2.1_lat-0.04_yaw-2_oblique0.4/evaluation/xy_candidates.png) — [逐条记录](../v2.1_lat-0.04_yaw-2_oblique0.4/evaluation/records.jsonl)
+- [v2.1_lat-0.04_yaw2_oblique-0.4](../v2.1_lat-0.04_yaw2_oblique-0.4/evaluation/xy_candidates.png) — [逐条记录](../v2.1_lat-0.04_yaw2_oblique-0.4/evaluation/records.jsonl)
+- [v2.1_lat-0.04_yaw2_oblique0.4](../v2.1_lat-0.04_yaw2_oblique0.4/evaluation/xy_candidates.png) — [逐条记录](../v2.1_lat-0.04_yaw2_oblique0.4/evaluation/records.jsonl)
+- [v2.1_lat0.04_yaw-2_oblique-0.4](../v2.1_lat0.04_yaw-2_oblique-0.4/evaluation/xy_candidates.png) — [逐条记录](../v2.1_lat0.04_yaw-2_oblique-0.4/evaluation/records.jsonl)
+- [v2.1_lat0.04_yaw-2_oblique0.4](../v2.1_lat0.04_yaw-2_oblique0.4/evaluation/xy_candidates.png) — [逐条记录](../v2.1_lat0.04_yaw-2_oblique0.4/evaluation/records.jsonl)
+- [v2.1_lat0.04_yaw2_oblique-0.4](../v2.1_lat0.04_yaw2_oblique-0.4/evaluation/xy_candidates.png) — [逐条记录](../v2.1_lat0.04_yaw2_oblique-0.4/evaluation/records.jsonl)
+- [v2.1_lat0.04_yaw2_oblique0.4](../v2.1_lat0.04_yaw2_oblique0.4/evaluation/xy_candidates.png) — [逐条记录](../v2.1_lat0.04_yaw2_oblique0.4/evaluation/records.jsonl)
+- [v2.3_lat-0.04_yaw-2_oblique-0.4](../v2.3_lat-0.04_yaw-2_oblique-0.4/evaluation/xy_candidates.png) — [逐条记录](../v2.3_lat-0.04_yaw-2_oblique-0.4/evaluation/records.jsonl)
+- [v2.3_lat-0.04_yaw-2_oblique0.4](../v2.3_lat-0.04_yaw-2_oblique0.4/evaluation/xy_candidates.png) — [逐条记录](../v2.3_lat-0.04_yaw-2_oblique0.4/evaluation/records.jsonl)
+- [v2.3_lat-0.04_yaw2_oblique-0.4](../v2.3_lat-0.04_yaw2_oblique-0.4/evaluation/xy_candidates.png) — [逐条记录](../v2.3_lat-0.04_yaw2_oblique-0.4/evaluation/records.jsonl)
+- [v2.3_lat-0.04_yaw2_oblique0.4](../v2.3_lat-0.04_yaw2_oblique0.4/evaluation/xy_candidates.png) — [逐条记录](../v2.3_lat-0.04_yaw2_oblique0.4/evaluation/records.jsonl)
+- [v2.3_lat0.04_yaw-2_oblique-0.4](../v2.3_lat0.04_yaw-2_oblique-0.4/evaluation/xy_candidates.png) — [逐条记录](../v2.3_lat0.04_yaw-2_oblique-0.4/evaluation/records.jsonl)
+- [v2.3_lat0.04_yaw-2_oblique0.4](../v2.3_lat0.04_yaw-2_oblique0.4/evaluation/xy_candidates.png) — [逐条记录](../v2.3_lat0.04_yaw-2_oblique0.4/evaluation/records.jsonl)
+- [v2.3_lat0.04_yaw2_oblique-0.4](../v2.3_lat0.04_yaw2_oblique-0.4/evaluation/xy_candidates.png) — [逐条记录](../v2.3_lat0.04_yaw2_oblique-0.4/evaluation/records.jsonl)
+- [v2.3_lat0.04_yaw2_oblique0.4](../v2.3_lat0.04_yaw2_oblique0.4/evaluation/xy_candidates.png) — [逐条记录](../v2.3_lat0.04_yaw2_oblique0.4/evaluation/records.jsonl)
