@@ -29,6 +29,7 @@ class IsaacPathRollout:
         self.auto_reset_horizon=settings.get('auto_reset_horizon',True)
         self.training_pulse=None
         self.initial_alpha=self.alpha.clone();self.switch=settings.get('alpha_switch')
+        self.preference_route=self.route if self.switch and self.switch.get('progress_frame')=='original_route' else None
         if self.switch is not None:
             self.switch_target=torch.tensor(self.switch['target_alpha'],device=self.device)
             self.switch_mode=torch.tensor([{'independent':0,'common':1,'steer_priority':2}[mode] for mode in self.switch['execution_modes']],device=self.device)
@@ -55,11 +56,17 @@ class IsaacPathRollout:
         m,pose,v=self.plant.observe();self.measurement=m
         if self.randomization is not None:self.randomization.reset(torch.arange(self.n,device=self.device))
         self.middle.reset(m,pose,v,raw,self.previous_reference,self.previous_command,self.controller)
+        self.preference_progress=self.middle.projection['progress'].clone()
 
     @torch.no_grad()
     def update_preference(self):
         if self.switch is not None:
-            event=self.alive&~self.switched&(self.middle.projection['progress']>=self.switch['progress_s_m'])
+            progress=self.middle.projection['progress']
+            if self.preference_route is not None:
+                _,pose,speed=self.plant.observe()
+                self.preference_progress=self.preference_route.project(pose[:,:2],self.preference_progress,speed.abs()*.02)['progress']
+                progress=self.preference_progress
+            event=self.alive&~self.switched&(progress>=self.switch['progress_s_m'])
             self.alpha.copy_(torch.where(event,self.switch_target,self.alpha))
             self.policy.execution_mode.copy_(torch.where(event,self.switch_mode,self.policy.execution_mode))
             self.switch_tick=torch.where(event,self.tick*4,self.switch_tick);self.switched|=event
