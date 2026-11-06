@@ -1,3 +1,30 @@
+## Tangent-heading closed-loop confirmation complete; STTW evidence figures supplemented
+
+`runs/h75_shared_switch_tangent/DECISION.md`: declared5-branch10s evaluation complete (250000physics,0optimizer). All5 arrive and remain active10s;11 plans contain0 LRL/RLR loops and span2.178–4.506m. Reward replay discrepancy5.93e-08. Adopt the existing PythonRobotics adapter with analytic tangent-heading candidates; retain original H75/Local300 and independent slew. The earlier10.480m loop is preserved in `h75_shared_switch`; no universal no-loop claim. No further planner scan or training.
+
+Saved-data chapter figures now include `runs/h75_terrain_speed_sweep/evaluation/PROGRESS.md`: ten terrain/speed conditions, all fivealpha plus matched Zero, progress-indexed true-speed/cross-track errors and `tradeoff_common_window.png`. Scatter uses the per-condition common active window (early Zero failure is not padded); full actual XY, rewards and failures remain in original RESULTS/METRICS. This supplements the existing fixed-route DEV data and does not relabel it as new-goal/replanning evaluation.
+
+STTW simulation evidence is substantially assembled; real-robot evidence and the later unified-model/capability/VLM chapter are still incomplete. See the current requirement map in METHODS_AND_RESULTS. No hardware run or later-chapter completion is claimed.
+
+## Latest task brief: evidence coverage and remaining scope
+
+This is a status map, not a declaration of whole-project completion. User decisions take precedence over suggested document parameters: five alpha levels, frozen orange Local300/original H75, no further training, required simple replanning, goals at least5m after bend end with2m arrival radius. The earlier objective's STTW-first ordering remains active. The newer four-module chapter plan supersedes the earlier chapter architecture, while both experimental variants may be retained.
+
+| Requirement | Current evidence | Interpretation / missing work |
+|---|---|---|
+| Fixed terrain preference, same initial state and matched Zero | `runs/h75_terrain_speed_sweep/evaluation/{RESULTS.md,METRICS.md,PROGRESS.md}`;10 terrain/speed conditions × five alpha + Zero | Nominal DEV, one initial state each; original fixed-route protocol. Includes negative Zero outcomes; not a robustness proof. |
+| Same-state alpha query | `runs/h75_common_state_channels/analysis/*/alpha*/same_state_alpha/{summary.json,queries.csv}` | Five queries per saved state; forward mappings, not independent closed-loop trajectories. |
+| Front/rear contact phases and channel effects | `runs/h75_common_state_channels/analysis/{RESULTS.md,CHANNEL_EFFECTS.md}` and `runs/h75_zero_correction_channels/analysis/{RESULTS.md,HOLD_ZERO.md}` | Hold and zero doses differ. Old official0.2ms contact-point records available; new5ms world-Fz is not terrain-normal load. Any claim about slope-normal loading still needs a correctly defined projection. |
+| Same-state bend switch, independent/common/steer-priority | `runs/h75_shared_switch/analysis/DECISION.md` | Complete; no demonstrated limiter gain. Original independent slew adopted. Shared export does not reproduce PhysX caches. |
+| Required goal replanning and post-bend goal | `runs/h75_lab_goal_replanning_final_goal/DECISION.md`; shared-switch new loop and geometry repair recorded in `runs/h75_shared_switch/analysis/DECISION.md` | Tangent-heading repair closed-loop confirmation in progress at `runs/h75_shared_switch_tangent`; old negative plans retained. |
+| STTW real-robot curves/video | No executed hardware evidence | Not complete; needs physical deployment preparation, operator and explicit hardware execution authorization. Simulation is not a substitute. |
+| Unified STTW/RB physical model and genuine handoff | No demonstrated unified-model transition | Not complete; imported Go2 results do not show this wheeled platform can execute the quadruped policy. Must resolve model and actuator compatibility before any claimed handoff. |
+| Six/36 ground and jump connection candidates; task-conditioned capability tool | Latest task architecture recorded; no complete matched candidate database | Not complete. Need actual reachable exits and complete stage-B outcomes, then held-out selection assessment; unsupported neighborhoods must remain unknown. |
+| Deterministic execution manager with validated forward bypass, asynchronous VLM | Current geometric replanning is only a building block | Not complete. No validated obstacle-aware bypass or semantic task program execution. Preserve hard boundaries separately from soft tracking corridor. |
+| Four integrated task-planning comparisons and ground hardware inspection | No integrated evidence | Not complete. Replanning remains required execution machinery; compare semantic/capability/update roles rather than treating it as optional basic control. |
+
+Do not pursue extra training or a new limiter to force a favorable third contribution. Next simulation work after the single repair confirmation is to assemble the existing STTW results, resolve genuinely missing log semantics/figures, and prepare the remaining interfaces without declaring hardware or the new chapter complete.
+
 ## Shared-state switch complete; small terminal-heading repair pending closed-loop confirmation
 
 `runs/h75_shared_switch/analysis/DECISION.md` contains actual XY, reward diagnostics and branch metrics. All5 branches reached the2m goal disk and completed10s. In the first0.5s after alpha1→0, independent/common/steer-priority differences are comparable to natural/restored submillimetre differences; steering-priority did not activate. Keep original independent slew. Keeping alpha1 reduces speed error and increases path error in this window; no universal ordering claim.

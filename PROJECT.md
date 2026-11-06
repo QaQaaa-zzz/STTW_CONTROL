@@ -1,3 +1,11 @@
+## Tangent-heading closed-loop confirmation complete; STTW evidence figures supplemented
+
+`runs/h75_shared_switch_tangent/DECISION.md`: declared5-branch10s evaluation complete (250000physics,0optimizer). All5 arrive and remain active10s;11 plans contain0 LRL/RLR loops and span2.178–4.506m. Reward replay discrepancy5.93e-08. Adopt the existing PythonRobotics adapter with analytic tangent-heading candidates; retain original H75/Local300 and independent slew. The earlier10.480m loop is preserved in `h75_shared_switch`; no universal no-loop claim. No further planner scan or training.
+
+Saved-data chapter figures now include `runs/h75_terrain_speed_sweep/evaluation/PROGRESS.md`: ten terrain/speed conditions, all fivealpha plus matched Zero, progress-indexed true-speed/cross-track errors and `tradeoff_common_window.png`. Scatter uses the per-condition common active window (early Zero failure is not padded); full actual XY, rewards and failures remain in original RESULTS/METRICS. This supplements the existing fixed-route DEV data and does not relabel it as new-goal/replanning evaluation.
+
+STTW simulation evidence is substantially assembled; real-robot evidence and the later unified-model/capability/VLM chapter are still incomplete. See the current requirement map in METHODS_AND_RESULTS. No hardware run or later-chapter completion is claimed.
+
 ## Shared-state switch complete; small terminal-heading repair pending closed-loop confirmation
 
 `runs/h75_shared_switch/analysis/DECISION.md` contains actual XY, reward diagnostics and branch metrics. All5 branches reached the2m goal disk and completed10s. In the first0.5s after alpha1→0, independent/common/steer-priority differences are comparable to natural/restored submillimetre differences; steering-priority did not activate. Keep original independent slew. Keeping alpha1 reduces speed error and increases path error in this window; no universal ordering claim.
