@@ -48,6 +48,24 @@ class ContinuousTask:
         self.events.append(event)
         return event
 
+    def revise_remaining(self, goals, reason):
+        """Apply a task-level reorder/reroute without inventing completed goals.
+
+        A planner may change remaining goal order and mapped route choices.
+        Physical reference replacement still requires choose() with current state.
+        """
+        remaining={g['goal_id'] for g in self.program['goals'] if g['goal_id'] not in self.completed}
+        ids=[g['goal_id'] for g in goals]
+        if len(ids)!=len(set(ids)) or set(ids)!=remaining or any(
+            not g['allowed_routes'] or any(r not in self.routes or self.routes[r]['goal_id']!=g['goal_id'] for r in g['allowed_routes']) for g in goals):
+            raise ValueError('Revision must preserve outstanding goals and use mapped routes to each goal')
+        done=[g for g in self.program['goals'] if g['goal_id'] in self.completed]
+        self.program={**self.program,'goals':done+goals}
+        event=dict(status='task_revised',reason=reason,completed=list(self.completed),
+                   remaining_goals=ids,active_reference=self.active)
+        self.events.append(event)
+        return event
+
     def observe_goal(self, goal_id, *, arrived, upright, within_allowed_region):
         """Executor supplies physical evidence; a plan or LLM cannot acknowledge it."""
         accepted=bool(self.active and goal_id==self.active['goal_id'] and arrived and upright and within_allowed_region)

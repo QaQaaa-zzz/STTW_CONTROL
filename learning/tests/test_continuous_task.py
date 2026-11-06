@@ -32,3 +32,28 @@ def test_blocked_route_is_not_recommended_from_old_success():
     assert event['status']=='revision_required'
     assert event['queries']==[]
     assert m.active is None
+
+
+def test_remaining_task_revision_preserves_progress_and_defers_reference_switch():
+    m=manager()
+    for goal in ('second','third'):
+        route=dict(m.routes['left_route'],route_id=goal+'_route',goal_id=goal)
+        m.routes[route['route_id']]=route
+        m.program['goals'].append(dict(goal_id=goal,allowed_routes=[route['route_id']]))
+    m.choose([0.],['left_route'])
+    m.observe_goal('checkpoint',arrived=True,upright=True,within_allowed_region=True)
+    old=m.choose([0.],['second_route'])['reference']
+    revision=m.revise_remaining(list(reversed(m.program['goals'][1:])),reason='remaining route order changed after disturbance')
+    assert revision['completed']==['checkpoint']
+    assert revision['remaining_goals']==['third','second']
+    assert m.active==old
+    new=m.choose([0.],['third_route'])['reference']
+    assert new['goal_id']=='third'
+    assert m.completed==['checkpoint']
+
+
+def test_revision_cannot_silently_drop_unfinished_task():
+    import pytest
+    m=manager()
+    with pytest.raises(ValueError):m.revise_remaining([],reason='unsupported route')
+    assert m.program['goals'][0]['goal_id']=='checkpoint'
