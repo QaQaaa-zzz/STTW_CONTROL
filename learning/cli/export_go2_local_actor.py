@@ -13,8 +13,23 @@ p.add_argument('--training-run',type=Path,required=True)
 p.add_argument('--checkpoint',type=Path,required=True)
 p.add_argument('--output',type=Path,required=True)
 p.add_argument('--h75-reference-bundle',type=Path,help='Export native H75 checkpoint into the existing fixed-route evaluation bundle')
+p.add_argument('--portable-local',action='store_true',help='Export Local300-shaped actor directly as CPU NPZ for existing Isaac ground evaluator')
 a=p.parse_args()
 a.output.mkdir(parents=True,exist_ok=False)
+if a.portable_local:
+    checkpoint=torch.load(a.checkpoint,map_location='cpu',weights_only=False)
+    state=checkpoint['model_state_dict'];arrays={}
+    for i,index in enumerate((0,2,4)):
+        arrays[f'Dense_{i}_kernel']=state[f'actor.{index}.weight'].numpy().T
+        arrays[f'Dense_{i}_bias']=state[f'actor.{index}.bias'].numpy()
+    np.savez(a.output/'actor.npz',**arrays)
+    identity=dict(path=str(a.output/'actor.npz'),sha256=hashlib.sha256((a.output/'actor.npz').read_bytes()).hexdigest(),
+        source_checkpoint=str(a.checkpoint.resolve()),source_sha256=hashlib.sha256(a.checkpoint.read_bytes()).hexdigest(),
+        training_run=str(a.training_run.resolve()),raw_upstream_iteration=checkpoint['iter'],infos=checkpoint.get('infos'),
+        actor_dim=210,hidden_sizes=[256,128],activation='elu',normalized_action='tanh logits',
+        physics_steps=0,optimizer_updates=0,role='unchanged Local300-shaped actor export; not task qualification')
+    (a.output/'identity.json').write_text(json.dumps(identity,indent=2))
+    print(json.dumps(identity,indent=2));raise SystemExit(0)
 if a.h75_reference_bundle:
     reference=a.h75_reference_bundle
     checkpoint=torch.load(a.checkpoint,map_location='cpu',weights_only=False)

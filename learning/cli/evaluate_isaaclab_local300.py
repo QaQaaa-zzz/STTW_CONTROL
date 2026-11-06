@@ -22,7 +22,7 @@ if a.training_run:
   checkpoint=torch.load(path,map_location=device,weights_only=False);model.load_state_dict(checkpoint['model_state_dict']);model.eval();models.append(model)
   if checkpoint.get('infos') and 'completed_updates' in checkpoint['infos']:updates=checkpoint['infos']['completed_updates']
   else:
-   label=int(path.stem.split('_')[-1]);updates=label if label==train['task']['updates'] else label+1
+   label=int(path.stem.split('_')[-1]);run_status=json.loads((a.training_run/'status.json').read_text());updates=label if run_status['stage']=='training_complete' and label==run_status['completed_updates'] else label+1
   identities.append(dict(checkpoint=str(path.resolve()),sha256=hashlib.sha256(path.read_bytes()).hexdigest(),completed_updates=updates,label=path.stem))
 controller_candidates=json.loads(a.controller_candidates.read_text()) if a.controller_candidates else []
 if controller_candidates:
@@ -37,17 +37,18 @@ if not warm_ticks and a.initial_state is None:p.error('--initial-state is requir
 if paired and models:p.error('paired_original cannot be combined with checkpoint/controller candidates')
 n=cases*(2 if paired else max(1,len(models)))
 plant=IsaacLabVectorPlant(s.get('asset','runs/isaac_urdf_drive/vehicle.urdf'),['plane'],[0]*n,a.output,**s.get('plant_options',{}))
+substeps=round(s['control_dt']/plant.physics_dt);radius=plant.wheel_radius_m
 tensor=lambda v:torch.as_tensor(v,dtype=torch.float32,device=device)
 if warm_ticks:
  plant.reset(speed=2.3)
- x=dict(physical_tick=warm_ticks,previous_reference=[2.3,0.],previous_command=[0.,23.])
+ x=dict(physical_tick=warm_ticks,previous_reference=[2.3,0.],previous_command=[0.,2.3/radius])
 else:
  x=np.load(a.initial_state)
  order=[list(x['joint_names']).index(k) for k in plant.joints]
  state={key:tensor(x[key]) for key in ('root_pose','root_velocity')}
  state.update({key:tensor(x[key][order]) for key in ('joint_position','joint_velocity')})
  plant.reset_idx(torch.arange(n,device=device),state=state)
-controller_config=json.loads(Path(s['controller_config']).read_text())
+controller_config=json.loads(Path(s['controller_config']).read_text());controller_config['wheel_radius_m']=radius
 if controller_candidates:
  for key in ('wc','wo','disturbance_filter'):
   controller_config[key]=tensor([c['parameters'][key] for c in controller_candidates]).repeat_interleave(cases)
@@ -72,10 +73,10 @@ for tick in range(-warm_ticks,round(s['seconds']/.005)):
  if tick<0:action=torch.zeros_like(action)
  elif paired:action[cases:]=0
  applied=action*scale
- row=torch.stack((m[:,5]*.1,m[:,2],m[:,3],m[:,0],m[:,1],raw[:,1]),dim=-1);output=controller.step(row,torch.full_like(alive,(int(x['physical_tick'])+tick)*.005>3.))
- steer=(output[:,0]+applied[:,0]).clamp(-3,3);steer=torch.maximum(torch.maximum(torch.full_like(steer,-3),(-.8-m[:,2])/.005),torch.minimum(torch.minimum(torch.full_like(steer,3),(.8-m[:,2])/.005),steer));command=torch.stack((steer,(raw[:,0]/.1+applied[:,1]).clamp(-60,60)),dim=-1)
- alive&=finite&(m[:,0].abs()<=.7);endpoint=plant.roots.clone();end_dofs=plant.dofs.clone();stop=torch.full((n,),25,device=device,dtype=torch.long);peak=m[:,0].abs()
- for substep in range(25):
+ row=torch.stack((m[:,5]*radius,m[:,2],m[:,3],m[:,0],m[:,1],raw[:,1]),dim=-1);output=controller.step(row,torch.full_like(alive,(int(x['physical_tick'])+tick)*.005>3.))
+ steer=(output[:,0]+applied[:,0]).clamp(-3,3);steer=torch.maximum(torch.maximum(torch.full_like(steer,-3),(-.8-m[:,2])/.005),torch.minimum(torch.minimum(torch.full_like(steer,3),(.8-m[:,2])/.005),steer));command=torch.stack((steer,(raw[:,0]/radius+applied[:,1]).clamp(-60,60)),dim=-1)
+ alive&=finite&(m[:,0].abs()<=.7);endpoint=plant.roots.clone();end_dofs=plant.dofs.clone();stop=torch.full((n,),substeps,device=device,dtype=torch.long);peak=m[:,0].abs()
+ for substep in range(substeps):
   contact=plant.step(torch.where(alive[:,None],command,0.));current_m,_,_=plant.observe();peak=torch.where(alive,torch.maximum(peak,current_m[:,0].abs()),peak);endpoint=torch.where(alive[:,None],plant.roots,endpoint);end_dofs=torch.where(alive[:,None,None],plant.dofs,end_dofs);hit=alive&(contact|(current_m[:,0].abs()>.7)|~torch.isfinite(current_m).all(-1)|~torch.isfinite(plant.roots).all(-1));stop=torch.where(hit,substep+1,stop);alive&=~hit
  post,position,speed=plant.signals.observe(endpoint,end_dofs[:,:,0],end_dofs[:,:,1]);position-=plant.origin;alive&=post[:,0].abs()<=.7;lower.finish(applied,wrap(position[:,2]-pose[:,2])/.005)
  record=dict(time=torch.full((n,),tick*.005,device=device),pose=position,measurement=post,peak_roll=peak,speed=speed,reference=raw,action=action,command=command,valid=valid,failed=valid&~alive,stop_tick=stop)
@@ -89,4 +90,4 @@ if models or paired:
  for i,identity in enumerate(identities):
   folder=a.output/identity['label'];folder.mkdir();np.savez_compressed(folder/'trajectory.npz',**{k:value[:,i*cases:(i+1)*cases] for k,value in data.items()});(folder/'identity.json').write_text(json.dumps(identity,indent=2))
 else:np.savez_compressed(a.output/'trajectory.npz',**data)
-(a.output/'status.json').write_text(json.dumps(dict(stage='complete',cases=s['cases'],survived=alive.cpu().tolist(),physical_lane_steps=(len(rows)+len(warm_rows))*n*25,optimizer_updates=0,elapsed_s=time.time()-start),indent=2));app.close(wait_for_replicator=False,skip_cleanup=True)
+(a.output/'status.json').write_text(json.dumps(dict(stage='complete',cases=s['cases'],survived=alive.cpu().tolist(),physical_lane_steps=(len(rows)+len(warm_rows))*n*substeps,optimizer_updates=0,elapsed_s=time.time()-start),indent=2));app.close(wait_for_replicator=False,skip_cleanup=True)
