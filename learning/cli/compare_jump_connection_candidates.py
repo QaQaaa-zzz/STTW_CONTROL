@@ -7,15 +7,17 @@ from pathlib import Path
 p = argparse.ArgumentParser()
 p.add_argument('--manifest', type=Path, required=True)
 p.add_argument('--output', type=Path, required=True)
+p.add_argument('--summary', type=Path, help='Freeze comparison to evaluated rows in an existing collection summary')
 p.add_argument('--anchor-speed', type=float, default=2.0)
 p.add_argument('--anchor-alpha', type=float, default=0.5)
 a = p.parse_args()
 m = json.loads(a.manifest.read_text())
+frozen = {r['case_id']: r for r in json.loads(a.summary.read_text())['rows'] if r['status'] == 'evaluated'} if a.summary else None
 groups = defaultdict(list)
 for case in m['cases']:
     config = json.loads(Path(case['config']).read_text())
     result_path = Path(config['output']) / 'chain_summary.json'
-    result = json.loads(result_path.read_text()) if result_path.exists() else None
+    result = frozen.get(case['case_id']) if frozen is not None else (json.loads(result_path.read_text()) if result_path.exists() else None)
     groups[(config['origin_id'], case['distance_m'])].append(dict(
         case_id=case['case_id'], speed=case['speed_m_s'], alpha=case['alpha'], result=result))
 
@@ -61,6 +63,7 @@ for name, chosen in selections.items():
         gained_success_tasks=sum(chosen[k]['Y'] and not anchor[k]['Y'] for k in chosen),
         lost_success_tasks=sum(anchor[k]['Y'] and not chosen[k]['Y'] for k in chosen))
 output = dict(role=m['role'], interpretation='Descriptive DEV coverage and hindsight oracle upper bounds; not learned or deployed selection. Distances share upstream roots. Incomplete groups remain pending, not failures.',
+              collection_summary=str(a.summary) if a.summary else None,
               declared_origins=len({r for r, _ in groups}), declared_tasks=len(groups),
               complete_matched_tasks=sum(r['matched_group_complete'] for r in records),
               anchor=dict(speed=a.anchor_speed, alpha=a.anchor_alpha), scores=scores, groups=records)
