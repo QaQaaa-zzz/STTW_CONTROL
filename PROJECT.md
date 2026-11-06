@@ -1,3 +1,9 @@
+## 接续首来源定位为轻扰动基线
+
+进一步读取真实source_trajectory：264个lower步，A全程peak roll仅0.1782°（1.15秒），速度2.171–2.643m/s，退出时侧倾更小。source_state_assessment.json保存实际统计。因此首组斜向凸起不能支撑“强残余侧倾状态决定后续方向”的结论；它保留为轻扰动基线。完整左右候选差异仍有价值，但不能把alpha自身差异冒充A动态影响。后续能力采集应补不同实际出口状态，而不是反复拟合这一个状态或增加重复名义seed假装独立数据。
+
+本轮实际确认续训pid23908 live，接续右弯pid31013 live elapsed5:16并已有重规划/forward-exit文件，未出现终态/完整trajectory，因此不重启、不把中间路径当最终结果。等待既定追加150与右弯完成，不追加GPU探针。
+
 ## 同车dt005四模型接管有效完成，仍未跳上高台
 
 runs/phase_u150_handoff_comparison/xy_jump.png已查看，真实H75+Local300锁摆接近、.74秒同实例释放、4候选/3200lane物理步/0optimizer，采样19.701秒。runtime.log无PhysX Error/Traceback；与此前无效同车run分开。source1.495秒45.03°失败/rootpeak.40681，RB1.620秒45.23°失败/.38068，best88 1.710秒46.24°失败/.47159。last150持续4秒未触及45度线，但峰值41.85°、最终速度.06273m/s、末端rootx3.25587；rootx最大3.30233（平台前缘3.6），未完成过台/落地任务，不能称跳跃成功或稳定。
