@@ -1,0 +1,522 @@
+{
+  "role": "Six representative DEV roots; all fixed C6 baselines, no new physics",
+  "rows": [
+    {
+      "origin_id": "rb_upstream_offset_01",
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "complete": true,
+      "T_s": 14.899999618530273,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v2.0_a0.5.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v2.0_a0.5/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_upstream_offset_01",
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "complete": false,
+      "T_s": null,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v1.8_a0.0.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v1.8_a0.0/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_upstream_offset_01",
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "complete": true,
+      "T_s": 15.100000381469727,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v1.8_a0.5.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v1.8_a0.5/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_upstream_offset_01",
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "complete": false,
+      "T_s": null,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v1.8_a1.0.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v1.8_a1.0/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_upstream_offset_01",
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "complete": true,
+      "T_s": 16.100000381469727,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v2.0_a0.0.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v2.0_a0.0/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_upstream_offset_01",
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "complete": false,
+      "T_s": null,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v2.0_a1.0.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v2.0_a1.0/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_upstream_offset_03",
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "complete": true,
+      "T_s": 15.0600004196167,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_03_L9.6_v2.0_a0.5.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_03_L9.6_v2.0_a0.5/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_upstream_offset_03",
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "complete": true,
+      "T_s": 16.940000534057617,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_03_L9.6_v1.8_a0.0.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_03_L9.6_v1.8_a0.0/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_upstream_offset_03",
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "complete": true,
+      "T_s": 16.600000381469727,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_03_L9.6_v1.8_a0.5.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_03_L9.6_v1.8_a0.5/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_upstream_offset_03",
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "complete": true,
+      "T_s": 15.420000076293945,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_03_L9.6_v1.8_a1.0.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_03_L9.6_v1.8_a1.0/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_upstream_offset_03",
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "complete": true,
+      "T_s": 14.699999809265137,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_03_L9.6_v2.0_a0.0.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_03_L9.6_v2.0_a0.0/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_upstream_offset_03",
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "complete": false,
+      "T_s": null,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_03_L9.6_v2.0_a1.0.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_03_L9.6_v2.0_a1.0/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_upstream_offset_06",
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "complete": true,
+      "T_s": 14.859999656677246,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_06_L9.6_v2.0_a0.5.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_06_L9.6_v2.0_a0.5/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_upstream_offset_06",
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "complete": false,
+      "T_s": null,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_06_L9.6_v1.8_a0.0.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_06_L9.6_v1.8_a0.0/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_upstream_offset_06",
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "complete": true,
+      "T_s": 15.0,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_06_L9.6_v1.8_a0.5.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_06_L9.6_v1.8_a0.5/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_upstream_offset_06",
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "complete": true,
+      "T_s": 15.5600004196167,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_06_L9.6_v1.8_a1.0.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_06_L9.6_v1.8_a1.0/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_upstream_offset_06",
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "complete": false,
+      "T_s": null,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_06_L9.6_v2.0_a0.0.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_06_L9.6_v2.0_a0.0/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_upstream_offset_06",
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "complete": false,
+      "T_s": null,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_06_L9.6_v2.0_a1.0.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_06_L9.6_v2.0_a1.0/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "complete": true,
+      "T_s": 16.360000610351562,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L9.6_v2.0_a0.5.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L9.6_v2.0_a0.5/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "complete": true,
+      "T_s": 15.4399995803833,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L9.6_v1.8_a0.0.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L9.6_v1.8_a0.0/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "complete": true,
+      "T_s": 15.279999732971191,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L9.6_v1.8_a0.5.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L9.6_v1.8_a0.5/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "complete": false,
+      "T_s": null,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L9.6_v1.8_a1.0.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L9.6_v1.8_a1.0/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "complete": false,
+      "T_s": null,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L9.6_v2.0_a0.0.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L9.6_v2.0_a0.0/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "complete": true,
+      "T_s": 14.880000114440918,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L9.6_v2.0_a1.0.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L9.6_v2.0_a1.0/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root000",
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "complete": false,
+      "T_s": null,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root000_L9.6_v2.0_a0.5.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root000_L9.6_v2.0_a0.5/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root000",
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "complete": false,
+      "T_s": null,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root000_L9.6_v1.8_a0.0.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root000_L9.6_v1.8_a0.0/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root000",
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "complete": true,
+      "T_s": 15.460000038146973,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root000_L9.6_v1.8_a0.5.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root000_L9.6_v1.8_a0.5/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root000",
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "complete": true,
+      "T_s": 15.899999618530273,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root000_L9.6_v1.8_a1.0.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root000_L9.6_v1.8_a1.0/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root000",
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "complete": true,
+      "T_s": 16.15999984741211,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root000_L9.6_v2.0_a0.0.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root000_L9.6_v2.0_a0.0/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root000",
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "complete": false,
+      "T_s": null,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root000_L9.6_v2.0_a1.0.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root000_L9.6_v2.0_a1.0/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root002",
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "complete": true,
+      "T_s": 15.479999542236328,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root002_L9.6_v2.0_a0.5.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root002_L9.6_v2.0_a0.5/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root002",
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "complete": false,
+      "T_s": null,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root002_L9.6_v1.8_a0.0.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root002_L9.6_v1.8_a0.0/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root002",
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "complete": true,
+      "T_s": 15.180000305175781,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root002_L9.6_v1.8_a0.5.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root002_L9.6_v1.8_a0.5/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root002",
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "complete": true,
+      "T_s": 15.520000457763672,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root002_L9.6_v1.8_a1.0.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root002_L9.6_v1.8_a1.0/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root002",
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "complete": true,
+      "T_s": 15.819999694824219,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root002_L9.6_v2.0_a0.0.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root002_L9.6_v2.0_a0.0/chain_summary.json"
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root002",
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "complete": false,
+      "T_s": null,
+      "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root002_L9.6_v2.0_a1.0.json",
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/rb_connection_seed20261106_root002_L9.6_v2.0_a1.0/chain_summary.json"
+    }
+  ],
+  "fixed_candidates": [
+    {
+      "candidate": [
+        1.8,
+        0.0
+      ],
+      "successes": 2,
+      "roots": 6,
+      "successful_mean_time_s": 16.19000005722046
+    },
+    {
+      "candidate": [
+        1.8,
+        0.5
+      ],
+      "successes": 6,
+      "roots": 6,
+      "successful_mean_time_s": 15.4366668065389
+    },
+    {
+      "candidate": [
+        1.8,
+        1.0
+      ],
+      "successes": 4,
+      "roots": 6,
+      "successful_mean_time_s": 15.600000143051147
+    },
+    {
+      "candidate": [
+        2.0,
+        0.0
+      ],
+      "successes": 4,
+      "roots": 6,
+      "successful_mean_time_s": 15.694999933242798
+    },
+    {
+      "candidate": [
+        2.0,
+        0.5
+      ],
+      "successes": 5,
+      "roots": 6,
+      "successful_mean_time_s": 15.331999969482421
+    },
+    {
+      "candidate": [
+        2.0,
+        1.0
+      ],
+      "successes": 1,
+      "roots": 6,
+      "successful_mean_time_s": 14.880000114440918
+    }
+  ],
+  "oracle_viable_origins": 6,
+  "paired_best_fixed_vs_oracle": [
+    {
+      "origin_id": "rb_connection_seed20261106_root000",
+      "fixed_time_s": 15.460000038146973,
+      "oracle_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "oracle_time_s": 15.460000038146973,
+      "oracle_time_saved_s": 0.0
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root002",
+      "fixed_time_s": 15.180000305175781,
+      "oracle_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "oracle_time_s": 15.180000305175781,
+      "oracle_time_saved_s": 0.0
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "fixed_time_s": 15.279999732971191,
+      "oracle_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "oracle_time_s": 14.880000114440918,
+      "oracle_time_saved_s": 0.39999961853027344
+    },
+    {
+      "origin_id": "rb_upstream_offset_01",
+      "fixed_time_s": 15.100000381469727,
+      "oracle_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "oracle_time_s": 14.899999618530273,
+      "oracle_time_saved_s": 0.20000076293945312
+    },
+    {
+      "origin_id": "rb_upstream_offset_03",
+      "fixed_time_s": 16.600000381469727,
+      "oracle_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "oracle_time_s": 14.699999809265137,
+      "oracle_time_saved_s": 1.9000005722045898
+    },
+    {
+      "origin_id": "rb_upstream_offset_06",
+      "fixed_time_s": 15.0,
+      "oracle_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "oracle_time_s": 14.859999656677246,
+      "oracle_time_saved_s": 0.1400003433227539
+    }
+  ],
+  "mean_oracle_time_saved_s": 0.4400002161661784,
+  "limits": "All six deliberately chosen representative DEV roots already have a successful hold. No additional viable root can be claimed from sequencing on this set. Fixed/oracle choices use these observed outcomes; independent TEST remains untouched."
+}
