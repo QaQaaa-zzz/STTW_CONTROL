@@ -57,6 +57,12 @@ else:
         os.sync();os._exit(0)
     snapshot=env.capture_connection_state(0);torch.save(snapshot,a.output/'exit_snapshot.pt')
     m,pose,v=plant.observe();feature=[float(v[0]),float(m[0,0]),float(m[0,1]),float(env.middle.projection['cross_track'][0]),float(wrap(env.middle.projection['heading'][0]-pose[0,2])),float(m[0,2]),float(m[0,3]),float(env.previous_reference[0,0])]
+# Decision-time inputs only; retain legacy eight-feature order for its kernel baseline.
+m,pose,v=plant.observe();root=plant.roots[0];yaw=pose[0,2]
+feature_names=['speed','roll','roll_rate','cross_track','heading_error','steer','steer_rate','previous_speed_reference']
+state_named=dict(zip(feature_names,feature))
+state_named.update(lateral_velocity_heading_frame=float(-torch.sin(yaw)*root[7]+torch.cos(yaw)*root[8]),world_yaw_rate=float(root[12]),previous_alpha=float(env.alpha[0]),previous_alpha_duration_s=snapshot['rollout_tick']*.02)
+(a.output/'decision_state.json').write_text(json.dumps(dict(schema='ground_connection_exit_v1',origin_id=spec['origin_id'],state=state_named,history_scope='Same constant alpha since source episode start; saved warm-state before episode excluded',snapshot='exit_snapshot.pt',future_outcomes_excluded=True),indent=2)+'\n')
 if a.source_only:
     (a.output/'status.json').write_text(json.dumps(dict(status='source_complete',origin_id=spec['origin_id'],reached_decision=True,state=feature,elapsed_s=time.monotonic()-start,optimizer_updates=0),indent=2))
     os.sync();os._exit(0)
@@ -114,7 +120,7 @@ for task in spec['tasks']:
     for i,candidate in enumerate(candidates):
         valid=trace[:,i,6]>0;path_errors=errors[valid,i]
         completed=bool(env.alive[i]) and (common is None or bool(entered_b[i])) and np.isfinite(arrivals[i]) and bool((path_errors<=spec['corridor_half_width_m']).all())
-        records.append(dict(protocol_id=spec.get('protocol_id','legacy_full_suffix'),b_entry=next((e for e in entry_events if e['lane']==i),None),common_task_reference=common,origin_id=spec['origin_id'],snapshot_id=snapshot_id,task_id=task['task_id'],skill_id=skill_id,candidate_id=candidate['candidate_id'],state=feature,complete=int(completed),success_cost=float(arrivals[i]) if completed else None,path_rmse_m=float(np.sqrt(np.mean(path_errors**2))) if len(path_errors) else None,observed_lower_steps=int(valid.sum()),physical_or_controller_failure=not bool(env.alive[i]),trace=str((folder/'trajectory.npz').resolve()),snapshot=str((a.output/'exit_snapshot.pt').resolve())))
+        records.append(dict(protocol_id=spec.get('protocol_id','legacy_full_suffix'),b_entry=next((e for e in entry_events if e['lane']==i),None),common_task_reference=common,origin_id=spec['origin_id'],snapshot_id=snapshot_id,task_id=task['task_id'],skill_id=skill_id,candidate_id=candidate['candidate_id'],state=feature,state_named=state_named,geometry=dict(connection_length_m=spec.get('connection_end_progress_m'),corridor_half_width_m=spec['corridor_half_width_m'],route=task['route']),complete=int(completed),success_cost=float(arrivals[i]) if completed else None,path_rmse_m=float(np.sqrt(np.mean(path_errors**2))) if len(path_errors) else None,observed_lower_steps=int(valid.sum()),physical_or_controller_failure=not bool(env.alive[i]),trace=str((folder/'trajectory.npz').resolve()),snapshot=str((a.output/'exit_snapshot.pt').resolve())))
     if decision is not None and decision['status']=='reference_selected':
         selected=next(r for r in records if r['task_id']==task['task_id'] and r['candidate_id']==decision['reference']['candidate_id'])
         lane=next(i for i,c in enumerate(candidates) if c['candidate_id']==selected['candidate_id'])

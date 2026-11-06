@@ -6,8 +6,24 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-p=argparse.ArgumentParser(description=__doc__);p.add_argument('--run',type=Path,required=True);p.add_argument('--tasks',nargs='+');a=p.parse_args()
+p=argparse.ArgumentParser(description=__doc__);p.add_argument('--run',type=Path,required=True);p.add_argument('--tasks',nargs='+');p.add_argument('--source-only',action='store_true');a=p.parse_args()
 protocol=json.loads((a.run/'protocol.json').read_text());spec=protocol['spec'];physics_dt=protocol['settings']['plant_options'].get('physics_dt',.0002);tasks=spec['tasks'];candidates=spec['candidates']
+if a.source_only:
+    data=np.load(a.run/'source_trajectory.npz');trace=data['trace'];trace=trace.reshape(-1,trace.shape[-2],trace.shape[-1])[:,0]
+    valid=trace[:,6]>0;tr=trace[valid];t=np.flatnonzero(valid)*.005+tr[:,7]*physics_dt
+    route=np.load(spec['source_route']);fig,axes=plt.subplots(1,3,figsize=(15,4),layout='constrained')
+    axes[0].plot(route['xy'][:,0],route['xy'][:,1],':',color='gray',label='Original source route')
+    axes[0].plot(tr[:,0],tr[:,1],label='Actual lane 0');axes[0].plot(*tr[-1,:2],'x',color='black')
+    lo=tr[:,:2].min(0)-.2;hi=tr[:,:2].max(0)+.2
+    axes[0].set(xlim=(lo[0],hi[0]),ylim=(lo[1],hi[1]),xlabel='World x (m)',ylabel='World y (m)');axes[0].set_aspect('equal',adjustable='box')
+    axes[1].plot(t,tr[:,2],label='True forward speed');axes[1].plot(t,tr[:,10],label='Wheel-axis speed estimate')
+    axes[1].axhline(spec['source_speed_m_s'],ls=':',color='black',label='Requested speed');axes[1].set(xlabel='Time (s)',ylabel='Speed (m/s)')
+    axes[2].plot(t,tr[:,3],label='Signed cross-track');axes[2].set(xlabel='Time (s)',ylabel='Cross-track (m)')
+    for ax in axes:ax.grid(alpha=.2);ax.legend(fontsize=8)
+    status=json.loads((a.run/'status.json').read_text());fig.suptitle(f"{spec['origin_id']} | {status['status']} | one upstream root, lane 0")
+    fig.savefig(a.run/'xy_source.png',dpi=150)
+    (a.run/'source_summary.json').write_text(json.dumps(dict(origin_id=spec['origin_id'],status=status['status'],duration_s=float(t[-1]),request_speed_m_s=spec['source_speed_m_s'],exit_or_terminal_speed_m_s=float(tr[-1,2]),max_cross_track_m=float(abs(tr[:,3]).max()),peak_roll_deg=float(np.rad2deg(tr[:,4].max())),role='Source reachability only; not downstream task completion'),indent=2)+'\n')
+    raise SystemExit
 records=[json.loads(line) for line in (a.run/'records.jsonl').read_text().splitlines() if line.strip()]
 traces={r['task_id']:r['trace'] for r in records}
 if a.tasks:tasks=[t for t in tasks if t['task_id'] in a.tasks]
