@@ -12,6 +12,7 @@ from sttw_control.torch_controller import TorchController
 cfg=json.loads(Path('runs/isaac_signals_parity/dynamic.json').read_text())
 options=json.loads(Path('learning/configs/isaaclab_h75_offroad_selected.json').read_text())['plant_options']
 spec=json.loads(a.config.read_text()) if a.config else dict(duration_s=3.,warmup_s=3.,return_s=3.,speed_m_s=2.,steer_slew_rad_s=.8,cases=[dict(name='ecbc',steer_rad=0.,local300=False)])
+if spec.get('controller_config'):cfg=json.loads(Path(spec['controller_config']).read_text())
 options.update(spec.get('plant_options',{}));radius=options.get('wheel_radius_m',.1);cfg['wheel_radius_m']=radius
 substeps=round(.005/options.get('physics_dt',.0002))
 cases=spec['cases'];n=len(cases);steps=round(spec['duration_s']/.005)

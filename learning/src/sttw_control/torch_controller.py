@@ -24,7 +24,7 @@ class TorchController:
     def _system(self, speed):
         c = self.config
         v = speed.clamp_min(c['minimum_speed'])
-        inertia = c['mass']*c['cg_height']**2 + .043929*c['mass']/5.434
+        inertia = c['mass']*c['cg_height']**2 + c.get('roll_inertia_com',.043929*c['mass']/5.434)
         m1 = -c['mass']*c['cg_forward']*c['cg_height']*v*math.cos(c['caster'])/c['wheelbase']
         m2 = _floor_magnitude(-(c['mass']*v*v*c['cg_height'] -
                               c['mass']*c['cg_forward']*c['trail']*c['gravity'])*
