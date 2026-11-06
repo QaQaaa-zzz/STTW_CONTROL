@@ -41,3 +41,18 @@ class ConnectionCapabilityTests(unittest.TestCase):
         rows=[dict(origin_id='r',snapshot_id='s',task_id='left',skill_id='frozen',candidate_id='slow',state=[0.],complete=1,success_cost=1.)]
         with self.assertRaises(ValueError):
             evaluate_connection_groups(rows,['slow','fast'],[1.],1.,.5)
+
+    def test_fixed_comparison_retains_failures_and_unknown_queries(self):
+        from sttw_control.empirical_capability import evaluate_connection_groups
+        rows=[dict(origin_id='only_origin',snapshot_id='exit',task_id='left',skill_id='frozen',
+                   candidate_id=c,state=[0.],complete=y,success_cost=cost)
+              for c,y,cost in [('slow',1,5.),('fast',0,None)]]
+        result=evaluate_connection_groups(rows,['slow','fast'],[1.],1.,.5)
+        assert result['unknown_groups']==1
+        assert result['selected_groups']==0
+        assert result['observed_oracle_complete_groups']==1
+        slow,fast=result['fixed_candidates']
+        assert slow['complete_count']==1 and slow['successful_mean_cost']==5.
+        assert fast['groups']==1 and fast['complete_count']==0
+        assert fast['successful_mean_cost'] is None
+        assert slow['matched_decided_groups']==0

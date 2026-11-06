@@ -124,7 +124,21 @@ def evaluate_connection_groups(records, candidates, feature_scales, bandwidth, m
             predictions=query['estimates'],calibration=calibration))
     decided=[r for r in results if r['selected_candidate'] is not None]
     errors=[e['squared_error'] for r in results for e in r['calibration']]
-    return dict(role='leave-one-origin-run-out DEV; not independent TEST or deployed planning success',
+    # Fixed references use the same executed groups, including failures. Unknown
+    # model queries remain abstentions; do not turn them into simulated outcomes.
+    fixed=[]
+    decided_keys={(r['origin_id'],r['snapshot_id'],r['task_id'],r['skill_id']) for r in decided}
+    for candidate in candidates:
+        outcomes=[r for r in rows if r['candidate_id']==candidate]
+        matched=[r for r in outcomes if (r['origin_id'],r['snapshot_id'],r['task_id'],r['skill_id']) in decided_keys]
+        successful=[r['success_cost'] for r in outcomes if r['complete']]
+        fixed.append(dict(candidate_id=candidate,groups=len(outcomes),
+            complete_count=sum(r['complete'] for r in outcomes),
+            successful_mean_cost=sum(successful)/len(successful) if successful else None,
+            matched_decided_groups=len(matched),matched_decided_complete_count=sum(r['complete'] for r in matched)))
+    return dict(fixed_candidates=fixed,
+        observed_oracle_complete_groups=sum(r['observed_oracle_candidate'] is not None for r in results),
+        role='leave-one-origin-run-out DEV; not independent TEST or deployed planning success',
         groups=len(results),selected_groups=len(decided),unknown_groups=len(results)-len(decided),
         selected_complete_count=sum(r['selected_complete'] for r in decided),
         brier_score=sum(errors)/len(errors) if errors else None,brier_count=len(errors),
