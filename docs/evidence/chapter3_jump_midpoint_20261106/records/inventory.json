@@ -1,0 +1,878 @@
+{
+  "declared_cases": 216,
+  "evaluated_cases": 6,
+  "independent_origins": 1,
+  "role": "Pilot DEV only; no train/validation/test split or fitted model",
+  "cases": [
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.5",
+      "status": "evaluated",
+      "decision_reached": true
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_1.8_0.0",
+      "status": "evaluated",
+      "decision_reached": true
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_1.8_0.5",
+      "status": "evaluated",
+      "decision_reached": true
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_1.8_1.0",
+      "status": "evaluated",
+      "decision_reached": true
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_2.0_0.0",
+      "status": "evaluated",
+      "decision_reached": true
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_2.0_1.0",
+      "status": "evaluated",
+      "decision_reached": true
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.5_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.0_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.5_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_1.0_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.0_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_1.0_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.5_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.5_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.5_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.5_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.5_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.0_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.0_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.0_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.0_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.0_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.5_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.5_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.5_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.5_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.5_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_1.0_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_1.0_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_1.0_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_1.0_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_1.0_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.0_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.0_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.0_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.0_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.0_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_1.0_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_1.0_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_1.0_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_1.0_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_1.0_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.5_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.0_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.5_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_1.0_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_1.0_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.5_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.5_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.5_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.5_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.5_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.0_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.0_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.0_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.0_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.0_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.5_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.5_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.5_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.5_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.5_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_1.0_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_1.0_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_1.0_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_1.0_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_1.0_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_1.0_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_1.0_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_1.0_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_1.0_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_1.0_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.5_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.0_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.5_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_1.0_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.0_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_1.0_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.5_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.5_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.5_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.5_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.5_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.0_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.0_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.0_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.0_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.0_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.5_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.5_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.5_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.5_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.5_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_1.0_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_1.0_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_1.0_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_1.0_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_1.0_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.0_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.0_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.0_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.0_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.0_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_1.0_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_1.0_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_1.0_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_1.0_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_1.0_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.5_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.0_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.5_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_1.0_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.0_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_1.0_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.5_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.5_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.5_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.5_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.5_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.0_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.0_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.0_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.0_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.0_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.5_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.5_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.5_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.5_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.5_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_1.0_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_1.0_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_1.0_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_1.0_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_1.0_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.0_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.0_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.0_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.0_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.0_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_1.0_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_1.0_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_1.0_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_1.0_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_1.0_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.5_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_1.0_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.0_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_1.0_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.5_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.5_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.5_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.5_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.5_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_1.0_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_1.0_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_1.0_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_1.0_then_2.0_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_1.0_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.0_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.0_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.0_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.0_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.0_then_2.0_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_1.0_then_2.0_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_1.0_then_1.8_0.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_1.0_then_1.8_0.5",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_1.0_then_1.8_1.0",
+      "status": "not_evaluated"
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_1.0_then_2.0_0.0",
+      "status": "not_evaluated"
+    }
+  ]
+}

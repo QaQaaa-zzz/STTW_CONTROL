@@ -1,0 +1,6860 @@
+{
+  "protocol_id": "ch3_jump_two_stage_hold_v1",
+  "role": "Six predefined upstream DEV roots, 36 sequences each; same origin grouping as C6",
+  "declared_cases": 216,
+  "evaluated_cases": 6,
+  "rows": [
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": true,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "evaluated",
+      "complete": true,
+      "success_time_s": 14.899999618530273,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "max_original_path_error_m": 0.6122847199440002,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": true,
+        "ground_return": true,
+        "continued": true
+      },
+      "stage_times": {
+        "release": 9.16,
+        "strict_support": 12.024999618530273,
+        "ground_return": 12.72,
+        "final_conditions": 14.899999618530273
+      },
+      "decision": {
+        "time": 5.22,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.22,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 2.0,
+          "alpha": 0.5
+        },
+        "root": [
+          [
+            -1.980629801750183,
+            0.3164025545120239,
+            0.11783301830291748,
+            0.7575281858444214,
+            0.040364280343055725,
+            0.03407478705048561,
+            0.6506617069244385,
+            1.9832981824874878,
+            0.1352066695690155,
+            0.001092622522264719,
+            -0.12676475942134857,
+            -0.01525973156094551,
+            -0.7841780781745911
+          ]
+        ],
+        "measurement": [
+          [
+            -0.15153586864471436,
+            0.12696002423763275,
+            -0.10777129977941513,
+            0.10939528048038483,
+            -0.7750332355499268,
+            28.63963508605957,
+            28.84756088256836
+          ]
+        ],
+        "position": [
+          [
+            -1.2001999616622925,
+            -1.2482999563217163,
+            -0.10777129977941513,
+            2.499999523162842,
+            -4.114353179931641
+          ]
+        ],
+        "velocity": [
+          [
+            3.511947852530284e-07,
+            -28.63963508605957,
+            0.10939528048038483,
+            -0.0005360023933462799,
+            -28.84756088256836
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.0063705444335938,
+            -0.06520263105630875
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 9.16,
+        "root": [
+          [
+            6.015126705169678,
+            0.09832093119621277,
+            0.1189466342329979,
+            0.7113280296325684,
+            -0.01886565610766411,
+            -0.01928722858428955,
+            0.70234215259552,
+            2.0408620834350586,
+            -0.10976529866456985,
+            -0.003661434631794691,
+            -0.0421711690723896,
+            -0.007528724614530802,
+            -0.039348501712083817
+          ]
+        ],
+        "position": [
+          [
+            -1.2002017498016357,
+            -3.02756929397583,
+            -0.005362433381378651,
+            2.499999523162842,
+            -5.938307285308838
+          ]
+        ],
+        "velocity": [
+          [
+            0.03206850588321686,
+            -29.01407241821289,
+            0.035634953528642654,
+            -3.1445626973436447e-06,
+            -29.225540161132812
+          ]
+        ],
+        "distance": [
+          1.350693702697754
+        ]
+      },
+      "observed_duration_s": 22.0,
+      "midpoint": {
+        "time": 7.2,
+        "decision_stage": "midpoint",
+        "previous_alpha_duration_s": 7.2,
+        "candidate": {
+          "decision_x_m": 2.0,
+          "speed_m_s": 2.0,
+          "alpha": 0.5
+        },
+        "root": [
+          [
+            2.0191712379455566,
+            -0.021838242188096046,
+            0.11893916130065918,
+            0.7008377313613892,
+            0.025466548278927803,
+            0.025217736139893532,
+            0.7124198079109192,
+            2.035397529602051,
+            0.14743050932884216,
+            -0.0035818733740597963,
+            0.08263863623142242,
+            -0.0038076844066381454,
+            0.0968376025557518
+          ]
+        ],
+        "measurement": [
+          [
+            0.016356587409973145,
+            -0.08206270635128021,
+            0.01316356472671032,
+            -0.07259591668844223,
+            0.09674277901649475,
+            28.97049331665039,
+            29.18268394470215
+          ]
+        ],
+        "position": [
+          [
+            -1.2002018690109253,
+            3.8976309299468994,
+            0.01316356472671032,
+            2.499999523162842,
+            0.9746613502502441
+          ]
+        ],
+        "velocity": [
+          [
+            0.03190770745277405,
+            -28.97049331665039,
+            -0.07259591668844223,
+            -3.2079121865535853e-06,
+            -29.18268394470215
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.041687250137329,
+            -0.0035872403532266617
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "diagonal_C6_comparison": {
+        "reference": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v2.0_a0.5",
+        "matched_samples": 1635,
+        "reference_samples": 1635,
+        "sequence_samples": 1635,
+        "reference_duration_s": 22.0,
+        "sequence_duration_s": 22.0,
+        "same_complete_label": true,
+        "reference_checks": {
+          "full_window": true,
+          "ordered_approach": true,
+          "original_path_corridor": true,
+          "stable_landing": true,
+          "ground_return": true,
+          "continued_time": true,
+          "continued_forward": true,
+          "final_goal": true
+        },
+        "sequence_checks": {
+          "full_window": true,
+          "ordered_approach": true,
+          "original_path_corridor": true,
+          "stable_landing": true,
+          "ground_return": true,
+          "continued_time": true,
+          "continued_forward": true,
+          "final_goal": true
+        },
+        "reference_T_s": 14.899999618530273,
+        "sequence_T_s": 14.899999618530273,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "scope": "Matched observed full trajectories; unequal lengths and labels retained, no hidden simulator-state equality claim"
+      },
+      "decision_prefix": {
+        "decision_time_s": 5.22,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.3164025545120239,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "none",
+      "decision_state": {
+        "time_s": 5.22,
+        "x_m": -1.980629801750183,
+        "y_m": 0.3164025545120239,
+        "forward_speed_m_s": 1.9864946603775024,
+        "lateral_velocity_heading_frame_m_s": -0.07477888683451256,
+        "heading_rad": 0.10569319537824143,
+        "world_yaw_rate_rad_s": -0.7841780781745911,
+        "roll_rad": -0.15153586864471436,
+        "roll_rate_rad_s": 0.12696002423763275,
+        "steer_rad": -0.10777129977941513,
+        "steer_rate_rad_s": 0.10939528048038483
+      },
+      "handoff_state": {
+        "time_s": 9.16,
+        "x_m": 6.015126705169678,
+        "y_m": 0.09832093119621277,
+        "forward_speed_m_s": 2.043811798095703,
+        "lateral_velocity_heading_frame_m_s": 0.00046188061376266354,
+        "heading_rad": -0.05395801003985489,
+        "world_yaw_rate_rad_s": -0.039348501712083817,
+        "roll_rad": -0.012687325477600098,
+        "roll_rate_rad_s": 0.041666798293590546,
+        "steer_rad": -0.005362433381378651,
+        "steer_rate_rad_s": 0.035634953528642654
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.5",
+        "matched_samples": 262,
+        "through_time_s": 5.21999979019165,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_0.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": true,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.3229750990867615,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": 9.64,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": {
+        "time": 5.22,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.22,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 1.8,
+          "alpha": 0.0
+        },
+        "root": [
+          [
+            -1.980629801750183,
+            0.3164025545120239,
+            0.11783301830291748,
+            0.7575281858444214,
+            0.040364280343055725,
+            0.03407478705048561,
+            0.6506617069244385,
+            1.9832981824874878,
+            0.1352066695690155,
+            0.001092622522264719,
+            -0.12676475942134857,
+            -0.01525973156094551,
+            -0.7841780781745911
+          ]
+        ],
+        "measurement": [
+          [
+            -0.15153586864471436,
+            0.12696002423763275,
+            -0.10777129977941513,
+            0.10939528048038483,
+            -0.7750332355499268,
+            28.63963508605957,
+            28.84756088256836
+          ]
+        ],
+        "position": [
+          [
+            -1.2001999616622925,
+            -1.2482999563217163,
+            -0.10777129977941513,
+            2.499999523162842,
+            -4.114353179931641
+          ]
+        ],
+        "velocity": [
+          [
+            3.511947852530284e-07,
+            -28.63963508605957,
+            0.10939528048038483,
+            -0.0005360023933462799,
+            -28.84756088256836
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.0063705444335938,
+            -0.06520263105630875
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 9.64,
+        "root": [
+          [
+            6.0079665184021,
+            -0.09899710863828659,
+            0.11887034773826599,
+            0.6916864514350891,
+            0.005096444860100746,
+            0.004643429070711136,
+            0.722165048122406,
+            1.8419256210327148,
+            0.05139228701591492,
+            -0.0034996476024389267,
+            0.05016245320439339,
+            -0.008832280524075031,
+            0.2810167074203491
+          ]
+        ],
+        "position": [
+          [
+            -1.2002018690109253,
+            -4.075439453125,
+            0.04225676506757736,
+            2.499999523162842,
+            5.4257659912109375
+          ]
+        ],
+        "velocity": [
+          [
+            0.031733088195323944,
+            -26.14979362487793,
+            -0.037387408316135406,
+            -3.1627414500690065e-06,
+            -26.383342742919922
+          ]
+        ],
+        "distance": [
+          1.3576087951660156
+        ]
+      },
+      "observed_duration_s": 11.125,
+      "midpoint": {
+        "time": 7.44,
+        "decision_stage": "midpoint",
+        "previous_alpha_duration_s": 2.2200000000000006,
+        "candidate": {
+          "decision_x_m": 2.0,
+          "speed_m_s": 1.8,
+          "alpha": 0.0
+        },
+        "root": [
+          [
+            2.001464366912842,
+            -0.0029686724301427603,
+            0.1189437061548233,
+            0.7086522579193115,
+            0.08648555725812912,
+            0.08417641371488571,
+            0.6951593160629272,
+            1.7782447338104248,
+            0.40836280584335327,
+            -0.003842514706775546,
+            0.20812571048736572,
+            0.04083831608295441,
+            -0.03906828910112381
+          ]
+        ],
+        "measurement": [
+          [
+            -0.019336700439453125,
+            -0.21188472211360931,
+            -0.005928793456405401,
+            -0.2506498396396637,
+            -0.038664478808641434,
+            25.90313720703125,
+            26.087087631225586
+          ]
+        ],
+        "position": [
+          [
+            -1.2002018690109253,
+            3.347569465637207,
+            -0.005928793456405401,
+            2.499999523162842,
+            0.32064542174339294
+          ]
+        ],
+        "velocity": [
+          [
+            0.03287293761968613,
+            -25.90313720703125,
+            -0.2506498396396637,
+            -3.104114512098022e-06,
+            -26.087087631225586
+          ]
+        ],
+        "previous_reference": [
+          [
+            1.8249047994613647,
+            -0.06306640803813934
+          ]
+        ],
+        "previous_alpha": [
+          0.0
+        ],
+        "history": "retained, no reset"
+      },
+      "diagonal_C6_comparison": {
+        "reference": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v1.8_a0.0",
+        "matched_samples": 780,
+        "reference_samples": 780,
+        "sequence_samples": 780,
+        "reference_duration_s": 11.125,
+        "sequence_duration_s": 11.125,
+        "same_complete_label": true,
+        "reference_checks": {
+          "full_window": false,
+          "ordered_approach": true,
+          "original_path_corridor": true,
+          "stable_landing": false,
+          "ground_return": false,
+          "continued_time": false,
+          "continued_forward": false,
+          "final_goal": false
+        },
+        "sequence_checks": {
+          "full_window": false,
+          "ordered_approach": true,
+          "original_path_corridor": true,
+          "stable_landing": false,
+          "ground_return": false,
+          "continued_time": false,
+          "continued_forward": false,
+          "final_goal": false
+        },
+        "reference_T_s": null,
+        "sequence_T_s": null,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "scope": "Matched observed full trajectories; unequal lengths and labels retained, no hidden simulator-state equality claim"
+      },
+      "decision_prefix": {
+        "decision_time_s": 5.22,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.3164025545120239,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "jump_or_landing",
+      "decision_state": {
+        "time_s": 5.22,
+        "x_m": -1.980629801750183,
+        "y_m": 0.3164025545120239,
+        "forward_speed_m_s": 1.9864946603775024,
+        "lateral_velocity_heading_frame_m_s": -0.07477888683451256,
+        "heading_rad": 0.10569319537824143,
+        "world_yaw_rate_rad_s": -0.7841780781745911,
+        "roll_rad": -0.15153586864471436,
+        "roll_rate_rad_s": 0.12696002423763275,
+        "steer_rad": -0.10777129977941513,
+        "steer_rate_rad_s": 0.10939528048038483
+      },
+      "handoff_state": {
+        "time_s": 9.64,
+        "x_m": 6.0079665184021,
+        "y_m": -0.09899710863828659,
+        "forward_speed_m_s": 1.8424583673477173,
+        "lateral_velocity_heading_frame_m_s": 0.026048174283805403,
+        "heading_rad": 0.013757368081656007,
+        "world_yaw_rate_rad_s": 0.2810167074203491,
+        "roll_rad": 0.04310107231140137,
+        "roll_rate_rad_s": -0.04977276548743248,
+        "steer_rad": 0.04225676506757736,
+        "steer_rate_rad_s": -0.037387408316135406
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.5",
+        "matched_samples": 262,
+        "through_time_s": 5.21999979019165,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_0.5_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": true,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "evaluated",
+      "complete": true,
+      "success_time_s": 15.100000381469727,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "max_original_path_error_m": 0.3227050006389618,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": true,
+        "ground_return": true,
+        "continued": true
+      },
+      "stage_times": {
+        "release": 9.58,
+        "strict_support": 12.15999984741211,
+        "ground_return": 12.82,
+        "final_conditions": 15.100000381469727
+      },
+      "decision": {
+        "time": 5.22,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.22,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 1.8,
+          "alpha": 0.5
+        },
+        "root": [
+          [
+            -1.980629801750183,
+            0.3164025545120239,
+            0.11783301830291748,
+            0.7575281858444214,
+            0.040364280343055725,
+            0.03407478705048561,
+            0.6506617069244385,
+            1.9832981824874878,
+            0.1352066695690155,
+            0.001092622522264719,
+            -0.12676475942134857,
+            -0.01525973156094551,
+            -0.7841780781745911
+          ]
+        ],
+        "measurement": [
+          [
+            -0.15153586864471436,
+            0.12696002423763275,
+            -0.10777129977941513,
+            0.10939528048038483,
+            -0.7750332355499268,
+            28.63963508605957,
+            28.84756088256836
+          ]
+        ],
+        "position": [
+          [
+            -1.2001999616622925,
+            -1.2482999563217163,
+            -0.10777129977941513,
+            2.499999523162842,
+            -4.114353179931641
+          ]
+        ],
+        "velocity": [
+          [
+            3.511947852530284e-07,
+            -28.63963508605957,
+            0.10939528048038483,
+            -0.0005360023933462799,
+            -28.84756088256836
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.0063705444335938,
+            -0.06520263105630875
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 9.58,
+        "root": [
+          [
+            6.031766891479492,
+            0.01819639839231968,
+            0.1189405620098114,
+            0.7040325403213501,
+            -0.02135585807263851,
+            -0.022188259288668633,
+            0.7094996571540833,
+            1.844457983970642,
+            -0.10817378014326096,
+            -6.368719914462417e-05,
+            -0.021960493177175522,
+            0.0006637789774686098,
+            0.026214921846985817
+          ]
+        ],
+        "position": [
+          [
+            -1.2001993656158447,
+            -3.418445348739624,
+            0.003890396561473608,
+            2.499999523162842,
+            6.209334850311279
+          ]
+        ],
+        "velocity": [
+          [
+            -0.003707106923684478,
+            -26.325414657592773,
+            0.0066558546386659145,
+            0.0025346376933157444,
+            -26.346981048583984
+          ]
+        ],
+        "distance": [
+          1.3341784477233887
+        ]
+      },
+      "observed_duration_s": 22.0,
+      "midpoint": {
+        "time": 7.4,
+        "decision_stage": "midpoint",
+        "previous_alpha_duration_s": 7.4,
+        "candidate": {
+          "decision_x_m": 2.0,
+          "speed_m_s": 1.8,
+          "alpha": 0.5
+        },
+        "root": [
+          [
+            2.0188205242156982,
+            0.021026598289608955,
+            0.11894328892230988,
+            0.7073329091072083,
+            0.03825514391064644,
+            0.03745703399181366,
+            0.7048501372337341,
+            1.8319385051727295,
+            0.1867596060037613,
+            -0.0035960653331130743,
+            0.07428163290023804,
+            -0.0020450709853321314,
+            -0.01237350981682539
+          ]
+        ],
+        "measurement": [
+          [
+            -0.0035666227340698242,
+            -0.07364873588085175,
+            -0.0018807555316016078,
+            -0.06427142024040222,
+            -0.01226869598031044,
+            26.12738037109375,
+            26.3343563079834
+          ]
+        ],
+        "position": [
+          [
+            -1.2002018690109253,
+            3.7846779823303223,
+            -0.0018807555316016078,
+            2.499999523162842,
+            0.8357601165771484
+          ]
+        ],
+        "velocity": [
+          [
+            0.0322326123714447,
+            -26.12738037109375,
+            -0.06427142024040222,
+            -3.1767312975716777e-06,
+            -26.3343563079834
+          ]
+        ],
+        "previous_reference": [
+          [
+            1.842383623123169,
+            -0.0186600498855114
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "diagonal_C6_comparison": {
+        "reference": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v1.8_a0.5",
+        "matched_samples": 1587,
+        "reference_samples": 1587,
+        "sequence_samples": 1587,
+        "reference_duration_s": 22.0,
+        "sequence_duration_s": 22.0,
+        "same_complete_label": true,
+        "reference_checks": {
+          "full_window": true,
+          "ordered_approach": true,
+          "original_path_corridor": true,
+          "stable_landing": true,
+          "ground_return": true,
+          "continued_time": true,
+          "continued_forward": true,
+          "final_goal": true
+        },
+        "sequence_checks": {
+          "full_window": true,
+          "ordered_approach": true,
+          "original_path_corridor": true,
+          "stable_landing": true,
+          "ground_return": true,
+          "continued_time": true,
+          "continued_forward": true,
+          "final_goal": true
+        },
+        "reference_T_s": 15.100000381469727,
+        "sequence_T_s": 15.100000381469727,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "scope": "Matched observed full trajectories; unequal lengths and labels retained, no hidden simulator-state equality claim"
+      },
+      "decision_prefix": {
+        "decision_time_s": 5.22,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.3164025545120239,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "none",
+      "decision_state": {
+        "time_s": 5.22,
+        "x_m": -1.980629801750183,
+        "y_m": 0.3164025545120239,
+        "forward_speed_m_s": 1.9864946603775024,
+        "lateral_velocity_heading_frame_m_s": -0.07477888683451256,
+        "heading_rad": 0.10569319537824143,
+        "world_yaw_rate_rad_s": -0.7841780781745911,
+        "roll_rad": -0.15153586864471436,
+        "roll_rate_rad_s": 0.12696002423763275,
+        "steer_rad": -0.10777129977941513,
+        "steer_rate_rad_s": 0.10939528048038483
+      },
+      "handoff_state": {
+        "time_s": 9.58,
+        "x_m": 6.031766891479492,
+        "y_m": 0.01819639839231968,
+        "forward_speed_m_s": 1.8476189374923706,
+        "lateral_velocity_heading_frame_m_s": 0.0055680536473652065,
+        "heading_rad": -0.061594529568301526,
+        "world_yaw_rate_rad_s": 0.026214921846985817,
+        "roll_rad": 0.007764339447021484,
+        "roll_rate_rad_s": 0.02198430337011814,
+        "steer_rad": 0.003890396561473608,
+        "steer_rate_rad_s": 0.0066558546386659145
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.5",
+        "matched_samples": 262,
+        "through_time_s": 5.21999979019165,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_1.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": true,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.32241857051849365,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": 9.56,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": {
+        "time": 5.22,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.22,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 1.8,
+          "alpha": 1.0
+        },
+        "root": [
+          [
+            -1.980629801750183,
+            0.3164025545120239,
+            0.11783301830291748,
+            0.7575281858444214,
+            0.040364280343055725,
+            0.03407478705048561,
+            0.6506617069244385,
+            1.9832981824874878,
+            0.1352066695690155,
+            0.001092622522264719,
+            -0.12676475942134857,
+            -0.01525973156094551,
+            -0.7841780781745911
+          ]
+        ],
+        "measurement": [
+          [
+            -0.15153586864471436,
+            0.12696002423763275,
+            -0.10777129977941513,
+            0.10939528048038483,
+            -0.7750332355499268,
+            28.63963508605957,
+            28.84756088256836
+          ]
+        ],
+        "position": [
+          [
+            -1.2001999616622925,
+            -1.2482999563217163,
+            -0.10777129977941513,
+            2.499999523162842,
+            -4.114353179931641
+          ]
+        ],
+        "velocity": [
+          [
+            3.511947852530284e-07,
+            -28.63963508605957,
+            0.10939528048038483,
+            -0.0005360023933462799,
+            -28.84756088256836
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.0063705444335938,
+            -0.06520263105630875
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 9.56,
+        "root": [
+          [
+            6.025033473968506,
+            0.1734870970249176,
+            0.1189466267824173,
+            0.71135413646698,
+            -0.01876526139676571,
+            -0.019186878576874733,
+            0.7023211717605591,
+            1.8407106399536133,
+            -0.09996749460697174,
+            -0.0036447199527174234,
+            -0.032118361443281174,
+            -0.007921055890619755,
+            -0.04231875762343407
+          ]
+        ],
+        "position": [
+          [
+            -1.2002017498016357,
+            -3.0802457332611084,
+            -0.0063976263627409935,
+            2.499999523162842,
+            -5.991998195648193
+          ]
+        ],
+        "velocity": [
+          [
+            0.031895093619823456,
+            -26.1528263092041,
+            0.033403389155864716,
+            -3.1005347409518436e-06,
+            -26.362815856933594
+          ]
+        ],
+        "distance": [
+          1.3407869338989258
+        ]
+      },
+      "observed_duration_s": 11.15999984741211,
+      "midpoint": {
+        "time": 7.38,
+        "decision_stage": "midpoint",
+        "previous_alpha_duration_s": 2.16,
+        "candidate": {
+          "decision_x_m": 2.0,
+          "speed_m_s": 1.8,
+          "alpha": 1.0
+        },
+        "root": [
+          [
+            2.0062432289123535,
+            0.043662574142217636,
+            0.11894108355045319,
+            0.7038639783859253,
+            0.026175761595368385,
+            0.025714606046676636,
+            0.7093863487243652,
+            1.8432680368423462,
+            0.13517378270626068,
+            -6.851874059066176e-05,
+            0.04869559779763222,
+            0.0028935458976775408,
+            0.048004236072301865
+          ]
+        ],
+        "measurement": [
+          [
+            0.007780671119689941,
+            -0.048731617629528046,
+            0.0071616689674556255,
+            -0.05600805580615997,
+            0.04804318770766258,
+            26.336589813232422,
+            26.35604476928711
+          ]
+        ],
+        "position": [
+          [
+            -1.2001993656158447,
+            4.1773762702941895,
+            0.0071616689674556255,
+            2.499999523162842,
+            1.2519469261169434
+          ]
+        ],
+        "velocity": [
+          [
+            -0.0038070380687713623,
+            -26.336589813232422,
+            -0.05600805580615997,
+            0.002512578386813402,
+            -26.35604476928711
+          ]
+        ],
+        "previous_reference": [
+          [
+            1.8476039171218872,
+            -0.003412071615457535
+          ]
+        ],
+        "previous_alpha": [
+          1.0
+        ],
+        "history": "retained, no reset"
+      },
+      "diagonal_C6_comparison": {
+        "reference": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v1.8_a1.0",
+        "matched_samples": 799,
+        "reference_samples": 799,
+        "sequence_samples": 799,
+        "reference_duration_s": 11.15999984741211,
+        "sequence_duration_s": 11.15999984741211,
+        "same_complete_label": true,
+        "reference_checks": {
+          "full_window": false,
+          "ordered_approach": true,
+          "original_path_corridor": true,
+          "stable_landing": false,
+          "ground_return": false,
+          "continued_time": false,
+          "continued_forward": false,
+          "final_goal": false
+        },
+        "sequence_checks": {
+          "full_window": false,
+          "ordered_approach": true,
+          "original_path_corridor": true,
+          "stable_landing": false,
+          "ground_return": false,
+          "continued_time": false,
+          "continued_forward": false,
+          "final_goal": false
+        },
+        "reference_T_s": null,
+        "sequence_T_s": null,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "scope": "Matched observed full trajectories; unequal lengths and labels retained, no hidden simulator-state equality claim"
+      },
+      "decision_prefix": {
+        "decision_time_s": 5.22,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.3164025545120239,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "jump_or_landing",
+      "decision_state": {
+        "time_s": 5.22,
+        "x_m": -1.980629801750183,
+        "y_m": 0.3164025545120239,
+        "forward_speed_m_s": 1.9864946603775024,
+        "lateral_velocity_heading_frame_m_s": -0.07477888683451256,
+        "heading_rad": 0.10569319537824143,
+        "world_yaw_rate_rad_s": -0.7841780781745911,
+        "roll_rad": -0.15153586864471436,
+        "roll_rate_rad_s": 0.12696002423763275,
+        "steer_rad": -0.10777129977941513,
+        "steer_rate_rad_s": 0.10939528048038483
+      },
+      "handoff_state": {
+        "time_s": 9.56,
+        "x_m": 6.025033473968506,
+        "y_m": 0.1734870970249176,
+        "forward_speed_m_s": 1.8434228897094727,
+        "lateral_velocity_heading_frame_m_s": -0.0010726847970264353,
+        "heading_rad": -0.053673986189091756,
+        "world_yaw_rate_rad_s": -0.04231875762343407,
+        "roll_rad": -0.012754082679748535,
+        "roll_rate_rad_s": 0.03160741180181503,
+        "steer_rad": -0.0063976263627409935,
+        "steer_rate_rad_s": 0.033403389155864716
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.5",
+        "matched_samples": 262,
+        "through_time_s": 5.21999979019165,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_0.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": true,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "evaluated",
+      "complete": true,
+      "success_time_s": 16.100000381469727,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "max_original_path_error_m": 0.3230845034122467,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": true,
+        "ground_return": true,
+        "continued": true
+      },
+      "stage_times": {
+        "release": 9.200000000000001,
+        "strict_support": 13.305000305175781,
+        "ground_return": 14.1,
+        "final_conditions": 16.100000381469727
+      },
+      "decision": {
+        "time": 5.22,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.22,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 2.0,
+          "alpha": 0.0
+        },
+        "root": [
+          [
+            -1.980629801750183,
+            0.3164025545120239,
+            0.11783301830291748,
+            0.7575281858444214,
+            0.040364280343055725,
+            0.03407478705048561,
+            0.6506617069244385,
+            1.9832981824874878,
+            0.1352066695690155,
+            0.001092622522264719,
+            -0.12676475942134857,
+            -0.01525973156094551,
+            -0.7841780781745911
+          ]
+        ],
+        "measurement": [
+          [
+            -0.15153586864471436,
+            0.12696002423763275,
+            -0.10777129977941513,
+            0.10939528048038483,
+            -0.7750332355499268,
+            28.63963508605957,
+            28.84756088256836
+          ]
+        ],
+        "position": [
+          [
+            -1.2001999616622925,
+            -1.2482999563217163,
+            -0.10777129977941513,
+            2.499999523162842,
+            -4.114353179931641
+          ]
+        ],
+        "velocity": [
+          [
+            3.511947852530284e-07,
+            -28.63963508605957,
+            0.10939528048038483,
+            -0.0005360023933462799,
+            -28.84756088256836
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.0063705444335938,
+            -0.06520263105630875
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 9.200000000000001,
+        "root": [
+          [
+            6.036674976348877,
+            -0.04567746818065643,
+            0.1189308762550354,
+            0.6986140608787537,
+            -0.028754889965057373,
+            -0.030071759596467018,
+            0.7142879962921143,
+            2.03676176071167,
+            -0.15164348483085632,
+            -0.003752758027985692,
+            -0.043151386082172394,
+            -0.006246334873139858,
+            0.11569671332836151
+          ]
+        ],
+        "position": [
+          [
+            -1.2002018690109253,
+            -3.8116118907928467,
+            0.015698149800300598,
+            2.499999523162842,
+            5.798446178436279
+          ]
+        ],
+        "velocity": [
+          [
+            0.032076235860586166,
+            -28.995359420776367,
+            0.031832028180360794,
+            -3.122919224551879e-06,
+            -29.206947326660156
+          ]
+        ],
+        "distance": [
+          1.329636573791504
+        ]
+      },
+      "observed_duration_s": 22.0,
+      "midpoint": {
+        "time": 7.22,
+        "decision_stage": "midpoint",
+        "previous_alpha_duration_s": 2.0,
+        "candidate": {
+          "decision_x_m": 2.0,
+          "speed_m_s": 2.0,
+          "alpha": 0.0
+        },
+        "root": [
+          [
+            2.0232245922088623,
+            -0.055600982159376144,
+            0.11893925815820694,
+            0.700323224067688,
+            0.05132228508591652,
+            0.05137049779295921,
+            0.7101230025291443,
+            2.0139732360839844,
+            0.2871931195259094,
+            5.7823486713459715e-05,
+            0.17305374145507812,
+            0.024671122431755066,
+            0.11624186486005783
+          ]
+        ],
+        "measurement": [
+          [
+            0.013827204704284668,
+            -0.17469310760498047,
+            0.01578451879322529,
+            -0.15914882719516754,
+            0.11638567596673965,
+            28.995468139648438,
+            29.018205642700195
+          ]
+        ],
+        "position": [
+          [
+            -1.2001993656158447,
+            3.51926326751709,
+            0.01578451879322529,
+            2.499999523162842,
+            0.5614103674888611
+          ]
+        ],
+        "velocity": [
+          [
+            -0.0036025431472808123,
+            -28.995468139648438,
+            -0.15914882719516754,
+            0.0023962529376149178,
+            -29.018205642700195
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.0337486267089844,
+            -0.022566530853509903
+          ]
+        ],
+        "previous_alpha": [
+          0.0
+        ],
+        "history": "retained, no reset"
+      },
+      "diagonal_C6_comparison": {
+        "reference": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v2.0_a0.0",
+        "matched_samples": 1836,
+        "reference_samples": 1836,
+        "sequence_samples": 1836,
+        "reference_duration_s": 22.0,
+        "sequence_duration_s": 22.0,
+        "same_complete_label": true,
+        "reference_checks": {
+          "full_window": true,
+          "ordered_approach": true,
+          "original_path_corridor": true,
+          "stable_landing": true,
+          "ground_return": true,
+          "continued_time": true,
+          "continued_forward": true,
+          "final_goal": true
+        },
+        "sequence_checks": {
+          "full_window": true,
+          "ordered_approach": true,
+          "original_path_corridor": true,
+          "stable_landing": true,
+          "ground_return": true,
+          "continued_time": true,
+          "continued_forward": true,
+          "final_goal": true
+        },
+        "reference_T_s": 16.100000381469727,
+        "sequence_T_s": 16.100000381469727,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "scope": "Matched observed full trajectories; unequal lengths and labels retained, no hidden simulator-state equality claim"
+      },
+      "decision_prefix": {
+        "decision_time_s": 5.22,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.3164025545120239,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "none",
+      "decision_state": {
+        "time_s": 5.22,
+        "x_m": -1.980629801750183,
+        "y_m": 0.3164025545120239,
+        "forward_speed_m_s": 1.9864946603775024,
+        "lateral_velocity_heading_frame_m_s": -0.07477888683451256,
+        "heading_rad": 0.10569319537824143,
+        "world_yaw_rate_rad_s": -0.7841780781745911,
+        "roll_rad": -0.15153586864471436,
+        "roll_rate_rad_s": 0.12696002423763275,
+        "steer_rad": -0.10777129977941513,
+        "steer_rate_rad_s": 0.10939528048038483
+      },
+      "handoff_state": {
+        "time_s": 9.200000000000001,
+        "x_m": 6.036674976348877,
+        "y_m": -0.04567746818065643,
+        "forward_speed_m_s": 2.0423178672790527,
+        "lateral_velocity_heading_frame_m_s": 0.018211689285910354,
+        "heading_rad": -0.08323304081483339,
+        "world_yaw_rate_rad_s": 0.11569671332836151,
+        "roll_rad": 0.022224903106689453,
+        "roll_rate_rad_s": 0.04259127005934715,
+        "steer_rad": 0.015698149800300598,
+        "steer_rate_rad_s": 0.031832028180360794
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.5",
+        "matched_samples": 262,
+        "through_time_s": 5.21999979019165,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_1.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": true,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "evaluated",
+      "complete": false,
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.3224910497665405,
+      "stages": {
+        "reached_release_line": true,
+        "airborne_after_handoff": true,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": 9.16,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": {
+        "time": 5.22,
+        "decision_stage": "exit",
+        "previous_alpha_duration_s": 5.22,
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 2.0,
+          "alpha": 1.0
+        },
+        "root": [
+          [
+            -1.980629801750183,
+            0.3164025545120239,
+            0.11783301830291748,
+            0.7575281858444214,
+            0.040364280343055725,
+            0.03407478705048561,
+            0.6506617069244385,
+            1.9832981824874878,
+            0.1352066695690155,
+            0.001092622522264719,
+            -0.12676475942134857,
+            -0.01525973156094551,
+            -0.7841780781745911
+          ]
+        ],
+        "measurement": [
+          [
+            -0.15153586864471436,
+            0.12696002423763275,
+            -0.10777129977941513,
+            0.10939528048038483,
+            -0.7750332355499268,
+            28.63963508605957,
+            28.84756088256836
+          ]
+        ],
+        "position": [
+          [
+            -1.2001999616622925,
+            -1.2482999563217163,
+            -0.10777129977941513,
+            2.499999523162842,
+            -4.114353179931641
+          ]
+        ],
+        "velocity": [
+          [
+            3.511947852530284e-07,
+            -28.63963508605957,
+            0.10939528048038483,
+            -0.0005360023933462799,
+            -28.84756088256836
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.0063705444335938,
+            -0.06520263105630875
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained, no reset"
+      },
+      "handoff": {
+        "time": 9.16,
+        "root": [
+          [
+            6.036037921905518,
+            0.25163012742996216,
+            0.1189386397600174,
+            0.7152891755104065,
+            0.006512328051030636,
+            0.005705825984477997,
+            0.6987749338150024,
+            2.040116548538208,
+            0.025797713547945023,
+            -0.0036354041658341885,
+            -0.0027652292046695948,
+            -0.009599749930202961,
+            -0.0862211063504219
+          ]
+        ],
+        "position": [
+          [
+            -1.2002017498016357,
+            -3.161407232284546,
+            -0.011743607930839062,
+            2.499999523162842,
+            -6.056458950042725
+          ]
+        ],
+        "velocity": [
+          [
+            0.03177911788225174,
+            -28.966577529907227,
+            -0.0016675085062161088,
+            -3.1230924832925666e-06,
+            -29.176050186157227
+          ]
+        ],
+        "distance": [
+          1.3294992446899414
+        ]
+      },
+      "observed_duration_s": 10.420000076293945,
+      "midpoint": {
+        "time": 7.2,
+        "decision_stage": "midpoint",
+        "previous_alpha_duration_s": 1.9800000000000004,
+        "candidate": {
+          "decision_x_m": 2.0,
+          "speed_m_s": 2.0,
+          "alpha": 1.0
+        },
+        "root": [
+          [
+            2.0347306728363037,
+            0.029747381806373596,
+            0.11893841624259949,
+            0.7008733153343201,
+            0.015789981931447983,
+            0.015392143279314041,
+            0.7129449248313904,
+            2.0418567657470703,
+            0.09571823477745056,
+            -0.0036187083460390568,
+            0.03952875733375549,
+            -0.007902038283646107,
+            0.09026055037975311
+          ]
+        ],
+        "measurement": [
+          [
+            0.017055392265319824,
+            -0.03905724361538887,
+            0.012239612638950348,
+            -0.029829973354935646,
+            0.09011977910995483,
+            29.01795768737793,
+            29.23021697998047
+          ]
+        ],
+        "position": [
+          [
+            -1.2002018690109253,
+            3.843691110610962,
+            0.012239612638950348,
+            2.499999523162842,
+            0.934293806552887
+          ]
+        ],
+        "velocity": [
+          [
+            0.031954575330019,
+            -29.01795768737793,
+            -0.029829973354935646,
+            -3.249891506129643e-06,
+            -29.23021697998047
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.04502534866333,
+            0.004572601988911629
+          ]
+        ],
+        "previous_alpha": [
+          1.0
+        ],
+        "history": "retained, no reset"
+      },
+      "diagonal_C6_comparison": {
+        "reference": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v2.0_a1.0",
+        "matched_samples": 711,
+        "reference_samples": 711,
+        "sequence_samples": 711,
+        "reference_duration_s": 10.420000076293945,
+        "sequence_duration_s": 10.420000076293945,
+        "same_complete_label": true,
+        "reference_checks": {
+          "full_window": false,
+          "ordered_approach": true,
+          "original_path_corridor": true,
+          "stable_landing": false,
+          "ground_return": false,
+          "continued_time": false,
+          "continued_forward": false,
+          "final_goal": false
+        },
+        "sequence_checks": {
+          "full_window": false,
+          "ordered_approach": true,
+          "original_path_corridor": true,
+          "stable_landing": false,
+          "ground_return": false,
+          "continued_time": false,
+          "continued_forward": false,
+          "final_goal": false
+        },
+        "reference_T_s": null,
+        "sequence_T_s": null,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "scope": "Matched observed full trajectories; unequal lengths and labels retained, no hidden simulator-state equality claim"
+      },
+      "decision_prefix": {
+        "decision_time_s": 5.22,
+        "decision_reached": true,
+        "max_path_error_before_decision_m": 0.3164025545120239,
+        "corridor_intact_at_decision": true,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "jump_or_landing",
+      "decision_state": {
+        "time_s": 5.22,
+        "x_m": -1.980629801750183,
+        "y_m": 0.3164025545120239,
+        "forward_speed_m_s": 1.9864946603775024,
+        "lateral_velocity_heading_frame_m_s": -0.07477888683451256,
+        "heading_rad": 0.10569319537824143,
+        "world_yaw_rate_rad_s": -0.7841780781745911,
+        "roll_rad": -0.15153586864471436,
+        "roll_rate_rad_s": 0.12696002423763275,
+        "steer_rad": -0.10777129977941513,
+        "steer_rate_rad_s": 0.10939528048038483
+      },
+      "handoff_state": {
+        "time_s": 9.16,
+        "x_m": 6.036037921905518,
+        "y_m": 0.25163012742996216,
+        "forward_speed_m_s": 2.040257692337036,
+        "lateral_velocity_heading_frame_m_s": -0.009480940390035119,
+        "heading_rad": 0.017291441151138263,
+        "world_yaw_rate_rad_s": -0.0862211063504219,
+        "roll_rad": -0.02336418628692627,
+        "roll_rate_rad_s": 0.002849866636097431,
+        "steer_rad": -0.011743607930839062,
+        "steer_rate_rad_s": -0.0016675085062161088
+      },
+      "prefix_comparison": {
+        "reference_case": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.5",
+        "matched_samples": 262,
+        "through_time_s": 5.21999979019165,
+        "max_position_difference_m": 0.0,
+        "max_speed_difference_m_s": 0.0,
+        "max_roll_difference_rad": 0.0,
+        "max_roll_rate_difference_rad_s": 0.0,
+        "scope": "Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality"
+      }
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_0.5_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_0.5_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_0.5_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_0.5_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_0.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_0.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_0.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_0.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_0.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_0.5_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_0.5_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_0.5_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_0.5_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_0.5_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_1.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_1.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_1.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_1.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_1.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_0.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_0.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_0.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_0.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_0.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_1.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_1.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_1.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_1.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_1.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.5_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_0.5_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": true,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_0.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": true,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.5_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_0.5_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": true,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_1.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_1.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": true,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_0.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": true,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_1.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_1.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": true,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.5_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_0.5_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.5_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_0.5_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.5_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_0.5_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.5_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_0.5_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.5_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_0.5_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_0.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_0.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_0.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_0.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_0.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.5_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_0.5_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.5_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_0.5_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.5_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_0.5_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.5_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_0.5_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.5_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_0.5_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_1.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_1.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_1.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_1.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_1.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_1.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_1.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_1.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_1.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_1.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_0.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_0.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_0.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_0.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_0.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_1.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_1.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_1.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_1.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_1.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_1.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_1.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_1.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_1.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_1.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.5_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_0.5_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": true,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_0.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": true,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.5_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_0.5_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": true,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_1.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_1.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": true,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_0.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": true,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_1.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_1.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": true,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.5_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_0.5_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.5_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_0.5_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.5_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_0.5_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.5_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_0.5_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.5_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_0.5_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_0.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_0.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_0.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_0.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_0.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.5_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_0.5_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.5_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_0.5_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.5_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_0.5_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.5_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_0.5_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.5_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_0.5_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_1.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_1.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_1.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_1.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_1.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_1.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_1.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_1.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_1.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_1.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_0.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_0.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_0.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_0.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_0.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_1.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_1.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_1.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_1.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_1.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_1.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_1.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_1.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_1.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_1.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.5_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_0.5_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": true,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_0.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": true,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.5_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_0.5_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": true,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_1.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_1.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": true,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_0.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": true,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_1.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_1.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": true,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.5_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_0.5_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.5_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_0.5_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.5_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_0.5_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.5_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_0.5_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.5_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_0.5_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_0.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_0.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_0.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_0.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_0.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.5_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_0.5_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.5_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_0.5_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.5_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_0.5_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.5_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_0.5_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.5_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_0.5_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_1.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_1.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_1.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_1.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_1.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_1.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_1.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_1.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_1.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_1.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_0.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_0.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_0.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_0.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_0.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_1.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_1.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_1.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_1.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_1.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_1.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_1.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_1.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_1.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_1.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.5_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_0.5_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": true,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_0.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": true,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.5_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_0.5_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": true,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_1.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_1.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": true,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_0.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": true,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_1.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_1.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": true,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.5_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_0.5_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.5_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_0.5_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.5_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_0.5_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.5_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_0.5_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.5_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_0.5_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_0.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_0.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_0.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_0.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_0.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.5_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_0.5_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.5_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_0.5_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.5_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_0.5_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.5_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_0.5_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.5_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_0.5_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_1.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_1.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_1.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_1.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_1.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_1.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_1.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_1.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_1.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_1.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_0.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_0.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_0.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_0.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_0.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_1.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_1.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_1.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_1.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_1.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_1.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_1.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_1.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_1.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_1.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_0.5_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": true,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_0.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": true,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.5_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_0.5_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": true,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_1.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_1.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": true,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_0.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": true,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_1.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_1.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": true,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_0.5_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_0.5_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_0.5_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_0.5_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_0.5_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_0.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_0.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_0.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_0.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_0.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.5_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_0.5_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.5_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_0.5_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.5_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_0.5_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.5_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_0.5_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.5_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_0.5_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        0.5
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_1.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_1.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_1.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_1.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_1.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_1.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_1.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_1.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_1.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_1.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        1.8,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_0.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_0.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_0.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_0.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_0.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        0.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_1.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_1.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_1.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_1.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_1.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_1.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_1.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_1.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_1.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_1.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "panel_key": [
+        9.6,
+        2.0,
+        1.0
+      ],
+      "status": "pending",
+      "complete": null
+    }
+  ]
+}

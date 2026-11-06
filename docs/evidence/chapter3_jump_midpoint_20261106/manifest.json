@@ -1,0 +1,3254 @@
+{
+  "protocol_id": "ch3_jump_two_stage_hold_v1",
+  "role": "Six predefined upstream DEV roots, 36 sequences each; same origin grouping as C6",
+  "status": "prepared_not_started",
+  "simulation_python": "/home/qy/miniconda3/envs/env_isaaclab/bin/python",
+  "analysis_python": "/home/qy/miniconda3/envs/mjp/bin/python",
+  "cases": [
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_0.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_0.5_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_1.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_0.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_1.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_0.5_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_0.5_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_0.5_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_0.5_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.5_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_0.5_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_0.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_0.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_0.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_0.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_0.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_0.5_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_0.5_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_0.5_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_0.5_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_0.5_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_0.5_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_1.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_1.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_1.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_1.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_1.8_1.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_1.8_1.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_0.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_0.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_0.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_0.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_0.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_0.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_1.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_1.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_1.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_1.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_01_first_2.0_1.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_01_first_2.0_1.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.5_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_0.5_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_0.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.5_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_0.5_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_1.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_1.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_0.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_1.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_1.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.5_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_0.5_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.5_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_0.5_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.5_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_0.5_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.5_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_0.5_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.5_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_0.5_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_0.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_0.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_0.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_0.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_0.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.5_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_0.5_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.5_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_0.5_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.5_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_0.5_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.5_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_0.5_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_0.5_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_0.5_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_1.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_1.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_1.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_1.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_1.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_1.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_1.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_1.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_1.8_1.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_1.8_1.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_0.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_0.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_0.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_0.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_0.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_0.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_1.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_1.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_1.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_1.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_1.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_1.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_1.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_1.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_02_first_2.0_1.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_02_first_2.0_1.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.5_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_0.5_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_0.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.5_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_0.5_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_1.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_1.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_0.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_1.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_1.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.5_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_0.5_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.5_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_0.5_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.5_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_0.5_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.5_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_0.5_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.5_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_0.5_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_0.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_0.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_0.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_0.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_0.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.5_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_0.5_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.5_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_0.5_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.5_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_0.5_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.5_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_0.5_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_0.5_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_0.5_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_1.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_1.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_1.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_1.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_1.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_1.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_1.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_1.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_1.8_1.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_1.8_1.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_0.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_0.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_0.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_0.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_0.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_0.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_1.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_1.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_1.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_1.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_1.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_1.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_1.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_1.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_03_first_2.0_1.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_03_first_2.0_1.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.5_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_0.5_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_0.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.5_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_0.5_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_1.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_1.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_0.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_1.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_1.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.5_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_0.5_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.5_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_0.5_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.5_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_0.5_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.5_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_0.5_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.5_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_0.5_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_0.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_0.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_0.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_0.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_0.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.5_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_0.5_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.5_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_0.5_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.5_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_0.5_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.5_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_0.5_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_0.5_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_0.5_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_1.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_1.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_1.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_1.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_1.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_1.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_1.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_1.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_1.8_1.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_1.8_1.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_0.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_0.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_0.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_0.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_0.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_0.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_1.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_1.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_1.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_1.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_1.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_1.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_1.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_1.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_04_first_2.0_1.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_04_first_2.0_1.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.5_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_0.5_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_0.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.5_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_0.5_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_1.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_1.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_0.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_1.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_1.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.5_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_0.5_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.5_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_0.5_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.5_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_0.5_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.5_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_0.5_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.5_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_0.5_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_0.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_0.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_0.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_0.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_0.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.5_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_0.5_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.5_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_0.5_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.5_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_0.5_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.5_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_0.5_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_0.5_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_0.5_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_1.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_1.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_1.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_1.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_1.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_1.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_1.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_1.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_1.8_1.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_1.8_1.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_0.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_0.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_0.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_0.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_0.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_0.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_1.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_1.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_1.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_1.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_1.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_1.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_1.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_1.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_05_first_2.0_1.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_05_first_2.0_1.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_0.5_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_0.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.5_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_0.5_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_1.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_1.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_0.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_1.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_1.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": true
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_0.5_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_0.5_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_0.5_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_0.5_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.5_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_0.5_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_0.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_0.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_0.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_0.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_0.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.5_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_0.5_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.5_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_0.5_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.5_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_0.5_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.5_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_0.5_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_0.5_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_0.5_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_1.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_1.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_1.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_1.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_1.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_1.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_1.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_1.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_1.8_1.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_1.8_1.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_0.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_0.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_0.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_0.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_0.0_then_2.0_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_0.0_then_2.0_1.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_1.0_then_2.0_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_1.0_then_2.0_0.5.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_1.0_then_1.8_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_1.0_then_1.8_0.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_1.0_then_1.8_0.5",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_1.0_then_1.8_0.5.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_1.0_then_1.8_1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_1.0_then_1.8_1.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 1.0
+      },
+      "diagonal": false
+    },
+    {
+      "case_id": "rb_upstream_offset_06_first_2.0_1.0_then_2.0_0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_midpoint_sequences/rb_upstream_offset_06_first_2.0_1.0_then_2.0_0.0.json",
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "first_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 1.0
+      },
+      "second_candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.0
+      },
+      "diagonal": false
+    }
+  ],
+  "maximum_physics_steps": 1900800,
+  "optimizer_updates": 0,
+  "first_execution": "Run six same-reference diagonals of first root and compare full trajectories with C6 before off-diagonal enumeration",
+  "midpoint_definition": "50% along straight connection from x=-2 exit to x=6 release: x=2; platform front x=7.6",
+  "remaining_requirement": "This fixed enumeration is not R6 online policy; midpoint Q_hold learning and online selection need executed midpoint data"
+}

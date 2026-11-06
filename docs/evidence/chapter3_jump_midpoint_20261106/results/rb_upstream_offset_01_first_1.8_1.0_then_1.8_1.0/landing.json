@@ -1,0 +1,39 @@
+{
+  "role": "nominal DEV landing diagnostic, not complete continuous-task success",
+  "criteria": {
+    "platform_x_m": [
+      7.6,
+      11.6
+    ],
+    "platform_y_m": [
+      -1,
+      1
+    ],
+    "top_z_m": 0.16,
+    "wheel_bottom_tolerance_m": 0.015,
+    "min_each_wheel_vertical_force_N": 1.0,
+    "max_nonwheel_contact_force_N": 1.0,
+    "max_abs_roll_pitch_deg": 15,
+    "continuous_hold_s": 1.0,
+    "airborne_diagnostic": {
+      "min_wheel_bottom_m": 0.02,
+      "max_each_wheel_contact_N": 1.0,
+      "minimum_duration_s": 0.02,
+      "scope": "both wheels clear ground after handoff; not an independent jump success criterion"
+    }
+  },
+  "cases": [
+    {
+      "skill": "update2",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        10.140000343322754,
+        10.6899995803833
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.0,
+      "interval_s": null
+    }
+  ]
+}
