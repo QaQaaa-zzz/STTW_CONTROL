@@ -22,7 +22,7 @@ from sttw_control.isaac_path_rollout import IsaacPathRollout
 from sttw_control.torch_path_policy import TorchPathPolicy
 from sttw_control.torch_path_reference import TorchPathReference,wrap
 from sttw_control.goal_replanning import IsaacGoalReplanning
-s=json.loads(Path(spec['settings']).read_text());s.update(num_envs=6,alphas=[spec['source_alpha']]*6,zero_middle=[False]*6,user_speed_m_s=spec['source_speed_m_s'],terrains={'source':spec['terrain']},episode_s=spec['source_seconds'],auto_reset_horizon=False,diagnostics=False,record_control_commands=True)
+s=json.loads(Path(spec['settings']).read_text());s.update(num_envs=6,alphas=[spec['source_alpha']]*6,zero_middle=[False]*6,user_speed_m_s=spec['source_speed_m_s'],terrains={'source':spec['terrain']},episode_s=spec['source_seconds'],auto_reset_horizon=False,diagnostics=False,record_control_commands=True,record_body_poses=spec.get('record_body_poses',False))
 torch.manual_seed(spec['seed']);torch.set_num_threads(2)
 bundle=Path(spec['source_bundle']);identity=json.loads((bundle/'identity.json').read_text());cfg=json.loads((bundle/'config.json').read_text())
 policy=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],cfg,6,'cuda:0')
@@ -121,7 +121,7 @@ for task in spec['tasks']:
     env.restore_connection_state(snapshot);env.horizon=round(task['seconds']/.02);env.begin_connection(original,speeds,alphas)
     planner=IsaacGoalReplanning(env,{**spec['replanning'],'original_route':task['route']},folder)
     goal=torch.as_tensor(planner.goal,device=env.device);arrival=torch.full((6,),float('nan'),device=env.device)
-    rows=[];command_rows=[];original_errors=[];entry_events=[];common=spec.get('common_task_reference')
+    rows=[];command_rows=[];body_rows=[];original_errors=[];entry_events=[];common=spec.get('common_task_reference')
     original_progress=torch.zeros(6,device=env.device);entered_b=torch.zeros(6,device=env.device,dtype=torch.bool)
     # Original fixed-path distance is measured independently of replanned references.
     points=original.xy;segments=points[1:]-points[:-1];segment_norm=segments.square().sum(-1)
@@ -135,6 +135,7 @@ for task in spec['tasks']:
             env.speed.copy_(torch.where(crossing,common['speed_m_s'],env.speed));env.alpha.copy_(torch.where(crossing,common['alpha'],env.alpha));entered_b|=crossing
         planner.update();result=env.step();trace=result['lower_trace'];rows.append(trace.clone())
         commands=result['executed_commands'].clone();commands[:,:,0]+=k*.02;command_rows.append(commands)
+        if s['record_body_poses']:body_rows.append(result['body_poses'])
         xy=trace[:,:,:2]
         delta=xy[:,:,None,:]-points[None,None,:-1,:]
         u=(delta*segments).sum(-1)/segment_norm
@@ -147,6 +148,7 @@ for task in spec['tasks']:
     commands=torch.cat(command_rows).cpu().numpy()
     np.savez_compressed(folder/'executed_commands.npz',commands=commands,columns=np.array(['time_since_connection_s','steering_rate_rad_s','rear_axle_speed_rad_s','alive_before_step']))
     np.savez(folder/'trajectory.npz',trace=trace,original_path_error=errors,original_xy=data['xy'],original_s=data['s'],arrival_time=arrivals,goal=planner.goal)
+    if body_rows:np.savez_compressed(folder/'body_poses.npz',poses=torch.cat(body_rows).cpu().numpy(),body_names=np.array(plant.bodies),env_origins=plant.origin.cpu().numpy(),quaternion_order=np.array('xyzw'),sample_dt_s=np.array(.005),valid=trace[:,:,6]>0,urdf=np.array(str(Path(s['asset']).resolve())))
     if common is not None:(folder/'b_entry_events.json').write_text(json.dumps(entry_events,indent=2)+'\n')
     for i,candidate in enumerate(candidates):
         valid=trace[:,i,6]>0;path_errors=errors[valid,i]

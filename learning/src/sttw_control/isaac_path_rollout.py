@@ -20,6 +20,7 @@ class IsaacPathRollout:
         self.zero_lower=torch.tensor(settings.get('zero_lower',[False]*n),device=self.device)
         self.upper_sha256=identity['files']['actor.npz'];self.lower_sha256=settings['lower_sha256']
         self.record_control_commands=settings.get('record_control_commands',False)
+        self.record_body_poses=settings.get('record_body_poses',False)
         self.physics_recorder=None;self.plant=plant;self.wheel_radius_m=getattr(plant,'wheel_radius_m',.1);self.cc=json.loads(Path(settings['controller_config']).read_text());self.cc['wheel_radius_m']=self.wheel_radius_m;self.controller=TorchController(self.cc,n,self.device)
         self.lower=lower if lower is not None else TorchLocalLower(settings['lower_actor'],settings['lower_sha256'],n,self.device);self.policy=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],self.config,n,self.device);self.policy.weights=actor.weights
         self.physics_dt=getattr(self.plant,'physics_dt',.0002);self.physics_substeps=round(.005/self.physics_dt)
@@ -84,7 +85,7 @@ class IsaacPathRollout:
     @torch.no_grad()
     def step(self,std=None,latent=None):
         self.update_preference()
-        valid=self.alive.clone();start_task_tick=self.task_tick.clone();initial_offsets=self.policy.offsets.clone();reward=torch.zeros(self.n,device=self.device);new_failure=torch.zeros_like(valid);logs=[];details=[];command_logs=[];first_action=None
+        valid=self.alive.clone();start_task_tick=self.task_tick.clone();initial_offsets=self.policy.offsets.clone();reward=torch.zeros(self.n,device=self.device);new_failure=torch.zeros_like(valid);logs=[];details=[];command_logs=[];body_poses=[];first_action=None
         for lower_tick in range(4):
             if self.randomization is not None:
                 push_ticks=round(self.randomization.config['push_interval_s']/.005)
@@ -121,6 +122,7 @@ class IsaacPathRollout:
             terms=costs(alpha=self.alpha,chi=chi,ev=post_v-self.speed,ey=projection['cross_track'],eh=wrap(projection['heading']-post_pose[:,2]),peak_roll=peak,roll_rate=post_m[:,1],speed=post_v,offsets=offsets,offset_rate=torch.zeros_like(offsets),config=self.config)
             reward+=torch.where(active_lower,torch.nan_to_num(terms['reward']),0);bad=(post_m[:,0].abs()>.7)|self.middle.fault|self.middle.domain_exit;new_failure|=self.alive&bad;self.alive&=~bad
             logs.append(torch.cat((post_pose[:self.trace_lanes,:2],post_v[:self.trace_lanes,None],projection['cross_track'][:self.trace_lanes,None],peak[:self.trace_lanes,None],terms['reward'][:self.trace_lanes,None],active_lower[:self.trace_lanes,None],stop_tick[:self.trace_lanes,None],governed[:self.trace_lanes],post_m[:self.trace_lanes,5:6]*self.wheel_radius_m),dim=-1));self.previous_reference=governed;self.previous_command=command
+            if self.record_body_poses:body_poses.append(self.plant.rigid[:self.trace_lanes,:,:7].clone())
             if self.diagnostics:
                 details.append(dict(observation=self.middle.obs.clone(),nominal=self.middle.nominal.clone(),
                     progress=projection['progress'].clone(),pose=post_pose.clone(),measurement=post_m.clone(),policy_measurement=(post_m if self.randomization is None else self.measurement).clone(),
@@ -135,6 +137,7 @@ class IsaacPathRollout:
         reward=torch.where(new_failure,failure_reward(self.horizon-start_task_tick//4,self.config),reward);reward=torch.where(valid,reward,0);self.tick+=1;horizon_done=self.task_tick>=self.horizon*4;done=new_failure|horizon_done
         result=dict(action=first_action,reward=reward,done=done,valid=valid,failure=new_failure,lower_trace=torch.stack(logs),episode=self.episode,episode_tick=self.tick,tracking_error=torch.stack((post_v-self.speed,projection['cross_track'],post_m[:,0]),dim=-1))
         if self.record_control_commands:result['executed_commands']=torch.stack(command_logs)
+        if self.record_body_poses:result['body_poses']=torch.stack(body_poses)
         if self.diagnostics:result['diagnostics']=details
         if self.auto_reset_horizon and self.tick==self.horizon:self.episode+=1;self.reset()
         return result
