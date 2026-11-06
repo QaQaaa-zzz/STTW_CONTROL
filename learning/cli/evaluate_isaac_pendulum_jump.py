@@ -60,7 +60,7 @@ returned=False;landing_ticks=0;landing_ready=False;transition_speed=None
 if spec.get('landing_return'):assert n==1, 'Landing return currently uses a single lane'
 ground_rows=[];ground_command_rows=[];approach_selected=False;executed_rows=[]
 active=False;rows=[];actions=[];observations=[];valid=[];arm_rows=[];body_rows=[];contact_rows=[];start=time.monotonic();steps=round(spec['seconds']/.005)
-(out/'protocol.json').write_text(json.dumps(dict(spec=spec,plant=plant.metadata,policies=[s.identity for s in policies],ground_history='last_action zero means no prior jump action; physical FIFO sampled throughout ground approach',initial_translation='common saved snapshot translated to start_x/y0; optional rigid world-yaw alignment rotates pose and both velocities together',role='nominal paired DEV integration; not original donor benchmark',physics_dt=plant.physics_dt,ground_dt=.005,jump_dt=.02,optimizer_updates=0),indent=2))
+(out/'protocol.json').write_text(json.dumps(dict(spec=spec,plant=plant.metadata,joint_names=plant.joints,policies=[s.identity for s in policies],ground_history='last_action zero means no prior jump action; physical FIFO sampled throughout ground approach',initial_translation='common saved snapshot translated to start_x/y0; optional rigid world-yaw alignment rotates pose and both velocities together',role='nominal paired DEV integration; not original donor benchmark',physics_dt=plant.physics_dt,ground_dt=.005,jump_dt=.02,optimizer_updates=0),indent=2))
 ground=None
 if spec.get('ground_bundle'):
  from sttw_control.isaac_path_rollout import IsaacPathRollout
