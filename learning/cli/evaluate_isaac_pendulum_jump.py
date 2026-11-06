@@ -54,6 +54,8 @@ policies=[TorchPendulumSkill(Path(spec['bundles'])/s) for s in spec['skills']]
 history=TorchPendulumObservation(plant.joints,json.loads(Path(spec.get('model_config','learning/configs/pendulum_common_asset.json')).read_text())['mount_rotation_wxyz'],n,'cuda:0')
 geometry=TorchPendulumGeometry(json.loads(Path(spec['geometry']).read_text()),plant.bodies)
 last=torch.zeros(n,4,device='cuda:0');alive=torch.ones(n,dtype=torch.bool,device='cuda:0');entered=torch.zeros_like(alive);consumed=torch.zeros_like(alive)
+returned=False;landing_ticks=0
+if spec.get('landing_return'):assert n==1, 'Landing return currently uses a single lane'
 active=False;rows=[];actions=[];observations=[];valid=[];arm_rows=[];body_rows=[];contact_rows=[];start=time.monotonic();steps=round(spec['seconds']/.005)
 (out/'protocol.json').write_text(json.dumps(dict(spec=spec,plant=plant.metadata,policies=[s.identity for s in policies],ground_history='last_action zero means no prior jump action; physical FIFO sampled throughout ground approach',initial_translation='common saved snapshot translated to start_x/y0; optional rigid world-yaw alignment rotates pose and both velocities together',role='nominal paired DEV integration; not original donor benchmark',physics_dt=plant.physics_dt,ground_dt=.005,jump_dt=.02,optimizer_updates=0),indent=2))
 ground=None
@@ -61,11 +63,12 @@ if spec.get('ground_bundle'):
  from sttw_control.isaac_path_rollout import IsaacPathRollout
  from sttw_control.torch_path_policy import TorchPathPolicy
  from sttw_control.torch_path_reference import TorchPathReference
- ground_state={key:saved[key] for key in saved.files}
+ ground_saved=np.load(spec.get('ground_initial_state',spec['initial_state']))
+ ground_state={key:ground_saved[key] for key in ground_saved.files}
  ground_state.update({key:value.cpu().numpy() for key,value in state.items()})
  np.savez(out/'ground_initial.npz',**ground_state)
- settings=json.loads(Path('learning/configs/isaaclab_h75_offroad_selected.json').read_text())
- settings.update(num_envs=n,alphas=[spec['ground_alpha']]*n,zero_middle=[False]*n,terrains={'plane':'plane'},episode_s=spec['seconds'],initial_state=str(out/'ground_initial.npz'),user_speed_m_s=spec['approach_speed'],auto_reset_horizon=False)
+ settings=json.loads(Path(spec.get('ground_settings','learning/configs/isaaclab_h75_offroad_selected.json')).read_text())
+ settings.update(num_envs=n,alphas=[spec['ground_alpha']]*n,zero_middle=[False]*n,zero_lower=[spec.get('zero_lower',False)]*n,terrains={'plane':'plane'},episode_s=spec['seconds'],initial_state=str(out/'ground_initial.npz'),user_speed_m_s=spec['approach_speed'],auto_reset_horizon=False)
  bundle=Path(spec['ground_bundle']);identity=json.loads((bundle/'identity.json').read_text());ground_cfg=json.loads((bundle/'config.json').read_text())
  actor=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],ground_cfg,n,'cuda:0')
  ground=IsaacPathRollout(bundle,settings,actor,plant=plant)
@@ -77,7 +80,7 @@ target=torch.zeros(n,4,device='cuda:0')
 root_acceleration=torch.zeros(n,3,device='cuda:0')
 previous_root_velocity=plant.roots[:,7:10].clone()
 for k in range(steps+1):
- if ground is not None and not active and k%4:continue
+ if ground is not None and not active and (returned or not spec.get('ground_after_landing_only',False)) and k%4:continue
  m,pose,speed=plant.observe();root=plant.roots.clone();root[:,:3]-=plant.origin
  distance=3.6-(geometry.frontmost_x(plant.rigid)-plant.origin[:,0])
  row=torch.cat((torch.full((n,1),k*.005,device='cuda:0'),root[:,:3],speed[:,None],m[:,:4],plant.dofs[:,plant.pendulum_servos.indices,0],distance[:,None]),-1)
@@ -87,7 +90,7 @@ for k in range(steps+1):
  if camera is not None and k%4==0:
   plant.sim.render();camera.update(.02,force_recompute=True)
   writer.append_data(camera.data.output['rgb'][0,:,:,:3].cpu().numpy())
- if ground is not None and not active:alive &= ground.alive
+ if ground is not None and not active and (returned or not spec.get('ground_after_landing_only',False)):alive &= ground.alive
  alive &= torch.isfinite(row).all(-1)&(m[:,0].abs()<torch.pi/4)&(root[:,2]>0.05)
  if k==steps or not bool(alive.any()):break
  if k%4==0:
@@ -96,11 +99,36 @@ for k in range(steps+1):
   acceleration=root_acceleration if spec.get('root_acceleration_difference',False) else plant.robot.data.body_com_acc_w[:,plant.bodies.index('chasis'),:3]
   obs=torch.cat((history.frames.flatten(1),signal[:,None]),-1) if k==0 and spec.get('zero_initial_history',False) else history.advance(root,plant.dofs[:,:,0],plant.dofs[:,:,1],acceleration,distance,last,signal)
   observations.append(obs)
-  if not active and bool((root[:,0]>=spec.get('handoff_x',2.5)).any()):
+  if not active and not returned and bool((root[:,0]>=spec.get('handoff_x',2.5)).any()):
    plant.set_pendulum_locked(False);active=True
    (out/'handoff.json').write_text(json.dumps(dict(time=k*.005,root=root.cpu().tolist(),position=plant.dofs[:,:,0].cpu().tolist(),velocity=plant.dofs[:,:,1].cpu().tolist(),distance=distance.cpu().tolist()),indent=2))
   if active:
    for i,policy in enumerate(policies):last[i:i+1],target[i:i+1]=policy.infer(obs[i:i+1],plant.dofs[i:i+1,plant.joints.index('knee_joint'),0])
+ if active and spec.get('landing_return'):
+  # Contact-triggered handback; retain the physical pose/velocity and lock the current arm posture.
+  from isaaclab.utils.math import euler_xyz_from_quat
+  ids=[plant.bodies.index(name) for name in ('frontwheel','rearwheel')]
+  wheels=plant.rigid[:,ids,:3]-plant.origin[:,None,:]
+  roll,pitch,yaw=euler_xyz_from_quat(plant.robot.data.root_link_quat_w)
+  pitch=torch.atan2(torch.sin(pitch),torch.cos(pitch))
+  on_platform=((wheels[:,:,0]>3.6)&(wheels[:,:,0]<7.6)&(wheels[:,:,1].abs()<.9)&((wheels[:,:,2]-.23).abs()<.025)).all()
+  supported=(plant.contact[:,ids,2]>1.).all()
+  settled=bool(on_platform & supported & (m[:,0].abs()<.15).all() & (pitch.abs()<.15).all())
+  landing_ticks=landing_ticks+1 if settled else 0
+  if landing_ticks*.005>=spec['landing_return']['support_s'] and k%4==0:
+   plant.set_pendulum_locked(True);active=False;returned=True;controller.reset(slice(None))
+   if ground is not None:
+    ground.controller.reset(slice(None));ground.lower.reset(slice(None));ground.alive.fill_(True)
+    ground.speed.fill_(spec['landing_return']['speed_m_s'])
+    ground.measurement=m;ground.previous_reference=torch.stack((speed,m[:,2]),-1)
+    ground.previous_command=torch.stack((m[:,3],m[:,5]),-1)
+    ground.middle.reset(m,pose,speed,ground.previous_reference,ground.previous_reference,ground.previous_command,ground.controller)
+    ground.begin_connection(ground.route,ground.speed.clone(),ground.alpha.clone())
+    nearest=(ground.route.xy[None]-pose[:,None,:2]).square().sum(-1).argmin(-1)
+    ground.middle.projection=ground.route.project(pose[:,:2],ground.route.s[nearest],torch.zeros_like(speed))
+    ground.middle.follower=ground.route.pursuit(ground.middle.projection['progress'],pose,speed,ground.speed)
+    ground.middle.fault=ground.middle.follower['numerical_fault'].clone();ground.middle.domain_exit=ground.middle.follower['invalid'].clone()
+   (out/'landing_handoff.json').write_text(json.dumps(dict(time=k*.005,root=root.cpu().tolist(),position=plant.dofs[:,:,0].cpu().tolist(),velocity=plant.dofs[:,:,1].cpu().tolist(),controller_state='ECBC ESO initialized for resumed ground control; no physical reset',arm='locked at current posture'),indent=2))
  if active:
   command=torch.stack((torch.zeros_like(speed),target[:,1]),-1)
   for substep in range(substeps):
@@ -110,11 +138,11 @@ for k in range(steps+1):
    velocity=plant.robot.data.root_link_lin_vel_w
    root_acceleration=(velocity-previous_root_velocity)/plant.physics_dt;previous_root_velocity=velocity.clone()
    arm_rows.append(torch.cat((before,plant.last_pendulum_torque[:,ids],alive[:,None]),-1))
- elif ground is not None:
+ elif ground is not None and (returned or not spec.get('ground_after_landing_only',False)):
   ground.step()
  else:
   request=torch.stack((m[:,5]*plant.wheel_radius_m,m[:,2],m[:,3],m[:,0],m[:,1],torch.zeros_like(speed)),-1)
-  control=controller.step(request,torch.ones_like(alive));command=torch.stack((control[:,0].clamp(-3,3),torch.full_like(speed,spec['approach_speed']/plant.wheel_radius_m)),-1)
+  control=controller.step(request,torch.ones_like(alive));command=torch.stack((control[:,0].clamp(-3,3),torch.full_like(speed,(spec['landing_return']['speed_m_s'] if returned else spec['approach_speed'])/plant.wheel_radius_m)),-1)
   for _ in range(substeps):
    plant.step(command,refresh_diagnostics=False)
    velocity=plant.robot.data.root_link_lin_vel_w
@@ -127,7 +155,7 @@ if body_rows:
 if arm_rows:
  np.savez(out/'arm_commands.npz',trace=torch.stack(arm_rows).cpu().numpy(),columns=['time','hip_target','knee_target','hip_position','knee_position','hip_velocity','knee_velocity','hip_command_torque','knee_command_torque','alive_before_step'],semantics='pre-step state and actual clipped PD effort command each physics step; not solver-measured reaction torque')
 trace=torch.stack(rows).cpu().numpy();mask=torch.stack(valid).cpu().numpy();np.savez(out/'trajectory.npz',trace=trace,valid=mask,action=torch.stack(actions).cpu().numpy(),observations=torch.stack(observations).cpu().numpy(),columns=['time','x','y','z','speed','roll','roll_rate','steer','steer_rate','hip','knee','obstacle_relative_x'])
-result=dict(status='complete',elapsed_s=time.monotonic()-start,physics_lane_steps=k*substeps*n,ground_controller=('none; jump policy from reset' if spec.get('handoff_x',2.5)<=spec['start_x'] else ('H75+Local300' if ground is not None else 'ECBC+ESO')),cases=[])
+result=dict(status='complete',elapsed_s=time.monotonic()-start,physics_lane_steps=k*substeps*n,landing_return_executed=returned,ground_controller=('none; jump policy from reset' if spec.get('handoff_x',2.5)<=spec['start_x'] else (('H75+ECBC (zero lower residual)' if spec.get('zero_lower') else 'H75+Local300') if ground is not None else 'ECBC+ESO')),cases=[])
 for i,name in enumerate(spec['skills']):
  tr=trace[mask[:,i],i];result['cases'].append(dict(skill=name,duration_s=float(tr[-1,0]),physical_termination=not bool(alive[i]),peak_root_z=float(tr[:,3].max()),final_xyz=tr[-1,1:4].tolist(),peak_abs_roll_deg=float(np.rad2deg(abs(tr[:,5])).max()),full_jump_success='not adjudicated; requires clearance and landing evidence'))
 (out/'results.json').write_text(json.dumps(result,indent=2));print(result,flush=True)
