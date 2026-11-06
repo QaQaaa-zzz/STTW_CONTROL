@@ -25,6 +25,12 @@ if protocol['spec'].get('ground_route'):
  end=max(int(np.argmin(np.linalg.norm(route['xy']-point,axis=1))) for point in endpoints)
  ref=route['xy'][:min(end+51,len(route['xy']))];ax[0].plot(ref[:,0],ref[:,1],color='gray',ls=':',label='Original ground route')
 else:ax[0].axhline(0,color='gray',ls=':',label='Straight approach reference')
+if protocol['spec'].get('forward_branch'):
+ branch_map=json.loads(Path(protocol['spec']['forward_branch']['map_contract']).read_text())
+ mapped=np.load(branch_map['allowed_route_map'])['xy'];last=t[-1,0,1:3]
+ end=int(np.argmin(np.linalg.norm(mapped-last,axis=1)))
+ ax[0].plot(mapped[:end+51,0],mapped[:end+51,1],'--',color='purple',label='Declared bypass map')
+ ax[0].plot(*branch_map['common_goal_xy'],'*',color='black',label='Shared destination')
 ax[0].set(xlabel='World x (m)',ylabel='World y (m)');ax[0].set_aspect('equal',adjustable='datalim');ax[0].legend(fontsize=8)
 ax[1].plot([1,protocol['spec'].get('platform_front_x',3.6),protocol['spec'].get('platform_front_x',3.6),protocol['spec'].get('platform_back_x',7.6)],[0,0,.16,.16],color='gray',ls=':',label='Platform surface');ax[1].set(xlabel='World x (m)',ylabel='Root height (m)');ax[1].legend(fontsize=8)
 ax[2].set(xlabel='Time (s)',ylabel='Roll (deg)');ax[2].legend(fontsize=8)

@@ -5,6 +5,7 @@ import numpy as np
 p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);a=p.parse_args()
 spec=json.loads(a.config.read_text())
 if spec.get('connection_selector') and (len(spec['skills'])!=1 or not spec.get('ground_bundle') or not spec.get('connection_midpoint_candidate')):p.error('Connection selection requires single-lane ground execution and a declared midpoint event')
+if spec.get('forward_branch') and (len(spec['skills'])!=1 or not spec.get('ground_bundle') or spec['forward_branch']['requested_route'] not in ('original_jump','bypass')):p.error('Mapped branch pilot requires one ground lane and a declared original_jump or bypass route')
 if spec.get('connection_midpoint_candidate'):
  if not spec.get('connection_candidate') or not spec['connection_candidate']['decision_x_m']<spec['connection_midpoint_candidate']['decision_x_m']<spec['handoff_x']:p.error('Midpoint decision must lie strictly between the exit decision and jump handoff')
 out=Path(spec['output']);out.mkdir(exist_ok=True,parents=True)
@@ -101,6 +102,12 @@ if spec.get('connection_selector'):
  selector=JumpConnectionSelector(evidence,selector_config,origin_id=spec['origin_id'],policy_sha256=dict(ground=ground.upper_sha256,jump=policies[0].identity['artifact_sha256']),model_contract_sha256=hashlib.sha256(Path(cfg['asset']).with_name('contract.json').read_bytes()).hexdigest(),physics_dt=plant.physics_dt,zero_lower=spec['zero_lower'])
  (out/'connection_selector.json').write_text(json.dumps(dict(config=selector_config,evidence_sha256={file:hashlib.sha256(text.encode()).hexdigest() for file,text in evidence_texts.items()},accepted_rows=selector.evidence_rows,excluded_origin_id=spec['origin_id']),indent=2))
 root_acceleration=torch.zeros(n,3,device='cuda:0')
+branch_decided=False;bypass_selected=False
+if spec.get('forward_branch'):
+ from sttw_control.continuous_task import available_forward_routes
+ branch_config=spec['forward_branch'];branch_map=json.loads(Path(branch_config['map_contract']).read_text())
+ branch_routes=[dict(route_id='original_jump'),dict(route_id='bypass',first_entry_progress_m=branch_map['first_entry_progress_m'],last_entry_progress_m=branch_map['last_entry_progress_m'],minimum_dwell_s=branch_map['minimum_dwell_s'])]
+ common_route=ground.route;furthest_common_progress=0.
 previous_root_velocity=plant.roots[:,7:10].clone()
 for k in range(steps+1):
  if ground is not None and not active and (returned or not spec.get('ground_after_landing_only',False)) and k%4:continue
@@ -116,7 +123,7 @@ for k in range(steps+1):
  if ground is not None and not active and (returned or not spec.get('ground_after_landing_only',False)):alive &= ground.alive
  alive &= torch.isfinite(row).all(-1)&(m[:,0].abs()<torch.pi/4)&(root[:,2]>0.05)
  if k==steps or not bool(alive.any()):break
- if ground is not None and not active and not returned and connection_event_index<len(connection_events) and float(root[0,0])>=connection_events[connection_event_index][2]['decision_x_m']:
+ if ground is not None and not active and not returned and not bypass_selected and connection_event_index<len(connection_events) and float(root[0,0])>=connection_events[connection_event_index][2]['decision_x_m']:
   stage,event_file,candidate=connection_events[connection_event_index];connection_event_index+=1
   event=dict(time=k*.005,decision_stage=stage,previous_alpha_duration_s=k*.005-previous_alpha_since_s,candidate=candidate,root=root.cpu().tolist(),measurement=m.cpu().tolist(),position=plant.dofs[:,:,0].cpu().tolist(),velocity=plant.dofs[:,:,1].cpu().tolist(),previous_reference=ground.previous_reference.cpu().tolist(),previous_alpha=ground.alpha.cpu().tolist(),history='retained, no reset')
   if selector is not None and stage in spec['connection_selector'].get('stages',['midpoint']):
@@ -126,13 +133,25 @@ for k in range(steps+1):
   (out/event_file).write_text(json.dumps(event,indent=2))
   if float(ground.alpha[0])!=candidate['alpha']:previous_alpha_since_s=k*.005
   ground.speed.fill_(candidate['speed_m_s']);ground.alpha.fill_(candidate['alpha'])
+ if spec.get('forward_branch') and not branch_decided and not active and not returned:
+  furthest_common_progress=max(furthest_common_progress,float(ground.middle.projection['progress'][0]))
+  if float(root[0,0])>=branch_config['decision_x_m']:
+   branch_decided=True;query_start=time.perf_counter()
+   projection=common_route.project(pose[:,:2],torch.full_like(speed,furthest_common_progress),speed*.02)
+   furthest_common_progress=max(furthest_common_progress,float(projection['progress'][0]))
+   availability=available_forward_routes(branch_routes,['original_jump','bypass'],furthest_progress_m=furthest_common_progress,time_s=k*.005,current_route='original_jump')
+   requested=branch_config['requested_route'];executed=requested if requested in availability['available_routes'] else 'original_jump'
+   if executed=='bypass':
+    branch_reference=dict(np.load(branch_map['branch_reference']));np.savez_compressed(out/'executed_branch_reference.npz',**branch_reference)
+    ground.begin_connection(TorchPathReference(branch_reference,ground.config,ground.device),ground.speed.clone(),ground.alpha.clone());bypass_selected=True
+   (out/'forward_branch_decision.json').write_text(json.dumps(dict(time_s=k*.005,requested_route=requested,executed_route=executed,furthest_common_progress_m=furthest_common_progress,availability=availability,root=root.cpu().tolist(),selection_wall_s=time.perf_counter()-query_start,history='existing begin_connection; controller/filter/ESO/observation history retained',role='Forced-route pilot, no capability-based route decision'),indent=2))
  if k%4==0:
   inside=(root[:,0]>=spec.get('platform_front_x',3.6)-1.1)&(root[:,0]<=spec.get('platform_front_x',3.6)+.4);consumed|=entered&~inside;entered|=inside
   signal=(inside&~consumed).float()
   acceleration=root_acceleration if spec.get('root_acceleration_difference',False) else plant.robot.data.body_com_acc_w[:,plant.bodies.index('chasis'),:3]
   obs=torch.cat((history.frames.flatten(1),signal[:,None]),-1) if k==0 and spec.get('zero_initial_history',False) else history.advance(root,plant.dofs[:,:,0],plant.dofs[:,:,1],acceleration,distance,last,signal)
   observations.append(obs)
-  if not active and not returned and bool((root[:,0]>=spec.get('handoff_x',2.5)).any()):
+  if not active and not returned and not bypass_selected and bool((root[:,0]>=spec.get('handoff_x',2.5)).any()):
    plant.set_pendulum_locked(False);active=True
    (out/'handoff.json').write_text(json.dumps(dict(time=k*.005,root=root.cpu().tolist(),position=plant.dofs[:,:,0].cpu().tolist(),velocity=plant.dofs[:,:,1].cpu().tolist(),distance=distance.cpu().tolist()),indent=2))
   if active:

@@ -1,0 +1,18 @@
+{
+  "role": "Two forced mapped-route DEV pilots, same upstream root; not rule/capability comparison",
+  "simulation_python": "/home/qy/miniconda3/envs/env_isaaclab/bin/python",
+  "analysis_python": "/home/qy/miniconda3/envs/mjp/bin/python",
+  "cases": [
+    {
+      "case_id": "forced_original_jump",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/forced_original_jump.json"
+    },
+    {
+      "case_id": "forced_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/forced_bypass.json"
+    }
+  ],
+  "physics_lane_steps_max": 24000,
+  "optimizer_updates": 0,
+  "status": "prepared_not_started"
+}
