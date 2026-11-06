@@ -61,8 +61,16 @@ if s.get('replanning'):
 if s.get('physics_contact_recording'):
     from sttw_control.physics_contact_recording import PhysicsContactRecorder
     env.physics_recorder=PhysicsContactRecorder(a.output/'physics_contacts',env,s['physics_contact_recording'])
+branching=None
+if s.get('contact_branching'):
+    if env.physics_recorder is not None or intervention or planner is not None:
+        raise ValueError('Contact branching uses its own physics hook and fixed natural route')
+    from sttw_control.contact_branching import ContactBranching
+    branching=ContactBranching(env,s['contact_branching'],a.output,a.terrain)
+    env.physics_recorder=branching
 fork_step=None
 for step in range(env.horizon):
+    if branching is not None:branching.decision(step)
     if intervention:
         if fork_step is None and bool(env.alive[0]) and float(env.middle.projection['progress'][0])>=intervention['progress_m']:
             from sttw_control.isaac_path_snapshot import capture,restore
