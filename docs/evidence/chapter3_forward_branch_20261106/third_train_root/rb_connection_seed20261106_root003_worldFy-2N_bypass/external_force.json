@@ -1,0 +1,28 @@
+{
+  "protocol": {
+    "kind": "external_force_N",
+    "body": "chasis",
+    "site_body_position_m": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "force_world_N": [
+      0.0,
+      -2.0,
+      0.0
+    ],
+    "duration_s": 0.12,
+    "trigger_x_m": -2.5
+  },
+  "triggered": true,
+  "trigger_time_s": 5.72,
+  "impulse_world_Ns": [
+    [
+      0.0,
+      -0.23999999463558197,
+      0.0
+    ]
+  ],
+  "scope": "Prescribed world-frame force at body-local site; position crossing sampled at current execution rate; omitted intervals have zero force, not velocity replacement"
+}
