@@ -1,3 +1,17 @@
+## 五档 alpha 连线及动力学解释（已保存数据，不新增仿真）
+
+用户要求把取舍点连线，并解释形状；暂不写论文正文。图按 alpha=0/.25/.5/.75/1 顺序连接，保留折返，不按横坐标排序，不拟合多项式；Zero 是独立控制器，不接入偏好曲线。源码 `learning/cli/plot_tradeoff_curve.py`，输入原 `tradeoff_common_window.json`。 [保留Zero全图](../runs/h75_terrain_speed_sweep/evaluation/tradeoff_common_window_connected.png) · [H75放大连线](../runs/h75_terrain_speed_sweep/evaluation/tradeoff_common_window_connected_detail.png) · [原实际XY](../runs/h75_terrain_speed_sweep/evaluation/xy_matrix_full.png) · [各段斜率](../runs/h75_terrain_speed_sweep/evaluation/tradeoff_curve_segments.json)。单位斜率为(m/s)/m，不能当无量纲收益。
+
+观察：中高alpha多数区间速度收益递减，但非处处凸或单调。4cm/2.6m/s相邻段速度RMSE变化除路径RMSE变化依次-2.208/-0.784/-0.318/-0.229 s^-1；多数低速条件0→.25同时降低两误差，6cm/2.3m/s .75→1也同时降低，故不能称全部点Pareto最优。alpha=.5/.75只能作为待选折中档，不能凭单位相关视觉“拐点”宣称普遍最优。
+
+模型依据：controller.py `_system`的线性侧倾模型为 I*roll_ddot = m1*steer_rate + m2*steer - m4*roll + 扰动，m1∝v，m2=-(m*v²*h-m*a*t*g)*cos(caster)/L，m4=-m*g*h。其准静态参考关系为 roll_ref=steer_ref/(m4/m2)，即系数含v²和拖距修正。因此速度与转向不独立；在忽略拖距/小角度的解释模型中 κ≈cos(caster)*δ/L，tan(phi)≈v²κ/g。速度上升会提高相同曲率的侧倾需求；若侧倾增长受控制目标/执行能力约束，减小曲率可部分抵消，代价是偏离原弯道。这里没有证明车辆已触及物理极限。
+
+假设圆弯半径R、外扩e_R、近似恒定侧倾phi_*及近似恒速欠速，得到 E_v≈v_req-sqrt(g*tan(phi_*)*(R+e_R))，其一阶导负、二阶导正，可解释下降后趋平的趋势。e_R不是实际全程路径RMSE，欠速不是普遍等于速度RMSE；实际姿态随alpha改变，地形接触/历史/参考滤波/奖励共同决定闭环轨迹。因此这个平方根形状只是假设下的解释，不是从五个点识别出的车辆函数，更不是强行套用的拟合。
+
+原数据额外描述检查：4cm/2.3m/s，在五H75 lane都位于|参考曲率|>0.1/m且六lane有效的共同时间段(270个5ms样本)，alpha0→1平均速度2.0126→2.2765m/s，平均绝对侧倾0.1886→0.2146rad；侧倾并不恒定。`tradeoff_bend_dynamics.json`保留全部条件数据；pre-step侧倾/post-step速度仅作分开均值，不当同步平衡方程拟合。二级统计窗口不同于原散点的完整共同有效窗口。
+
+稳态物理关系参考原始研究：Eric Maris, PLOS ONE 2023, https://doi.org/10.1371/journal.pone.0278961 ，文中“realistic turn radiuses, lean angles”明确tan(phi)=v²/(Rg)。本项目模型系数以本地controller.py为准，外部研究不作为本车数据验证。
+
 ## Pendulum-bicycle skill lineage located and model pair identified
 
 `learning/configs/pendulum_bike_skill_sources.json` binds the reviewed source and first Full/Run1 student record from the existing10k evaluation request. Actual payload hashes and checkpoint XML identities match: source actor`a06acbc8…`, Run1 actor`c3eae39c…`; payloads are accessible. Run1 is an interface-preparation candidate, not a new best-model selection or a claim that all historical Full labels share one recipe. Preserve the existing training-record audit differences.
