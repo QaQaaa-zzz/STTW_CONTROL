@@ -17,8 +17,8 @@ s=json.loads(a.config.read_text())
 if not a.configured_lanes:s.update(num_envs=6,alphas=[0,.25,.5,.75,1,0],zero_middle=[False]*5+[True])
 if not 1<=s['num_envs']<=15:p.error('diagnostic evaluation supports 1 to 15 lanes')
 if a.channel_protocol:
-    protocol=json.loads(a.channel_protocol.read_text());s.update(num_envs=5,alphas=[a.protocol_alpha]*5,zero_middle=[False]*5,case_labels=protocol['case_labels'],evaluation_role=protocol['evaluation_role'],channel_intervention=dict(progress_m=protocol['fork_phases_m'][a.protocol_phase],hold_s=protocol['hold_s'],hold_channels=protocol['hold_channels'],phase=a.protocol_phase))
-    s['plant_options']['track_wheel_contacts']=True
+    protocol=json.loads(a.channel_protocol.read_text());s.update(num_envs=5,alphas=[a.protocol_alpha]*5,zero_middle=[False]*5,case_labels=protocol['case_labels'],evaluation_role=protocol['evaluation_role'],channel_intervention=dict(progress_m=protocol['fork_phases_m'][a.protocol_phase],hold_s=protocol['hold_s'],hold_channels=protocol['hold_channels'],phase=a.protocol_phase,kind=protocol.get('kind','hold'),post_fork_seconds=protocol.get('post_fork_seconds')))
+    s['plant_options']['track_wheel_contacts']=protocol.get('track_wheel_contacts',True)
 intervention=s.get('channel_intervention')
 if intervention and (s.get('randomization') or s['num_envs']!=5 or len(set(s['alphas']))!=1):p.error('channel intervention requires five nominal lanes at one common alpha')
 s.update(terrains={'evaluation':str(a.terrain)},diagnostics=True,episode_s=a.seconds)
@@ -32,6 +32,7 @@ if a.lower_checkpoint:
     from sttw_control.torch_go2_lower import TorchGo2Lower
     lower=TorchGo2Lower(a.lower_training_run,a.lower_checkpoint,s['num_envs'],'cuda:0')
 env=IsaacPathRollout(a.bundle,s,policy,plant=plant,lower=lower)
+if intervention:env.policy.channel_intervention_mode=intervention.get('kind','hold')
 contract=dict(backend=a.backend,settings=s,bundle=str(a.bundle.resolve()),identity=identity,terrain=env.plant.terrain_identity,bodies=env.plant.bodies,origin=env.plant.origin.cpu().tolist(),role=s.get('evaluation_role','fixed preference DEV; Zero is frozen LOCAL300 plus ECBC/ESO, no H75 correction'),physics_dt=.0002,lower_dt=.005,policy_dt=.02)
 if lower is not None:
     contract['lower_identity']=lower.identity
@@ -61,8 +62,9 @@ for step in range(env.horizon):
     rows.append({key:result[key].cpu().numpy() for key in ['reward','valid','done','failure','lower_trace']})
     detail.extend({key:value.cpu().numpy() for key,value in item.items()} for item in result['diagnostics'])
     if (step+1)%50==0:print(json.dumps(dict(step=step+1,alive=int(env.alive.sum()),seconds=time.time()-started)),flush=True)
+    if intervention and fork_step is not None and intervention.get('post_fork_seconds') is not None and (step+1-fork_step)*.02>=intervention['post_fork_seconds']:break
 np.savez_compressed(a.output/'trajectory.npz',**{key:np.stack([r[key] for r in rows]) for key in rows[0]},**{key:np.stack([r[key] for r in detail]) for key in detail[0]})
-summary=dict(post_fork_failures=np.stack([r['failure'] for r in rows[fork_step:]]).sum(0).tolist() if fork_step is not None else None,fork_policy_step=fork_step,stage='complete',policy_steps=env.horizon,physics_steps=env.horizon*s['num_envs']*100,elapsed_s=time.time()-started,failures=np.stack([r['failure'] for r in rows]).sum(0).tolist(),valid_steps=np.stack([r['valid'] for r in rows]).sum(0).tolist(),push_events=env.push_events)
+summary=dict(post_fork_failures=np.stack([r['failure'] for r in rows[fork_step:]]).sum(0).tolist() if fork_step is not None else None,fork_policy_step=fork_step,stage='complete',policy_steps=len(rows),physics_steps=len(rows)*s['num_envs']*100,elapsed_s=time.time()-started,failures=np.stack([r['failure'] for r in rows]).sum(0).tolist(),valid_steps=np.stack([r['valid'] for r in rows]).sum(0).tolist(),push_events=env.push_events)
 (a.output/'status.json').write_text(json.dumps(summary,indent=2));print(json.dumps(summary))
 
 if a.backend=='lab':app.close(wait_for_replicator=False,skip_cleanup=True)

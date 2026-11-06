@@ -1,3 +1,17 @@
+## First executed-zero case completed; remaining declared cases running
+
+Entry-projection alpha0 finished at3.6s (fork1.6s plus2s),90000physics/0optimizer. All five branches remain active through the observation window. Saved selected correction components are exactly0 for the declared40 lower ticks; first natural/restored policy observation difference0, reward replay discrepancy1.91e-8. In the0.5s after release, natural/restored XY max difference1.34mm, speed-zero13.18cm, steer-zero1.18cm and both-zero13.20cm. These are descriptive local effects in one case, not a better-controller or generalization result. Full two-second response and negative outcomes remain in the report.
+
+Partial report: `runs/h75_zero_correction_channels/analysis/RESULTS.md`; first actualXY at `analysis/entry_projection/alpha0/xy.png`. Pipeline PID3476615 continues the declared five-alpha entry/exit set. Analyze the final collection before comparing zero with prior hold. No training, new planner, or extra scenario scan.
+
+## Executed-zero common-state intervention registered
+
+Previous goal turn completed replanning integration and changed authoritative evidence (progress). Continue frozen H75u77/selected Local300; no training. `runs/h75_zero_correction_channels` adds the requested executed-correction-zero variant to existing hold experiments: all five alphas, geometric entry/exit forks, five branches (natural, restored control, zero speed, zero steer, zero both). The selected executed H75 correction is forced to0 for.2s before absolute reference bounds; filter/history/ESO persist, release uses existing slew. Onset deliberately need not satisfy the normal correction-slew bound, so this is a diagnostic intervention, not a deployable limiter.
+
+Reuse existing fork/evaluation/analysis code, no copied controller or planner. Observe2s after each fork; preserve original10s reward horizon and task clock. Maximum10cases×5lanes×10s=2500000physics, expected~1000000 with early collection end;0optimizer. Contact-force logging uses existing body-world forces at5ms. Avoid expensive repeated0.2ms contact-point collection; historical contact phases remain separate and newFz is not called slope-normal load. This local mechanism window fixes reference geometry to interpret channel effects; it is not a complete goal-task comparison or evidence to remove the required execution replanning stage.
+
+Natural versus restored controls retain the PhysX-cache-copy limitation. Pair intervention effects against restored control. Prior hold full traces are preserved and can be restricted to the same postfork windows for comparison; no need to rerun them. Script `runs/h75_common_state_channels/execute.py --output runs/h75_zero_correction_channels` now accepts an output root. One declared pass, no retries or additional training. Direct executed-zero/bounded-release behavior check passed; actual physics results pending.
+
 ## Goal-replanning evaluation completed: keep original H75
 
 Final evidence: `runs/h75_lab_goal_replanning_final_goal/{DECISION.md,RESULTS.md,metrics.json,xy_models.png,xy_models_bend.png,xy_switch.png}`. Originalu77 and reward-peak update33 each complete all five alpha plus1→0 cases:6/6 enter the new goal disk and remain active for10s. Both Zero baselines enter the goal but later terminate on follower-domain exit, not a documented fall. Final goal rule: turn_end+5m, arrival radius2m; old/interim contracts remain separate. Actual switching is2.3s in both fixed/replanned lanes of both models.

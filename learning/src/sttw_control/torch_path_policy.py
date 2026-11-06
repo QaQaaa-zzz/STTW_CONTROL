@@ -28,6 +28,7 @@ class TorchPathPolicy:
         self.offsets = torch.zeros_like(self.filtered)
         self.execution_mode = torch.zeros(count,device=device,dtype=torch.long)
         self.hold_channels = torch.zeros(count,2,device=device,dtype=torch.bool)
+        self.channel_intervention_mode = "hold"
         c=config['residual_interface'];dt=config['timing']['lower_dt_s']
         self.decay=torch.exp(-dt*torch.ones(2,device=device)/torch.tensor(c['filter_tau_s'],device=device))
         self.increment_low=dt*torch.tensor([-c['correction_speed_down_m_s2'],-c['correction_steer_rate_rad_s']],device=device)
@@ -60,7 +61,9 @@ class TorchPathPolicy:
         increment=torch.where((self.execution_mode==2)[:,None],steer_priority,increment)
         rate_clipped=(increment!=f-self.offsets).any(-1)
         increment=torch.where(self.hold_channels,torch.zeros_like(increment),increment)
-        before=nominal+self.offsets+increment
+        candidate=self.offsets+increment
+        if self.channel_intervention_mode=="zero":candidate=torch.where(self.hold_channels,torch.zeros_like(candidate),candidate)
+        before=nominal+candidate
         governed=torch.maximum(self.low,torch.minimum(self.high,before))
         clipped=governed!=before
         self.offsets=governed-nominal

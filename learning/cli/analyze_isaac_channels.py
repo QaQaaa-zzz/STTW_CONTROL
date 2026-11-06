@@ -7,9 +7,11 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from sttw_control.isaac_path_reporting import replay_rewards,raised_contact_phases
 p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True);a=p.parse_args();status=json.loads((a.run/'status.json').read_text());cases=status['cases'];spec=json.loads((a.run/'protocol.json').read_text())
+kind=spec.get('kind','hold')
 if not cases:p.error('no completed physics cases to analyze')
 out=a.run/'analysis';out.mkdir(exist_ok=True);labels=spec['case_labels'];colors=['#333333','#777777','#D55E00','#0072B2','#009E73'];styles=['-',':','--','-.','-'];alpha_colors=['#0072B2','#D55E00','#009E73','#CC79A7','#8A6500'];all_metrics=[];all_lanes=[];report=['# Original H75 common-state channel mechanism DEV','','Saved original H75 u77 and selected orange Local300; no new optimizer updates. '+str(len(cases))+'/10 cases collected. Each case uses one alpha and one common exported state, not a shared state across alpha. PhysX caches are not copied. Natural continuation versus restored unmodified control measures the reload effect; intervention contrasts use the restored control. All raw prefixes remain saved; branch outcomes start at the fork.','','Contact stages use official mean wheel/filter points at0.2ms, force>1e-3N, local z>2.5mm and positive terrain height. Fork locations are projection triggers, not measured contact events. One initial state per condition; no uncertainty or generalization claim.']
-report+=['','[Frozen protocol](../protocol.json), [source/config/budget manifest](../manifest.json), [base physical/control configuration](../base_config.json). Reward is the unchanged original H75 path-persistent-preference cost; ordinary signed components and terminal penalties are retained. Source trajectories and fork snapshots remain in the case evaluation directories.']
+if not spec.get('track_wheel_contacts',True):report[-1]='Current run records per-body world forces at5ms; Fz is vertical load, not terrain-normal force. No new0.2ms contact-point phase measurement. Fork points are geometric; prior high-rate contact records remain separate.'
+report+=['',spec['semantics'],'','[Frozen protocol](../protocol.json), [source/config/budget manifest](../manifest.json), [base physical/control configuration](../base_config.json). Reward is the unchanged original H75 path-persistent-preference cost; ordinary signed components and terminal penalties are retained. Source trajectories and fork snapshots remain in the case evaluation directories.']
 for case in cases:
  run=Path(case['run']);raw=np.load(run/'trajectory.npz');contract=json.loads((run/'contract.json').read_text());cfg=json.loads((Path(contract['bundle'])/'config.json').read_text());route=np.load(Path(contract['bundle'])/'route.npz');target=out/case['phase']/('alpha'+str(case['alpha']));target.mkdir(parents=True,exist_ok=True);entry=dict(phase=case['phase'],alpha=case['alpha'],run=str(run),fork_reached=case['status']['fork_policy_step'] is not None);all_metrics.append(entry)
  trace=raw['lower_trace'].reshape(-1,5,11)
@@ -18,7 +20,7 @@ for case in cases:
  fork=json.loads((run/'fork.json').read_text());saved=np.load(run/'fork_snapshot.npz');step=fork['policy_step'];start=step*4;t0=step*.02;hold=fork['protocol']['hold_s'];reward,parts,closure=replay_rewards(raw,cfg,(step,[1,2,3,4],saved['policy.offsets']));entry.update(fork_time_s=t0,fork_progress_m=float(saved['middle.projection.progress']),reward_replay_error=closure,branches=[]);lanes=[]
  for lane,label in enumerate(labels):
   ids=np.flatnonzero(trace[:,lane,6].astype(bool)&(np.arange(len(trace))>=start));time=ids*.005+trace[ids,lane,7]*.0002
-  data=dict(ids=ids,time=time,progress=raw['progress'][ids,lane],xy=trace[ids,lane,:2],speed_error=trace[ids,lane,2]-2.3,cross=trace[ids,lane,3],roll=trace[ids,lane,4],target=raw['target'][ids,lane],offsets=raw['offsets'][ids,lane],reward=reward[ids,lane]);lanes.append(data);contact=raised_contact_phases(raw,contract,lane)
+  data=dict(ids=ids,time=time,progress=raw['progress'][ids,lane],xy=trace[ids,lane,:2],speed_error=trace[ids,lane,2]-2.3,cross=trace[ids,lane,3],roll=trace[ids,lane,4],target=raw['target'][ids,lane],offsets=raw['offsets'][ids,lane],reward=reward[ids,lane]);lanes.append(data);contact=raised_contact_phases(raw,contract,lane) if 'wheel_contact_points' in raw.files else dict(measurement='net world force only; no contact-point phase timing')
   row=dict(branch=label,failed_after_fork=bool(raw['failure'][step:,lane].any()),observed_end_s=float(time[-1]),postfork_speed_rmse_m_s=float(np.sqrt(np.mean(data['speed_error']**2))),postfork_path_rmse_m=float(np.sqrt(np.mean(data['cross']**2))),peak_roll_rad=float(data['roll'].max()),held_lower_ticks=int(raw['held_channels'][ids,lane].any(-1).sum()),contacts=contact,windows={})
   common=np.intersect1d(ids,lanes[1]['ids'] if lane>1 else np.flatnonzero(trace[:,1,6].astype(bool)&(np.arange(len(trace))>=start)))
   for name,left,right in [('hold',t0,t0+hold),('after_release_0p5',t0+hold,t0+hold+.5),('whole_common',t0,float('inf'))]:
@@ -26,6 +28,7 @@ for case in cases:
    if len(ticks):
     delta=trace[ticks,lane,:2]-trace[ticks,1,:2];row['windows'][name]=dict(lower_ticks=len(ticks),end_s=float(ticks[-1]*.005+min(trace[ticks[-1],lane,7],trace[ticks[-1],1,7])*.0002),xy_difference_rmse_m=float(np.sqrt(np.mean((delta**2).sum(-1)))),xy_difference_max_m=float(np.linalg.norm(delta,axis=-1).max()),speed_error_rmse_m_s=float(np.sqrt(np.mean((trace[ticks,lane,2]-2.3)**2))),path_rmse_m=float(np.sqrt(np.mean(trace[ticks,lane,3]**2))))
   entry['branches'].append(row)
+ entry['intervention_kind']=kind
  entry['first_postfork_observation_difference_natural_vs_restored']=float(abs(raw['observation'][start,0]-raw['observation'][start,1]).max());all_lanes.append((case,lanes,route,t0))
  fig,axes=plt.subplots(1,2,figsize=(12,7),layout='constrained')
  for ax in axes:
@@ -33,19 +36,19 @@ for case in cases:
   for lane,data in enumerate(lanes):ax.plot(*data['xy'].T,color=colors[lane],linestyle=styles[lane],label=labels[lane]);ax.plot(*data['xy'][-1],color=colors[lane],marker='x')
   ax.plot(*saved['middle.pose'][:2],marker='D',color='black',fillstyle='none');ax.set(xlabel='World x (m)',ylabel='World y (m)');ax.set_aspect('equal')
  bend=route['xy'][abs(route['curvature'])>1e-5];axes[0].set_title('Full XY; x observed endpoints');axes[1].set(xlim=(bend[:,0].min()-.5,bend[:,0].max()+.8),ylim=(bend[:,1].min()-.3,bend[:,1].max()+1),title='Bend detail; diamond fork');axes[1].legend(fontsize=7)
- title=f"Original H75 | {case['phase']} | alpha {case['alpha']} | fork {t0:.2f}s, hold {hold:.2f}s";fig.suptitle(title);fig.savefig(target/'xy.png',dpi=150);plt.close(fig)
+ title=f"Original H75 | {case['phase']} | alpha {case['alpha']} | fork {t0:.2f}s, {kind} {hold:.2f}s";fig.suptitle(title);fig.savefig(target/'xy.png',dpi=150);plt.close(fig)
  fig,axes=plt.subplots(3,3,figsize=(16,11),layout='constrained')
  for lane,data in enumerate(lanes):
   series=[data['speed_error'],data['cross'],data['roll'],data['target'][:,0],data['target'][:,1],data['offsets'][:,0],data['offsets'][:,1],data['reward'],np.cumsum(data['reward'])]
   for ax,values in zip(axes.flat,series):ax.plot(data['time']-t0,values,color=colors[lane],linestyle=styles[lane],label=labels[lane])
  for ax,label in zip(axes.flat,['True speed error (m/s)','Signed cross-track (m)','Peak roll (rad)','Mapped speed target (m/s)','Mapped steer target (rad)','Executed speed correction (m/s)','Executed steer correction (rad)','Reward per lower step','Cumulative reward']):
   ax.set(title=label,xlabel='Time after fork (s)');ax.axvspan(0,hold,color='#0072B2',alpha=.08);ax.axvline(hold,color='.4',linestyle=':');ax.grid(alpha=.2)
- axes[0,0].legend(fontsize=7);fig.suptitle(title+' | shaded: hold; filter/history/ESO continue');fig.savefig(target/'responses.png',dpi=150)
+ axes[0,0].legend(fontsize=7);fig.suptitle(title+f' | shaded: {kind}; filter/history/ESO continue');fig.savefig(target/'responses.png',dpi=150)
  for ax in axes.flat:
   for line in ax.lines[:len(labels)]:
    x=np.asarray(line.get_xdata());y=np.asarray(line.get_ydata());visible=(x>=0)&(x<=hold+.5+1e-8);line.set_data(x[visible],y[visible])
   ax.relim();ax.autoscale_view(scalex=False,scaley=True);ax.set_xlim(0,hold+.5)
- fig.suptitle(title+' | predeclared hold +0.5s release window');fig.savefig(target/'responses_short.png',dpi=150);plt.close(fig)
+ fig.suptitle(title+f' | {kind} +0.5s release window');fig.savefig(target/'responses_short.png',dpi=150);plt.close(fig)
  fig,axes=plt.subplots(1,3,figsize=(15,4.5),layout='constrained')
  for lane,data in enumerate(lanes):
   common=np.intersect1d(data['ids'],lanes[1]['ids']);common=common[common*.005+.005-t0<=hold+.5+1e-8];time=common*.005+.005-t0;delta=trace[common,lane,:2]-trace[common,1,:2]
@@ -59,14 +62,22 @@ for case in cases:
    line=axes[0,lane].plot(data['time']-t0,values[data['ids'],lane],label=key)[0];axes[1,lane].plot(data['time']-t0,np.cumsum(values[data['ids'],lane]),color=line.get_color())
   axes[0,lane].set(title=labels[lane],xlabel='Time after fork (s)',ylabel='Ordinary reward / step');axes[1,lane].set(xlabel='Time after fork (s)',ylabel='Cumulative ordinary reward')
  axes[0,0].legend(fontsize=7);fig.suptitle(title+' | signed components; terminal penalties retained in response totals');fig.savefig(target/'components.png',dpi=150);plt.close(fig)
- (target/'metrics.json').write_text(json.dumps(entry,indent=2));report+=['',f'## {case["phase"]} alpha {case["alpha"]}',f'![XY]({target.relative_to(out)}/xy.png)',f'[Full responses]({target.relative_to(out)}/responses.png), [hold/release window]({target.relative_to(out)}/responses_short.png), [local effects vs restored control]({target.relative_to(out)}/local_effects.png), [reward components]({target.relative_to(out)}/components.png), [paired windows and contact phases]({target.relative_to(out)}/metrics.json).','','| Branch | Failed after fork | End s | Speed RMSE m/s | Path RMSE m | Hold ticks |','|---|---|---:|---:|---:|---:|']
+ fig,ax=plt.subplots(3,1,figsize=(11,9),layout='constrained')
+ for lane,data in enumerate(lanes):
+  ids=data['ids'];time=data['time']-t0
+  for k,wheel in enumerate(('frontwheel','rearwheel')):ax[k].plot(time,raw['contact_force'][ids,lane,contract['bodies'].index(wheel),2],color=colors[lane],linestyle=styles[lane],label=labels[lane])
+  ax[2].plot(time,raw['measurement'][ids,lane,1],color=colors[lane],linestyle=styles[lane])
+ for axis,ylabel in zip(ax,['Front wheel world Fz (N)','Rear wheel world Fz (N)','Roll rate (rad/s)']):axis.set(xlabel='Time after fork (s)',ylabel=ylabel);axis.axvspan(0,hold,alpha=.1);axis.grid(alpha=.2)
+ ax[0].legend(fontsize=7);fig.suptitle(title+' | control-step loads, not contact-point normals');fig.savefig(target/'loads.png',dpi=150);plt.close(fig)
+ (target/'metrics.json').write_text(json.dumps(entry,indent=2));report+=['',f'## {case["phase"]} alpha {case["alpha"]}',f'![XY]({target.relative_to(out)}/xy.png)',f'[Full responses]({target.relative_to(out)}/responses.png), [intervention/release window]({target.relative_to(out)}/responses_short.png), [local effects vs restored control]({target.relative_to(out)}/local_effects.png), [reward components]({target.relative_to(out)}/components.png), [paired windows and contact phases]({target.relative_to(out)}/metrics.json).','','| Branch | Failed after fork | End s | Speed RMSE m/s | Path RMSE m | Intervention ticks |','|---|---|---:|---:|---:|---:|']
  for row in entry['branches']:report.append(f"|{row['branch']}|{row['failed_after_fork']}|{row['observed_end_s']:.3f}|{row['postfork_speed_rmse_m_s']:.4f}|{row['postfork_path_rmse_m']:.4f}|{row['held_lower_ticks']}|")
- report+=['','| Matched observation window | Natural vs restored max XY m | Speed hold vs restored m | Steer hold vs restored m | Both hold vs restored m |','|---|---:|---:|---:|---:|']
+ report+=['','| Matched observation window | Natural vs restored max XY m | Speed intervention vs restored m | Steer intervention vs restored m | Both intervention vs restored m |','|---|---:|---:|---:|---:|']
  for window in ('hold','after_release_0p5','whole_common'):
   values=[]
   for lane in (0,2,3,4):
    observed=entry['branches'][lane]['windows'].get(window);values.append(f"{observed['xy_difference_max_m']:.6f}" if observed else 'not observed')
   report.append('|'+window+'|'+'|'.join(values)+'|')
+ report += ['',f'[Wheel vertical loads and roll rate]({target.relative_to(out)}/loads.png)']
  report+=['','The natural–restored contrast includes reload and lane-level numerical effects; its sole cause is not identified. Whole-tail reload differences may exceed some intervention contrasts. Short-window physical effects and long-tail tracking metrics are reported separately; neither survival nor a small error difference establishes a better execution method.']
  if (target/'same_state_alpha'/'summary.json').exists():
   report+=['',f'[Five-alpha query at the same frozen input]({target.relative_to(out)}/same_state_alpha/summary.json), [targets and executed references]({target.relative_to(out)}/same_state_alpha/queries.csv). This is a forward query, not five new physics trajectories. Values below are one200Hz reference update from the same50Hz decision state.','','| Alpha | Speed target correction m/s | Steer target correction rad | Next speed reference m/s | Next steer reference rad |','|---|---:|---:|---:|---:|']
