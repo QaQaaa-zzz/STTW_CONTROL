@@ -18,7 +18,7 @@ class IsaacLabVectorPlant:
     def __init__(self,asset,terrain_paths,terrain_ids,output,servo_mode="explicit",hull_vertices=None,mesh_collision_on_geometry=False,compliant_wheels=None,friction_correlation_distance=.025,external_forces_every_iteration=False,wheel_collision="convexHull",friction_offset_threshold=.04,env_spacing=None,track_wheel_contacts=False,terrain_layout="external",pendulum_rest=None,pendulum_locked=False,physics_dt=.0002,gpu_pair_capacities=None,actuator_force_limits=None,wheel_radius_m=.1,robot_contact_offset=.01,solver_position_iterations=4,solver_velocity_iterations=1,wheel_contact_slop=0.,wheel_width_m=None,wheel_profile_slices=1,terrain_base_plane=False,track_contact_wrench=False):
         self.track_contact_wrench=track_contact_wrench;self.servo_mode=servo_mode;self.physics_dt=physics_dt;self.wheel_radius_m=wheel_radius_m
         pair_capacities=gpu_pair_capacities or [2**24,2**24,2**27]
-        asset=Path(asset);output=Path(output);self.contract=json.loads(asset.with_name('contract.json').read_text());self.device='cuda:0';self.count=len(terrain_ids)
+        asset=Path(asset);output=Path(output);self.contract=json.loads(asset.with_name('contract.json').read_text());self.device='cuda:0';self.count=len(terrain_ids);self.diagnostic_joint_torque=None
         if hashlib.sha256(asset.read_bytes()).hexdigest()!=self.contract['exported_xml_sha256']:raise ValueError('asset identity mismatch')
         if actuator_force_limits:
             actuators={a['name']:a for a in self.contract['actuators']}
@@ -273,6 +273,9 @@ class IsaacLabVectorPlant:
             if pendulum_target is not None:self.pendulum_target=pendulum_target
             self.last_pendulum_torque=self.pendulum_servos.torque(self.pendulum_target,self.dofs[:,:,0],self.dofs[:,:,1])
             torque=torque+self.last_pendulum_torque
+        if self.diagnostic_joint_torque is not None:
+            torque=torque+self.diagnostic_joint_torque
+            self.last_diagnostic_joint_torque=self.diagnostic_joint_torque.clone()
         self.robot.set_joint_effort_target(torque);self.robot.write_data_to_sim();self.sim.step(render=False);self.robot.update(self.physics_dt)
         if not refresh_diagnostics:
             self.dofs=torch.stack((self.robot.data.joint_pos,self.robot.data.joint_vel),dim=-1)
@@ -300,6 +303,8 @@ class IsaacLabVectorPlant:
                                    'friction_count', 'friction_start'), friction):
                 samples[wheel + '_' + key] = value.clone()
         samples['motor_torque'] = self.last_motor_torque.clone()
+        if self.diagnostic_joint_torque is not None:
+            samples['diagnostic_joint_torque'] = self.last_diagnostic_joint_torque.clone()
         samples['joint_position'] = self.dofs[..., 0].clone()
         samples['joint_velocity'] = self.dofs[..., 1].clone()
         samples['body_state'] = self.rigid.clone()
