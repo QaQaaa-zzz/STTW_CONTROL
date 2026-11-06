@@ -1,3 +1,11 @@
+## 带摆左右转弯配对诊断已启动
+
+`learning/configs/isaac_pendulum_turns.json`：4lane正/负0.12rad转向，各比较原ECBC与原Local300＋ECBC；2m/s、3秒零残差预热并填充history、3–7秒slew转弯、7–8秒回正。共同带摆模型/固定摆姿态不变，Local300原权重与1.5/10缩放。最多160000physics steps、0optimizer，输出 `runs/pendulum_isaac_turns`；此处结果尚待采集，不是H75或跳跃任务完成。
+
+源码核实reset首帧问题：官方write_root_velocity_to_sim实际写COM速度，不刷新已用root_link_state_w；更正调用write_root_link_velocity_to_sim，与本plant观测/物理初态bank的root frame契约一致。原chassis COM为0，名义物理速度相同。旧三秒诊断原始首帧保留，不重跑。
+
+前一次三秒诊断结果已完整保存，旧进程3760642退出清理停留超过4分钟，已发送SIGTERM回收本任务进程；未干预其他仿真。新入口直接使用官方app.close(wait_for_replicator=False)。实际session78985/PID3779253已记录200控制步、4lane active，正在继续声明预算。分析器支持批量原轨迹/参考/真实终点，不以存活取代转弯完成。
+
 ## 整段粗糙路2.0m/s三档阶段结果
 
 ±1/2/3cm三个条件已完成，15条H75均10秒无提前失败且goal；hold分别5/5、4/5、4/5。±3cm时alpha0路径RMSE0.0475m、alpha1为0.3403m，速度RMSE0.1399/0.0958m/s，存在更明显的路径—速度取舍。alpha.75后段偏离更大且未保持，不能强行称alpha严格排序。

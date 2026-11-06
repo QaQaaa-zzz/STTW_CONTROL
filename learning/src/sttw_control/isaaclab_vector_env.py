@@ -157,7 +157,7 @@ class IsaacLabVectorPlant:
             velocity=state['joint_velocity'].expand(count,-1).clone()
         root[:,:3]+=self.origin[env_ids]
         self.robot.write_root_pose_to_sim(root[:,:7],env_ids=env_ids)
-        self.robot.write_root_velocity_to_sim(root[:,7:],env_ids=env_ids)
+        self.robot.write_root_link_velocity_to_sim(root[:,7:],env_ids=env_ids)
         self.robot.write_joint_state_to_sim(position,velocity,env_ids=env_ids)
         self.robot.reset(env_ids);self.sensor.reset(env_ids)
         for sensor in self.wheel_sensors:sensor.reset(env_ids)
