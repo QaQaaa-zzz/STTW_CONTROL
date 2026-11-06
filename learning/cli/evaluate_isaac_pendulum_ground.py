@@ -45,11 +45,12 @@ turn=torch.tensor([c['steer_rad'] for c in cases],device=device)
 speed_gain=torch.tensor([c.get('speed_feedback_gain',0.) for c in cases],device=device)
 open_loop=torch.tensor(['open_loop_steer_rate' in c for c in cases],device=device)
 pulse=torch.tensor([c.get('open_loop_steer_rate',0.) for c in cases],device=device)
-alive=torch.ones(n,dtype=torch.bool,device=device);rows=[];masks=[];references=[];commands=[];contacts=[];start=time.monotonic()
+alive=torch.ones(n,dtype=torch.bool,device=device);rows=[];masks=[];references=[];commands=[];contacts=[];body_states=[];start=time.monotonic()
 for k in range(steps+1):
  m,pose,v=plant.observe()
  q=plant.roots[:,3:7];pitch=torch.asin((2*(q[:,3]*q[:,1]-q[:,2]*q[:,0])).clamp(-1,1))
  row=torch.cat((torch.full((n,1),k*.005,device=device),pose,v[:,None],m[:,:4],plant.dofs[:,plant.pendulum_servos.indices,0],plant.dofs[:,plant.pendulum_servos.indices,1],m[:,5:7]*radius,plant.roots[:,2:3],controller.disturbance[:,None],pitch[:,None],plant.roots[:,9:10]),dim=1)
+ if spec.get("record_body_states",False):body_states.append(plant.rigid.cpu().numpy())
  contacts.append(plant.contact.cpu().numpy().copy())
  rows.append(row.cpu().numpy());masks.append(alive.cpu().numpy().copy());references.append(raw.cpu().numpy().copy());commands.append(command.cpu().numpy().copy())
  alive &= (m[:,0].abs()<=torch.pi/4)&torch.isfinite(row).all(-1)
@@ -72,6 +73,7 @@ for k in range(steps+1):
  _,new_pose,_=plant.observe();lower.finish(applied,wrap(new_pose[:,2]-pose[:,2])/.005);previous=raw.clone()
  if (k+1)%200==0:print(dict(control_steps=k+1,alive=int(alive.sum()),elapsed_s=time.monotonic()-start),flush=True)
 trace=np.asarray(rows);valid=np.asarray(masks);np.savez(a.output/'trajectory.npz',trace=trace,valid=valid,contact=np.asarray(contacts),contact_body_names=plant.bodies,reference=np.asarray(references),command=np.asarray(commands),columns=['time','x','y','yaw','speed','roll','roll_rate','steer','steer_rate','hip','knee','hip_velocity','knee_velocity','rear_wheel_speed_estimate','front_wheel_speed_estimate','root_height','eso_disturbance','pitch','vertical_speed'])
+if body_states:np.savez(a.output/'body_states.npz',state=np.asarray(body_states),body_names=plant.bodies,time=trace[:,0,0],valid=valid,semantics='world position, xyzw rotation, world link linear/angular velocities')
 results=[]
 for i,case in enumerate(cases):
  tr=trace[valid[:,i],i];results.append(dict(name=case['name'],failed=not bool(alive[i]),duration_s=float(tr[-1,0]),peak_roll_deg=float(np.rad2deg(abs(tr[:,5])).max()),final_speed=float(tr[-1,4]),final_xy=tr[-1,1:3].tolist(),max_pendulum_position_drift_rad=np.max(np.abs(tr[:,9:11]-tr[0,9:11]),axis=0).tolist(),max_pendulum_speed_rad_s=np.max(np.abs(tr[:,11:13]),axis=0).tolist()))
