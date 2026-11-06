@@ -14,6 +14,7 @@ if a.include_comparison_references:
   references[ref['config']]=dict(c,case_id=c['case_id']+'_reference_'+ref['skill'],config=ref['config'],skill=ref['skill'],reused_reference=True)
  m['cases'].extend(references.values())
 skills=sorted({c['skill'] for c in m['cases'] if 'skill' in c})
+methods=sorted({c['method'] for c in m['cases'] if 'method' in c})
 sequences=any('second_candidate' in c for c in m['cases'])
 for c in m['cases']:
  c['origin_id']=json.loads(Path(c['config']).read_text())['origin_id']
@@ -32,6 +33,11 @@ for c in m['cases']:
   row['handoff']=json.loads(handoff.read_text()) if handoff.exists() else None
   d=np.load(run/'trajectory.npz');t=d['trace'][d['valid'][:,0],0];i=panels[origin].index(tuple(c['panel_key']));color={0.:'tab:blue',.5:'tab:orange',1.:'tab:green'}[c['alpha']];style='--' if c['speed_m_s']==1.8 else '-';label=f"v={c['speed_m_s']}, alpha={c['alpha']}"+(" after midpoint" if sequences else "")
   if skills:label=c['skill']+' | '+label
+  if c.get('method'):
+   color=plt.get_cmap('tab10')(methods.index(c['method']));label=c['method'];style='-'
+   midpoint=run/'midpoint_decision.json'
+   row['midpoint']=json.loads(midpoint.read_text()) if midpoint.exists() else None
+   if row['midpoint'] is not None:axes[i,1].axvline(row['midpoint']['time'],color=color,alpha=.2)
   row['observed_duration_s']=float(t[-1,0])
   if sequences:
    midpoint=run/'midpoint_decision.json'
