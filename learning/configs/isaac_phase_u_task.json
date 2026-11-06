@@ -160,6 +160,10 @@
     ],
     "critic_output": 1,
     "action_contract": "Go2 rollout stores latent Gaussian actions; environment tanh once then original four-actuator mapping",
-    "network_adapter_status": "native Go2 PPO synthetic update completed; physical training not connected"
+    "network_adapter_status": "native Go2 PPO synthetic update completed; physical training not connected",
+    "events": "sttw_control.phase_u_events",
+    "critic_observation": "TorchPendulumObservation.privileged",
+    "critic_extra_joint_policy": "preserve original 106D; additional passive suspension is physically simulated but omitted as an independent critic input",
+    "events_status": "384 sequential event and 384 terminal cases match original configured Phase U v4 branch; physical env not wired"
   }
 }

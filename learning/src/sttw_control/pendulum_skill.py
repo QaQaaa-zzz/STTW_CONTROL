@@ -75,6 +75,7 @@ class TorchPendulumObservation:
         self.torch=torch
         self.indices=[joint_names.index(n) for n in ('steering_joint','hip_joint','knee_joint')]
         self.wheels=[joint_names.index(n) for n in ('frontwheel_joint','rearwheel_joint')]
+        self.critic_indices=[joint_names.index(n) for n in ('rearwheel_joint','steering_joint','frontwheel_joint','hip_joint','knee_joint')]
         self.mount=torch.tensor(mount_wxyz[1:]+mount_wxyz[:1],device=device).expand(count,4)
         self.frames=torch.zeros(count,3,25,device=device)
         self.valid_count=torch.zeros(count,device=device,dtype=torch.long)
@@ -96,6 +97,28 @@ class TorchPendulumObservation:
         self.valid_count=(self.valid_count+1).clamp_max(3)
         self.frames[:,:,-1]=(torch.arange(3,device=root.device)[None]>=3-self.valid_count[:,None])
         return torch.cat((self.frames.flatten(1),jump_signal[:,None]),dim=-1)
+
+    def privileged(self, actor_observation, root, position, velocity, illegal_contact):
+        """Original 106-D critic order on a virtual upright root frame.
+
+        The common car's extra passive suspension DOF remains physical but is
+        not appended to this fixed-size source critic. Wheel coordinates flip
+        with wheel axes, for position as well as velocity. No physics is reset.
+        """
+        from .torch_observation import rotate_inverse
+        torch=self.torch
+        q=root[:,3:7];a=q[:,:3];b=self.mount[:,:3]
+        xyz=q[:,3:]*b+self.mount[:,3:]*a+torch.cross(a,b,dim=-1)
+        w=q[:,3:]*self.mount[:,3:]-(a*b).sum(-1,keepdim=True)
+        virtual=torch.cat((xyz,w),-1)
+        x,y,z=xyz.unbind(-1);w=w[:,0]
+        angles=torch.stack((torch.atan2(2*(w*x+y*z),1-2*(x*x+y*y)),
+            torch.asin((2*(w*y-z*x)).clamp(-1,1)),
+            torch.atan2(2*(w*z+x*y),1-2*(y*y+z*z))),-1)
+        sign=torch.tensor([-1.,1.,-1.,1.,1.],device=root.device)
+        qpos=torch.cat((root[:,:3],virtual[:,[3,0,1,2]],position[:,self.critic_indices]*sign),-1)
+        qvel=torch.cat((root[:,7:10],rotate_inverse(virtual,root[:,10:13]),velocity[:,self.critic_indices]*sign),-1)
+        return torch.cat((actor_observation,qpos,qvel,angles,root[:,7:10],illegal_contact[:,None].float()),-1)
 
 class TorchPendulumSkill:
     """Exact deterministic Brax actor arrays exported for Isaac Lab inference."""

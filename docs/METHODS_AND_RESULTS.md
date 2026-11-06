@@ -1,3 +1,9 @@
+## 原Phase U事件/终止与106维critic接口完成
+
+`phase_u_events.py`批量实现原一次性jump_signal、consumed锁存、ascending/height/apex、速度卡住与失败优先级，保留原step计数和timeout；原env需要先初判terminal→advance_events→同旧step终判，不能把apex当终止成功。runs/phase_u_event_port对只读原semantics.py比较32lane×12步，共384事件转移＋384终止组合、252字段比较一致；覆盖本配置velocity-stuck分支，不声称旧window-stuck分支已验证。没有物理/优化更新。
+
+TorchPendulumObservation.privileged保留原106字段：Actor76、原顺序qpos12/qvel11、Euler3、world线速3、contact1；root姿态使用声明mount虚拟直立框架，freejoint角速度用本体坐标，轮位置与轮速度一致反号。共同车额外被动后悬架仍有真实动力学，但不加入原critic输入以保持网络维度；这是明确状态投影，非模型等同。两项观测测试和一项回报修正测试通过。训练环境/四动作域随机化还未接完，未新训、未重跑物理。
+
 ## 原Phase U Actor/critic已接通原Go2 PPO接口
 
 `phase_u_actor_critic.py`保留Actor76→256→256→256→8、critic106→256→256→256→1与SiLU，原checkpoint两网络/归一化均从只读来源导出至runs/phase_u_training_bundle/source。原四均值＋四状态相关scale经softplus+.001，不换成Go2独立std头。rollout存latent动作，环境必须tanh一次再原映射；log probability和采样entropy保留tanh Jacobian，KL比较latent Gaussian。归一化暂冻结原值，续训为权重/critic初始化＋fresh optimizer，不是exact resume。
