@@ -1,3 +1,11 @@
+## Short-uphill screen completed: traversal hypothesis not yet observed
+
+`runs/h75_uphill/evaluation/UPHILL.md` and `uphill_comparison.png` summarize all three8/16/24cm ramps, five alphas plus Zero.18/18 lanes survive10s and cross the original goal/crest projection;900000 physics lane steps,0 optimizer updates,478s wall time. No alpha0 inability to climb was observed. At24cm alpha0→1 minimum ascent speeds are1.612/1.640/1.688/1.749/1.782m/s; Zero1.802m/s. All outcomes retained, including successful Zero. Actual wheel-height changes are stored in uphill_metrics.json.
+
+At24cm alpha0 has visible post-ramp path/speed oscillations; path RMSE .1665m and speed RMSE .1464m/s versus alpha1 .1892m/.0900m/s. Its original final hold flag is false solely because last1s heading peaks .050030rad versus .05rad; path .02744m and speed .06085m/s remain within limits. This tiny threshold crossing is not treated as practical traversal failure. Other17 lanes pass original hold. Zero at24cm has lower path/speed RMSE .0992m/.0759m/s but higher peak roll .369rad versus alpha1 .281rad; no universal H75 superiority claim. No measured motor work was recorded.
+
+Original H75/Local300 remain adopted. This completed screen supports speed/attitude tradeoffs but not the proposed pass/fail separation. Next assess whether a bounded steeper-ramp extension addresses the hypothesis before changing training; preserve limits and all outcomes. Preference-switch1→0 recovery remains unfinished, and subsequent task-connection work has not begun.
+
 ## Completed terrain/speed matrix and short-uphill follow-up
 
 Original H75 u77 + selected orange Local300 completed 10 terrain/requested-speed conditions (50 alpha lanes and 10 matched Zero lanes). All50 H75 lanes survive10s, cross the original goal and satisfy original final hold. Speed RMSE decreases across all five alpha levels in every condition; path error is not strictly monotonic. Zero fails physically in6/10 conditions; the remaining4 do not satisfy final hold. Preserve actual early-failure windows. Evidence: `runs/h75_terrain_speed_sweep/evaluation/RESULTS.md`, `METRICS.md`, `xy_matrix_full.png`, `xy_matrix_bend.png`. Eight new conditions used2400000 physics lane steps,0 optimizer updates; two matched historical conditions were reused. Single initial-state nominal DEV only;2.6m/s starts from the same2.3m/s warm state.
