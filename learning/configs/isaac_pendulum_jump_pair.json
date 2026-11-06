@@ -1,5 +1,5 @@
 {
-  "output": "runs/pendulum_jump_pair",
+  "output": "runs/pendulum_jump_aligned",
   "initial_state": "runs/pendulum_h75_locked/warmup/initial_state.npz",
   "geometry": "runs/pendulum_jump_pair/geometry.json",
   "bundles": "runs/pendulum_torch_skills",
@@ -11,5 +11,6 @@
   "approach_speed": 2.0,
   "seconds": 4.0,
   "maximum_physics_lane_steps": 40000,
-  "optimizer_updates": 0
+  "optimizer_updates": 0,
+  "align_heading": true
 }

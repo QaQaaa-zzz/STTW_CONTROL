@@ -193,7 +193,7 @@ class IsaacLabVectorPlant:
     def observe(self):
         measurement,pose,speed=self.signals.observe(self.roots,self.dofs[:,:,0],self.dofs[:,:,1]);return measurement,pose-self.origin,speed
 
-    def step(self,command,pendulum_target=None,steering_position_target=None):
+    def step(self,command,pendulum_target=None,steering_position_target=None,refresh_diagnostics=True):
         torque=self.signals.passive_torque(self.dofs[:,:,0],self.dofs[:,:,1])
         if self.servo_mode == 'implicit':
             target=torch.maximum(self.servos.control[:,0],torch.minimum(self.servos.control[:,1],command*self.servos.sign))
@@ -207,7 +207,11 @@ class IsaacLabVectorPlant:
         if self.pendulum_servos is not None and not self.pendulum_is_locked:
             if pendulum_target is not None:self.pendulum_target=pendulum_target
             torque=torque+self.pendulum_servos.torque(self.pendulum_target,self.dofs[:,:,0],self.dofs[:,:,1])
-        self.robot.set_joint_effort_target(torque);self.robot.write_data_to_sim();self.sim.step(render=False);self.robot.update(.0002);self.sensor.update(.0002,force_recompute=True)
+        self.robot.set_joint_effort_target(torque);self.robot.write_data_to_sim();self.sim.step(render=False);self.robot.update(.0002)
+        if not refresh_diagnostics:
+            self.dofs=torch.stack((self.robot.data.joint_pos,self.robot.data.joint_vel),dim=-1)
+            return None
+        self.sensor.update(.0002,force_recompute=True)
         for sensor in self.wheel_sensors:sensor.update(.0002,force_recompute=True)
         self.refresh();return (self.contact[:,self.nonwheel].square().sum(-1)>0).any(-1)
 

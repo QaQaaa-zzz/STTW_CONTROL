@@ -21,6 +21,15 @@ for i,origin in enumerate(plant.origin.cpu().numpy()):
 saved=np.load(spec['initial_state'])
 state={k:torch.tensor(saved[k],device='cuda:0') for k in ('root_pose','root_velocity','joint_position','joint_velocity')}
 state['root_pose']=state['root_pose'].clone();state['root_pose'][0]=spec['start_x'];state['root_pose'][1]=0.
+if spec.get('align_heading',False):
+ from isaaclab.utils.math import quat_mul,quat_apply
+ q=state['root_pose'][3:];w,x,y,z=q
+ yaw=torch.atan2(2*(w*z+x*y),1-2*(y*y+z*z))
+ rotation=torch.stack((torch.cos(yaw/2),yaw*0,yaw*0,-torch.sin(yaw/2)))
+ state['root_pose'][3:]=quat_mul(rotation[None],q[None])[0]
+ state['root_velocity'][:3]=quat_apply(rotation[None],state['root_velocity'][:3][None])[0]
+ state['root_velocity'][3:]=quat_apply(rotation[None],state['root_velocity'][3:][None])[0]
+
 plant.reset_idx(torch.arange(2,device='cuda:0'),state=state)
 plant.set_pendulum_locked(False);plant.set_pendulum_locked(True)
 controller=TorchController(json.loads(Path(cfg['controller_config']).read_text()),2,'cuda:0')
@@ -29,7 +38,7 @@ history=TorchPendulumObservation(plant.joints,json.loads(Path('learning/configs/
 geometry=TorchPendulumGeometry(json.loads(Path(spec['geometry']).read_text()),plant.bodies)
 last=torch.zeros(2,4,device='cuda:0');alive=torch.ones(2,dtype=torch.bool,device='cuda:0');entered=torch.zeros_like(alive);consumed=torch.zeros_like(alive)
 active=False;rows=[];actions=[];observations=[];valid=[];start=time.monotonic();steps=round(spec['seconds']/.005)
-(out/'protocol.json').write_text(json.dumps(dict(spec=spec,plant=plant.metadata,policies=[s.identity for s in policies],ground_history='last_action zero means no prior jump action; physical FIFO sampled throughout ground approach',initial_translation='common saved ground snapshot translated to declared start_x, y=0; velocities unchanged',role='nominal paired DEV integration; not original donor benchmark',physics_dt=.0002,ground_dt=.005,jump_dt=.02,optimizer_updates=0),indent=2))
+(out/'protocol.json').write_text(json.dumps(dict(spec=spec,plant=plant.metadata,policies=[s.identity for s in policies],ground_history='last_action zero means no prior jump action; physical FIFO sampled throughout ground approach',initial_translation='common saved snapshot translated to start_x/y0; optional rigid world-yaw alignment rotates pose and both velocities together',role='nominal paired DEV integration; not original donor benchmark',physics_dt=.0002,ground_dt=.005,jump_dt=.02,optimizer_updates=0),indent=2))
 target=torch.zeros(2,4,device='cuda:0')
 for k in range(steps+1):
  m,pose,speed=plant.observe();root=plant.roots.clone();root[:,:3]-=plant.origin
@@ -50,11 +59,12 @@ for k in range(steps+1):
    for i,policy in enumerate(policies):last[i:i+1],target[i:i+1]=policy.infer(obs[i:i+1],plant.dofs[i:i+1,plant.joints.index('knee_joint'),0])
  if active:
   command=torch.stack((torch.zeros_like(speed),target[:,1]),-1)
-  for _ in range(25):plant.step(command,pendulum_target=target[:,2:],steering_position_target=target[:,:1])
+  for _ in range(25):plant.step(command,pendulum_target=target[:,2:],steering_position_target=target[:,:1],refresh_diagnostics=False)
  else:
   request=torch.stack((m[:,5]*.1,m[:,2],m[:,3],m[:,0],m[:,1],torch.zeros_like(speed)),-1)
   control=controller.step(request,torch.ones_like(alive));command=torch.stack((control[:,0].clamp(-3,3),torch.full_like(speed,spec['approach_speed']/.1)),-1)
-  for _ in range(25):plant.step(command)
+  for _ in range(25):plant.step(command,refresh_diagnostics=False)
+ plant.refresh()
 trace=torch.stack(rows).cpu().numpy();mask=torch.stack(valid).cpu().numpy();np.savez(out/'trajectory.npz',trace=trace,valid=mask,action=torch.stack(actions).cpu().numpy(),observations=torch.stack(observations).cpu().numpy(),columns=['time','x','y','z','speed','roll','roll_rate','steer','steer_rate','hip','knee','obstacle_relative_x'])
 result=dict(status='complete',elapsed_s=time.monotonic()-start,physics_lane_steps=k*25*2,cases=[])
 for i,name in enumerate(spec['skills']):
