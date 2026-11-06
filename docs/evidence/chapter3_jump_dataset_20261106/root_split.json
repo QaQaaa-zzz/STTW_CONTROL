@@ -1,0 +1,975 @@
+{
+  "seed": 20261106,
+  "status": "prepared_not_started",
+  "roots": [
+    {
+      "origin_id": "rb_connection_seed20261106_root000",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.06622033774001246,
+        "yaw_deg": 0.48709439426211176
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root001",
+      "split": "validation_calibration",
+      "initial_offset": {
+        "lateral_m": -0.0405874429494469,
+        "yaw_deg": 0.4123323297897894
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root002",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.0436555942057648,
+        "yaw_deg": 0.18573256308178454
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root003",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.06535870646097579,
+        "yaw_deg": 0.8343139778630078
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root004",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.015685821920830068,
+        "yaw_deg": 0.5035743781468955
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root005",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.004178145749677981,
+        "yaw_deg": -0.45838267482317097
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root006",
+      "split": "validation_tuning",
+      "initial_offset": {
+        "lateral_m": -0.07714007963614938,
+        "yaw_deg": 0.21495193858476425
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root007",
+      "split": "validation_calibration",
+      "initial_offset": {
+        "lateral_m": 0.04703765812614051,
+        "yaw_deg": 0.7560296486529738
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root008",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.028823847840000527,
+        "yaw_deg": 0.32208046268635515
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root009",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.06994173716926287,
+        "yaw_deg": 0.550852671526807
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root010",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.056974488904105655,
+        "yaw_deg": 1.350473802228382
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root011",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.02627119186092873,
+        "yaw_deg": 1.0494669454891832
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root012",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": -0.03012840679371493,
+        "yaw_deg": -1.7860533052570338
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root013",
+      "split": "validation_calibration",
+      "initial_offset": {
+        "lateral_m": -0.05867337255260409,
+        "yaw_deg": -0.5341133910532161
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root014",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.03688528195197975,
+        "yaw_deg": 0.704435256507137
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root015",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.05353094572379498,
+        "yaw_deg": -1.6371719335113215
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root016",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.06950348760122883,
+        "yaw_deg": -0.5978272405928138
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root017",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.0043283816422973465,
+        "yaw_deg": 0.5790225693880418
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root018",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.06036742034010068,
+        "yaw_deg": 1.149840888602109
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root019",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": -0.06020143044219341,
+        "yaw_deg": -1.4538022428014021
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root020",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.061980876170215485,
+        "yaw_deg": 0.25247231682926286
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root021",
+      "split": "validation_tuning",
+      "initial_offset": {
+        "lateral_m": -0.05237721224376884,
+        "yaw_deg": 1.7388892097413438
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root022",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.0020765792671384314,
+        "yaw_deg": -0.41704199365347483
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root023",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.06634000778200705,
+        "yaw_deg": -1.6902166747705545
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root024",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.039618056133050306,
+        "yaw_deg": 1.9532795501607563
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root025",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.07999699518763671,
+        "yaw_deg": -0.4923093098079394
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root026",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": 0.021076646590589762,
+        "yaw_deg": 0.6640417513055366
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root027",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": 0.04433684744913581,
+        "yaw_deg": -0.13854545714673128
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root028",
+      "split": "validation_calibration",
+      "initial_offset": {
+        "lateral_m": 0.07873278741821436,
+        "yaw_deg": -1.1821872966569686
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root029",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.0055711774961453575,
+        "yaw_deg": 1.9711749133057044
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root030",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.04395590705924471,
+        "yaw_deg": 1.8821899957589956
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root031",
+      "split": "validation_calibration",
+      "initial_offset": {
+        "lateral_m": -0.03540990626076118,
+        "yaw_deg": 0.4675012985606313
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root032",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.013804337501687497,
+        "yaw_deg": -1.7581080594904783
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root033",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": -0.03763621468114687,
+        "yaw_deg": -1.5756679399859719
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root034",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.07009585858050708,
+        "yaw_deg": 1.8872503046712312
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root035",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.04182102670628669,
+        "yaw_deg": 1.4838182714939236
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root036",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": -0.036172751551918604,
+        "yaw_deg": 1.3900570147598716
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root037",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.0018662166235321048,
+        "yaw_deg": 0.9533431172590823
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root038",
+      "split": "validation_tuning",
+      "initial_offset": {
+        "lateral_m": -0.04463082231800831,
+        "yaw_deg": -0.5024466840500046
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root039",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.07349623541130364,
+        "yaw_deg": 0.056777237195153596
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root040",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.009169836146751362,
+        "yaw_deg": 1.0595685497674543
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root041",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": 0.052770225420810904,
+        "yaw_deg": 1.5533478675133008
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root042",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.041024289683173065,
+        "yaw_deg": -0.4601109020256384
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root043",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.06201443133114065,
+        "yaw_deg": 1.3084377501363922
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root044",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.03295570087044884,
+        "yaw_deg": 1.4489321361811949
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root045",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.04426971138099965,
+        "yaw_deg": -1.7807627180408976
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root046",
+      "split": "validation_tuning",
+      "initial_offset": {
+        "lateral_m": 0.01768168587076252,
+        "yaw_deg": 1.3235853277317804
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root047",
+      "split": "validation_tuning",
+      "initial_offset": {
+        "lateral_m": -0.033544302217630585,
+        "yaw_deg": -0.5839216457554701
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root048",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.05008567299206347,
+        "yaw_deg": 0.8309796023643887
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root049",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.03153656121192276,
+        "yaw_deg": 1.895817273617503
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root050",
+      "split": "validation_calibration",
+      "initial_offset": {
+        "lateral_m": -0.056101776344112224,
+        "yaw_deg": 1.3750874264027235
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root051",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.07712950553298807,
+        "yaw_deg": -1.5712647238587092
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root052",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.045303878777212106,
+        "yaw_deg": -1.6690965476061481
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root053",
+      "split": "validation_tuning",
+      "initial_offset": {
+        "lateral_m": 0.04791345212056365,
+        "yaw_deg": -0.3127603064458211
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root054",
+      "split": "validation_calibration",
+      "initial_offset": {
+        "lateral_m": 0.05879172047954144,
+        "yaw_deg": 0.1576848514933804
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root055",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.006350123958982989,
+        "yaw_deg": -0.8704728738263099
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root056",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": -0.029721654887966888,
+        "yaw_deg": 1.0018181697545692
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root057",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.057605088589792006,
+        "yaw_deg": -0.7651250338707678
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root058",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.004016602545783066,
+        "yaw_deg": -0.33604940511268744
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root059",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.04114921442587115,
+        "yaw_deg": 1.2319275144806712
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root060",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.05281481969812299,
+        "yaw_deg": 0.5996475848082734
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root061",
+      "split": "validation_tuning",
+      "initial_offset": {
+        "lateral_m": -0.038572077397374026,
+        "yaw_deg": -1.6006856441885753
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root062",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": 0.05123083100413468,
+        "yaw_deg": -1.115447942264833
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root063",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.041399806697279995,
+        "yaw_deg": -0.16651565301841798
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root064",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.053273320385524625,
+        "yaw_deg": -0.8363524155466067
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root065",
+      "split": "validation_tuning",
+      "initial_offset": {
+        "lateral_m": -0.00024423736910447746,
+        "yaw_deg": -0.09958365452345053
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root066",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.05097566644591402,
+        "yaw_deg": -0.9176959364826991
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root067",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": -0.015879356578314158,
+        "yaw_deg": -0.4106152045756932
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root068",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": 0.03728592565442769,
+        "yaw_deg": -0.8024335215128233
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root069",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.016289535336876035,
+        "yaw_deg": 1.2635906825364116
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root070",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.041489043174224846,
+        "yaw_deg": -1.237834859098374
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root071",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.04511345812756112,
+        "yaw_deg": -0.05483803031173551
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root072",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.05282718897683748,
+        "yaw_deg": 1.045066074124724
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root073",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": -0.015074593083096582,
+        "yaw_deg": 1.1661243812936877
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root074",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.003262033619528759,
+        "yaw_deg": -0.4407508810439946
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root075",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.06457932128407558,
+        "yaw_deg": 0.7654315574605874
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root076",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.03696764599073475,
+        "yaw_deg": 0.2701162920843334
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root077",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.06199337998045289,
+        "yaw_deg": -0.12024614273551126
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root078",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.025439376950590398,
+        "yaw_deg": 1.1779980441635738
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root079",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.03731695120260016,
+        "yaw_deg": 1.0015638142139158
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root080",
+      "split": "validation_calibration",
+      "initial_offset": {
+        "lateral_m": -0.023304934447966053,
+        "yaw_deg": 0.9134886547824275
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root081",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": 0.004299208435325413,
+        "yaw_deg": -0.017006946455862426
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root082",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": -0.011888871186613456,
+        "yaw_deg": -1.7388262780303623
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root083",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.05136575340692978,
+        "yaw_deg": -0.5126799384134162
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root084",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.0013980600432727253,
+        "yaw_deg": -1.8198395098551527
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root085",
+      "split": "validation_calibration",
+      "initial_offset": {
+        "lateral_m": -0.017075753793398082,
+        "yaw_deg": 0.5890266057114166
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root086",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": -0.029103576666043837,
+        "yaw_deg": -0.5303648885333048
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root087",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": 0.05187501874152113,
+        "yaw_deg": 0.023499464010532378
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root088",
+      "split": "validation_calibration",
+      "initial_offset": {
+        "lateral_m": -0.03189598413873039,
+        "yaw_deg": -1.4745883894474172
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root089",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.02478319404529701,
+        "yaw_deg": 1.3235959901633936
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root090",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.06501803746675083,
+        "yaw_deg": 1.5091454700813292
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root091",
+      "split": "validation_tuning",
+      "initial_offset": {
+        "lateral_m": -0.033184972216256534,
+        "yaw_deg": 1.4423939017552447
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root092",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.05398987566229656,
+        "yaw_deg": 0.21615109041434355
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root093",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": 0.014772669985192638,
+        "yaw_deg": -0.5168404004350919
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root094",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.07753725678029473,
+        "yaw_deg": 1.2389838608163792
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root095",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.04672363247737035,
+        "yaw_deg": -1.6872594365759754
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root096",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": -0.003013560839962112,
+        "yaw_deg": 1.9401238953070554
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root097",
+      "split": "validation_tuning",
+      "initial_offset": {
+        "lateral_m": 0.023390592652312872,
+        "yaw_deg": -1.7063515364965798
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root098",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": -0.07960310513451928,
+        "yaw_deg": -0.5605019303417653
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root099",
+      "split": "validation_tuning",
+      "initial_offset": {
+        "lateral_m": 0.07262306942221612,
+        "yaw_deg": -1.252276976919886
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root100",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.05888521669682946,
+        "yaw_deg": 0.10540331702238426
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root101",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.002146394421420117,
+        "yaw_deg": 1.8124075691639159
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root102",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.011536738726256227,
+        "yaw_deg": -1.6221160293070747
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root103",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.05473159447450608,
+        "yaw_deg": 0.14837982788171944
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root104",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.07081088610122584,
+        "yaw_deg": 0.5923428356906113
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root105",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.07451108084316506,
+        "yaw_deg": -1.4190557661784546
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root106",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": 0.07789476536123664,
+        "yaw_deg": -1.6512358012803898
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root107",
+      "split": "validation_calibration",
+      "initial_offset": {
+        "lateral_m": 0.014043353250890428,
+        "yaw_deg": 1.6200700376173738
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root108",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.047368458536104954,
+        "yaw_deg": -0.6852169317311336
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root109",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.07446599957426688,
+        "yaw_deg": -1.5950367408206638
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root110",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.0012617893131238733,
+        "yaw_deg": -0.10597745493850486
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root111",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": 0.07251401104872608,
+        "yaw_deg": -1.7041081256014383
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root112",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": -0.0585484720193033,
+        "yaw_deg": 1.7650903406836802
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root113",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.02222198979458284,
+        "yaw_deg": 1.9768805680585264
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root114",
+      "split": "validation_calibration",
+      "initial_offset": {
+        "lateral_m": -0.013944268630668458,
+        "yaw_deg": 1.0374228393400133
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root115",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": -0.07244036881127949,
+        "yaw_deg": 0.19523213546974416
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root116",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": -0.06235087569582291,
+        "yaw_deg": 1.1027598865761545
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root117",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": -0.060219002935288146,
+        "yaw_deg": -1.9666217688226797
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root118",
+      "split": "validation_tuning",
+      "initial_offset": {
+        "lateral_m": 0.011471251335020846,
+        "yaw_deg": 0.02515094253571526
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root119",
+      "split": "train",
+      "initial_offset": {
+        "lateral_m": 0.07212706432606435,
+        "yaw_deg": -1.0383726233764028
+      }
+    }
+  ],
+  "distribution": "Independent uniform initial lateral [-.08,.08] m and heading [-2,2] deg around the existing upstream start; prescribed simulation distribution, not measured real-world traffic",
+  "source_snapshot": "All start from the declared common source snapshot, rigidly translated/rotated; no synthetic exit states",
+  "inheritance": "All distances, candidates, midpoints, future disturbances and skill variants inherit the root split",
+  "upstream_failures": "Retain in full-task denominator; do not substitute roots or invent exit labels",
+  "test_use": "Do not inspect test outcomes for design or fitting; lock methods, normalization, support and calibration before final test",
+  "skill_updates": 0,
+  "task_groups": 360,
+  "candidate_trajectories": 2160,
+  "physics_lane_steps_max": 19008000
+}
