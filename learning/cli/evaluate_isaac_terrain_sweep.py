@@ -13,20 +13,27 @@ p.add_argument('--config',type=Path,default=Path('learning/configs/isaac_h75_ter
 p.add_argument('--assets',type=Path,default=Path('runs/h75_terrain_speed_sweep/assets.json'))
 p.add_argument('--output',type=Path,required=True)
 p.add_argument('--bundle',type=Path)
+p.add_argument('--resume',action='store_true',help='Continue recorded unfinished matrix after an interrupted process')
 p.add_argument('--after-pid',type=int,help='Wait for an existing process exit using a kernel pidfd, without polling')
 a=p.parse_args();spec=json.loads(a.config.read_text());assets=json.loads(a.assets.read_text())['terrains'];bundle=(a.bundle or Path(spec['reference_bundle'])).resolve()
-base=json.loads(Path(spec['base_evaluation_config']).read_text());a.output.mkdir(parents=True,exist_ok=False)
+base=json.loads(Path(spec['base_evaluation_config']).read_text());a.output.mkdir(parents=True,exist_ok=a.resume)
+previous_status=json.loads((a.output/'status.json').read_text()) if a.resume else {}
 if a.after_pid:
     fd=os.pidfd_open(a.after_pid)
-    (a.output/'status.json').write_text(json.dumps(dict(stage='queued',waiting_for_pid=a.after_pid,pid=os.getpid())))
+    (a.output/'status.json').write_text(json.dumps(dict(previous_status,stage='queued',waiting_for_pid=a.after_pid,pid=os.getpid())))
     select.select([fd],[],[]);os.close(fd)
 env=dict(os.environ,PYTHONPATH=str(Path('learning/src').resolve()),JAX_PLATFORMS='cpu')
 lab='/home/qy/miniconda3/envs/env_isaaclab/bin/python';analysis='/home/qy/miniconda3/envs/mjp/bin/python'
 status=dict(stage='evaluation',pid=os.getpid(),completed_conditions=0,physics_lane_steps=0,started=time.time(),bundle=str(bundle));index=[]
+if a.resume:
+    status.update(previous_status);status.update(stage='evaluation',pid=os.getpid(),resumed=time.time())
+    index=json.loads((a.output/'index.json').read_text()) if (a.output/'index.json').exists() else []
 (a.output/'status.json').write_text(json.dumps(status,indent=2))
 for seed in spec.get('seeds',[None]):
     for speed,terrain in product(spec['user_speed_m_s'],spec['terrain_overrides']):
         name=terrain['name'];case=a.output/(name+'_v'+str(speed).replace('.','p')+('' if seed is None else '_seed'+str(seed)))
+        if any(row['terrain']==name and row['user_speed_m_s']==speed and row.get('seed')==seed for row in index):continue
+        if a.resume and case.exists():case.rename(case.with_name(case.name+'_interrupted_'+str(int(time.time()))))
         cached={'flat':'flat_mesh','oblique_4cm':'bump'}
         if seed is None and speed==2.3 and name in cached and bundle==Path(spec['reference_bundle']).resolve():
             run=Path('runs/h75_selected_local300_bend')/cached[name];role='reused original matched run'
