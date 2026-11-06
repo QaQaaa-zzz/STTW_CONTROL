@@ -1,3 +1,13 @@
+## Contact-force semantics resolved and all-alpha phase alignment complete
+
+Existing installed IsaacLab commit090aed181 documents `net_forces_w` and `force_matrix_w` as world-frame NORMAL contact-force vectors (not friction-inclusive totals). `isaaclab_vector_env.refresh` stores the former; `isaac_path_rollout` stores the latter per wheel/filter at0.2ms. Documentation for this generation: https://isaac-sim.github.io/IsaacLab/v2.3.0/source/api/lab/isaaclab.sensors.html . Do not substitute newer main API semantics.
+
+`learning/cli/plot_isaac_contact_alignment.py --run runs/h75_common_state_channels` now produces `analysis/contact_alignment/{RESULTS.md,front_aligned.png,rear_aligned.png,summary.json,alpha*.npz}` from the five natural branches. Quantity is norm(sum of per-filter normal vectors), NOT sum of per-contact scalar loads. Existing world-Fz graphs remain valid vertical components; earlier loose wording as total contact force is corrected here. No physical rerun, new filtering or estimated terrain-normal projection.
+
+Front first raised contact1.5506–1.6002s; rear first1.7448–1.8170s; rear last2.0106–2.1156s across alpha. Thus the natural histories differ before alignment. Full-window raw peak front resultants191.7–257.5N, rear227.7–369.1N are instantaneous simulation samples, not measured hardware loads or a robustness ranking. Phase charts show raw0.2ms resultant pulses,5ms executed speed/steer correction, roll rate and signed path error, with first/last front/rear markers. Local path error need not follow the whole-window preference ranking. Interpret alongside the common-exported-state hold/zero experiments; temporal coincidence alone is not causal mechanism proof.
+
+This resolves the log-semantics/phase-figure gap in the task coverage map below. STTW hardware evidence remains missing; later capability/continuous-task work remains incomplete. Continue to use frozen original H75/Local300 and independent slew, with adopted tangent-heading replanning.
+
 ## Tangent-heading closed-loop confirmation complete; STTW evidence figures supplemented
 
 `runs/h75_shared_switch_tangent/DECISION.md`: declared5-branch10s evaluation complete (250000physics,0optimizer). All5 arrive and remain active10s;11 plans contain0 LRL/RLR loops and span2.178–4.506m. Reward replay discrepancy5.93e-08. Adopt the existing PythonRobotics adapter with analytic tangent-heading candidates; retain original H75/Local300 and independent slew. The earlier10.480m loop is preserved in `h75_shared_switch`; no universal no-loop claim. No further planner scan or training.
