@@ -26,7 +26,9 @@ class Go2LocalEnv(VecEnv):
         self.max_episode_length = round(cfg['episode_s']/self.dt)
         self.plant = IsaacLabVectorPlant(cfg['asset'], ['plane'], [0]*self.num_envs, output, **cfg.get('plant_options', {}))
         self.decimation = round(self.dt/self.plant.sim.cfg.dt)
-        self.controller = TorchController(json.loads(Path(cfg['controller_config']).read_text()), self.num_envs, self.device)
+        self.wheel_radius_m = self.plant.wheel_radius_m
+        controller_cfg=json.loads(Path(cfg['controller_config']).read_text());controller_cfg['wheel_radius_m']=self.wheel_radius_m
+        self.controller = TorchController(controller_cfg, self.num_envs, self.device)
         self.history = TorchLocalLower(cfg['history_actor'], cfg['history_actor_sha256'], self.num_envs, self.device)
         data = np.load(cfg['initial_state'])
         order = [list(data['joint_names']).index(name) for name in self.plant.joints]
@@ -150,13 +152,13 @@ class Go2LocalEnv(VecEnv):
             self.plant.refresh()
         action = torch.tanh(actions)
         m = self.plant.observe()[0] if self.cfg.get('controller_clean_feedback', False) else self.measurement
-        row = torch.stack((m[:,5]*.1,m[:,2],m[:,3],m[:,0],m[:,1],self.reference[:,1]), -1)
+        row = torch.stack((m[:,5]*self.wheel_radius_m,m[:,2],m[:,3],m[:,0],m[:,1],self.reference[:,1]), -1)
         output = self.controller.step(row, torch.ones(self.num_envs, dtype=torch.bool, device=self.device))
         applied = action*torch.tensor([1.5,10.], device=self.device)
         steer = (output[:,0]+applied[:,0]).clamp(-3,3)
         steer = torch.maximum(((-.8-m[:,2])/self.dt).clamp(min=-3),
                               torch.minimum(((.8-m[:,2])/self.dt).clamp(max=3), steer))
-        self.command = torch.stack((steer,(self.reference[:,0]/.1+applied[:,1]).clamp(-60,60)), -1)
+        self.command = torch.stack((steer,(self.reference[:,0]/self.wheel_radius_m+applied[:,1]).clamp(-60,60)), -1)
         _, before, _ = self.plant.observe()
         failure = torch.zeros(self.num_envs, device=self.device, dtype=torch.bool)
         peak = torch.zeros(self.num_envs, device=self.device)
