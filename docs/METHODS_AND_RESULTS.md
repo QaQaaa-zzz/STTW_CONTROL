@@ -1,3 +1,17 @@
+## 两个指定地形的等权平均与函数形状（探索性分析）
+
+用户指定2cm/4cm、2.6m/s两个工况，要求可考虑删大误差点和加权平均。主分析无删点：大速度误差是alpha0的任务取舍，缺少异常采集依据。两工况统一六lane共同有效时间交集0–6.26s（1252个5ms样本），按同alpha对路径/速度RMSE各取0.5/0.5算术均值；这是平均RMSE坐标，不等于合并样本RMSE，后者另存JSON。无重复初态，不编造精度权重。
+
+[三联图：原点/平均、函数比较、端点敏感性](../runs/h75_terrain_speed_sweep/evaluation/tradeoff_shape_analysis.png) · [完整数值](../runs/h75_terrain_speed_sweep/evaluation/tradeoff_shape_analysis.json)。复现：`python learning/cli/analyze_tradeoff_shape.py --evaluation runs/h75_terrain_speed_sweep/evaluation`。
+
+五点平均(E_path m,E_speed m/s)：(.063612,.172454),(.079394,.137048),(.110635,.111348),(.166291,.088632),(.246319,.075067)。两参数反比例加常数拟合 E_speed=0.039477+0.0081632/E_path，系数单位分别m/s、m²/s；R²=.990312，拟合RMSE .003430m/s，留一alpha预测RMSE .007048m/s。幂律/指数/线性/固定请求速度平方根近似对应留一误差 .011122/.021573/.031872/.031152m/s。每类仅两参数；平方根方案在线性化的(2.6-E_speed)²域拟合，其他直接最小化速度误差残差，统一用原速度误差单位报告预测分数。五个确定性alpha不是独立随机样本，留一仅评估形状敏感性，不是泛化检验或显著性证明。
+
+分别拟合2cm与4cm反比例关系R²=.986951/.988932，非仅平均制造曲线。2cm权重.25/.5/.75时截距.042831/.039477/.036042、倒数项.007963/.008163/.008366。去除alpha0/alpha1仅为敏感性，未标其为异常；两种处理都保留递减凸形状，参数仍改变。只在观测路径RMSE约.064–.246m区间解释，截距不能称不可消除物理误差下界，不能向0或无穷外推。Zero不属于alpha曲线，单独保留在原全图。
+
+机制解释进一步分层：原controller的v/v²耦合说明速度/转弯/侧倾相关；实际保存轨迹十条件alpha0→1全部速度升、yaw_rate/v曲率代理降，9/10绝对侧倾均值升。但这不能推导当前RMSE双曲线为物理定律。此前恒侧倾圆弯平方根假设对该平均五点拟合明显差，现明确仅保留为趋势示意。反比例形式可描述边际收益递减：导数-b/E_path²；路径误差翻倍时该拟合的边际速度误差收益降为四分之一。局部经验描述不等于所有地形共有函数或已识别动力学。
+
+附：[保存轨迹动力学均值图](../runs/h75_terrain_speed_sweep/evaluation/tradeoff_bend_dynamics.png)。更正上条“pre-step侧倾”：当前isaac_path_rollout的diagnostics measurement=post_m，侧倾与速度均为post-step；yawrate是相邻post-step姿态5ms后向差分。不是转角几何曲率，不能在有侧滑时当精确轨迹曲率。分析脚本已保留完整复现，不新增physics/训练/主稿修改。
+
 ## 五档 alpha 连线及动力学解释（已保存数据，不新增仿真）
 
 用户要求把取舍点连线，并解释形状；暂不写论文正文。图按 alpha=0/.25/.5/.75/1 顺序连接，保留折返，不按横坐标排序，不拟合多项式；Zero 是独立控制器，不接入偏好曲线。源码 `learning/cli/plot_tradeoff_curve.py`，输入原 `tradeoff_common_window.json`。 [保留Zero全图](../runs/h75_terrain_speed_sweep/evaluation/tradeoff_common_window_connected.png) · [H75放大连线](../runs/h75_terrain_speed_sweep/evaluation/tradeoff_common_window_connected_detail.png) · [原实际XY](../runs/h75_terrain_speed_sweep/evaluation/xy_matrix_full.png) · [各段斜率](../runs/h75_terrain_speed_sweep/evaluation/tradeoff_curve_segments.json)。单位斜率为(m/s)/m，不能当无量纲收益。
