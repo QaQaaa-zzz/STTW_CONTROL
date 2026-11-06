@@ -1,10 +1,12 @@
 """Run an explicit slice of declared roots, batching downstream tasks per root."""
 import argparse
+import os
 import json
 import subprocess
 import sys
 import time
 from pathlib import Path
+os.environ['PYTHONPATH']=str(Path(__file__).resolve().parents[1]/'src')+os.pathsep+os.environ.get('PYTHONPATH','')
 
 
 p = argparse.ArgumentParser(description=__doc__)

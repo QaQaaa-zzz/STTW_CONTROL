@@ -1,6 +1,7 @@
 """Run a declared single-lane approach matrix sequentially through existing tools."""
 import argparse,json,os,subprocess,sys,time
 from pathlib import Path
+os.environ['PYTHONPATH']=str(Path(__file__).resolve().parents[1]/'src')+os.pathsep+os.environ.get('PYTHONPATH','')
 p=argparse.ArgumentParser();p.add_argument('--manifest',type=Path,required=True);p.add_argument('--start',type=int,default=0);p.add_argument('--count',type=int,required=True);a=p.parse_args()
 m=json.loads(a.manifest.read_text());root=a.manifest.parent
 for case in m['cases'][a.start:a.start+a.count]:
@@ -21,7 +22,10 @@ for case in m['cases'][a.start:a.start+a.count]:
  summaries=[]
  for result_out in outputs:
   for script in ['analyze_isaac_pendulum_landing.py','analyze_rb_continuous_task.py','plot_isaac_pendulum_jump.py']:
-   subprocess.run([m['analysis_python'],'learning/cli/'+script,'--run',str(result_out)],check=True)
+   analysis=subprocess.run([m['analysis_python'],'learning/cli/'+script,'--run',str(result_out)])
+   if analysis.returncode:
+    (root/'status.json').write_text(json.dumps(dict(status='failed',stage='analysis',script=script,case_id=case['case_id'],returncode=analysis.returncode)))
+    sys.exit(analysis.returncode)
   summaries.append(json.loads((result_out/'chain_summary.json').read_text()))
  (root/(case['case_id']+'_summary.json')).write_text(json.dumps(dict(cases=summaries) if spec.get('batch_candidates') else summaries[0],indent=2)+'\n')
 (root/'status.json').write_text(json.dumps(dict(status='completed_slice',start=a.start,count=a.count,finished_unix=time.time())))

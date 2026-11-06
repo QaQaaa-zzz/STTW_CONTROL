@@ -1,0 +1,370 @@
+{
+  "role": "Matched source/RB approach DEV; no training, not independent TEST",
+  "simulation_python": "/home/qy/miniconda3/envs/env_isaaclab/bin/python",
+  "analysis_python": "/home/qy/miniconda3/envs/mjp/bin/python",
+  "maximum_physics_steps": 299200,
+  "optimizer_updates": 0,
+  "limits": "Nominal upstream root; matched disturbances and independent roots still required. Cross-selected approaches can be scored only after skill-specific candidate results exist.",
+  "cases": [
+    {
+      "case_id": "L9.6_v2.0_a0.5_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_pilot/rb_nominal_upstream_01_9.6_v2.0_a0.5_source.json",
+      "distance_m": 9.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "reused_completed"
+    },
+    {
+      "case_id": "L9.6_v2.0_a0.5_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_pilot/rb_nominal_upstream_01_9.6_v2.0_a0.5_rb_run1_candidate.json",
+      "distance_m": 9.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "reused_completed"
+    },
+    {
+      "case_id": "L5.6_v2.0_a0.5_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L5.6_v2.0_a0.5_source.json",
+      "distance_m": 5.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L5.6_v2.0_a0.5_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L5.6_v2.0_a0.5_rb_run1_candidate.json",
+      "distance_m": 5.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L7.6_v2.0_a0.5_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L7.6_v2.0_a0.5_source.json",
+      "distance_m": 7.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L7.6_v2.0_a0.5_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L7.6_v2.0_a0.5_rb_run1_candidate.json",
+      "distance_m": 7.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L9.6_v1.8_a0.0_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L9.6_v1.8_a0.0_source.json",
+      "distance_m": 9.6,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L9.6_v1.8_a0.0_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L9.6_v1.8_a0.0_rb_run1_candidate.json",
+      "distance_m": 9.6,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L9.6_v1.8_a0.5_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L9.6_v1.8_a0.5_source.json",
+      "distance_m": 9.6,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L9.6_v1.8_a0.5_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L9.6_v1.8_a0.5_rb_run1_candidate.json",
+      "distance_m": 9.6,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L9.6_v1.8_a1.0_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L9.6_v1.8_a1.0_source.json",
+      "distance_m": 9.6,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L9.6_v1.8_a1.0_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L9.6_v1.8_a1.0_rb_run1_candidate.json",
+      "distance_m": 9.6,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L9.6_v2.0_a0.0_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L9.6_v2.0_a0.0_source.json",
+      "distance_m": 9.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L9.6_v2.0_a0.0_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L9.6_v2.0_a0.0_rb_run1_candidate.json",
+      "distance_m": 9.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L9.6_v2.0_a1.0_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L9.6_v2.0_a1.0_source.json",
+      "distance_m": 9.6,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L9.6_v2.0_a1.0_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L9.6_v2.0_a1.0_rb_run1_candidate.json",
+      "distance_m": 9.6,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L5.6_v1.8_a0.0_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L5.6_v1.8_a0.0_source.json",
+      "distance_m": 5.6,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L5.6_v1.8_a0.0_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L5.6_v1.8_a0.0_rb_run1_candidate.json",
+      "distance_m": 5.6,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L5.6_v1.8_a0.5_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L5.6_v1.8_a0.5_source.json",
+      "distance_m": 5.6,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L5.6_v1.8_a0.5_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L5.6_v1.8_a0.5_rb_run1_candidate.json",
+      "distance_m": 5.6,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L5.6_v1.8_a1.0_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L5.6_v1.8_a1.0_source.json",
+      "distance_m": 5.6,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L5.6_v1.8_a1.0_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L5.6_v1.8_a1.0_rb_run1_candidate.json",
+      "distance_m": 5.6,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L5.6_v2.0_a0.0_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L5.6_v2.0_a0.0_source.json",
+      "distance_m": 5.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L5.6_v2.0_a0.0_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L5.6_v2.0_a0.0_rb_run1_candidate.json",
+      "distance_m": 5.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L5.6_v2.0_a1.0_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L5.6_v2.0_a1.0_source.json",
+      "distance_m": 5.6,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L5.6_v2.0_a1.0_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L5.6_v2.0_a1.0_rb_run1_candidate.json",
+      "distance_m": 5.6,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L7.6_v1.8_a0.0_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L7.6_v1.8_a0.0_source.json",
+      "distance_m": 7.6,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L7.6_v1.8_a0.0_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L7.6_v1.8_a0.0_rb_run1_candidate.json",
+      "distance_m": 7.6,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L7.6_v1.8_a0.5_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L7.6_v1.8_a0.5_source.json",
+      "distance_m": 7.6,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L7.6_v1.8_a0.5_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L7.6_v1.8_a0.5_rb_run1_candidate.json",
+      "distance_m": 7.6,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L7.6_v1.8_a1.0_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L7.6_v1.8_a1.0_source.json",
+      "distance_m": 7.6,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L7.6_v1.8_a1.0_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L7.6_v1.8_a1.0_rb_run1_candidate.json",
+      "distance_m": 7.6,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L7.6_v2.0_a0.0_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L7.6_v2.0_a0.0_source.json",
+      "distance_m": 7.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L7.6_v2.0_a0.0_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L7.6_v2.0_a0.0_rb_run1_candidate.json",
+      "distance_m": 7.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L7.6_v2.0_a1.0_source",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L7.6_v2.0_a1.0_source.json",
+      "distance_m": 7.6,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "skill": "source",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    },
+    {
+      "case_id": "L7.6_v2.0_a1.0_rb_run1_candidate",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L7.6_v2.0_a1.0_rb_run1_candidate.json",
+      "distance_m": 7.6,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "skill": "rb_run1_candidate",
+      "origin_id": "rb_nominal_upstream_01",
+      "execution": "prepared_not_started"
+    }
+  ]
+}

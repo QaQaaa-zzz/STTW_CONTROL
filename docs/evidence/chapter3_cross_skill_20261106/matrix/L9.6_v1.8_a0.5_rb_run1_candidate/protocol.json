@@ -1,0 +1,1020 @@
+{
+  "spec": {
+    "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_cross_skill_candidates/L9.6_v1.8_a0.5_rb_run1_candidate",
+    "plant_config": "runs/rb_h75_ecbc_ground/left90_R2/config.json",
+    "model_config": "learning/configs/rb_sttw_platform.json",
+    "initial_state": "runs/rb_ground_standard1500/initial_state.npz",
+    "geometry": "runs/rb_sttw_platform/jump_input/geometry.json",
+    "bundles": "runs/pendulum_torch_skills",
+    "skills": [
+      "rb_run1_candidate"
+    ],
+    "start_x": -4.0,
+    "approach_speed": 2.0,
+    "seconds": 22.0,
+    "handoff_x": 6.0,
+    "physics_dt": 0.0025,
+    "gpu_pair_capacities": [
+      1048576,
+      1048576,
+      1048576
+    ],
+    "zero_initial_history": true,
+    "root_acceleration_difference": true,
+    "jump_steering_gains": [
+      2.5,
+      0.4
+    ],
+    "optimizer_updates": 0,
+    "maximum_physics_lane_steps": 8800,
+    "role": "Matched cross-skill DEV; source/RB identical adaptation; update2 separate engineering reference",
+    "scene_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/scene_L9.6/terrain",
+    "record_body_states": true,
+    "landing_return": {
+      "support_s": 1.0,
+      "speed_m_s": 1.5,
+      "minimum_handoff_speed_m_s": 1.2,
+      "acceleration_m_s2": 0.8,
+      "alpha": 0.5
+    },
+    "ground_bundle": "runs/rb_h75_ecbc_ground/left90_R2/bundle",
+    "ground_settings": "runs/rb_h75_ecbc_ground/left90_R2/config.json",
+    "ground_initial_state": "runs/rb_ground_standard1500/initial_state.npz",
+    "zero_lower": true,
+    "ground_alpha": 0.5,
+    "ground_after_landing_only": false,
+    "terrain_base_plane": true,
+    "ground_route": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/scene_L9.6/route.npz",
+    "start_y": -9.0,
+    "start_heading_rad": 1.5707963267948966,
+    "platform_front_x": 7.6,
+    "platform_back_x": 11.6,
+    "completion": {
+      "corridor_half_width_m": 1.0,
+      "waypoints": [
+        [
+          -4.0,
+          -8.0
+        ],
+        [
+          -4.0,
+          -4.8
+        ],
+        [
+          -4.0,
+          -2
+        ],
+        [
+          -2.0,
+          0
+        ],
+        [
+          6.0,
+          0
+        ]
+      ],
+      "waypoint_radius_m": 1.0,
+      "minimum_post_handoff_s": 2.0,
+      "minimum_post_handoff_forward_m": 2.0,
+      "final_goal_xy": [
+        14.6,
+        0.0
+      ]
+    },
+    "protocol_id": "ch3_jump_connection_hold_v1",
+    "origin_id": "rb_nominal_upstream_01",
+    "candidate_id": "v1.8_a0.5",
+    "connection_candidate": {
+      "decision_x_m": -2.0,
+      "speed_m_s": 1.8,
+      "alpha": 0.5
+    },
+    "comparison_reference": {
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L9.6_v1.8_a0.5.json",
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/L9.6_v1.8_a0.5",
+      "skill": "update2"
+    }
+  },
+  "plant": {
+    "wheel_profile_slices": 21,
+    "wheel_width_m": 0.05,
+    "solver_iterations": [
+      16,
+      4
+    ],
+    "robot_contact_offset_m": 0.001,
+    "wheel_radius_m": 0.07,
+    "actuator_force_limits_Nm": null,
+    "gpu_pair_capacities": [
+      1048576,
+      1048576,
+      1048576
+    ],
+    "physics_dt_s": 0.0025,
+    "env_origins": [
+      [
+        0.0,
+        0.0,
+        0.0
+      ]
+    ],
+    "env_spacing": 20.0,
+    "friction_offset_threshold": 0.03999999910593033,
+    "wheel_collision": "cylinder",
+    "external_forces_every_iteration": false,
+    "friction_correlation_distance": 0.02500000037252903,
+    "compliant_wheels": null,
+    "mesh_collision_on_geometry": true,
+    "collision_cooking": [
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/collisions/geom_9/World/mesh",
+        "points": 226,
+        "previous_hull_limit": null,
+        "hull_limit": 64,
+        "approximation": "convexHull"
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/collisions/geom_15/World/mesh",
+        "points": 226,
+        "previous_hull_limit": null,
+        "hull_limit": 64,
+        "approximation": "convexHull"
+      }
+    ],
+    "servo_mode": "hybrid",
+    "device": "cuda:0",
+    "num_envs": 1,
+    "replicate_physics": true,
+    "terrain_asset_count": 1,
+    "masses": [
+      [
+        1.7599999904632568,
+        0.7200000286102295,
+        0.17000000178813934,
+        0.0010000000474974513,
+        2.309999942779541,
+        0.12999999523162842
+      ]
+    ],
+    "materials": [
+      [
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ],
+        [
+          0.800000011920929,
+          0.800000011920929,
+          0.0
+        ]
+      ]
+    ],
+    "contact_sensor_bodies": [
+      "chasis",
+      "downarm",
+      "uparm",
+      "rearwheel",
+      "steer",
+      "frontwheel"
+    ],
+    "mesh_filename_mapping": {
+      "ellipsoid_0.07_0.07_0.025.obj": "collision_mesh_0.obj"
+    },
+    "scope": "original meshes imported by Isaac Sim 5.1; contact representation may be recooked",
+    "wheel_contact_slop_m": {
+      "frontwheel": 0.0,
+      "rearwheel": 0.0
+    },
+    "runtime_inertial": {
+      "body_names": [
+        "chasis",
+        "downarm",
+        "rearwheel",
+        "steer",
+        "uparm",
+        "frontwheel"
+      ],
+      "coms": [
+        [
+          0.027728000655770302,
+          0.05052940174937248,
+          0.0007008520187810063,
+          0.0013114999746903777,
+          0.00825549941509962,
+          0.3800515830516815,
+          0.9249275922775269
+        ],
+        [
+          7.806149682210162e-08,
+          -0.01510469987988472,
+          0.2552109956741333,
+          0.10496897250413895,
+          -1.1546807172635454e-06,
+          -1.2187896913928853e-07,
+          0.9944754838943481
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        [
+          0.0,
+          0.0,
+          -0.029999999329447746,
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        [
+          7.580339911328338e-08,
+          0.03347399830818176,
+          -0.2917400002479553,
+          0.053068164736032486,
+          1.626345920158201e-06,
+          2.121319994330406e-06,
+          0.998590886592865
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "inertias": [
+        [
+          0.011191313154995441,
+          -0.006352673750370741,
+          0.00018343458941671997,
+          -0.006352672819048166,
+          0.011332865804433823,
+          0.00014043028932064772,
+          0.00018343457486480474,
+          0.00014043028932064772,
+          0.02095877192914486
+        ],
+        [
+          0.005291960202157497,
+          -2.393221398833134e-09,
+          1.1210379291526351e-08,
+          -2.393221398833134e-09,
+          0.00496068736538291,
+          0.0009830899070948362,
+          1.1210379291526351e-08,
+          0.0009830897906795144,
+          0.0005655496497638524
+        ],
+        [
+          0.00020966700685676187,
+          0.0,
+          0.0,
+          0.0,
+          0.00020966700685676187,
+          0.0,
+          0.0,
+          0.0,
+          0.00041649999911896884
+        ],
+        [
+          2.9083300887577934e-06,
+          0.0,
+          0.0,
+          0.0,
+          2.7749999844672857e-06,
+          0.0,
+          0.0,
+          0.0,
+          2.8333300861049793e-07
+        ],
+        [
+          0.005248399917036295,
+          -1.5036961675818361e-09,
+          -1.2984887831635206e-08,
+          -1.5036961675818361e-09,
+          0.005905769765377045,
+          0.0004614113422576338,
+          -1.2984887831635206e-08,
+          0.00046141137136146426,
+          0.0016259904950857162
+        ],
+        [
+          0.00016033300198614597,
+          0.0,
+          0.0,
+          0.0,
+          0.00016033300198614597,
+          0.0,
+          0.0,
+          0.0,
+          0.00031850000959821045
+        ]
+      ]
+    },
+    "collision_shapes": [
+      {
+        "path": "/World/Envs/Env_0/Robot/chasis/collisions/geom_3/box",
+        "type": "Cube",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/downarm/collisions/geom_18/box",
+        "type": "Cube",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/downarm/collisions/geom_19/cylinder",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/uparm/collisions/geom_23/box",
+        "type": "Cube",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/collisions/geom_9/World/mesh",
+        "type": "Mesh",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/standard_wheel_0",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/standard_wheel_1",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/standard_wheel_2",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/standard_wheel_3",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/standard_wheel_4",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/standard_wheel_5",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/standard_wheel_6",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/standard_wheel_7",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/standard_wheel_8",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/standard_wheel_9",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/standard_wheel_10",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/standard_wheel_11",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/standard_wheel_12",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/standard_wheel_13",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/standard_wheel_14",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/standard_wheel_15",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/standard_wheel_16",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/standard_wheel_17",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/standard_wheel_18",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/standard_wheel_19",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/rearwheel/standard_wheel_20",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/steer/collisions/geom_12/box",
+        "type": "Cube",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/collisions/geom_15/World/mesh",
+        "type": "Mesh",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/standard_wheel_0",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/standard_wheel_1",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/standard_wheel_2",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/standard_wheel_3",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/standard_wheel_4",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/standard_wheel_5",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/standard_wheel_6",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/standard_wheel_7",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/standard_wheel_8",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/standard_wheel_9",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/standard_wheel_10",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/standard_wheel_11",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/standard_wheel_12",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/standard_wheel_13",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/standard_wheel_14",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/standard_wheel_15",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/standard_wheel_16",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/standard_wheel_17",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/standard_wheel_18",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/standard_wheel_19",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      },
+      {
+        "path": "/World/Envs/Env_0/Robot/frontwheel/standard_wheel_20",
+        "type": "Cylinder",
+        "contact_offset": 0.0010000000474974513,
+        "rest_offset": 0.0
+      }
+    ],
+    "self_collision": {
+      "enabled": true,
+      "filtered_body_pairs": [
+        [
+          "chasis",
+          "rearwheel"
+        ],
+        [
+          "chasis",
+          "steer"
+        ],
+        [
+          "chasis",
+          "downarm"
+        ],
+        [
+          "rearwheel",
+          "frontwheel"
+        ],
+        [
+          "steer",
+          "frontwheel"
+        ],
+        [
+          "downarm",
+          "uparm"
+        ]
+      ]
+    },
+    "terrain_layout": {
+      "mode": "external",
+      "clone_origins": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "template_offsets": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "filtering": "explicit collision groups"
+    },
+    "wheel_contact_tracking": {
+      "enabled": false,
+      "body_order": [
+        "frontwheel",
+        "rearwheel"
+      ],
+      "aggregation": "official ContactSensor mean contact position per body/filter; force_matrix_w per filter",
+      "sample_dt_s": 0.0025
+    },
+    "pendulum_lock_model": "joint brake with 1e-4 rad half-play, clipped to native limits; not finite motor holding",
+    "pendulum_locked": true,
+    "pendulum_locked_lanes": [
+      true
+    ]
+  },
+  "joint_names": [
+    "hip_joint",
+    "rearwheel_joint",
+    "steering_joint",
+    "knee_joint",
+    "frontwheel_joint"
+  ],
+  "policies": [
+    {
+      "skill_id": "rb_run1_candidate",
+      "source": {
+        "action_order": [
+          "steer",
+          "rear_wheel_drive",
+          "hip",
+          "knee"
+        ],
+        "actor_frame_fields": [
+          "gravity_x",
+          "gravity_y",
+          "gravity_z",
+          "angular_velocity_x",
+          "angular_velocity_y",
+          "angular_velocity_z",
+          "acceleration_x",
+          "acceleration_y",
+          "acceleration_z",
+          "steering_position",
+          "hip_position",
+          "knee_position",
+          "steering_velocity",
+          "hip_velocity",
+          "knee_velocity",
+          "front_wheel_velocity",
+          "rear_wheel_velocity",
+          "last_action_steer",
+          "last_action_rear_wheel_drive",
+          "last_action_hip",
+          "last_action_knee",
+          "estimated_forward_velocity",
+          "obstacle_relative_x",
+          "root_height",
+          "history_valid"
+        ],
+        "actor_sha256": "c3eae39c7c116d5db56122d5aff4f29a6f95b8971a51c4c46864754ecb58b040",
+        "actor_task_fields": [
+          "jump_signal"
+        ],
+        "checkpoint": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_pi0_scratchG_100_candidates12_20261019/training_initial_source_policy_recovery/round_0009/students/student/training/round_0009_student/checkpoints/transition_128000",
+        "checkpoint_identity_sha256": "f6c42676539c66e06d4703b744577243e5b0f99d5df7c8431e3cc40e929036db",
+        "critic_sha256": "ef6f698d2dc016183a1bd2a83ec147338e47fdb539dff0f97b91df3b6563eeb9",
+        "data_role": "train",
+        "formal_config": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_pi0_scratchG_100_candidates12_20261019/training_initial_source_policy_recovery/round_0009/students/student/config.json",
+        "formal_config_file_sha256": "caf486f6f0587a9acc8a86061999272309cb1df0dfb4b666b00c17780efd3e51",
+        "formal_config_sha256": "06bcc68c2245bb8853b5933b826add551b2408c10c8b3656c630c74466e47584",
+        "iteration": 1,
+        "name": "round_0009_student",
+        "normalizer_sha256": "db84aad7750991d6b720e9f065ed7e49f862893c7753f9839c593d7951b6ea86",
+        "payload_sha256": "c11052e726ccbc3970fe272037a9b52b95161d4b7a48ec958caa3b75b306e4df",
+        "policy_role": "development_checkpoint",
+        "source_formal_report": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_pi0_scratchG_100_candidates12_20261019/training_initial_source_policy_recovery/round_0009/students/student/training/round_0009_student/formal_report.json",
+        "source_formal_report_sha256": "6b4c25707dd7ce4abf967d3f83c25b7c65c5aaefae999285feb39c76dadcdc79",
+        "source_requested_training_transitions": 128000,
+        "source_reset_mixture": {
+          "natural_reset_probability": 0.6,
+          "selection": "complete_start_60pct_current_teacher_30pct_historical_success_10pct",
+          "soft_tube_probability": 0.4
+        },
+        "source_training_run_id": "round_0009_student",
+        "source_training_transitions": 128000,
+        "xml_sha256": "0b56d3672773ef05a2b5982117fa53a7fdffcaf2b7f3f04a7a7941233d6e9c8a"
+      },
+      "artifact_sha256": "b9ec970743efd80cdee1aeb1d404272972feba8b701a9d75c820465d0d98371b",
+      "mapping": {
+        "ctrl_min": [
+          -0.800000011920929,
+          -5.0,
+          -1.2999999523162842,
+          -1.5
+        ],
+        "ctrl_max": [
+          0.800000011920929,
+          40.0,
+          0.5,
+          2.5
+        ],
+        "hip_initial": -1.2,
+        "knee_initial": 2.5,
+        "base_rear_speed": 12.0,
+        "rear_speed_delta": 12.0,
+        "joint_target_semantics": "keyframe_centered_absolute",
+        "knee_target_delta": 0.0
+      },
+      "network": "76-256-256-256-8 SiLU; tanh first four logits, deterministic",
+      "conversion": "exact arrays, no training or architecture change"
+    }
+  ],
+  "ground_history": "last_action zero means no prior jump action; physical FIFO sampled throughout ground approach",
+  "initial_translation": "common saved snapshot translated to start_x/y0; optional rigid world-yaw alignment rotates pose and both velocities together",
+  "role": "nominal paired DEV integration; not original donor benchmark",
+  "physics_dt": 0.0025,
+  "ground_dt": 0.005,
+  "jump_dt": 0.02,
+  "optimizer_updates": 0
+}
