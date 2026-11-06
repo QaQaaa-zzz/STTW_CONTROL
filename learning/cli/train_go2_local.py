@@ -110,8 +110,7 @@ def recorded_update():
     return result
 runner.alg.update = recorded_update
 runner.learn(s['updates'], init_at_random_ep_len=False)
-status.update(stage='training_complete', elapsed_s=time.time()-started)
+status.update(stage='training_complete', elapsed_s=time.time()-started,total_physics_steps=env.total_steps*env.decimation*env.num_envs)
 (a.output/'status.json').write_text(json.dumps(status, indent=2))
 runner.writer.close()
-env.plant.close()
-app.close(wait_for_replicator=False)
+os.sync();os._exit(0)

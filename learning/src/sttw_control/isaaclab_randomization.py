@@ -99,6 +99,7 @@ class VehicleControlRandomization:
             low+(high-low)*torch.rand(n, 2, device=self.device))
         low, high = self.config['steer_zero_offset_rad']
         self.steer_offset[env_ids] = low+(high-low)*torch.rand(n, device=self.device)
+        if self.plant.servo_mode=='hybrid':self.plant.sync_native_drives(env_ids)
 
     def command(self, command):
         return self.buffers['command'].compute(command)
