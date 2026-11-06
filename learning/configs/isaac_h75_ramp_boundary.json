@@ -1,0 +1,39 @@
+{
+  "role": "Planned bounded DEV short-ramp feasibility boundary; not executed",
+  "reference_bundle": "runs/h75_selected_local300_flat/bundle",
+  "base_evaluation_config": "runs/h75_selected_local300_bend/lab_config.json",
+  "terrain_generator": "learning/cli/place_isaac_terrain.py --terrain bend_ramp",
+  "terrain_base_config": "runs/h75_ramp_boundary/ramp_32cm.json",
+  "terrain_overrides": [
+    {
+      "name": "ramp_32cm",
+      "height_m": 0.32
+    },
+    {
+      "name": "ramp_48cm",
+      "height_m": 0.48
+    },
+    {
+      "name": "ramp_64cm",
+      "height_m": 0.64
+    }
+  ],
+  "user_speed_m_s": [
+    1.5,
+    2.0
+  ],
+  "initial_state_protocol": "Same saved 2.3 m/s warm state; request 1.5 or 2.0 m/s; record actual entry speed and reference-floor fraction",
+  "alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "include_zero": true,
+  "seconds": 10,
+  "max_physics_lane_steps": 1800000,
+  "optimizer_updates": 0,
+  "reuse": "New ramp meshes; planned six paired conditions; no altered vehicle properties",
+  "start_condition": "After current full-route terrain matrix finishes and outcomes are reviewed; no automatic launch"
+}
