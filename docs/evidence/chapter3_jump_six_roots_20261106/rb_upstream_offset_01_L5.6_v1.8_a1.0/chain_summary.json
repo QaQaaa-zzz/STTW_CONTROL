@@ -1,4 +1,12 @@
 {
+  "decision_prefix": {
+    "decision_time_s": 5.22,
+    "decision_reached": true,
+    "max_path_error_before_decision_m": 0.3164025545120239,
+    "corridor_intact_at_decision": true,
+    "first_corridor_violation_s": 12.039999961853027,
+    "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+  },
   "stages": {
     "reached_release_line": true,
     "airborne_after_handoff": true,

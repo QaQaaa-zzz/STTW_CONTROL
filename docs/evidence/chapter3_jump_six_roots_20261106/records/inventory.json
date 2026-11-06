@@ -1,7 +1,7 @@
 {
   "declared_cases": 108,
-  "evaluated_cases": 17,
-  "independent_origins": 1,
+  "evaluated_cases": 38,
+  "independent_origins": 3,
   "role": "Pilot DEV only; no train/validation/test split or fitted model",
   "cases": [
     {
@@ -91,87 +91,108 @@
     },
     {
       "case_id": "rb_upstream_offset_01_L7.6_v2.0_a1.0",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_02_L9.6_v2.0_a0.5",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_02_L5.6_v2.0_a0.5",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_02_L7.6_v2.0_a0.5",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_02_L9.6_v1.8_a0.0",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_02_L9.6_v1.8_a0.5",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_02_L9.6_v1.8_a1.0",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_02_L9.6_v2.0_a0.0",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_02_L9.6_v2.0_a1.0",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_02_L5.6_v1.8_a0.0",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_02_L5.6_v1.8_a0.5",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_02_L5.6_v1.8_a1.0",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_02_L5.6_v2.0_a0.0",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_02_L5.6_v2.0_a1.0",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_02_L7.6_v1.8_a0.0",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_02_L7.6_v1.8_a0.5",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_02_L7.6_v1.8_a1.0",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_02_L7.6_v2.0_a0.0",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_02_L7.6_v2.0_a1.0",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_03_L9.6_v2.0_a0.5",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_03_L5.6_v2.0_a0.5",
-      "status": "not_evaluated"
+      "status": "evaluated",
+      "decision_reached": true
     },
     {
       "case_id": "rb_upstream_offset_03_L7.6_v2.0_a0.5",

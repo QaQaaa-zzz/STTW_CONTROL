@@ -1,5 +1,5 @@
 {
-  "schema_version": "rb_jump_exit_features_v1",
+  "schema_version": "rb_jump_decision_features_v2",
   "features": [
     {
       "name": "speed",
@@ -104,9 +104,18 @@
       "unit": "1"
     }
   ],
+  "categorical_features": [
+    {
+      "name": "decision_stage",
+      "values": [
+        "exit",
+        "midpoint"
+      ]
+    }
+  ],
   "deployment_sources": "IMU, localization/velocity estimation, joint encoders, command history and known map. Simulation state substitutes measurements in this DEV; deployment estimation not validated.",
   "missing_joint_velocity": "Older protocol lacks live joint ordering: retain null, never assume donor or URDF order. These rows cannot train the full feature set.",
-  "previous_alpha_duration": "At first turn-exit decision only: elapsed episode time under unchanged upstream alpha.",
+  "previous_alpha_duration": "Recorded duration since last alpha change; legacy exit records use episode time under unchanged upstream alpha.",
   "excluded_inputs": [
     "handoff_state",
     "future_contacts",

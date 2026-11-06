@@ -46,7 +46,8 @@ for c in m['cases']:
      pr=json.loads((paired/'chain_summary.json').read_text())
      row['diagonal_C6_comparison']=dict(reference=str(paired),matched_samples=len(times),reference_samples=len(pt),sequence_samples=len(t),reference_duration_s=float(pt[-1,0]),sequence_duration_s=float(t[-1,0]),same_complete_label=bool(pr['complete']==result['complete']),reference_checks=pr['checks'],sequence_checks=result['checks'],reference_T_s=pr['success_time_s'],sequence_T_s=result['success_time_s'],max_position_difference_m=float(np.linalg.norm(pt[pi,1:4]-t[ti,1:4],axis=1).max()) if len(times) else None,max_speed_difference_m_s=float(np.abs(pt[pi,4]-t[ti,4]).max()) if len(times) else None,scope='Matched observed full trajectories; unequal lengths and labels retained, no hidden simulator-state equality claim')
 
-  row['failure_phase']=('none' if result['complete'] else 'upstream' if row['decision'] is None else 'approach' if row['handoff'] is None else 'jump_or_landing' if not result['checks']['stable_landing'] else 'ground_return' if not result['checks']['ground_return'] else 'continuation_or_corridor')
+  row['decision_prefix']=result.get('decision_prefix')
+  row['failure_phase']=('none' if result['complete'] else 'upstream_corridor_before_decision' if result.get('decision_prefix',{}).get('corridor_intact_at_decision') is False else 'upstream' if row['decision'] is None else 'approach' if row['handoff'] is None else 'jump_or_landing' if not result['checks']['stable_landing'] else 'ground_return' if not result['checks']['ground_return'] else 'continuation_or_corridor')
   for key in ('decision','handoff'):
    if row[key] is None:continue
    event=row[key];root=np.asarray(event['root'])[0];qx,qy,qz,qw=root[3:7];yaw=np.arctan2(2*(qw*qz+qx*qy),1-2*(qy*qy+qz*qz));sample=t[np.argmin(np.abs(t[:,0]-event['time']))]
