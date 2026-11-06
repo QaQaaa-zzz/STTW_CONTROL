@@ -91,11 +91,11 @@ lines = ['# Paired terrain feasibility — completed cases only', '', '![Actual 
          'Failure is the existing combined termination flag, not automatically a physical fall. Goal crossing and final hold are separate.',
          'Termination signals are flags observed in the first failed policy step. Multiple flags may coexist; an unresolved event is not classified as a fall.',
          'Terrain exit is chassis route projection, not a measured rear-wheel clearance. Metrics use individual observed windows.', '',
-         '|Terrain|Request m/s|Alpha|Early failure / signals|Goal crossed|Final hold|Entry speed|Min terrain speed|Path RMSE m|Speed RMSE m/s|',
-         '|---|---:|---|---|---|---|---:|---:|---:|---:|']
+         '|Terrain|Request m/s|Alpha|Early failure / signals|Terrain exit|Goal crossed|Final hold|Entry speed|Min terrain speed|Path RMSE m|Speed RMSE m/s|',
+         '|---|---:|---|---|---|---|---|---:|---:|---:|---:|']
 for r in rows:
     fmt = lambda x: '—' if x is None else f'{x:.3f}'
-    lines.append(f"|{r['terrain']}|{r['requested_speed_m_s']}|{r['label']}|{r['failed']} / {','.join(r['termination_signals']) or '—'}|{r['goal_crossed']}|{r['final_hold']}|{fmt(r.get('entry_speed_m_s'))}|{fmt(r.get('min_terrain_speed_m_s'))}|{r['path_rmse_m']:.3f}|{r['speed_rmse_m_s']:.3f}|")
+    lines.append(f"|{r['terrain']}|{r['requested_speed_m_s']}|{r['label']}|{r['failed']} / {','.join(r['termination_signals']) or '—'}|{r.get('terrain_exit_reached', '—')}|{r['goal_crossed']}|{r['final_hold']}|{fmt(r.get('entry_speed_m_s'))}|{fmt(r.get('min_terrain_speed_m_s'))}|{r['path_rmse_m']:.3f}|{r['speed_rmse_m_s']:.3f}|")
 lines.extend(['', '[Per-condition full XY and paired reward diagnostics](RESULTS.md)', '',
               'No automatic feasibility or dynamic-switch benefit claim is made from this table.'])
 (a.evaluation/'FEASIBILITY.md').write_text('\n'.join(lines)+'\n')
