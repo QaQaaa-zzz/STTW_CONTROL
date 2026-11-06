@@ -32,6 +32,8 @@ for model,label in models:
   d=dict(time=t,xy=xy,speed=tr[ids,i,2],wheel_speed=tr[ids,i,10],original_progress=svals,original_cross=cross,execution_cross=tr[ids,i,3],roll=tr[ids,i,4],roll_rate=data['measurement'][ids,i,1],reward=total[ids,i],goal_distance=distance,alpha=data['alpha'][ids,i],nominal=data['nominal'][ids,i],reference=tr[ids,i,8:10],target=data['target'][ids,i],plans=plans)
   series[model,i]=d
   row=dict(model=model,case=case,failed=failed,survived_full_window=not failed and len(ids)==len(tr),goal_arrived=bool(len(arrival)),first_arrival_s=float(t[arrival[0]]) if len(arrival) else None,min_goal_distance_m=float(distance.min()),original_path_rmse_m=float(np.sqrt(np.mean(cross**2))),execution_path_rmse_m=float(np.sqrt(np.mean(d['execution_cross']**2))),speed_rmse_m_s=float(np.sqrt(np.mean((d['speed']-user_speed)**2))),peak_roll_rad=float(d['roll'].max()),replans=sum(e.get('event')!='goal_arrival_forward_exit' for e in plans),arrival_handoffs=sum(e.get('event')=='goal_arrival_forward_exit' for e in plans),planner_seconds=sum(e['planning_seconds'] for e in plans),reward_sum=float(d['reward'].sum()))
+  task_end=int(arrival[0])+1 if len(arrival) else len(ids)
+  row['before_goal_or_termination']=dict(window_end_s=float(t[task_end-1]),end_reason='first_goal_entry' if len(arrival) else ('termination' if failed else 'observation_end'),original_path_rmse_m=float(np.sqrt(np.mean(cross[:task_end]**2))),original_path_peak_m=float(np.max(np.abs(cross[:task_end]))),speed_rmse_m_s=float(np.sqrt(np.mean((d['speed'][:task_end]-user_speed)**2))),peak_roll_rad=float(np.max(d['roll'][:task_end])))
   row['domain_exit']=bool(data['domain_exit'][ids,i].any()) if 'domain_exit' in data.files else None
   row['policy_fault']=bool(data['policy_fault'][ids,i].any()) if 'policy_fault' in data.files else None
   if i>=7:
@@ -63,14 +65,15 @@ for model,label in models:
 
 def reference(ax):
  keep=route['s']<24;ax.plot(*route['xy'][keep].T,':',color='.6',label='Original route');ax.scatter(*goal,marker='*',color='black',s=70,label='Original goal');ax.add_patch(Circle(goal,arrival_radius,fill=False,edgecolor='.7',linestyle=':'));ax.set(xlabel='World x (m)',ylabel='World y (m)');ax.set_aspect('equal');ax.grid(alpha=.2)
-fig,axs=plt.subplots(len(models),2,figsize=(13,6*len(models)),squeeze=False,layout='constrained')
+columns=max(len(g) for g in model_groups.values())
+fig,axs=plt.subplots(len(models),columns,figsize=(6.5*columns,6*len(models)),squeeze=False,layout='constrained')
 for row,(model,label) in enumerate(models):
  for col,(offset,style,title) in enumerate(model_groups[model]):
   ax=axs[row,col];reference(ax)
   for j in range(7):
    d=series[model,j+offset];ax.plot(*d['xy'].T,color=colors[j],label=names[j]);ax.plot(*d['xy'][-1],marker='x',color=colors[j])
   ax.set_title(label+' | '+title);ax.legend(fontsize=7)
- if len(model_groups[model])==1:axs[row,1].set_visible(False)
+ if len(model_groups[model])==1 and columns>1:axs[row,1].set_visible(False)
 fig.savefig(a.root/'xy_models.png',dpi=160)
 bend=route['xy'][abs(route['curvature'])>1e-5]
 for ax in axs.flat:ax.set(xlim=(bend[:,0].min()-.4,bend[:,0].max()+.8),ylim=(bend[:,1].min()-.3,bend[:,1].max()+1.2))
@@ -87,6 +90,9 @@ fig.savefig(a.root/'xy_switch.png',dpi=160);plt.close(fig)
 (a.root/'metrics.json').write_text(json.dumps(dict(goal_xy=goal.tolist(),goal_progress_m=goal_s,arrival_radius_m=arrival_radius,cases=all_rows,reward_replay=closures,scope='one route and initial state, nominal DEV; no global superiority; declared original task goal disk;  full-window completion separate'),indent=2))
 lines=['# Integrated replanning: configured frozen controllers','','![All five alphas grouped by model](xy_models.png)','','![Switch trajectories and actual plans](xy_switch.png)','','Original target and physical limits unchanged. Termination flags include follower-domain exits, so they are not all falls. Fixed-route panels diagnose the integration; replanning is part of the intended execution system. No optimizer updates. Goal entry means measured XY enters the declared goal disk, not endpoint rest or a safety guarantee. Crosses are actual observed endpoints. All termination flags retained. After goal entry, the replanned route hands off to a measured-heading straight forward extension; this tail is not tracking the old path and is not a validated next task.','','|Model|Case|Termination flag|Goal entry (s)|Replans|Original path RMSE (m)|Speed RMSE (m/s)|','|---|---|---|---|---|---|---|']
 for r in all_rows:lines.append(f"|{r['model']}|{r['case']}|{r['failed']}|{r['first_arrival_s']}|{r['replans']}|{r['original_path_rmse_m']:.3f}|{r['speed_rmse_m_s']:.3f}|")
+lines += ['', '## Original task before first goal entry', '', 'These windows end at first measured goal entry, true termination, or observation end. Full-window values above are retained separately because the post-arrival forward-exit reference can intentionally leave the original route. Different arrival times imply different observation windows; this table describes each completed task, not an equal-duration comparison.', '', '|Model|Case|End reason|End time s|Original path RMSE m|Original path peak m|Speed RMSE m/s|', '|---|---|---|---:|---:|---:|---:|']
+for r in all_rows:
+ q=r['before_goal_or_termination'];lines.append(f"|{r['model']}|{r['case']}|{q['end_reason']}|{q['window_end_s']:.3f}|{q['original_path_rmse_m']:.4f}|{q['original_path_peak_m']:.4f}|{q['speed_rmse_m_s']:.4f}|")
 for model,label in models:lines.extend(['',f'[{label}: rewards, cumulative rewards, speed and original errors]({model}_responses.png)',f'[{label}: all per-step/cumulative reward components]({model}_reward_components.png)'])
 lines += ['', '[Bend detail: all five alphas](xy_models_bend.png)', 'Full-window original-path errors include the forward-exit tail after arrival; do not treat that deliberately changed reference as old-path recovery performance.',f'Declared goal progress: {goal_s:.6f}m; goal XY: {goal.tolist()}; arrival radius: {arrival_radius}m.']
 lines+=['','Execution-path reward is rebuilt from saved effective terms plus offset-rate/terminal terms; it is not used to claim original-task superiority after changing geometry. Per-case NPZ retains coordinates, both errors, actual/rear-wheel speeds and reward components. No terrain-obstacle planning certificate is implied.']

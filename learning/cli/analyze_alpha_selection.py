@@ -23,6 +23,11 @@ for key,c in sorted(cases.items()):
  with np.load(run/'trajectory.npz') as raw:
   trace=raw['lower_trace'].reshape(-1,6,11)
   groups.setdefault(key[:2],[]).append((c,trace,raw['failure'].any(0)))
+first_case=next(iter(cases.values()))
+contract=json.loads((Path(first_case['run'])/'contract.json').read_text())
+with np.load(Path(contract['bundle'])/'route.npz') as route:
+ goal_s=float(route['turn_end'])+5.
+ goal_xy=np.array([np.interp(goal_s,route['s'],route['xy'][:,k]) for k in (0,1)])
 result=[]
 for (terrain,speed),samples in groups.items():
  count=min(int(t[:,:,6].astype(bool).sum(0).min()) for _,t,_ in samples)
@@ -32,7 +37,12 @@ for (terrain,speed),samples in groups.items():
   j=ev**2+a.eta**2*ey**2
   peak=[float(np.max(np.abs(t[t[:,i,6].astype(bool),i,3]))) for i in range(5)]
   full=(t[:,:5,6].sum(0)==2000)&~failed[:5]
-  per_seed.append(dict(seed=c['seed'],path_rmse=ey.tolist(),speed_rmse=ev.tolist(),cost=j.tolist(),peak_path_m=peak,full_observation=full.tolist(),cost_best_alpha=float(alpha[j.argmin()]),run=c['run']))
+  task_windows=[]
+  for i in range(5):
+   ids=np.flatnonzero(t[:,i,6]);v=t[ids,i];arrival=np.flatnonzero(np.linalg.norm(v[:,:2]-goal_xy,axis=1)<=2.)
+   end=int(arrival[0])+1 if len(arrival) else len(v)
+   task_windows.append(dict(goal_arrived=bool(len(arrival)),arrival_s=float((ids[arrival[0]]+1)*.005) if len(arrival) else None,peak_before_goal_or_end_m=float(np.abs(v[:end,3]).max()),bound_met_before_goal_or_end=bool(np.abs(v[:end,3]).max()<=a.path_bound)))
+  per_seed.append(dict(seed=c['seed'],task_windows=task_windows,path_rmse=ey.tolist(),speed_rmse=ev.tolist(),cost=j.tolist(),peak_path_m=peak,full_observation=full.tolist(),cost_best_alpha=float(alpha[j.argmin()]),run=c['run']))
   costs.append(j);speeds.append(ev);peaks.append(peak);survival.append(full)
  costs=np.array(costs);mean=costs.mean(0);speed_mean=np.mean(speeds,axis=0)
  feasible=np.all(np.array(survival)&(np.array(peaks)<=a.path_bound),axis=0)
@@ -50,7 +60,7 @@ for (terrain,speed),samples in groups.items():
 output=dict(role='DEV repetition check; offline task-rule selection, not an online alpha planner',eta_per_s=a.eta,path_bound_m=a.path_bound,
  cost_rule='minimize mean across seeds of Ev^2 + eta^2 Ey^2; common window includes all six methods and all seeds in each panel',
  constraint_rule='require every seed full 10s observation without termination and peak |ey| <= bound, then minimize mean common-window speed RMSE; survival is not goal completion',
- alpha=alpha.tolist(),cases=result)
+ alpha=alpha.tolist(),goal_window_definition=dict(goal_xy=goal_xy.tolist(),goal_after_turn_m=5.,arrival_radius_m=2.,role='Separate retrospective first-arrival window; full10s metrics unchanged'),cases=result)
 calibration=[r for r in result if r['speed_m_s']==a.calibration_speed and r['terrain'] in a.calibration_terrains]
 calibration_cost=np.mean([r['mean_cost'] for r in calibration],axis=0)
 common_feasible=set.intersection(*(set(r['full_window_feasible_alpha']) for r in calibration))
@@ -85,6 +95,11 @@ lines += ['', '## Full-window bound feasibility', '', 'Counts require a full10s 
 for r in result:
  lines.append(f"|{r['terrain']}|{r['speed_m_s']:g}|{' / '.join(map(str,r['per_alpha_feasible_seed_counts']))}|{r['n']}|")
 lines += ['', '## Calibration-condition repetition', '', f"For {a.calibration_terrains} at {a.calibration_speed:g}m/s, the repeated mean-cost choice is alpha={output['calibration_repetition']['cost_best_alpha']:g}; .75 versus .5 cost change is {output['calibration_repetition']['alpha075_vs05_cost_change_percent']:+.2f}%. Common full-window bound-feasible levels are {sorted(common_feasible)}, giving alpha={constraint_choice} under the speed-priority constrained rule. These are task-conditioned choices, not a universal optimum.", '', 'Negative percentage favors .75; positive favors .5. No feasible candidate is reported as None rather than forcing a recommendation. These are paired physical-parameter repeats of one trained policy, not independent training seeds or a significance test.']
+lines += ['', '## First-arrival interpretation check', '', 'Original task goal is turn end+5m with2m arrival radius. Full10s constraint violations may occur AFTER first goal entry. They do not imply inability to reach the goal. In4cm/1.5m/s, all five alphas reach the goal in all five repeats and all satisfy the0.40m bound BEFORE arrival; the previously reported0/5 versus5/5 split concerns continued tracking over the full10s only.', '', '|Terrain|Speed|Goal arrivals by alpha0/.25/.5/.75/1|Pre-arrival/end bound counts|', '|---|---:|---|---|']
+for r in result:
+ arrivals=[sum(seed['task_windows'][i]['goal_arrived'] for seed in r['per_seed']) for i in range(5)]
+ counts=[sum(seed['task_windows'][i]['bound_met_before_goal_or_end'] for seed in r['per_seed']) for i in range(5)]
+ lines.append(f"|{r['terrain']}|{r['speed_m_s']:g}|{arrivals}|{counts}|")
 lines += ['', '## Task-weight sensitivity', '', 'For the same calibration repeats, the mean cost is A + eta^2 B. Pairwise line intersections give these discrete optimality intervals; boundary values are ties. These are empirical policy choices, not a fitted continuous alpha law.', '', '|Alpha|Minimum eta (1/s)|Maximum eta (1/s)|', '|---|---:|---:|']
 for r in weight_intervals:
  upper='unbounded' if r['eta_max_per_s'] is None else f"{r['eta_max_per_s']:.6f}"
