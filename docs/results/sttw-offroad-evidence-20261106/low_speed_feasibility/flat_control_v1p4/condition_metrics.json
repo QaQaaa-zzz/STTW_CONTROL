@@ -1,0 +1,74 @@
+[
+  {
+    "lane": 0,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": true,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.04939133673906326,
+    "speed_rmse_m_s": 0.22720399498939514,
+    "peak_roll_rad": 0.12609386444091797,
+    "requested_speed_m_s": 1.4
+  },
+  {
+    "lane": 1,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": false,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.07225795835256577,
+    "speed_rmse_m_s": 0.2297828495502472,
+    "peak_roll_rad": 0.12654411792755127,
+    "requested_speed_m_s": 1.4
+  },
+  {
+    "lane": 2,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": false,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.050604287534952164,
+    "speed_rmse_m_s": 0.2302061766386032,
+    "peak_roll_rad": 0.12600791454315186,
+    "requested_speed_m_s": 1.4
+  },
+  {
+    "lane": 3,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": false,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.09449060261249542,
+    "speed_rmse_m_s": 0.2311253845691681,
+    "peak_roll_rad": 0.12687933444976807,
+    "requested_speed_m_s": 1.4
+  },
+  {
+    "lane": 4,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": false,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.07465490698814392,
+    "speed_rmse_m_s": 0.23196953535079956,
+    "peak_roll_rad": 0.12539303302764893,
+    "requested_speed_m_s": 1.4
+  },
+  {
+    "lane": 5,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": false,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.15893152356147766,
+    "speed_rmse_m_s": 0.2258848249912262,
+    "peak_roll_rad": 0.12604165077209473,
+    "requested_speed_m_s": 1.4
+  }
+]

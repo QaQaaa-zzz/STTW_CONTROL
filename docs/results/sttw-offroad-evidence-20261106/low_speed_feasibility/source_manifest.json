@@ -1,0 +1,116 @@
+[
+  {
+    "case": "flat_control_v1p4",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_low_speed_feasibility/evaluation/flat_control_v1p4/evaluation",
+    "array_subset": [
+      "lower_trace",
+      "progress",
+      "measurement",
+      "pose",
+      "offsets",
+      "target",
+      "nominal",
+      "failure",
+      "valid",
+      "reward"
+    ],
+    "arrays": "original arrays, no truncation/filtering",
+    "source_trajectory_sha256": "155a9e2469b0474df0e003a0b3695c6b723af5cfbc146be6e30746a86f4c4551",
+    "packaged_trajectory_sha256": "e9058cdcac152939e51ce44d21691bf94afcb0698c05ad98c4e7e6c2404da855"
+  },
+  {
+    "case": "ramp_16cm_v1p4",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_low_speed_feasibility/evaluation/ramp_16cm_v1p4/evaluation",
+    "array_subset": [
+      "lower_trace",
+      "progress",
+      "measurement",
+      "pose",
+      "offsets",
+      "target",
+      "nominal",
+      "failure",
+      "valid",
+      "reward"
+    ],
+    "arrays": "original arrays, no truncation/filtering",
+    "source_trajectory_sha256": "a613ae4864db5e65677d5e0dfecda41ed619597654a9a06f4690daa69d36e4ae",
+    "packaged_trajectory_sha256": "c02e7a098161f716d2c78f3a122f2bc9dc8dabcc52f50224a775c4a1acf223eb"
+  },
+  {
+    "case": "ramp_24cm_v1p4",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_low_speed_feasibility/evaluation/ramp_24cm_v1p4/evaluation",
+    "array_subset": [
+      "lower_trace",
+      "progress",
+      "measurement",
+      "pose",
+      "offsets",
+      "target",
+      "nominal",
+      "failure",
+      "valid",
+      "reward"
+    ],
+    "arrays": "original arrays, no truncation/filtering",
+    "source_trajectory_sha256": "928833286cee1f72ce87ac5e3b5b07ed19daf80ddfa736ab95fbabde2b194656",
+    "packaged_trajectory_sha256": "6a9628b1f84daf37cf4f234b61e2501b69ed34dae76a217b90f1e24067b1df2c"
+  },
+  {
+    "case": "flat_control_v1p55",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_low_speed_feasibility/evaluation/flat_control_v1p55/evaluation",
+    "array_subset": [
+      "lower_trace",
+      "progress",
+      "measurement",
+      "pose",
+      "offsets",
+      "target",
+      "nominal",
+      "failure",
+      "valid",
+      "reward"
+    ],
+    "arrays": "original arrays, no truncation/filtering",
+    "source_trajectory_sha256": "3eb8e75bb7a08df4a61c8be88b826b18591e588799c36724bd559071d75af182",
+    "packaged_trajectory_sha256": "e7a06ffbe83a4f46b62fa331afdae31cd11b5f605349afeb00eef54cb1a29164"
+  },
+  {
+    "case": "ramp_16cm_v1p55",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_low_speed_feasibility/evaluation/ramp_16cm_v1p55/evaluation",
+    "array_subset": [
+      "lower_trace",
+      "progress",
+      "measurement",
+      "pose",
+      "offsets",
+      "target",
+      "nominal",
+      "failure",
+      "valid",
+      "reward"
+    ],
+    "arrays": "original arrays, no truncation/filtering",
+    "source_trajectory_sha256": "b69e455473bb7cdcc23ec4270d8fb915cb17f94e06f9ecfad5ca756c94a1c208",
+    "packaged_trajectory_sha256": "4e4ffcde85d90fd83630ef668fc6d6142a44d64cecc7e4f199420f4ace8f283f"
+  },
+  {
+    "case": "ramp_24cm_v1p55",
+    "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_low_speed_feasibility/evaluation/ramp_24cm_v1p55/evaluation",
+    "array_subset": [
+      "lower_trace",
+      "progress",
+      "measurement",
+      "pose",
+      "offsets",
+      "target",
+      "nominal",
+      "failure",
+      "valid",
+      "reward"
+    ],
+    "arrays": "original arrays, no truncation/filtering",
+    "source_trajectory_sha256": "371c6276ac5505ed58e3b1b00c1563103989dc6444c6ffe69dffe244d575162b",
+    "packaged_trajectory_sha256": "e865e1a1bf69448c556bc6a4e6bff7712dae16493274782e672c48d5725178c9"
+  }
+]

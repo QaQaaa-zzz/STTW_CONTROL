@@ -1,0 +1,74 @@
+[
+  {
+    "lane": 0,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": false,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.11690809577703476,
+    "speed_rmse_m_s": 0.17858415842056274,
+    "peak_roll_rad": 0.15632319450378418,
+    "requested_speed_m_s": 1.55
+  },
+  {
+    "lane": 1,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": false,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.09906130284070969,
+    "speed_rmse_m_s": 0.17874008417129517,
+    "peak_roll_rad": 0.15638244152069092,
+    "requested_speed_m_s": 1.55
+  },
+  {
+    "lane": 2,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": true,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.09558333456516266,
+    "speed_rmse_m_s": 0.17937155067920685,
+    "peak_roll_rad": 0.15745031833648682,
+    "requested_speed_m_s": 1.55
+  },
+  {
+    "lane": 3,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": false,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.15413320064544678,
+    "speed_rmse_m_s": 0.17970550060272217,
+    "peak_roll_rad": 0.16108620166778564,
+    "requested_speed_m_s": 1.55
+  },
+  {
+    "lane": 4,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": false,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.19738593697547913,
+    "speed_rmse_m_s": 0.17946790158748627,
+    "peak_roll_rad": 0.1714024543762207,
+    "requested_speed_m_s": 1.55
+  },
+  {
+    "lane": 5,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": false,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.12718388438224792,
+    "speed_rmse_m_s": 0.17021910846233368,
+    "peak_roll_rad": 0.15176641941070557,
+    "requested_speed_m_s": 1.55
+  }
+]

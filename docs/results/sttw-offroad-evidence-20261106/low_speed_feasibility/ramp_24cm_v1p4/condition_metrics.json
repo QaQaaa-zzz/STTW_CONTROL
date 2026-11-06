@@ -1,0 +1,74 @@
+[
+  {
+    "lane": 0,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": false,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.1060873344540596,
+    "speed_rmse_m_s": 0.23313592374324799,
+    "peak_roll_rad": 0.15826833248138428,
+    "requested_speed_m_s": 1.4
+  },
+  {
+    "lane": 1,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": false,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.10405233502388,
+    "speed_rmse_m_s": 0.23478305339813232,
+    "peak_roll_rad": 0.15845811367034912,
+    "requested_speed_m_s": 1.4
+  },
+  {
+    "lane": 2,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": true,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.10449520498514175,
+    "speed_rmse_m_s": 0.23616167902946472,
+    "peak_roll_rad": 0.15903723239898682,
+    "requested_speed_m_s": 1.4
+  },
+  {
+    "lane": 3,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": true,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.1033979207277298,
+    "speed_rmse_m_s": 0.23668496310710907,
+    "peak_roll_rad": 0.15904462337493896,
+    "requested_speed_m_s": 1.4
+  },
+  {
+    "lane": 4,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": false,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.1430741846561432,
+    "speed_rmse_m_s": 0.23698492348194122,
+    "peak_roll_rad": 0.15600812435150146,
+    "requested_speed_m_s": 1.4
+  },
+  {
+    "lane": 5,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": false,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.30594056844711304,
+    "speed_rmse_m_s": 0.2303813397884369,
+    "peak_roll_rad": 0.15471374988555908,
+    "requested_speed_m_s": 1.4
+  }
+]

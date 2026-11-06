@@ -34,7 +34,23 @@ Terrain exit is chassis route projection, not a measured rear-wheel clearance. M
 |flat_control|1.55|alpha .75|False|True|False|—|—|0.077|0.169|
 |flat_control|1.55|alpha 1|False|True|True|—|—|0.073|0.169|
 |flat_control|1.55|Zero|False|True|False|—|—|0.088|0.160|
+|ramp_16cm|1.55|alpha 0|False|True|True|1.344|1.270|0.072|0.172|
+|ramp_16cm|1.55|alpha .25|False|True|True|1.327|1.292|0.070|0.173|
+|ramp_16cm|1.55|alpha .5|False|True|True|1.328|1.296|0.077|0.173|
+|ramp_16cm|1.55|alpha .75|False|True|True|1.340|1.308|0.073|0.174|
+|ramp_16cm|1.55|alpha 1|False|True|False|1.376|1.300|0.145|0.173|
+|ramp_16cm|1.55|Zero|False|True|False|1.386|1.318|0.444|0.165|
+|ramp_24cm|1.55|alpha 0|False|True|False|1.293|1.207|0.117|0.179|
+|ramp_24cm|1.55|alpha .25|False|True|False|1.296|1.203|0.099|0.179|
+|ramp_24cm|1.55|alpha .5|False|True|True|1.307|1.213|0.096|0.179|
+|ramp_24cm|1.55|alpha .75|False|True|False|1.315|1.207|0.154|0.180|
+|ramp_24cm|1.55|alpha 1|False|True|False|1.312|1.223|0.197|0.179|
+|ramp_24cm|1.55|Zero|False|True|False|1.329|1.227|0.127|0.170|
 
-Per-condition raw trajectories and paired reward diagnostics remain under `runs/h75_low_speed_feasibility/evaluation`. This remote snapshot covers only the completed cases listed above.
+[Per-condition full XY and paired reward diagnostics](RESULTS.md)
 
 No automatic feasibility or dynamic-switch benefit claim is made from this table.
+
+All six conditions complete:36/36 full-window survival and goal crossing. Final hold:13/36 (H75 13/30, Zero 0/6); this is not a physical-fall advantage. The1.4m/s slope cases have100% speed-reference floor activation across all lanes. The1.55m/s cases retain some alpha-dependent speed correction, but every lane traversed.
+
+[Source and packaged array subset manifest](source_manifest.json). Contract paths preserve original local provenance.

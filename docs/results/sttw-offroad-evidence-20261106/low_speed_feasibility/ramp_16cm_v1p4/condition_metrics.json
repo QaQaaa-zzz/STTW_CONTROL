@@ -1,0 +1,74 @@
+[
+  {
+    "lane": 0,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": false,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.07693777233362198,
+    "speed_rmse_m_s": 0.22936458885669708,
+    "peak_roll_rad": 0.1391202211380005,
+    "requested_speed_m_s": 1.4
+  },
+  {
+    "lane": 1,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": true,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.07718423008918762,
+    "speed_rmse_m_s": 0.2313440889120102,
+    "peak_roll_rad": 0.1387578248977661,
+    "requested_speed_m_s": 1.4
+  },
+  {
+    "lane": 2,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": false,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.08062832057476044,
+    "speed_rmse_m_s": 0.23266373574733734,
+    "peak_roll_rad": 0.13909053802490234,
+    "requested_speed_m_s": 1.4
+  },
+  {
+    "lane": 3,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": false,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.12335611879825592,
+    "speed_rmse_m_s": 0.23352129757404327,
+    "peak_roll_rad": 0.14079594612121582,
+    "requested_speed_m_s": 1.4
+  },
+  {
+    "lane": 4,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": false,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.09714126586914062,
+    "speed_rmse_m_s": 0.2342277467250824,
+    "peak_roll_rad": 0.14290380477905273,
+    "requested_speed_m_s": 1.4
+  },
+  {
+    "lane": 5,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": false,
+    "working_roll_exceeded": false,
+    "path_rmse_m": 0.37076452374458313,
+    "speed_rmse_m_s": 0.22734315693378448,
+    "peak_roll_rad": 0.15416038036346436,
+    "requested_speed_m_s": 1.4
+  }
+]
