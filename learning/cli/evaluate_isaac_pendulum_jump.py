@@ -14,6 +14,7 @@ from sttw_control.torch_controller import TorchController
 cfg=json.loads(Path(spec.get('plant_config','learning/configs/isaac_pendulum_local300_standard.json')).read_text())
 options=cfg['plant_options'].copy();options['env_spacing']=20.;options['pendulum_locked']=True
 options['physics_dt']=spec.get('physics_dt',.0002)
+if 'terrain_base_plane' in spec:options['terrain_base_plane']=spec['terrain_base_plane']
 options['gpu_pair_capacities']=spec.get('gpu_pair_capacities')
 options['actuator_force_limits']=spec.get('actuator_force_limits')
 substeps=round(.005/options['physics_dt'])
@@ -57,6 +58,7 @@ geometry=TorchPendulumGeometry(json.loads(Path(spec['geometry']).read_text()),pl
 last=torch.zeros(n,4,device='cuda:0');alive=torch.ones(n,dtype=torch.bool,device='cuda:0');entered=torch.zeros_like(alive);consumed=torch.zeros_like(alive)
 returned=False;landing_ticks=0;landing_ready=False;transition_speed=None
 if spec.get('landing_return'):assert n==1, 'Landing return currently uses a single lane'
+ground_rows=[]
 active=False;rows=[];actions=[];observations=[];valid=[];arm_rows=[];body_rows=[];contact_rows=[];start=time.monotonic();steps=round(spec['seconds']/.005)
 (out/'protocol.json').write_text(json.dumps(dict(spec=spec,plant=plant.metadata,policies=[s.identity for s in policies],ground_history='last_action zero means no prior jump action; physical FIFO sampled throughout ground approach',initial_translation='common saved snapshot translated to start_x/y0; optional rigid world-yaw alignment rotates pose and both velocities together',role='nominal paired DEV integration; not original donor benchmark',physics_dt=plant.physics_dt,ground_dt=.005,jump_dt=.02,optimizer_updates=0),indent=2))
 ground=None
@@ -151,7 +153,7 @@ for k in range(steps+1):
    root_acceleration=(velocity-previous_root_velocity)/plant.physics_dt;previous_root_velocity=velocity.clone()
    arm_rows.append(torch.cat((before,plant.last_pendulum_torque[:,ids],alive[:,None]),-1))
  elif ground is not None and (returned or not spec.get('ground_after_landing_only',False)):
-  ground.step()
+  result=ground.step();ground_rows.append(result['lower_trace'].clone())
   velocity=plant.robot.data.root_link_lin_vel_w
   root_acceleration=(velocity-previous_root_velocity)/.02;previous_root_velocity=velocity.clone()
  else:
@@ -163,6 +165,7 @@ for k in range(steps+1):
    root_acceleration=(velocity-previous_root_velocity)/plant.physics_dt;previous_root_velocity=velocity.clone()
  if spec.get('record_body_states',False):plant.sensor.update(.005,force_recompute=True)
  plant.refresh()
+if ground_rows:np.savez(out/'ground_tracking.npz',trace=torch.cat(ground_rows).cpu().numpy(),columns=['x','y','speed','cross_track','abs_roll','reward','alive','physics_ticks','speed_reference','steer_reference','wheel_speed_estimate'])
 if writer is not None:writer.close()
 if body_rows:
  np.savez(out/'body_contact.npz',time=torch.stack(rows)[:,0,0].cpu().numpy(),body_state=torch.stack(body_rows).cpu().numpy(),contact=torch.stack(contact_rows).cpu().numpy(),body_names=plant.bodies,valid=torch.stack(valid).cpu().numpy(),semantics='world states relative to lane origin; actual per-body net contact forces; no post-termination samples scored')
