@@ -6,8 +6,23 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-p=argparse.ArgumentParser(description=__doc__);p.add_argument('--run',type=Path,required=True);p.add_argument('--tasks',nargs='+');p.add_argument('--source-only',action='store_true');a=p.parse_args()
+p=argparse.ArgumentParser(description=__doc__);p.add_argument('--run',type=Path,required=True);p.add_argument('--tasks',nargs='+');p.add_argument('--source-only',action='store_true');p.add_argument('--replay-comparison',action='store_true');a=p.parse_args()
 protocol=json.loads((a.run/'protocol.json').read_text());spec=protocol['spec'];physics_dt=protocol['settings']['plant_options'].get('physics_dt',.0002);tasks=spec['tasks'];candidates=spec['candidates']
+if a.replay_comparison:
+    data=np.load(a.run/'replay_comparison.npz');fig,axes=plt.subplots(1,2,figsize=(12,5),layout='constrained');points=[]
+    axes[0].plot(data['original_xy'][:,0],data['original_xy'][:,1],':',color='gray',label='Original route')
+    for name in ('uninterrupted','restored'):
+        trace=data[name][:,0];valid=trace[:,6]>0;tr=trace[valid];t=np.flatnonzero(valid)*.005+tr[:,7]*physics_dt;points.append(tr[:,:2])
+        style='-' if name=='uninterrupted' else '--'
+        axes[0].plot(tr[:,0],tr[:,1],style,label=name);axes[0].plot(*tr[-1,:2],'x')
+        axes[1].plot(t,tr[:,2],style,label=name)
+    points=np.concatenate(points);lo=points.min(0)-.5;hi=points.max(0)+.5
+    axes[0].set(xlim=(lo[0],hi[0]),ylim=(lo[1],hi[1]),xlabel='World x (m)',ylabel='World y (m)');axes[0].set_aspect('equal',adjustable='box')
+    axes[1].set(xlabel='Time after source exit (s)',ylabel='True speed (m/s)')
+    for ax in axes:ax.grid(alpha=.2);ax.legend()
+    fig.suptitle('Live source continuation versus exposed-state replay | lane 0 | same route and reference')
+    fig.savefig(a.run/'xy_replay_comparison.png',dpi=150)
+    raise SystemExit
 if a.source_only:
     data=np.load(a.run/'source_trajectory.npz');trace=data['trace'];trace=trace.reshape(-1,trace.shape[-2],trace.shape[-1])[:,0]
     valid=trace[:,6]>0;tr=trace[valid];t=np.flatnonzero(valid)*.005+tr[:,7]*physics_dt

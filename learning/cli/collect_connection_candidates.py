@@ -7,7 +7,8 @@ original STTW; hidden PhysX contact caches are not serialized by the state API.
 import os,argparse,hashlib,json,time
 from pathlib import Path
 import numpy as np
-p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--source-snapshot',type=Path);p.add_argument('--source-only',action='store_true');p.add_argument('--resume-from',type=Path);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--source-snapshot',type=Path);p.add_argument('--source-only',action='store_true');p.add_argument('--replay-check-only',action='store_true');p.add_argument('--resume-from',type=Path);a=p.parse_args()
+if a.replay_check_only and (a.source_only or a.source_snapshot or a.resume_from):p.error('Replay comparison must start from live uninterrupted source execution')
 spec=json.loads(a.config.read_text());candidates=spec['candidates']
 if len(candidates)!=6 or len({(c['speed_m_s'],c['alpha']) for c in candidates})!=6:
     p.error('six distinct speed/alpha candidates required')
@@ -69,6 +70,33 @@ if a.source_only:
 snapshot_id=hashlib.sha256((a.output/'exit_snapshot.pt').read_bytes()).hexdigest()
 skill_id=env.upper_sha256+':'+('ecbc_zero_residual' if bool(env.zero_lower.all()) else env.lower_sha256)
 if spec['replanning'].get('arrival_reference')=='original_route':skill_id+=':arrival_original_route'
+if a.replay_check_only:
+    # First continuation uses the live source scene; only the second restores it.
+    # This compares uninterrupted execution with replay, not replay with replay.
+    task=spec['tasks'][0];route=TorchPathReference(np.load(task['route']),env.config,env.device)
+    reference=spec.get('common_task_reference',dict(speed_m_s=spec['source_speed_m_s'],alpha=spec['source_alpha']))
+    traces=[];endpoints=[]
+    for restored in (False,True):
+        if restored:env.restore_connection_state(snapshot)
+        env.horizon=round(task['seconds']/.02)
+        env.begin_connection(route,torch.full_like(env.speed,reference['speed_m_s']),torch.full_like(env.alpha,reference['alpha']))
+        folder=a.output/('restored' if restored else 'uninterrupted');folder.mkdir()
+        planner=IsaacGoalReplanning(env,{**spec['replanning'],'original_route':task['route']},folder)
+        history=[]
+        for _ in range(env.horizon):
+            planner.update();history.append(env.step()['lower_trace'].clone())
+            if not bool(env.alive.any()):break
+        traces.append(torch.cat(history).cpu().numpy());endpoints.append(env.alive.cpu().tolist())
+    np.savez_compressed(a.output/'replay_comparison.npz',uninterrupted=traces[0],restored=traces[1],original_xy=route.xy.cpu().numpy())
+    n=min(len(t) for t in traces);both=(traces[0][:n,0,6]>0)&(traces[1][:n,0,6]>0)
+    delta=traces[0][:n,0]-traces[1][:n,0]
+    comparison=dict(status='replay_compared',origin_id=spec['origin_id'],reference=reference,task_id=task['task_id'],seconds=task['seconds'],lane=0,
+        comparison='Live uninterrupted source continuation versus restored exposed state; hidden PhysX caches not serialized',
+        common_valid_lower_steps=int(both.sum()),uninterrupted_alive=endpoints[0],restored_alive=endpoints[1],
+        max_xy_difference_m=float(np.linalg.norm(delta[both,:2],axis=1).max()),max_speed_difference_m_s=float(abs(delta[both,2]).max()),
+        elapsed_s=time.monotonic()-start,optimizer_updates=0,adoption='Inspect trajectories and task behavior; no automatic numerical pass threshold')
+    (a.output/'status.json').write_text(json.dumps(comparison,indent=2)+'\n')
+    os.sync();os._exit(0)
 speeds=torch.tensor([c['speed_m_s'] for c in candidates],device=env.device);alphas=torch.tensor([c['alpha'] for c in candidates],device=env.device)
 capability=None
 if spec.get('capability_records'):
