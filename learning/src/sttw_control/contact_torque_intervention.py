@@ -45,6 +45,7 @@ class ContactTorqueExperiment:
         self.config=config;self.dt=env.physics_dt;self.total=0;self.used=0;self.chunks=[];self.buffers=None
         self.chunk_steps=int(config.get('chunk_steps',250))
         self.window=tuple(config['active_window_s'])
+        self.pulse_window=tuple(config.get('pulse_window_s',self.window))
         self.pulse=torch.tensor(config.get('pulse_Nm',[0.]*env.n),device=env.device)
         if len(self.window)!=2 or not 0<=self.window[0]<self.window[1] or self.pulse.shape!=(env.n,):
             raise ValueError('Declare increasing intervention window and one pulse amplitude per lane')
@@ -60,8 +61,8 @@ class ContactTorqueExperiment:
         torques=front_contact_torques(samples,env.plant.bodies)
         next_time=(self.total+1)*self.dt
         active=self.window[0]<=next_time<self.window[1]
-        submitted=self.channel.after_solve(torques['negative_lateral'],torques['reference_delta'],self.pulse,env.alive&active)
-        values=dict(**torques,**submitted,alive_before=env.alive.clone(),alpha=env.alpha.clone(),
+        submitted=self.channel.after_solve(torques['negative_lateral'],torques['reference_delta'],self.pulse if self.pulse_window[0]<=next_time<self.pulse_window[1] else torch.zeros_like(self.pulse),env.alive&active)
+        values=dict(**torques,**submitted,bounded_next_torque=env.plant.diagnostic_joint_torque[:,env.plant.signals.steer],alive_before=env.alive.clone(),alpha=env.alpha.clone(),
             steer_velocity=samples['joint_velocity'][:,env.plant.signals.steer],
             steer_position=samples['joint_position'][:,env.plant.signals.steer],
             motor_steering_torque=samples['motor_torque'][:,env.plant.signals.steer])
