@@ -86,6 +86,7 @@ class PhaseUEnv:
 
     def step(self,latent_actions):
         plant=self.plant;action=torch.tanh(latent_actions);target=self.targets(action)
+        previous_forward_velocity=plant.roots[:,7].clone()
         push_ticks=round(self.rand['push_interval_s']/self.dt)
         ids=((self.episode_length_buf>0)&(self.episode_length_buf%push_ticks==0)).nonzero().flatten()
         if len(ids):push_by_setting_velocity(SimpleNamespace(scene={'robot':plant.robot}),ids,self.rand['push_velocity_range'])
@@ -107,9 +108,9 @@ class PhaseUEnv:
         self.events=advance_events(previous,dict(x=root[:,0],z=root[:,2],forward_velocity=root[:,7],vertical_velocity=root[:,9],physical_failure=preliminary['terminated']),self.task)
         inputs.update(stuck=self.events['stuck'],jump_zone_seen=self.events['jump_zone_seen'])
         terminal=classify_terminal(inputs,self.task)
-        reward_events=dict(jump_signal=self.events['jump_signal'],first_apex_success=self.events['apex_seen']&~previous['apex_seen'],illegal_contact=contact,physical_failure_transition=terminal['physical_failure'],roll_pitch_failure_transition=terminal['roll_limit']|terminal['pitch_limit'],jump_zone_missed_transition=terminal['jump_zone_missed'],stuck_transition=terminal['stuck'],yaw_limit_transition=terminal['yaw_limit'],timeout_transition=terminal['timeout'])
+        reward_events=dict(jump_zone_seen=self.events['jump_zone_seen'],jump_signal=self.events['jump_signal'],first_apex_success=self.events['apex_seen']&~previous['apex_seen'],illegal_contact=contact,physical_failure_transition=terminal['physical_failure'],roll_pitch_failure_transition=terminal['roll_limit']|terminal['pitch_limit'],jump_zone_missed_transition=terminal['jump_zone_missed'],stuck_transition=terminal['stuck'],yaw_limit_transition=terminal['yaw_limit'],timeout_transition=terminal['timeout'])
         hip,knee=plant.pendulum_servos.indices
-        reward_state=dict(roll=angles[:,0],pitch=angles[:,1],yaw=angles[:,2],z=root[:,2],forward_velocity=root[:,7],pitch_rate=root[:,11],hip_velocity=plant.dofs[:,hip,1],knee_velocity=plant.dofs[:,knee,1],hip_force=plant.last_pendulum_torque[:,hip],knee_force=plant.last_pendulum_torque[:,knee])
+        reward_state=dict(previous_forward_velocity=previous_forward_velocity,policy_dt=self.dt,x=root[:,0],roll=angles[:,0],pitch=angles[:,1],yaw=angles[:,2],z=root[:,2],forward_velocity=root[:,7],pitch_rate=root[:,11],hip_velocity=plant.dofs[:,hip,1],knee_velocity=plant.dofs[:,knee,1],hip_force=plant.last_pendulum_torque[:,hip],knee_force=plant.last_pendulum_torque[:,knee])
         clipped,unclipped,parts=phase_u_reward(reward_state,action,self.last_action,reward_events,self.task['reward'])
         reward,self.episode_return,override=phase_u_episode_reward(clipped,self.episode_return,terminal['stuck'],terminal['yaw_limit'],self.task['reward'])
         done=terminal['terminated']|terminal['truncated'];self.episode_length_buf+=1;self.last_action.copy_(action)

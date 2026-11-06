@@ -49,6 +49,18 @@ def phase_u_reward(state, action, last_action, events, config):
         jump_zone_missed=-c['jump_zone_missed_penalty']*missed,
         stuck=-c['stuck_penalty']*stuck,yaw_limit=-c['yaw_limit_penalty']*yaw_failure,
         timeout=-c['timeout_penalty']*events['timeout_transition'])
+    if 'traversal' in c:
+        traversal=c['traversal']
+        active=events['jump_zone_seen'].bool()&(state['x']<traversal['end_x_m'])
+        velocity=state['forward_velocity']
+        fraction=(velocity/traversal['minimum_forward_m_s']).clamp(0,1)
+        height_factor=traversal['stationary_height_fraction']+(1-traversal['stationary_height_fraction'])*fraction
+        components['height']=components['height']*torch.where(active,height_factor,torch.ones_like(fraction))
+        components['apex_success']=components['apex_success']*torch.where(active,fraction,torch.ones_like(fraction))
+        components['traversal_low_speed']=-traversal['low_speed_weight']*(1-fraction).square()*active
+        components['traversal_forward']=traversal['forward_weight']*(velocity/traversal['target_forward_m_s']).clamp(-1,1)*active
+        deceleration=((state['previous_forward_velocity']-velocity)/state['policy_dt']).clamp_min(0)
+        components['traversal_deceleration']=-traversal['deceleration_weight']*(deceleration/traversal['deceleration_scale_m_s2']).clamp(max=1)*active*(velocity<traversal['target_forward_m_s'])
     total=sum(components.values())
     return total.clamp(c['total_min'],c['total_max']),total,components
 
