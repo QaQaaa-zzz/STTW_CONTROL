@@ -1,3 +1,9 @@
+## Bounded flat-face candidate also rejected
+
+Official OmniPhysics107.2 collision guidance notes static triangles may be automatically subdivided during SDF contact generation: https://docs.omniverse.nvidia.com/kit/docs/omni_physics/107.2/dev_guide/guides/collision_guide.html . This motivated retaining2m grid lines only in zero-height planar regions, with all nonzero samples preserved. One4096-lane policy-step profile (409600 physics lane steps,0 optimizer updates) did not improve runtime: triangle collision3.887s versus3.164s, sampled rollout5.075s versus4.203s. Evidence `runs/h75_runtime_profile/flat_edge2`; patch retained and CLI restored. No mesh candidate adopted.
+
+Next potential frequency comparison is pending explicit user decision because prior rules require preserving physics frequency. Proposed1000Hz physics would preserve200/50Hz controllers but change integration accuracy; not yet implemented or tested. Bark notification sent as requested. Existing5000Hz training continues unchanged; no additional geometry probes queued.
+
 ## Exact-triangle spatial partition rejected for performance
 
 The optional16m centroid grouping retained every original triangle/vertex/material and only split collision meshes. One matched4096-lane policy-step profiler run allocated409600 physics lane steps/0 optimizer updates. `runs/h75_runtime_profile/tiled16/profile_cuda.txt` reports triangleTriangleCollision4.083s versus current unpartitioned3.164s; sampling log5.421s versus4.203s. This first-step profile is not a repeated steady-state benchmark, but provides no speedup evidence. Additional collision groups also increased constraint workload. Do not adopt or tune more tile sizes from this result.
