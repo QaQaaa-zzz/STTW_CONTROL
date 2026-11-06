@@ -1,3 +1,15 @@
+## 同出口六候选实际采集入口与固定场景准备
+
+prepare_connection_candidates.py复用geometric_path.build_path，准备固定直行A与左右90度B路线，不按车辆偏移移动原参考；两速度1.5/2.3m/s×alpha0/.5/1，各B观察10秒、2m原路径走廊、弯后5m目标/2m到达半径，全候选均启用已有Dubins重规划。source几何进度3.1m触发保存，不能称所有轮接触已离开地形；源斜向凸起支持最远3m，真实接触状态仍需轨迹解释。terrain复用现有place_isaac_terrain.py/Isaac Gym转换，3cm凸起、0.1m网格、0.005m高度量化。准备产物runs/connection_candidates_nominal，未启动采集。
+
+collect_connection_candidates.py接既有状态保存/恢复，保留历史和ESO等，分别执行两任务六候选，保存原始XY/固定路径误差/失败/到达及JSONL。先在GPU累计轨迹，结束后导出；包含全窗口存活与走廊约束，不仅末端。当前只是单来源DEV准备，无法单凭12个候选拟合或评价泛化；后续需多个真实来源运行。物理预算上限780000 lane steps、0optimizer，待GPU资源可用后执行。完整PhysX内部缓存仍不在快照范围，限制保留。无新训练或实机。
+
+## 可配置物理步长与0.005秒短测状态
+
+IsaacLabVectorPlant新增physics_dt（默认保持0.0002），状态更新时间与记录随实际步长；PhaseU策略周期0.02、传感周期0.005保持，物理子步自动推导，动作DelayBuffer原有逻辑按实际物理dt换算。跳跃评估同样使用实际子步并记录。新配置isaac_pendulum_jump_dt005.json为两策略最多4秒、1600 lane物理步、0优化预算。
+
+首试runs/pendulum_jump_dt005发生PhysX GPU分配64MiB失败，尽管进程返回0，标记INVALID.json，runtime.log保存；产出的曲线/数值不得用于步长结论。并发时原训练占9607MiB、另一任务6765MiB、新实例6699MiB；未停止其他任务。尚未证明0.005秒可用或提速，等待资源后再次执行；原150轮进程未热更。后续需另存重试结果，旧错误记录保留。
+
 ## 同出口连接候选的控制状态保存/恢复接口已实现
 
 IsaacPathRollout.capture_connection_state在50Hz边界导出单lane车体/关节位置速度、ECBC ESO/扰动/gains、Local300历史/前动作/偏航率、H75历史/mask、filtered/offsets/执行模式、原参考/命令、进度/跟随器及物理控制时钟。restore_connection_state把该出口广播给匹配原模型/网络/控制器的名义批次，不用重新预热替代真实出口。begin_connection只绑定下一路线/速度/alpha与新任务计时，保留历史、ESO、滤波和原参考slew。
