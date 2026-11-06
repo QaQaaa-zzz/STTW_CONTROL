@@ -95,3 +95,16 @@ class ConnectionCapabilityTests(unittest.TestCase):
         self.assertEqual(result['selected_complete_count'],2)
         self.assertEqual(result['fixed_candidates'][0]['matched_decided_groups'],2)
         self.assertTrue(all(r['snapshot_id'] is None and r['decision_id'] for r in result['rows']))
+
+    def test_false_clearance_and_unknown_have_separate_denominators(self):
+        from sttw_control.empirical_capability import evaluate_connection_groups
+        rows=[dict(origin_id=o,decision_id=o,task_id='jump',skill_id='frozen',candidate_id='a',state=[0.],complete=y,success_cost=2. if y else None) for o,y in [('pass',1),('fail',0)]]
+        result=evaluate_connection_groups(rows,['a'],[1.],1.,.5)
+        self.assertEqual(result['false_clearance_count'],1)
+        self.assertEqual(result['clearance_denominator'],1)
+        self.assertEqual(result['no_feasible_groups'],1)
+        self.assertEqual(result['selection_coverage'],.5)
+        one=evaluate_connection_groups(rows[:1],['a'],[1.],1.,.5)
+        self.assertEqual(one['unknown_groups'],1)
+        self.assertEqual(one['clearance_denominator'],0)
+        self.assertEqual(one['false_clearance_count'],0)

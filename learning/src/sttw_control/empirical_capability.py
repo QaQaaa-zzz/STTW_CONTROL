@@ -168,5 +168,9 @@ def evaluate_connection_groups(records, candidates, feature_scales, bandwidth, m
         no_feasible_groups=sum(r['selection_status']=='no_feasible' for r in results),
         selection_rule=dict(minimum_completion=minimum_completion,probability_tolerance=probability_tolerance),
         selected_complete_count=sum(r['selected_complete'] for r in decided),
+        false_clearance_count=sum(not r['selected_complete'] for r in decided),
+        clearance_denominator=len(decided),
+        selection_coverage=len(decided)/len(results) if results else None,
+        false_clearance_scope='Selected candidate fails the full task; abstentions excluded from clearance denominator and retained in query coverage',
         brier_score=sum(errors)/len(errors) if errors else None,brier_count=len(errors),
         rows=results)
