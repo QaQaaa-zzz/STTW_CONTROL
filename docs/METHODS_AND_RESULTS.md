@@ -10,6 +10,12 @@ Skill contract:76-D = three25-D history frames + jump_signal; action order steer
 
 Reusable upstream entries are `build_unified_formal_environment`, `load_checkpoint`, `make_checkpoint_policy`, and `unified_envelope_snapshot` for its own model. No new runtime wrapper, training or physics evaluation was launched in this identity pass. Next: read exact action mapping and state-history lifecycle, then implement a bounded interface on the pendulum model while leaving the completed STTW bicycle chapter intact.
 
+## 当前执行顺序：STTW 走通并形成论文后再启动新章节
+
+用户最新明确要求：先把 STTW 走通形成论文，再开始新章节。当前工作集中于原双轮车、已选橙色 Local300 与原 H75 的越野偏好控制：整理全部已完成轨迹与机制证据，补齐影响论证的缺口，形成与实际结果一致的论文主稿。不得以仿真主体完成或接口加载成功替代论文交付与实车证据。
+
+带摆双轮车、RB 接续、6/36 能力库及 VLM 新章节工作暂不推进；保留已完成的来源绑定和推理适配代码，不删除、不继续扩展。整体目标仍保持，只有阶段顺序调整。STTW 实车尚无执行证据，需要实际部署条件与执行授权；先完成能够开展的仿真证据整理和写作，不虚构实车结果。当前工作树实际论文源为 `docs/paper/MANUSCRIPT.tex`，旧规则提及的 `MANUSCRIPT.md` 在此工作树不存在；后续在实际主稿原位维护，不另建并行主稿。
+
 ## Pendulum skill inference adapter available
 
 `learning/src/sttw_control/pendulum_skill.py` loads either `source` or `rb_run1_candidate` from the bound registry, reusing JIT checkpoint loading, original PPO inference/normalization, host model and action mapping. Reference dependency: add `/home/qy/DVGC/JIT/src` and this checkout's `learning/src` to PYTHONPATH; use `/home/qy/mujoco_playground/.venv/bin/python`. No external source edits. `PendulumSkill(registry_path, skill_id).infer(observation76, knee_position)` returns normalized action and native targets `[steer rad, rear rad/s, hip rad, knee rad]`. Caller owns observation FIFO, last-action memory and physical state; inference never resets or steps them.
@@ -62,14 +68,14 @@ This is a status map, not a declaration of whole-project completion. User decisi
 | Same-state alpha query | `runs/h75_common_state_channels/analysis/*/alpha*/same_state_alpha/{summary.json,queries.csv}` | Five queries per saved state; forward mappings, not independent closed-loop trajectories. |
 | Front/rear contact phases and channel effects | `runs/h75_common_state_channels/analysis/{RESULTS.md,CHANNEL_EFFECTS.md}` and `runs/h75_zero_correction_channels/analysis/{RESULTS.md,HOLD_ZERO.md}` | Hold and zero doses differ. Old official0.2ms contact-point records available; new5ms world-Fz is not terrain-normal load. Any claim about slope-normal loading still needs a correctly defined projection. |
 | Same-state bend switch, independent/common/steer-priority | `runs/h75_shared_switch/analysis/DECISION.md` | Complete; no demonstrated limiter gain. Original independent slew adopted. Shared export does not reproduce PhysX caches. |
-| Required goal replanning and post-bend goal | `runs/h75_lab_goal_replanning_final_goal/DECISION.md`; shared-switch new loop and geometry repair recorded in `runs/h75_shared_switch/analysis/DECISION.md` | Tangent-heading repair closed-loop confirmation in progress at `runs/h75_shared_switch_tangent`; old negative plans retained. |
+| Required goal replanning and post-bend goal | `runs/h75_lab_goal_replanning_final_goal/DECISION.md`; shared-switch new loop and geometry repair recorded in `runs/h75_shared_switch/analysis/DECISION.md` | Tangent-heading closed-loop confirmation completed at `runs/h75_shared_switch_tangent`: five branches reached the goal and completed10s; old negative plans retained. |
 | STTW real-robot curves/video | No executed hardware evidence | Not complete; needs physical deployment preparation, operator and explicit hardware execution authorization. Simulation is not a substitute. |
-| Unified STTW/RB physical model and genuine handoff | No demonstrated unified-model transition | Not complete; imported Go2 results do not show this wheeled platform can execute the quadruped policy. Must resolve model and actuator compatibility before any claimed handoff. |
+| Unified STTW/RB physical model and genuine handoff | No demonstrated unified-model transition | Deferred until the STTW paper is formed. User selected a pendulum bicycle; source/RB identities and inference are bound, but no physical handoff has been demonstrated. Go2 remains a training reference only. |
 | Six/36 ground and jump connection candidates; task-conditioned capability tool | Latest task architecture recorded; no complete matched candidate database | Not complete. Need actual reachable exits and complete stage-B outcomes, then held-out selection assessment; unsupported neighborhoods must remain unknown. |
 | Deterministic execution manager with validated forward bypass, asynchronous VLM | Current geometric replanning is only a building block | Not complete. No validated obstacle-aware bypass or semantic task program execution. Preserve hard boundaries separately from soft tracking corridor. |
 | Four integrated task-planning comparisons and ground hardware inspection | No integrated evidence | Not complete. Replanning remains required execution machinery; compare semantic/capability/update roles rather than treating it as optional basic control. |
 
-Do not pursue extra training or a new limiter to force a favorable third contribution. Next simulation work after the single repair confirmation is to assemble the existing STTW results, resolve genuinely missing log semantics/figures, and prepare the remaining interfaces without declaring hardware or the new chapter complete.
+Do not pursue extra training or a new limiter to force a favorable third contribution. Current work is STTW evidence synthesis and the paper. Contact semantics and tangent-heading confirmation are now resolved in the later entries above. Do not advance new-chapter interfaces before the STTW paper is formed.
 
 ## Shared-state switch complete; small terminal-heading repair pending closed-loop confirmation
 

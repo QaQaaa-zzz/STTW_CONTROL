@@ -10,6 +10,12 @@ Skill contract:76-D = three25-D history frames + jump_signal; action order steer
 
 Reusable upstream entries are `build_unified_formal_environment`, `load_checkpoint`, `make_checkpoint_policy`, and `unified_envelope_snapshot` for its own model. No new runtime wrapper, training or physics evaluation was launched in this identity pass. Next: read exact action mapping and state-history lifecycle, then implement a bounded interface on the pendulum model while leaving the completed STTW bicycle chapter intact.
 
+## 当前执行顺序：STTW 走通并形成论文后再启动新章节
+
+用户最新明确要求：先把 STTW 走通形成论文，再开始新章节。当前工作集中于原双轮车、已选橙色 Local300 与原 H75 的越野偏好控制：整理全部已完成轨迹与机制证据，补齐影响论证的缺口，形成与实际结果一致的论文主稿。不得以仿真主体完成或接口加载成功替代论文交付与实车证据。
+
+带摆双轮车、RB 接续、6/36 能力库及 VLM 新章节工作暂不推进；保留已完成的来源绑定和推理适配代码，不删除、不继续扩展。整体目标仍保持，只有阶段顺序调整。STTW 实车尚无执行证据，需要实际部署条件与执行授权；先完成能够开展的仿真证据整理和写作，不虚构实车结果。当前工作树实际论文源为 `docs/paper/MANUSCRIPT.tex`，旧规则提及的 `MANUSCRIPT.md` 在此工作树不存在；后续在实际主稿原位维护，不另建并行主稿。
+
 ## Pendulum skill inference adapter available
 
 `learning/src/sttw_control/pendulum_skill.py` loads either `source` or `rb_run1_candidate` from the bound registry, reusing JIT checkpoint loading, original PPO inference/normalization, host model and action mapping. Reference dependency: add `/home/qy/DVGC/JIT/src` and this checkout's `learning/src` to PYTHONPATH; use `/home/qy/mujoco_playground/.venv/bin/python`. No external source edits. `PendulumSkill(registry_path, skill_id).infer(observation76, knee_position)` returns normalized action and native targets `[steer rad, rear rad/s, hip rad, knee rad]`. Caller owns observation FIFO, last-action memory and physical state; inference never resets or steps them.
