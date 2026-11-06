@@ -5,17 +5,30 @@ from collections import defaultdict
 from pathlib import Path
 
 p = argparse.ArgumentParser()
-p.add_argument('--manifest', type=Path, required=True)
+source = p.add_mutually_exclusive_group(required=True)
+source.add_argument('--manifest', type=Path)
+source.add_argument('--ground-summary', type=Path, help='Reuse the same ablations on a frozen ground collection summary')
 p.add_argument('--output', type=Path, required=True)
 p.add_argument('--summary', type=Path, help='Freeze comparison to evaluated rows in an existing collection summary')
 p.add_argument('--anchor-speed', type=float, default=2.0)
 p.add_argument('--anchor-alpha', type=float, default=0.5)
 a = p.parse_args()
-m = json.loads(a.manifest.read_text())
-frozen = {r['case_id']: r for r in json.loads(a.summary.read_text())['rows'] if r['status'] == 'evaluated'} if a.summary else None
-sequences = any('second_candidate' in c for c in m['cases'])
 groups = defaultdict(list)
-for case in m['cases']:
+if a.ground_summary:
+    m = json.loads(a.ground_summary.read_text());sequences = False
+    ground_manifest = json.loads(Path(m['manifest']).read_text())
+    group_config = json.loads(Path(ground_manifest[m.get('manifest_group','nominal')][0]['config']).read_text())
+    lookup = {c['candidate_id']: c for c in group_config['candidates']}
+    for group in m['groups']:
+        for i, name in enumerate(group['candidates']):
+            c = lookup[name]
+            result = None if group['success_vector'][i] is None else dict(complete=group['success_vector'][i], success_time_s=group['success_costs'][i])
+            groups[(group['origin_id'], group['task_id'])].append(dict(case_id=name,speed=c['speed_m_s'],alpha=c['alpha'],first_speed=c['speed_m_s'],first_alpha=c['alpha'],result=result))
+else:
+    m = json.loads(a.manifest.read_text())
+    sequences = any('second_candidate' in c for c in m['cases'])
+frozen = {r['case_id']: r for r in json.loads(a.summary.read_text())['rows'] if r['status'] == 'evaluated'} if a.summary else None
+for case in ([] if a.ground_summary else m['cases']):
     config = json.loads(Path(case['config']).read_text())
     result_path = Path(config['output']) / 'chain_summary.json'
     result = frozen.get(case['case_id']) if frozen is not None else (json.loads(result_path.read_text()) if result_path.exists() else None)
@@ -44,9 +57,10 @@ records = []
 for (origin, distance), rows in groups.items():
     expected = len(candidates) ** (2 if sequences else 1)
     complete = len(rows) == expected and all(c['result'] is not None for c in rows)
-    record = dict(origin_id=origin, distance_m=distance, declared_candidates=len(rows),
+    record = dict(origin_id=origin, declared_candidates=len(rows),
                   evaluated_candidates=sum(c['result'] is not None for c in rows),
                   matched_group_complete=complete, selected={})
+    record['task_id' if a.ground_summary else 'distance_m'] = distance
     if complete:
         for name, allowed in methods.items():
             successes = [c for c in rows if allowed(c) and c['result']['complete']]
@@ -95,8 +109,9 @@ if sequences:
         mean_time_saved_s=sum(hold[k]['T_s']-seq[k]['T_s'] for k in common)/len(common) if common else None,
         gained_success_tasks=sum(seq[k]['Y'] and not hold[k]['Y'] for k in seq),
         lost_success_tasks=sum(hold[k]['Y'] and not seq[k]['Y'] for k in seq))
-output = dict(role=m['role'], interpretation='Descriptive DEV coverage and hindsight oracle upper bounds; not learned or deployed selection. Distances share upstream roots. Incomplete groups remain pending, not failures.',
-              collection_summary=str(a.summary) if a.summary else None,
+output = dict(role=m['role'], interpretation='Descriptive DEV coverage and hindsight oracle upper bounds; not learned or deployed selection. Tasks share upstream roots. Incomplete suffix groups are unscored; upstream failures remain separately accounted, never assigned invented suffix outcomes.',
+              collection_summary=str(a.ground_summary or a.summary) if (a.ground_summary or a.summary) else None,
+              source_root_status_counts=m.get('root_status_counts'),
               declared_origins=len({r for r, _ in groups}), declared_tasks=len(groups),
               complete_matched_tasks=sum(r['matched_group_complete'] for r in records),
               anchor=dict(speed=a.anchor_speed, alpha=a.anchor_alpha), scores=scores, groups=records)

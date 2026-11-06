@@ -58,6 +58,7 @@ if complete:
             only_first=[dict(origin_id=g['origin_id'], case_id=g['case_id'], task_id=g['task_id']) for g in complete if g['success_vector'][i] and not g['success_vector'][j]],
             only_second=[dict(origin_id=g['origin_id'], case_id=g['case_id'], task_id=g['task_id']) for g in complete if g['success_vector'][j] and not g['success_vector'][i]]))
 summary = dict(role=manifest['role'], manifest=str(a.manifest.resolve()),
+    manifest_group=a.group,
     declared_cases=len(roots), distinct_origins=len({r['origin_id'] for r in roots}),
     root_status_counts=dict(Counter(r['status']['status'] for r in roots)),
     group_counts=dict(Counter(g['classification'] for g in groups)), roots=roots, groups=groups,
