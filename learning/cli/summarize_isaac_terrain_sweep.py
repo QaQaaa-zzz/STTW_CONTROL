@@ -40,6 +40,19 @@ for case, ax in zip(index, axes):
         row = dict(terrain=case['terrain'], label=label, **metrics[lane],
                    speed_reference_floor_m_s=speed_floor,
                    reference_floor_fraction=float(np.mean(np.isclose(trace[:, 8], speed_floor, atol=1e-5))))
+        row['termination_signals'] = []
+        if row['failed']:
+            step = int(np.flatnonzero(data['failure'][:, lane])[0])
+            window = slice(4*step, 4*(step+1))
+            row['failure_policy_step'] = step
+            row['terminal_roll_rad'] = float(data['measurement'][ids[-1], lane, 0])
+            for key in ['domain_exit', 'policy_fault']:
+                if data[key][window, lane].any():
+                    row['termination_signals'].append(key)
+            if (np.abs(data['measurement'][window, lane, 0])>.7).any():
+                row['termination_signals'].append('roll_threshold_exceeded')
+            if not row['termination_signals']:
+                row['termination_signals'].append('unresolved_from_recorded_flags')
         if start is not None and end is not None:
             on = (progress>=start)&(progress<=end)
             entered = np.flatnonzero(progress>=start)
@@ -76,12 +89,13 @@ lines = ['# Paired terrain feasibility — completed cases only', '', '![Actual 
          'The initial saved speed is 2.3 m/s; requested lower speeds are deceleration-approach conditions, not equilibrated starts.',
          'The frozen speed-reference lower bound is recorded per row; a request below that bound cannot test an unrestricted low-speed preference difference.',
          'Failure is the existing combined termination flag, not automatically a physical fall. Goal crossing and final hold are separate.',
+         'Termination signals are flags observed in the first failed policy step. Multiple flags may coexist; an unresolved event is not classified as a fall.',
          'Terrain exit is chassis route projection, not a measured rear-wheel clearance. Metrics use individual observed windows.', '',
-         '|Terrain|Request m/s|Alpha|Early failure|Goal crossed|Final hold|Entry speed|Min terrain speed|Path RMSE m|Speed RMSE m/s|',
+         '|Terrain|Request m/s|Alpha|Early failure / signals|Goal crossed|Final hold|Entry speed|Min terrain speed|Path RMSE m|Speed RMSE m/s|',
          '|---|---:|---|---|---|---|---:|---:|---:|---:|']
 for r in rows:
     fmt = lambda x: '—' if x is None else f'{x:.3f}'
-    lines.append(f"|{r['terrain']}|{r['requested_speed_m_s']}|{r['label']}|{r['failed']}|{r['goal_crossed']}|{r['final_hold']}|{fmt(r.get('entry_speed_m_s'))}|{fmt(r.get('min_terrain_speed_m_s'))}|{r['path_rmse_m']:.3f}|{r['speed_rmse_m_s']:.3f}|")
+    lines.append(f"|{r['terrain']}|{r['requested_speed_m_s']}|{r['label']}|{r['failed']} / {','.join(r['termination_signals']) or '—'}|{r['goal_crossed']}|{r['final_hold']}|{fmt(r.get('entry_speed_m_s'))}|{fmt(r.get('min_terrain_speed_m_s'))}|{r['path_rmse_m']:.3f}|{r['speed_rmse_m_s']:.3f}|")
 lines.extend(['', '[Per-condition full XY and paired reward diagnostics](RESULTS.md)', '',
               'No automatic feasibility or dynamic-switch benefit claim is made from this table.'])
 (a.evaluation/'FEASIBILITY.md').write_text('\n'.join(lines)+'\n')
