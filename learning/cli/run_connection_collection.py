@@ -33,6 +33,8 @@ for case in selected:
         started_unix=started, completed=completed), indent=2) + '\n')
     command = [sys.executable, 'learning/cli/collect_connection_candidates.py',
         '--config', case['config'], '--output', str(output)]
+    if case.get('source_snapshot'):
+        command.extend(['--source-snapshot', case['source_snapshot']])
     if case.get('source_only', False):
         command.append('--source-only')
     if a.parallel_tasks:
@@ -49,6 +51,12 @@ for case in selected:
     if case.get('source_only', False) or outcome['status'] == 'source_failed':
         plot.append('--source-only')
     subprocess.run(plot, check=True)
+    if 'envelope_half_width_m' in case and outcome['status'] == 'complete':
+        spec = json.loads(Path(case['config']).read_text())
+        for task in spec['tasks']:
+            subprocess.run([a.analysis_python, 'learning/cli/evaluate_connection_envelope.py',
+                '--task-run', str(output / task['task_id']),
+                '--half-width', str(case['envelope_half_width_m'])], check=True)
     completed.append(dict(origin_id=case['origin_id'], output=str(output), outcome=outcome))
 status_path.write_text(json.dumps(dict(status='completed_slice', start=a.start, count=a.count,
     started_unix=started, finished_unix=time.time(), completed=completed), indent=2) + '\n')

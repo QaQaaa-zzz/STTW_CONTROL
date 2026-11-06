@@ -1,0 +1,76 @@
+{
+  "status": "prepared_not_started",
+  "role": "Eight preselected DEV roots, not independent TEST",
+  "selection": "Before nominal outcome collection: low/high requested speeds \u00d7 two oblique signs \u00d7 two diagonal offset combinations. Correlated offset subset, not uniform coverage of all24 roots.",
+  "cases": [
+    {
+      "origin_id": "v1.9_lat-0.04_yaw-2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_narrow/v1.9_lat-0.04_yaw-2_oblique-0.4.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_narrow/v1.9_lat-0.04_yaw-2_oblique-0.4/evaluation",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique-0.4/evaluation/exit_snapshot.pt",
+      "envelope_half_width_m": 0.6
+    },
+    {
+      "origin_id": "v1.9_lat-0.04_yaw-2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_narrow/v1.9_lat-0.04_yaw-2_oblique0.4.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_narrow/v1.9_lat-0.04_yaw-2_oblique0.4/evaluation",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique0.4/evaluation/exit_snapshot.pt",
+      "envelope_half_width_m": 0.6
+    },
+    {
+      "origin_id": "v1.9_lat0.04_yaw2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_narrow/v1.9_lat0.04_yaw2_oblique-0.4.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_narrow/v1.9_lat0.04_yaw2_oblique-0.4/evaluation",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw2_oblique-0.4/evaluation/exit_snapshot.pt",
+      "envelope_half_width_m": 0.6
+    },
+    {
+      "origin_id": "v1.9_lat0.04_yaw2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_narrow/v1.9_lat0.04_yaw2_oblique0.4.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_narrow/v1.9_lat0.04_yaw2_oblique0.4/evaluation",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw2_oblique0.4/evaluation/exit_snapshot.pt",
+      "envelope_half_width_m": 0.6
+    },
+    {
+      "origin_id": "v2.3_lat-0.04_yaw-2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_narrow/v2.3_lat-0.04_yaw-2_oblique-0.4.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_narrow/v2.3_lat-0.04_yaw-2_oblique-0.4/evaluation",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw-2_oblique-0.4/evaluation/exit_snapshot.pt",
+      "envelope_half_width_m": 0.6
+    },
+    {
+      "origin_id": "v2.3_lat-0.04_yaw-2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_narrow/v2.3_lat-0.04_yaw-2_oblique0.4.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_narrow/v2.3_lat-0.04_yaw-2_oblique0.4/evaluation",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw-2_oblique0.4/evaluation/exit_snapshot.pt",
+      "envelope_half_width_m": 0.6
+    },
+    {
+      "origin_id": "v2.3_lat0.04_yaw2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_narrow/v2.3_lat0.04_yaw2_oblique-0.4.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_narrow/v2.3_lat0.04_yaw2_oblique-0.4/evaluation",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw2_oblique-0.4/evaluation/exit_snapshot.pt",
+      "envelope_half_width_m": 0.6
+    },
+    {
+      "origin_id": "v2.3_lat0.04_yaw2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_narrow/v2.3_lat0.04_yaw2_oblique0.4.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_narrow/v2.3_lat0.04_yaw2_oblique0.4/evaluation",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw2_oblique0.4/evaluation/exit_snapshot.pt",
+      "envelope_half_width_m": 0.6
+    }
+  ],
+  "roots": 8,
+  "suffixes": 96,
+  "physics_lane_steps_max": 4800000,
+  "optimizer_updates": 0,
+  "physics_hz": 5000,
+  "lower_hz": 200,
+  "upper_hz": 50,
+  "half_width_m": 0.6,
+  "width_status": "Development starting width from taskbook, not final formal road selection",
+  "map_definition": "Marked corridor around original polyline; boundaries saved explicitly. No walls, new friction, terrain or collision obstacles.",
+  "score_definition": "Original center criterion plus separately reported 200 Hz authored collision vertex vehicle and wheel distances; not exact cooked SDF or continuous volume clearance.",
+  "source_failure_rule": "Do not run a suffix from an unavailable nominal exit; preserve failed root in overall accounting, no substitute root.",
+  "order": "After nominal D0 and throughput comparison; reuse actual nominal exit snapshots; zero optimization"
+}

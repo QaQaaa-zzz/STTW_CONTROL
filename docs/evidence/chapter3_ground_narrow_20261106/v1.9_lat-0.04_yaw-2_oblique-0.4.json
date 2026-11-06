@@ -1,0 +1,90 @@
+{
+  "settings": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique-0.4/settings.json",
+  "source_bundle": "runs/h75_selected_local300_flat/bundle",
+  "source_route": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique-0.4/source.npz",
+  "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/terrain_negative",
+  "source_alpha": 0.5,
+  "source_speed_m_s": 1.9,
+  "source_seconds": 6.0,
+  "source_exit_progress_m": 3.1,
+  "seed": 28,
+  "origin_id": "v1.9_lat-0.04_yaw-2_oblique-0.4",
+  "tasks": [
+    {
+      "task_id": "left90_R2_connection_hold_v1_L1.0_W0.6",
+      "route": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique-0.4/left90_R2.npz",
+      "seconds": 10.0
+    },
+    {
+      "task_id": "right90_R2_connection_hold_v1_L1.0_W0.6",
+      "route": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique-0.4/right90_R2.npz",
+      "seconds": 10.0
+    }
+  ],
+  "candidates": [
+    {
+      "candidate_id": "v1.5_a0.0",
+      "speed_m_s": 1.5,
+      "alpha": 0.0
+    },
+    {
+      "candidate_id": "v1.5_a0.5",
+      "speed_m_s": 1.5,
+      "alpha": 0.5
+    },
+    {
+      "candidate_id": "v1.5_a1.0",
+      "speed_m_s": 1.5,
+      "alpha": 1.0
+    },
+    {
+      "candidate_id": "v2.3_a0.0",
+      "speed_m_s": 2.3,
+      "alpha": 0.0
+    },
+    {
+      "candidate_id": "v2.3_a0.5",
+      "speed_m_s": 2.3,
+      "alpha": 0.5
+    },
+    {
+      "candidate_id": "v2.3_a1.0",
+      "speed_m_s": 2.3,
+      "alpha": 1.0
+    }
+  ],
+  "replanning": {
+    "period_s": 0.5,
+    "departure_m": 0.3,
+    "arrival_radius_m": 2.0,
+    "radius_m": 1.8,
+    "enabled": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "goal_after_turn_m": 5.0,
+    "arrival_reference": "original_route"
+  },
+  "corridor_half_width_m": 0.6,
+  "role": "Predeclared DEV narrow marked-road challenge; D0, same nominal source snapshot",
+  "completion_rule": "goal reached and survive entire 10-second window and remain within declared original-path corridor",
+  "maximum_physics_lane_steps": 600000,
+  "optimizer_updates": 0,
+  "initial_offset": {
+    "lateral_m": -0.04,
+    "yaw_deg": -2.0,
+    "source_state": "runs/h75_selected_local300_flat/initial_state.npz",
+    "scope": "Initial upstream pose offset; rotate world velocities consistently, preserve joints and controller warm state. Requested upstream speed is not assumed equal to measured obstacle-entry speed."
+  },
+  "protocol_id": "ground_connection_hold_v1",
+  "connection_end_progress_m": 1.0,
+  "common_task_reference": {
+    "speed_m_s": 2.3,
+    "alpha": 0.5
+  },
+  "record_body_poses": true
+}
