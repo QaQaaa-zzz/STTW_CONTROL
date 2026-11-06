@@ -1,0 +1,45 @@
+{
+  "task_spec": "learning/configs/isaac_phase_u_task_traversal.json",
+  "device": "cuda:0",
+  "num_envs": 4096,
+  "updates": 150,
+  "save_interval": 25,
+  "asset": "runs/pendulum_common_asset/isaac_runtime_asset/vehicle.urdf",
+  "asset_spec": "learning/configs/pendulum_common_asset.json",
+  "geometry": "runs/pendulum_jump_pair/geometry.json",
+  "bundle": "runs/phase_u_training_bundle/source",
+  "plant_options": {
+    "wheel_collision": "sdf",
+    "friction_offset_threshold": 0.0,
+    "compliant_wheels": {
+      "frontwheel": {
+        "stiffness": 5324.4083452801915,
+        "damping": 112.38579318769304
+      },
+      "rearwheel": {
+        "stiffness": 7833.38122453075,
+        "damping": 173.11038721684574
+      }
+    },
+    "env_spacing": 20.0,
+    "pendulum_rest": [
+      -1.2,
+      2.499999
+    ],
+    "terrain_layout": "replicated",
+    "pendulum_locked": false,
+    "physics_dt": 0.005,
+    "gpu_pair_capacities": [
+      4194304,
+      4194304,
+      16777216
+    ]
+  },
+  "go2_checkout": "/home/qy/projects/My_unitree_go2_gym",
+  "seed": 28,
+  "status": "user-authorized further150 updates after recovery; target600, unchanged traversal reward",
+  "reset_note": "original x1.5, vx2, joint velocities zero and 8 percent airborne RSI; ground z uses common chassis asset nominal0.254 instead of donor0.15 to avoid floor penetration; source joint order mapped by name",
+  "optimizer_initialization": "restore model and Adam; changed reward objective, fresh simulation; returns not directly comparable across objectives",
+  "resume_checkpoint": "runs/phase_u_isaac450_recovery/training/model_450.pt",
+  "resume_policy_update": 450
+}
