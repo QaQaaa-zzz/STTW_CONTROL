@@ -81,7 +81,7 @@ class TorchPendulumObservation:
         self.gravity=torch.tensor([0.,0.,-1.],device=device).expand(count,3)
 
     def advance(self, root, position, velocity, root_acceleration_world,
-                obstacle_world_x, last_action, jump_signal):
+                obstacle_relative_x, last_action, jump_signal):
         from .torch_observation import rotate_inverse
         torch=self.torch
         q=root[:,3:7]
@@ -90,7 +90,7 @@ class TorchPendulumObservation:
             body(root_acceleration_world-9.81*self.gravity),
             position[:,self.indices],velocity[:,self.indices],
             -velocity[:,self.wheels],last_action,
-            root[:,7:8],(obstacle_world_x-root[:,0])[:,None],root[:,2:3],
+            root[:,7:8],obstacle_relative_x[:,None],root[:,2:3],
             torch.ones_like(root[:,:1])),dim=-1)
         self.frames=torch.cat((self.frames[:,1:],frame[:,None]),dim=1)
         self.valid_count=(self.valid_count+1).clamp_max(3)
@@ -123,3 +123,28 @@ class TorchPendulumSkill:
             knee=absolute(action[:,3],m['knee_initial'],3) if m['joint_target_semantics']=='keyframe_centered_absolute' else knee_position-action[:,3]*m['knee_target_delta']
             target=torch.stack((action[:,0]*self.hi[0],m['base_rear_speed']+action[:,1]*m['rear_speed_delta'],hip,knee),dim=-1)
             return action,torch.maximum(self.lo,torch.minimum(self.hi,target))
+
+class TorchPendulumGeometry:
+    """World-x support of the actual primitive collision geometry (MuJoCo types)."""
+    def __init__(self, geometry, body_names, device='cuda:0'):
+        import torch
+        self.indices=[body_names.index(g['body']) for g in geometry]
+        self.kind=torch.tensor([g['type'] for g in geometry],device=device)
+        self.size=torch.tensor([g['size'] for g in geometry],device=device)
+        self.pos=torch.tensor([g['pos'] for g in geometry],device=device)
+        self.quat=torch.tensor([g['quat'][1:]+g['quat'][:1] for g in geometry],device=device)
+
+    def frontmost_x(self, bodies):
+        import torch
+        from .torch_observation import rotate_inverse
+        state=bodies[:,self.indices];q=state[...,3:7]
+        direction=torch.zeros_like(state[...,:3]);direction[...,0]=1.
+        local=rotate_inverse(q,direction)
+        center=state[...,0]+(local*self.pos).sum(-1)
+        axis=rotate_inverse(self.quat.expand_as(q),local)
+        # Common model collision types: box=6, ellipsoid=4, cylinder=5.
+        box=(self.size*axis.abs()).sum(-1)
+        ellipsoid=((self.size*axis).square().sum(-1)).sqrt()
+        cylinder=self.size[:,1]*axis[...,2].abs()+self.size[:,0]*axis[...,:2].square().sum(-1).sqrt()
+        radius=torch.where(self.kind==6,box,torch.where(self.kind==4,ellipsoid,cylinder))
+        return (center+radius).amax(-1)
