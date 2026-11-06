@@ -13,7 +13,8 @@ from sttw_control.pendulum_skill import TorchPendulumObservation,TorchPendulumSk
 from sttw_control.torch_controller import TorchController
 cfg=json.loads(Path('learning/configs/isaac_pendulum_local300_standard.json').read_text())
 options=cfg['plant_options'].copy();options['env_spacing']=20.;options['pendulum_locked']=True
-plant=IsaacLabVectorPlant(Path(cfg['asset']),['plane'],[0,0],out,**options)
+n=len(spec['skills'])
+plant=IsaacLabVectorPlant(Path(cfg['asset']),['plane'],[0]*n,out,**options)
 # Same source step dimensions, translated independently into each lane.
 for i,origin in enumerate(plant.origin.cpu().numpy()):
  box=sim_utils.CuboidCfg(size=(4.,2.,.32),collision_props=sim_utils.CollisionPropertiesCfg(contact_offset=.01,rest_offset=0.),physics_material=sim_utils.RigidBodyMaterialCfg(static_friction=.8,dynamic_friction=.8))
@@ -30,20 +31,20 @@ if spec.get('align_heading',False):
  state['root_velocity'][:3]=quat_apply(rotation[None],state['root_velocity'][:3][None])[0]
  state['root_velocity'][3:]=quat_apply(rotation[None],state['root_velocity'][3:][None])[0]
 
-plant.reset_idx(torch.arange(2,device='cuda:0'),state=state)
+plant.reset_idx(torch.arange(n,device='cuda:0'),state=state)
 plant.set_pendulum_locked(False);plant.set_pendulum_locked(True)
-controller=TorchController(json.loads(Path(cfg['controller_config']).read_text()),2,'cuda:0')
+controller=TorchController(json.loads(Path(cfg['controller_config']).read_text()),n,'cuda:0')
 policies=[TorchPendulumSkill(Path(spec['bundles'])/s) for s in spec['skills']]
-history=TorchPendulumObservation(plant.joints,json.loads(Path('learning/configs/pendulum_common_asset.json').read_text())['mount_rotation_wxyz'],2,'cuda:0')
+history=TorchPendulumObservation(plant.joints,json.loads(Path('learning/configs/pendulum_common_asset.json').read_text())['mount_rotation_wxyz'],n,'cuda:0')
 geometry=TorchPendulumGeometry(json.loads(Path(spec['geometry']).read_text()),plant.bodies)
-last=torch.zeros(2,4,device='cuda:0');alive=torch.ones(2,dtype=torch.bool,device='cuda:0');entered=torch.zeros_like(alive);consumed=torch.zeros_like(alive)
+last=torch.zeros(n,4,device='cuda:0');alive=torch.ones(n,dtype=torch.bool,device='cuda:0');entered=torch.zeros_like(alive);consumed=torch.zeros_like(alive)
 active=False;rows=[];actions=[];observations=[];valid=[];start=time.monotonic();steps=round(spec['seconds']/.005)
 (out/'protocol.json').write_text(json.dumps(dict(spec=spec,plant=plant.metadata,policies=[s.identity for s in policies],ground_history='last_action zero means no prior jump action; physical FIFO sampled throughout ground approach',initial_translation='common saved snapshot translated to start_x/y0; optional rigid world-yaw alignment rotates pose and both velocities together',role='nominal paired DEV integration; not original donor benchmark',physics_dt=.0002,ground_dt=.005,jump_dt=.02,optimizer_updates=0),indent=2))
-target=torch.zeros(2,4,device='cuda:0')
+target=torch.zeros(n,4,device='cuda:0')
 for k in range(steps+1):
  m,pose,speed=plant.observe();root=plant.roots.clone();root[:,:3]-=plant.origin
  distance=3.6-(geometry.frontmost_x(plant.rigid)-plant.origin[:,0])
- row=torch.cat((torch.full((2,1),k*.005,device='cuda:0'),root[:,:3],speed[:,None],m[:,:4],plant.dofs[:,plant.pendulum_servos.indices,0],distance[:,None]),-1)
+ row=torch.cat((torch.full((n,1),k*.005,device='cuda:0'),root[:,:3],speed[:,None],m[:,:4],plant.dofs[:,plant.pendulum_servos.indices,0],distance[:,None]),-1)
  rows.append(row);valid.append(alive.clone());actions.append(last.clone())
  alive &= torch.isfinite(row).all(-1)&(m[:,0].abs()<torch.pi/4)&(root[:,2]>0.05)
  if k==steps or not bool(alive.any()):break
@@ -66,7 +67,7 @@ for k in range(steps+1):
   for _ in range(25):plant.step(command,refresh_diagnostics=False)
  plant.refresh()
 trace=torch.stack(rows).cpu().numpy();mask=torch.stack(valid).cpu().numpy();np.savez(out/'trajectory.npz',trace=trace,valid=mask,action=torch.stack(actions).cpu().numpy(),observations=torch.stack(observations).cpu().numpy(),columns=['time','x','y','z','speed','roll','roll_rate','steer','steer_rate','hip','knee','obstacle_relative_x'])
-result=dict(status='complete',elapsed_s=time.monotonic()-start,physics_lane_steps=k*25*2,cases=[])
+result=dict(status='complete',elapsed_s=time.monotonic()-start,physics_lane_steps=k*25*n,cases=[])
 for i,name in enumerate(spec['skills']):
  tr=trace[mask[:,i],i];result['cases'].append(dict(skill=name,duration_s=float(tr[-1,0]),physical_termination=not bool(alive[i]),peak_root_z=float(tr[:,3].max()),final_xyz=tr[-1,1:4].tolist(),peak_abs_roll_deg=float(np.rad2deg(abs(tr[:,5])).max()),full_jump_success='not adjudicated; requires clearance and landing evidence'))
 (out/'results.json').write_text(json.dumps(result,indent=2));print(result,flush=True)

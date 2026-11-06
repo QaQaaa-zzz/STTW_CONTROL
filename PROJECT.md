@@ -1,3 +1,11 @@
+## 训练后冻结导出与多候选接管比较入口准备完成
+
+`export_trained_phase_u.py`显式指定checkpoint和source-bundle，严格加载原网络state_dict后导出Actor/critic/normalizer，继承动作映射并记录当前checkpoint路径/SHA及selection infos；不默认用last，不改权重。`evaluate_isaac_pendulum_jump.py`按skills数量创建lane，可同场比较source/RB/训练best或last。新增plot_isaac_pendulum_jump.py直接复用已保存NPZ，已用aligned旧轨迹出图并查看，无重跑物理。训练后候选尚未执行。
+
+原Go2 runner.save中途iter字段可能仍为0，因为current_learning_iteration到整段结束才更新；当前运行的best_step_model.json及checkpoint infos.update已正确记录采样模型更新号。导出分别标stored_checkpoint_iter与scored_policy_update，后者用于best语义；源码后续保存best已改直接写iter=实际update。此修改不热更当前训练进程，未重启/未改其权重；避免把metadata0误称最佳一定在update0。普通定期checkpoint仍保留上游语义，以日志/文件轮次另行识别。
+
+训练pid4004504在本轮首查运行71秒且initializing，TensorBoard服务HTTP200，尚无本运行标量；随后只做离线评估入口，不轮询。下一次训练状态检查不早于启动约10分钟（UTC07:55附近），再以实际首轮耗时安排后续。目录runs/phase_u_isaac150链接数据盘，预算仍150updates。
+
 ## 原Phase U完整环境接线通过，启动4096环境有界适配
 
 `PhaseUEnv`已接真实GPU物理、原92/8 reset、原事件/奖励/106critic、startup摩擦/质量惯量/COM、四动作增益/延迟/传感噪声及4s推扰。接口检查runs/phase_u_env_integration：4lane×8policy=3200physics lane steps、0optimizer，采样4.059s，初始化2.558s（不含App加载），奖励/观测有限，partial reset通过；不是恢复能力验证。共同车natural rootz=.254与原donor .15不同，明确以模型几何适配避免穿地；8%空中RSI范围原样保留。训练为原PhaseU全程四动作控制，不是锁摆地面交接实验。

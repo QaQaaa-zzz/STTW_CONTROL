@@ -34,7 +34,7 @@ def recorded_update():
     runner.writer.add_scalar('Train/mean_step_reward_pre_update',score,update)
     if score>selection['best']:
         selection['best']=score
-        runner.save(str(a.output/'training/model_step_best.pt'),infos=row)
+        torch.save(dict(model_state_dict=runner.alg.actor_critic.state_dict(),optimizer_state_dict=runner.alg.optimizer.state_dict(),iter=update,infos=row),a.output/'training/model_step_best.pt')
         (a.output/'best_step_model.json').write_text(json.dumps(dict(**row,checkpoint='training/model_step_best.pt',scope='best sampled pre-update policy in this run; not fixed-case qualification'),indent=2))
     result=upstream_update();selection['update']+=1
     return result
