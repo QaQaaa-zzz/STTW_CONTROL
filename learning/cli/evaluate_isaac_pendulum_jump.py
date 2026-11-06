@@ -4,6 +4,8 @@ from pathlib import Path
 import numpy as np
 p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);a=p.parse_args()
 spec=json.loads(a.config.read_text())
+pulse=spec.get('external_force_pulse')
+if pulse and (len(spec['skills'])!=1 or pulse['kind']!='external_force_N' or pulse['body']!='chasis' or pulse['duration_s']<=0):p.error('External pulse requires one lane, chasis body, external_force_N and positive duration')
 if spec.get('connection_selector') and (len(spec['skills'])!=1 or not spec.get('ground_bundle') or not spec.get('connection_midpoint_candidate')):p.error('Connection selection requires single-lane ground execution and a declared midpoint event')
 if spec.get('forward_branch') and (len(spec['skills'])!=1 or not spec.get('ground_bundle') or spec['forward_branch']['requested_route'] not in ('original_jump','bypass')):p.error('Mapped branch pilot requires one ground lane and a declared original_jump or bypass route')
 if spec.get('connection_midpoint_candidate'):
@@ -108,6 +110,21 @@ if spec.get('forward_branch'):
  branch_config=spec['forward_branch'];branch_map=json.loads(Path(branch_config['map_contract']).read_text())
  branch_routes=[dict(route_id='original_jump'),dict(route_id='bypass',first_entry_progress_m=branch_map['first_entry_progress_m'],last_entry_progress_m=branch_map['last_entry_progress_m'],minimum_dwell_s=branch_map['minimum_dwell_s'])]
  common_route=ground.route;furthest_common_progress=0.
+pulse_started=False;pulse_remaining=0;pulse_start_time=None;pulse_rows=[]
+if pulse:
+ from sttw_control.torch_observation import rotate_inverse
+ pulse_body=torch.tensor([plant.bodies.index(pulse['body'])],device='cuda:0')
+ pulse_site=torch.tensor(pulse['site_body_position_m'],device='cuda:0').reshape(1,1,3)
+ pulse_zero=torch.zeros(1,1,3,device='cuda:0')
+ pulse_world=torch.tensor(pulse['force_world_N'],device='cuda:0').reshape(1,3)
+ def apply_force(ignored_tick=0):
+  global pulse_remaining,pulse_step_tick
+  force=pulse_world*((pulse_remaining>0)&alive)[:,None]
+  if ground is not None and not active:force=force*ground.alive[:,None]
+  local=rotate_inverse(plant.roots[:,3:7],force)
+  plant.robot.permanent_wrench_composer.set_forces_and_torques(forces=local[:,None].contiguous(),torques=pulse_zero,positions=pulse_site,body_ids=pulse_body,is_global=False)
+  pulse_rows.append(torch.cat((torch.full((1,1),k*.005+pulse_step_tick*plant.physics_dt,device='cuda:0'),force),-1))
+  pulse_step_tick+=1;pulse_remaining=max(0,pulse_remaining-1)
 previous_root_velocity=plant.roots[:,7:10].clone()
 for k in range(steps+1):
  if ground is not None and not active and (returned or not spec.get('ground_after_landing_only',False)) and k%4:continue
@@ -189,17 +206,23 @@ for k in range(steps+1):
     ground.middle.follower=ground.route.pursuit(ground.middle.projection['progress'],pose,speed,ground.speed)
     ground.middle.fault=ground.middle.follower['numerical_fault'].clone();ground.middle.domain_exit=ground.middle.follower['invalid'].clone()
    (out/'landing_handoff.json').write_text(json.dumps(dict(time=k*.005,root=root.cpu().tolist(),position=plant.dofs[:,:,0].cpu().tolist(),velocity=plant.dofs[:,:,1].cpu().tolist(),controller_state='ECBC ESO initialized for resumed ground control; no physical reset',arm='locked at current posture'),indent=2))
+ if pulse and not pulse_started and float(root[0,0])>=pulse['trigger_x_m']:
+  pulse_started=True;pulse_remaining=round(pulse['duration_s']/plant.physics_dt);pulse_start_time=k*.005
+ pulse_step_tick=0
  if active:
   command=torch.stack((torch.zeros_like(speed),target[:,1]),-1)
   for substep in range(substeps):
    ids=plant.pendulum_servos.indices
    before=torch.cat((torch.full((n,1),k*.005+substep*plant.physics_dt,device='cuda:0'),target[:,2:],plant.dofs[:,ids,0],plant.dofs[:,ids,1]),-1)
    executed_rows.append(torch.cat((torch.full((n,1),k*.005+substep*plant.physics_dt,device='cuda:0'),torch.full((n,1),2. if landing_ready else 1.,device='cuda:0'),target.clone()),-1))
+   if pulse and pulse_remaining>0:apply_force()
+   elif pulse and pulse_rows:plant.robot.permanent_wrench_composer.set_forces_and_torques(forces=pulse_zero,torques=pulse_zero,positions=pulse_site,body_ids=pulse_body,is_global=False)
    plant.step(command,pendulum_target=target[:,2:],steering_position_target=target[:,:1],refresh_diagnostics=False)
    velocity=plant.robot.data.root_link_lin_vel_w
    root_acceleration=(velocity-previous_root_velocity)/plant.physics_dt;previous_root_velocity=velocity.clone()
    arm_rows.append(torch.cat((before,plant.last_pendulum_torque[:,ids],alive[:,None]),-1))
  elif ground is not None and (returned or not spec.get('ground_after_landing_only',False)):
+  ground.training_pulse=apply_force if pulse and pulse_remaining>0 else None
   result=ground.step();ground_rows.append(result['lower_trace'].clone())
   commands=result['executed_commands'].clone();commands[:,:,0]+=k*.005
   phase=torch.full((*commands.shape[:2],1),3. if returned else 0.,device='cuda:0')
@@ -210,11 +233,19 @@ for k in range(steps+1):
   request=torch.stack((m[:,5]*plant.wheel_radius_m,m[:,2],m[:,3],m[:,0],m[:,1],torch.zeros_like(speed)),-1)
   control=controller.step(request,torch.ones_like(alive));command=torch.stack((control[:,0].clamp(-3,3),torch.full_like(speed,(spec['landing_return']['speed_m_s'] if returned else spec['approach_speed'])/plant.wheel_radius_m)),-1)
   for _ in range(substeps):
+   if pulse and pulse_remaining>0:apply_force()
+   elif pulse and pulse_rows:plant.robot.permanent_wrench_composer.set_forces_and_torques(forces=pulse_zero,torques=pulse_zero,positions=pulse_site,body_ids=pulse_body,is_global=False)
    plant.step(command,refresh_diagnostics=False)
    velocity=plant.robot.data.root_link_lin_vel_w
    root_acceleration=(velocity-previous_root_velocity)/plant.physics_dt;previous_root_velocity=velocity.clone()
+ if pulse and pulse_started:
+  plant.robot.permanent_wrench_composer.set_forces_and_torques(forces=pulse_zero,torques=pulse_zero,positions=pulse_site,body_ids=pulse_body,is_global=False)
  if spec.get('record_body_states',False):plant.sensor.update(.005,force_recompute=True)
  plant.refresh()
+if pulse:
+ applied=torch.stack(pulse_rows).cpu().numpy() if pulse_rows else np.empty((0,1,4))
+ np.savez_compressed(out/'external_force.npz',samples=applied,columns=['time_s','world_Fx_N','world_Fy_N','world_Fz_N'],physics_dt_s=plant.physics_dt)
+ (out/'external_force.json').write_text(json.dumps(dict(protocol=pulse,triggered=pulse_started,trigger_time_s=pulse_start_time,impulse_world_Ns=(applied[:,:,1:].sum(0)*plant.physics_dt).tolist(),scope='Prescribed world-frame force at body-local site; position crossing sampled at current execution rate; omitted intervals have zero force, not velocity replacement'),indent=2)+'\n')
 if ground_command_rows:np.savez_compressed(out/'executed_ground_commands.npz',trace=torch.cat(ground_command_rows).cpu().numpy(),columns=['time','steer_rate_rad_s','rear_axis_speed_rad_s','alive_before_step','phase_0_ground_3_return'],semantics='Actual motor input passed to plant.step after controller limits and optional randomization; plant servo limits still apply')
 if executed_rows:np.savez_compressed(out/'executed_jump_targets.npz',trace=torch.stack(executed_rows).cpu().numpy(),columns=['time','phase_1_jump_2_landing_transition','steering_position_rad','rear_axis_speed_rad_s','hip_position_rad','knee_position_rad'],semantics='Actual target after landing override, before plant servo dynamics; not measured torque')
 if ground_rows:np.savez(out/'ground_tracking.npz',trace=torch.cat(ground_rows).cpu().numpy(),columns=['x','y','speed','cross_track','abs_roll','reward','alive','physics_ticks','speed_reference','steer_reference','wheel_speed_estimate'])

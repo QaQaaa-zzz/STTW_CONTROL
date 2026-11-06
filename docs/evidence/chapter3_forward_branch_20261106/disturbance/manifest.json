@@ -1,0 +1,36 @@
+{
+  "role": "E5 matched external-force route feasibility pilot, two signs by two forced routes; frozen root01",
+  "simulation_python": "/home/qy/miniconda3/envs/env_isaaclab/bin/python",
+  "analysis_python": "/home/qy/miniconda3/envs/mjp/bin/python",
+  "cases": [
+    {
+      "case_id": "worldFy-2N_original_jump",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_disturbance/worldFy-2N_original_jump.json",
+      "force_world_y_N": -2,
+      "route": "original_jump"
+    },
+    {
+      "case_id": "worldFy-2N_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_disturbance/worldFy-2N_bypass.json",
+      "force_world_y_N": -2,
+      "route": "bypass"
+    },
+    {
+      "case_id": "worldFy+2N_original_jump",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_disturbance/worldFy+2N_original_jump.json",
+      "force_world_y_N": 2,
+      "route": "original_jump"
+    },
+    {
+      "case_id": "worldFy+2N_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_disturbance/worldFy+2N_bypass.json",
+      "force_world_y_N": 2,
+      "route": "bypass"
+    }
+  ],
+  "physics_lane_steps_max": 48000,
+  "optimizer_updates": 0,
+  "status": "prepared_not_started",
+  "comparison": "Reuse existing no-force baseline; same sign route pairs share entire upstream until decision, verify from saved trajectories",
+  "stop_rule": "Four single-lane runs at 30 seconds maximum each; retain failures; no automatic training"
+}
