@@ -1,0 +1,260 @@
+{
+  "records": 36,
+  "physical_cases": 36,
+  "independent_origins": 6,
+  "usable_records": 36,
+  "cases": [
+    {
+      "case_id": "rb_connection_seed20261106_root000_forced_bypass",
+      "status": "exported",
+      "state_source": "branch_decision",
+      "supervised_input_complete": true
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root000_forced_original_jump_extended_reference",
+      "status": "exported",
+      "state_source": "branch_decision",
+      "supervised_input_complete": true
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root000_worldFy-2N_original_jump",
+      "status": "exported",
+      "state_source": "branch_decision",
+      "supervised_input_complete": true
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root000_worldFy-2N_bypass",
+      "status": "exported",
+      "state_source": "branch_decision",
+      "supervised_input_complete": true
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root000_worldFy+2N_original_jump",
+      "status": "exported",
+      "state_source": "branch_decision",
+      "supervised_input_complete": true
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root000_worldFy+2N_bypass",
+      "status": "exported",
+      "state_source": "branch_decision",
+      "supervised_input_complete": true
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root002_forced_bypass",
+      "status": "exported",
+      "state_source": "branch_decision",
+      "supervised_input_complete": true
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root002_forced_original_jump_extended_reference",
+      "status": "exported",
+      "state_source": "branch_decision",
+      "supervised_input_complete": true
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root002_worldFy-2N_original_jump",
+      "status": "exported",
+      "state_source": "branch_decision",
+      "supervised_input_complete": true
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root002_worldFy-2N_bypass",
+      "status": "exported",
+      "state_source": "branch_decision",
+      "supervised_input_complete": true
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root002_worldFy+2N_original_jump",
+      "status": "exported",
+      "state_source": "branch_decision",
+      "supervised_input_complete": true
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root002_worldFy+2N_bypass",
+      "status": "exported",
+      "state_source": "branch_decision",
+      "supervised_input_complete": true
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root003_forced_bypass",
+      "status": "exported",
+      "state_source": "branch_decision",
+      "supervised_input_complete": true
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root003_forced_original_jump_extended_reference",
+      "status": "exported",
+      "state_source": "branch_decision",
+      "supervised_input_complete": true
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root003_worldFy-2N_original_jump",
+      "status": "exported",
+      "state_source": "branch_decision",
+      "supervised_input_complete": true
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root003_worldFy-2N_bypass",
+      "status": "exported",
+      "state_source": "branch_decision",
+      "supervised_input_complete": true
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root003_worldFy+2N_original_jump",
+      "status": "exported",
+      "state_source": "branch_decision",
+      "supervised_input_complete": true
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root003_worldFy+2N_bypass",
+      "status": "exported",
+      "state_source": "branch_decision",
+      "supervised_input_complete": true
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root004_forced_bypass",
+      "origin_id": "rb_connection_seed20261106_root004",
+      "status": "evaluated_no_route_decision",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root004_forced_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root004_forced_original_jump_extended_reference",
+      "origin_id": "rb_connection_seed20261106_root004",
+      "status": "evaluated_no_route_decision",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root004_forced_original_jump_extended_reference/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root004_worldFy-2N_original_jump",
+      "origin_id": "rb_connection_seed20261106_root004",
+      "status": "evaluated_no_route_decision",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root004_worldFy-2N_original_jump/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root004_worldFy-2N_bypass",
+      "origin_id": "rb_connection_seed20261106_root004",
+      "status": "evaluated_no_route_decision",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root004_worldFy-2N_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root004_worldFy+2N_original_jump",
+      "origin_id": "rb_connection_seed20261106_root004",
+      "status": "evaluated_no_route_decision",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root004_worldFy+2N_original_jump/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root004_worldFy+2N_bypass",
+      "origin_id": "rb_connection_seed20261106_root004",
+      "status": "evaluated_no_route_decision",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root004_worldFy+2N_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root005_forced_bypass",
+      "origin_id": "rb_connection_seed20261106_root005",
+      "status": "evaluated_no_route_decision",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root005_forced_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root005_forced_original_jump_extended_reference",
+      "origin_id": "rb_connection_seed20261106_root005",
+      "status": "evaluated_no_route_decision",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root005_forced_original_jump_extended_reference/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root005_worldFy-2N_original_jump",
+      "origin_id": "rb_connection_seed20261106_root005",
+      "status": "evaluated_no_route_decision",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root005_worldFy-2N_original_jump/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root005_worldFy-2N_bypass",
+      "origin_id": "rb_connection_seed20261106_root005",
+      "status": "evaluated_no_route_decision",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root005_worldFy-2N_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root005_worldFy+2N_original_jump",
+      "origin_id": "rb_connection_seed20261106_root005",
+      "status": "evaluated_no_route_decision",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root005_worldFy+2N_original_jump/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root005_worldFy+2N_bypass",
+      "origin_id": "rb_connection_seed20261106_root005",
+      "status": "evaluated_no_route_decision",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root005_worldFy+2N_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root008_forced_bypass",
+      "origin_id": "rb_connection_seed20261106_root008",
+      "status": "evaluated_no_route_decision",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root008_forced_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root008_forced_original_jump_extended_reference",
+      "origin_id": "rb_connection_seed20261106_root008",
+      "status": "evaluated_no_route_decision",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root008_forced_original_jump_extended_reference/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root008_worldFy-2N_original_jump",
+      "origin_id": "rb_connection_seed20261106_root008",
+      "status": "evaluated_no_route_decision",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root008_worldFy-2N_original_jump/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root008_worldFy-2N_bypass",
+      "origin_id": "rb_connection_seed20261106_root008",
+      "status": "evaluated_no_route_decision",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root008_worldFy-2N_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root008_worldFy+2N_original_jump",
+      "origin_id": "rb_connection_seed20261106_root008",
+      "status": "evaluated_no_route_decision",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root008_worldFy+2N_original_jump/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root008_worldFy+2N_bypass",
+      "origin_id": "rb_connection_seed20261106_root008",
+      "status": "evaluated_no_route_decision",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root008_worldFy+2N_bypass/chain_summary.json"
+    }
+  ]
+}

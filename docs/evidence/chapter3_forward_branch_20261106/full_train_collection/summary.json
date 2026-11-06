@@ -1,0 +1,1450 @@
+{
+  "role": "Actual forward-route DEV and interface timing; no pooled success claim across task roles",
+  "declared_cases": 36,
+  "evaluated_cases": 36,
+  "rows": [
+    {
+      "case_id": "rb_connection_seed20261106_root000_forced_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root000_forced_bypass.json",
+      "origin_id": "rb_connection_seed20261106_root000",
+      "status": "evaluated",
+      "method": null,
+      "disturbance_protocol": null,
+      "route_prefix": {
+        "decision_time_s": 5.68,
+        "max_error_before_branch_m": 0.9852452278137207,
+        "corridor_intact_at_branch": false,
+        "max_error_after_branch_m": 0.8019752675518979,
+        "first_violation_s": 2.200000047683716,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "bypass",
+      "requested_route": "bypass",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": true,
+      "arrival_s": 17.079999923706055,
+      "max_mapped_path_error_m": 0.9852452278137207,
+      "selection": null,
+      "selection_wall_s": 0.08807137399708154,
+      "query_time_s": 5.68,
+      "application_time_s": 5.68,
+      "application_delay_sim_s": 0.0,
+      "asynchronous": false,
+      "available_routes_at_application": [
+        "original_jump",
+        "bypass"
+      ],
+      "requested_route_unavailable": false,
+      "world_xy_motion_during_query_m": 0.0,
+      "stored_samples_after_request_through_application": 0,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root000_forced_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root000_forced_original_jump_extended_reference",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root000_forced_original_jump_extended_reference.json",
+      "origin_id": "rb_connection_seed20261106_root000",
+      "status": "evaluated",
+      "method": null,
+      "disturbance_protocol": null,
+      "route_prefix": {
+        "decision_time_s": 5.68,
+        "max_error_before_branch_m": 0.9852452278137207,
+        "corridor_intact_at_branch": true,
+        "max_error_after_branch_m": 0.7028263807296753,
+        "first_violation_s": null,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "requested_route": "original_jump",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": false,
+      "arrival_s": null,
+      "max_mapped_path_error_m": 0.9852452278137207,
+      "selection": null,
+      "selection_wall_s": 1.9619001250248402e-05,
+      "query_time_s": 5.68,
+      "application_time_s": 5.68,
+      "application_delay_sim_s": 0.0,
+      "asynchronous": false,
+      "available_routes_at_application": [
+        "original_jump",
+        "bypass"
+      ],
+      "requested_route_unavailable": false,
+      "world_xy_motion_during_query_m": 0.0,
+      "stored_samples_after_request_through_application": 0,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root000_forced_original_jump_extended_reference/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root000_worldFy-2N_original_jump",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root000_worldFy-2N_original_jump.json",
+      "origin_id": "rb_connection_seed20261106_root000",
+      "status": "evaluated",
+      "method": null,
+      "disturbance_protocol": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "route_prefix": {
+        "decision_time_s": 5.68,
+        "max_error_before_branch_m": 0.9852452278137207,
+        "corridor_intact_at_branch": true,
+        "max_error_after_branch_m": 0.6953340172767639,
+        "first_violation_s": null,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "requested_route": "original_jump",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": false,
+      "arrival_s": null,
+      "max_mapped_path_error_m": 0.9852452278137207,
+      "selection": null,
+      "selection_wall_s": 1.9287996110506356e-05,
+      "query_time_s": 5.68,
+      "application_time_s": 5.68,
+      "application_delay_sim_s": 0.0,
+      "asynchronous": false,
+      "available_routes_at_application": [
+        "original_jump",
+        "bypass"
+      ],
+      "requested_route_unavailable": false,
+      "world_xy_motion_during_query_m": 0.0,
+      "stored_samples_after_request_through_application": 0,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root000_worldFy-2N_original_jump/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root000_worldFy-2N_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root000_worldFy-2N_bypass.json",
+      "origin_id": "rb_connection_seed20261106_root000",
+      "status": "evaluated",
+      "method": null,
+      "disturbance_protocol": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "route_prefix": {
+        "decision_time_s": 5.68,
+        "max_error_before_branch_m": 0.9852452278137207,
+        "corridor_intact_at_branch": false,
+        "max_error_after_branch_m": 0.7825272010540972,
+        "first_violation_s": 2.200000047683716,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "bypass",
+      "requested_route": "bypass",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": true,
+      "arrival_s": 17.079999923706055,
+      "max_mapped_path_error_m": 0.9852452278137207,
+      "selection": null,
+      "selection_wall_s": 0.031021561000670772,
+      "query_time_s": 5.68,
+      "application_time_s": 5.68,
+      "application_delay_sim_s": 0.0,
+      "asynchronous": false,
+      "available_routes_at_application": [
+        "original_jump",
+        "bypass"
+      ],
+      "requested_route_unavailable": false,
+      "world_xy_motion_during_query_m": 0.0,
+      "stored_samples_after_request_through_application": 0,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root000_worldFy-2N_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root000_worldFy+2N_original_jump",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root000_worldFy+2N_original_jump.json",
+      "origin_id": "rb_connection_seed20261106_root000",
+      "status": "evaluated",
+      "method": null,
+      "disturbance_protocol": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "route_prefix": {
+        "decision_time_s": 5.68,
+        "max_error_before_branch_m": 0.9852452278137207,
+        "corridor_intact_at_branch": true,
+        "max_error_after_branch_m": 0.7115343809127808,
+        "first_violation_s": null,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "requested_route": "original_jump",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": false,
+      "arrival_s": null,
+      "max_mapped_path_error_m": 0.9852452278137207,
+      "selection": null,
+      "selection_wall_s": 2.65159978880547e-05,
+      "query_time_s": 5.68,
+      "application_time_s": 5.68,
+      "application_delay_sim_s": 0.0,
+      "asynchronous": false,
+      "available_routes_at_application": [
+        "original_jump",
+        "bypass"
+      ],
+      "requested_route_unavailable": false,
+      "world_xy_motion_during_query_m": 0.0,
+      "stored_samples_after_request_through_application": 0,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root000_worldFy+2N_original_jump/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root000_worldFy+2N_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root000_worldFy+2N_bypass.json",
+      "origin_id": "rb_connection_seed20261106_root000",
+      "status": "evaluated",
+      "method": null,
+      "disturbance_protocol": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "route_prefix": {
+        "decision_time_s": 5.68,
+        "max_error_before_branch_m": 0.9852452278137207,
+        "corridor_intact_at_branch": false,
+        "max_error_after_branch_m": 0.8212679569781347,
+        "first_violation_s": 2.200000047683716,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "bypass",
+      "requested_route": "bypass",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": true,
+      "arrival_s": 17.100000381469727,
+      "max_mapped_path_error_m": 0.9852452278137207,
+      "selection": null,
+      "selection_wall_s": 0.23612597099418053,
+      "query_time_s": 5.68,
+      "application_time_s": 5.68,
+      "application_delay_sim_s": 0.0,
+      "asynchronous": false,
+      "available_routes_at_application": [
+        "original_jump",
+        "bypass"
+      ],
+      "requested_route_unavailable": false,
+      "world_xy_motion_during_query_m": 0.0,
+      "stored_samples_after_request_through_application": 0,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root000_worldFy+2N_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root002_forced_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root002_forced_bypass.json",
+      "origin_id": "rb_connection_seed20261106_root002",
+      "status": "evaluated",
+      "method": null,
+      "disturbance_protocol": null,
+      "route_prefix": {
+        "decision_time_s": 5.54,
+        "max_error_before_branch_m": 0.6451108146596943,
+        "corridor_intact_at_branch": false,
+        "max_error_after_branch_m": 0.6680498871547037,
+        "first_violation_s": 4.179999828338623,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "bypass",
+      "requested_route": "bypass",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": true,
+      "arrival_s": 16.920000076293945,
+      "max_mapped_path_error_m": 0.6680498871547037,
+      "selection": null,
+      "selection_wall_s": 0.11015973099711118,
+      "query_time_s": 5.54,
+      "application_time_s": 5.54,
+      "application_delay_sim_s": 0.0,
+      "asynchronous": false,
+      "available_routes_at_application": [
+        "original_jump",
+        "bypass"
+      ],
+      "requested_route_unavailable": false,
+      "world_xy_motion_during_query_m": 0.0,
+      "stored_samples_after_request_through_application": 0,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root002_forced_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root002_forced_original_jump_extended_reference",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root002_forced_original_jump_extended_reference.json",
+      "origin_id": "rb_connection_seed20261106_root002",
+      "status": "evaluated",
+      "method": null,
+      "disturbance_protocol": null,
+      "route_prefix": {
+        "decision_time_s": 5.54,
+        "max_error_before_branch_m": 0.6451108146596943,
+        "corridor_intact_at_branch": true,
+        "max_error_after_branch_m": 0.7130758762359619,
+        "first_violation_s": null,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "requested_route": "original_jump",
+      "optional_platform_complete": true,
+      "mandatory_platform_complete": true,
+      "full_window": true,
+      "arrival_s": 19.459999084472656,
+      "max_mapped_path_error_m": 0.7130758762359619,
+      "selection": null,
+      "selection_wall_s": 2.0633000531233847e-05,
+      "query_time_s": 5.54,
+      "application_time_s": 5.54,
+      "application_delay_sim_s": 0.0,
+      "asynchronous": false,
+      "available_routes_at_application": [
+        "original_jump",
+        "bypass"
+      ],
+      "requested_route_unavailable": false,
+      "world_xy_motion_during_query_m": 0.0,
+      "stored_samples_after_request_through_application": 0,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root002_forced_original_jump_extended_reference/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root002_worldFy-2N_original_jump",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root002_worldFy-2N_original_jump.json",
+      "origin_id": "rb_connection_seed20261106_root002",
+      "status": "evaluated",
+      "method": null,
+      "disturbance_protocol": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "route_prefix": {
+        "decision_time_s": 5.54,
+        "max_error_before_branch_m": 0.6451108146596943,
+        "corridor_intact_at_branch": true,
+        "max_error_after_branch_m": 0.6053491234779358,
+        "first_violation_s": null,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "requested_route": "original_jump",
+      "optional_platform_complete": true,
+      "mandatory_platform_complete": true,
+      "full_window": true,
+      "arrival_s": 19.799999237060547,
+      "max_mapped_path_error_m": 0.6451108146596943,
+      "selection": null,
+      "selection_wall_s": 3.0790004529990256e-05,
+      "query_time_s": 5.54,
+      "application_time_s": 5.54,
+      "application_delay_sim_s": 0.0,
+      "asynchronous": false,
+      "available_routes_at_application": [
+        "original_jump",
+        "bypass"
+      ],
+      "requested_route_unavailable": false,
+      "world_xy_motion_during_query_m": 0.0,
+      "stored_samples_after_request_through_application": 0,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root002_worldFy-2N_original_jump/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root002_worldFy-2N_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root002_worldFy-2N_bypass.json",
+      "origin_id": "rb_connection_seed20261106_root002",
+      "status": "evaluated",
+      "method": null,
+      "disturbance_protocol": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "route_prefix": {
+        "decision_time_s": 5.54,
+        "max_error_before_branch_m": 0.6451108146596943,
+        "corridor_intact_at_branch": false,
+        "max_error_after_branch_m": 0.6451929800350902,
+        "first_violation_s": 4.179999828338623,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "bypass",
+      "requested_route": "bypass",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": true,
+      "arrival_s": 16.899999618530273,
+      "max_mapped_path_error_m": 0.6451929800350902,
+      "selection": null,
+      "selection_wall_s": 0.18895290199725423,
+      "query_time_s": 5.54,
+      "application_time_s": 5.54,
+      "application_delay_sim_s": 0.0,
+      "asynchronous": false,
+      "available_routes_at_application": [
+        "original_jump",
+        "bypass"
+      ],
+      "requested_route_unavailable": false,
+      "world_xy_motion_during_query_m": 0.0,
+      "stored_samples_after_request_through_application": 0,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root002_worldFy-2N_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root002_worldFy+2N_original_jump",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root002_worldFy+2N_original_jump.json",
+      "origin_id": "rb_connection_seed20261106_root002",
+      "status": "evaluated",
+      "method": null,
+      "disturbance_protocol": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "route_prefix": {
+        "decision_time_s": 5.54,
+        "max_error_before_branch_m": 0.6451108146596943,
+        "corridor_intact_at_branch": true,
+        "max_error_after_branch_m": 0.6146831512451172,
+        "first_violation_s": null,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "requested_route": "original_jump",
+      "optional_platform_complete": true,
+      "mandatory_platform_complete": true,
+      "full_window": true,
+      "arrival_s": 19.079999923706055,
+      "max_mapped_path_error_m": 0.6451108146596943,
+      "selection": null,
+      "selection_wall_s": 1.674499799264595e-05,
+      "query_time_s": 5.54,
+      "application_time_s": 5.54,
+      "application_delay_sim_s": 0.0,
+      "asynchronous": false,
+      "available_routes_at_application": [
+        "original_jump",
+        "bypass"
+      ],
+      "requested_route_unavailable": false,
+      "world_xy_motion_during_query_m": 0.0,
+      "stored_samples_after_request_through_application": 0,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root002_worldFy+2N_original_jump/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root002_worldFy+2N_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root002_worldFy+2N_bypass.json",
+      "origin_id": "rb_connection_seed20261106_root002",
+      "status": "evaluated",
+      "method": null,
+      "disturbance_protocol": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "route_prefix": {
+        "decision_time_s": 5.54,
+        "max_error_before_branch_m": 0.6451108146596943,
+        "corridor_intact_at_branch": false,
+        "max_error_after_branch_m": 0.6874818676734873,
+        "first_violation_s": 4.179999828338623,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "bypass",
+      "requested_route": "bypass",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": true,
+      "arrival_s": 16.920000076293945,
+      "max_mapped_path_error_m": 0.6874818676734873,
+      "selection": null,
+      "selection_wall_s": 0.05271464499674039,
+      "query_time_s": 5.54,
+      "application_time_s": 5.54,
+      "application_delay_sim_s": 0.0,
+      "asynchronous": false,
+      "available_routes_at_application": [
+        "original_jump",
+        "bypass"
+      ],
+      "requested_route_unavailable": false,
+      "world_xy_motion_during_query_m": 0.0,
+      "stored_samples_after_request_through_application": 0,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root002_worldFy+2N_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root003_forced_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root003_forced_bypass.json",
+      "origin_id": "rb_connection_seed20261106_root003",
+      "status": "evaluated",
+      "method": null,
+      "disturbance_protocol": null,
+      "route_prefix": {
+        "decision_time_s": 5.98,
+        "max_error_before_branch_m": 1.4933193974842625,
+        "corridor_intact_at_branch": false,
+        "max_error_after_branch_m": 1.5619790701596428,
+        "first_violation_s": 4.079999923706055,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "bypass",
+      "requested_route": "bypass",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": true,
+      "arrival_s": 17.540000915527344,
+      "max_mapped_path_error_m": 1.5619790701596428,
+      "selection": null,
+      "selection_wall_s": 0.5693082729994785,
+      "query_time_s": 5.98,
+      "application_time_s": 5.98,
+      "application_delay_sim_s": 0.0,
+      "asynchronous": false,
+      "available_routes_at_application": [
+        "original_jump",
+        "bypass"
+      ],
+      "requested_route_unavailable": false,
+      "world_xy_motion_during_query_m": 0.0,
+      "stored_samples_after_request_through_application": 0,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root003_forced_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root003_forced_original_jump_extended_reference",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root003_forced_original_jump_extended_reference.json",
+      "origin_id": "rb_connection_seed20261106_root003",
+      "status": "evaluated",
+      "method": null,
+      "disturbance_protocol": null,
+      "route_prefix": {
+        "decision_time_s": 5.98,
+        "max_error_before_branch_m": 1.4932597875595093,
+        "corridor_intact_at_branch": false,
+        "max_error_after_branch_m": 1.4970346689224243,
+        "first_violation_s": 4.519999980926514,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "requested_route": "original_jump",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": true,
+      "arrival_s": 19.979999542236328,
+      "max_mapped_path_error_m": 1.4970346689224243,
+      "selection": null,
+      "selection_wall_s": 3.501799801597372e-05,
+      "query_time_s": 5.98,
+      "application_time_s": 5.98,
+      "application_delay_sim_s": 0.0,
+      "asynchronous": false,
+      "available_routes_at_application": [
+        "original_jump",
+        "bypass"
+      ],
+      "requested_route_unavailable": false,
+      "world_xy_motion_during_query_m": 0.0,
+      "stored_samples_after_request_through_application": 0,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root003_forced_original_jump_extended_reference/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root003_worldFy-2N_original_jump",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root003_worldFy-2N_original_jump.json",
+      "origin_id": "rb_connection_seed20261106_root003",
+      "status": "evaluated",
+      "method": null,
+      "disturbance_protocol": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "route_prefix": {
+        "decision_time_s": 5.98,
+        "max_error_before_branch_m": 1.4886236190795898,
+        "corridor_intact_at_branch": false,
+        "max_error_after_branch_m": 1.4899972677230835,
+        "first_violation_s": 4.519999980926514,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "requested_route": "original_jump",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": true,
+      "arrival_s": 20.6200008392334,
+      "max_mapped_path_error_m": 1.4899972677230835,
+      "selection": null,
+      "selection_wall_s": 1.902600342873484e-05,
+      "query_time_s": 5.98,
+      "application_time_s": 5.98,
+      "application_delay_sim_s": 0.0,
+      "asynchronous": false,
+      "available_routes_at_application": [
+        "original_jump",
+        "bypass"
+      ],
+      "requested_route_unavailable": false,
+      "world_xy_motion_during_query_m": 0.0,
+      "stored_samples_after_request_through_application": 0,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root003_worldFy-2N_original_jump/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root003_worldFy-2N_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root003_worldFy-2N_bypass.json",
+      "origin_id": "rb_connection_seed20261106_root003",
+      "status": "evaluated",
+      "method": null,
+      "disturbance_protocol": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "route_prefix": {
+        "decision_time_s": 5.98,
+        "max_error_before_branch_m": 1.4886833316766788,
+        "corridor_intact_at_branch": false,
+        "max_error_after_branch_m": 1.5376681531431373,
+        "first_violation_s": 4.079999923706055,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "bypass",
+      "requested_route": "bypass",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": true,
+      "arrival_s": 17.540000915527344,
+      "max_mapped_path_error_m": 1.5376681531431373,
+      "selection": null,
+      "selection_wall_s": 0.23818807899806416,
+      "query_time_s": 5.98,
+      "application_time_s": 5.98,
+      "application_delay_sim_s": 0.0,
+      "asynchronous": false,
+      "available_routes_at_application": [
+        "original_jump",
+        "bypass"
+      ],
+      "requested_route_unavailable": false,
+      "world_xy_motion_during_query_m": 0.0,
+      "stored_samples_after_request_through_application": 0,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root003_worldFy-2N_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root003_worldFy+2N_original_jump",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root003_worldFy+2N_original_jump.json",
+      "origin_id": "rb_connection_seed20261106_root003",
+      "status": "evaluated",
+      "method": null,
+      "disturbance_protocol": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "route_prefix": {
+        "decision_time_s": 5.98,
+        "max_error_before_branch_m": 1.4978920221328735,
+        "corridor_intact_at_branch": false,
+        "max_error_after_branch_m": 1.5053144693374634,
+        "first_violation_s": 4.519999980926514,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "requested_route": "original_jump",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": true,
+      "arrival_s": 20.020000457763672,
+      "max_mapped_path_error_m": 1.5053144693374634,
+      "selection": null,
+      "selection_wall_s": 1.5835998055990785e-05,
+      "query_time_s": 5.98,
+      "application_time_s": 5.98,
+      "application_delay_sim_s": 0.0,
+      "asynchronous": false,
+      "available_routes_at_application": [
+        "original_jump",
+        "bypass"
+      ],
+      "requested_route_unavailable": false,
+      "world_xy_motion_during_query_m": 0.0,
+      "stored_samples_after_request_through_application": 0,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root003_worldFy+2N_original_jump/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root003_worldFy+2N_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root003_worldFy+2N_bypass.json",
+      "origin_id": "rb_connection_seed20261106_root003",
+      "status": "evaluated",
+      "method": null,
+      "disturbance_protocol": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "route_prefix": {
+        "decision_time_s": 5.98,
+        "max_error_before_branch_m": 1.4979511155269842,
+        "corridor_intact_at_branch": false,
+        "max_error_after_branch_m": 1.584996879228256,
+        "first_violation_s": 4.079999923706055,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "bypass",
+      "requested_route": "bypass",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": true,
+      "arrival_s": 17.559999465942383,
+      "max_mapped_path_error_m": 1.584996879228256,
+      "selection": null,
+      "selection_wall_s": 0.08817267500126036,
+      "query_time_s": 5.98,
+      "application_time_s": 5.98,
+      "application_delay_sim_s": 0.0,
+      "asynchronous": false,
+      "available_routes_at_application": [
+        "original_jump",
+        "bypass"
+      ],
+      "requested_route_unavailable": false,
+      "world_xy_motion_during_query_m": 0.0,
+      "stored_samples_after_request_through_application": 0,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root003_worldFy+2N_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root004_forced_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root004_forced_bypass.json",
+      "origin_id": "rb_connection_seed20261106_root004",
+      "status": "evaluated_no_route_decision",
+      "method": null,
+      "disturbance_protocol": null,
+      "route_prefix": {
+        "decision_time_s": null,
+        "max_error_before_branch_m": 1.0519350966729901,
+        "corridor_intact_at_branch": null,
+        "max_error_after_branch_m": null,
+        "first_violation_s": 3.440000057220459,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": false,
+      "arrival_s": null,
+      "max_mapped_path_error_m": 1.0519350966729901,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root004_forced_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root004_forced_original_jump_extended_reference",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root004_forced_original_jump_extended_reference.json",
+      "origin_id": "rb_connection_seed20261106_root004",
+      "status": "evaluated_no_route_decision",
+      "method": null,
+      "disturbance_protocol": null,
+      "route_prefix": {
+        "decision_time_s": null,
+        "max_error_before_branch_m": 1.0519350966729901,
+        "corridor_intact_at_branch": null,
+        "max_error_after_branch_m": null,
+        "first_violation_s": 3.440000057220459,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": false,
+      "arrival_s": null,
+      "max_mapped_path_error_m": 1.0519350966729901,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root004_forced_original_jump_extended_reference/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root004_worldFy-2N_original_jump",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root004_worldFy-2N_original_jump.json",
+      "origin_id": "rb_connection_seed20261106_root004",
+      "status": "evaluated_no_route_decision",
+      "method": null,
+      "disturbance_protocol": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "route_prefix": {
+        "decision_time_s": null,
+        "max_error_before_branch_m": 1.0519350966729901,
+        "corridor_intact_at_branch": null,
+        "max_error_after_branch_m": null,
+        "first_violation_s": 3.440000057220459,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": false,
+      "arrival_s": null,
+      "max_mapped_path_error_m": 1.0519350966729901,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root004_worldFy-2N_original_jump/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root004_worldFy-2N_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root004_worldFy-2N_bypass.json",
+      "origin_id": "rb_connection_seed20261106_root004",
+      "status": "evaluated_no_route_decision",
+      "method": null,
+      "disturbance_protocol": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "route_prefix": {
+        "decision_time_s": null,
+        "max_error_before_branch_m": 1.0519350966729901,
+        "corridor_intact_at_branch": null,
+        "max_error_after_branch_m": null,
+        "first_violation_s": 3.440000057220459,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": false,
+      "arrival_s": null,
+      "max_mapped_path_error_m": 1.0519350966729901,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root004_worldFy-2N_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root004_worldFy+2N_original_jump",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root004_worldFy+2N_original_jump.json",
+      "origin_id": "rb_connection_seed20261106_root004",
+      "status": "evaluated_no_route_decision",
+      "method": null,
+      "disturbance_protocol": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "route_prefix": {
+        "decision_time_s": null,
+        "max_error_before_branch_m": 1.0519350966729901,
+        "corridor_intact_at_branch": null,
+        "max_error_after_branch_m": null,
+        "first_violation_s": 3.440000057220459,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": false,
+      "arrival_s": null,
+      "max_mapped_path_error_m": 1.0519350966729901,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root004_worldFy+2N_original_jump/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root004_worldFy+2N_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root004_worldFy+2N_bypass.json",
+      "origin_id": "rb_connection_seed20261106_root004",
+      "status": "evaluated_no_route_decision",
+      "method": null,
+      "disturbance_protocol": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "route_prefix": {
+        "decision_time_s": null,
+        "max_error_before_branch_m": 1.0519350966729901,
+        "corridor_intact_at_branch": null,
+        "max_error_after_branch_m": null,
+        "first_violation_s": 3.440000057220459,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": false,
+      "arrival_s": null,
+      "max_mapped_path_error_m": 1.0519350966729901,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root004_worldFy+2N_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root005_forced_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root005_forced_bypass.json",
+      "origin_id": "rb_connection_seed20261106_root005",
+      "status": "evaluated_no_route_decision",
+      "method": null,
+      "disturbance_protocol": null,
+      "route_prefix": {
+        "decision_time_s": null,
+        "max_error_before_branch_m": 0.8898739291602608,
+        "corridor_intact_at_branch": null,
+        "max_error_after_branch_m": null,
+        "first_violation_s": null,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": false,
+      "arrival_s": null,
+      "max_mapped_path_error_m": 0.8898739291602608,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root005_forced_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root005_forced_original_jump_extended_reference",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root005_forced_original_jump_extended_reference.json",
+      "origin_id": "rb_connection_seed20261106_root005",
+      "status": "evaluated_no_route_decision",
+      "method": null,
+      "disturbance_protocol": null,
+      "route_prefix": {
+        "decision_time_s": null,
+        "max_error_before_branch_m": 0.8898739291602608,
+        "corridor_intact_at_branch": null,
+        "max_error_after_branch_m": null,
+        "first_violation_s": null,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": false,
+      "arrival_s": null,
+      "max_mapped_path_error_m": 0.8898739291602608,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root005_forced_original_jump_extended_reference/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root005_worldFy-2N_original_jump",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root005_worldFy-2N_original_jump.json",
+      "origin_id": "rb_connection_seed20261106_root005",
+      "status": "evaluated_no_route_decision",
+      "method": null,
+      "disturbance_protocol": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "route_prefix": {
+        "decision_time_s": null,
+        "max_error_before_branch_m": 0.8898739291602608,
+        "corridor_intact_at_branch": null,
+        "max_error_after_branch_m": null,
+        "first_violation_s": null,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": false,
+      "arrival_s": null,
+      "max_mapped_path_error_m": 0.8898739291602608,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root005_worldFy-2N_original_jump/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root005_worldFy-2N_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root005_worldFy-2N_bypass.json",
+      "origin_id": "rb_connection_seed20261106_root005",
+      "status": "evaluated_no_route_decision",
+      "method": null,
+      "disturbance_protocol": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "route_prefix": {
+        "decision_time_s": null,
+        "max_error_before_branch_m": 0.8898739291602608,
+        "corridor_intact_at_branch": null,
+        "max_error_after_branch_m": null,
+        "first_violation_s": null,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": false,
+      "arrival_s": null,
+      "max_mapped_path_error_m": 0.8898739291602608,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root005_worldFy-2N_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root005_worldFy+2N_original_jump",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root005_worldFy+2N_original_jump.json",
+      "origin_id": "rb_connection_seed20261106_root005",
+      "status": "evaluated_no_route_decision",
+      "method": null,
+      "disturbance_protocol": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "route_prefix": {
+        "decision_time_s": null,
+        "max_error_before_branch_m": 0.8898739291602608,
+        "corridor_intact_at_branch": null,
+        "max_error_after_branch_m": null,
+        "first_violation_s": null,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": false,
+      "arrival_s": null,
+      "max_mapped_path_error_m": 0.8898739291602608,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root005_worldFy+2N_original_jump/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root005_worldFy+2N_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root005_worldFy+2N_bypass.json",
+      "origin_id": "rb_connection_seed20261106_root005",
+      "status": "evaluated_no_route_decision",
+      "method": null,
+      "disturbance_protocol": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "route_prefix": {
+        "decision_time_s": null,
+        "max_error_before_branch_m": 0.8898739291602608,
+        "corridor_intact_at_branch": null,
+        "max_error_after_branch_m": null,
+        "first_violation_s": null,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": false,
+      "arrival_s": null,
+      "max_mapped_path_error_m": 0.8898739291602608,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root005_worldFy+2N_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root008_forced_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root008_forced_bypass.json",
+      "origin_id": "rb_connection_seed20261106_root008",
+      "status": "evaluated_no_route_decision",
+      "method": null,
+      "disturbance_protocol": null,
+      "route_prefix": {
+        "decision_time_s": null,
+        "max_error_before_branch_m": 0.2601757049560547,
+        "corridor_intact_at_branch": null,
+        "max_error_after_branch_m": null,
+        "first_violation_s": null,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": false,
+      "arrival_s": null,
+      "max_mapped_path_error_m": 0.2601757049560547,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root008_forced_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root008_forced_original_jump_extended_reference",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root008_forced_original_jump_extended_reference.json",
+      "origin_id": "rb_connection_seed20261106_root008",
+      "status": "evaluated_no_route_decision",
+      "method": null,
+      "disturbance_protocol": null,
+      "route_prefix": {
+        "decision_time_s": null,
+        "max_error_before_branch_m": 0.2601757049560547,
+        "corridor_intact_at_branch": null,
+        "max_error_after_branch_m": null,
+        "first_violation_s": null,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": false,
+      "arrival_s": null,
+      "max_mapped_path_error_m": 0.2601757049560547,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root008_forced_original_jump_extended_reference/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root008_worldFy-2N_original_jump",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root008_worldFy-2N_original_jump.json",
+      "origin_id": "rb_connection_seed20261106_root008",
+      "status": "evaluated_no_route_decision",
+      "method": null,
+      "disturbance_protocol": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "route_prefix": {
+        "decision_time_s": null,
+        "max_error_before_branch_m": 0.2601757049560547,
+        "corridor_intact_at_branch": null,
+        "max_error_after_branch_m": null,
+        "first_violation_s": null,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": false,
+      "arrival_s": null,
+      "max_mapped_path_error_m": 0.2601757049560547,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root008_worldFy-2N_original_jump/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root008_worldFy-2N_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root008_worldFy-2N_bypass.json",
+      "origin_id": "rb_connection_seed20261106_root008",
+      "status": "evaluated_no_route_decision",
+      "method": null,
+      "disturbance_protocol": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "route_prefix": {
+        "decision_time_s": null,
+        "max_error_before_branch_m": 0.2601757049560547,
+        "corridor_intact_at_branch": null,
+        "max_error_after_branch_m": null,
+        "first_violation_s": null,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": false,
+      "arrival_s": null,
+      "max_mapped_path_error_m": 0.2601757049560547,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root008_worldFy-2N_bypass/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root008_worldFy+2N_original_jump",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root008_worldFy+2N_original_jump.json",
+      "origin_id": "rb_connection_seed20261106_root008",
+      "status": "evaluated_no_route_decision",
+      "method": null,
+      "disturbance_protocol": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "route_prefix": {
+        "decision_time_s": null,
+        "max_error_before_branch_m": 0.2601757049560547,
+        "corridor_intact_at_branch": null,
+        "max_error_after_branch_m": null,
+        "first_violation_s": null,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": false,
+      "arrival_s": null,
+      "max_mapped_path_error_m": 0.2601757049560547,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root008_worldFy+2N_original_jump/chain_summary.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root008_worldFy+2N_bypass",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root008_worldFy+2N_bypass.json",
+      "origin_id": "rb_connection_seed20261106_root008",
+      "status": "evaluated_no_route_decision",
+      "method": null,
+      "disturbance_protocol": {
+        "kind": "external_force_N",
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "duration_s": 0.12,
+        "trigger_x_m": -2.5
+      },
+      "route_prefix": {
+        "decision_time_s": null,
+        "max_error_before_branch_m": 0.2601757049560547,
+        "corridor_intact_at_branch": null,
+        "max_error_after_branch_m": null,
+        "first_violation_s": null,
+        "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+      },
+      "executed_route": "original_jump",
+      "optional_platform_complete": false,
+      "mandatory_platform_complete": false,
+      "full_window": false,
+      "arrival_s": null,
+      "max_mapped_path_error_m": 0.2601757049560547,
+      "source_summary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_route_roots/rb_connection_seed20261106_root008_worldFy+2N_bypass/chain_summary.json"
+    }
+  ],
+  "paired_comparisons": [],
+  "paired_distinct_origins": 0,
+  "limits": "Wall query latency and simulated control advance are distinct. A zero simulated delay does not demonstrate pending-query motion. Mandatory platform success requires the platform skill; bypass is at most safe exit. Pending rows are not failures; actual XY is retained in each source run."
+}
