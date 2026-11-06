@@ -68,6 +68,11 @@ if s.get('contact_branching'):
     from sttw_control.contact_branching import ContactBranching
     branching=ContactBranching(env,s['contact_branching'],a.output,a.terrain)
     env.physics_recorder=branching
+if s.get('contact_torque_intervention'):
+    if env.physics_recorder is not None or intervention or planner is not None:
+        raise ValueError('Contact torque experiment requires its own solved-step hook and fixed route')
+    from sttw_control.contact_torque_intervention import ContactTorqueExperiment
+    env.physics_recorder=ContactTorqueExperiment(env,s['contact_torque_intervention'],a.output)
 fork_step=None
 for step in range(env.horizon):
     if branching is not None:branching.decision(step)

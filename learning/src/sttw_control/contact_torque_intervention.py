@@ -31,3 +31,60 @@ class DelayedContactTorque:
         self.requested_impulse+=request*dt
         self.plant.diagnostic_joint_torque[:,self.plant.signals.steer]=request.clamp(-self.limit,self.limit)
         return dict(requested_next_torque=request,submitted_previous_torque=previous)
+
+
+class ContactTorqueExperiment:
+    """GPU solved-step diagnostics and next-step intervention, compact chunk output."""
+    def __init__(self,env,config,output):
+        import json
+        from pathlib import Path
+        if not env.plant.track_contact_wrench:
+            raise ValueError('Torque intervention requires native contact wrench tracking')
+        self.channel=DelayedContactTorque(env.plant,config['modes'],config['limit_Nm'])
+        self.output=Path(output)/'contact_intervention';self.output.mkdir()
+        self.config=config;self.dt=env.physics_dt;self.total=0;self.used=0;self.chunks=[];self.buffers=None
+        self.chunk_steps=int(config.get('chunk_steps',250))
+        self.window=tuple(config['active_window_s'])
+        self.pulse=torch.tensor(config.get('pulse_Nm',[0.]*env.n),device=env.device)
+        if len(self.window)!=2 or not 0<=self.window[0]<self.window[1] or self.pulse.shape!=(env.n,):
+            raise ValueError('Declare increasing intervention window and one pulse amplitude per lane')
+        self.metadata=dict(config=config,physics_dt_s=self.dt,body_order=env.plant.bodies,
+            semantics='post-solve wrench k requests bounded external steering torque at k+1; unchanged motor limits',
+            impulse_scope='submitted generalized torque, not direct measurement of cancelled contact impulse',
+            clock='first sampled state at physics_dt; active window gates next-step application time')
+        (self.output/'protocol.json').write_text(json.dumps(self.metadata,indent=2))
+
+    def record(self,env,lower_tick,physics_tick):
+        from .contact_torque_geometry import front_contact_torques
+        samples=env.plant.read_wheel_contact_samples()
+        torques=front_contact_torques(samples,env.plant.bodies)
+        next_time=(self.total+1)*self.dt
+        active=self.window[0]<=next_time<self.window[1]
+        submitted=self.channel.after_solve(torques['negative_lateral'],torques['reference_delta'],self.pulse,env.alive&active)
+        values=dict(**torques,**submitted,alive_before=env.alive.clone(),alpha=env.alpha.clone(),
+            steer_velocity=samples['joint_velocity'][:,env.plant.signals.steer],
+            steer_position=samples['joint_position'][:,env.plant.signals.steer],
+            motor_steering_torque=samples['motor_torque'][:,env.plant.signals.steer])
+        if self.buffers is None:
+            self.buffers={k:torch.empty((self.chunk_steps,)+v.shape,device=v.device,dtype=v.dtype) for k,v in values.items()}
+        for key,value in values.items():self.buffers[key][self.used].copy_(value)
+        self.used+=1;self.total+=1
+        if self.used==self.chunk_steps:self.flush()
+
+    def flush(self):
+        import numpy as np
+        if not self.used:return
+        name=f'chunk_{len(self.chunks):05d}.npz'
+        arrays={k:v[:self.used].cpu().numpy() for k,v in self.buffers.items()}
+        arrays['time_s']=np.arange(self.total-self.used+1,self.total+1)*self.dt
+        np.savez_compressed(self.output/name,**arrays)
+        self.chunks.append(dict(file=name,first_step=self.total-self.used+1,last_step=self.total));self.used=0
+
+    def close(self):
+        import json
+        self.flush()
+        self.metadata.update(total_physics_steps=self.total,chunks=self.chunks,
+            requested_impulse_Nms=self.channel.requested_impulse.cpu().tolist(),
+            submitted_impulse_Nms=self.channel.submitted_impulse.cpu().tolist(),
+            submitted_absolute_impulse_Nms=self.channel.submitted_absolute_impulse.cpu().tolist())
+        (self.output/'index.json').write_text(json.dumps(self.metadata,indent=2)+'\n')
