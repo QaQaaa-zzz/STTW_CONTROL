@@ -85,7 +85,18 @@
         0,
         0,
         0
-      ]
+      ],
+      "push_interval_s": 1000000000,
+      "push_velocity_range": {
+        "x": [
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0
+        ]
+      }
     },
     "102": {
       "base_body": "chasis",
@@ -121,7 +132,18 @@
         0,
         0,
         0
-      ]
+      ],
+      "push_interval_s": 1000000000,
+      "push_velocity_range": {
+        "x": [
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0
+        ]
+      }
     },
     "103": {
       "base_body": "chasis",
@@ -157,7 +179,18 @@
         0,
         0,
         0
-      ]
+      ],
+      "push_interval_s": 1000000000,
+      "push_velocity_range": {
+        "x": [
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0
+        ]
+      }
     },
     "104": {
       "base_body": "chasis",
@@ -193,7 +226,18 @@
         0,
         0,
         0
-      ]
+      ],
+      "push_interval_s": 1000000000,
+      "push_velocity_range": {
+        "x": [
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0
+        ]
+      }
     },
     "105": {
       "base_body": "chasis",
@@ -229,7 +273,18 @@
         0,
         0,
         0
-      ]
+      ],
+      "push_interval_s": 1000000000,
+      "push_velocity_range": {
+        "x": [
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0
+        ]
+      }
     }
   }
 }

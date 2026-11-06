@@ -23,6 +23,7 @@ if a.after_pid:
 env=dict(os.environ,PYTHONPATH=str(Path('learning/src').resolve()),JAX_PLATFORMS='cpu')
 lab='/home/qy/miniconda3/envs/env_isaaclab/bin/python';analysis='/home/qy/miniconda3/envs/mjp/bin/python'
 status=dict(stage='evaluation',pid=os.getpid(),completed_conditions=0,physics_lane_steps=0,started=time.time(),bundle=str(bundle));index=[]
+(a.output/'status.json').write_text(json.dumps(status,indent=2))
 for seed in spec.get('seeds',[None]):
     for speed,terrain in product(spec['user_speed_m_s'],spec['terrain_overrides']):
         name=terrain['name'];case=a.output/(name+'_v'+str(speed).replace('.','p')+('' if seed is None else '_seed'+str(seed)))
