@@ -72,3 +72,21 @@ base.update(candidates=[f'v{v}_a{alpha}' for v in (1.8,2.) for alpha in (0.,.5,1
 (a.output/'kernel_records.jsonl').write_text(''.join(json.dumps(r)+'\n' for r in kernel))
 (a.output/'kernel_config.json').write_text(json.dumps(base,indent=2)+'\n')
 (a.output/'kernel_coverage.json').write_text(json.dumps(dict(groups=groups,full_records='records.jsonl',excluded_from_kernel_not_from_task_denominator=True),indent=2)+'\n')
+
+# The same grouped evaluator can query actual reached midpoints, excluding the
+# entire upstream origin rather than leaking its other first-action branches.
+mid_kernel=[]
+for row in midpoint_rows:
+    if not row['supervised_input_complete'] or (row['decision_prefix'] or {}).get('corridor_intact_at_decision') is not True:
+        continue
+    skill=json.dumps(dict(policies=row['policy_sha256'],model=row['model_contract_sha256'],zero_lower=row['zero_lower'],dt=row['physics_dt']),sort_keys=True)
+    decision_id=json.dumps(dict(origin=row['origin_id'],map=row['map_sha256'],parent=row['parent_candidate'],disturbance=row['disturbance_protocol']),sort_keys=True)
+    candidate=row['candidate']
+    mid_kernel.append(dict(origin_id=row['origin_id'],decision_id=decision_id,
+        task_id='midpoint',skill_id=skill,candidate_id=f"v{candidate['speed_m_s']}_a{candidate['alpha']}",
+        state=row['state'],complete=row['Y'],success_cost=row['T_after_decision_s'],source_case_id=row['case_id']))
+mid_config=json.loads(Path('learning/configs/jump_connection_capability_dev.json').read_text())
+mid_config['candidates']=[f"v{c['speed_m_s']}_a{c['alpha']}" for c in mid_config['candidates']]
+mid_config['role']='Actual reached midpoint Q_hold; whole-origin held-out pilot DEV, no fitted model or independent TEST'
+(a.output/'midpoint_kernel_records.jsonl').write_text(''.join(json.dumps(r)+'\n' for r in mid_kernel))
+(a.output/'midpoint_kernel_config.json').write_text(json.dumps(mid_config,indent=2)+'\n')
