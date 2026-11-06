@@ -1,0 +1,413 @@
+{
+  "role": "Six new parametric DEV roots; all descendants grouped by origin; not independent TEST",
+  "interpretation": "Descriptive DEV coverage and hindsight oracle upper bounds; not learned or deployed selection. Distances share upstream roots. Incomplete groups remain pending, not failures.",
+  "declared_origins": 6,
+  "declared_tasks": 18,
+  "complete_matched_tasks": 2,
+  "anchor": {
+    "speed": 2.0,
+    "alpha": 0.5
+  },
+  "scores": {
+    "fixed_v1.8_a0.0": {
+      "successes": 0,
+      "evaluated_tasks": 2,
+      "success_conditional_mean_T_s": null,
+      "per_root": {
+        "rb_upstream_offset_01": {
+          "successes": 0,
+          "evaluated_tasks": 2
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 0,
+        "mean_time_saved_s": null,
+        "gained_success_tasks": 0,
+        "lost_success_tasks": 1
+      }
+    },
+    "fixed_v1.8_a0.5": {
+      "successes": 1,
+      "evaluated_tasks": 2,
+      "success_conditional_mean_T_s": 15.100000381469727,
+      "per_root": {
+        "rb_upstream_offset_01": {
+          "successes": 1,
+          "evaluated_tasks": 2
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 1,
+        "mean_time_saved_s": -0.20000076293945312,
+        "gained_success_tasks": 0,
+        "lost_success_tasks": 0
+      }
+    },
+    "fixed_v1.8_a1.0": {
+      "successes": 0,
+      "evaluated_tasks": 2,
+      "success_conditional_mean_T_s": null,
+      "per_root": {
+        "rb_upstream_offset_01": {
+          "successes": 0,
+          "evaluated_tasks": 2
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 0,
+        "mean_time_saved_s": null,
+        "gained_success_tasks": 0,
+        "lost_success_tasks": 1
+      }
+    },
+    "fixed_v2.0_a0.0": {
+      "successes": 2,
+      "evaluated_tasks": 2,
+      "success_conditional_mean_T_s": 14.900000095367432,
+      "per_root": {
+        "rb_upstream_offset_01": {
+          "successes": 2,
+          "evaluated_tasks": 2
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 1,
+        "mean_time_saved_s": -1.2000007629394531,
+        "gained_success_tasks": 1,
+        "lost_success_tasks": 0
+      }
+    },
+    "fixed_v2.0_a0.5": {
+      "successes": 1,
+      "evaluated_tasks": 2,
+      "success_conditional_mean_T_s": 14.899999618530273,
+      "per_root": {
+        "rb_upstream_offset_01": {
+          "successes": 1,
+          "evaluated_tasks": 2
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 1,
+        "mean_time_saved_s": 0.0,
+        "gained_success_tasks": 0,
+        "lost_success_tasks": 0
+      }
+    },
+    "fixed_v2.0_a1.0": {
+      "successes": 0,
+      "evaluated_tasks": 2,
+      "success_conditional_mean_T_s": null,
+      "per_root": {
+        "rb_upstream_offset_01": {
+          "successes": 0,
+          "evaluated_tasks": 2
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 0,
+        "mean_time_saved_s": null,
+        "gained_success_tasks": 0,
+        "lost_success_tasks": 1
+      }
+    },
+    "speed_only_oracle": {
+      "successes": 1,
+      "evaluated_tasks": 2,
+      "success_conditional_mean_T_s": 14.899999618530273,
+      "per_root": {
+        "rb_upstream_offset_01": {
+          "successes": 1,
+          "evaluated_tasks": 2
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 1,
+        "mean_time_saved_s": 0.0,
+        "gained_success_tasks": 0,
+        "lost_success_tasks": 0
+      }
+    },
+    "alpha_only_oracle": {
+      "successes": 2,
+      "evaluated_tasks": 2,
+      "success_conditional_mean_T_s": 14.299999713897705,
+      "per_root": {
+        "rb_upstream_offset_01": {
+          "successes": 2,
+          "evaluated_tasks": 2
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 1,
+        "mean_time_saved_s": 0.0,
+        "gained_success_tasks": 1,
+        "lost_success_tasks": 0
+      }
+    },
+    "joint_oracle": {
+      "successes": 2,
+      "evaluated_tasks": 2,
+      "success_conditional_mean_T_s": 14.299999713897705,
+      "per_root": {
+        "rb_upstream_offset_01": {
+          "successes": 2,
+          "evaluated_tasks": 2
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 1,
+        "mean_time_saved_s": 0.0,
+        "gained_success_tasks": 1,
+        "lost_success_tasks": 0
+      }
+    }
+  },
+  "groups": [
+    {
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "declared_candidates": 6,
+      "evaluated_candidates": 6,
+      "matched_group_complete": true,
+      "selected": {
+        "fixed_v1.8_a0.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v1.8_a0.5": {
+          "Y": 1,
+          "T_s": 15.100000381469727,
+          "case_id": "rb_upstream_offset_01_L9.6_v1.8_a0.5"
+        },
+        "fixed_v1.8_a1.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a0.0": {
+          "Y": 1,
+          "T_s": 16.100000381469727,
+          "case_id": "rb_upstream_offset_01_L9.6_v2.0_a0.0"
+        },
+        "fixed_v2.0_a0.5": {
+          "Y": 1,
+          "T_s": 14.899999618530273,
+          "case_id": "rb_upstream_offset_01_L9.6_v2.0_a0.5"
+        },
+        "fixed_v2.0_a1.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "speed_only_oracle": {
+          "Y": 1,
+          "T_s": 14.899999618530273,
+          "case_id": "rb_upstream_offset_01_L9.6_v2.0_a0.5"
+        },
+        "alpha_only_oracle": {
+          "Y": 1,
+          "T_s": 14.899999618530273,
+          "case_id": "rb_upstream_offset_01_L9.6_v2.0_a0.5"
+        },
+        "joint_oracle": {
+          "Y": 1,
+          "T_s": 14.899999618530273,
+          "case_id": "rb_upstream_offset_01_L9.6_v2.0_a0.5"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 5.6,
+      "declared_candidates": 6,
+      "evaluated_candidates": 6,
+      "matched_group_complete": true,
+      "selected": {
+        "fixed_v1.8_a0.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v1.8_a0.5": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v1.8_a1.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a0.0": {
+          "Y": 1,
+          "T_s": 13.699999809265137,
+          "case_id": "rb_upstream_offset_01_L5.6_v2.0_a0.0"
+        },
+        "fixed_v2.0_a0.5": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a1.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "speed_only_oracle": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "alpha_only_oracle": {
+          "Y": 1,
+          "T_s": 13.699999809265137,
+          "case_id": "rb_upstream_offset_01_L5.6_v2.0_a0.0"
+        },
+        "joint_oracle": {
+          "Y": 1,
+          "T_s": 13.699999809265137,
+          "case_id": "rb_upstream_offset_01_L5.6_v2.0_a0.0"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 7.6,
+      "declared_candidates": 6,
+      "evaluated_candidates": 5,
+      "matched_group_complete": false,
+      "selected": {}
+    },
+    {
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 9.6,
+      "declared_candidates": 6,
+      "evaluated_candidates": 0,
+      "matched_group_complete": false,
+      "selected": {}
+    },
+    {
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 5.6,
+      "declared_candidates": 6,
+      "evaluated_candidates": 0,
+      "matched_group_complete": false,
+      "selected": {}
+    },
+    {
+      "origin_id": "rb_upstream_offset_02",
+      "distance_m": 7.6,
+      "declared_candidates": 6,
+      "evaluated_candidates": 0,
+      "matched_group_complete": false,
+      "selected": {}
+    },
+    {
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 9.6,
+      "declared_candidates": 6,
+      "evaluated_candidates": 0,
+      "matched_group_complete": false,
+      "selected": {}
+    },
+    {
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 5.6,
+      "declared_candidates": 6,
+      "evaluated_candidates": 0,
+      "matched_group_complete": false,
+      "selected": {}
+    },
+    {
+      "origin_id": "rb_upstream_offset_03",
+      "distance_m": 7.6,
+      "declared_candidates": 6,
+      "evaluated_candidates": 0,
+      "matched_group_complete": false,
+      "selected": {}
+    },
+    {
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 9.6,
+      "declared_candidates": 6,
+      "evaluated_candidates": 0,
+      "matched_group_complete": false,
+      "selected": {}
+    },
+    {
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 5.6,
+      "declared_candidates": 6,
+      "evaluated_candidates": 0,
+      "matched_group_complete": false,
+      "selected": {}
+    },
+    {
+      "origin_id": "rb_upstream_offset_04",
+      "distance_m": 7.6,
+      "declared_candidates": 6,
+      "evaluated_candidates": 0,
+      "matched_group_complete": false,
+      "selected": {}
+    },
+    {
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 9.6,
+      "declared_candidates": 6,
+      "evaluated_candidates": 0,
+      "matched_group_complete": false,
+      "selected": {}
+    },
+    {
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 5.6,
+      "declared_candidates": 6,
+      "evaluated_candidates": 0,
+      "matched_group_complete": false,
+      "selected": {}
+    },
+    {
+      "origin_id": "rb_upstream_offset_05",
+      "distance_m": 7.6,
+      "declared_candidates": 6,
+      "evaluated_candidates": 0,
+      "matched_group_complete": false,
+      "selected": {}
+    },
+    {
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 9.6,
+      "declared_candidates": 6,
+      "evaluated_candidates": 0,
+      "matched_group_complete": false,
+      "selected": {}
+    },
+    {
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 5.6,
+      "declared_candidates": 6,
+      "evaluated_candidates": 0,
+      "matched_group_complete": false,
+      "selected": {}
+    },
+    {
+      "origin_id": "rb_upstream_offset_06",
+      "distance_m": 7.6,
+      "declared_candidates": 6,
+      "evaluated_candidates": 0,
+      "matched_group_complete": false,
+      "selected": {}
+    }
+  ]
+}

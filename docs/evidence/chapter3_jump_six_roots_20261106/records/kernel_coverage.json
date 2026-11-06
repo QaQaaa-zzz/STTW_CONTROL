@@ -1,0 +1,27 @@
+{
+  "groups": [
+    {
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 9.6,
+      "executed_rows": 6,
+      "kernel_ready": true,
+      "reason": "complete_decision_group"
+    },
+    {
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 5.6,
+      "executed_rows": 6,
+      "kernel_ready": true,
+      "reason": "complete_decision_group"
+    },
+    {
+      "origin_id": "rb_upstream_offset_01",
+      "distance_m": 7.6,
+      "executed_rows": 5,
+      "kernel_ready": false,
+      "reason": "upstream_failure_or_incomplete_group"
+    }
+  ],
+  "full_records": "records.jsonl",
+  "excluded_from_kernel_not_from_task_denominator": true
+}

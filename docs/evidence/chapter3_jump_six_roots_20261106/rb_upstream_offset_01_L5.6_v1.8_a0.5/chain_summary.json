@@ -1,0 +1,117 @@
+{
+  "stages": {
+    "reached_release_line": true,
+    "airborne_after_handoff": true,
+    "strict_support": true,
+    "ground_return": true,
+    "continued": true
+  },
+  "stage_times": {
+    "release": 7.4,
+    "strict_support": 9.819999694824219,
+    "ground_return": 10.5,
+    "final_conditions": 14.0
+  },
+  "role": "Single nominal DEV, no robustness claim",
+  "complete": false,
+  "success_time_s": null,
+  "first_final_conditions_time_s": 14.0,
+  "checks": {
+    "full_window": true,
+    "ordered_approach": true,
+    "original_path_corridor": false,
+    "stable_landing": true,
+    "ground_return": true,
+    "continued_time": true,
+    "continued_forward": true,
+    "final_goal": true
+  },
+  "criteria": {
+    "corridor_half_width_m": 1.0,
+    "waypoints": [
+      [
+        -4.0,
+        -8.0
+      ],
+      [
+        -4.0,
+        -4.8
+      ],
+      [
+        -4.0,
+        -2
+      ],
+      [
+        -2.0,
+        0
+      ],
+      [
+        2.0,
+        0
+      ]
+    ],
+    "waypoint_radius_m": 1.0,
+    "minimum_post_handoff_s": 2.0,
+    "minimum_post_handoff_forward_m": 2.0,
+    "final_goal_xy": [
+      10.6,
+      0.0
+    ]
+  },
+  "passed_waypoints": [
+    {
+      "point": [
+        -4.0,
+        -8.0
+      ],
+      "time_s": 0.019999999552965164
+    },
+    {
+      "point": [
+        -4.0,
+        -4.8
+      ],
+      "time_s": 1.5399999618530273
+    },
+    {
+      "point": [
+        -4.0,
+        -2
+      ],
+      "time_s": 2.940000057220459
+    },
+    {
+      "point": [
+        -2.0,
+        0
+      ],
+      "time_s": 4.679999828338623
+    },
+    {
+      "point": [
+        2.0,
+        0
+      ],
+      "time_s": 6.860000133514404
+    }
+  ],
+  "max_original_path_error_m": 1.9319865703582764,
+  "path_rmse_m": 0.6150631637087017,
+  "post_handoff_s": 11.5,
+  "post_handoff_forward_m": 17.18899917602539,
+  "landing": {
+    "skill": "update2",
+    "first_strict_support_completion_s": 9.819999694824219,
+    "airborne_after_handoff": true,
+    "first_airborne_interval_s": [
+      8.020000457763672,
+      8.545000076293945
+    ],
+    "landing_hold_1s": true,
+    "longest_hold_s": 1.0,
+    "interval_s": [
+      8.819999694824219,
+      9.819999694824219
+    ]
+  }
+}
