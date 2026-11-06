@@ -1,0 +1,32 @@
+{
+  "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/panel/update0/source/nominal_v2.0",
+  "plant_config": "runs/rb_h75_ecbc_ground/left90_R2/config.json",
+  "model_config": "learning/configs/rb_sttw_platform.json",
+  "initial_state": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/panel/nominal_v2.0.npz",
+  "geometry": "runs/rb_sttw_platform/jump_input/geometry.json",
+  "bundles": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/bundles",
+  "skills": [
+    "source"
+  ],
+  "start_x": 1.5,
+  "approach_speed": 2.0,
+  "seconds": 8.0,
+  "handoff_x": 1.5,
+  "physics_dt": 0.0025,
+  "gpu_pair_capacities": [
+    1048576,
+    1048576,
+    1048576
+  ],
+  "zero_initial_history": true,
+  "root_acceleration_difference": true,
+  "jump_steering_gains": [
+    2.5,
+    0.4
+  ],
+  "optimizer_updates": 0,
+  "maximum_physics_lane_steps": 3200,
+  "role": "Nominal-start capability retention DEV in Isaac; not original MuJoCo donor benchmark",
+  "scene_terrain": "runs/rb_isaac150/terrain",
+  "record_body_states": true
+}

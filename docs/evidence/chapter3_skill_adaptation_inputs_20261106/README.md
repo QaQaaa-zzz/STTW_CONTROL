@@ -6,7 +6,7 @@
 
 真实入口库18条来自一个名义上游根、三距离六接近；不能称18独立根。保存交权root/关节位置速度、原76维历史观测和上一动作，仅平移世界x使台沿与训练模板3.6m一致，姿态与速度不改。不是完整隐藏PhysX快照，未连接训练环境。
 
-计划各25更新、每5轮配对评价，4096×24采样，累计4915200策略转移/39321600物理lane步；积分2.5ms、策略20ms，原架构/映射与Go2随机化保持。原能力与接近入口面板、入口库reset接线尚缺，预算不含尚未冻结的评价；当前状态明确prepared_not_training_ready，不可直接启动。没有新增训练，不自动延长。
+计划各25更新、每5轮配对评价，4096×24采样，累计4915200策略转移/39321600物理lane步；积分2.5ms、策略20ms，原架构/映射与Go2随机化保持。入口库reset及冻结9工况面板已准备，尚缺分阶段评价编排与资源分配；当前状态明确prepared_not_training_ready，不可直接启动。没有新增训练，不自动延长。
 
 ### Optional reset integration
 
@@ -28,3 +28,19 @@ recorded history retained, episode counters cleared. These are wiring checks,
 not physical validation. No optimizer update or extra GPU simulation was run.
 The frozen retention/entry evaluation panel and its budget remain to be connected
 before launching the two 25-update adaptations.
+
+### Frozen DEV panel and physical configuration correction
+
+`panel/panel_plan.json` freezes update0/5/10/15/20/25, per policy three
+nominal-start speed conditions (1.8/2.0/2.2m/s,8s) and six full-chain conditions
+(three distances,2m/s,alpha0/1,22s). Both policies together: at most108
+evaluation rollouts/748800physics lane steps. Nominal retention is relative
+to each original policy in this same Isaac domain, not the donor MuJoCo
+benchmark or its full recovery distribution. Hard cases are seen DEV.
+
+The historical training template still selected sectors/convexHull wheels;
+prepared configs now inherit the actual current evaluation asset and cylinder
+profile (radius.07m,width.05m,21slices). GPU replicated training layout and Go2
+randomization remain. No physics was run with the mismatched template.
+The runner reuses landing analysis and XY plotting for nominal jump-only cases.
+Staged evaluation/selection orchestration remains unconnected; no PPO launched.

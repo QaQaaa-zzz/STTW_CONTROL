@@ -24,10 +24,11 @@
   },
   "preserved": "Original76/106-256-256-256-8/1 SiLU, actuator mapping, Go2 domain randomization and delay/noise; old policy artifacts immutable",
   "missing_before_launch": [
-    "Connect reachable state/history reset bank to PhaseUEnv; current reset still nominal/RSI only",
-    "Declare fixed original-capability and reached-entry evaluation panel; include update0 and each5 updates",
-    "Resolve allocation after current collection stages; no concurrent4096-env training"
+    "Connect staged evaluation orchestration and selection; panel/configs are prepared",
+    "Resolve GPU allocation after current collection; no concurrent4096-env training"
   ],
   "selection": "Best qualified evaluated candidate, with original-capability retention; not last or sampled reward alone",
-  "no_automatic_extension": true
+  "no_automatic_extension": true,
+  "evaluation_panel": "panel/panel_plan.json",
+  "training_plant": "Current evaluation isaac_asset vehicle, cylinder wheel_collision, width0.05m,21profile slices; replaces historical sectors asset/convexHull training template"
 }

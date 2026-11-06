@@ -1,0 +1,27 @@
+{
+  "status": "prepared_pending_evaluation_orchestration_and_gpu_allocation",
+  "training_configs": [
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/panel/source_training.json",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/panel/rb_run1_candidate_training.json"
+  ],
+  "panels": [
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/panel/source_panel.json",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/panel/rb_run1_candidate_panel.json"
+  ],
+  "evaluated_updates": [
+    0,
+    5,
+    10,
+    15,
+    20,
+    25
+  ],
+  "training_transitions": 4915200,
+  "training_physics_lane_steps": 39321600,
+  "evaluation_rollouts": 108,
+  "evaluation_max_physics_lane_steps": 748800.0,
+  "comparison": "Each original policy versus its own adapted checkpoints. Source and RB identical budgets; update2 is separate engineering reference.",
+  "retention": "Three fixed nominal starts at vx1.8/2.0/2.2. Full-window survival and strict support >=1s reported separately; no loss of any update0 successful nominal case.",
+  "selection": "Among retention-qualified candidates maximize complete hard-chain successes; then minimize mean completion time on shared successful cases; ties keep earlier update. If no improvement retain original.",
+  "limits": "Nine-case seen DEV panel only; no claim of preserving the original donor recovery distribution or independent generalization. Final adopted candidates still require wider paired full-chain evaluation. No automatic extension."
+}

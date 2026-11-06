@@ -21,11 +21,13 @@ for case in m['cases'][a.start:a.start+a.count]:
  outputs=[Path(r['output']) for r in json.loads((out/'batch_results.json').read_text())['cases']] if spec.get('batch_candidates') else [out]
  summaries=[]
  for result_out in outputs:
-  for script in ['analyze_isaac_pendulum_landing.py','analyze_rb_continuous_task.py','plot_isaac_pendulum_jump.py']:
+  scripts=['analyze_isaac_pendulum_landing.py','plot_isaac_pendulum_jump.py'] if case.get('analysis_kind')=='jump_only' else ['analyze_isaac_pendulum_landing.py','analyze_rb_continuous_task.py','plot_isaac_pendulum_jump.py']
+  for script in scripts:
    analysis=subprocess.run([m['analysis_python'],'learning/cli/'+script,'--run',str(result_out)])
    if analysis.returncode:
     (root/'status.json').write_text(json.dumps(dict(status='failed',stage='analysis',script=script,case_id=case['case_id'],returncode=analysis.returncode)))
     sys.exit(analysis.returncode)
-  summaries.append(json.loads((result_out/'chain_summary.json').read_text()))
+  summary_file='landing.json' if case.get('analysis_kind')=='jump_only' else 'chain_summary.json'
+  summaries.append(json.loads((result_out/summary_file).read_text()))
  (root/(case['case_id']+'_summary.json')).write_text(json.dumps(dict(cases=summaries) if spec.get('batch_candidates') else summaries[0],indent=2)+'\n')
 (root/'status.json').write_text(json.dumps(dict(status='completed_slice',start=a.start,count=a.count,finished_unix=time.time())))

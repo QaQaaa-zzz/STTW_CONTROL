@@ -1,0 +1,69 @@
+{
+  "simulation_python": "/home/qy/miniconda3/envs/env_isaaclab/bin/python",
+  "analysis_python": "/home/qy/miniconda3/envs/mjp/bin/python",
+  "cases": [
+    {
+      "case_id": "nominal_v1.8",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/panel/source_nominal_v1.8.json",
+      "analysis_kind": "jump_only",
+      "seconds": 8.0,
+      "retention": true
+    },
+    {
+      "case_id": "nominal_v2.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/panel/source_nominal_v2.0.json",
+      "analysis_kind": "jump_only",
+      "seconds": 8.0,
+      "retention": true
+    },
+    {
+      "case_id": "nominal_v2.2",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/panel/source_nominal_v2.2.json",
+      "analysis_kind": "jump_only",
+      "seconds": 8.0,
+      "retention": true
+    },
+    {
+      "case_id": "L9.6_v2.0_a0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/panel/source_L9.6_v2.0_a0.0.json",
+      "analysis_kind": "continuous",
+      "seconds": 22.0,
+      "retention": false
+    },
+    {
+      "case_id": "L9.6_v2.0_a1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/panel/source_L9.6_v2.0_a1.0.json",
+      "analysis_kind": "continuous",
+      "seconds": 22.0,
+      "retention": false
+    },
+    {
+      "case_id": "L5.6_v2.0_a0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/panel/source_L5.6_v2.0_a0.0.json",
+      "analysis_kind": "continuous",
+      "seconds": 22.0,
+      "retention": false
+    },
+    {
+      "case_id": "L5.6_v2.0_a1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/panel/source_L5.6_v2.0_a1.0.json",
+      "analysis_kind": "continuous",
+      "seconds": 22.0,
+      "retention": false
+    },
+    {
+      "case_id": "L7.6_v2.0_a0.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/panel/source_L7.6_v2.0_a0.0.json",
+      "analysis_kind": "continuous",
+      "seconds": 22.0,
+      "retention": false
+    },
+    {
+      "case_id": "L7.6_v2.0_a1.0",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/panel/source_L7.6_v2.0_a1.0.json",
+      "analysis_kind": "continuous",
+      "seconds": 22.0,
+      "retention": false
+    }
+  ]
+}

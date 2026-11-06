@@ -1,0 +1,52 @@
+{
+  "task_spec": "learning/configs/isaac_phase_u_task_traversal.json",
+  "device": "cuda:0",
+  "num_envs": 4096,
+  "updates": 25,
+  "save_interval": 5,
+  "asset": "runs/rb_sttw_platform/isaac_asset/vehicle.urdf",
+  "asset_spec": "learning/configs/rb_sttw_platform.json",
+  "geometry": "runs/rb_sttw_platform/jump_input/geometry.json",
+  "bundle": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/bundles/rb_run1_candidate",
+  "plant_options": {
+    "physics_dt": 0.0025,
+    "wheel_radius_m": 0.07,
+    "gpu_pair_capacities": [
+      4194304,
+      4194304,
+      16777216
+    ],
+    "servo_mode": "hybrid",
+    "compliant_wheels": null,
+    "wheel_collision": "cylinder",
+    "hull_vertices": 64,
+    "robot_contact_offset": 0.001,
+    "mesh_collision_on_geometry": true,
+    "solver_position_iterations": 16,
+    "solver_velocity_iterations": 4,
+    "wheel_width_m": 0.05,
+    "wheel_profile_slices": 21,
+    "pendulum_rest": [
+      -1.2,
+      2.499999
+    ],
+    "pendulum_locked": false,
+    "env_spacing": 20.0,
+    "terrain_layout": "replicated"
+  },
+  "go2_checkout": "/home/qy/projects/My_unitree_go2_gym",
+  "seed": 28,
+  "status": "Prepared symmetric25 adaptation; not launched",
+  "reset_note": "50% recorded reachable entry, 42% original nominal, 8% original airborne RSI",
+  "optimizer_initialization": "Own original actor/critic/normalizer; fresh Adam",
+  "jump_steering_gains": [
+    2.5,
+    0.4
+  ],
+  "root_acceleration_difference": true,
+  "ppo_overrides": {
+    "learning_rate": 1e-05
+  },
+  "reachable_entry_bank": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/reachable_entries/entries.npz",
+  "reachable_entry_probability": 0.5
+}
