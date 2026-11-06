@@ -1,0 +1,339 @@
+{
+  "role": "single-root diagnostic DEV; no new training",
+  "interpretation": "Descriptive DEV coverage and hindsight oracle upper bounds; not learned or deployed selection. Distances share upstream roots. Incomplete groups remain pending, not failures.",
+  "declared_origins": 1,
+  "declared_tasks": 3,
+  "complete_matched_tasks": 3,
+  "anchor": {
+    "speed": 2.0,
+    "alpha": 0.5
+  },
+  "scores": {
+    "fixed_v1.8_a0.0": {
+      "successes": 2,
+      "evaluated_tasks": 3,
+      "success_conditional_mean_T_s": 15.15999984741211,
+      "per_root": {
+        "rb_nominal_upstream_01": {
+          "successes": 2,
+          "evaluated_tasks": 3
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 1,
+        "mean_time_saved_s": 0.9200010299682617,
+        "gained_success_tasks": 1,
+        "lost_success_tasks": 0
+      }
+    },
+    "fixed_v1.8_a0.5": {
+      "successes": 2,
+      "evaluated_tasks": 3,
+      "success_conditional_mean_T_s": 14.769999980926514,
+      "per_root": {
+        "rb_nominal_upstream_01": {
+          "successes": 2,
+          "evaluated_tasks": 3
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 1,
+        "mean_time_saved_s": 1.080000877380371,
+        "gained_success_tasks": 1,
+        "lost_success_tasks": 0
+      }
+    },
+    "fixed_v1.8_a1.0": {
+      "successes": 0,
+      "evaluated_tasks": 3,
+      "success_conditional_mean_T_s": null,
+      "per_root": {
+        "rb_nominal_upstream_01": {
+          "successes": 0,
+          "evaluated_tasks": 3
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 0,
+        "mean_time_saved_s": null,
+        "gained_success_tasks": 0,
+        "lost_success_tasks": 1
+      }
+    },
+    "fixed_v2.0_a0.0": {
+      "successes": 1,
+      "evaluated_tasks": 3,
+      "success_conditional_mean_T_s": 14.0,
+      "per_root": {
+        "rb_nominal_upstream_01": {
+          "successes": 1,
+          "evaluated_tasks": 3
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 0,
+        "mean_time_saved_s": null,
+        "gained_success_tasks": 1,
+        "lost_success_tasks": 1
+      }
+    },
+    "fixed_v2.0_a0.5": {
+      "successes": 1,
+      "evaluated_tasks": 3,
+      "success_conditional_mean_T_s": 16.360000610351562,
+      "per_root": {
+        "rb_nominal_upstream_01": {
+          "successes": 1,
+          "evaluated_tasks": 3
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 1,
+        "mean_time_saved_s": 0.0,
+        "gained_success_tasks": 0,
+        "lost_success_tasks": 0
+      }
+    },
+    "fixed_v2.0_a1.0": {
+      "successes": 1,
+      "evaluated_tasks": 3,
+      "success_conditional_mean_T_s": 14.880000114440918,
+      "per_root": {
+        "rb_nominal_upstream_01": {
+          "successes": 1,
+          "evaluated_tasks": 3
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 1,
+        "mean_time_saved_s": 1.4800004959106445,
+        "gained_success_tasks": 0,
+        "lost_success_tasks": 0
+      }
+    },
+    "speed_only_oracle": {
+      "successes": 2,
+      "evaluated_tasks": 3,
+      "success_conditional_mean_T_s": 14.769999980926514,
+      "per_root": {
+        "rb_nominal_upstream_01": {
+          "successes": 2,
+          "evaluated_tasks": 3
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 1,
+        "mean_time_saved_s": 1.080000877380371,
+        "gained_success_tasks": 1,
+        "lost_success_tasks": 0
+      }
+    },
+    "alpha_only_oracle": {
+      "successes": 2,
+      "evaluated_tasks": 3,
+      "success_conditional_mean_T_s": 14.440000057220459,
+      "per_root": {
+        "rb_nominal_upstream_01": {
+          "successes": 2,
+          "evaluated_tasks": 3
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 1,
+        "mean_time_saved_s": 1.4800004959106445,
+        "gained_success_tasks": 1,
+        "lost_success_tasks": 0
+      }
+    },
+    "joint_oracle": {
+      "successes": 2,
+      "evaluated_tasks": 3,
+      "success_conditional_mean_T_s": 14.440000057220459,
+      "per_root": {
+        "rb_nominal_upstream_01": {
+          "successes": 2,
+          "evaluated_tasks": 3
+        }
+      },
+      "paired_with_anchor": {
+        "anchor": "fixed_v2.0_a0.5",
+        "common_success_tasks": 1,
+        "mean_time_saved_s": 1.4800004959106445,
+        "gained_success_tasks": 1,
+        "lost_success_tasks": 0
+      }
+    }
+  },
+  "groups": [
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 9.6,
+      "declared_candidates": 6,
+      "evaluated_candidates": 6,
+      "matched_group_complete": true,
+      "selected": {
+        "fixed_v1.8_a0.0": {
+          "Y": 1,
+          "T_s": 15.4399995803833,
+          "case_id": "L9.6_v1.8_a0.0"
+        },
+        "fixed_v1.8_a0.5": {
+          "Y": 1,
+          "T_s": 15.279999732971191,
+          "case_id": "L9.6_v1.8_a0.5"
+        },
+        "fixed_v1.8_a1.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a0.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a0.5": {
+          "Y": 1,
+          "T_s": 16.360000610351562,
+          "case_id": "L9.6_v2.0_a0.5"
+        },
+        "fixed_v2.0_a1.0": {
+          "Y": 1,
+          "T_s": 14.880000114440918,
+          "case_id": "L9.6_v2.0_a1.0"
+        },
+        "speed_only_oracle": {
+          "Y": 1,
+          "T_s": 15.279999732971191,
+          "case_id": "L9.6_v1.8_a0.5"
+        },
+        "alpha_only_oracle": {
+          "Y": 1,
+          "T_s": 14.880000114440918,
+          "case_id": "L9.6_v2.0_a1.0"
+        },
+        "joint_oracle": {
+          "Y": 1,
+          "T_s": 14.880000114440918,
+          "case_id": "L9.6_v2.0_a1.0"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 5.6,
+      "declared_candidates": 6,
+      "evaluated_candidates": 6,
+      "matched_group_complete": true,
+      "selected": {
+        "fixed_v1.8_a0.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v1.8_a0.5": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v1.8_a1.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a0.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a0.5": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a1.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "speed_only_oracle": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "alpha_only_oracle": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "joint_oracle": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 7.6,
+      "declared_candidates": 6,
+      "evaluated_candidates": 6,
+      "matched_group_complete": true,
+      "selected": {
+        "fixed_v1.8_a0.0": {
+          "Y": 1,
+          "T_s": 14.880000114440918,
+          "case_id": "L7.6_v1.8_a0.0"
+        },
+        "fixed_v1.8_a0.5": {
+          "Y": 1,
+          "T_s": 14.260000228881836,
+          "case_id": "L7.6_v1.8_a0.5"
+        },
+        "fixed_v1.8_a1.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a0.0": {
+          "Y": 1,
+          "T_s": 14.0,
+          "case_id": "L7.6_v2.0_a0.0"
+        },
+        "fixed_v2.0_a0.5": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "fixed_v2.0_a1.0": {
+          "Y": 0,
+          "T_s": null,
+          "case_id": null
+        },
+        "speed_only_oracle": {
+          "Y": 1,
+          "T_s": 14.260000228881836,
+          "case_id": "L7.6_v1.8_a0.5"
+        },
+        "alpha_only_oracle": {
+          "Y": 1,
+          "T_s": 14.0,
+          "case_id": "L7.6_v2.0_a0.0"
+        },
+        "joint_oracle": {
+          "Y": 1,
+          "T_s": 14.0,
+          "case_id": "L7.6_v2.0_a0.0"
+        }
+      }
+    }
+  ]
+}

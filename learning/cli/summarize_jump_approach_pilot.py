@@ -7,9 +7,11 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 p=argparse.ArgumentParser();p.add_argument('--manifest',type=Path,required=True);a=p.parse_args()
 m=json.loads(a.manifest.read_text());rows=[];prefixes={}
-lengths=sorted({c['distance_m'] for c in m['cases']});fig,axes=plt.subplots(len(lengths),2,figsize=(12,4*len(lengths)),squeeze=False,layout='constrained')
+lengths=sorted({c['distance_m'] for c in m['cases']});figures={}
 for c in m['cases']:
- spec=json.loads(Path(c['config']).read_text());run=Path(spec['output']);row=dict(**c,status='pending',complete=None)
+ spec=json.loads(Path(c['config']).read_text());origin=spec['origin_id'];run=Path(spec['output']);row=dict(c,origin_id=origin,status='pending',complete=None)
+ if origin not in figures:figures[origin]=plt.subplots(len(lengths),2,figsize=(12,4*len(lengths)),squeeze=False,layout='constrained')
+ fig,axes=figures[origin]
  summary=run/'chain_summary.json'
  if summary.exists():
   result=json.loads(summary.read_text());row.update(status='evaluated',complete=result['complete'],success_time_s=result['success_time_s'],checks=result['checks'],max_original_path_error_m=result['max_original_path_error_m'],stages=result.get('stages'),stage_times=result.get('stage_times'))
@@ -32,20 +34,24 @@ for c in m['cases']:
  elif (run/'results.json').exists():row['status']='simulation_complete_analysis_pending'
  elif (run/'runtime.log').exists():row['status']='started_no_final_result'
  rows.append(row)
-baseline=next((c['case_id'] for c in m['cases'] if c['speed_m_s']==2. and c['alpha']==.5 and c['case_id'] in prefixes),None)
+baselines={origin:next((r['case_id'] for r in rows if r['origin_id']==origin and r['speed_m_s']==2. and r['alpha']==.5 and r['case_id'] in prefixes),None) for origin in figures}
 for row in rows:
+ baseline=baselines[row['origin_id']]
  if baseline is None or row['case_id'] not in prefixes:continue
  reference=prefixes[baseline];observed=prefixes[row['case_id']]
  times,ri,oi=np.intersect1d(reference[:,0],observed[:,0],return_indices=True)
  if not len(times):continue
  delta=np.abs(reference[ri]-observed[oi])
  row['prefix_comparison']=dict(reference_case=baseline,matched_samples=len(times),through_time_s=float(times[-1]),max_position_difference_m=float(np.linalg.norm(reference[ri,1:4]-observed[oi,1:4],axis=1).max()),max_speed_difference_m_s=float(delta[:,4].max()),max_roll_difference_rad=float(delta[:,5].max()),max_roll_rate_difference_rad_s=float(delta[:,6].max()),scope='Observed uninterrupted prefix comparison, not proof of hidden PhysX cache equality')
-for ax in axes[:,0]:ax.set(xlabel='World x (m)',ylabel='World y (m)');ax.set_aspect('equal',adjustable='datalim')
-for ax in axes[:,1]:ax.set(xlabel='Time (s)',ylabel='Measured forward speed (m/s)')
-for ax in axes.flat:
- ax.grid(alpha=.2)
- if ax.lines:ax.legend(fontsize=8)
-fig.suptitle('Frozen update2 / H75 + ECBC | same nominal origin | connection-only candidates\nUnexecuted cases remain pending; crosses mark actual endpoints')
-fig.savefig(a.manifest.parent/'xy_candidates.png',dpi=150)
+for origin,(fig,axes) in figures.items():
+ for ax in axes[:,0]:ax.set(xlabel='World x (m)',ylabel='World y (m)');ax.set_aspect('equal',adjustable='datalim')
+ for ax in axes[:,1]:ax.set(xlabel='Time (s)',ylabel='Measured forward speed (m/s)')
+ for ax in axes.flat:
+  ax.grid(alpha=.2)
+  if ax.lines:ax.legend(fontsize=8)
+ fig.suptitle(f'Frozen update2 / H75 + ECBC | origin {origin} | connection-only candidates\nUnexecuted cases remain pending; crosses mark actual endpoints')
+ name='xy_candidates.png' if len(figures)==1 else f'xy_candidates_{origin}.png'
+ fig.savefig(a.manifest.parent/name,dpi=150)
+ plt.close(fig)
 (a.manifest.parent/'summary.json').write_text(json.dumps(dict(protocol_id=m['protocol_id'],role=m['role'],declared_cases=len(rows),evaluated_cases=sum(r['status']=='evaluated' for r in rows),rows=rows),indent=2)+'\n')
 print(json.dumps({r['case_id']:dict(status=r['status'],complete=r['complete']) for r in rows},indent=2))
