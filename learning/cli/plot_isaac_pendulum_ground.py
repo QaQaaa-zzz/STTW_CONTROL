@@ -9,10 +9,10 @@ p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True);a=p.
 d=np.load(a.run/'trajectory.npz');tr=d['trace'];protocol=json.loads((a.run/'protocol.json').read_text());results=json.loads((a.run/'results.json').read_text())
 if tr.ndim==2:tr=tr[:,None,:]
 n=tr.shape[1];valid=d['valid'] if 'valid' in d else np.ones(tr.shape[:2],bool)
-cases=protocol.get('spec',{}).get('cases',[{'name':'ecbc'}]);colors=['#0072B2','#D55E00','#009E73','#CC79A7']
+cases=protocol.get('spec',{}).get('cases',[{'name':'ecbc'}]);colors=plt.get_cmap('tab10').colors
 f,axes=plt.subplots(2,2,figsize=(11,8),layout='constrained')
 for i in range(n):
- x=tr[valid[:,i],i];t=x[:,0];label=cases[i]['name'];color=colors[i%4];style='--' if 'local300' in label else '-'
+ x=tr[valid[:,i],i];t=x[:,0];label=cases[i]['name'];color=colors[i%len(colors)];style='--' if 'local300' in label else '-'
  axes[0,0].plot(x[:,1],x[:,2],style,color=color,label=label);axes[0,0].plot(x[-1,1],x[-1,2],'x',color=color)
  axes[0,1].plot(t,x[:,4],style,color=color,label=label)
  axes[1,0].plot(t,np.rad2deg(x[:,5]),style,color=color,label=label)

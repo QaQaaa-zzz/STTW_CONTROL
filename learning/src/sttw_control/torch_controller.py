@@ -34,6 +34,11 @@ class TorchController:
         m4 = -c['mass']*c['gravity']*c['cg_height']
         a1, a2 = m1/inertia, m2/inertia
         a4 = torch.full_like(v, -m4/inertia)
+        ratio = m4/m2
+        if 'roll_dynamics' in c:
+            rate, steer, gravity = c['roll_dynamics']
+            a1, a2, a4 = rate*v, steer*v*v, torch.full_like(v, gravity)
+            ratio = -a4/a2
         matrix = torch.stack((-a2*a2, a1*a2, -a1*a1,
                               -a2*a4, a1*a4, -a2,
                               a1*a4, -a2, a1), dim=-1).reshape(-1, 3, 3)
@@ -42,7 +47,7 @@ class TorchController:
                               torch.ones_like(v)*c['wc']**3), dim=-1)
         gains = torch.where((det.abs() > 5.)[:, None],
                             (matrix @ target[:, :, None]).squeeze(-1)/det[:, None], self.gains)
-        return a1, a2, a4, m4/m2, gains
+        return a1, a2, a4, ratio, gains
 
     def reset(self, indices):
         self.eso[indices] = 0
