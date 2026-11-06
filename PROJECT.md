@@ -1,3 +1,11 @@
+## dt005追加150轮已从最终150模型真实续训
+
+用户要求查看结果并追加150轮。前阶段完成150/932.37秒，训练mean-step best为update88/.704313；后25轮均值.55443低于前25轮.59607，不能认定稳定收敛。最后日志apex_fraction .77145、physical_failure .82020，是训练终止回合事件而非完整跳跃成功率。training_curves.png及training_scalar_summary.json已保存并查看；value loss下降但仍有波动，学习率自适应，原日志无KL数值。
+
+续训从model_150.pt恢复Actor/Critic/normalizer/Adam及lr=1e-5；保存model_initial.pt已核实iter150和16组优化器状态。环境/rollout重新初始化，不称逐位exact resume。第一次初始化进程消失无优化，目录保留interrupted_initialization，原因未知；重新执行pid23908实际已到累计154、阶段4/150，sample4.656/opt.114秒，目标300。模型、任务、随机化、4096×24和dt005均不变。新目录runs/phase_u_isaac300_dt005链接数据盘，persistent运行日志同数据盘。旧best88与last150保留，续训best按全局轮次另存，不退回update0。
+
+TensorBoard pid25679 HTTP200，保留全部旧入口并新增phase_u_dt005_continue，通知器pid25680/初始600秒。之后按预计结束约12分钟检查，不高频轮询。代码本地提交、不push。
+
 ## dt005训练53轮与后续候选比较准备
 
 训练pid4094392已核实live，53/150更新、最近采样5.852秒/优化.186秒。新select_phase_u_candidates.py只生成候选清单：按每个已存周期模型自己的下一次rollout奖励排序，取最多三个不同更新数，阶段完成后追加最后模型；不把model_25错误归属update25（原runner保存后实际26）。当前sample best仍update0，短启动批次与完整episode分布不同，不能据此判后续模型无用。清单是DEV筛选，最终还需同工况物理比较，未自动采用或声称训练收敛。

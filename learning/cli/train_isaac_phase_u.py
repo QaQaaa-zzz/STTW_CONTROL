@@ -20,18 +20,24 @@ status=dict(stage='initializing',pid=os.getpid(),completed_updates=0,started=sta
 class RecordedRunner(module.OnPolicyRunner):
     def log(self,locs,width=80,pad=35):
         super().log(locs,width,pad)
-        status.update(stage='training',completed_updates=locs['it']+1,sample_seconds=locs['collection_time'],optimize_seconds=locs['learn_time'],elapsed_s=time.time()-start)
+        status.update(stage='training',completed_updates=locs['it']+1,stage_completed_updates=locs['it']+1-status.get('start_update',0),sample_seconds=locs['collection_time'],optimize_seconds=locs['learn_time'],elapsed_s=time.time()-start)
         (a.output/'status.json').write_text(json.dumps(status,indent=2))
 env=PhaseUEnv(cfg,a.output)
 (a.output/'randomized_properties.json').write_text(json.dumps(env.properties));(a.output/'plant.json').write_text(json.dumps(env.plant.metadata))
 runner=RecordedRunner(env,train,log_dir=str(a.output/'training'),device=cfg['device']);(a.output/'training').mkdir(exist_ok=True)
 initialization={'initialization':'original Phase U actor/critic/frozen normalizer; fresh optimizer'}
-if cfg.get('initial_checkpoint'):
+if cfg.get('resume_checkpoint'):
+    runner.load(cfg['resume_checkpoint'],load_optimizer=True)
+    runner.alg.learning_rate=runner.alg.optimizer.param_groups[0]['lr']
+    initialization.update(initialization='checkpoint model and optimizer resume; fresh simulation and rollout state',resume_checkpoint=cfg['resume_checkpoint'],start_update=runner.current_learning_iteration,learning_rate=runner.alg.learning_rate)
+elif cfg.get('initial_checkpoint'):
     checkpoint=torch.load(cfg['initial_checkpoint'],map_location=cfg['device'],weights_only=False)
     runner.alg.actor_critic.load_state_dict(checkpoint['model_state_dict'])
     initialization.update(initial_checkpoint=cfg['initial_checkpoint'],parent_selection=checkpoint.get('infos'),initialization='selected prior actor/critic/normalizer weights; fresh optimizer and rollout state')
+status.update(start_update=runner.current_learning_iteration,completed_updates=runner.current_learning_iteration,target_update=runner.current_learning_iteration+cfg['updates'])
+(a.output/'status.json').write_text(json.dumps(status,indent=2))
 runner.save(str(a.output/'training/model_initial.pt'),infos=initialization)
-upstream_update=runner.alg.update;selection=dict(update=0,best=-float('inf'))
+upstream_update=runner.alg.update;selection=dict(update=runner.current_learning_iteration,best=-float('inf'))
 def recorded_update():
     score=float(runner.alg.storage.rewards.mean());update=selection['update']
     row=dict(update=update,mean_step_reward=score,samples=cfg['num_envs']*train['runner']['num_steps_per_env'],reward_scaling=env.task['ppo']['reward_scaling'])
