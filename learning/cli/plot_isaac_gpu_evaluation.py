@@ -35,7 +35,7 @@ for ax in axs:
  for lane,(label,color) in enumerate(zip(labels,colors)):
   trace=r['lower_trace'][:,:,lane].reshape(-1,11);v=trace[trace[:,6].astype(bool)];ax.plot(v[:,0],v[:,1],color=color,label=label,linestyle=styles[lane],marker=palette_markers[lane],markevery=400,markersize=3);ax.plot(*v[-1,:2],marker='x',color=color)
  ax.set(xlabel='World x (m)',ylabel='World y (m)');ax.set_aspect('equal',adjustable='box')
-turn=np.flatnonzero(abs(route['curvature'])>1e-5);bend=route['xy'][turn] if len(turn) else route['xy'][ref];axs[1].set(xlim=(bend[:,0].min()-.5,bend[:,0].max()+.7),ylim=(bend[:,1].min()-.3,bend[:,1].max()+1),title='Bend detail' if len(turn) else 'Straight route detail');axs[0].set_title('Full trajectory; × actual endpoint');axs[1].legend(loc='upper left',bbox_to_anchor=(1.01,1),fontsize=9);fig.suptitle(a.title+' | selected original Local300 lower');fig.savefig(out/'xy_all_alpha.png',dpi=150);plt.close(fig)
+turn=np.flatnonzero(abs(route['curvature'])>1e-5);bend=route['xy'][turn] if len(turn) else route['xy'][ref];axs[1].set(xlim=(bend[:,0].min()-.5,bend[:,0].max()+.7),ylim=(bend[:,1].min()-.3,bend[:,1].max()+1),title='Bend detail' if len(turn) else 'Straight route detail');axs[0].set_title('Full trajectory; × actual endpoint');axs[1].legend(loc='upper left',bbox_to_anchor=(1.01,1),fontsize=9);fig.suptitle(a.title+(' | ECBC+ESO lower (zero residual)' if all(c['settings'].get('zero_lower',[False])) else ' | frozen residual lower'));fig.savefig(out/'xy_all_alpha.png',dpi=150);plt.close(fig)
 fig,axs=plt.subplots(2,3,figsize=(15,8),layout='constrained')
 for lane,(label,color,ax) in enumerate(zip(labels,colors,axs.flat)):
  trace=r['lower_trace'][:,:,lane].reshape(-1,11);ids=np.flatnonzero(trace[:,6]);t=ids*.005+trace[ids,7]*physics_dt

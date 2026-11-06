@@ -56,7 +56,7 @@ def write_zero_scores(run):
     route=np.load(Path(contract['bundle'])/'route.npz')
     lane=int(np.flatnonzero(contract['settings']['zero_middle'])[0])
     trace=data['lower_trace'][:,:,lane].reshape(-1,11);ids=np.flatnonzero(trace[:,6])
-    time=ids*.005+trace[ids,7]*.0002;speed=float(contract['settings'].get('user_speed_m_s',2.3))
+    time=ids*.005+trace[ids,7]*contract['physics_dt'];speed=float(contract['settings'].get('user_speed_m_s',2.3))
     progress=data['progress'][ids,lane];heading=np.interp(progress,route['s'],route['heading'])
     eh=(heading-data['pose'][ids,lane,2]+np.pi)%(2*np.pi)-np.pi
     cc=ControllerConfig(**json.loads(Path(contract['settings']['controller_config']).read_text()))
@@ -81,7 +81,7 @@ def static_case_metrics(data,contract):
     goal=float(route['goal']);goal_xy=np.array([np.interp(goal,route['s'],route['xy'][:,k]) for k in (0,1)])
     yaw=np.interp(goal,route['s'],route['heading']);rows=[]
     for lane in range(data['reward'].shape[1]):
-        trace=data['lower_trace'][:,:,lane].reshape(-1,11);ids=np.flatnonzero(trace[:,6]);time=ids*.005+trace[ids,7]*.0002
+        trace=data['lower_trace'][:,:,lane].reshape(-1,11);ids=np.flatnonzero(trace[:,6]);time=ids*.005+trace[ids,7]*contract['physics_dt']
         progress=data['progress'][ids,lane];heading=(np.interp(progress,route['s'],route['heading'])-data['pose'][ids,lane,2]+np.pi)%(2*np.pi)-np.pi
         signed=(trace[ids,:2]-goal_xy)@np.array([np.cos(yaw),np.sin(yaw)])
         failed=bool(data['failure'][:,lane].any());tail=time>contract['settings']['episode_s']-b['hold_s']+1e-5
