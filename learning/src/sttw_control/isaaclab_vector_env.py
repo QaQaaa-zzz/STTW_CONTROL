@@ -87,6 +87,7 @@ class IsaacLabVectorPlant:
             actuators={name:ImplicitActuatorCfg(joint_names_expr=[rows[name]['joint']],stiffness=0.,damping=rows[name]['gain'][0],effort_limit_sim=max(abs(v) for v in rows[name]['forcerange']),velocity_limit_sim=1000.) for name in ('cmd_steering_v','cmd_rearwheel_v')}
             actuators['passive']=ImplicitActuatorCfg(joint_names_expr=[j['name'] for j in self.contract['joints'] if j['name'] not in ('steering_joint','rearwheel_joint')],stiffness=0.,damping=0.,effort_limit_sim=1000.,velocity_limit_sim=1000.)
         self.jump_position_mode=False
+        self.steering_position_lanes=None
         self.robot=Articulation(ArticulationCfg(prim_path='/World/Envs/Env_.*/Robot',spawn=sim_utils.UsdFileCfg(usd_path=converter.usd_path,activate_contact_sensors=True,rigid_props=sim_utils.RigidBodyPropertiesCfg(linear_damping=0.,angular_damping=0.,max_depenetration_velocity=100.,enable_gyroscopic_forces=True),articulation_props=sim_utils.ArticulationRootPropertiesCfg(enabled_self_collisions=self_collision,solver_position_iteration_count=solver_position_iterations,solver_velocity_iteration_count=solver_velocity_iterations)),init_state=ArticulationCfg.InitialStateCfg(pos=tuple(map(float,self.contract['root_translation'].split())),rot=tuple(self.contract['root_quat_wxyz']),joint_pos=({'.*':0.} if pendulum_rest is None else {**{j['name']:0. for j in self.contract['joints']},'hip_joint':pendulum_rest[0],'knee_joint':pendulum_rest[1]}),joint_vel={'.*':0.}),actuators=actuators))
         if wheel_contact_slop:
             for wheel in ('frontwheel','rearwheel'):
@@ -244,13 +245,28 @@ class IsaacLabVectorPlant:
     def observe(self):
         measurement,pose,speed=self.signals.observe(self.roots,self.dofs[:,:,0],self.dofs[:,:,1]);return measurement,pose-self.origin,speed
 
+    def set_steering_position_modes(self,position_lanes):
+        """Select ground velocity or jump position steering at lane transition events."""
+        previous=self.steering_position_lanes
+        if previous is None:previous=torch.full((self.count,),self.jump_position_mode,device=self.device,dtype=torch.bool)
+        changed=(previous!=position_lanes).nonzero(as_tuple=False).flatten()
+        self.steering_position_lanes=position_lanes.clone()
+        self.jump_position_mode=bool(position_lanes.any())
+        if self.servo_mode=='hybrid' and len(changed):self.sync_native_drives(changed)
+
     def sync_native_drives(self,env_ids=None):
         """Apply sampled motor gains to native hybrid drives, including reset lanes."""
         ids=torch.arange(self.count,device=self.device) if env_ids is None else env_ids
         gain=self.servos.gain.reshape(-1,2).expand(self.count,2)
         stiffness=torch.zeros(len(ids),2,device=self.device)
         damping=gain[ids].clone()
-        if self.jump_position_mode:
+        if self.steering_position_lanes is not None:
+            mask=self.steering_position_lanes[ids]
+            kp=self.jump_steering_servo.kp.reshape(-1,1).expand(self.count,1)[ids,0]
+            kd=self.jump_steering_servo.kd.reshape(-1,1).expand(self.count,1)[ids,0]
+            stiffness[:,0]=torch.where(mask,kp,0.)
+            damping[:,0]=torch.where(mask,kd,damping[:,0])
+        elif self.jump_position_mode:
             stiffness[:,0]=self.jump_steering_servo.kp.reshape(-1,1).expand(self.count,1)[ids,0]
             damping[:,0]=self.jump_steering_servo.kd.reshape(-1,1).expand(self.count,1)[ids,0]
         self.robot.write_joint_stiffness_to_sim(stiffness,joint_ids=self.servos.indices,env_ids=ids)
@@ -263,18 +279,23 @@ class IsaacLabVectorPlant:
             self.robot.set_joint_velocity_target(target,joint_ids=self.servos.indices)
             if self.servo_mode=='hybrid':
                 position_mode=steering_position_target is not None
-                if position_mode!=self.jump_position_mode:
+                if self.steering_position_lanes is None and position_mode!=self.jump_position_mode:
                     self.jump_position_mode=position_mode
                     self.sync_native_drives()
                 if position_mode:
                     self.robot.set_joint_position_target(steering_position_target,joint_ids=[self.signals.steer])
-                    self.robot.set_joint_velocity_target(torch.zeros_like(steering_position_target),joint_ids=[self.signals.steer])
+                    steering_velocity=torch.zeros_like(steering_position_target) if self.steering_position_lanes is None else torch.where(self.steering_position_lanes[:,None],0.,target[:,:1])
+                    self.robot.set_joint_velocity_target(steering_velocity,joint_ids=[self.signals.steer])
 
         else:
             motor=self.servos.torque(command,self.dofs[:,:,1])
             if steering_position_target is not None:
-                motor[:,self.signals.steer]=0.
-                motor+=self.jump_steering_servo.torque(steering_position_target,self.dofs[:,:,0],self.dofs[:,:,1])
+                position_torque=self.jump_steering_servo.torque(steering_position_target,self.dofs[:,:,0],self.dofs[:,:,1])
+                if self.steering_position_lanes is None:
+                    motor[:,self.signals.steer]=0.;motor+=position_torque
+                else:
+                    motor[:,self.signals.steer]=torch.where(self.steering_position_lanes,0.,motor[:,self.signals.steer])
+                    motor+=position_torque*self.steering_position_lanes[:,None]
             torque=torque+motor
             if self.track_contact_wrench:self.last_motor_torque=motor.clone()
         if self.pendulum_servos is not None and not self.pendulum_is_locked:
