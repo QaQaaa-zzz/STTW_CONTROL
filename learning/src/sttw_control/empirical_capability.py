@@ -115,17 +115,18 @@ def evaluate_connection_groups(records, candidates, feature_scales, bandwidth, m
     origin_id groups every exit/branch from one upstream physical run; snapshot_id
     identifies the actual saved closed-loop state. Uninterrupted jump records instead
     supply decision_id; this does not claim a replayable PhysX snapshot. Neither
-    identifies an RL seed.
+    identifies an RL seed. disturbance_id separates paired future sequences only;
+    it is excluded from predictor inputs and never splits the origin holdout.
     This consumes executed outcomes only. Missing candidate results remain missing.
     """
     from collections import defaultdict
     rows=list(records);groups=defaultdict(list)
     for row in rows:
-        groups[(row['origin_id'],row.get('snapshot_id',row.get('decision_id')),row['task_id'],row['skill_id'])].append(row)
+        groups[(row['origin_id'],row.get('snapshot_id',row.get('decision_id')),row['task_id'],row['skill_id'],row.get('disturbance_id','D0'))].append(row)
     folds={origin:ConnectionCapability([r for r in rows if r['origin_id']!=origin],feature_scales,bandwidth,minimum_support)
            for origin in {r['origin_id'] for r in rows}}
     results=[]
-    for (origin,snapshot,task,skill),paired in sorted(groups.items()):
+    for (origin,snapshot,task,skill,disturbance),paired in sorted(groups.items()):
         actual={r['candidate_id']:r for r in paired}
         if len(actual)!=len(paired) or set(actual)!=set(candidates):
             raise ValueError('Each snapshot/task/skill requires exactly one executed outcome for every candidate')
@@ -140,7 +141,7 @@ def evaluate_connection_groups(records, candidates, feature_scales, bandwidth, m
         oracle=min(successful,key=lambda r:r['success_cost']) if successful else None
         calibration=[dict(candidate_id=e['candidate_id'],probability=e['complete_probability'],actual_complete=actual[e['candidate_id']]['complete'],squared_error=(e['complete_probability']-actual[e['candidate_id']]['complete'])**2)
                      for e in query['estimates'] if e['known']]
-        results.append(dict(origin_id=origin,snapshot_id=snapshot if 'snapshot_id' in paired[0] else None,decision_id=snapshot if 'decision_id' in paired[0] else None,task_id=task,skill_id=skill,
+        results.append(dict(origin_id=origin,disturbance_id=disturbance,snapshot_id=snapshot if 'snapshot_id' in paired[0] else None,decision_id=snapshot if 'decision_id' in paired[0] else None,task_id=task,skill_id=skill,
             selection_status=connection_selection_status(query['estimates'],choice),
             selected_candidate=selected,selected_complete=observed['complete'] if observed else None,
             selected_success_cost=observed['success_cost'] if observed and observed['complete'] else None,
@@ -152,10 +153,10 @@ def evaluate_connection_groups(records, candidates, feature_scales, bandwidth, m
     # Fixed references use the same executed groups, including failures. Unknown
     # model queries remain abstentions; do not turn them into simulated outcomes.
     fixed=[]
-    decided_keys={(r['origin_id'],r['snapshot_id'] or r['decision_id'],r['task_id'],r['skill_id']) for r in decided}
+    decided_keys={(r['origin_id'],r['snapshot_id'] or r['decision_id'],r['task_id'],r['skill_id'],r['disturbance_id']) for r in decided}
     for candidate in candidates:
         outcomes=[r for r in rows if r['candidate_id']==candidate]
-        matched=[r for r in outcomes if (r['origin_id'],r.get('snapshot_id',r.get('decision_id')),r['task_id'],r['skill_id']) in decided_keys]
+        matched=[r for r in outcomes if (r['origin_id'],r.get('snapshot_id',r.get('decision_id')),r['task_id'],r['skill_id'],r.get('disturbance_id','D0')) in decided_keys]
         successful=[r['success_cost'] for r in outcomes if r['complete']]
         fixed.append(dict(candidate_id=candidate,groups=len(outcomes),
             complete_count=sum(r['complete'] for r in outcomes),

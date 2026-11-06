@@ -108,3 +108,17 @@ class ConnectionCapabilityTests(unittest.TestCase):
         self.assertEqual(one['unknown_groups'],1)
         self.assertEqual(one['clearance_denominator'],0)
         self.assertEqual(one['false_clearance_count'],0)
+
+    def test_future_sequences_are_paired_separately_but_hold_out_whole_origin(self):
+        from sttw_control.empirical_capability import evaluate_connection_groups
+        rows=[dict(origin_id='one',snapshot_id='same_exit',disturbance_id=d,
+                   task_id='left',skill_id='frozen',candidate_id=c,state=[0.],
+                   complete=int(c==winner),success_cost=2. if c==winner else None)
+              for d,winner in [('push_left','slow'),('push_right','fast')]
+              for c in ['slow','fast']]
+        result=evaluate_connection_groups(rows,['slow','fast'],[1.],1.,.5)
+        self.assertEqual(result['groups'],2)
+        self.assertEqual(result['unknown_groups'],2)
+        self.assertEqual(result['observed_oracle_complete_groups'],2)
+        self.assertEqual({r['disturbance_id'] for r in result['rows']},{'push_left','push_right'})
+        self.assertTrue(all(r['snapshot_id']=='same_exit' for r in result['rows']))

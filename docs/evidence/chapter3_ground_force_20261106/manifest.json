@@ -1,0 +1,857 @@
+{
+  "status": "prepared_not_started",
+  "role": "Preselected DEV force challenge; not independent TEST",
+  "selection": "Before nominal outcome collection: low/high requested speeds \u00d7 two oblique signs \u00d7 two diagonal offset combinations. Correlated offset subset, not uniform coverage of all24 roots.",
+  "source_origins": [
+    "v1.9_lat-0.04_yaw-2_oblique-0.4",
+    "v1.9_lat-0.04_yaw-2_oblique0.4",
+    "v1.9_lat0.04_yaw2_oblique-0.4",
+    "v1.9_lat0.04_yaw2_oblique0.4",
+    "v2.3_lat-0.04_yaw-2_oblique-0.4",
+    "v2.3_lat-0.04_yaw-2_oblique0.4",
+    "v2.3_lat0.04_yaw2_oblique-0.4",
+    "v2.3_lat0.04_yaw2_oblique0.4"
+  ],
+  "cases": [
+    {
+      "case_id": "v1.9_lat-0.04_yaw-2_oblique-0.4_force_00_0",
+      "origin_id": "v1.9_lat-0.04_yaw-2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat-0.04_yaw-2_oblique-0.4_force_00_0.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat-0.04_yaw-2_oblique-0.4_force_00_0",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique-0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_00_0",
+        "seed": 2026110600,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.0496054553937286,
+          0.0
+        ],
+        "duration_s": 0.12265989258114972,
+        "trigger_progress_m": 0.3014853510028257,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v1.9_lat-0.04_yaw-2_oblique-0.4_force_00_1",
+      "origin_id": "v1.9_lat-0.04_yaw-2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat-0.04_yaw-2_oblique-0.4_force_00_1.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat-0.04_yaw-2_oblique-0.4_force_00_1",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique-0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_00_1",
+        "seed": 2026110601,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          3.9247522636136614,
+          0.0
+        ],
+        "duration_s": 0.1574006427517904,
+        "trigger_progress_m": 0.21851565246955068,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v1.9_lat-0.04_yaw-2_oblique-0.4_force_00_2",
+      "origin_id": "v1.9_lat-0.04_yaw-2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat-0.04_yaw-2_oblique-0.4_force_00_2.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat-0.04_yaw-2_oblique-0.4_force_00_2",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique-0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_00_2",
+        "seed": 2026110602,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -3.9982282987027533,
+          0.0
+        ],
+        "duration_s": 0.15275020580583168,
+        "trigger_progress_m": 0.24835096973761525,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v1.9_lat-0.04_yaw-2_oblique-0.4_force_00_3",
+      "origin_id": "v1.9_lat-0.04_yaw-2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat-0.04_yaw-2_oblique-0.4_force_00_3.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat-0.04_yaw-2_oblique-0.4_force_00_3",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique-0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_00_3",
+        "seed": 2026110603,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.530076162197682,
+          0.0
+        ],
+        "duration_s": 0.1296315145737844,
+        "trigger_progress_m": 0.3025285873210171,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v1.9_lat-0.04_yaw-2_oblique0.4_force_01_0",
+      "origin_id": "v1.9_lat-0.04_yaw-2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat-0.04_yaw-2_oblique0.4_force_01_0.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat-0.04_yaw-2_oblique0.4_force_01_0",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_01_0",
+        "seed": 2026110604,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -3.980308509391902,
+          0.0
+        ],
+        "duration_s": 0.15321261170397502,
+        "trigger_progress_m": 0.34276894852617124,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v1.9_lat-0.04_yaw-2_oblique0.4_force_01_1",
+      "origin_id": "v1.9_lat-0.04_yaw-2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat-0.04_yaw-2_oblique0.4_force_01_1.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat-0.04_yaw-2_oblique0.4_force_01_1",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_01_1",
+        "seed": 2026110605,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.2764239797074115,
+          0.0
+        ],
+        "duration_s": 0.12000749923696144,
+        "trigger_progress_m": 0.23756826701831393,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v1.9_lat-0.04_yaw-2_oblique0.4_force_01_2",
+      "origin_id": "v1.9_lat-0.04_yaw-2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat-0.04_yaw-2_oblique0.4_force_01_2.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat-0.04_yaw-2_oblique0.4_force_01_2",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_01_2",
+        "seed": 2026110606,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.395242258565651,
+          0.0
+        ],
+        "duration_s": 0.1316023650176835,
+        "trigger_progress_m": 0.27242592942420535,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v1.9_lat-0.04_yaw-2_oblique0.4_force_01_3",
+      "origin_id": "v1.9_lat-0.04_yaw-2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat-0.04_yaw-2_oblique0.4_force_01_3.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat-0.04_yaw-2_oblique0.4_force_01_3",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat-0.04_yaw-2_oblique0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_01_3",
+        "seed": 2026110607,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.6736759186088266,
+          0.0
+        ],
+        "duration_s": 0.16290269925303405,
+        "trigger_progress_m": 0.22018012346875246,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v1.9_lat0.04_yaw2_oblique-0.4_force_02_0",
+      "origin_id": "v1.9_lat0.04_yaw2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat0.04_yaw2_oblique-0.4_force_02_0.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat0.04_yaw2_oblique-0.4_force_02_0",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw2_oblique-0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_02_0",
+        "seed": 2026110608,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -3.021488278711205,
+          0.0
+        ],
+        "duration_s": 0.1350647924491566,
+        "trigger_progress_m": 0.33520647998732916,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v1.9_lat0.04_yaw2_oblique-0.4_force_02_1",
+      "origin_id": "v1.9_lat0.04_yaw2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat0.04_yaw2_oblique-0.4_force_02_1.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat0.04_yaw2_oblique-0.4_force_02_1",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw2_oblique-0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_02_1",
+        "seed": 2026110609,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.9407893934220612,
+          0.0
+        ],
+        "duration_s": 0.17568501526002367,
+        "trigger_progress_m": 0.23172221975776247,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v1.9_lat0.04_yaw2_oblique-0.4_force_02_2",
+      "origin_id": "v1.9_lat0.04_yaw2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat0.04_yaw2_oblique-0.4_force_02_2.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat0.04_yaw2_oblique-0.4_force_02_2",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw2_oblique-0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_02_2",
+        "seed": 2026110610,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -3.847186260594279,
+          0.0
+        ],
+        "duration_s": 0.1593091831198873,
+        "trigger_progress_m": 0.21025339028717532,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v1.9_lat0.04_yaw2_oblique-0.4_force_02_3",
+      "origin_id": "v1.9_lat0.04_yaw2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat0.04_yaw2_oblique-0.4_force_02_3.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat0.04_yaw2_oblique-0.4_force_02_3",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw2_oblique-0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_02_3",
+        "seed": 2026110611,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.1180281907307235,
+          0.0
+        ],
+        "duration_s": 0.12188101972119102,
+        "trigger_progress_m": 0.25760938906170633,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v1.9_lat0.04_yaw2_oblique0.4_force_03_0",
+      "origin_id": "v1.9_lat0.04_yaw2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat0.04_yaw2_oblique0.4_force_03_0.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat0.04_yaw2_oblique0.4_force_03_0",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw2_oblique0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_03_0",
+        "seed": 2026110612,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -3.116759936194069,
+          0.0
+        ],
+        "duration_s": 0.17818694425148623,
+        "trigger_progress_m": 0.2964808401073091,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v1.9_lat0.04_yaw2_oblique0.4_force_03_1",
+      "origin_id": "v1.9_lat0.04_yaw2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat0.04_yaw2_oblique0.4_force_03_1.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat0.04_yaw2_oblique0.4_force_03_1",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw2_oblique0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_03_1",
+        "seed": 2026110613,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          3.511234325263655,
+          0.0
+        ],
+        "duration_s": 0.13187467970852307,
+        "trigger_progress_m": 0.23164185350897581,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v1.9_lat0.04_yaw2_oblique0.4_force_03_2",
+      "origin_id": "v1.9_lat0.04_yaw2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat0.04_yaw2_oblique0.4_force_03_2.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat0.04_yaw2_oblique0.4_force_03_2",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw2_oblique0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_03_2",
+        "seed": 2026110614,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -3.6396058830100126,
+          0.0
+        ],
+        "duration_s": 0.1797534206808158,
+        "trigger_progress_m": 0.2147858541011104,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v1.9_lat0.04_yaw2_oblique0.4_force_03_3",
+      "origin_id": "v1.9_lat0.04_yaw2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat0.04_yaw2_oblique0.4_force_03_3.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat0.04_yaw2_oblique0.4_force_03_3",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v1.9_lat0.04_yaw2_oblique0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_03_3",
+        "seed": 2026110615,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          3.5445934214050214,
+          0.0
+        ],
+        "duration_s": 0.13115485658559742,
+        "trigger_progress_m": 0.2520387295010149,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v2.3_lat-0.04_yaw-2_oblique-0.4_force_04_0",
+      "origin_id": "v2.3_lat-0.04_yaw-2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat-0.04_yaw-2_oblique-0.4_force_04_0.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat-0.04_yaw-2_oblique-0.4_force_04_0",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw-2_oblique-0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_04_0",
+        "seed": 2026110616,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.5214177019664046,
+          0.0
+        ],
+        "duration_s": 0.15131015926697872,
+        "trigger_progress_m": 0.23362428401377805,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v2.3_lat-0.04_yaw-2_oblique-0.4_force_04_1",
+      "origin_id": "v2.3_lat-0.04_yaw-2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat-0.04_yaw-2_oblique-0.4_force_04_1.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat-0.04_yaw-2_oblique-0.4_force_04_1",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw-2_oblique-0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_04_1",
+        "seed": 2026110617,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          3.5133478029549314,
+          0.0
+        ],
+        "duration_s": 0.14747306543602845,
+        "trigger_progress_m": 0.23405061534291763,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v2.3_lat-0.04_yaw-2_oblique-0.4_force_04_2",
+      "origin_id": "v2.3_lat-0.04_yaw-2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat-0.04_yaw-2_oblique-0.4_force_04_2.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat-0.04_yaw-2_oblique-0.4_force_04_2",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw-2_oblique-0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_04_2",
+        "seed": 2026110618,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.494425182243797,
+          0.0
+        ],
+        "duration_s": 0.15920376674453188,
+        "trigger_progress_m": 0.29470907807138824,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v2.3_lat-0.04_yaw-2_oblique-0.4_force_04_3",
+      "origin_id": "v2.3_lat-0.04_yaw-2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat-0.04_yaw-2_oblique-0.4_force_04_3.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat-0.04_yaw-2_oblique-0.4_force_04_3",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw-2_oblique-0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_04_3",
+        "seed": 2026110619,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.7095282077983187,
+          0.0
+        ],
+        "duration_s": 0.17797457570595,
+        "trigger_progress_m": 0.26171807614919046,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v2.3_lat-0.04_yaw-2_oblique0.4_force_05_0",
+      "origin_id": "v2.3_lat-0.04_yaw-2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat-0.04_yaw-2_oblique0.4_force_05_0.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat-0.04_yaw-2_oblique0.4_force_05_0",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw-2_oblique0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_05_0",
+        "seed": 2026110620,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -2.5241876335755564,
+          0.0
+        ],
+        "duration_s": 0.1750824681042667,
+        "trigger_progress_m": 0.29786510133147076,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v2.3_lat-0.04_yaw-2_oblique0.4_force_05_1",
+      "origin_id": "v2.3_lat-0.04_yaw-2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat-0.04_yaw-2_oblique0.4_force_05_1.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat-0.04_yaw-2_oblique0.4_force_05_1",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw-2_oblique0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_05_1",
+        "seed": 2026110621,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          3.713703882392469,
+          0.0
+        ],
+        "duration_s": 0.16554190213847053,
+        "trigger_progress_m": 0.3349080762766544,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v2.3_lat-0.04_yaw-2_oblique0.4_force_05_2",
+      "origin_id": "v2.3_lat-0.04_yaw-2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat-0.04_yaw-2_oblique0.4_force_05_2.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat-0.04_yaw-2_oblique0.4_force_05_2",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw-2_oblique0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_05_2",
+        "seed": 2026110622,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -3.2902294752445735,
+          0.0
+        ],
+        "duration_s": 0.15451176292450475,
+        "trigger_progress_m": 0.32610561049368725,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v2.3_lat-0.04_yaw-2_oblique0.4_force_05_3",
+      "origin_id": "v2.3_lat-0.04_yaw-2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat-0.04_yaw-2_oblique0.4_force_05_3.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat-0.04_yaw-2_oblique0.4_force_05_3",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat-0.04_yaw-2_oblique0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_05_3",
+        "seed": 2026110623,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          3.6413124047046317,
+          0.0
+        ],
+        "duration_s": 0.12994776216107437,
+        "trigger_progress_m": 0.29185816948659904,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v2.3_lat0.04_yaw2_oblique-0.4_force_06_0",
+      "origin_id": "v2.3_lat0.04_yaw2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat0.04_yaw2_oblique-0.4_force_06_0.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat0.04_yaw2_oblique-0.4_force_06_0",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw2_oblique-0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_06_0",
+        "seed": 2026110624,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -3.044082336717726,
+          0.0
+        ],
+        "duration_s": 0.1746419061348079,
+        "trigger_progress_m": 0.29285058766468774,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v2.3_lat0.04_yaw2_oblique-0.4_force_06_1",
+      "origin_id": "v2.3_lat0.04_yaw2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat0.04_yaw2_oblique-0.4_force_06_1.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat0.04_yaw2_oblique-0.4_force_06_1",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw2_oblique-0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_06_1",
+        "seed": 2026110625,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          3.830844455632275,
+          0.0
+        ],
+        "duration_s": 0.161434649529857,
+        "trigger_progress_m": 0.34642729215253754,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v2.3_lat0.04_yaw2_oblique-0.4_force_06_2",
+      "origin_id": "v2.3_lat0.04_yaw2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat0.04_yaw2_oblique-0.4_force_06_2.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat0.04_yaw2_oblique-0.4_force_06_2",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw2_oblique-0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_06_2",
+        "seed": 2026110626,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -3.5347332794446804,
+          0.0
+        ],
+        "duration_s": 0.15433324090335532,
+        "trigger_progress_m": 0.2833472548061678,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v2.3_lat0.04_yaw2_oblique-0.4_force_06_3",
+      "origin_id": "v2.3_lat0.04_yaw2_oblique-0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat0.04_yaw2_oblique-0.4_force_06_3.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat0.04_yaw2_oblique-0.4_force_06_3",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw2_oblique-0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_06_3",
+        "seed": 2026110627,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.5444175609781463,
+          0.0
+        ],
+        "duration_s": 0.16334586039547716,
+        "trigger_progress_m": 0.23868869132234322,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v2.3_lat0.04_yaw2_oblique0.4_force_07_0",
+      "origin_id": "v2.3_lat0.04_yaw2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat0.04_yaw2_oblique0.4_force_07_0.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat0.04_yaw2_oblique0.4_force_07_0",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw2_oblique0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_07_0",
+        "seed": 2026110628,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -3.914069966227721,
+          0.0
+        ],
+        "duration_s": 0.17875452542807774,
+        "trigger_progress_m": 0.3392683955461274,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v2.3_lat0.04_yaw2_oblique0.4_force_07_1",
+      "origin_id": "v2.3_lat0.04_yaw2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat0.04_yaw2_oblique0.4_force_07_1.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat0.04_yaw2_oblique0.4_force_07_1",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw2_oblique0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_07_1",
+        "seed": 2026110629,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.951948339137754,
+          0.0
+        ],
+        "duration_s": 0.14484550889443293,
+        "trigger_progress_m": 0.22747870111888083,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v2.3_lat0.04_yaw2_oblique0.4_force_07_2",
+      "origin_id": "v2.3_lat0.04_yaw2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat0.04_yaw2_oblique0.4_force_07_2.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat0.04_yaw2_oblique0.4_force_07_2",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw2_oblique0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_07_2",
+        "seed": 2026110630,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          -3.800676630512736,
+          0.0
+        ],
+        "duration_s": 0.1285703468171494,
+        "trigger_progress_m": 0.3303193583626452,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    },
+    {
+      "case_id": "v2.3_lat0.04_yaw2_oblique0.4_force_07_3",
+      "origin_id": "v2.3_lat0.04_yaw2_oblique0.4",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat0.04_yaw2_oblique0.4_force_07_3.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat0.04_yaw2_oblique0.4_force_07_3",
+      "source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_roots/v2.3_lat0.04_yaw2_oblique0.4/evaluation/exit_snapshot.pt",
+      "disturbance": {
+        "kind": "external_force_N",
+        "sequence_id": "force_07_3",
+        "seed": 2026110631,
+        "body": "chasis",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "force_world_N": [
+          0.0,
+          2.2674821391682642,
+          0.0
+        ],
+        "duration_s": 0.17327226887095012,
+        "trigger_progress_m": 0.28237158824511926,
+        "trigger": "First crossing of fixed original connection progress, checked every20ms per lane; same spatial field and duration for every candidate"
+      }
+    }
+  ],
+  "roots": 8,
+  "future_sequences_per_root": 4,
+  "suffixes": 384,
+  "physics_lane_steps_max": 19200000,
+  "optimizer_updates": 0,
+  "order": "Finish D0 nominal and inspect candidate behavior first; reuse each declared nominal exit. Source failures remain failed roots, never synthesize exit.",
+  "input_boundary": "Future sequence identity is paired evaluation metadata, not a predictor feature. All descendants of an origin stay together.",
+  "half_width_m": 2.0
+}

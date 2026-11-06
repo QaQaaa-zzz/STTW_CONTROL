@@ -13,6 +13,8 @@ spec=json.loads(a.config.read_text());candidates=spec['candidates']
 if len(candidates)!=6 or len({(c['speed_m_s'],c['alpha']) for c in candidates})!=6:
     p.error('six distinct speed/alpha candidates required')
 if spec['replanning']['goal_after_turn_m']<5:p.error('goal must be at least 5 m beyond turn end')
+pulse=spec.get('connection_force_pulse')
+if pulse and (pulse['kind']!='external_force_N' or pulse['body']!='chasis' or not spec.get('common_task_reference') or pulse['duration_s']<=0 or not 0<=pulse['trigger_progress_m']<spec['connection_end_progress_m']):p.error('force pulse requires external_force_N, positive duration and trigger inside connection')
 a.output.mkdir(parents=True,exist_ok=False)
 from isaaclab.app import AppLauncher
 app=AppLauncher(headless=True,device='cuda:0').app
@@ -125,6 +127,21 @@ for task in spec['tasks']:
     original_progress=torch.zeros(6,device=env.device);entered_b=torch.zeros(6,device=env.device,dtype=torch.bool)
     # Original fixed-path distance is measured independently of replanned references.
     points=original.xy;segments=points[1:]-points[:-1];segment_norm=segments.square().sum(-1)
+    if pulse:
+        from sttw_control.torch_observation import rotate_inverse
+        pulse_started=torch.zeros(6,device=env.device,dtype=torch.bool);remaining=torch.zeros(6,device=env.device,dtype=torch.long)
+        pulse_start_time=torch.full((6,),float('nan'),device=env.device);pulse_base_tick=env.physical_tick.clone();pulse_rows=[]
+        body_id=torch.tensor([plant.bodies.index(pulse['body'])],device=env.device)
+        site=torch.tensor(pulse['site_body_position_m'],device=env.device).expand(6,1,3).contiguous()
+        zero=torch.zeros(6,1,3,device=env.device);force_world=torch.tensor(pulse['force_world_N'],device=env.device).expand(6,3)
+        def apply_connection_force(physics_tick):
+            force=force_world*((remaining>0)&env.alive)[:,None]
+            local=rotate_inverse(plant.roots[:,3:7],force)
+            plant.robot.permanent_wrench_composer.set_forces_and_torques(forces=local[:,None].contiguous(),torques=zero,positions=site,body_ids=body_id,is_global=False)
+            t=(env.physical_tick-pulse_base_tick)*.005+physics_tick*plant.physics_dt
+            pulse_rows.append(torch.cat((t[:,None],force),dim=-1).clone())
+            remaining.sub_(1).clamp_(min=0)
+
     for k in range(env.horizon):
         if common is not None:
             measurement,pose,velocity=plant.observe()
@@ -133,7 +150,15 @@ for task in spec['tasks']:
             for lane in crossing.nonzero(as_tuple=False).flatten().tolist():
                 entry_events.append(dict(lane=lane,candidate_id=candidates[lane]['candidate_id'],time_s=k*.02,original_progress_m=float(original_progress[lane]),speed_m_s=float(velocity[lane]),lateral_velocity_heading_frame_m_s=float(-torch.sin(pose[lane,2])*plant.roots[lane,7]+torch.cos(pose[lane,2])*plant.roots[lane,8]),world_yaw_rate_rad_s=float(plant.roots[lane,12]),measurement=measurement[lane].cpu().tolist(),pose=pose[lane].cpu().tolist(),root=plant.roots[lane].cpu().tolist(),previous_reference=env.previous_reference[lane].cpu().tolist(),previous_alpha=float(env.alpha[lane]),common_reference=common,history='retained; no reset'))
             env.speed.copy_(torch.where(crossing,common['speed_m_s'],env.speed));env.alpha.copy_(torch.where(crossing,common['alpha'],env.alpha));entered_b|=crossing
+        if pulse:
+            trigger=env.alive&~pulse_started&(original_progress>=pulse['trigger_progress_m'])
+            remaining[trigger]=round(pulse['duration_s']/plant.physics_dt);pulse_start_time[trigger]=k*.02;pulse_started|=trigger
+            env.training_pulse=apply_connection_force if bool((remaining>0).any()) else None
         planner.update();result=env.step();trace=result['lower_trace'];rows.append(trace.clone())
+        if pulse and env.training_pulse is not None:
+            plant.robot.permanent_wrench_composer.set_forces_and_torques(forces=zero,torques=zero,positions=site,body_ids=body_id,is_global=False)
+            env.training_pulse=None
+
         commands=result['executed_commands'].clone();commands[:,:,0]+=k*.02;command_rows.append(commands)
         if s['record_body_poses']:body_rows.append(result['body_poses'])
         xy=trace[:,:,:2]
@@ -144,6 +169,10 @@ for task in spec['tasks']:
         _,pose,_=plant.observe();at_goal=env.alive&(torch.linalg.vector_norm(pose[:,:2]-goal,dim=-1)<=spec['replanning']['arrival_radius_m'])
         arrival=torch.where(torch.isnan(arrival)&at_goal,(k+1)*.02,arrival)
         if not bool(env.alive.any()):break
+    if pulse:
+        applied=torch.stack(pulse_rows).cpu().numpy() if pulse_rows else np.empty((0,6,4))
+        np.savez_compressed(folder/'external_force.npz',samples=applied,columns=np.array(['time_since_connection_s','world_Fx_N','world_Fy_N','world_Fz_N']),trigger_time_s=pulse_start_time.cpu().numpy(),physics_dt_s=plant.physics_dt)
+        (folder/'external_force.json').write_text(json.dumps(dict(protocol=pulse,triggered=pulse_started.cpu().tolist(),impulse_world_Ns=(applied[:,:,1:].sum(0)*plant.physics_dt).tolist(),scope='Prescribed rigid-body external force, not command residual or velocity replacement; omitted inactive intervals have zero force'),indent=2)+'\n')
     trace=torch.cat(rows).cpu().numpy();errors=torch.cat(original_errors).cpu().numpy();arrivals=arrival.cpu().numpy()
     commands=torch.cat(command_rows).cpu().numpy()
     np.savez_compressed(folder/'executed_commands.npz',commands=commands,columns=np.array(['time_since_connection_s','steering_rate_rad_s','rear_axle_speed_rad_s','alive_before_step']))
@@ -159,7 +188,7 @@ for task in spec['tasks']:
             count=int(((live_commands[:,column]<=lo+1e-6)|(live_commands[:,column]>=hi-1e-6)).sum()) if actuator['control_limited'] else 0
             input_limit[name]=dict(at_limit_samples=count,active_physics_samples=len(live_commands),fraction=count/len(live_commands) if len(live_commands) else None,ctrlrange=actuator['ctrlrange'],scope='Plant input target limit, not measured torque saturation')
         completed=bool(env.alive[i]) and (common is None or bool(entered_b[i])) and np.isfinite(arrivals[i]) and bool((path_errors<=spec['corridor_half_width_m']).all())
-        records.append(dict(protocol_id=spec.get('protocol_id','legacy_full_suffix'),b_entry=next((e for e in entry_events if e['lane']==i),None),common_task_reference=common,origin_id=spec['origin_id'],snapshot_id=snapshot_id,task_id=task['task_id'],skill_id=skill_id,candidate_id=candidate['candidate_id'],state=feature,state_named=state_named,geometry=dict(connection_length_m=spec.get('connection_end_progress_m'),corridor_half_width_m=spec['corridor_half_width_m'],route=task['route']),complete=int(completed),success_cost=float(arrivals[i]) if completed else None,input_target_limit=input_limit,max_original_path_error_m=float(path_errors.max()) if len(path_errors) else None,path_rmse_m=float(np.sqrt(np.mean(path_errors**2))) if len(path_errors) else None,observed_lower_steps=int(valid.sum()),physical_or_controller_failure=not bool(env.alive[i]),trace=str((folder/'trajectory.npz').resolve()),snapshot=str((a.output/'exit_snapshot.pt').resolve())))
+        records.append(dict(disturbance_id=pulse['sequence_id'] if pulse else 'D0',protocol_id=spec.get('protocol_id','legacy_full_suffix'),b_entry=next((e for e in entry_events if e['lane']==i),None),common_task_reference=common,origin_id=spec['origin_id'],snapshot_id=snapshot_id,task_id=task['task_id'],skill_id=skill_id,candidate_id=candidate['candidate_id'],state=feature,state_named=state_named,geometry=dict(connection_length_m=spec.get('connection_end_progress_m'),corridor_half_width_m=spec['corridor_half_width_m'],route=task['route']),complete=int(completed),success_cost=float(arrivals[i]) if completed else None,input_target_limit=input_limit,max_original_path_error_m=float(path_errors.max()) if len(path_errors) else None,path_rmse_m=float(np.sqrt(np.mean(path_errors**2))) if len(path_errors) else None,observed_lower_steps=int(valid.sum()),physical_or_controller_failure=not bool(env.alive[i]),trace=str((folder/'trajectory.npz').resolve()),snapshot=str((a.output/'exit_snapshot.pt').resolve())))
     if decision is not None and decision['status']=='reference_selected':
         selected=next(r for r in records if r['task_id']==task['task_id'] and r['candidate_id']==decision['reference']['candidate_id'])
         lane=next(i for i,c in enumerate(candidates) if c['candidate_id']==selected['candidate_id'])
