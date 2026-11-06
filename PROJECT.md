@@ -1,3 +1,9 @@
+## 同车H75/Local300到跳跃入口已接通，首跑引擎错误不采用
+
+跳跃评估复用IsaacPathRollout作为可选ground_bundle，在同一个commonasset与.005物理实例中锁摆运行H75+Local300，再原位释放摆给PhaseU/RB，控制周期.005/上层.02，保存ground身份。ground_alpha=.5首跑输出runs/pendulum_sttw_jump_dt005，日志出现GPU narrowphase/friction kernel launch errors，确切原因未定；虽写出results.json，已INVALID.json标明不可用于兼容或能力结论。保留runtime.log，不将其曲线当有效实验证据；后续需补无引擎错误运行。没有修改其他任务或新训练预算。
+
+ContinuousTask新增纯任务接口：已知地图允许路线→经验能力查询→相近完成概率下选成功时间，未知/不可通行返回剩余任务修订请求，保留当前有效参考；实际到达、直立、区域条件才推进完成序列。三个单元用例验证无真实运行数据时不伪装完成/不选已阻塞路线；不称LLM已部署或在线仿真闭环已完成。
+
 ## 跳跃训练已切换0.005秒；同车STTW调度同步适配
 
 用户要求同车STTW与跳跃兼容并中止旧训练。旧pid4004504已停止，23轮记录保留，旧采样reward best实际update0用于新阶段weights-only初始化，fresh optimizer，不冒充23轮精确续训。新配置isaac_phase_u_training_dt005.json：4096×24×150，physics.005/sensor.005/policy.02，保留原模型网络、Go2 PPO与随机化。初始化首次因并发显存OOM失败（0更新）目录保留；仅降低预分配接触容量到2^22/2^22/2^24后运行成功。
