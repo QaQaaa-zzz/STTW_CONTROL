@@ -3,11 +3,11 @@ import argparse,json
 from pathlib import Path
 import numpy as np
 from scipy.spatial.transform import Rotation
-p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True);p.add_argument('--reference-wheel-radii',nargs=3,type=float,default=[.1,.1,.025]);a=p.parse_args()
 idx=json.loads((a.run/'physics_contacts/index.json').read_text());c=json.loads((a.run/'contract.json').read_text());dt=idx['physics_dt_s'];n=c['settings']['num_envs'];fork=idx['body_order'].index('frontfork')
 frames=[];times=[];maxcounts=np.zeros((2,2),int)
 for chunk in idx['chunks']:
- archive=np.load(a.run/'physics_contacts'/chunk['file']);d={key:archive[key] for key in archive.files};archive.close();count=len(d['physics_step']);f=np.zeros((count,n,2,3));moment=np.zeros((count,n,2));normal_force=np.zeros_like(f);ridge=np.zeros((count,n,2),bool);components=np.zeros((count,n,3));front=d['body_state'][:,:,fork];axis=Rotation.from_quat(front[:,:,3:7].reshape(-1,4)).apply([0,1,0]).reshape(count,n,3)
+ archive=np.load(a.run/'physics_contacts'/chunk['file']);d={key:archive[key] for key in archive.files};archive.close();count=len(d['physics_step']);f=np.zeros((count,n,2,3));moment=np.zeros((count,n,2));normal_force=np.zeros_like(f);ridge=np.zeros((count,n,2),bool);components=np.zeros((count,n,3));negative_lateral=np.zeros((count,n));migration_lateral=np.zeros((count,n));trail_min=np.full((count,n),np.inf);front=d['body_state'][:,:,fork];axis=Rotation.from_quat(front[:,:,3:7].reshape(-1,4)).apply([0,1,0]).reshape(count,n,3)
  for wi,wheel in enumerate(['frontwheel','rearwheel']):
   for kind in ['normal','friction']:
    counts=d[wheel+'_'+kind+'_count'];starts=d[wheel+'_'+kind+'_start']
@@ -40,16 +40,34 @@ for chunk in idx['chunks']:
       axle=Rotation.from_quat(d['body_state'][ti,li,idx['body_order'].index(wheel),3:7]).apply([0,0,1])
       longitudinal=np.cross(axle,normal);longitudinal/=np.linalg.norm(longitudinal,axis=1,keepdims=True)
       lateral=np.cross(normal,longitudinal)
+      forward=Rotation.from_quat(d['body_state'][ti,li,idx['body_order'].index('chasis'),3:7]).apply([1,0,0])
+      direction=longitudinal*np.where((longitudinal*forward).sum(1)>=0,1.,-1.)[:,None]
+      dot=(steer_axis*normal).sum(1);regular=abs(dot)>1e-6
+      intersection=front[ti,li,:3]+steer_axis*np.divide((lever*normal).sum(1),dot,out=np.zeros_like(dot),where=regular)[:,None]
+      trail=((intersection-points)*direction).sum(1)
+      np.minimum.at(trail_min,(ti[regular],li[regular]),trail[regular])
+      lateral_force=(values*lateral).sum(1)[:,None]*lateral
+      lateral_moment=(np.cross(lever,lateral_force)*steer_axis).sum(1)
+      np.add.at(negative_lateral,(ti,li),np.where(regular&(trail<0),lateral_moment,0.))
+      wheel=d['body_state'][ti,li,idx['body_order'].index(wheel)]
+      rotation=Rotation.from_quat(wheel[:,3:7]);up=np.broadcast_to([0.,0.,1.],(len(wheel),3)).copy()
+      q_up=rotation.apply(rotation.inv().apply(up)*np.array(a.reference_wheel_radii)**2)
+      reference=wheel[:,:3]-q_up/np.sqrt((q_up*up).sum(1))[:,None]
+      horizontal=np.cross(axle,up);horizontal/=np.linalg.norm(horizontal,axis=1,keepdims=True)
+      horizontal*=np.where((horizontal*forward).sum(1)>=0,1.,-1.)[:,None]
+      ref_trail=((front[ti,li,:3]-reference)*horizontal).sum(1)+(reference[:,2]-front[ti,li,2])*(steer_axis*horizontal).sum(1)/steer_axis[:,2]
+      delta=(np.cross(reference-points,lateral_force)*steer_axis).sum(1)
+      np.add.at(migration_lateral,(ti,li),np.where(ref_trail>0,delta,0.))
       for ci,direction in enumerate([longitudinal,lateral,normal]):
        part=(values*direction).sum(1)[:,None]*direction
        np.add.at(components[:,:,ci],(ti,li),(np.cross(lever,part)*steer_axis).sum(1))
 
  if not np.isfinite(f).all() or not np.isfinite(moment).all():raise ValueError('Nonfinite active contact buffer')
- frames.append(dict(force=f,normal_force=normal_force,ridge_contact=ridge,friction_components=components,moment=moment,steer_velocity=d['joint_velocity'][:,:,idx['joint_order'].index('steering_joint')],motor=d['motor_torque'],alive=d['alive_before']))
+ frames.append(dict(force=f,normal_force=normal_force,ridge_contact=ridge,friction_components=components,negative_trail_lateral_moment=negative_lateral,restore_reference_lateral_delta=migration_lateral,friction_patch_min_trail=trail_min,moment=moment,steer_velocity=d['joint_velocity'][:,:,idx['joint_order'].index('steering_joint')],motor=d['motor_torque'],alive=d['alive_before']))
  times.append(d['physics_step']*dt)
 out={key:np.concatenate([row[key] for row in frames]) for key in frames[0]};out['time_s']=np.concatenate(times)
 np.savez_compressed(a.run/'physics_wrench.npz',**out)
-report=dict(physics_steps=len(out['time_s']),dt_s=dt,max_patch_count=maxcounts.tolist(),scope='normal and friction moments at their own world points, projected onto frontfork local+y steering axis; no causal compensation',lanes=[])
+report=dict(physics_steps=len(out['time_s']),dt_s=dt,max_patch_count=maxcounts.tolist(),reference_wheel_radii_m=a.reference_wheel_radii,migration_reference='nominal wheel ellipsoid at recorded wheel pose on horizontal plane; only positive-reference cases; lateral force kept fixed; geometry-only torque delta, not causal replay',scope='normal and friction moments at their own world points, projected onto frontfork local+y steering axis; no causal compensation',lanes=[])
 for lane,alpha in enumerate(c['settings']['alphas']):
  valid=out['alive'][:,lane];m=out['moment'][valid,lane];report['lanes'].append(dict(alpha=alpha,signed_impulse_Nms=(m.sum(0)*dt).tolist(),absolute_impulse_Nms=(abs(m).sum(0)*dt).tolist(),peak_abs_moment_Nm=abs(m).max(0).tolist(),peak_abs_steer_rate_rad_s=float(abs(out['steer_velocity'][valid,lane]).max())))
 (a.run/'physics_wrench_summary.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))
