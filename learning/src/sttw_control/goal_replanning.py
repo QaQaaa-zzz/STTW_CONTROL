@@ -5,11 +5,9 @@ only selects a finite free-goal-heading set and adapts its geometry to Path.
 Curvature steps still use the ORIGINAL reference slew/filter.
 """
 import numpy as np
-import jax.numpy as j
-from .geometric_path import Path
 
 
-def dubins_goal_path(pose, goal_xy, *, radius_m=1.8, length_m=80., spacing_m=.02, goal_heading_rad=None, fallback_max_length_m=None):
+def dubins_goal_path(pose, goal_xy, *, radius_m=1.8, length_m=80., spacing_m=.02, goal_heading_rad=None, fallback_max_length_m=None, numpy_output=False):
     """Upstream planner with eight world headings plus the current goal bearing.
 
     This finite heading set avoids imposing one final heading as task success;
@@ -64,7 +62,14 @@ def dubins_goal_path(pose, goal_xy, *, radius_m=1.8, length_m=80., spacing_m=.02
         if mode!='S' and length>0:turn_end=end
         start=end
     xy[0]=pose[:2];xy[nearest]=goal
-    result=Path(*(j.asarray(x) for x in (s,xy,heading,curvature,turn_end,total)))
+    values=dict(s=s,xy=xy,heading=heading,curvature=curvature,turn_end=turn_end,goal=total)
+    if numpy_output:
+        from types import SimpleNamespace
+        result=SimpleNamespace(**values)
+    else:
+        import jax.numpy as j
+        from .geometric_path import Path
+        result=Path(**{key:j.asarray(value) for key,value in values.items()})
     metadata=dict(planner='PythonRobotics Dubins; six path families and finite goal-heading candidates',
                   upstream_commit='8c392897c7f41a6e4d9aab9cb2e9737a7a6fa031',
                   radius_m=float(radius_m),modes=modes,segment_lengths_m=list(lengths),
@@ -114,3 +119,61 @@ def replan_requested(*, xy, goal_xy, cross_track_m, follower_invalid, already_re
     return bool(not ((already_replanned and not continuous_replanning) or contact or fault or ever_arrived)
                 and np.linalg.norm(np.asarray(xy)-goal_xy)>arrival_radius_m
                 and ((continuous_replanning and already_replanned) or follower_invalid or abs(cross_track_m)>departure_m))
+
+
+class IsaacGoalReplanning:
+    """Evaluation adapter: reuse Dubins geometry, retain all controller state."""
+    def __init__(self, env, config, output):
+        import torch
+        from .torch_path_reference import TorchPathReference
+        self.env=env;self.config=config;self.output=output;self.events=[]
+        original=env.route
+        self.grid=original.s.cpu().numpy()
+        route_data=np.load(config['original_route'])
+        self.goal_s=float(route_data['turn_end'])+config['goal_after_turn_m'] if 'goal_after_turn_m' in config else float(route_data['goal'])
+        self.goal=original.at(torch.tensor([self.goal_s],device=env.device))[0][0].cpu().numpy()
+        self.arrived=np.zeros(env.n,dtype=bool);self.exit_bound=np.zeros(env.n,dtype=bool);self.replanned=np.zeros(env.n,dtype=bool)
+        route=dict(s=self.grid,**{key:getattr(original,key).cpu().numpy()[None].repeat(env.n,axis=0) for key in ('xy','heading','curvature')})
+        env.route=TorchPathReference(route,env.config,env.device)
+        env.middle.route=env.route
+        self.period=round(config['period_s']/.02)
+
+    def update(self):
+        import json,time,torch
+        env=self.env;c=self.config;_,pose,speed=env.plant.observe()
+        poses=pose.cpu().numpy()
+        self.arrived|=np.linalg.norm(poses[:,:2]-self.goal,axis=1)<=c['arrival_radius_m']
+        due=env.tick>0 and env.tick%self.period==0
+        cross=env.middle.projection['cross_track'].cpu().numpy()
+        invalid=env.middle.follower['invalid'].cpu().numpy();alive=env.alive.cpu().numpy()
+        changed=[]
+        for i,enabled in enumerate(c['enabled']):
+            if enabled and alive[i] and self.arrived[i] and self.replanned[i] and not self.exit_bound[i]:
+                # Finite-goal handoff: do not keep following a pre-arrival loop.
+                xy=poses[i,:2]+self.grid[:,None]*np.array([np.cos(poses[i,2]),np.sin(poses[i,2])])
+                heading=np.full_like(self.grid,poses[i,2]);curvature=np.zeros_like(self.grid)
+                for key,value in dict(xy=xy,heading=heading,curvature=curvature).items():getattr(env.route,key)[i]=torch.as_tensor(value,device=env.device,dtype=torch.float32)
+                file=f'forward_exit_{i:02d}_tick{env.tick*4:04d}.npz'
+                np.savez_compressed(self.output/file,s=self.grid,xy=xy,heading=heading,curvature=curvature,goal=0.,original_goal_xy=self.goal)
+                self.events.append(dict(lane=i,task_tick=env.tick*4,time_s=env.tick*.02,event='goal_arrival_forward_exit',file=file,start_pose=poses[i].tolist(),goal_xy=self.goal.tolist(),planning_seconds=0.))
+                self.exit_bound[i]=True;changed.append(i)
+                continue
+            if not due or not enabled or not replan_requested(xy=poses[i,:2],goal_xy=self.goal,cross_track_m=cross[i],follower_invalid=invalid[i],already_replanned=self.replanned[i],contact=not alive[i],fault=bool(env.middle.fault[i]),ever_arrived=self.arrived[i],arrival_radius_m=c['arrival_radius_m'],departure_m=c['departure_m'],continuous_replanning=True):continue
+            started=time.monotonic()
+            path,meta=dubins_goal_path(poses[i],self.goal,radius_m=c['radius_m'],numpy_output=True)
+            xy=np.column_stack([np.interp(self.grid,path.s,path.xy[:,k]) for k in (0,1)])
+            heading=np.interp(self.grid,path.s,np.unwrap(path.heading));curvature=np.interp(self.grid,path.s,path.curvature)
+            for key,value in dict(xy=xy,heading=heading,curvature=curvature).items():getattr(env.route,key)[i]=torch.as_tensor(value,device=env.device,dtype=torch.float32)
+            file=f'replanned_path_{i:02d}_tick{env.tick*4:04d}.npz'
+            np.savez_compressed(self.output/file,s=self.grid,xy=xy,heading=heading,curvature=curvature,goal=path.goal,original_goal_xy=self.goal)
+            self.events.append(dict(meta,lane=i,task_tick=env.tick*4,time_s=env.tick*.02,cross_track_before=float(cross[i]),file=file,planning_seconds=time.monotonic()-started))
+            self.replanned[i]=True;changed.append(i)
+        if changed:
+            ids=torch.tensor(changed,device=env.device)
+            previous=env.middle.projection['progress'].clone();previous[ids]=0
+            projection=env.route.project(pose[:,:2],previous,torch.zeros_like(speed))
+            follower=env.route.pursuit(projection['progress'],pose,speed,env.speed)
+            for key,value in projection.items():env.middle.projection[key][ids]=value[ids]
+            for key,value in follower.items():env.middle.follower[key][ids]=value[ids]
+            # No policy/filter/history/ESO reset. Normal publish retains slew.
+            (self.output/'replanning_decisions.json').write_text(json.dumps(self.events,indent=2))

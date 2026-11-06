@@ -41,6 +41,11 @@ if env.randomization is not None:
     contract['randomization_readback']=env.randomization_properties
     contract['delay_steps']={key:value.time_lags.cpu().tolist() for key,value in env.randomization.buffers.items()}
 (a.output/'contract.json').write_text(json.dumps(contract,indent=2));rows=[];detail=[];started=time.time()
+planner=None
+if s.get('replanning'):
+    from sttw_control.goal_replanning import IsaacGoalReplanning
+    planner=IsaacGoalReplanning(env,s['replanning'],a.output)
+    (a.output/'replanning_decisions.json').write_text('[]')
 fork_step=None
 for step in range(env.horizon):
     if intervention:
@@ -51,6 +56,7 @@ for step in range(env.horizon):
             (a.output/'fork.json').write_text(json.dumps(dict(policy_step=step,time_s=step*.02,source_lane=0,restored_lanes=[1,2,3,4],fields=list(state),root_pose='link pose wxyz in local terrain coordinates',root_velocity='root COM linear/angular world velocity',signal_root='root link state xyzw; local pose, world velocity; policy signal cache',physical_caches_copied=False,analysis_window='source lane defines prefix; compare all branches only after fork; sibling pre-fork traces retained but not branch outcomes',protocol=intervention),indent=2))
         if fork_step is not None:
             active=(step-fork_step)*.02<intervention['hold_s'];env.policy.hold_channels.copy_(torch.tensor(intervention['hold_channels'],device=env.device,dtype=torch.bool) if active else torch.zeros_like(env.policy.hold_channels))
+    if planner is not None:planner.update()
     result=env.step(None)
     rows.append({key:result[key].cpu().numpy() for key in ['reward','valid','done','failure','lower_trace']})
     detail.extend({key:value.cpu().numpy() for key,value in item.items()} for item in result['diagnostics'])
