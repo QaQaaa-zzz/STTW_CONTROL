@@ -7,7 +7,7 @@ original STTW; hidden PhysX contact caches are not serialized by the state API.
 import argparse,hashlib,json,time
 from pathlib import Path
 import numpy as np
-p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--resume-from',type=Path);a=p.parse_args()
 spec=json.loads(a.config.read_text());candidates=spec['candidates']
 if len(candidates)!=6 or len({(c['speed_m_s'],c['alpha']) for c in candidates})!=6:
     p.error('six distinct speed/alpha candidates required')
@@ -29,21 +29,33 @@ plant=IsaacLabVectorPlant(s['asset'],[spec['terrain']],[0]*6,a.output,**s['plant
 source_route=TorchPathReference(np.load(spec['source_route']),env.config,env.device)
 env.begin_connection(source_route,env.speed.clone(),env.alpha.clone())
 (a.output/'protocol.json').write_text(json.dumps(dict(spec=spec,settings=s,plant=plant.metadata,source_identity=identity,role='same exposed exit state paired DEV; not exact hidden PhysX cache replay'),indent=2))
-start=time.monotonic();source_trace=[];found=False
-for _ in range(round(spec['source_seconds']/.02)):
-    result=env.step();source_trace.append(result['lower_trace'].clone())
-    if not bool(env.alive[0]):break
-    if float(env.middle.projection['progress'][0])>=spec['source_exit_progress_m']:
-        found=True;break
-np.savez(a.output/'source_trajectory.npz',trace=torch.stack(source_trace).cpu().numpy())
-if not found:raise RuntimeError('Source lane did not produce the declared live exit; no candidate records emitted')
-snapshot=env.capture_connection_state(0);torch.save(snapshot,a.output/'exit_snapshot.pt')
-m,pose,v=plant.observe();feature=[float(v[0]),float(m[0,0]),float(m[0,1]),float(env.middle.projection['cross_track'][0]),float(wrap(env.middle.projection['heading'][0]-pose[0,2])),float(m[0,2]),float(m[0,3]),float(env.previous_reference[0,0])]
+start=time.monotonic()
+records=[]
+if a.resume_from:
+    import shutil
+    parent=json.loads((a.resume_from/'protocol.json').read_text())
+    if parent['spec']!=spec or parent['settings']!=s:raise ValueError('resume requires unchanged collection contract')
+    records=[json.loads(line) for line in (a.resume_from/'records.jsonl').read_text().splitlines() if line.strip()]
+    shutil.copy2(a.resume_from/'exit_snapshot.pt',a.output/'exit_snapshot.pt')
+    snapshot=torch.load(a.output/'exit_snapshot.pt',map_location='cpu',weights_only=False)
+    feature=records[0]['state']
+else:
+    source_trace=[];found=False
+    for _ in range(round(spec['source_seconds']/.02)):
+        result=env.step();source_trace.append(result['lower_trace'].clone())
+        if not bool(env.alive[0]):break
+        if float(env.middle.projection['progress'][0])>=spec['source_exit_progress_m']:
+            found=True;break
+    np.savez(a.output/'source_trajectory.npz',trace=torch.stack(source_trace).cpu().numpy())
+    if not found:raise RuntimeError('Source lane did not produce the declared live exit; no candidate records emitted')
+    snapshot=env.capture_connection_state(0);torch.save(snapshot,a.output/'exit_snapshot.pt')
+    m,pose,v=plant.observe();feature=[float(v[0]),float(m[0,0]),float(m[0,1]),float(env.middle.projection['cross_track'][0]),float(wrap(env.middle.projection['heading'][0]-pose[0,2])),float(m[0,2]),float(m[0,3]),float(env.previous_reference[0,0])]
 snapshot_id=hashlib.sha256((a.output/'exit_snapshot.pt').read_bytes()).hexdigest()
 skill_id=env.upper_sha256+':'+env.lower_sha256
 speeds=torch.tensor([c['speed_m_s'] for c in candidates],device=env.device);alphas=torch.tensor([c['alpha'] for c in candidates],device=env.device)
-records=[]
+completed_tasks={r['task_id'] for r in records}
 for task in spec['tasks']:
+    if task['task_id'] in completed_tasks:continue
     folder=a.output/task['task_id'];folder.mkdir()
     data=np.load(task['route']);original=TorchPathReference(data,env.config,env.device)
     env.restore_connection_state(snapshot);env.horizon=round(task['seconds']/.02);env.begin_connection(original,speeds,alphas)

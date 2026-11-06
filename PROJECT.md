@@ -1,3 +1,11 @@
+## 首个同出口左弯六候选已完成；右弯按快照恢复
+
+机器重启前left90_R2已保存6条实际NPZ/JSONL，右弯未完成。collect_connection_candidates新增显式--resume-from，同合同复用原exit_snapshot和完整左弯结果，只补右弯，追加预算300000lane物理步/0optimizer；输出collection_resume，原结果不覆盖。
+
+已查看runs/connection_candidates_nominal/collection/xy_candidates.png：6/6到达2m目标区并存活10秒；按预先定义全窗口走廊2m条件5/6合格。2.3m/s alpha1在3.28s已到达，但继续行驶后偏离至约4.5m，不能写成到达失败。其余5候选路径RMSE约.046–.069m。1.5m/s三alpha到达4.52/4.44/4.38秒，2.3m/s为3.28/3.24/3.28秒。arrival_vs_full_window.json分开记录到达前和全窗口最大误差，后续能力工具须与任务时域一致，不从此单来源宣布泛化或alpha严格排序。
+
+同车四候选对比正在执行：原source/RB＋原150阶段best88/last150，ground H75+Local300、alpha.5、dt005，4lane×最多4秒，0optimizer；续训150→300继续。输出phase_u150_handoff_comparison，尚未回收，不写结果。
+
 ## dt005追加150轮已从最终150模型真实续训
 
 用户要求查看结果并追加150轮。前阶段完成150/932.37秒，训练mean-step best为update88/.704313；后25轮均值.55443低于前25轮.59607，不能认定稳定收敛。最后日志apex_fraction .77145、physical_failure .82020，是训练终止回合事件而非完整跳跃成功率。training_curves.png及training_scalar_summary.json已保存并查看；value loss下降但仍有波动，学习率自适应，原日志无KL数值。

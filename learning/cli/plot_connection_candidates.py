@@ -6,13 +6,16 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-p=argparse.ArgumentParser(description=__doc__);p.add_argument('--run',type=Path,required=True);a=p.parse_args()
+p=argparse.ArgumentParser(description=__doc__);p.add_argument('--run',type=Path,required=True);p.add_argument('--tasks',nargs='+');a=p.parse_args()
 spec=json.loads((a.run/'protocol.json').read_text())['spec'];tasks=spec['tasks'];candidates=spec['candidates']
+records=[json.loads(line) for line in (a.run/'records.jsonl').read_text().splitlines() if line.strip()]
+traces={r['task_id']:r['trace'] for r in records}
+if a.tasks:tasks=[t for t in tasks if t['task_id'] in a.tasks]
 fig,axes=plt.subplots(len(tasks),3,figsize=(15,5*len(tasks)),squeeze=False,layout='constrained')
 reward_fig,reward_axes=plt.subplots(len(tasks),2,figsize=(12,4*len(tasks)),squeeze=False,layout='constrained')
 colors={0.:'tab:blue',.5:'tab:orange',1.:'tab:green'};speeds=sorted({c['speed_m_s'] for c in candidates})
 for row,task in enumerate(tasks):
-    data=np.load(a.run/task['task_id']/'trajectory.npz');trace=data['trace'];original=data['original_xy'];error=data['original_path_error']
+    data=np.load(traces[task['task_id']]);trace=data['trace'];original=data['original_xy'];error=data['original_path_error']
     ax=axes[row];ax[0].plot(original[:,0],original[:,1],':',color='gray',label='Original reference')
     ax[0].plot(*data['goal'],'*',color='black',markersize=10,label='Goal')
     plotted=[]
