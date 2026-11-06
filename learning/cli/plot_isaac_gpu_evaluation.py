@@ -61,7 +61,8 @@ if a.baseline_run:
   speeds.plot(time,trace[ids,2]-user_speed,label='Policy true speed error');speeds.plot(bt,baseline[bid,2]-user_speed,'--',label='Zero true speed error');speeds.plot(time,trace[ids,2]-trace[ids,10],':',label='Policy true minus wheel proxy')
   tick.plot(time,replayed[ids,lane],color=colors[lane]);tick.plot(zero['time'],zero['reward'],'--',color='.4');cum.plot(time,np.cumsum(replayed[ids,lane]),color=colors[lane]);cum.plot(zero['time'],np.cumsum(zero['reward']),'--',color='.4')
   for ax,title,ylabel in zip(axes.flat,['Ordinary reward components','Cumulative ordinary components','Path error','Speed errors','Reward per lower step','Cumulative reward'],['Reward','Reward','m','m/s','Reward','Reward']):ax.set(title=title,xlabel='Time (s)',ylabel=ylabel);ax.grid(alpha=.2)
-  terrain_meta=json.loads((Path(next(iter(c['settings']['terrains'].values())))/'identity.json').read_text())
+  terrain_path=next(iter(c['settings']['terrains'].values()))
+  terrain_meta={} if terrain_path=='plane' else json.loads((Path(terrain_path)/'identity.json').read_text())
   if terrain_meta.get('height_m',0)>0:
    if 'start_s_m' in terrain_meta:
     start=terrain_meta['start_s_m'];end=terrain_meta['end_s_m']

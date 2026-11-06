@@ -1,3 +1,9 @@
+## 锁摆H75左弯完成；RB观测组装实现待物理接入
+
+`runs/pendulum_h75_locked/RESULTS.md`先给实际XY。五alpha皆完整10秒/goal，路径RMSE .232/.158/.110/.064/.083m，速度RMSE .149/.105/.076/.055/.039m/s；严格final_hold按各行记录，不因此重训或要求单调排序。Zero9.18s domain_exit，末roll-.02491rad，非摔倒。平面绘图错误plane/identity.json已原位修复并复用轨迹补全，原批处理退出后仅继续右弯session19125，未重跑预热/左弯。用户认可当前效果并要求推进。
+
+新增TorchPendulumObservation组装RB3×25+signal，复用原rotate_inverse及原JIT字段顺序：按mount将chassis转到虚拟RB直立坐标，轮速符号转换一次；保留实际世界x速度/高度/障碍相对x，不伪造donor质量/半径/高度。50Hz连续FIFO，last_action需调用方明确来源，地面模式不能把虚构RB动作称实际已执行。当前只是数值接口，未接真实IMU加速度/策略滚动；共同chassis root COM为0的加速度假设已注明。三个观测/伺服测试通过，验证姿态坐标、静止specific force、轮速符号和三帧顺序，不称RB接管成功。
+
 ## RB交接动作接口：复用原车备用转向位置伺服
 
 源码核对：原RB的四动作映射为转向角/后轮轴转速/hip角/knee角，而地面STTW为转向角速度/后轮轴转速，不能直接串接。共同STTW模型已保留未启用的cmd_steering_p（kp10、kd0.1、角度±0.8rad、力矩±1Nm），因此复用它作为显式跳跃位置接口，不自行拼角度到角速度转换。旧RB donor的转向力矩±5Nm、后轮±6Nm与共同车不同；共同车仍保留转向±1Nm、后轮±3Nm，不能假设原RB直接成功。

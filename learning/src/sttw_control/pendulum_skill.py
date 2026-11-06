@@ -57,3 +57,40 @@ class PendulumSkill:
         action, _ = self.policy({"state": observation}, jax.random.PRNGKey(0))
         ctrl = map_action(action, jp.asarray(knee_position), self.bundle.action_mapping)
         return action, ctrl
+
+class TorchPendulumObservation:
+    """76-D RB observation on the common chassis, sampled at 50 Hz.
+
+    Inputs are physical root-link state (xyzw, world velocities), joint state,
+    and root-origin world acceleration. The common chassis COM is at its root
+    origin. The virtual RB frame uses the declared pendulum mounting rotation.
+    No donor mass, wheel radius, or height is substituted into physical signals.
+    Caller supplies previous normalized RB action; ground-mode action history
+    needs an explicit convention because the ground controller is a different skill.
+    """
+    def __init__(self, joint_names, mount_wxyz, count, device='cpu'):
+        import torch
+        self.torch=torch
+        self.indices=[joint_names.index(n) for n in ('steering_joint','hip_joint','knee_joint')]
+        self.wheels=[joint_names.index(n) for n in ('frontwheel_joint','rearwheel_joint')]
+        self.mount=torch.tensor(mount_wxyz[1:]+mount_wxyz[:1],device=device).expand(count,4)
+        self.frames=torch.zeros(count,3,25,device=device)
+        self.valid_count=torch.zeros(count,device=device,dtype=torch.long)
+        self.gravity=torch.tensor([0.,0.,-1.],device=device).expand(count,3)
+
+    def advance(self, root, position, velocity, root_acceleration_world,
+                obstacle_world_x, last_action, jump_signal):
+        from .torch_observation import rotate_inverse
+        torch=self.torch
+        q=root[:,3:7]
+        body=lambda v:rotate_inverse(self.mount,rotate_inverse(q,v))
+        frame=torch.cat((body(self.gravity),body(root[:,10:13]),
+            body(root_acceleration_world-9.81*self.gravity),
+            position[:,self.indices],velocity[:,self.indices],
+            -velocity[:,self.wheels],last_action,
+            root[:,7:8],(obstacle_world_x-root[:,0])[:,None],root[:,2:3],
+            torch.ones_like(root[:,:1])),dim=-1)
+        self.frames=torch.cat((self.frames[:,1:],frame[:,None]),dim=1)
+        self.valid_count=(self.valid_count+1).clamp_max(3)
+        self.frames[:,:,-1]=(torch.arange(3,device=root.device)[None]>=3-self.valid_count[:,None])
+        return torch.cat((self.frames.flatten(1),jump_signal[:,None]),dim=-1)
