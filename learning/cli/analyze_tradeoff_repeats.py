@@ -11,6 +11,7 @@ if a.window_mode=='both':
  sys.exit(0)
 index=json.loads((a.evaluation/'index.json').read_text())
 suffix='' if a.window_mode=='panel' else '_global_window'
+replicate_label='paired parameter repeats' if any(r.get('seed') is not None for r in index) else 'nominal single-state preview'
 global_count=None
 if a.window_mode=='global':
  counts=[]
@@ -32,16 +33,16 @@ for row,speed in enumerate(speeds):
   count=global_count if global_count is not None else min(int(lengths.min()) for _,_,lengths,_ in samples);window=count*.005;values=[]
   for case,tr,lengths,failed in samples:
    xy=np.sqrt(np.mean(tr[:count,:,3]**2,axis=0));sv=np.sqrt(np.mean((tr[:count,:,2]-speed)**2,axis=0));values.append(np.stack((xy,sv),axis=-1))
-   for lane,label in enumerate(labels):records.append(dict(terrain=terrain,speed_m_s=speed,seed=case['seed'],alpha=label,common_window_s=window,path_rmse_m=float(xy[lane]),speed_rmse_m_s=float(sv[lane]),failed=bool(failed[lane]),observed_s=float(lengths[lane]*.005),run=case['run']))
-  values=np.stack(values);mean=values.mean(0);std=values.std(0,ddof=1) if len(values)>1 else np.zeros_like(mean)
+   for lane,label in enumerate(labels):records.append(dict(terrain=terrain,speed_m_s=speed,seed=case.get('seed'),alpha=label,common_window_s=window,path_rmse_m=float(xy[lane]),speed_rmse_m_s=float(sv[lane]),failed=bool(failed[lane]),observed_s=float(lengths[lane]*.005),run=case['run']))
+  values=np.stack(values);mean=values.mean(0);std=values.std(0,ddof=1) if len(values)>1 else None
   ax.plot(mean[:5,0],mean[:5,1],color='.5',lw=1)
   for lane in range(5):
    ax.scatter(values[:,lane,0],values[:,lane,1],color=colors[lane],s=12,alpha=.35)
-   ax.errorbar(*mean[lane],xerr=std[lane,0],yerr=std[lane,1],fmt=markers[lane],color=colors[lane],capsize=2,label='alpha '+labels[lane])
+   ax.errorbar(*mean[lane],xerr=std[lane,0] if std is not None else None,yerr=std[lane,1] if std is not None else None,fmt=markers[lane],color=colors[lane],capsize=2,label='alpha '+labels[lane])
   ax.set(title=f'{terrain} | {speed:g} m/s\nn={len(samples)}; shared 0–{window:.2f}s',xlabel='Path RMSE (m)',ylabel='Speed RMSE (m/s)');ax.grid(alpha=.2)
-  groups.append(dict(terrain=terrain,speed_m_s=speed,n=len(samples),window_mode=a.window_mode,common_window_s=window,labels=labels,mean=mean.tolist(),sample_sd=std.tolist(),failure_counts=np.sum([x[3] for x in samples],axis=0).tolist()))
+  groups.append(dict(terrain=terrain,speed_m_s=speed,n=len(samples),window_mode=a.window_mode,common_window_s=window,labels=labels,mean=mean.tolist(),sample_sd=std.tolist() if std is not None else None,failure_counts=np.sum([x[3] for x in samples],axis=0).tolist()))
 axs[0,0].legend(fontsize=7)
-fig.suptitle(a.window_mode+' common window | Original H75 + selected Local300 | paired parameter repeats, DEV\nPoints: seed results; bars: ±1 sample SD; lines connect alpha means, not a fitted law. Zero retained in tables and shared-window selection.')
+fig.suptitle(a.window_mode+' common window | Original H75 + selected Local300 | '+replicate_label+', DEV\nPoints: seed results; bars: ±1 sample SD (omitted for n=1); lines connect alpha means, not a fitted law. Zero retained in tables and shared-window selection.')
 fig.savefig(a.evaluation/('tradeoff_repeated_mean'+suffix+'.png'),dpi=160);plt.close(fig)
 with (a.evaluation/('tradeoff_repeated_raw'+suffix+'.csv')).open('w') as f:
  w=csv.DictWriter(f,fieldnames=list(records[0]));w.writeheader();w.writerows(records)
