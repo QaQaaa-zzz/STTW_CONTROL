@@ -1,0 +1,151 @@
+{
+  "role": "12 parameterized upstream DEV roots; six replicated lanes per root are not independent samples",
+  "declared_roots": 12,
+  "reached_exit": 12,
+  "rows": [
+    {
+      "origin_id": "v1.9_lat-0.04_yaw-2_oblique0.0",
+      "status": "source_complete",
+      "duration_s": 1.5399999998882414,
+      "request_speed_m_s": 1.9,
+      "exit_or_terminal_speed_m_s": 1.9372508525848389,
+      "max_cross_track_m": 0.06114531308412552,
+      "peak_roll_deg": 1.6673651933670044,
+      "role": "Source reachability only; not downstream task completion",
+      "sampling_elapsed_s": 91.83933437299856,
+      "xy_plot": "first_flat_result/xy_source.png"
+    },
+    {
+      "origin_id": "v1.9_lat-0.04_yaw2_oblique0.0",
+      "status": "source_complete",
+      "duration_s": 1.5399999998882414,
+      "request_speed_m_s": 1.9,
+      "exit_or_terminal_speed_m_s": 1.9532243013381958,
+      "max_cross_track_m": 0.03962446749210358,
+      "peak_roll_deg": 0.6566202044487,
+      "role": "Source reachability only; not downstream task completion",
+      "sampling_elapsed_s": 72.1436306359974,
+      "xy_plot": "flat_results/v1.9_lat-0.04_yaw2_oblique0.0/xy_source.png"
+    },
+    {
+      "origin_id": "v1.9_lat0.04_yaw-2_oblique0.0",
+      "status": "source_complete",
+      "duration_s": 1.5399999998882414,
+      "request_speed_m_s": 1.9,
+      "exit_or_terminal_speed_m_s": 1.9402514696121216,
+      "max_cross_track_m": 0.039641123265028,
+      "peak_roll_deg": 0.8557475209236145,
+      "role": "Source reachability only; not downstream task completion",
+      "sampling_elapsed_s": 69.68488277899814,
+      "xy_plot": "flat_results/v1.9_lat0.04_yaw-2_oblique0.0/xy_source.png"
+    },
+    {
+      "origin_id": "v1.9_lat0.04_yaw2_oblique0.0",
+      "status": "source_complete",
+      "duration_s": 1.5399999998882414,
+      "request_speed_m_s": 1.9,
+      "exit_or_terminal_speed_m_s": 1.944362759590149,
+      "max_cross_track_m": 0.06850703060626984,
+      "peak_roll_deg": 1.1856319904327393,
+      "role": "Source reachability only; not downstream task completion",
+      "sampling_elapsed_s": 98.46203322899964,
+      "xy_plot": "flat_results/v1.9_lat0.04_yaw2_oblique0.0/xy_source.png"
+    },
+    {
+      "origin_id": "v2.1_lat-0.04_yaw-2_oblique0.0",
+      "status": "source_complete",
+      "duration_s": 1.4599999998882414,
+      "request_speed_m_s": 2.1,
+      "exit_or_terminal_speed_m_s": 2.145223617553711,
+      "max_cross_track_m": 0.06124821677803993,
+      "peak_roll_deg": 1.6767498254776,
+      "role": "Source reachability only; not downstream task completion",
+      "sampling_elapsed_s": 88.74372812300135,
+      "xy_plot": "flat_results/v2.1_lat-0.04_yaw-2_oblique0.0/xy_source.png"
+    },
+    {
+      "origin_id": "v2.1_lat-0.04_yaw2_oblique0.0",
+      "status": "source_complete",
+      "duration_s": 1.4599999998882414,
+      "request_speed_m_s": 2.1,
+      "exit_or_terminal_speed_m_s": 2.1472625732421875,
+      "max_cross_track_m": 0.03962446749210358,
+      "peak_roll_deg": 0.7496200799942017,
+      "role": "Source reachability only; not downstream task completion",
+      "sampling_elapsed_s": 77.90078758099844,
+      "xy_plot": "flat_results/v2.1_lat-0.04_yaw2_oblique0.0/xy_source.png"
+    },
+    {
+      "origin_id": "v2.1_lat0.04_yaw-2_oblique0.0",
+      "status": "source_complete",
+      "duration_s": 1.4599999998882414,
+      "request_speed_m_s": 2.1,
+      "exit_or_terminal_speed_m_s": 2.147033929824829,
+      "max_cross_track_m": 0.039641123265028,
+      "peak_roll_deg": 0.8509253859519958,
+      "role": "Source reachability only; not downstream task completion",
+      "sampling_elapsed_s": 80.63067711199983,
+      "xy_plot": "flat_results/v2.1_lat0.04_yaw-2_oblique0.0/xy_source.png"
+    },
+    {
+      "origin_id": "v2.1_lat0.04_yaw2_oblique0.0",
+      "status": "source_complete",
+      "duration_s": 1.4599999998882414,
+      "request_speed_m_s": 2.1,
+      "exit_or_terminal_speed_m_s": 2.146409273147583,
+      "max_cross_track_m": 0.06826256960630417,
+      "peak_roll_deg": 1.19196355342865,
+      "role": "Source reachability only; not downstream task completion",
+      "sampling_elapsed_s": 89.62083638799959,
+      "xy_plot": "flat_results/v2.1_lat0.04_yaw2_oblique0.0/xy_source.png"
+    },
+    {
+      "origin_id": "v2.3_lat-0.04_yaw-2_oblique0.0",
+      "status": "source_complete",
+      "duration_s": 1.3199999998882412,
+      "request_speed_m_s": 2.3,
+      "exit_or_terminal_speed_m_s": 2.3458199501037598,
+      "max_cross_track_m": 0.06361903250217438,
+      "peak_roll_deg": 1.589357614517212,
+      "role": "Source reachability only; not downstream task completion",
+      "sampling_elapsed_s": 78.86793194700294,
+      "xy_plot": "flat_results/v2.3_lat-0.04_yaw-2_oblique0.0/xy_source.png"
+    },
+    {
+      "origin_id": "v2.3_lat-0.04_yaw2_oblique0.0",
+      "status": "source_complete",
+      "duration_s": 1.3199999998882412,
+      "request_speed_m_s": 2.3,
+      "exit_or_terminal_speed_m_s": 2.3433573246002197,
+      "max_cross_track_m": 0.0396282859146595,
+      "peak_roll_deg": 0.7580689787864685,
+      "role": "Source reachability only; not downstream task completion",
+      "sampling_elapsed_s": 82.85255330499785,
+      "xy_plot": "flat_results/v2.3_lat-0.04_yaw2_oblique0.0/xy_source.png"
+    },
+    {
+      "origin_id": "v2.3_lat0.04_yaw-2_oblique0.0",
+      "status": "source_complete",
+      "duration_s": 1.3199999998882412,
+      "request_speed_m_s": 2.3,
+      "exit_or_terminal_speed_m_s": 2.342435836791992,
+      "max_cross_track_m": 0.039641123265028,
+      "peak_roll_deg": 0.7559447884559631,
+      "role": "Source reachability only; not downstream task completion",
+      "sampling_elapsed_s": 84.31946379000146,
+      "xy_plot": "flat_results/v2.3_lat0.04_yaw-2_oblique0.0/xy_source.png"
+    },
+    {
+      "origin_id": "v2.3_lat0.04_yaw2_oblique0.0",
+      "status": "source_complete",
+      "duration_s": 1.3199999998882412,
+      "request_speed_m_s": 2.3,
+      "exit_or_terminal_speed_m_s": 2.3472108840942383,
+      "max_cross_track_m": 0.06884616613388062,
+      "peak_roll_deg": 1.1013474464416504,
+      "role": "Source reachability only; not downstream task completion",
+      "sampling_elapsed_s": 81.4150327430034,
+      "xy_plot": "flat_results/v2.3_lat0.04_yaw2_oblique0.0/xy_source.png"
+    }
+  ]
+}

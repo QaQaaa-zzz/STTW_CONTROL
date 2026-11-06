@@ -1,0 +1,10 @@
+{
+  "origin_id": "v1.9_lat-0.04_yaw2_oblique0.0",
+  "status": "source_complete",
+  "duration_s": 1.5399999998882414,
+  "request_speed_m_s": 1.9,
+  "exit_or_terminal_speed_m_s": 1.9532243013381958,
+  "max_cross_track_m": 0.03962446749210358,
+  "peak_roll_deg": 0.6566202044487,
+  "role": "Source reachability only; not downstream task completion"
+}
