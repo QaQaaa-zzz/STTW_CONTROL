@@ -5,9 +5,11 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-p=argparse.ArgumentParser(description=__doc__);p.add_argument('--evaluation',type=Path,required=True);p.add_argument('--window-mode',choices=['panel','global','both'],default='both');a=p.parse_args()
+p=argparse.ArgumentParser(description=__doc__);p.add_argument('--evaluation',type=Path,required=True);p.add_argument('--window-mode',choices=['panel','global','both'],default='both');p.add_argument('--window-methods',choices=['all','h75'],default='all');a=p.parse_args()
+method_count=5 if a.window_methods=='h75' else 6
+if a.window_mode=='both' and a.window_methods=='h75':p.error('Use panel or global for the H75-only sensitivity view')
 if a.window_mode=='both':
- for mode in ('panel','global'):subprocess.run([sys.executable,__file__,'--evaluation',str(a.evaluation),'--window-mode',mode],check=True)
+ for mode in ('panel','global'):subprocess.run([sys.executable,__file__,'--evaluation',str(a.evaluation),'--window-mode',mode,'--window-methods',a.window_methods],check=True)
  marker='## Paired repeated-parameter summary'
  lines=[marker,'','Five fixed H75 alpha levels and matched Zero. Each seed changes frozen physical/control parameters; these are not independent policy-training seeds. All runs start from the same saved 2.3 m/s warm state; low-speed requests include the deceleration transient, not equilibrated low-speed starts. No exclusions. Means average individual-run RMSE; error bars are sample SD, not confidence intervals. Failure counts use each full recorded run, while RMSE comparisons use the stated common window.','']
  for suffix,title in (('', 'Common window within each speed/terrain panel'),('_global_window','One common window across the whole matrix')):
@@ -24,24 +26,24 @@ if a.window_mode=='both':
  report.write_text(existing+'\n\n'+'\n'.join(lines)+'\n')
  sys.exit(0)
 index=json.loads((a.evaluation/'index.json').read_text())
-suffix='' if a.window_mode=='panel' else '_global_window'
+suffix=('' if a.window_mode=='panel' else '_global_window')+('_h75_window' if a.window_methods=='h75' else '')
 replicate_label='paired parameter repeats' if any(r.get('seed') is not None for r in index) else 'nominal single-state preview'
 global_count=None
 if a.window_mode=='global':
  counts=[]
  for case in index:
-  with np.load(Path(case['run'])/'trajectory.npz') as d:counts.append(int(d['lower_trace'].reshape(-1,6,11)[:,:,6].astype(bool).sum(0).min()))
+  with np.load(Path(case['run'])/'trajectory.npz') as d:counts.append(int(d['lower_trace'].reshape(-1,6,11)[:,:method_count,6].astype(bool).sum(0).min()))
  global_count=min(counts)
 speeds=sorted({r['user_speed_m_s'] for r in index});terrains=list(dict.fromkeys(r['terrain'] for r in index))
-colors=['#0072B2','#D55E00','#009E73','#CC79A7','#8A6500','#333333'];markers=['o','s','^','D','v','x'];labels=['0','.25','.5','.75','1','Zero']
+colors=['#0072B2','#D55E00','#009E73','#CC79A7','#8A6500','#333333'];markers=['o','s','^','D','v','x'];labels=['0','.25','.5','.75','1','Zero'][:method_count]
 fig,axs=plt.subplots(len(speeds),len(terrains),figsize=(4*len(terrains),3.3*len(speeds)),squeeze=False,layout='constrained');records=[];groups=[];exchanges=[]
 for row,speed in enumerate(speeds):
  for col,terrain in enumerate(terrains):
   ax=axs[row,col];cases=[r for r in index if r['terrain']==terrain and r['user_speed_m_s']==speed];samples=[]
   for case in cases:
    with np.load(Path(case['run'])/'trajectory.npz') as d:
-    tr=d['lower_trace'].reshape(-1,6,11);valid=tr[:,:,6].astype(bool);lengths=valid.sum(0)
-    samples.append((case,tr.copy(),lengths,d['failure'].any(0).copy()))
+    tr=d['lower_trace'].reshape(-1,6,11)[:,:method_count];valid=tr[:,:,6].astype(bool);lengths=valid.sum(0)
+    samples.append((case,tr.copy(),lengths,d['failure'].any(0)[:method_count].copy()))
   if not samples:ax.set_visible(False);continue
   # Identical duration for every seed and method in this panel; failures retained.
   count=global_count if global_count is not None else min(int(lengths.min()) for _,_,lengths,_ in samples);window=count*.005;values=[]
@@ -71,7 +73,8 @@ for row,speed in enumerate(speeds):
   ax.set(title=f'{terrain} | {speed:g} m/s\nn={len(samples)}; shared 0–{window:.2f}s',xlabel='Path RMSE (m)',ylabel='Speed RMSE (m/s)');ax.grid(alpha=.2)
   groups.append(dict(terrain=terrain,speed_m_s=speed,n=len(samples),window_mode=a.window_mode,common_window_s=window,labels=labels,mean=mean.tolist(),sample_sd=std.tolist() if std is not None else None,failure_counts=np.sum([x[3] for x in samples],axis=0).tolist()))
 axs[0,0].legend(fontsize=7)
-fig.suptitle(a.window_mode+' common window | Original H75 + selected Local300 | '+replicate_label+', DEV\nPoints: seed results; bars: ±1 sample SD (omitted for n=1); lines connect alpha means, not a fitted law. Zero retained in tables and shared-window selection.')
+scope_note='Zero included in tables and window selection.' if a.window_methods=='all' else 'H75-only window; Zero comparisons are in the separate all-method outputs.'
+fig.suptitle(a.window_mode+' window ('+a.window_methods+') | H75 + Local300 | '+replicate_label+', DEV\nDots: individual repeats; bars: ±1 sample SD; lines connect alpha means, not a fitted law.\n'+scope_note)
 fig.savefig(a.evaluation/('tradeoff_repeated_mean'+suffix+'.png'),dpi=160);plt.close(fig)
 with (a.evaluation/('tradeoff_repeated_raw'+suffix+'.csv')).open('w') as f:
  w=csv.DictWriter(f,fieldnames=list(records[0]));w.writeheader();w.writerows(records)
