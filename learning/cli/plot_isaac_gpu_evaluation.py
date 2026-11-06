@@ -63,7 +63,9 @@ if a.baseline_run:
   for ax,title,ylabel in zip(axes.flat,['Ordinary reward components','Cumulative ordinary components','Path error','Speed errors','Reward per lower step','Cumulative reward'],['Reward','Reward','m','m/s','Reward','Reward']):ax.set(title=title,xlabel='Time (s)',ylabel=ylabel);ax.grid(alpha=.2)
   terrain_meta=json.loads((Path(next(iter(c['settings']['terrains'].values())))/'identity.json').read_text())
   if terrain_meta.get('height_m',0)>0:
-   if 'slope_start_s_m' in terrain_meta:
+   if 'start_s_m' in terrain_meta:
+    start=terrain_meta['start_s_m'];end=terrain_meta['end_s_m']
+   elif 'slope_start_s_m' in terrain_meta:
     start=terrain_meta['slope_start_s_m'];end=terrain_meta['slope_end_s_m']
    else:
     end=terrain_meta['terrain_support_end_s_m'];start=2*terrain_meta['center_s_m']-end

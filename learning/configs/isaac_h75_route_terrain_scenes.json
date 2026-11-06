@@ -10,8 +10,6 @@
       "horizontal_scale_m": 0.1,
       "vertical_scale_m": 0.005,
       "slope_threshold": 1.5,
-      "slope_start_s_m": 3.8,
-      "length_m": 1.2,
       "alphas": [
         0,
         0.25,
@@ -38,8 +36,6 @@
       "horizontal_scale_m": 0.1,
       "vertical_scale_m": 0.005,
       "slope_threshold": 1.5,
-      "slope_start_s_m": 3.8,
-      "length_m": 1.2,
       "alphas": [
         0,
         0.25,
@@ -66,8 +62,6 @@
       "horizontal_scale_m": 0.1,
       "vertical_scale_m": 0.005,
       "slope_threshold": 1.5,
-      "slope_start_s_m": 3.8,
-      "length_m": 1.2,
       "alphas": [
         0,
         0.25,
@@ -94,8 +88,6 @@
       "horizontal_scale_m": 0.1,
       "vertical_scale_m": 0.005,
       "slope_threshold": 1.5,
-      "slope_start_s_m": 3.8,
-      "length_m": 1.2,
       "alphas": [
         0,
         0.25,
@@ -123,8 +115,6 @@
       "horizontal_scale_m": 0.1,
       "vertical_scale_m": 0.005,
       "slope_threshold": 1.5,
-      "slope_start_s_m": 3.8,
-      "length_m": 1.2,
       "alphas": [
         0,
         0.25,
@@ -152,8 +142,6 @@
       "horizontal_scale_m": 0.1,
       "vertical_scale_m": 0.005,
       "slope_threshold": 1.5,
-      "slope_start_s_m": 3.8,
-      "length_m": 1.2,
       "alphas": [
         0,
         0.25,
@@ -181,8 +169,6 @@
       "horizontal_scale_m": 0.1,
       "vertical_scale_m": 0.005,
       "slope_threshold": 1.5,
-      "slope_start_s_m": 3.8,
-      "length_m": 1.2,
       "alphas": [
         0,
         0.25,
