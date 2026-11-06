@@ -135,6 +135,7 @@ class IsaacLabVectorPlant:
         self.reset()
         if self.pendulum_servos is not None:
             self.pendulum_original_limits=self.robot.data.joint_pos_limits[:,self.pendulum_servos.indices].clone()
+            self.pendulum_joint_prims=[prim for prim in self.sim.stage.Traverse() if prim.IsA(UsdPhysics.RevoluteJoint) and prim.GetName() in ('hip_joint','knee_joint') and str(prim.GetPath()).startswith('/World/Envs/Env_')]
             self.metadata['pendulum_lock_model']='joint brake with 1e-4 rad half-play, clipped to native limits; not finite motor holding'
             self.set_pendulum_locked(pendulum_locked)
 
@@ -143,7 +144,16 @@ class IsaacLabVectorPlant:
         indices=self.pendulum_servos.indices
         self.pendulum_target=self.robot.data.joint_pos[:,indices].clone()
         limits=torch.stack((torch.maximum(self.pendulum_target-1e-4,self.pendulum_original_limits[:,:,0]),torch.minimum(self.pendulum_target+1e-4,self.pendulum_original_limits[:,:,1])),dim=-1) if locked else self.pendulum_original_limits
-        self.robot.write_joint_position_limit_to_sim(limits,joint_ids=indices)
+        # Tensor API rewrites every DOF, including unbounded continuous wheel joints.
+        # USD notices update only these two joint limits, with native degree units.
+        bounds=limits.cpu().numpy()
+        for prim in self.pendulum_joint_prims:
+            env_id=int(str(prim.GetPath()).split('/Env_')[1].split('/')[0])
+            joint_id=0 if prim.GetName()=='hip_joint' else 1
+            joint=UsdPhysics.RevoluteJoint(prim)
+            joint.GetLowerLimitAttr().Set(float(np.rad2deg(bounds[env_id,joint_id,0])))
+            joint.GetUpperLimitAttr().Set(float(np.rad2deg(bounds[env_id,joint_id,1])))
+        self.robot.data.joint_pos_limits[:,indices]=limits
         self.pendulum_is_locked=bool(locked)
         self.metadata['pendulum_locked']=bool(locked)
 

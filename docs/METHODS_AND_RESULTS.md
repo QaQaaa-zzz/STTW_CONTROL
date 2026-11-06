@@ -1,3 +1,9 @@
+## 地面锁摆接口已修复，进入H75左右弯执行
+
+`runs/pendulum_isaac_locked_jointonly`：3秒转弯/15000physics/0optimizer，髋摆角最大漂移0.000100017rad（0.00573°）、膝4.768e-7rad；约束瞬时角速峰值仍0.09054/0.00223rad/s，不宣称完全零微振。无PhysX限位报错，peakroll5.59°、未终止。释放接口恢复原limits缓存且位置未重置，释放后RB动态控制尚未验证。旧等限位/窄限位tensorAPI均会全关节回写，两个带报错记录保留；最终用独立USD摆关节更新避免碰车轮。
+
+用户认可当前行驶效果，继续推进，不再重复七工况或训练。已启动session25963，runs/pendulum_h75_locked：同锁摆模型3.5秒ECBC预热生成初态，继而原H75/Local300左右弯五alpha+Zero各10秒；最多617525physics、0optimizer，结果pending。理想极小游隙制动为显式仿真假设，未声明实机机械锁能力。下一步完成路径任务后再接释放与RB，维持跨技能统一模型目标。
+
 ## 地面固定摆、跳跃释放及继续推进
 
 用户认可当前行驶表现，要求继续推进，不为缩小误差重复调参/训练；但地面摆应固定，跳跃才由RB接管。新增显式pendulum_locked选项，地面以当前hip/knee角±1e-4rad极小游隙制动（裁到native limits），不额外添加摆位置servo扭矩；set_pendulum_locked(False)恢复原范围、目标对齐当前角、不reset车体/关节。此为仿真制动模型，不是已验证实机机械锁或原30Nm电机能力。
