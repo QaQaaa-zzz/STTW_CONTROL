@@ -1,0 +1,118 @@
+{
+  "schema_version": "rb_jump_exit_features_v1",
+  "features": [
+    {
+      "name": "speed",
+      "unit": "m/s"
+    },
+    {
+      "name": "roll",
+      "unit": "rad"
+    },
+    {
+      "name": "roll_rate",
+      "unit": "rad/s"
+    },
+    {
+      "name": "cross_track",
+      "unit": "m"
+    },
+    {
+      "name": "heading_error",
+      "unit": "rad"
+    },
+    {
+      "name": "steer",
+      "unit": "rad"
+    },
+    {
+      "name": "steer_rate",
+      "unit": "rad/s"
+    },
+    {
+      "name": "previous_speed_reference",
+      "unit": "m/s"
+    },
+    {
+      "name": "lateral_velocity_heading_frame",
+      "unit": "m/s"
+    },
+    {
+      "name": "world_yaw_rate",
+      "unit": "rad/s"
+    },
+    {
+      "name": "previous_alpha",
+      "unit": "1"
+    },
+    {
+      "name": "previous_alpha_duration",
+      "unit": "s"
+    },
+    {
+      "name": "remaining_path_to_release",
+      "unit": "m"
+    },
+    {
+      "name": "path_curvature",
+      "unit": "1/m"
+    },
+    {
+      "name": "corridor_half_width",
+      "unit": "m"
+    },
+    {
+      "name": "pitch",
+      "unit": "rad"
+    },
+    {
+      "name": "body_angular_y",
+      "unit": "rad/s"
+    },
+    {
+      "name": "hip",
+      "unit": "rad"
+    },
+    {
+      "name": "knee",
+      "unit": "rad"
+    },
+    {
+      "name": "hip_velocity",
+      "unit": "rad/s"
+    },
+    {
+      "name": "knee_velocity",
+      "unit": "rad/s"
+    },
+    {
+      "name": "platform_height",
+      "unit": "m"
+    },
+    {
+      "name": "remaining_path_to_platform",
+      "unit": "m"
+    }
+  ],
+  "candidate_features": [
+    {
+      "name": "speed_m_s",
+      "unit": "m/s"
+    },
+    {
+      "name": "alpha",
+      "unit": "1"
+    }
+  ],
+  "deployment_sources": "IMU, localization/velocity estimation, joint encoders, command history and known map. Simulation state substitutes measurements in this DEV; deployment estimation not validated.",
+  "missing_joint_velocity": "Older protocol lacks live joint ordering: retain null, never assume donor or URDF order. These rows cannot train the full feature set.",
+  "previous_alpha_duration": "At first turn-exit decision only: elapsed episode time under unchanged upstream alpha.",
+  "excluded_inputs": [
+    "handoff_state",
+    "future_contacts",
+    "future_disturbance",
+    "max_path_error",
+    "terminal_outcome"
+  ],
+  "normalization": "Not fitted; fit only on training roots if supervised learning is justified"
+}

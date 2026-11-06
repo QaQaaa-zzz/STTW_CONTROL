@@ -1,0 +1,98 @@
+{
+  "declared_cases": 18,
+  "evaluated_cases": 18,
+  "independent_origins": 1,
+  "role": "Pilot DEV only; no train/validation/test split or fitted model",
+  "cases": [
+    {
+      "case_id": "L9.6_v2.0_a0.5",
+      "status": "evaluated",
+      "decision_reached": true
+    },
+    {
+      "case_id": "L5.6_v2.0_a0.5",
+      "status": "evaluated",
+      "decision_reached": true
+    },
+    {
+      "case_id": "L7.6_v2.0_a0.5",
+      "status": "evaluated",
+      "decision_reached": true
+    },
+    {
+      "case_id": "L9.6_v1.8_a0.0",
+      "status": "evaluated",
+      "decision_reached": true
+    },
+    {
+      "case_id": "L9.6_v1.8_a0.5",
+      "status": "evaluated",
+      "decision_reached": true
+    },
+    {
+      "case_id": "L9.6_v1.8_a1.0",
+      "status": "evaluated",
+      "decision_reached": true
+    },
+    {
+      "case_id": "L9.6_v2.0_a0.0",
+      "status": "evaluated",
+      "decision_reached": true
+    },
+    {
+      "case_id": "L9.6_v2.0_a1.0",
+      "status": "evaluated",
+      "decision_reached": true
+    },
+    {
+      "case_id": "L5.6_v1.8_a0.0",
+      "status": "evaluated",
+      "decision_reached": true
+    },
+    {
+      "case_id": "L5.6_v1.8_a0.5",
+      "status": "evaluated",
+      "decision_reached": true
+    },
+    {
+      "case_id": "L5.6_v1.8_a1.0",
+      "status": "evaluated",
+      "decision_reached": true
+    },
+    {
+      "case_id": "L5.6_v2.0_a0.0",
+      "status": "evaluated",
+      "decision_reached": true
+    },
+    {
+      "case_id": "L5.6_v2.0_a1.0",
+      "status": "evaluated",
+      "decision_reached": true
+    },
+    {
+      "case_id": "L7.6_v1.8_a0.0",
+      "status": "evaluated",
+      "decision_reached": true
+    },
+    {
+      "case_id": "L7.6_v1.8_a0.5",
+      "status": "evaluated",
+      "decision_reached": true
+    },
+    {
+      "case_id": "L7.6_v1.8_a1.0",
+      "status": "evaluated",
+      "decision_reached": true
+    },
+    {
+      "case_id": "L7.6_v2.0_a0.0",
+      "status": "evaluated",
+      "decision_reached": true
+    },
+    {
+      "case_id": "L7.6_v2.0_a1.0",
+      "status": "evaluated",
+      "decision_reached": true
+    }
+  ]
+}

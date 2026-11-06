@@ -1,0 +1,22 @@
+{
+  "status": "complete",
+  "elapsed_s": 96.64182785199955,
+  "physics_lane_steps": 8800,
+  "landing_return_executed": true,
+  "ground_controller": "H75+ECBC (zero lower residual)",
+  "cases": [
+    {
+      "skill": "update2",
+      "duration_s": 22.0,
+      "physical_termination": false,
+      "peak_root_z": 0.5633277893066406,
+      "final_xyz": [
+        23.139087677001953,
+        0.39295899868011475,
+        0.11882354319095612
+      ],
+      "peak_abs_roll_deg": 12.222540855407715,
+      "full_jump_success": "not adjudicated; requires clearance and landing evidence"
+    }
+  ]
+}
