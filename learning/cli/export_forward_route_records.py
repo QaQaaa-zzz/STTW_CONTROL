@@ -17,6 +17,9 @@ for manifest in a.manifests:
   if not summary.exists():
    inventory.append(dict(case_id=case['case_id'],status='pending'));continue
   result=json.loads(summary.read_text());task=result['forward_task'];event=task['branch_event']
+  if event is None:
+   inventory.append(dict(case_id=case['case_id'],origin_id=spec['origin_id'],status='evaluated_no_route_decision',optional_platform_complete=task['optional_platform_task_complete'],mandatory_platform_complete=task['mandatory_platform_task_complete'],source_summary=str(summary)))
+   continue
   protocol=json.loads((run/'protocol.json').read_text());ground=json.loads((run/'ground_controller.json').read_text())
   state_event=event.get('decision_state');source='branch_decision'
   if state_event is None and (run/'connection_decision.json').exists():
@@ -45,5 +48,5 @@ for manifest in a.manifests:
   inventory.append(dict(case_id=case['case_id'],status='exported',state_source=source,supervised_input_complete=common['supervised_input_complete']))
 (a.output/'records.jsonl').write_text(''.join(json.dumps(r)+'\n' for r in rows))
 (a.output/'feature_schema.json').write_text(json.dumps(dict(features=[dict(name=n,unit=u) for n,u in fields],target='Full-window mapped-route completion; conditional first goal arrival time minus decision time',platform_requirement='Separate task_id; mandatory bypass is failure even if safe exit succeeds',limits='Same-root disturbance descendants are not independent roots. Leave entire origin out. Legacy state recovery requires identical recorded root and timestamp.'),indent=2)+'\n')
-report=dict(records=len(rows),physical_cases=len(inventory),independent_origins=len({r['origin_id'] for r in rows}),usable_records=sum(r['supervised_input_complete'] for r in rows),cases=inventory)
+report=dict(records=len(rows),physical_cases=len(inventory),independent_origins=len({json.loads(Path(c['config']).read_text())['origin_id'] for m in a.manifests for c in json.loads(m.read_text())['cases']}),usable_records=sum(r['supervised_input_complete'] for r in rows),cases=inventory)
 (a.output/'inventory.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))
