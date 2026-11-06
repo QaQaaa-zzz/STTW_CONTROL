@@ -35,10 +35,13 @@ if a.resume_from:
     import shutil
     parent=json.loads((a.resume_from/'protocol.json').read_text())
     if parent['spec']!=spec or parent['settings']!=s:raise ValueError('resume requires unchanged collection contract')
-    records=[json.loads(line) for line in (a.resume_from/'records.jsonl').read_text().splitlines() if line.strip()]
+    record_path=a.resume_from/'records.jsonl'
+    records=[json.loads(line) for line in record_path.read_text().splitlines() if line.strip()] if record_path.exists() else []
     shutil.copy2(a.resume_from/'exit_snapshot.pt',a.output/'exit_snapshot.pt')
     snapshot=torch.load(a.output/'exit_snapshot.pt',map_location='cpu',weights_only=False)
-    feature=records[0]['state']
+    env.restore_connection_state(snapshot)
+    m,pose,v=plant.observe()
+    feature=records[0]['state'] if records else [float(v[0]),float(m[0,0]),float(m[0,1]),float(env.middle.projection['cross_track'][0]),float(wrap(env.middle.projection['heading'][0]-pose[0,2])),float(m[0,2]),float(m[0,3]),float(env.previous_reference[0,0])]
 else:
     source_trace=[];found=False
     for _ in range(round(spec['source_seconds']/.02)):
