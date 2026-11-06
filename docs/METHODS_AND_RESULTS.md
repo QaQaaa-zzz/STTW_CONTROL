@@ -1,3 +1,11 @@
+## 原Phase U Actor/critic已接通原Go2 PPO接口
+
+`phase_u_actor_critic.py`保留Actor76→256→256→256→8、critic106→256→256→256→1与SiLU，原checkpoint两网络/归一化均从只读来源导出至runs/phase_u_training_bundle/source。原四均值＋四状态相关scale经softplus+.001，不换成Go2独立std头。rollout存latent动作，环境必须tanh一次再原映射；log probability和采样entropy保留tanh Jacobian，KL比较latent Gaussian。归一化暂冻结原值，续训为权重/critic初始化＋fresh optimizer，不是exact resume。
+
+`runs/phase_u_training_bundle/adapter_check.json`：16输入确定性动作与原JAX max差2.68e-7；latent范围[-4,4]的logprob差1.22e-4（按相对3e-6/绝对3e-5通过，大幅负logprob浮点尺度），不能写绝对误差<3e-5。直接导入原Go2 algorithms/ppo.py执行16个合成转移、1次更新，loss有限且原Actor权重确实更新；不保存更新后checkpoint、0物理、不是训练结果。原source与RB推理bundle不覆盖。导出CLI新增skills筛选并附critic数组，避免无须重导RB。
+
+训练环境的原事件/终止、106维critic观测、四动作随机化仍待接入；未运行4096物理训练，未宣称性能。第三章完整能力评价/任务管理/跨技能仍未完成。
+
 ## 原Phase U奖励移植完成，训练环境仍待接线
 
 `learning/src/sttw_control/phase_u_reward.py`实现GPU可批量的原21分项奖励，保留分段侧倾/俯仰/偏航、速度、起跳高度、动作、实际摆功率与终止罚。`runs/phase_u_reward_port/compare.py`直接调用只读DVGC/JIT原函数，128组含分段边界与终止组合逐项对比：总奖励最大差0，唯一非零分项speed最大5.96e-8，0physics/0optimizer。原env.py还有stuck/yaw导致整回合回报固定-100的修正；已保留单独phase_u_episode_reward，修正不能再次裁剪，也不把它漏作原奖励。专项测试覆盖历史累计700时末步-800、累计-300时末步200，均最终-100。

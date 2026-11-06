@@ -146,9 +146,20 @@
     "actor_activation": "silu",
     "actor_input": 76,
     "actor_logits": 8,
-    "policy_initialization": "original Phase U actor weights and normalizer, no RB adaptation yet",
+    "policy_initialization": "original Phase U actor, critic and frozen normalizer; optimizer fresh when training starts",
     "training_backend": "existing Go2 OnPolicyRunner, not connected yet",
     "randomization_reference": "learning/configs/go2_local_original_task.json:randomization",
-    "randomization_status": "not connected to four jump actuators/76D observation yet"
+    "randomization_status": "not connected to four jump actuators/76D observation yet",
+    "actor_critic": "sttw_control.phase_u_actor_critic.PhaseUActorCritic",
+    "training_bundle": "runs/phase_u_training_bundle/source",
+    "critic_input": 106,
+    "critic_hidden": [
+      256,
+      256,
+      256
+    ],
+    "critic_output": 1,
+    "action_contract": "Go2 rollout stores latent Gaussian actions; environment tanh once then original four-actuator mapping",
+    "network_adapter_status": "native Go2 PPO synthetic update completed; physical training not connected"
   }
 }

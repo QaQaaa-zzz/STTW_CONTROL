@@ -4,14 +4,18 @@ from pathlib import Path
 import numpy as np
 import torch
 from sttw_control.pendulum_skill import PendulumSkill,TorchPendulumSkill
-p=argparse.ArgumentParser();p.add_argument('--registry',type=Path,default=Path('learning/configs/pendulum_bike_skill_sources.json'));p.add_argument('--output',type=Path,required=True);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--registry',type=Path,default=Path('learning/configs/pendulum_bike_skill_sources.json'));p.add_argument('--output',type=Path,required=True);p.add_argument('--skills',nargs='+');a=p.parse_args()
 registry=json.loads(a.registry.read_text());results=[]
-for name in registry['records']:
+for name in (a.skills or registry['records']):
  skill=PendulumSkill(a.registry,name);out=a.output/name;out.mkdir(parents=True,exist_ok=False)
  params=skill.payload.actor_params['params'];normal=skill.payload.observation_normalizer
  arrays=dict(mean=np.asarray(normal.mean['state']),std=np.asarray(normal.std['state']))
  for i in range(4):
   for field in ('kernel','bias'):arrays[f'{field}_{i}']=np.asarray(params[f'hidden_{i}'][field])
+ critic=skill.payload.critic_params['params']
+ arrays['critic_mean']=np.asarray(normal.mean['privileged_state']);arrays['critic_std']=np.asarray(normal.std['privileged_state'])
+ for i in range(4):
+  for field in ('kernel','bias'):arrays[f'critic_{field}_{i}']=np.asarray(critic[f'hidden_{i}'][field])
  np.savez(out/'actor.npz',**arrays)
  mapping={k:getattr(skill.bundle.action_mapping,k) for k in ('ctrl_min','ctrl_max','hip_initial','knee_initial','base_rear_speed','rear_speed_delta','joint_target_semantics','knee_target_delta')}
  mapping={k:np.asarray(v).tolist() if not isinstance(v,str) else v for k,v in mapping.items()}
