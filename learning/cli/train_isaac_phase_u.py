@@ -25,7 +25,12 @@ class RecordedRunner(module.OnPolicyRunner):
 env=PhaseUEnv(cfg,a.output)
 (a.output/'randomized_properties.json').write_text(json.dumps(env.properties));(a.output/'plant.json').write_text(json.dumps(env.plant.metadata))
 runner=RecordedRunner(env,train,log_dir=str(a.output/'training'),device=cfg['device']);(a.output/'training').mkdir(exist_ok=True)
-runner.save(str(a.output/'training/model_initial.pt'),infos={'initialization':'original Phase U actor/critic/frozen normalizer; fresh optimizer'})
+initialization={'initialization':'original Phase U actor/critic/frozen normalizer; fresh optimizer'}
+if cfg.get('initial_checkpoint'):
+    checkpoint=torch.load(cfg['initial_checkpoint'],map_location=cfg['device'],weights_only=False)
+    runner.alg.actor_critic.load_state_dict(checkpoint['model_state_dict'])
+    initialization.update(initial_checkpoint=cfg['initial_checkpoint'],parent_selection=checkpoint.get('infos'),initialization='selected prior actor/critic/normalizer weights; fresh optimizer and rollout state')
+runner.save(str(a.output/'training/model_initial.pt'),infos=initialization)
 upstream_update=runner.alg.update;selection=dict(update=0,best=-float('inf'))
 def recorded_update():
     score=float(runner.alg.storage.rewards.mean());update=selection['update']
