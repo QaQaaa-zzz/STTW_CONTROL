@@ -1,3 +1,9 @@
+## 同车dt005四模型接管有效完成，仍未跳上高台
+
+runs/phase_u150_handoff_comparison/xy_jump.png已查看，真实H75+Local300锁摆接近、.74秒同实例释放、4候选/3200lane物理步/0optimizer，采样19.701秒。runtime.log无PhysX Error/Traceback；与此前无效同车run分开。source1.495秒45.03°失败/rootpeak.40681，RB1.620秒45.23°失败/.38068，best88 1.710秒46.24°失败/.47159。last150持续4秒未触及45度线，但峰值41.85°、最终速度.06273m/s、末端rootx3.25587；rootx最大3.30233（平台前缘3.6），未完成过台/落地任务，不能称跳跃成功或稳定。
+
+best88提高最高根高度但未改善到可用接管；last150延迟失稳但停在台前。本单初态DEV支持实际比较多个checkpoint，不能只按训练reward采用，也不能声称成功率。累计300续训已获授权且继续，不基于此短测自动改奖励/无界训练；完成后继续同工况比较。原STTW接续右弯恢复独立运行。
+
 ## 首个同出口左弯六候选已完成；右弯按快照恢复
 
 机器重启前left90_R2已保存6条实际NPZ/JSONL，右弯未完成。collect_connection_candidates新增显式--resume-from，同合同复用原exit_snapshot和完整左弯结果，只补右弯，追加预算300000lane物理步/0optimizer；输出collection_resume，原结果不覆盖。
