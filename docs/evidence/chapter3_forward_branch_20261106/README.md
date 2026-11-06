@@ -46,3 +46,9 @@ PYTHONPATH=learning/src python learning/cli/prepare_online_route_comparison.py \
 `DATA=/media/qy/6A7E3DB07E3D75C3/STTW_runs`。冻结后用既有 `run_jump_approach_pilot.py` 执行生成的 manifest，复用释放出的GPU名额；此次没有新增并发、没有启动该36条。最终必须按根比较原路完成、绕行完成、必须跳台完成、误放行/未知、查询延迟及实际XY，不以本入口测试代替任务收益。
 
 在线运行后复用 `summarize_forward_route_comparison.py`：按 `origin_id` 与冻结外扰协议配对rule/capability，optional与mandatory分别给出both_complete/capability_only/rule_only/both_failed；仅共同完成时计算能力减规则的到达时间。未完成配对保持pending，重复方法报错而不覆盖；根数与扰动派生对数分开。CPU复算保留既有两条异步物理结果逐字段不变，尚未运行的36配置对应18个pending配对。
+
+## 换接近参考补充（已准备、排队，未运行）
+
+C6新train根000在原22s/原目标任务中2.0/.5失败，1.8/.5、1.8/1及2.0/0成功，不能直接替代E5的30s/共同终点验收。因此补充同六train根×D0/Fy±2的原路1.8/.5，共18条、最大216000物理步、0优化；所有根保留，非挑选成功根。用现有 `prepare_forward_route_roots.py --original-reference 1.8 0.5`，模型、地图、起点、频率、外扰、共同目标与走廊不变。
+
+冻结manifest及18配置见 `reference_extension_plan/`；实际输出 `chapter3_forward_reference_roots`。排在原36条在线规则/能力比较之后，复用释放名额。原在线比较仍用原动作库，后续换参考结果另分析，不把扩充后数据倒灌进原比较。已有执行器会应用能力查询返回的速度/α，无新增控制器；当前只有准备和队列，没有物理结果或收益结论。

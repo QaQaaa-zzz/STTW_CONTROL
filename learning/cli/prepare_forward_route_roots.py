@@ -5,6 +5,7 @@ p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('--roots-manifest',type=Path,required=True)
 p.add_argument('--route-manifest',type=Path,required=True)
 p.add_argument('--count',type=int,default=6)
+p.add_argument('--original-reference',type=float,nargs=2,metavar=('SPEED','ALPHA'),help='Additional original-route reference only; preserve the same source roots and force protocols')
 p.add_argument('--output',type=Path,required=True)
 a=p.parse_args();roots=json.loads(a.roots_manifest.read_text());templates=json.loads(a.route_manifest.read_text())
 selected={}
@@ -16,6 +17,12 @@ for root in selected:
  initial=json.loads(Path(root['config']).read_text())
  for template in templates['cases']:
   spec=json.loads(Path(template['config']).read_text());ident=root['origin_id']+'_'+template['case_id']
+  if a.original_reference:
+   if spec['forward_branch']['requested_route']!='original_jump':continue
+   speed,alpha=a.original_reference
+   spec['connection_candidate'].update(speed_m_s=speed,alpha=alpha)
+   spec['candidate_id']=f'v{speed}_a{alpha}'
+   ident+=f'_reference_v{speed}_a{alpha}'
   for name in ('start_x','start_y','start_heading_rad','initial_offset','origin_id'):spec[name]=initial[name]
   spec.update(data_split='train',output=str(a.output/ident),role='Preassigned training root route outcome; frozen skills, no RL')
   config=a.output/(ident+'.json');config.write_text(json.dumps(spec,indent=2)+'\n')
@@ -25,5 +32,7 @@ manifest=dict(role='Paired original/bypass, D0 and two prescribed forces; indepe
  simulation_python=roots['simulation_python'],analysis_python=roots['analysis_python'],root_split=roots['root_split'],
  selected_origins=[r['origin_id'] for r in selected],cases=cases,maximum_physics_steps=budget,optimizer_updates=0,status='prepared_not_started',
  scope='All descendants inherit original split; failed upstream roots remain in denominator. No test roots, outcome-based replacement or synthetic exit states.')
+if a.original_reference:
+ manifest.update(role='Additional original-route reference on all predeclared E5 training roots; exploratory DEV, same destination/window/corridor',original_reference=dict(speed_m_s=a.original_reference[0],alpha=a.original_reference[1]))
 (a.output/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
 print(json.dumps(dict(roots=len(selected),cases=len(cases),maximum_physics_steps=budget)))
