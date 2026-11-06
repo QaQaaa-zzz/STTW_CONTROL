@@ -47,6 +47,7 @@
   "ppo_overrides": {
     "learning_rate": 1e-05
   },
+  "evaluation_checkpoint_every": 5,
   "reachable_entry_bank": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation_inputs/reachable_entries/entries.npz",
   "reachable_entry_probability": 0.5
 }

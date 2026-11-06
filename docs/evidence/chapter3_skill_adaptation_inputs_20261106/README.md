@@ -44,3 +44,31 @@ profile (radius.07m,width.05m,21slices). GPU replicated training layout and Go2
 randomization remain. No physics was run with the mismatched template.
 The runner reuses landing analysis and XY plotting for nominal jump-only cases.
 Staged evaluation/selection orchestration remains unconnected; no PPO launched.
+
+### Sequential execution and checkpoint selection
+
+`run_skill_adaptation.py --plan .../panel/panel_plan.json --output NEW_RUN`
+now connects training, exact checkpoint export, both frozen panels and selection.
+Run with `PYTHONPATH=learning/src` and the Isaac Python environment after resource
+allocation. It is **not launched**. The sequence performs each bounded25 training
+run, exits its GPU process, then evaluates update0/5/10/15/20/25 sequentially.
+This is evaluation of every fifth saved update after the budget, not immediate
+online evaluation or early stopping within25. It avoids retaining the4096-lane
+plant during single-lane evaluation. Source and RB get identical treatment.
+
+The upstream periodic filename uses the zero-based loop index. New optional
+`evaluation_checkpoint_every=5` saves `model_update_00005.pt` etc only after the
+corresponding optimizer update, with accurate `iter` and `completed_updates`.
+Existing historical files and sampled pre-update reward selection are unchanged.
+
+Selection rejects loss of any baseline nominal full-window/support condition,
+then maximizes complete hard-case successes; tied counts compare time only on
+shared successful cases, retaining earlier updates on ties. If the original has
+no positive nominal condition, the report explicitly marks the retention evidence
+uninformative. No claim of broad donor capability preservation follows.
+
+Seven CPU tests passed (reset bank, reward, selection including rejection of a
+nominal regression and retaining an earlier best). CLI syntax checked. No actual
+PPO or end-to-end orchestration run yet; TensorBoard/notifications and GPU
+allocation remain launch-time work. Frozen task/data/checkpoint evidence must
+still be reviewed after execution.

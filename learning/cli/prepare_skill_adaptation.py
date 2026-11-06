@@ -18,7 +18,7 @@ original.update(plant_config=reference['plant_config'],physics_dt=.0025,skills=[
 configs=[];panels=[]
 for skill in ('source','rb_run1_candidate'):
  cfg=copy.deepcopy(base)
- cfg.update(asset=plant['asset'],bundle=str(a.inputs/'bundles'/skill),updates=25,save_interval=5,
+ cfg.update(asset=plant['asset'],bundle=str(a.inputs/'bundles'/skill),updates=25,save_interval=5,evaluation_checkpoint_every=5,
   reachable_entry_bank=str(a.inputs/'reachable_entries/entries.npz'),reachable_entry_probability=.5,
   status='Prepared symmetric25 adaptation; not launched',
   optimizer_initialization='Own original actor/critic/normalizer; fresh Adam',

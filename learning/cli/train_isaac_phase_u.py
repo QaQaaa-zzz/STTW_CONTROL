@@ -49,6 +49,12 @@ def recorded_update():
         torch.save(dict(model_state_dict=runner.alg.actor_critic.state_dict(),optimizer_state_dict=runner.alg.optimizer.state_dict(),iter=update,infos=row),a.output/'training/model_step_best.pt')
         (a.output/'best_step_model.json').write_text(json.dumps(dict(**row,checkpoint='training/model_step_best.pt',scope='best sampled pre-update policy in this run; not fixed-case qualification'),indent=2))
     result=upstream_update();selection['update']+=1
+    interval=cfg.get('evaluation_checkpoint_every',0)
+    if interval and selection['update']%interval==0:
+        completed=selection['update']
+        torch.save(dict(model_state_dict=runner.alg.actor_critic.state_dict(),optimizer_state_dict=runner.alg.optimizer.state_dict(),iter=completed,
+            infos=dict(completed_updates=completed,scope='post-update checkpoint; fixed-panel score pending')),
+            a.output/f'training/model_update_{completed:05d}.pt')
     return result
 runner.alg.update=recorded_update
 runner.learn(cfg['updates'],init_at_random_ep_len=False)

@@ -1,5 +1,5 @@
 {
-  "status": "prepared_not_training_ready",
+  "status": "orchestration_prepared_not_launched",
   "reason": "Original source/RB each failed strict landing in all18 reachable matched approaches; taskbook conditional adaptation",
   "skills": [
     "source",
@@ -24,8 +24,8 @@
   },
   "preserved": "Original76/106-256-256-256-8/1 SiLU, actuator mapping, Go2 domain randomization and delay/noise; old policy artifacts immutable",
   "missing_before_launch": [
-    "Connect staged evaluation orchestration and selection; panel/configs are prepared",
-    "Resolve GPU allocation after current collection; no concurrent4096-env training"
+    "GPU allocation after existing collections",
+    "TensorBoard service and stage notifications at launch"
   ],
   "selection": "Best qualified evaluated candidate, with original-capability retention; not last or sampled reward alone",
   "no_automatic_extension": true,
