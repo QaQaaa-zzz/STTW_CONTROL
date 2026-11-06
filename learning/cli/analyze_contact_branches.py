@@ -26,3 +26,37 @@ for fork in forks:
 report=dict(role='DEV same-clearance-state branches; center-error and survival constraint, not arrival or vehicle swept-envelope certification; selected alpha is retrospective label, not deployed predictor',selection='among surviving branches with peak absolute center-path error within declared limit, minimize requested-speed RMSE; preserve empty feasible sets',center_error_limit_m=a.center_error_limit_m,branch_status=status,groups=rows)
 (a.run/'contact_branch_outcomes.json').write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps(dict(groups=len(rows),empty_feasible_sets=sum(r['empty_feasible_set'] for r in rows))))
+
+# Full paired trajectories, one condition per page; no aggregation or smoothing.
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+figures=a.run/'branch_figures';figures.mkdir(exist_ok=True)
+route=np.load(Path(c['bundle'])/'route.npz')['xy'];palette={0:'#0072B2',.25:'#D55E00',1:'#009E73'};styles={0:'-',.25:'--',1:'-.'};time=(np.arange(len(pose))+1)*c['lower_dt'];manifest=[]
+for fork,row in zip(forks,rows):
+    start=fork['policy_step']*4;source=fork['source_lane'];fig,axes=plt.subplots(2,2,figsize=(11,8),layout='constrained');xy,roll,ev,ey=axes.flat
+    xy.plot(*route.T,':',color='.5',label='Original reference')
+    extent=[]
+    for lane,alpha in zip([source]+fork['branch_lanes'],[fork['entry_alpha']]+fork['target_alphas']):
+        valid=alive[:,lane].copy()
+        if lane!=source:valid[:start]=False
+        label='Unreset entry continuation' if lane==source else f'Recovery alpha={alpha:g}'
+        color='.25' if lane==source else palette[alpha];style=':' if lane==source else styles[alpha]
+        points=np.where(valid[:,None],pose[:,lane,:2],np.nan);xy.plot(*points.T,color=color,ls=style,label=label,lw=1.2)
+        indices=np.flatnonzero(valid)
+        if len(indices):
+            xy.plot(*pose[indices[-1],lane,:2],marker='x',color=color);extent.append(pose[valid,lane,:2])
+        roll.plot(time,np.where(valid,np.rad2deg(measurement[:,lane,0]),np.nan),color=color,ls=style)
+        ev.plot(time,np.where(valid,trace[:,lane,2]-row['speed_m_s'],np.nan),color=color,ls=style)
+        ey.plot(time,np.where(valid,trace[:,lane,3],np.nan),color=color,ls=style)
+    points=np.concatenate(extent);xy.set_xlim(points[:,0].min()-.3,points[:,0].max()+.3);xy.set_ylim(points[:,1].min()-.3,points[:,1].max()+.3)
+    xy.plot(*pose[start-1,source,:2],marker='o',mfc='none',mec='black',label='Clearance fork')
+    xy.set(xlabel='World x (m)',ylabel='World y (m)');xy.set_aspect('equal',adjustable='box');xy.legend(fontsize=8)
+    roll.set(ylabel='Roll (deg)');ev.set(ylabel='Speed error (m/s)');ey.set(ylabel='Signed path error (m)')
+    ey.axhline(a.center_error_limit_m,color='.5',ls=':',lw=.8);ey.axhline(-a.center_error_limit_m,color='.5',ls=':',lw=.8)
+    for ax in [roll,ev,ey]:ax.axvline(fork['time_s'],color='.5',ls=':');ax.set_xlabel('Time (s)')
+    for ax in axes.flat:ax.grid(alpha=.2)
+    fig.suptitle(f"Frozen H75 + original Local300 | DEV | seed{row['seed']} | {row['speed_m_s']} m/s | entry alpha={row['entry_alpha']:g}\n{status['event']}, ramp={status['ramp_s']}s; crosses: last observed endpoints; branch curves start at fork")
+    filename=f"group_{row['group']:03d}.png";fig.savefig(figures/filename,dpi=140);plt.close(fig)
+    manifest.append(dict(group=row['group'],figure=filename,source='trajectory.npz and contact_forks.json; original route from contract bundle',description='Actual/reference XY, roll, speed error, signed path error; all three recovery alphas and unreset source; no smoothing; gaps and true observed endpoints retained'))
+(figures/'index.json').write_text(json.dumps(manifest,indent=2)+'\n')
