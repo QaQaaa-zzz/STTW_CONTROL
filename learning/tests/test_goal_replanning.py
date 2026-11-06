@@ -6,6 +6,16 @@ import pytest
 from sttw_control.goal_replanning import dubins_goal_path,replan_requested,rebind_geometry
 
 
+def test_free_heading_tangent_avoids_observed_near_goal_loop():
+    # Recorded shared-switch pose previously selected a 10.480m LRL loop
+    # because its short tangent heading lay between the discrete candidates.
+    goal=[12.949442863464355,7.052823066711426]
+    path,meta=dubins_goal_path([12.400750160217285,4.727596759796143,2.0595498085021973],goal,numpy_output=True)
+    assert meta['goal_arclength_m']==pytest.approx(2.60483533266846,abs=1e-6)
+    assert meta['modes']==['R','S','R']
+    np.testing.assert_allclose(path.xy[np.argmin(abs(path.s-path.goal))],goal)
+
+
 @pytest.mark.parametrize('pose,goal',[
     ([0,0,0],[8,0]),([0,0,0],[3,4]),([2,-1,2.9],[-3,-4]),
     ([0,0,0],[-4,0]),([0,0,0],[0,.2]),([4,3,-2],[4,3.01])])

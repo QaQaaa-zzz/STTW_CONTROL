@@ -1,3 +1,11 @@
+## Shared-state switch complete; small terminal-heading repair pending closed-loop confirmation
+
+`runs/h75_shared_switch/analysis/DECISION.md` contains actual XY, reward diagnostics and branch metrics. All5 branches reached the2m goal disk and completed10s. In the first0.5s after alpha1→0, independent/common/steer-priority differences are comparable to natural/restored submillimetre differences; steering-priority did not activate. Keep original independent slew. Keeping alpha1 reduces speed error and increases path error in this window; no universal ordering claim.
+
+A new saved plan at4.0s was10.480m LRL despite goalturn_end+5m/radius2m. Previous final_goal success does not generalize to all nearby states. Adding analytic circle-tangent terminal headings to the existing PythonRobotics adapter gives2.604835m at identical pose/goal/radius; closed-loop confirmation pending. No replacement planner, training, or goal change.
+
+Executed-zero analysis also complete:10cases/50branches,960500physics,0optimizer; all survived their2s postfork windows. Entry speed-zero reduces path RMSE in5/5alpha conditions but increases peak roll in5/5. Exit speed-zero reduces speed RMSE in5/5, path in3/5. Short-window mechanism evidence, not full-task success or universal benefit. `runs/h75_zero_correction_channels/analysis/{RESULTS.md,HOLD_ZERO.md,hold_zero_comparison.json}` preserves all conditions and prior hold comparison.
+
 ## First executed-zero case completed; remaining declared cases running
 
 Entry-projection alpha0 finished at3.6s (fork1.6s plus2s),90000physics/0optimizer. All five branches remain active through the observation window. Saved selected correction components are exactly0 for the declared40 lower ticks; first natural/restored policy observation difference0, reward replay discrepancy1.91e-8. In the0.5s after release, natural/restored XY max difference1.34mm, speed-zero13.18cm, steer-zero1.18cm and both-zero13.20cm. These are descriptive local effects in one case, not a better-controller or generalization result. Full two-second response and negative outcomes remain in the report.

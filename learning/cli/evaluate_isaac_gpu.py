@@ -17,7 +17,7 @@ s=json.loads(a.config.read_text())
 if not a.configured_lanes:s.update(num_envs=6,alphas=[0,.25,.5,.75,1,0],zero_middle=[False]*5+[True])
 if not 1<=s['num_envs']<=15:p.error('diagnostic evaluation supports 1 to 15 lanes')
 if a.channel_protocol:
-    protocol=json.loads(a.channel_protocol.read_text());s.update(num_envs=5,alphas=[a.protocol_alpha]*5,zero_middle=[False]*5,case_labels=protocol['case_labels'],evaluation_role=protocol['evaluation_role'],channel_intervention=dict(progress_m=protocol['fork_phases_m'][a.protocol_phase],hold_s=protocol['hold_s'],hold_channels=protocol['hold_channels'],phase=a.protocol_phase,kind=protocol.get('kind','hold'),post_fork_seconds=protocol.get('post_fork_seconds')))
+    protocol=json.loads(a.channel_protocol.read_text());s.update(num_envs=5,alphas=[a.protocol_alpha]*5,zero_middle=[False]*5,case_labels=protocol['case_labels'],evaluation_role=protocol['evaluation_role'],channel_intervention=dict(progress_m=protocol['fork_phases_m'][a.protocol_phase],hold_s=protocol['hold_s'],hold_channels=protocol['hold_channels'],phase=a.protocol_phase,kind=protocol.get('kind','hold'),post_fork_seconds=protocol.get('post_fork_seconds'),target_alpha=protocol.get('target_alpha'),execution_modes=protocol.get('execution_modes')))
     s['plant_options']['track_wheel_contacts']=protocol.get('track_wheel_contacts',True)
 intervention=s.get('channel_intervention')
 if intervention and (s.get('randomization') or s['num_envs']!=5 or len(set(s['alphas']))!=1):p.error('channel intervention requires five nominal lanes at one common alpha')
@@ -53,6 +53,10 @@ for step in range(env.horizon):
         if fork_step is None and bool(env.alive[0]) and float(env.middle.projection['progress'][0])>=intervention['progress_m']:
             from sttw_control.isaac_path_snapshot import capture,restore
             state=capture(env,0);restore(env,state,[1,2,3,4]);fork_step=step
+            if intervention.get('kind')=='switch':
+                target=torch.tensor(intervention['target_alpha'],device=env.device)
+                env.switched.copy_(target!=env.alpha);env.switch_tick[env.switched]=env.tick*4
+                env.alpha.copy_(target);env.policy.execution_mode.copy_(torch.tensor(intervention['execution_modes'],device=env.device))
             np.savez_compressed(a.output/'fork_snapshot.npz',**{key:value.cpu().numpy() for key,value in state.items()})
             (a.output/'fork.json').write_text(json.dumps(dict(policy_step=step,time_s=step*.02,source_lane=0,restored_lanes=[1,2,3,4],fields=list(state),root_pose='link pose wxyz in local terrain coordinates',root_velocity='root COM linear/angular world velocity',signal_root='root link state xyzw; local pose, world velocity; policy signal cache',physical_caches_copied=False,analysis_window='source lane defines prefix; compare all branches only after fork; sibling pre-fork traces retained but not branch outcomes',protocol=intervention),indent=2))
         if fork_step is not None:

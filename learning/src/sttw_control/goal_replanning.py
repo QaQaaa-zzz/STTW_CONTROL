@@ -8,7 +8,7 @@ import numpy as np
 
 
 def dubins_goal_path(pose, goal_xy, *, radius_m=1.8, length_m=80., spacing_m=.02, goal_heading_rad=None, fallback_max_length_m=None, numpy_output=False):
-    """Upstream planner with eight world headings plus the current goal bearing.
+    """Upstream planner with world headings, goal bearing and circle tangents.
 
     This finite heading set avoids imposing one final heading as task success;
     it is not a globally optimal free-heading solver. No event input exists.
@@ -26,7 +26,16 @@ def dubins_goal_path(pose, goal_xy, *, radius_m=1.8, length_m=80., spacing_m=.02
         raise ValueError('finite optional goal heading required')
     if fallback_max_length_m is not None and (goal_heading_rad is None or not np.isfinite(fallback_max_length_m) or fallback_max_length_m<0):
         raise ValueError('heading fallback requires a preferred heading and finite nonnegative length allowance')
-    finite_headings=np.unique(np.r_[np.arange(8)*np.pi/4,bearing])
+    # Free terminal heading: include the exact turn-to-straight tangent for
+    # either initial turning circle. A coarse heading grid can miss a short
+    # connection near the circle and choose a nearly full loop instead.
+    tangent_headings=[]
+    for sign in (-1,1):
+        center=pose[:2]+sign*radius_m*np.array([-np.sin(pose[2]),np.cos(pose[2])])
+        delta=goal-center;center_distance=np.linalg.norm(delta)
+        if center_distance>=radius_m:
+            tangent_headings.append(np.arctan2(delta[1],delta[0])-sign*np.arccos(radius_m/center_distance)+sign*np.pi/2)
+    finite_headings=np.unique(np.r_[np.arange(8)*np.pi/4,bearing,tangent_headings])
     headings=finite_headings if goal_heading_rad is None else np.r_[goal_heading_rad,finite_headings] if fallback_max_length_m is not None else np.array([goal_heading_rad])
     candidates=[]
     for heading_index,heading in enumerate(headings):
