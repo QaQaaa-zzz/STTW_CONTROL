@@ -57,3 +57,21 @@ def test_revision_cannot_silently_drop_unfinished_task():
     m=manager()
     with pytest.raises(ValueError):m.revise_remaining([],reason='unsupported route')
     assert m.program['goals'][0]['goal_id']=='checkpoint'
+
+
+def test_revision_reasons_distinguish_support_and_geometry():
+    m=manager()
+    assert m.choose([100.],['left_route'])['reason']=='unknown'
+    assert m.choose([0.],[])['reason']=='no_available_route'
+    for row in m.capability.records:
+        row['complete']=0;row['success_cost']=None
+    assert m.choose([0.],['left_route'])['reason']=='no_feasible'
+
+
+def test_near_tie_retains_active_reference_without_claiming_goal_completion():
+    m=manager();first=m.choose([0.],['left_route'])['reference']
+    for row in m.capability.records:
+        row['success_cost']=5. if row['candidate_id']=='slow' else 5.01
+    second=m.choose([0.],['left_route'])
+    assert second['reference']==first and second['held_previous']
+    assert m.completed==[]

@@ -73,3 +73,17 @@ class ConnectionCapabilityTests(unittest.TestCase):
         self.assertEqual(result['selected_groups'],0)
         self.assertEqual(result['unknown_groups'],0)
         self.assertEqual(result['no_feasible_groups'],2)
+
+    def test_partial_support_is_unknown_not_proven_infeasible(self):
+        from sttw_control.empirical_capability import connection_selection_status
+        self.assertEqual(connection_selection_status([dict(known=True),dict(known=False)],None),'unknown')
+        self.assertEqual(connection_selection_status([dict(known=True)],None),'no_feasible')
+
+    def test_near_tie_keeps_previous_only_within_probability_and_route_limits(self):
+        from sttw_control.empirical_capability import select_connection_estimate
+        rows=[dict(candidate_id='a',route_id='left',known=True,complete_probability=.9,success_cost=5.),
+              dict(candidate_id='b',route_id='left',known=True,complete_probability=.88,success_cost=5.01)]
+        self.assertEqual(select_connection_estimate(rows,previous_candidate='b',previous_route='left',time_tolerance=.02)['candidate_id'],'b')
+        self.assertEqual(select_connection_estimate(rows,previous_candidate='b',previous_route='right',time_tolerance=.02)['candidate_id'],'a')
+        rows[1]['complete_probability']=.7
+        self.assertEqual(select_connection_estimate(rows,previous_candidate='b',previous_route='left',time_tolerance=.02)['candidate_id'],'a')

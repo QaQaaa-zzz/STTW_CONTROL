@@ -4,7 +4,7 @@ Language models propose goal order and allowed route IDs. Actual capability data
 select speed/alpha. Recommendations never constitute physical task completion.
 """
 
-from .empirical_capability import select_connection_estimate
+from .empirical_capability import select_connection_estimate, connection_selection_status
 
 class ContinuousTask:
     def __init__(self, program, routes, candidates, capability):
@@ -20,7 +20,7 @@ class ContinuousTask:
         self.active=None
         self.events=[]
 
-    def choose(self, state, available_routes, minimum_completion=.7, probability_tolerance=.05):
+    def choose(self, state, available_routes, minimum_completion=.7, probability_tolerance=.05, time_tolerance=.02):
         """Select only supported feasible routes, then efficiency among similar p.
 
         The caller supplies current geometric/skill availability. An unknown
@@ -38,14 +38,18 @@ class ContinuousTask:
             for estimate in query['estimates']:
                 if estimate['known'] and estimate['complete_probability']>=minimum_completion and estimate['success_cost'] is not None:
                     options.append(dict(route_id=route_id,**estimate))
-        selected=select_connection_estimate(options,minimum_completion,probability_tolerance)
+        previous=self.active if self.active and self.active['goal_id']==goal['goal_id'] else None
+        selected=select_connection_estimate(options,minimum_completion,probability_tolerance,
+            previous_candidate=previous['candidate_id'] if previous else None,
+            previous_route=previous['route_id'] if previous else None,time_tolerance=time_tolerance)
         if selected is None:
-            event=dict(status='revision_required',goal_id=goal['goal_id'],completed=list(self.completed),remaining_goals=[g['goal_id'] for g in remaining],queries=queries,active_reference=self.active)
+            reason=connection_selection_status([e for q in queries for e in q['estimates']],None) if queries else 'no_available_route'
+            event=dict(status='revision_required',reason=reason,goal_id=goal['goal_id'],completed=list(self.completed),remaining_goals=[g['goal_id'] for g in remaining],queries=queries,active_reference=self.active)
             self.events.append(event)
             return event
         route=self.routes[selected['route_id']];candidate=self.candidates[selected['candidate_id']]
         self.active=dict(goal_id=goal['goal_id'],route_id=route['route_id'],reference_path=route['reference_path'],skill_id=route['skill_id'],candidate_id=candidate['candidate_id'],speed_m_s=candidate['speed_m_s'],alpha=candidate['alpha'])
-        event=dict(status='reference_selected',reference=self.active.copy(),estimate=selected,queries=queries)
+        event=dict(status='reference_selected',reference=self.active.copy(),estimate=selected,queries=queries,held_previous=bool(previous and previous==self.active),time_tolerance_s=time_tolerance)
         self.events.append(event)
         return event
 

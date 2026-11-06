@@ -89,14 +89,24 @@ class ConnectionCapability:
                     scope='Empirical complete-task outcomes; executor must apply feasibility threshold and fallback')
 
 
-def select_connection_estimate(estimates, minimum_completion=.7, probability_tolerance=.05):
+def select_connection_estimate(estimates, minimum_completion=.7, probability_tolerance=.05, *, previous_candidate=None, previous_route=None, time_tolerance=0.):
     """Shared executor/evaluation decision: feasible completion, then efficiency."""
     feasible=[e for e in estimates if e['known'] and
               e['complete_probability']>=minimum_completion and e['success_cost'] is not None]
     if not feasible:return None
     best=max(e['complete_probability'] for e in feasible)
-    return min((e for e in feasible if e['complete_probability']>=best-probability_tolerance),
-               key=lambda e:e['success_cost'])
+    comparable=[e for e in feasible if e['complete_probability']>=best-probability_tolerance]
+    fastest=min(comparable,key=lambda e:e['success_cost'])
+    previous=next((e for e in comparable if e['candidate_id']==previous_candidate and
+                   (previous_route is None or e.get('route_id')==previous_route) and
+                   e['success_cost']<=fastest['success_cost']+time_tolerance),None)
+    return previous if previous is not None else fastest
+
+
+def connection_selection_status(estimates, selected):
+    if selected is not None:return 'selected'
+    # Partial support cannot establish that every available candidate is infeasible.
+    return 'no_feasible' if estimates and all(e['known'] for e in estimates) else 'unknown'
 
 
 def evaluate_connection_groups(records, candidates, feature_scales, bandwidth, minimum_support, minimum_completion=.7, probability_tolerance=.05):
@@ -129,7 +139,7 @@ def evaluate_connection_groups(records, candidates, feature_scales, bandwidth, m
         calibration=[dict(candidate_id=e['candidate_id'],probability=e['complete_probability'],actual_complete=actual[e['candidate_id']]['complete'],squared_error=(e['complete_probability']-actual[e['candidate_id']]['complete'])**2)
                      for e in query['estimates'] if e['known']]
         results.append(dict(origin_id=origin,snapshot_id=snapshot,task_id=task,skill_id=skill,
-            selection_status=('selected' if choice else 'no_feasible_candidate' if any(e['known'] for e in query['estimates']) else 'unknown'),
+            selection_status=connection_selection_status(query['estimates'],choice),
             selected_candidate=selected,selected_complete=observed['complete'] if observed else None,
             selected_success_cost=observed['success_cost'] if observed and observed['complete'] else None,
             observed_oracle_candidate=oracle['candidate_id'] if oracle else None,
@@ -153,7 +163,7 @@ def evaluate_connection_groups(records, candidates, feature_scales, bandwidth, m
         observed_oracle_complete_groups=sum(r['observed_oracle_candidate'] is not None for r in results),
         role='leave-one-origin-run-out DEV; not independent TEST or deployed planning success',
         groups=len(results),selected_groups=len(decided),unknown_groups=sum(r['selection_status']=='unknown' for r in results),
-        no_feasible_groups=sum(r['selection_status']=='no_feasible_candidate' for r in results),
+        no_feasible_groups=sum(r['selection_status']=='no_feasible' for r in results),
         selection_rule=dict(minimum_completion=minimum_completion,probability_tolerance=probability_tolerance),
         selected_complete_count=sum(r['selected_complete'] for r in decided),
         brier_score=sum(errors)/len(errors) if errors else None,brier_count=len(errors),
