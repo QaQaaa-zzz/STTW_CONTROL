@@ -7,3 +7,9 @@
 原始轨迹、执行输入、接触与运行日志：`/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_batch_pilot/evaluation_repaired_scope/`。首次启动闭包作用域异常保存在同级 `evaluation/`，不是技能失败。比较命令：`python learning/cli/compare_jump_batch.py --run <上述目录>`。
 
 当前地面根状态采集和两阶段连接实验继续；本批仅为工程性能与行为比较，不是独立 TEST 或方法提升证据。
+
+## 单环境新旧执行器对照
+
+新入口单环境完整22秒已完成。1635个状态样本一致，XY和速度RMSE均0，T=14.90秒；出口5.22秒、交权9.16秒、落台稳定12.02秒、交回12.72秒均一致。见 [单环境XY](single_lane_control/batch_vs_single_xy.png) 和 [逐项数据](single_lane_control/batch_comparison.json)。这支持当前六环境差异与多环境执行条件有关，具体原因尚未确定；不能据此宣称任意批量等价。
+
+单环境新入口213.792秒，旧97.331秒，当前共享机器负载不同且新入口继续计算跳跃期间地面历史，未实现单环境加速。正式跨技能候选使用原单环境入口推进。

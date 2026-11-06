@@ -1,0 +1,74 @@
+{
+  "role": "Same-root engineering batch comparison; not independent task improvement or an isolated hardware benchmark",
+  "batch_elapsed_s": 213.79173701000036,
+  "saved_single_elapsed_sum_s": 97.33054533900213,
+  "observed_sampling_speed_ratio": 0.455258686328225,
+  "single_complete_count": 1,
+  "batch_complete_count": 1,
+  "matching_full_task_labels": 1,
+  "cases": [
+    {
+      "lane": 0,
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "reference_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v2.0_a0.5.json",
+      "single_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_six_roots/rb_upstream_offset_01_L9.6_v2.0_a0.5",
+      "batch_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_batch_pilot/single_lane_control/evaluation/lane_00",
+      "single_complete": true,
+      "batch_complete": true,
+      "single_checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "batch_checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "single_T_s": 14.899999618530273,
+      "batch_T_s": 14.899999618530273,
+      "single_duration_s": 22.0,
+      "batch_duration_s": 22.0,
+      "single_samples": 1635,
+      "batch_samples": 1635,
+      "matched_time_samples": 1635,
+      "matched_time_end_s": 22.0,
+      "xy_rmse_m": 0.0,
+      "xy_max_m": 0.0,
+      "speed_rmse_m_s": 0.0,
+      "first_state_difference_over_1e_6_s": null,
+      "events": {
+        "connection_decision": {
+          "single": 5.22,
+          "batch": 5.22
+        },
+        "handoff": {
+          "single": 9.16,
+          "batch": 9.16
+        },
+        "landing_ready": {
+          "single": 12.02,
+          "batch": 12.02
+        },
+        "landing_handoff": {
+          "single": 12.72,
+          "batch": 12.72
+        }
+      }
+    }
+  ],
+  "limits": "Matched stored timestamps only; different observed windows remain explicit. Wall times collected under shared-machine load and different initialization scopes. Speed alone does not establish behavioral compatibility."
+}
