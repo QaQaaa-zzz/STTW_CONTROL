@@ -58,19 +58,22 @@ print(json.dumps(dict(lanes=len(rows),with_two_wheel_events=sum('two_wheel_ridge
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-fig,axes=plt.subplots(len(rows),2,figsize=(11,2.4*len(rows)),squeeze=False,layout='constrained')
-for lane,row in enumerate(rows):
-    m=d['alive'][:,lane];time=t[m];left,right=axes[lane]
-    left.plot(time,d['moment'][m,lane,0],label='Normal',lw=.7)
-    left.plot(time,d['friction_components'][m,lane,1],label='Lateral friction',lw=.7)
-    right.plot(time,d['normal_force'][m,lane,0,2],lw=.7,label='Front vertical normal load')
-    reference=row['operational_precontact_load_N']
-    if reference is not None:right.axhline(.2*reference,ls='--',color='gray',label='20% precontact load')
-    for ax in (left,right):
-        if row['first_front_contact_s'] is not None and row['last_rear_contact_s'] is not None:ax.axvspan(row['first_front_contact_s'],row['last_rear_contact_s'],color='orange',alpha=.12)
-        ax.grid(alpha=.2);ax.set_xlabel('Time (s)')
-    left.set_ylabel('Steering-axis torque (Nm)');right.set_ylabel('Load (N)')
-    left.set_title(f"lane {lane}, alpha={row['alpha']:g}")
-axes[0,0].legend();axes[0,1].legend()
-fig.suptitle('Solved-step contacts | orange: first front to last rear ridge contact\nObserved windows only; last-contact boundaries are retrospective')
-fig.savefig(a.run/'contact_event_windows.png',dpi=140);plt.close(fig)
+for begin in range(0,len(rows),5):
+    page=rows[begin:begin+5]
+    fig,axes=plt.subplots(len(page),2,figsize=(11,2.4*len(page)),squeeze=False,layout='constrained')
+    for panel,row in enumerate(page):
+        lane=row['lane']
+        m=d['alive'][:,lane];time=t[m];left,right=axes[panel]
+        left.plot(time,d['moment'][m,lane,0],label='Normal',lw=.7)
+        left.plot(time,d['friction_components'][m,lane,1],label='Lateral friction',lw=.7)
+        right.plot(time,d['normal_force'][m,lane,0,2],lw=.7,label='Front vertical normal load')
+        reference=row['operational_precontact_load_N']
+        if reference is not None:right.axhline(.2*reference,ls='--',color='gray',label='20% precontact load')
+        for ax in (left,right):
+            if row['first_front_contact_s'] is not None and row['last_rear_contact_s'] is not None:ax.axvspan(row['first_front_contact_s'],row['last_rear_contact_s'],color='orange',alpha=.12)
+            ax.grid(alpha=.2);ax.set_xlabel('Time (s)')
+        left.set_ylabel('Steering-axis torque (Nm)');right.set_ylabel('Load (N)')
+        left.set_title(f"lane {lane}, alpha={row['alpha']:g}")
+    axes[0,0].legend();axes[0,1].legend()
+    fig.suptitle('Solved-step contacts | orange: first front to last rear ridge contact\nObserved windows only; last-contact boundaries are retrospective')
+    fig.savefig(a.run/('contact_event_windows.png' if len(rows)<=5 else f'contact_event_windows_{begin//5:02d}.png'),dpi=140);plt.close(fig)
