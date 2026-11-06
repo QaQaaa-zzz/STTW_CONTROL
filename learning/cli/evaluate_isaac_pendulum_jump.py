@@ -4,6 +4,7 @@ from pathlib import Path
 import numpy as np
 p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);a=p.parse_args()
 spec=json.loads(a.config.read_text())
+if spec.get('connection_selector') and (len(spec['skills'])!=1 or not spec.get('ground_bundle') or not spec.get('connection_midpoint_candidate')):p.error('Connection selection requires single-lane ground execution and a declared midpoint event')
 if spec.get('connection_midpoint_candidate'):
  if not spec.get('connection_candidate') or not spec['connection_candidate']['decision_x_m']<spec['connection_midpoint_candidate']['decision_x_m']<spec['handoff_x']:p.error('Midpoint decision must lie strictly between the exit decision and jump handoff')
 out=Path(spec['output']);out.mkdir(exist_ok=True,parents=True)
@@ -90,6 +91,15 @@ if spec.get('ground_bundle'):
   ground.middle.reset(gm,gpose,gv,ground.previous_reference,ground.previous_reference,ground.previous_command,ground.controller)
  (out/'ground_controller.json').write_text(json.dumps(dict(upper_sha256=ground.upper_sha256,lower_sha256=ground.lower_sha256,alpha=spec['ground_alpha'],physics_dt=plant.physics_dt,control_dt=.005,policy_dt=.02,physical_substeps=ground.physics_substeps),indent=2))
 target=torch.zeros(n,4,device='cuda:0')
+selector=None
+if spec.get('connection_selector'):
+ import hashlib
+ from sttw_control.jump_connection import JumpConnectionSelector,decision_features
+ selection=spec['connection_selector'];selector_config=json.loads(Path(selection['config']).read_text())
+ evidence_texts={file:Path(file).read_text() for file in selection['records']}
+ evidence=[json.loads(line) for text in evidence_texts.values() for line in text.splitlines() if line.strip()]
+ selector=JumpConnectionSelector(evidence,selector_config,origin_id=spec['origin_id'],policy_sha256=dict(ground=ground.upper_sha256,jump=policies[0].identity['artifact_sha256']),model_contract_sha256=hashlib.sha256(Path(cfg['asset']).with_name('contract.json').read_bytes()).hexdigest(),physics_dt=plant.physics_dt,zero_lower=spec['zero_lower'])
+ (out/'connection_selector.json').write_text(json.dumps(dict(config=selector_config,evidence_sha256={file:hashlib.sha256(text.encode()).hexdigest() for file,text in evidence_texts.items()},accepted_rows=selector.evidence_rows,excluded_origin_id=spec['origin_id']),indent=2))
 root_acceleration=torch.zeros(n,3,device='cuda:0')
 previous_root_velocity=plant.roots[:,7:10].clone()
 for k in range(steps+1):
@@ -108,7 +118,12 @@ for k in range(steps+1):
  if k==steps or not bool(alive.any()):break
  if ground is not None and not active and not returned and connection_event_index<len(connection_events) and float(root[0,0])>=connection_events[connection_event_index][2]['decision_x_m']:
   stage,event_file,candidate=connection_events[connection_event_index];connection_event_index+=1
-  (out/event_file).write_text(json.dumps(dict(time=k*.005,decision_stage=stage,previous_alpha_duration_s=k*.005-previous_alpha_since_s,candidate=candidate,root=root.cpu().tolist(),measurement=m.cpu().tolist(),position=plant.dofs[:,:,0].cpu().tolist(),velocity=plant.dofs[:,:,1].cpu().tolist(),previous_reference=ground.previous_reference.cpu().tolist(),previous_alpha=ground.alpha.cpu().tolist(),history='retained, no reset'),indent=2))
+  event=dict(time=k*.005,decision_stage=stage,previous_alpha_duration_s=k*.005-previous_alpha_since_s,candidate=candidate,root=root.cpu().tolist(),measurement=m.cpu().tolist(),position=plant.dofs[:,:,0].cpu().tolist(),velocity=plant.dofs[:,:,1].cpu().tolist(),previous_reference=ground.previous_reference.cpu().tolist(),previous_alpha=ground.alpha.cpu().tolist(),history='retained, no reset')
+  if selector is not None and stage in spec['connection_selector'].get('stages',['midpoint']):
+   query_start=time.perf_counter();features,named=decision_features(event,out,dict(joint_names=plant.joints),spec)
+   choice=selector.choose(features,stage,dict(speed_m_s=float(ground.speed[0]),alpha=float(ground.alpha[0])))
+   candidate=dict(candidate,**choice['candidate']);event.update(candidate=candidate,selection=choice,observable_state=named,selection_wall_s=time.perf_counter()-query_start)
+  (out/event_file).write_text(json.dumps(event,indent=2))
   if float(ground.alpha[0])!=candidate['alpha']:previous_alpha_since_s=k*.005
   ground.speed.fill_(candidate['speed_m_s']);ground.alpha.fill_(candidate['alpha'])
  if k%4==0:

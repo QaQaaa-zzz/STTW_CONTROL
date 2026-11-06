@@ -18,3 +18,13 @@
 出口决策 x=-2 m，中点 x=2 m，释放线 x=6 m，平台前缘 x=7.6 m；实际中点状态在 records/midpoint_hold_records.jsonl（6 条）。前后阶段序列标签与中点后保持方案标签分别保存，不能混作同一个评价器目标。
 
 下一步：执行预先声明的非对角候选，随后判断是否存在实际选择收益；当前不新增训练。
+
+## 在线中点查询接口（已接线，尚未实跑 R6）
+
+`evaluate_isaac_pendulum_jump.py` 的可选 `connection_selector` 接收 `config`、`records`（JSONL 路径列表）和 `stages`（默认 `["midpoint"]`）。配合原有 `connection_midpoint_candidate` 指定真实触发坐标。配置入口为 `learning/configs/jump_connection_capability_dev.json`，继续使用既有高斯经验评价器，不新增RL。
+
+在线/离线共同使用 `sttw_control.jump_connection.decision_features` 的23个可观测特征；六条已保存中点特征逐项相同。按实际模型/冻结策略/物理周期/零残差配置匹配证据，排除整个当前根；只消费Q_hold与决策前走廊完整的记录。中点标签现在检查第一段连接在内的历史，六条原完整任务标签和完成时间不变。
+
+支持不足或无可行候选保留实际当前速度与alpha请求，不重置滤波、ESO、历史或物理状态。每次事件保存所有候选估计、选档/未知、实际执行参数、查询耗时，初始化记录证据哈希与排除根。保留当前参考不等于保证安全或完成任务。
+
+带在线选择的出口标签标为adaptive_remaining_task，不能误用为保持原档的Q_hold；实际中点选择后的保持标签单独输出。当前只有接口测试和保存数据回归，尚无在线R6物理运行或收益结论。

@@ -121,5 +121,12 @@
       11.024999618530273,
       12.470000267028809
     ]
+  },
+  "midpoint_prefix": {
+    "decision_time_s": 7.2,
+    "decision_reached": true,
+    "max_path_error_before_decision_m": 0.32277894020080566,
+    "corridor_intact_at_decision": true,
+    "scope": "Observed corridor history through actual midpoint, including the first connection segment"
   }
 }
