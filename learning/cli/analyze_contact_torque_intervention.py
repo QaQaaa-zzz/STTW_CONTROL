@@ -35,6 +35,24 @@ for lane,mode in enumerate(protocol['modes']):
         difference={k:pair['intervention'][k]-pair['baseline'][k] for k in pair['baseline']}
         requested=physics['requested_next_torque'][pm,lane];bounded=physics['bounded_next_torque'][pm,lane];submitted=physics['submitted_previous_torque'][pm,lane]
         row['windows'][name]=dict(shared_observed_s=float(m.sum()*c['lower_dt']),**pair,intervention_minus_baseline=difference,paired_xy_rms_m=float(np.sqrt(np.mean(np.sum((pose[m,lane,:2]-pose[m,base,:2])**2,axis=1)))),paired_steer_rate_peak_difference_rad_s=float(abs(physics['steer_velocity'][pm,lane]-physics['steer_velocity'][pm,base]).max()),submitted_signed_impulse_Nms=float(submitted.sum()*dt),submitted_absolute_impulse_Nms=float(abs(submitted).sum()*dt),clipped_request_duration_s=float((abs(requested-bounded)>1e-6).sum()*dt))
+    # Separate actuator delivery from the simultaneous moment balance: delayed
+    # compensation can be delivered exactly and still miss a short contact pulse.
+    observed=physics['geometry_observed'][:,lane]&physics['alive_before'][:,lane]
+    submitted_all=physics['submitted_previous_torque'][:,lane]
+    request_all=physics['requested_next_torque'][:,lane]
+    requested_abs=float(np.abs(request_all).sum()*dt)
+    row['delivery']=dict(requested_absolute_impulse_Nms=requested_abs,
+        submitted_absolute_impulse_Nms=float(np.abs(submitted_all).sum()*dt),
+        next_step_delivery_peak_error_Nm=float(np.abs(submitted_all[1:]-physics['bounded_next_torque'][:-1,lane]).max()))
+    if mode in ('cancel_negative','restore_reference'):
+        target=-physics['negative_lateral'][:,lane] if mode=='cancel_negative' else physics['reference_delta'][:,lane]
+        gap=target[observed]-submitted_all[observed]
+        row['moment_balance']=dict(observed_s=float(observed.sum()*dt),
+            target_signed_impulse_Nms=float(target[observed].sum()*dt),
+            target_absolute_impulse_Nms=float(np.abs(target[observed]).sum()*dt),
+            simultaneous_uncompensated_signed_impulse_Nms=float(gap.sum()*dt),
+            simultaneous_uncompensated_absolute_impulse_Nms=float(np.abs(gap).sum()*dt),
+            interpretation='Same-step target minus submitted external torque on the intervened trajectory; includes causal lag and clipping, not a counterfactual contact-force cancellation fraction.')
     rows.append(row)
 report=dict(role='G5 paired DEV; shared surviving windows plus separate full failure/observation lengths; external generalized torque submission is not a measured contact cancellation fraction',code_protocol=index,conditions=rows)
 (a.run/'contact_intervention_effects.json').write_text(json.dumps(report,indent=2)+'\n')
