@@ -1,3 +1,9 @@
+## 带摆原七工况结果与H75路径闭环接续
+
+标准评测已正常退出，14lane均完成10s，无物理终止；包括预热总945000physics、0optimizer、416.604s。`runs/pendulum_local300_standard/RESULTS.md`先展示实际/原参考XY、逐时刻最近路径距离及速度误差，保留原轨迹、所有方法指标及原奖励重建。带摆Local300回正/回正后小转向峰值偏离1.08–1.47m，超过0.5m持续2.05–4.30秒，不能因存活判跟踪合格；持续正负转弯优于纯ECBC。原车历史对照初态不同，图按首记录位姿对齐，不能宣称严格单因素效果。
+
+原H75路径闭环评测已启动session80548，目录runs/pendulum_h75_standard：原生straight/left90_R2/right90_R2，每条五alpha+Zero、10s、最多900000physics、0optimizer；使用实际带摆预热初态，原网络参数不改，必要重规划保留。先看路径反馈能否纠正底层开环指令累计偏差，再决定适配。未证明带摆地面技能通过，更未证明跳跃交接。plot_isaac_gpu_evaluation原位支持无曲率直线路径，避免空弯道索引；语法/diff通过。
+
 ## 2.0m/s全七地形组完成（14条件矩阵的前半组）
 
 证据：`runs/h75_route_terrain/evaluation/FEASIBILITY.md`、各case原XY/奖励图与trajectory.npz。七种地形×五alpha共35条H75均完整10秒且通过目标截面，29/35满足末段保持；Zero7/7通过目标截面、2/7保持，1次跟踪域退出。数据角色为单初态DEV，所有条件与反例保留，不称泛化。
