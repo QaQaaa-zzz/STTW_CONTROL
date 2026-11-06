@@ -68,3 +68,13 @@ python learning/cli/plot_tradeoff_curve.py --evaluation docs/results/sttw-offroa
 terrain/每工况trajectory.npz仅包含原始lower_trace、progress、pose、measurement完整数组，六lane及提前终止标记均保留。lower_trace最后维顺序为post_x,post_y,true_speed,signed_cross_track,peak_abs_roll,step_reward,active_before_step,physics_stop_tick,governed_speed,governed_steer,rear_wheel_speed_estimate；控制dt=.005s。旧数据形状[500,4,6,11]，reshape为[2000,6,11]。模型/全物理快照不在此包，干预与切换用指标/图支持审阅，不能从本包完整重演PhysX快照。
 
 source_manifest.json给出来源、提取方式和文件哈希；内部历史绝对路径仅用于原机器溯源。所有主要入口使用本包相对路径。主稿未修改，实车证据尚缺。
+
+## 新增地形准备（尚无物理评测结论）
+
+![整路粗糙与连续起伏](terrain_preparation/terrain_preview.png)
+
+七个SDK地形已实际生成，黑线是原始参考路径，不是车辆轨迹。粗糙面实际高度范围分别为±1/2/3cm；波形SDK参数2/4cm经网格离散后的实际高度范围为±1.5/3.5cm，世界轴波长约2.008/1.004m。不可将名称参数直接写成实测振幅。原路径进度1.8m后用1m平滑渐入，12.3m处结束，覆盖弯道及出口观察段。地形没有按车辆位置移动，横向覆盖整个网格，凹处无额外平面填平。
+
+[几何实测](terrain_preparation/geometry_metrics.json)的max_grid_grade是离散高程梯度，不是已测车辆爬坡能力。[场景配置](../../../learning/configs/isaac_h75_route_terrain_scenes.json)、[生成器](../../../learning/cli/place_isaac_terrain.py)复用NVIDIA terrain_utils；逐场景把scene对象保存为JSON，使用`--scene-config <scene.json> --terrain route_rough或route_waves --output <目录>`生成。使用既有Go2 IsaacGym环境及其库路径。新场景属于DEV准备，不混入先前10条件的结果表或拟合。
+
+低速坡段筛查正在另行执行，尚未确认alpha0摔倒而更大alpha通过。新增全路段评测配置为`learning/configs/isaac_h75_route_terrain_sweep.json`，14条件×6轨迹，10秒，上限420万physics lane steps，0optimizer；等待低速筛查完成后再登记启动。

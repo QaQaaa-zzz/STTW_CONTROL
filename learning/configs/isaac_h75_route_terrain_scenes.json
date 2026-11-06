@@ -1,0 +1,205 @@
+{
+  "role": "DEV geometry preparation; rollout not yet launched",
+  "scenes": [
+    {
+      "route": "runs/h75_selected_local300_flat/bundle/route.npz",
+      "bounds_m": [
+        -2,
+        24
+      ],
+      "horizontal_scale_m": 0.1,
+      "vertical_scale_m": 0.005,
+      "slope_threshold": 1.5,
+      "slope_start_s_m": 3.8,
+      "length_m": 1.2,
+      "alphas": [
+        0,
+        0.25,
+        0.5,
+        0.75,
+        1
+      ],
+      "role": "DEV short uphill hypothesis; same task and actuator limits across alpha; no guaranteed outcome",
+      "height_m": 0.01,
+      "seed": 20261106,
+      "start_s_m": 1.8,
+      "end_s_m": 12.3,
+      "blend_length_m": 1.0,
+      "downsampled_scale_m": 0.2,
+      "name": "rough_1cm",
+      "terrain_kind": "route_rough"
+    },
+    {
+      "route": "runs/h75_selected_local300_flat/bundle/route.npz",
+      "bounds_m": [
+        -2,
+        24
+      ],
+      "horizontal_scale_m": 0.1,
+      "vertical_scale_m": 0.005,
+      "slope_threshold": 1.5,
+      "slope_start_s_m": 3.8,
+      "length_m": 1.2,
+      "alphas": [
+        0,
+        0.25,
+        0.5,
+        0.75,
+        1
+      ],
+      "role": "DEV short uphill hypothesis; same task and actuator limits across alpha; no guaranteed outcome",
+      "height_m": 0.02,
+      "seed": 20261106,
+      "start_s_m": 1.8,
+      "end_s_m": 12.3,
+      "blend_length_m": 1.0,
+      "downsampled_scale_m": 0.2,
+      "name": "rough_2cm",
+      "terrain_kind": "route_rough"
+    },
+    {
+      "route": "runs/h75_selected_local300_flat/bundle/route.npz",
+      "bounds_m": [
+        -2,
+        24
+      ],
+      "horizontal_scale_m": 0.1,
+      "vertical_scale_m": 0.005,
+      "slope_threshold": 1.5,
+      "slope_start_s_m": 3.8,
+      "length_m": 1.2,
+      "alphas": [
+        0,
+        0.25,
+        0.5,
+        0.75,
+        1
+      ],
+      "role": "DEV short uphill hypothesis; same task and actuator limits across alpha; no guaranteed outcome",
+      "height_m": 0.03,
+      "seed": 20261106,
+      "start_s_m": 1.8,
+      "end_s_m": 12.3,
+      "blend_length_m": 1.0,
+      "downsampled_scale_m": 0.2,
+      "name": "rough_3cm",
+      "terrain_kind": "route_rough"
+    },
+    {
+      "route": "runs/h75_selected_local300_flat/bundle/route.npz",
+      "bounds_m": [
+        -2,
+        24
+      ],
+      "horizontal_scale_m": 0.1,
+      "vertical_scale_m": 0.005,
+      "slope_threshold": 1.5,
+      "slope_start_s_m": 3.8,
+      "length_m": 1.2,
+      "alphas": [
+        0,
+        0.25,
+        0.5,
+        0.75,
+        1
+      ],
+      "role": "DEV short uphill hypothesis; same task and actuator limits across alpha; no guaranteed outcome",
+      "height_m": 0.02,
+      "seed": 20261106,
+      "start_s_m": 1.8,
+      "end_s_m": 12.3,
+      "blend_length_m": 1.0,
+      "downsampled_scale_m": 0.2,
+      "name": "waves_2cm_n13",
+      "terrain_kind": "route_waves",
+      "num_waves": 13
+    },
+    {
+      "route": "runs/h75_selected_local300_flat/bundle/route.npz",
+      "bounds_m": [
+        -2,
+        24
+      ],
+      "horizontal_scale_m": 0.1,
+      "vertical_scale_m": 0.005,
+      "slope_threshold": 1.5,
+      "slope_start_s_m": 3.8,
+      "length_m": 1.2,
+      "alphas": [
+        0,
+        0.25,
+        0.5,
+        0.75,
+        1
+      ],
+      "role": "DEV short uphill hypothesis; same task and actuator limits across alpha; no guaranteed outcome",
+      "height_m": 0.02,
+      "seed": 20261106,
+      "start_s_m": 1.8,
+      "end_s_m": 12.3,
+      "blend_length_m": 1.0,
+      "downsampled_scale_m": 0.2,
+      "name": "waves_2cm_n26",
+      "terrain_kind": "route_waves",
+      "num_waves": 26
+    },
+    {
+      "route": "runs/h75_selected_local300_flat/bundle/route.npz",
+      "bounds_m": [
+        -2,
+        24
+      ],
+      "horizontal_scale_m": 0.1,
+      "vertical_scale_m": 0.005,
+      "slope_threshold": 1.5,
+      "slope_start_s_m": 3.8,
+      "length_m": 1.2,
+      "alphas": [
+        0,
+        0.25,
+        0.5,
+        0.75,
+        1
+      ],
+      "role": "DEV short uphill hypothesis; same task and actuator limits across alpha; no guaranteed outcome",
+      "height_m": 0.04,
+      "seed": 20261106,
+      "start_s_m": 1.8,
+      "end_s_m": 12.3,
+      "blend_length_m": 1.0,
+      "downsampled_scale_m": 0.2,
+      "name": "waves_4cm_n13",
+      "terrain_kind": "route_waves",
+      "num_waves": 13
+    },
+    {
+      "route": "runs/h75_selected_local300_flat/bundle/route.npz",
+      "bounds_m": [
+        -2,
+        24
+      ],
+      "horizontal_scale_m": 0.1,
+      "vertical_scale_m": 0.005,
+      "slope_threshold": 1.5,
+      "slope_start_s_m": 3.8,
+      "length_m": 1.2,
+      "alphas": [
+        0,
+        0.25,
+        0.5,
+        0.75,
+        1
+      ],
+      "role": "DEV short uphill hypothesis; same task and actuator limits across alpha; no guaranteed outcome",
+      "height_m": 0.04,
+      "seed": 20261106,
+      "start_s_m": 1.8,
+      "end_s_m": 12.3,
+      "blend_length_m": 1.0,
+      "downsampled_scale_m": 0.2,
+      "name": "waves_4cm_n26",
+      "terrain_kind": "route_waves",
+      "num_waves": 26
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+[
+  {
+    "name": "rough_1cm",
+    "height_min_m": -0.01,
+    "height_max_m": 0.01,
+    "max_grid_grade": 0.12499999999999999,
+    "world_axis_wavelength_m": null
+  },
+  {
+    "name": "rough_2cm",
+    "height_min_m": -0.02,
+    "height_max_m": 0.02,
+    "max_grid_grade": 0.21360009363293828,
+    "world_axis_wavelength_m": null
+  },
+  {
+    "name": "rough_3cm",
+    "height_min_m": -0.03,
+    "height_max_m": 0.03,
+    "max_grid_grade": 0.31622776601683794,
+    "world_axis_wavelength_m": null
+  },
+  {
+    "name": "waves_2cm_n13",
+    "height_min_m": -0.015,
+    "height_max_m": 0.015,
+    "max_grid_grade": 0.10606601717798213,
+    "world_axis_wavelength_m": 2.0076923076923077
+  },
+  {
+    "name": "waves_2cm_n26",
+    "height_min_m": -0.015,
+    "height_max_m": 0.015,
+    "max_grid_grade": 0.09013878188659973,
+    "world_axis_wavelength_m": 1.0038461538461538
+  },
+  {
+    "name": "waves_4cm_n13",
+    "height_min_m": -0.035,
+    "height_max_m": 0.035,
+    "max_grid_grade": 0.24748737341529164,
+    "world_axis_wavelength_m": 2.0076923076923077
+  },
+  {
+    "name": "waves_4cm_n26",
+    "height_min_m": -0.035,
+    "height_max_m": 0.035,
+    "max_grid_grade": 0.19525624189766635,
+    "world_axis_wavelength_m": 1.0038461538461538
+  }
+]

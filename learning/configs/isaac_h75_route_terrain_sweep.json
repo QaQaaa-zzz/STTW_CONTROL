@@ -1,0 +1,48 @@
+{
+  "role": "Planned DEV full-route roughness and continuous undulations; not executed",
+  "reference_bundle": "runs/h75_selected_local300_flat/bundle",
+  "base_evaluation_config": "runs/h75_selected_local300_bend/lab_config.json",
+  "terrain_generator": "learning/cli/place_isaac_terrain.py",
+  "terrain_base_config": "learning/configs/isaac_h75_route_terrain_scenes.json",
+  "terrain_overrides": [
+    {
+      "name": "rough_1cm"
+    },
+    {
+      "name": "rough_2cm"
+    },
+    {
+      "name": "rough_3cm"
+    },
+    {
+      "name": "waves_2cm_n13"
+    },
+    {
+      "name": "waves_2cm_n26"
+    },
+    {
+      "name": "waves_4cm_n13"
+    },
+    {
+      "name": "waves_4cm_n26"
+    }
+  ],
+  "user_speed_m_s": [
+    2.0,
+    2.3
+  ],
+  "initial_state_protocol": "Same saved 2.3 m/s warm state; requested 2.0 or 2.3 m/s; measure actual entry speed",
+  "alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "include_zero": true,
+  "seconds": 10,
+  "max_physics_lane_steps": 4200000,
+  "optimizer_updates": 0,
+  "reuse": "Reuse prepared SDK meshes; fresh five-alpha plus Zero paired conditions",
+  "start_condition": "After current low-speed feasibility screen completes; record launch separately"
+}

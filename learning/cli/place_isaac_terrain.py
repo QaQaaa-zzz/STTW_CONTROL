@@ -9,10 +9,10 @@ import numpy as np
 p = argparse.ArgumentParser(description=__doc__)
 p.add_argument('--library', type=Path)
 p.add_argument('--scene-config', type=Path)
-p.add_argument('--terrain', choices=('slope', 'rough_slope', 'bend_bump', 'bend_ramp'), required=True)
+p.add_argument('--terrain', choices=('slope', 'rough_slope', 'bend_bump', 'bend_ramp', 'route_rough', 'route_waves'), required=True)
 p.add_argument('--output', type=Path, required=True)
 a = p.parse_args()
-if a.terrain in ('bend_bump', 'bend_ramp'):
+if a.terrain in ('bend_bump', 'bend_ramp', 'route_rough', 'route_waves'):
     cfg = json.loads(a.scene_config.read_text())
     route_path = Path(cfg['route'])
     route = np.load(route_path)
@@ -21,7 +21,7 @@ if a.terrain in ('bend_bump', 'bend_ramp'):
     x, y = np.meshgrid(axis, axis, indexing='ij')
     points = np.stack((x.ravel(), y.ravel()), axis=-1)
     # Project onto the fixed route; the terrain never follows the vehicle.
-    ids = np.flatnonzero(route['s'] <= float(route['turn_end']) + 3)
+    ids = np.flatnonzero(route['s'] <= float(route['turn_end']) + (6 if a.terrain.startswith('route_') else 3))
     xy = route['xy'][ids]
     start, edge = xy[:-1], np.diff(xy, axis=0)
     ss, lateral = [], []
@@ -35,7 +35,23 @@ if a.terrain in ('bend_bump', 'bend_ramp'):
         tangent = edge[nearest] / np.linalg.norm(edge[nearest], axis=-1)[:, None]
         lateral.append(tangent[:, 0] * offset[row, nearest, 1] - tangent[:, 1] * offset[row, nearest, 0])
     s, n = np.concatenate(ss), np.concatenate(lateral)
-    if a.terrain == 'bend_ramp':
+    if a.terrain.startswith('route_'):
+        np.random.seed(cfg['seed'])
+        tile = terrain_utils.SubTerrain(a.terrain, width=len(axis), length=len(axis),
+                                       vertical_scale=cfg['vertical_scale_m'], horizontal_scale=spacing)
+        if a.terrain == 'route_rough':
+            terrain_utils.random_uniform_terrain(tile, min_height=-cfg['height_m'],
+                max_height=cfg['height_m'], step=cfg['vertical_scale_m'],
+                downsampled_scale=cfg['downsampled_scale_m'])
+        else:
+            terrain_utils.wave_terrain(tile, num_waves=cfg['num_waves'], amplitude=cfg['height_m'])
+        # Terrain is fixed in world coordinates and spans the whole lateral domain.
+        # Both ends fade smoothly; there is no narrow strip to bypass.
+        entry = np.clip((s-cfg['start_s_m'])/cfg['blend_length_m'], 0, 1)
+        leave = np.clip((cfg['end_s_m']-s)/cfg['blend_length_m'], 0, 1)
+        envelope = .5*(1-np.cos(np.pi*entry)) * .5*(1-np.cos(np.pi*leave))
+        surface = tile.height_field_raw.ravel()*cfg['vertical_scale_m']*envelope
+    elif a.terrain == 'bend_ramp':
         u = np.clip((s - cfg['slope_start_s_m']) / cfg['length_m'], 0, 1)
         profile = .5 * (1 - np.cos(np.pi * u))
         surface = cfg['height_m'] * profile
@@ -59,6 +75,13 @@ if a.terrain in ('bend_bump', 'bend_ramp'):
         meta.update(profile='raised cosine ascent to persistent plateau; height independent of lateral offset',
                     slope_end_s_m=cfg['slope_start_s_m']+cfg['length_m'],
                     nominal_peak_grade=cfg['height_m']*np.pi/(2*cfg['length_m']))
+    elif a.terrain.startswith('route_'):
+        meta.update(terrain_support_end_s_m=cfg['end_s_m'], source_module=terrain_utils.__file__,
+                    height_min_m=float(height.min()*cfg['vertical_scale_m']),
+                    height_max_m=float(height.max()*cfg['vertical_scale_m']),
+                    profile='SDK world-fixed surface, full lateral coverage, raised-cosine route entry and exit')
+        if a.terrain == 'route_waves':
+            meta['world_axis_wavelength_m'] = len(axis)*spacing/cfg['num_waves']
     else:
         meta['terrain_support_end_s_m'] = cfg['center_s_m'] + cfg['length_m']/2 + abs(cfg['oblique_s_per_lateral_m'])*cfg['half_width_m']
     (a.output / 'identity.json').write_text(json.dumps(meta, indent=2))
