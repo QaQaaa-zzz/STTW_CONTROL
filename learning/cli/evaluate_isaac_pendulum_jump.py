@@ -37,12 +37,13 @@ if spec.get('video',False):
  writer=imageio.get_writer(out/'simulation.mp4',fps=50,codec='libx264',quality=8,macro_block_size=1)
 saved=np.load(spec['initial_state'])
 state={k:torch.tensor(saved[k],device='cuda:0',dtype=torch.float32) for k in ('root_pose','root_velocity','joint_position','joint_velocity')}
-state['root_pose']=state['root_pose'].clone();state['root_pose'][0]=spec['start_x'];state['root_pose'][1]=0.
-if spec.get('align_heading',False):
+state['root_pose']=state['root_pose'].clone();state['root_pose'][0]=spec['start_x'];state['root_pose'][1]=spec.get('start_y',0.)
+if spec.get('align_heading',False) or 'start_heading_rad' in spec:
  from isaaclab.utils.math import quat_mul,quat_apply
  q=state['root_pose'][3:];w,x,y,z=q
  yaw=torch.atan2(2*(w*z+x*y),1-2*(y*y+z*z))
- rotation=torch.stack((torch.cos(yaw/2),yaw*0,yaw*0,-torch.sin(yaw/2)))
+ delta=spec.get('start_heading_rad',0.)-yaw
+ rotation=torch.stack((torch.cos(delta/2),yaw*0,yaw*0,torch.sin(delta/2)))
  state['root_pose'][3:]=quat_mul(rotation[None],q[None])[0]
  state['root_velocity'][:3]=quat_apply(rotation[None],state['root_velocity'][:3][None])[0]
  state['root_velocity'][3:]=quat_apply(rotation[None],state['root_velocity'][3:][None])[0]
@@ -73,8 +74,12 @@ if spec.get('ground_bundle'):
  actor=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],ground_cfg,n,'cuda:0')
  ground=IsaacPathRollout(bundle,settings,actor,plant=plant)
  ss=np.arange(0,80.01,.02);route=dict(s=ss,xy=np.column_stack((ss+spec['start_x'],np.zeros_like(ss))),heading=np.zeros_like(ss),curvature=np.zeros_like(ss))
+ if spec.get('ground_route'):route=dict(np.load(spec['ground_route']))
  np.savez(out/'ground_route.npz',**route)
  ground.begin_connection(TorchPathReference(route,ground.config,ground.device),ground.speed.clone(),ground.alpha.clone())
+ if spec.get('ground_route'):
+  gm,gpose,gv=plant.observe()
+  ground.middle.reset(gm,gpose,gv,ground.previous_reference,ground.previous_reference,ground.previous_command,ground.controller)
  (out/'ground_controller.json').write_text(json.dumps(dict(upper_sha256=ground.upper_sha256,lower_sha256=ground.lower_sha256,alpha=spec['ground_alpha'],physics_dt=plant.physics_dt,control_dt=.005,policy_dt=.02,physical_substeps=ground.physics_substeps),indent=2))
 target=torch.zeros(n,4,device='cuda:0')
 root_acceleration=torch.zeros(n,3,device='cuda:0')
@@ -147,6 +152,8 @@ for k in range(steps+1):
    arm_rows.append(torch.cat((before,plant.last_pendulum_torque[:,ids],alive[:,None]),-1))
  elif ground is not None and (returned or not spec.get('ground_after_landing_only',False)):
   ground.step()
+  velocity=plant.robot.data.root_link_lin_vel_w
+  root_acceleration=(velocity-previous_root_velocity)/.02;previous_root_velocity=velocity.clone()
  else:
   request=torch.stack((m[:,5]*plant.wheel_radius_m,m[:,2],m[:,3],m[:,0],m[:,1],torch.zeros_like(speed)),-1)
   control=controller.step(request,torch.ones_like(alive));command=torch.stack((control[:,0].clamp(-3,3),torch.full_like(speed,(spec['landing_return']['speed_m_s'] if returned else spec['approach_speed'])/plant.wheel_radius_m)),-1)

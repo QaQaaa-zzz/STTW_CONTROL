@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import argparse
 parser=argparse.ArgumentParser();parser.add_argument('--run',type=Path,required=True);args=parser.parse_args()
 p=args.run;d=np.load(p/'trajectory.npz');t=d['trace'];v=d['valid'];r=json.loads((p/'results.json').read_text());fig,axes=plt.subplots(2,3,figsize=(15,8.5),layout='constrained');ax=axes.flatten()
-protocol=json.loads((p/'protocol.json').read_text());handoff=json.loads((p/'handoff.json').read_text())['time']
+protocol=json.loads((p/'protocol.json').read_text());handoff=json.loads((p/'handoff.json').read_text())['time'] if (p/'handoff.json').exists() else float('inf')
 landing_path=p/'landing_handoff.json'
 landing=json.loads(landing_path.read_text())['time'] if landing_path.exists() else None
 for i,c in enumerate(r['cases']):
@@ -20,7 +20,12 @@ for i,c in enumerate(r['cases']):
  jump=(a[:,0]>=handoff)&((a[:,0]<landing) if landing is not None else True)
  ax[4].plot(a[jump,0],command[jump],label=label,color=color)
  ax[5].plot(a[:,0],a[:,11],label=label,color=color)
-ax[0].axhline(0,color='gray',ls=':',label='Straight approach reference');ax[0].set(xlabel='World x (m)',ylabel='World y (m)');ax[0].set_aspect('equal',adjustable='datalim');ax[0].legend(fontsize=8)
+if protocol['spec'].get('ground_route'):
+ route=np.load(p/'ground_route.npz');endpoints=t[-1,:,:][:,1:3]
+ end=max(int(np.argmin(np.linalg.norm(route['xy']-point,axis=1))) for point in endpoints)
+ ref=route['xy'][:min(end+51,len(route['xy']))];ax[0].plot(ref[:,0],ref[:,1],color='gray',ls=':',label='Original ground route')
+else:ax[0].axhline(0,color='gray',ls=':',label='Straight approach reference')
+ax[0].set(xlabel='World x (m)',ylabel='World y (m)');ax[0].set_aspect('equal',adjustable='datalim');ax[0].legend(fontsize=8)
 ax[1].plot([1,3.6,3.6,7.6],[0,0,.16,.16],color='gray',ls=':',label='Platform surface');ax[1].set(xlabel='World x (m)',ylabel='Root height (m)');ax[1].legend(fontsize=8)
 ax[2].set(xlabel='Time (s)',ylabel='Roll (deg)');ax[2].legend(fontsize=8)
 ax[3].axhline(protocol['spec']['approach_speed'],ls=':',color='gray',label='Approach speed request');ax[3].set(xlabel='Time (s)',ylabel='Measured forward speed (m/s)')
@@ -29,7 +34,8 @@ if landing is not None:
  for axis in (ax[2],ax[3],ax[4],ax[5]):axis.axvline(landing,ls='--',color='green',alpha=.6,label='Landing-to-ground handoff')
 ax[4].set(xlabel='Time (s)',ylabel='Last policy rear target, before delay (rad/s)')
 ax[5].axhline(0,ls=':',color='gray');ax[5].set(xlabel='Time (s)',ylabel='Frontmost collision distance to edge (m)')
-for a in (ax[2],ax[3],ax[4],ax[5]):a.axvline(handoff,ls=':',color='black',alpha=.5,label='Ground-to-jump handoff')
+if np.isfinite(handoff):
+ for a in (ax[2],ax[3],ax[4],ax[5]):a.axvline(handoff,ls=':',color='black',alpha=.5,label='Ground-to-jump handoff')
 for a in ax:a.grid(alpha=.25);a.legend(fontsize=7)
 fig.suptitle('Common pendulum bicycle | selected frozen checkpoints | nominal paired DEV\nActual trajectories end at physical termination; root height is not wheel clearance')
 fig.savefig(p/'xy_jump.png',dpi=150)
