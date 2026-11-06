@@ -5,6 +5,7 @@ from pathlib import Path
 import numpy as np
 import trimesh
 from scipy.spatial.transform import Rotation
+from sttw_control.polyline_distance import PolylineDistance
 
 p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('--task-run',type=Path,required=True)
@@ -13,16 +14,8 @@ a=p.parse_args()
 if a.half_width<=0:p.error('half-width must be positive')
 d=np.load(a.task_run/'body_poses.npz');tr=np.load(a.task_run/'trajectory.npz')
 urdf=Path(str(d['urdf']));robot=ET.parse(urdf).getroot();links={l.attrib['name']:l for l in robot.findall('link')}
-poses=d['poses'];origin=d['env_origins'];route=tr['original_xy'];segments=route[1:]-route[:-1];length2=(segments**2).sum(-1)
-keep=length2>0;starts=route[:-1][keep];segments=segments[keep];length2=length2[keep]
-
-def distance(xy):
-    shape=xy.shape[:-1];flat=xy.reshape(-1,2);out=[]
-    for chunk in np.array_split(flat,max(1,(len(flat)+255)//256)):
-        delta=chunk[:,None,:]-starts
-        u=np.clip((delta*segments).sum(-1)/length2,0,1)
-        out.append(np.sqrt(((delta-u[...,None]*segments)**2).sum(-1).min(-1)))
-    return np.concatenate(out).reshape(shape)
+poses=d['poses'];origin=d['env_origins'];route=tr['original_xy']
+distance=PolylineDistance(route)
 
 body_errors=[];names=[];geometry=[]
 for b,name in enumerate(d['body_names'].tolist()):

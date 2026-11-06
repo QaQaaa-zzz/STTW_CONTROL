@@ -2,8 +2,9 @@
 import os,argparse,json,time
 from pathlib import Path
 import numpy as np
-p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p.add_argument('--cuda-graph-observation',action='store_true');a=p.parse_args()
 spec=json.loads(a.config.read_text())
+if a.cuda_graph_observation:spec['cuda_graph_observation']=True
 batch=spec.get('batch_candidates')
 if batch and (len(batch)!=len(spec['skills']) or len(set(spec['skills']))!=1 or not spec.get('ground_bundle') or not spec.get('zero_lower') or not spec.get('landing_return') or not spec.get('connection_candidate') or any(spec.get(k) for k in ('connection_midpoint_candidate','connection_selector','forward_branch','external_force_pulse','video'))):p.error('Batch connection requires same frozen jump skill, zero-lower ground, common exit/landing protocol and fixed per-lane candidates')
 pulse=spec.get('external_force_pulse')
@@ -96,10 +97,14 @@ if spec.get('ground_bundle'):
   gm,gpose,gv=plant.observe()
   ground.middle.reset(gm,gpose,gv,ground.previous_reference,ground.previous_reference,ground.previous_command,ground.controller)
  (out/'ground_controller.json').write_text(json.dumps(dict(upper_sha256=ground.upper_sha256,lower_sha256=ground.lower_sha256,alpha=spec['ground_alpha'],physics_dt=plant.physics_dt,control_dt=.005,policy_dt=.02,physical_substeps=ground.physics_substeps),indent=2))
+if spec.get('cuda_graph_observation',False):
+ from sttw_control.cuda_control import CudaTensorFunction
+ position,velocity=plant.dofs.unbind(-1)
+ plant.signals.observe=CudaTensorFunction(plant.signals.observe,plant.roots,position,velocity)
 if batch:
  from sttw_control.isaac_pendulum_batch import run_connection_batch
  print(run_connection_batch(spec,out,plant,ground,policies[0],history,geometry),flush=True)
- os.sync();os._exit(0)
+ os._exit(0)
 target=torch.zeros(n,4,device='cuda:0')
 selector=None
 if spec.get('connection_selector'):
@@ -303,4 +308,4 @@ for i,name in enumerate(spec['skills']):
 if branch_executor is not None:
  if not branch_decided:(out/'forward_query_unapplied.json').write_text(json.dumps(dict(status='execution_ended_before_application',query_state=branch_query_state,active_jump=active,returned=returned)))
  branch_executor.shutdown(wait=False,cancel_futures=True)
-os.sync();os._exit(0)
+os._exit(0)

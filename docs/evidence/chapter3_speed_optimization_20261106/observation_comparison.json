@@ -1,0 +1,7 @@
+{
+  "baseline_elapsed_s": 62.20355238200136,
+  "optimized_elapsed_s": 58.97573232000286,
+  "trace_max_abs_difference": 0.0,
+  "speedup": 1.0547313265138332,
+  "single_run_only": true
+}

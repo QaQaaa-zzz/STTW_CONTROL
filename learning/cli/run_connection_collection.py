@@ -16,6 +16,7 @@ p.add_argument('--start', type=int, default=0)
 p.add_argument('--count', type=int, required=True)
 p.add_argument('--analysis-python', required=True)
 p.add_argument('--parallel-tasks', action='store_true')
+p.add_argument('--resume', action='store_true')
 a = p.parse_args()
 manifest = json.loads(a.manifest.read_text())
 cases = manifest[a.group]
@@ -29,7 +30,7 @@ started = time.time()
 completed = []
 for case in selected:
     output = Path(case['output'])
-    # The collector owns output creation; never reuse or overwrite a prior run.
+    # The collector owns output creation; resume preserves completed physical results.
     log_path = output.parent / (output.name + '_runtime.log')
     status_path.write_text(json.dumps(dict(status='running', origin_id=case['origin_id'],
         started_unix=started, completed=completed), indent=2) + '\n')
@@ -41,12 +42,19 @@ for case in selected:
         command.append('--source-only')
     if a.parallel_tasks:
         command.append('--parallel-tasks')
-    with log_path.open('x') as log:
-        result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT)
-    if result.returncode:
-        status_path.write_text(json.dumps(dict(status='failed', origin_id=case['origin_id'],
-            returncode=result.returncode, completed=completed), indent=2) + '\n')
-        sys.exit(result.returncode)
+    saved_status = output / 'status.json'
+    reuse = a.resume and saved_status.exists() and json.loads(saved_status.read_text())['status'] in ('complete', 'source_failed')
+    if not reuse:
+        if a.resume:
+            suffix = '_interrupted_' + str(time.time_ns())
+            if output.exists():output.rename(output.with_name(output.name + suffix))
+            if log_path.exists():log_path.rename(log_path.with_name(log_path.name + suffix))
+        with log_path.open('x') as log:
+            result = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT)
+        if result.returncode:
+            status_path.write_text(json.dumps(dict(status='failed', origin_id=case['origin_id'],
+                returncode=result.returncode, completed=completed), indent=2) + '\n')
+            sys.exit(result.returncode)
     outcome = json.loads((output / 'status.json').read_text())
     # Failed upstream roots remain in the declared denominator, with their XY trace.
     plot = [a.analysis_python, 'learning/cli/plot_connection_candidates.py', '--run', str(output)]
