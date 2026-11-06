@@ -13,6 +13,7 @@ for path in a.manifests:
    method=case.get('method'),disturbance_protocol=spec.get('external_force_pulse'))
   if summary.exists():
    result=json.loads(summary.read_text());task=result['forward_task'];event=task['branch_event']
+   row['route_prefix']=task.get('route_prefix')
    if event is None:
     row.update(status='evaluated_no_route_decision',executed_route=task['executed_route'],optional_platform_complete=task['optional_platform_task_complete'],mandatory_platform_complete=task['mandatory_platform_task_complete'],full_window=task['full_window'],arrival_s=task['first_goal_arrival_s'],max_mapped_path_error_m=task['max_mapped_path_error_m'],source_summary=str(summary))
     rows.append(row);continue

@@ -41,7 +41,7 @@ for manifest in a.manifests:
    candidate_id=f"v{candidate['speed_m_s']}_a{candidate['alpha']}",candidate=candidate,
    decision_time_s=event['time_s'],available_routes=event['availability']['available_routes'],
    disturbance_protocol=spec.get('external_force_pulse'),source_config=case['config'],source_summary=str(summary),
-   analysis_only=dict(full_window=task['full_window'],max_mapped_path_error_m=task['max_mapped_path_error_m'],platform_skill_complete=task['platform_skill_complete']))
+   analysis_only=dict(full_window=task['full_window'],max_mapped_path_error_m=task['max_mapped_path_error_m'],platform_skill_complete=task['platform_skill_complete'],route_prefix=task.get('route_prefix')))
   for requirement in ('optional','mandatory'):
    complete=task[requirement+'_platform_task_complete']
    rows.append(dict(common,task_id=route+':'+requirement,platform_requirement=requirement,complete=int(complete),success_cost=arrival-event['time_s'] if complete else None))

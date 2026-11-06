@@ -1,0 +1,86 @@
+[
+  {
+    "case_id": "rb_connection_seed20261106_root000_forced_bypass",
+    "route": "bypass",
+    "complete": false,
+    "half_width": 0.6,
+    "prefix": {
+      "decision_time_s": 5.68,
+      "max_error_before_branch_m": 0.9852452278137207,
+      "corridor_intact_at_branch": false,
+      "max_error_after_branch_m": 0.8019752675518979,
+      "first_violation_s": 2.200000047683716,
+      "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+    }
+  },
+  {
+    "case_id": "rb_connection_seed20261106_root000_forced_original_jump_extended_reference",
+    "route": "original_jump",
+    "complete": false,
+    "half_width": 1.0,
+    "prefix": {
+      "decision_time_s": 5.68,
+      "max_error_before_branch_m": 0.9852452278137207,
+      "corridor_intact_at_branch": true,
+      "max_error_after_branch_m": 0.7028263807296753,
+      "first_violation_s": null,
+      "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+    }
+  },
+  {
+    "case_id": "rb_connection_seed20261106_root000_worldFy-2N_original_jump",
+    "route": "original_jump",
+    "complete": false,
+    "half_width": 1.0,
+    "prefix": {
+      "decision_time_s": 5.68,
+      "max_error_before_branch_m": 0.9852452278137207,
+      "corridor_intact_at_branch": true,
+      "max_error_after_branch_m": 0.6953340172767639,
+      "first_violation_s": null,
+      "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+    }
+  },
+  {
+    "case_id": "rb_connection_seed20261106_root000_worldFy-2N_bypass",
+    "route": "bypass",
+    "complete": false,
+    "half_width": 0.6,
+    "prefix": {
+      "decision_time_s": 5.68,
+      "max_error_before_branch_m": 0.9852452278137207,
+      "corridor_intact_at_branch": false,
+      "max_error_after_branch_m": 0.7825272010540972,
+      "first_violation_s": 2.200000047683716,
+      "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+    }
+  },
+  {
+    "case_id": "rb_connection_seed20261106_root000_worldFy+2N_original_jump",
+    "route": "original_jump",
+    "complete": false,
+    "half_width": 1.0,
+    "prefix": {
+      "decision_time_s": 5.68,
+      "max_error_before_branch_m": 0.9852452278137207,
+      "corridor_intact_at_branch": true,
+      "max_error_after_branch_m": 0.7115343809127808,
+      "first_violation_s": null,
+      "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+    }
+  },
+  {
+    "case_id": "rb_connection_seed20261106_root000_worldFy+2N_bypass",
+    "route": "bypass",
+    "complete": false,
+    "half_width": 0.6,
+    "prefix": {
+      "decision_time_s": 5.68,
+      "max_error_before_branch_m": 0.9852452278137207,
+      "corridor_intact_at_branch": false,
+      "max_error_after_branch_m": 0.8212679569781347,
+      "first_violation_s": 2.200000047683716,
+      "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+    }
+  }
+]
