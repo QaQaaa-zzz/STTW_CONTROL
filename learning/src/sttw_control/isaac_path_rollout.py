@@ -143,8 +143,8 @@ class IsaacPathRollout:
         caches. Source terrain/model and target scene must be matched by caller.
         The six-connection experiment does not use randomized training snapshots.
         """
-        if self.randomization is not None or self.switch is not None or self.plant.pendulum_rest is not None or self.middle.tick%4:
-            raise ValueError('Connection capture requires nominal original STTW at a policy boundary')
+        if self.randomization is not None or self.switch is not None or (self.plant.pendulum_rest is not None and not self.plant.metadata.get('pendulum_locked',False)) or self.middle.tick%4:
+            raise ValueError('Connection capture requires nominal ground control with any pendulum locked at a policy boundary')
         groups={
             'controller':(self.controller,('eso','disturbance','gains')),
             'lower':(self.lower,('frames','mask','previous_applied','yaw_rate')),
@@ -160,6 +160,7 @@ class IsaacPathRollout:
             state[group]={key:value[lane].detach().cpu().clone() for key,value in getattr(self.middle,group).items()}
         return dict(state=state,upper_sha256=self.upper_sha256,lower_sha256=self.lower_sha256,
             asset_sha256=self.plant.contract['exported_xml_sha256'],joint_names=list(self.plant.joints),
+            zero_lower=self.zero_lower.cpu().tolist(),pendulum_locked=self.plant.metadata.get('pendulum_locked',False),
             controller_config=self.cc,rollout_tick=self.tick,middle_tick=self.middle.tick,
             channel_intervention_mode=self.policy.channel_intervention_mode,
             scope='exposed physical plus controller snapshot; PhysX solver/contact cache not serialized')
@@ -173,7 +174,9 @@ class IsaacPathRollout:
         """
         identity=(self.upper_sha256,self.lower_sha256,self.plant.contract['exported_xml_sha256'],list(self.plant.joints),self.cc)
         source=tuple(snapshot[k] for k in ('upper_sha256','lower_sha256','asset_sha256','joint_names','controller_config'))
-        if identity!=source or self.randomization is not None or self.switch is not None or self.plant.pendulum_rest is not None:
+        if snapshot.get('zero_lower',[False]*self.n)!=self.zero_lower.cpu().tolist() or snapshot.get('pendulum_locked',False)!=self.plant.metadata.get('pendulum_locked',False):
+            raise ValueError('Connection replay requires unchanged lower mode and pendulum lock')
+        if identity!=source or self.randomization is not None or self.switch is not None or (self.plant.pendulum_rest is not None and not self.plant.metadata.get('pendulum_locked',False)):
             raise ValueError('Connection replay requires the same nominal policy/model/controller interfaces')
         states=snapshot['state'];to=lambda v:v.to(self.device)
         self.plant.reset_idx(torch.arange(self.n,device=self.device),state={k:to(v) for k,v in states['physical'].items()})

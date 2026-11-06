@@ -7,7 +7,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('--run',type=Path,required=True);p.add_argument('--tasks',nargs='+');a=p.parse_args()
-spec=json.loads((a.run/'protocol.json').read_text())['spec'];tasks=spec['tasks'];candidates=spec['candidates']
+protocol=json.loads((a.run/'protocol.json').read_text());spec=protocol['spec'];physics_dt=protocol['settings']['plant_options'].get('physics_dt',.0002);tasks=spec['tasks'];candidates=spec['candidates']
 records=[json.loads(line) for line in (a.run/'records.jsonl').read_text().splitlines() if line.strip()]
 traces={r['task_id']:r['trace'] for r in records}
 if a.tasks:tasks=[t for t in tasks if t['task_id'] in a.tasks]
@@ -22,7 +22,7 @@ for row,task in enumerate(tasks):
     for lane,c in enumerate(candidates):
         valid=trace[:,lane,6]>0;tr=trace[valid,lane];err=error[valid,lane]
         if not len(tr):continue
-        t=(np.flatnonzero(valid)+tr[:,7]/25)*.005
+        t=np.flatnonzero(valid)*.005+tr[:,7]*physics_dt
         color=colors[c['alpha']];style='--' if c['speed_m_s']==speeds[0] else '-';label=f"v={c['speed_m_s']:g}, alpha={c['alpha']:g}"
         ax[0].plot(tr[:,0],tr[:,1],style,color=color,label=label);ax[0].plot(tr[-1,0],tr[-1,1],'x',color=color);plotted.append(tr[:,:2])
         ax[1].plot(t,tr[:,2],style,color=color,label=label);ax[2].plot(t,err,style,color=color,label=label)
@@ -34,6 +34,6 @@ for row,task in enumerate(tasks):
     ax[1].set(xlabel='Time since connection (s)',ylabel='True speed (m/s)');ax[2].set(xlabel='Time since connection (s)',ylabel='Original path distance (m)');ax[2].axhline(spec['corridor_half_width_m'],color='black',ls=':',label='Declared corridor')
     reward_axes[row,0].set(xlabel='Time (s)',ylabel='Recorded lower-step reward',title=task['task_id']);reward_axes[row,1].set(xlabel='Time (s)',ylabel='Sum of recorded lower-step reward')
 for ax in [*axes.flat,*reward_axes.flat]:ax.grid(alpha=.25);ax.legend(fontsize=7)
-fig.suptitle('Same accessible exit state | frozen H75 + Local300 | paired nominal DEV\nAlpha colors; speed line styles; crosses are last observed points; replanning enabled for all')
+fig.suptitle('Same accessible exit state | frozen H75 | paired nominal DEV\nAlpha colors; speed line styles; crosses are last observed points; replanning enabled for all')
 reward_fig.suptitle('Recorded lower-step reward only; upper-step rate/terminal adjustments excluded\nDifferent alpha-weighted rewards are not comparable physical rankings')
 fig.savefig(a.run/'xy_candidates.png',dpi=150);reward_fig.savefig(a.run/'recorded_lower_rewards.png',dpi=150)

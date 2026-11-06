@@ -54,7 +54,7 @@ else:
     snapshot=env.capture_connection_state(0);torch.save(snapshot,a.output/'exit_snapshot.pt')
     m,pose,v=plant.observe();feature=[float(v[0]),float(m[0,0]),float(m[0,1]),float(env.middle.projection['cross_track'][0]),float(wrap(env.middle.projection['heading'][0]-pose[0,2])),float(m[0,2]),float(m[0,3]),float(env.previous_reference[0,0])]
 snapshot_id=hashlib.sha256((a.output/'exit_snapshot.pt').read_bytes()).hexdigest()
-skill_id=env.upper_sha256+':'+env.lower_sha256
+skill_id=env.upper_sha256+':'+('ecbc_zero_residual' if bool(env.zero_lower.all()) else env.lower_sha256)
 speeds=torch.tensor([c['speed_m_s'] for c in candidates],device=env.device);alphas=torch.tensor([c['alpha'] for c in candidates],device=env.device)
 completed_tasks={r['task_id'] for r in records}
 for task in spec['tasks']:
