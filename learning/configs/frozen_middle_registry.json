@@ -135,6 +135,60 @@
       "frozen_manifest_sha256": "1f9bf2260fbce1d6430e3b42e0745a56e4da11e3027937c71b37f1aab84a9a79",
       "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/tolerance_calibration_disk_recovery_20261025/h75_mixed_u170_targeted_base_review_v1/analysis/practical_review.json",
       "interface": "unchanged frozen H75 middle interface; alpha grid0/.25/.5/.75/1 remains available"
+    },
+    "STTW_MIDDLE_H75_ORIGINAL_U77_ISAAC_OFFROAD": {
+      "label": "原H75 u77 + 图中橙色Isaac Lab原Local300，越野仿真固定入口",
+      "status": "adopted_simulation_only",
+      "actor": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_selected_local300_flat/bundle/actor.npz",
+      "actor_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "bundle": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_selected_local300_flat/bundle",
+      "runtime_config": "learning/configs/isaaclab_h75_offroad_selected.json",
+      "lower_selection": "learning/configs/isaaclab_selected_lower.json",
+      "runtime": "TorchPathPolicy + TorchMiddleControl + TorchLocalLower + TorchController",
+      "code_commit": "317fcf59",
+      "policy_weights_changed": false,
+      "physics_dt_s": 0.0002,
+      "lower_dt_s": 0.005,
+      "upper_dt_s": 0.02,
+      "lower_history": {
+        "frames": 10,
+        "frame_dim": 20,
+        "mask_dim": 10,
+        "sample_dt_s": 0.005,
+        "actor_dim": 210
+      },
+      "middle_history": {
+        "frames": 16,
+        "frame_dim": 20,
+        "mask_dim": 16,
+        "context_dim": 15,
+        "sample_dt_s": 0.02,
+        "actor_dim": 351
+      },
+      "execution_mode": "independent",
+      "artifacts_sha256": {
+        "runs/h75_selected_local300_flat/bundle/actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "runs/h75_selected_local300_flat/bundle/config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "runs/h75_selected_local300_flat/bundle/route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+        "runs/local300_torch_portable_parity/actor.npz": "517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125",
+        "runs/isaac_signals_parity/dynamic.json": "418a55486c863f5efb249c22987bc43017aee95ff0913582f59508230b18e00c",
+        "runs/h75_selected_local300_flat/initial_state.npz": "7c2849dc467f5d9c03a11675b59d88abfac7e92e6545cfc228fa621456c024b1",
+        "runs/isaac_urdf_drive/vehicle.urdf": "226c0681d8ae55b2ac579eb7d06d94b9306847d06158551ff737ca13f07e0b35",
+        "learning/configs/isaaclab_h75_offroad_selected.json": "a257cb810609011b744290e5b2c752663d9bb98f3dff375ab8d7fbf984aaefeb"
+      },
+      "evidence": [
+        "runs/h75_terrain_speed_sweep/evaluation/RESULTS.md",
+        "runs/h75_shared_switch_tangent/DECISION.md"
+      ],
+      "hardware_status": "not_validated_no_hardware_command",
+      "scope": "Named offroad entry only; historical current_primary_id and aliases are not retargeted"
     }
   },
   "extension_manifests": [
@@ -142,5 +196,6 @@
       "path": "/home/qy/STTW_CONTROL/runs/model_registry/middle_low_speed_mixed_u170/manifest.json",
       "sha256": "1f9bf2260fbce1d6430e3b42e0745a56e4da11e3027937c71b37f1aab84a9a79"
     }
-  ]
+  ],
+  "current_offroad_simulation_id": "STTW_MIDDLE_H75_ORIGINAL_U77_ISAAC_OFFROAD"
 }

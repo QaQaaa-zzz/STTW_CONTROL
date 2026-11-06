@@ -1,3 +1,9 @@
+## Frozen offroad runtime entry prepared
+
+Current simulation selection is now explicit as `current_offroad_simulation_id` in `learning/configs/frozen_middle_registry.json`, with `isaaclab_h75_offroad_selected.json` as the six-lane all-replanning nominal entry. Existing U170/historical aliases remain unchanged. No weights or controller behavior changed; necessary actor/config/asset/warm-state identities recorded once. This new convenience configuration has not itself been executed and is not a new evaluation result.
+
+`docs/FROZEN_MIDDLE_NETWORKS.md` documents actual scheduling: Local30010-frame history at5ms, H7516-frame history at20ms, H75 correction processing at5ms. Do not apply the task brief's generic5ms history wording to both networks. Runtime code and immutable checkpoint configuration are the source. World pose/true speed dependencies and measured hardware startup/interface gaps are explicit; no hardware command was sent.
+
 ## Contact-force semantics resolved and all-alpha phase alignment complete
 
 Existing installed IsaacLab commit090aed181 documents `net_forces_w` and `force_matrix_w` as world-frame NORMAL contact-force vectors (not friction-inclusive totals). `isaaclab_vector_env.refresh` stores the former; `isaac_path_rollout` stores the latter per wheel/filter at0.2ms. Documentation for this generation: https://isaac-sim.github.io/IsaacLab/v2.3.0/source/api/lab/isaaclab.sensors.html . Do not substitute newer main API semantics.

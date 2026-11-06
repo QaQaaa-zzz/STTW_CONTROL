@@ -5,6 +5,45 @@
 实际冻结包：[middle_lineage_20261024_v1](/home/qy/STTW_CONTROL/runs/model_registry/middle_lineage_20261024_v1/manifest.json)。
 稳定入口：[机器可读注册表](../learning/configs/frozen_middle_registry.json)。模型不再通过会变化的best/last路径定位。
 
+## 2026-11-06 越野仿真固定入口：原 H75 u77 + 橙色 Local300
+
+本节对应最新用户选定模型；下方U170与历史谱系保留，不能按历史`current_primary_id`误选越野模型。机器入口为`learning/configs/frozen_middle_registry.json`的`current_offroad_simulation_id = STTW_MIDDLE_H75_ORIGINAL_U77_ISAAC_OFFROAD`，运行参数为`learning/configs/isaaclab_h75_offroad_selected.json`。它引用已有权重，不复制或更新模型；固定的是当前仿真调用契约，不是已通过实车验证的部署包。
+
+| 项目 | 当前固定值 |
+|---|---|
+| 中层 | 原H75 actor0077；NPZ SHA256 `03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b` |
+| 底层 | 用户图中橙色Isaac Lab original Local300；SHA256 `517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125` |
+| 物理/底层/中层 | 0.2ms / 5ms / 20ms，即5000/200/50Hz |
+| Local300历史 | 10×20字段，间隔5ms，另10个mask；Actor210→256→128→2，ELU/tanh |
+| H75历史 | 16×20字段，间隔20ms，另16mask和15context；Actor351→128→128→64→2，原alpha调制 |
+| H75修正执行 | 每5ms低通与独立变化率限制；策略每20ms更新，不改历史采样频率 |
+| 偏好 | 0/.25/.5/.75/1，只进入中层，不传成底层alpha |
+| 底层残差权限 | 前转向角速度1.5rad/s、后轮轴速10rad/s；最终速度命令限幅3/60rad/s |
+| 目标与接回 | 弯后5m，接受半径2m；现有PythonRobotics切向终端航向补充，实际评估重规划周期0.5s |
+
+原序列必须保持：`TorchMiddleControl.before`产生参考 → `TorchLocalLower.prepare`在ECBC更新前读取旧ESO状态 → `TorchController.step` → 残差缩放/命令限幅 →25个物理子步 → `lower.finish`与`middle.after`更新历史。H75的`record`只每四个底层tick执行一次。参考处理200Hz不代表H75历史也200Hz。
+
+观测字段唯一实现是`torch_local_lower.local_frame`（20字段/缩放）、`torch_middle_control.observation`（15context及顺序）与`torch_observation.TorchVehicleSignals.observe`（符号/坐标转换）。中层context依次为alpha、横向误差、航向误差sin/cos、当前位置及前方0.5/1m曲率、预瞄点bodyXY、原速度请求、已执行两路修正、已滤波两路修正、预瞄距离。使用配置中的context_scales，不能重新归一化。
+
+仿真输入依赖世界XY/yaw与真实车体前向速度；后轮轴速×0.1m是独立特征，不能静默代替真实速度。实车需要对应定位/速度估计、IMU安装坐标和执行器接口映射。已有仿真warm-state包含真实模型/ESO状态，不能直接写入硬件；硬件启动流程尚未验证。路段接回保留ESO、策略历史、滤波与执行修正，只替换几何跟随状态；新episode才完整reset。导出快照不包含PhysX内部缓存。
+
+可复用原GPU入口（新输出目录，手动运行；本次仅整理入口，没有额外执行）：
+
+```bash
+cd /home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad
+PYTHONPATH=learning/src /home/qy/miniconda3/envs/env_isaaclab/bin/python learning/cli/evaluate_isaac_gpu.py \
+  --backend lab --configured-lanes \
+  --bundle runs/h75_selected_local300_flat/bundle \
+  --config learning/configs/isaaclab_h75_offroad_selected.json \
+  --terrain runs/h75_selected_local300_bend/bump_terrain \
+  --output runs/h75_offroad_selected_review --seconds 10
+```
+
+该入口六lane为五档固定alpha与匹配Zero，全部保留重规划；Zero仅无中层修正，仍有Local300+ECBC/ESO。配置本身没有新的六lane结果，已有科学证据仍引用原运行：`h75_terrain_speed_sweep/evaluation/RESULTS.md`、`h75_shared_switch_tangent/DECISION.md`、`h75_common_state_channels/analysis/contact_alignment/RESULTS.md`。
+
+后续训练如重新获得明确授权，域随机化/摩擦/延迟沿Go2既定配置；这里是名义评估入口，不启用训练随机化，也不代表取消训练要求。实车试验、STTW/RB统一物理模型交接和新章节能力库/VLM均未完成。
+
+
 ## 2026-10-29 低速混合U170固定底座
 
 已按用户最新实用综合标准采用 `STTW_MIDDLE_H75_LOW_SPEED_MIXED_U170`，原H75及其冻结包保持不变。新独立冻结包：[/home/qy/STTW_CONTROL/runs/model_registry/middle_low_speed_mixed_u170/manifest.json](/home/qy/STTW_CONTROL/runs/model_registry/middle_low_speed_mixed_u170/manifest.json)。注册表 `current_primary_id` 已更新；旧 `root/manifest_sha256` 仍指历史九模型包，新模型通过 `extension_manifests`/逐记录manifest定位，不能把历史包当新增模型来源。

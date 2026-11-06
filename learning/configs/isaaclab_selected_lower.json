@@ -29,7 +29,7 @@
   "lower_dt": 0.005,
   "evidence": "runs/local300_contact_repair/RESULTS.md",
   "limitation": "Return trajectories differ from original MuJoCo; user accepts as next-stage lower, not exact equivalence",
-  "next": "unchanged H75 standard-plane paired comparison before terrain",
+  "next": "Adopted for original H75 offroad simulation; see isaaclab_h75_offroad_selected.json and current project ledger",
   "selected_curve": "Isaac Lab original Local300",
   "selected_curve_color": "orange",
   "selection_plot": "runs/local300_contact_repair/mujoco_lab_xy.png",
