@@ -20,7 +20,7 @@ if a.window_mode=='global':
  global_count=min(counts)
 speeds=sorted({r['user_speed_m_s'] for r in index});terrains=list(dict.fromkeys(r['terrain'] for r in index))
 colors=['#0072B2','#D55E00','#009E73','#CC79A7','#8A6500','#333333'];markers=['o','s','^','D','v','x'];labels=['0','.25','.5','.75','1','Zero']
-fig,axs=plt.subplots(len(speeds),len(terrains),figsize=(4*len(terrains),3.3*len(speeds)),squeeze=False,layout='constrained');records=[];groups=[]
+fig,axs=plt.subplots(len(speeds),len(terrains),figsize=(4*len(terrains),3.3*len(speeds)),squeeze=False,layout='constrained');records=[];groups=[];exchanges=[]
 for row,speed in enumerate(speeds):
  for col,terrain in enumerate(terrains):
   ax=axs[row,col];cases=[r for r in index if r['terrain']==terrain and r['user_speed_m_s']==speed];samples=[]
@@ -35,6 +35,21 @@ for row,speed in enumerate(speeds):
    xy=np.sqrt(np.mean(tr[:count,:,3]**2,axis=0));sv=np.sqrt(np.mean((tr[:count,:,2]-speed)**2,axis=0));values.append(np.stack((xy,sv),axis=-1))
    for lane,label in enumerate(labels):records.append(dict(terrain=terrain,speed_m_s=speed,seed=case.get('seed'),alpha=label,common_window_s=window,path_rmse_m=float(xy[lane]),speed_rmse_m_s=float(sv[lane]),failed=bool(failed[lane]),observed_s=float(lengths[lane]*.005),run=case['run']))
   values=np.stack(values);mean=values.mean(0);std=values.std(0,ddof=1) if len(values)>1 else None
+  # Paired adjacent-alpha changes preserve folds and seed disagreement.
+  delta=np.diff(values[:,:5,:],axis=1)
+  for edge in range(4):
+   path_delta=delta[:,edge,0];speed_gain=-delta[:,edge,1]
+   dx=float(path_delta.mean());gain=float(speed_gain.mean())
+   exchanges.append(dict(terrain=terrain,speed_m_s=speed,n=len(samples),
+    alpha_from=labels[edge],alpha_to=labels[edge+1],common_window_s=window,
+    path_cost_mean_m=dx,speed_gain_mean_m_s=gain,
+    path_cost_sample_sd_m=float(path_delta.std(ddof=1)) if len(samples)>1 else None,
+    speed_gain_sample_sd_m_s=float(speed_gain.std(ddof=1)) if len(samples)>1 else None,
+    mean_exchange_per_s=gain/dx if dx>0 else None,
+    conventional_tradeoff_count=int(((path_delta>0)&(speed_gain>0)).sum()),
+    both_errors_improve_count=int(((path_delta<0)&(speed_gain>0)).sum()),
+    both_errors_worsen_count=int(((path_delta>0)&(speed_gain<0)).sum()),
+    reverse_tradeoff_count=int(((path_delta<0)&(speed_gain<0)).sum())))
   ax.plot(mean[:5,0],mean[:5,1],color='.5',lw=1)
   for lane in range(5):
    ax.scatter(values[:,lane,0],values[:,lane,1],color=colors[lane],s=12,alpha=.35)
@@ -47,4 +62,5 @@ fig.savefig(a.evaluation/('tradeoff_repeated_mean'+suffix+'.png'),dpi=160);plt.c
 with (a.evaluation/('tradeoff_repeated_raw'+suffix+'.csv')).open('w') as f:
  w=csv.DictWriter(f,fieldnames=list(records[0]));w.writeheader();w.writerows(records)
 (a.evaluation/('tradeoff_repeated_summary'+suffix+'.json')).write_text(json.dumps(groups,indent=2)+'\n')
+(a.evaluation/('tradeoff_marginal_exchange'+suffix+'.json')).write_text(json.dumps(exchanges,indent=2)+'\n')
 print(json.dumps(dict(completed_runs=len(index),panels=len(groups),replicates='paired parameter seeds; SD not confidence interval')))
