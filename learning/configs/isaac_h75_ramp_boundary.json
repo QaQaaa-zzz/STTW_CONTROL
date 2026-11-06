@@ -1,5 +1,5 @@
 {
-  "role": "Planned bounded DEV short-ramp feasibility boundary; not executed",
+  "role": "Bounded DEV short-ramp feasibility boundary; one matched initial state per condition",
   "reference_bundle": "runs/h75_selected_local300_flat/bundle",
   "base_evaluation_config": "runs/h75_selected_local300_bend/lab_config.json",
   "terrain_generator": "learning/cli/place_isaac_terrain.py --terrain bend_ramp",
@@ -34,6 +34,6 @@
   "seconds": 10,
   "max_physics_lane_steps": 1800000,
   "optimizer_updates": 0,
-  "reuse": "New ramp meshes; planned six paired conditions; no altered vehicle properties",
-  "start_condition": "After current full-route terrain matrix finishes and outcomes are reviewed; no automatic launch"
+  "reuse": "Six paired conditions; frozen original policies and vehicle properties",
+  "start_condition": "Whole-route matrix completed and reviewed; run approved within ongoing terrain task"
 }
