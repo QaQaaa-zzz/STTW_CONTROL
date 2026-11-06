@@ -1,3 +1,9 @@
+## 带摆模型按原STTW标准评测（运行中）
+
+用户要求以全过程XY路径跟踪判断底层是否够用，不能以末端/存活替代。`isaac_pendulum_local300_standard.json`复用原七个Local300指令流和10秒窗口，14lane配对原Local300与ECBC，另含3.5秒共同带摆车ECBC预热；最多945000 lane physics steps、0optimizer。原位复用`evaluate_isaaclab_local300.py`，支持显式asset、同模型fresh warmup与paired_original；旧保存状态模式继续可用。预热及真实终止保留，生成同模型initial_state用于后续H75接口。相较历史MuJoCo/无摆车有初态及质量差异，不能称完全配对sim2sim。
+
+实际输出`runs/pendulum_local300_standard`，session93823，日志`/tmp/sttw_pendulum_local300_standard.log`。结果待返回；下一步首先检查七工况实际/参考XY和回正后偏离时序，再做H75五alpha，不能由上一8秒小转弯诊断推断底层通过。此次无权重/ECBC参数调整，无训练。语法检查通过，运行中直接检验集成。
+
 ## 带摆四组转弯诊断结果
 
 `runs/pendulum_isaac_turns/RESULTS.md`、`xy_response.png`及`tracking_metrics.json`保留四条完整轨迹。实际完成8s/160000physics/0optimizer，4lane未触发45deg终止；初始速度均2.0，reset修复在本run得到确认。3–8s正/负方向速度RMSE：ECBC .05524/.05575m/s，Local300 .03440/.02848m/s；峰值roll ECBC5.85/6.04deg、Local3007.80/7.75deg。8s末端yawrate ECBC-.00424/+.04225rad/s，Local300-.15020/+.13044rad/s。Local300改善速度但放大roll瞬态及尾段偏航，不能认定整体更优或共同任务已合格；回正窗口仅1s，保留其限制。
