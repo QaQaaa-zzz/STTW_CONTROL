@@ -83,7 +83,6 @@ for i in range(len(alpha)):
  if hi>=lo and hi>=0:
   weight_intervals.append(dict(alpha=float(alpha[i]),eta_min_per_s=float(max(lo,0)**.5),eta_max_per_s=float(hi**.5) if np.isfinite(hi) else None))
 output['calibration_repetition']['optimal_eta_intervals']=weight_intervals
-(a.evaluation/'alpha_selection.json').write_text(json.dumps(output,indent=2))
 lines=['# Alpha selection: two distinct task rules','','[Actual/reference trajectories and repeated tradeoffs](RESULTS.md) · [All seeds and five-alpha costs](alpha_selection.json)','',
  'Original calibration: eta=.533 selects alpha=.75 among five levels, only about1% below alpha=.5. A0.40m peak path bound permits .75 on2cm and .5 on4cm; requiring both picks .5. These are different rules, not a universal optimal alpha.','',
  'New repeated checks below retain those weights and bound. The quadratic rule averages per-seed costs, not the squared average RMSE. The constraint rule requires all five seeds to complete the observation without termination and obey the full-window path bound; this is not a claim of goal completion. Zero remains in the common-window definition, but is not an alpha candidate. All runs start from the saved2.3m/s warm state. No new training or physics.','',
@@ -100,6 +99,16 @@ for r in result:
  arrivals=[sum(seed['task_windows'][i]['goal_arrived'] for seed in r['per_seed']) for i in range(5)]
  counts=[sum(seed['task_windows'][i]['bound_met_before_goal_or_end'] for seed in r['per_seed']) for i in range(5)]
  lines.append(f"|{r['terrain']}|{r['speed_m_s']:g}|{arrivals}|{counts}|")
+lines += ['', '## Arrival-time tradeoff under the original goal definition', '', 'Descriptive mean arrival times over all five parameter repeats. These are observed task outcomes, not a new trained selector. Feasibility requires arrival and the path bound before first entry; the post-arrival tail is excluded only from this separate table. All original full-window analyses remain above.', '', '|Terrain|Speed|Mean arrival seconds: alpha0/.25/.5/.75/1|All-repeat feasible alpha before arrival|Fastest feasible mean alpha|Time saved versus alpha0 s|', '|---|---:|---|---|---:|---:|']
+for r in result:
+ task=[[seed['task_windows'][i] for seed in r['per_seed']] for i in range(5)]
+ means=[float(np.mean([q['arrival_s'] for q in group])) if all(q['goal_arrived'] for q in group) else None for group in task]
+ allowed=[i for i,group in enumerate(task) if all(q['goal_arrived'] and q['bound_met_before_goal_or_end'] for q in group)]
+ choice=min(allowed,key=lambda i:means[i]) if allowed else None
+ r['arrival_summary']=dict(mean_arrival_s=means,feasible_alpha_before_arrival=[float(alpha[i]) for i in allowed],fastest_feasible_alpha=None if choice is None else float(alpha[choice]),saving_vs_alpha0_s=None if choice is None or means[0] is None else means[0]-means[choice])
+ times=' / '.join('not all arrived' if t is None else f'{t:.3f}' for t in means)
+ lines.append(f"|{r['terrain']}|{r['speed_m_s']:g}|{times}|{r['arrival_summary']['feasible_alpha_before_arrival']}|{r['arrival_summary']['fastest_feasible_alpha']}|{r['arrival_summary']['saving_vs_alpha0_s']}|")
+(a.evaluation/'alpha_selection.json').write_text(json.dumps(output,indent=2))
 lines += ['', '## Task-weight sensitivity', '', 'For the same calibration repeats, the mean cost is A + eta^2 B. Pairwise line intersections give these discrete optimality intervals; boundary values are ties. These are empirical policy choices, not a fitted continuous alpha law.', '', '|Alpha|Minimum eta (1/s)|Maximum eta (1/s)|', '|---|---:|---:|']
 for r in weight_intervals:
  upper='unbounded' if r['eta_max_per_s'] is None else f"{r['eta_max_per_s']:.6f}"
