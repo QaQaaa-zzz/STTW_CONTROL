@@ -13,7 +13,7 @@ from .torch_path_reward import costs,failure_reward
 class IsaacPathRollout:
     def __init__(self,bundle,settings,actor,plant=None,lower=None):
         bundle=Path(bundle);self.config=json.loads((bundle/'config.json').read_text());identity=json.loads((bundle/'identity.json').read_text());n=settings['num_envs'];self.n=n;self.device='cuda:0';self.horizon=round(settings['episode_s']/.02)
-        terrain_count=len(settings['terrains']);terrain_ids=[i%terrain_count for i in range(n)];self.terrain=torch.tensor(terrain_ids,device=self.device);self.alpha=torch.tensor([settings['alphas'][(i//terrain_count)%len(settings['alphas'])] for i in range(n)],device=self.device);self.diagnostics=settings.get('diagnostics',False);self.zero_middle=torch.tensor(settings.get('zero_middle',[False]*n),device=self.device)
+        terrain_count=len(settings['terrains']);terrain_ids=settings.get('lane_terrain_ids',[i%terrain_count for i in range(n)]);self.terrain=torch.tensor(terrain_ids,device=self.device);self.alpha=torch.tensor(settings.get('lane_alphas',[settings['alphas'][(i//terrain_count)%len(settings['alphas'])] for i in range(n)]),device=self.device);self.diagnostics=settings.get('diagnostics',False);self.trace_lanes=settings.get('trace_lanes',min(n,15));self.zero_middle=torch.tensor(settings.get('zero_middle',[False]*n),device=self.device)
         if plant is None:
             from .isaac_vector_env import IsaacVectorPlant
             plant=IsaacVectorPlant(settings['asset'],list(settings['terrains'].values()),terrain_ids)
@@ -22,7 +22,7 @@ class IsaacPathRollout:
         self.lower=lower if lower is not None else TorchLocalLower(settings['lower_actor'],settings['lower_sha256'],n,self.device);self.policy=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],self.config,n,self.device);self.policy.weights=actor.weights
         self.physics_dt=getattr(self.plant,'physics_dt',.0002);self.physics_substeps=round(.005/self.physics_dt)
         if self.physics_substeps<1 or abs(self.physics_substeps*self.physics_dt-.005)>1e-9:raise ValueError('physics step must divide STTW .005 s control period')
-        self.route=TorchPathReference(np.load(bundle/'route.npz'),self.config,self.device);self.speed=torch.full((n,),float(settings.get("user_speed_m_s",2.3)),device=self.device);self.middle=TorchMiddleControl(self.policy,self.route,identity['frame_scales'],self.alpha,self.speed);self.scale=torch.tensor([1.5,10.],device=self.device);self.episode=0
+        self.route=TorchPathReference(np.load(bundle/'route.npz'),self.config,self.device);self.speed=torch.as_tensor(settings["lane_speeds"],device=self.device,dtype=torch.float32) if "lane_speeds" in settings else torch.full((n,),float(settings.get("user_speed_m_s",2.3)),device=self.device);self.middle=TorchMiddleControl(self.policy,self.route,identity['frame_scales'],self.alpha,self.speed);self.scale=torch.tensor([1.5,10.],device=self.device);self.episode=0
         self.randomization=None;self.randomization_properties=None;self.push_events=0
         if settings.get('randomization'):
             from .isaaclab_randomization import randomize_vehicle_properties,VehicleControlRandomization
@@ -115,7 +115,7 @@ class IsaacPathRollout:
             projection=self.middle.projection;curvature=self.route.at(projection['progress'])[2];ratio=self.controller._system(self.speed)[3];chi=((torch.atan(self.cc['wheelbase']*curvature/np.cos(self.cc['caster']))/ratio).abs()-.18).div(.12).clamp(0,1)
             terms=costs(alpha=self.alpha,chi=chi,ev=post_v-self.speed,ey=projection['cross_track'],eh=wrap(projection['heading']-post_pose[:,2]),peak_roll=peak,roll_rate=post_m[:,1],speed=post_v,offsets=offsets,offset_rate=torch.zeros_like(offsets),config=self.config)
             reward+=torch.where(active_lower,torch.nan_to_num(terms['reward']),0);bad=(post_m[:,0].abs()>.7)|self.middle.fault|self.middle.domain_exit;new_failure|=self.alive&bad;self.alive&=~bad
-            logs.append(torch.cat((post_pose[:15,:2],post_v[:15,None],projection['cross_track'][:15,None],peak[:15,None],terms['reward'][:15,None],active_lower[:15,None],stop_tick[:15,None],governed[:15],post_m[:15,5:6]*.1),dim=-1));self.previous_reference=governed;self.previous_command=command
+            logs.append(torch.cat((post_pose[:self.trace_lanes,:2],post_v[:self.trace_lanes,None],projection['cross_track'][:self.trace_lanes,None],peak[:self.trace_lanes,None],terms['reward'][:self.trace_lanes,None],active_lower[:self.trace_lanes,None],stop_tick[:self.trace_lanes,None],governed[:self.trace_lanes],post_m[:self.trace_lanes,5:6]*.1),dim=-1));self.previous_reference=governed;self.previous_command=command
             if self.diagnostics:
                 details.append(dict(observation=self.middle.obs.clone(),nominal=self.middle.nominal.clone(),
                     progress=projection['progress'].clone(),pose=post_pose.clone(),measurement=post_m.clone(),policy_measurement=(post_m if self.randomization is None else self.measurement).clone(),

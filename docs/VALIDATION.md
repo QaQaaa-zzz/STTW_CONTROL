@@ -2844,3 +2844,17 @@ First launch failed before rollout on initial checkpoint directory creation; pre
 User explicitly selected the orange “Isaac Lab original Local300” trace in runs/local300_contact_repair/mujoco_lab_xy.png. Adopted actor sha517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125, original256/128, ECBC5/40/filter8 and repaired Lab contact options frozen together in learning/configs/isaaclab_selected_lower.json. Actor hash and controller/plant settings checked against the actual evaluation contract. Known return XY differences remain documented; adoption is for subsequent simulation work, not exact sim2sim equivalence.
 
 Warm1000 training stopped on user direction at787updates; checkpoints/logs retained, queued review and stage notifier canceled before extra evaluation. No new training queued. Next use unchanged original H75 on standard plane for matched MuJoCo comparison, then terrain after evaluation.
+
+## 2026-11-06 Go2步进参考与批量评测吞吐
+
+Go2实际参考：`/home/qy/projects/My_unitree_go2_gym/legged_gym/envs/base/legged_robot.py` 的 step/post_physics_step；配置4096env、physics dt=.005、decimation4。其内循环刷新关节，策略步结束刷新root/contact/body。STTW现有物理dt=.0002、lower=.005、policy=.02，每策略步100physics，是Go2的25倍。本轮没有修改这些物理/控制频率；保留逐物理步root/contact失败检测。完整body state改为诊断访问时读取，底层日志仍200Hz；新增单场景多工况GPU批量、50policy步分块传回CPU、完整逐case拆分保存。
+
+工程短测（不是任务成功率实验）：
+- 120env=20case×6method，seed101，2s/100policy步/1200000lanephysics；仿真44.76097s，含保存45.63312s，120lane均100有效步、0失败。
+- 600env=上述20case重复5包，仍seed101，2s/100policy步/6000000lanephysics；仿真100.72577s，含保存108.98209s，600lane均100有效步、0失败，进程exit0。
+- 600相对120吞吐倍数：2.222。环境数和惰性body读取共同变化，不将全部收益归因其中一项。没有声称五随机种子正式结果或10s全程存活。
+- 600lane×10s仅按采样线性外推约8.39分钟；初始化、输出、绘图另计，且正式跨seed分组随机化尚未接入600单批。现有sweep支持同seed20case批量120env，正式长评测仍未恢复。
+
+原始记录：`runs/h75_batch_throughput/batch/status.json`；数据盘`STTW_runs/h75_batch600_throughput/`（config/cases/budget/runtime/batch/status及100个六lane输出）。两项批量映射/拆分测试、相关模块py_compile与git diff --check通过。两次借用GPU后均恢复被暂停进程。
+
+空间维护：数据盘1.1TiB可用/40%使用，无需清理；系统盘30GiB可用。新大产物写数据盘；大任务前检查至少50GB可用，只清理可重建过程文件或重复导出，保留原始轨迹/模型/失败证据。本轮没有删除实验文件。

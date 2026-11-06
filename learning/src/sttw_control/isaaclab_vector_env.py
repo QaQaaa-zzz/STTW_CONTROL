@@ -160,7 +160,14 @@ class IsaacLabVectorPlant:
         self.metadata['pendulum_locked']=bool(locked)
 
     def refresh(self):
-        self.roots=self.robot.data.root_link_state_w.clone();self.roots[:,3:7]=self.roots[:,[4,5,6,3]];self.dofs=torch.stack((self.robot.data.joint_pos,self.robot.data.joint_vel),dim=-1);self.rigid=self.robot.data.body_link_state_w.clone();self.rigid[:,:,3:7]=self.rigid[:,:,[4,5,6,3]];self.contact=self.sensor.data.net_forces_w[:,self.contact_order]
+        self.roots=self.robot.data.root_link_state_w.clone();self.roots[:,3:7]=self.roots[:,[4,5,6,3]];self.dofs=torch.stack((self.robot.data.joint_pos,self.robot.data.joint_vel),dim=-1);self.contact=self.sensor.data.net_forces_w[:,self.contact_order]
+
+    @property
+    def rigid(self):
+        # Full body poses are diagnostics; Lab refreshes its lazy tensor on access.
+        state=self.robot.data.body_link_state_w.clone()
+        state[:,:,3:7]=state[:,:,[4,5,6,3]]
+        return state
 
     def reset(self,speed=2.3):
         self.reset_idx(torch.arange(self.count,device=self.device),speed=speed)
