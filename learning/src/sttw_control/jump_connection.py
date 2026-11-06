@@ -56,3 +56,25 @@ class JumpConnectionSelector:
             excluded_origin_id=self.excluded_origin_id,
             fallback='retain_current_reference' if choice is None else None,
             scope='Empirical Q_hold recommendation, not a calibrated or guaranteed success probability')
+
+
+class ForwardRouteSelector:
+    """Known-map route choice using the shared task manager and Q_route data."""
+    def __init__(self, records, config, *, origin_id, policy_sha256, model_contract_sha256, physics_dt, zero_lower):
+        from .continuous_task import ContinuousTask
+        accepted = [r for r in records if r['origin_id'] != origin_id
+            and r['target_semantics'] == 'Q_route' and r['supervised_input_complete']
+            and r['policy_sha256'] == policy_sha256 and r['model_contract_sha256'] == model_contract_sha256
+            and r['physics_dt'] == physics_dt and r['zero_lower'] == zero_lower
+            and r['map_id'] == config['map_id']]
+        capability = ConnectionCapability(accepted, config['feature_scales'], config['bandwidth'], config['minimum_support'])
+        self.task = ContinuousTask(config['program'], config['routes'], config['candidates'], capability)
+        self.config = config
+        self.evidence_rows = len(accepted)
+        self.excluded_origin_id = origin_id
+
+    def choose(self, state, available_routes):
+        result = self.task.choose(state, available_routes,
+            self.config['minimum_completion'], self.config['probability_tolerance'], self.config['time_tolerance_s'])
+        return dict(result, evidence_rows=self.evidence_rows, excluded_origin_id=self.excluded_origin_id,
+            scope='Empirical route recommendation; unavailable support retains current execution, not proof of safety')
