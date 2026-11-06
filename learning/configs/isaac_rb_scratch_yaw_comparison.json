@@ -1,0 +1,145 @@
+{
+  "duration_s": 8.0,
+  "warmup_s": 3.0,
+  "return_s": 7.0,
+  "speed_m_s": 2.0,
+  "steer_slew_rad_s": 0.8,
+  "cases": [
+    {
+      "name": "reward_best_turn0.0",
+      "steer_rad": 0.0,
+      "local300": true,
+      "lower_start_s": 0.0,
+      "controller_wc": 8.0,
+      "controller_wo": 10.0,
+      "eso_enabled": true,
+      "actor": "reward_best"
+    },
+    {
+      "name": "reward_best_turn0.12",
+      "steer_rad": 0.12,
+      "local300": true,
+      "lower_start_s": 0.0,
+      "controller_wc": 8.0,
+      "controller_wo": 10.0,
+      "eso_enabled": true,
+      "actor": "reward_best"
+    },
+    {
+      "name": "reward_best_turn-0.12",
+      "steer_rad": -0.12,
+      "local300": true,
+      "lower_start_s": 0.0,
+      "controller_wc": 8.0,
+      "controller_wo": 10.0,
+      "eso_enabled": true,
+      "actor": "reward_best"
+    },
+    {
+      "name": "episode_peak_turn0.0",
+      "steer_rad": 0.0,
+      "local300": true,
+      "lower_start_s": 0.0,
+      "controller_wc": 8.0,
+      "controller_wo": 10.0,
+      "eso_enabled": true,
+      "actor": "episode_peak"
+    },
+    {
+      "name": "episode_peak_turn0.12",
+      "steer_rad": 0.12,
+      "local300": true,
+      "lower_start_s": 0.0,
+      "controller_wc": 8.0,
+      "controller_wo": 10.0,
+      "eso_enabled": true,
+      "actor": "episode_peak"
+    },
+    {
+      "name": "episode_peak_turn-0.12",
+      "steer_rad": -0.12,
+      "local300": true,
+      "lower_start_s": 0.0,
+      "controller_wc": 8.0,
+      "controller_wo": 10.0,
+      "eso_enabled": true,
+      "actor": "episode_peak"
+    },
+    {
+      "name": "last150_turn0.0",
+      "steer_rad": 0.0,
+      "local300": true,
+      "lower_start_s": 0.0,
+      "controller_wc": 8.0,
+      "controller_wo": 10.0,
+      "eso_enabled": true,
+      "actor": "last150"
+    },
+    {
+      "name": "last150_turn0.12",
+      "steer_rad": 0.12,
+      "local300": true,
+      "lower_start_s": 0.0,
+      "controller_wc": 8.0,
+      "controller_wo": 10.0,
+      "eso_enabled": true,
+      "actor": "last150"
+    },
+    {
+      "name": "last150_turn-0.12",
+      "steer_rad": -0.12,
+      "local300": true,
+      "lower_start_s": 0.0,
+      "controller_wc": 8.0,
+      "controller_wo": 10.0,
+      "eso_enabled": true,
+      "actor": "last150"
+    }
+  ],
+  "pendulum_locked": true,
+  "plant_options": {
+    "physics_dt": 0.005,
+    "wheel_radius_m": 0.07,
+    "gpu_pair_capacities": [
+      1048576,
+      1048576,
+      1048576
+    ],
+    "servo_mode": "hybrid",
+    "compliant_wheels": null,
+    "wheel_collision": "cylinder",
+    "hull_vertices": 64,
+    "robot_contact_offset": 0.001,
+    "mesh_collision_on_geometry": true,
+    "solver_position_iterations": 16,
+    "solver_velocity_iterations": 4,
+    "wheel_width_m": 0.05,
+    "wheel_profile_slices": 21
+  },
+  "role": "DEV scratch yaw-rate reward candidates, original ground tasks",
+  "save_warmup_state": false,
+  "controller_config": "learning/configs/rb_sttw_rounded_controller.json",
+  "actor_catalog": {
+    "reward_best": {
+      "path": "runs/rb_scratch_yaw150/evaluation_actors/reward_best.npz",
+      "sha256": "4eeacf9172ed2549f20f9cb96d90ee40d985185fd1bd09f066d8b058cafbd36c",
+      "source_checkpoint": "runs/rb_scratch_yaw150/training/model_step_best.pt",
+      "source_sha256": "c4f1e99f4c0c5f8a33a5f103a86fc35f128b00d0d018d6286a16b3a981886496",
+      "iter": 8
+    },
+    "episode_peak": {
+      "path": "runs/rb_scratch_yaw150/evaluation_actors/episode_peak.npz",
+      "sha256": "18d6521f38d4d906971b8f480b7d72a5f4458859d3d569c90c5ad7a997ff68cb",
+      "source_checkpoint": "runs/rb_scratch_yaw150/training/model_best.pt",
+      "source_sha256": "0e120ac0901c30df698fe950b7567302cf11558ce51156647bfcc5a2bae1bb6b",
+      "iter": 127
+    },
+    "last150": {
+      "path": "runs/rb_scratch_yaw150/evaluation_actors/last150.npz",
+      "sha256": "323657c9198ad6d61145aa4b38430ed6a47e91508b8b35bd5062a893a7f451a4",
+      "source_checkpoint": "runs/rb_scratch_yaw150/training/model_150.pt",
+      "source_sha256": "611d74c751bd477e0f5fc231eb96b9c2bb5f2b14ce07314a619c94b737d23ba9",
+      "iter": 150
+    }
+  }
+}
