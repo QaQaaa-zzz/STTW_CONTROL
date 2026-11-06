@@ -98,5 +98,41 @@ for origin,(fig,axes) in figures.items():
  name='xy_candidates.png' if len(figures)==1 else f'xy_candidates_{origin}.png'
  fig.savefig(a.manifest.parent/name,dpi=150)
  plt.close(fig)
+if sequences and figures:
+ from matplotlib.patches import Rectangle
+ origins=sorted(figures)
+ candidates=sorted({(r['first_candidate']['speed_m_s'],r['first_candidate']['alpha']) for r in rows})
+ successful_times=[r['success_time_s'] for r in rows if r['complete']]
+ if successful_times:
+  vmin,vmax=min(successful_times),max(successful_times)
+  columns=min(3,len(origins));height=(len(origins)+columns-1)//columns
+  fig,axes=plt.subplots(height,columns,figsize=(7*columns,7*height),squeeze=False,layout='constrained')
+  for ax in list(axes.flat)[len(origins):]:ax.set_visible(False)
+  for origin,ax in zip(origins,axes.flat):
+   group=[r for r in rows if r['origin_id']==origin]
+   cells={((r['first_candidate']['speed_m_s'],r['first_candidate']['alpha']),
+           (r['second_candidate']['speed_m_s'],r['second_candidate']['alpha'])):r for r in group}
+   matrix=np.full((len(candidates),len(candidates)),np.nan)
+   for i,first in enumerate(candidates):
+    for j,second in enumerate(candidates):
+     row=cells.get((first,second))
+     if row is not None and row['complete']:matrix[i,j]=row['success_time_s']
+   cmap=plt.get_cmap('viridis_r').copy();cmap.set_bad('#eeeeee')
+   plot=ax.imshow(matrix,cmap=cmap,vmin=vmin,vmax=vmax)
+   for i,first in enumerate(candidates):
+    for j,second in enumerate(candidates):
+     row=cells.get((first,second));complete=row is not None and row['status']=='evaluated'
+     label=f"{row['success_time_s']:.2f}" if complete and row['complete'] else 'FAIL' if complete else 'pending'
+     if complete and not row['complete']:ax.add_patch(Rectangle((j-.5,i-.5),1,1,facecolor='#d0d0d0',hatch='//',edgecolor='#aaaaaa'))
+     color='white' if complete and row['complete'] and row['success_time_s']>(vmin+vmax)/2 else 'black'
+     ax.text(j,i,label,ha='center',va='center',color=color,fontsize=9)
+     if i==j:ax.add_patch(Rectangle((j-.5,i-.5),1,1,fill=False,edgecolor='black',linewidth=2))
+   labels=[f'{v:g} / {alpha:g}' for v,alpha in candidates]
+   ax.set(xticks=range(len(candidates)),xticklabels=labels,yticks=range(len(candidates)),yticklabels=labels,
+    xlabel='Second reference: speed (m/s) / alpha',ylabel='First reference: speed (m/s) / alpha',
+    title=f"{origin}\n{sum(r['complete'] is True for r in group)}/{sum(r['status']=='evaluated' for r in group)} evaluated sequences complete")
+  fig.colorbar(plot,ax=list(axes.flat)[:len(origins)],label='Full-task completion time on successful sequences (s)',shrink=.75)
+  fig.suptitle('Observed two-stage DEV outcomes; black diagonal = hold the same reference\nFAIL = hard task failure, pending = not evaluated; branches are correlated within each origin')
+  fig.savefig(a.manifest.parent/'sequence_outcomes.png',dpi=150);plt.close(fig)
 (a.manifest.parent/'summary.json').write_text(json.dumps(dict(protocol_id=m.get('protocol_id',json.loads(Path(m['cases'][0]['config']).read_text())['protocol_id']),role=m['role'],declared_cases=len(rows),evaluated_cases=sum(r['status']=='evaluated' for r in rows),rows=rows),indent=2)+'\n')
 print(json.dumps({r['case_id']:dict(status=r['status'],complete=r['complete']) for r in rows},indent=2))
