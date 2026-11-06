@@ -1,0 +1,446 @@
+[
+  {
+    "planner": "PythonRobotics Dubins; six path families and finite goal-heading candidates",
+    "upstream_commit": "8c392897c7f41a6e4d9aab9cb2e9737a7a6fa031",
+    "radius_m": 1.8,
+    "modes": [
+      "L",
+      "S",
+      "L"
+    ],
+    "segment_lengths_m": [
+      1.305469852545043,
+      4.617553773990257,
+      7.494005416219806e-17
+    ],
+    "goal_heading_rad": 1.686283942647654,
+    "goal_heading_candidates": 11,
+    "goal_heading_mode": "free",
+    "goal_arclength_m": 5.9230236265353,
+    "goal_xy": [
+      14.049443244934082,
+      7.052752494812012
+    ],
+    "start_pose": [
+      14.269119262695312,
+      1.2277145385742188,
+      0.9610229134559631
+    ],
+    "curvature_continuous": false,
+    "position_heading_continuous": true,
+    "shortest_path_certificate": false,
+    "safety_certificate": false,
+    "lane": 0,
+    "task_tick": 400,
+    "time_s": 2.0,
+    "cross_track_before": -0.3036588728427887,
+    "file": "replanned_path_00_tick0400.npz",
+    "planning_seconds": 0.03973495499667479,
+    "global_lane": 0
+  },
+  {
+    "planner": "PythonRobotics Dubins; six path families and finite goal-heading candidates",
+    "upstream_commit": "8c392897c7f41a6e4d9aab9cb2e9737a7a6fa031",
+    "radius_m": 1.8,
+    "modes": [
+      "L",
+      "S",
+      "R"
+    ],
+    "segment_lengths_m": [
+      0.4746345274649604,
+      4.301566116502541,
+      0.0
+    ],
+    "goal_heading_rad": 1.7036273740509345,
+    "goal_heading_candidates": 11,
+    "goal_heading_mode": "free",
+    "goal_arclength_m": 4.776200643967502,
+    "goal_xy": [
+      14.049443244934082,
+      7.052752494812012
+    ],
+    "start_pose": [
+      14.619613647460938,
+      2.3158187866210938,
+      1.4399415254592896
+    ],
+    "curvature_continuous": false,
+    "position_heading_continuous": true,
+    "shortest_path_certificate": false,
+    "safety_certificate": false,
+    "lane": 0,
+    "task_tick": 500,
+    "time_s": 2.5,
+    "cross_track_before": -0.027015527710318565,
+    "file": "replanned_path_00_tick0500.npz",
+    "planning_seconds": 0.014214351002010517,
+    "global_lane": 0
+  },
+  {
+    "planner": "PythonRobotics Dubins; six path families and finite goal-heading candidates",
+    "upstream_commit": "8c392897c7f41a6e4d9aab9cb2e9737a7a6fa031",
+    "radius_m": 1.8,
+    "modes": [
+      "L",
+      "S",
+      "R"
+    ],
+    "segment_lengths_m": [
+      0.2920633207733552,
+      4.359954361113294,
+      2.9976021664879224e-16
+    ],
+    "goal_heading_rad": 1.6843908700112449,
+    "goal_heading_candidates": 11,
+    "goal_heading_mode": "free",
+    "goal_arclength_m": 4.652017681886649,
+    "goal_xy": [
+      14.049443244934082,
+      7.052752494812012
+    ],
+    "start_pose": [
+      14.553115844726562,
+      2.4293084144592285,
+      1.522133469581604
+    ],
+    "curvature_continuous": false,
+    "position_heading_continuous": true,
+    "shortest_path_certificate": false,
+    "safety_certificate": false,
+    "lane": 1,
+    "task_tick": 500,
+    "time_s": 2.5,
+    "cross_track_before": -0.5039701461791992,
+    "file": "replanned_path_01_tick0500.npz",
+    "planning_seconds": 0.0161036889985553,
+    "global_lane": 1
+  },
+  {
+    "planner": "PythonRobotics Dubins; six path families and finite goal-heading candidates",
+    "upstream_commit": "8c392897c7f41a6e4d9aab9cb2e9737a7a6fa031",
+    "radius_m": 1.8,
+    "modes": [
+      "L",
+      "S",
+      "R"
+    ],
+    "segment_lengths_m": [
+      0.24935464694789253,
+      4.338461865586632,
+      0.006761727458592192
+    ],
+    "goal_heading_rad": 1.6718373235842445,
+    "goal_heading_candidates": 11,
+    "goal_heading_mode": "free",
+    "goal_arclength_m": 4.594578239993117,
+    "goal_xy": [
+      14.049443244934082,
+      7.052752494812012
+    ],
+    "start_pose": [
+      14.5128173828125,
+      2.4823684692382812,
+      1.537063479423523
+    ],
+    "curvature_continuous": false,
+    "position_heading_continuous": true,
+    "shortest_path_certificate": false,
+    "safety_certificate": false,
+    "lane": 2,
+    "task_tick": 500,
+    "time_s": 2.5,
+    "cross_track_before": -0.4636678695678711,
+    "file": "replanned_path_02_tick0500.npz",
+    "planning_seconds": 0.013839413000823697,
+    "global_lane": 2
+  },
+  {
+    "planner": "PythonRobotics Dubins; six path families and finite goal-heading candidates",
+    "upstream_commit": "8c392897c7f41a6e4d9aab9cb2e9737a7a6fa031",
+    "radius_m": 1.8,
+    "modes": [
+      "R",
+      "S",
+      "R"
+    ],
+    "segment_lengths_m": [
+      0.10837856253883295,
+      3.4951347305120932,
+      0.0
+    ],
+    "goal_heading_rad": 1.705730592095736,
+    "goal_heading_candidates": 11,
+    "goal_heading_mode": "free",
+    "goal_arclength_m": 3.603513293050926,
+    "goal_xy": [
+      14.049443244934082,
+      7.052752494812012
+    ],
+    "start_pose": [
+      14.537429809570312,
+      3.4824981689453125,
+      1.7659409046173096
+    ],
+    "curvature_continuous": false,
+    "position_heading_continuous": true,
+    "shortest_path_certificate": false,
+    "safety_certificate": false,
+    "lane": 0,
+    "task_tick": 600,
+    "time_s": 3.0,
+    "cross_track_before": -0.010840547271072865,
+    "file": "replanned_path_00_tick0600.npz",
+    "planning_seconds": 0.017106796000007307,
+    "global_lane": 0
+  },
+  {
+    "planner": "PythonRobotics Dubins; six path families and finite goal-heading candidates",
+    "upstream_commit": "8c392897c7f41a6e4d9aab9cb2e9737a7a6fa031",
+    "radius_m": 1.8,
+    "modes": [
+      "R",
+      "S",
+      "R"
+    ],
+    "segment_lengths_m": [
+      0.45327754493371514,
+      3.046180190827564,
+      0.0
+    ],
+    "goal_heading_rad": 1.64018458527649,
+    "goal_heading_candidates": 11,
+    "goal_heading_mode": "free",
+    "goal_arclength_m": 3.499457735761279,
+    "goal_xy": [
+      14.049443244934082,
+      7.052752494812012
+    ],
+    "start_pose": [
+      14.348373413085938,
+      3.57041597366333,
+      1.892005443572998
+    ],
+    "curvature_continuous": false,
+    "position_heading_continuous": true,
+    "shortest_path_certificate": false,
+    "safety_certificate": false,
+    "lane": 1,
+    "task_tick": 600,
+    "time_s": 3.0,
+    "cross_track_before": 0.0977206602692604,
+    "file": "replanned_path_01_tick0600.npz",
+    "planning_seconds": 0.01465007200022228,
+    "global_lane": 1
+  },
+  {
+    "planner": "PythonRobotics Dubins; six path families and finite goal-heading candidates",
+    "upstream_commit": "8c392897c7f41a6e4d9aab9cb2e9737a7a6fa031",
+    "radius_m": 1.8,
+    "modes": [
+      "R",
+      "S",
+      "L"
+    ],
+    "segment_lengths_m": [
+      0.441307307379038,
+      2.9967745855195043,
+      1.5987211554602253e-15
+    ],
+    "goal_heading_rad": 1.6317666630520922,
+    "goal_heading_candidates": 11,
+    "goal_heading_mode": "free",
+    "goal_arclength_m": 3.438081892898544,
+    "goal_xy": [
+      14.049443244934082,
+      7.052752494812012
+    ],
+    "start_pose": [
+      14.312393188476562,
+      3.6287384033203125,
+      1.8769373893737793
+    ],
+    "curvature_continuous": false,
+    "position_heading_continuous": true,
+    "shortest_path_certificate": false,
+    "safety_certificate": false,
+    "lane": 2,
+    "task_tick": 600,
+    "time_s": 3.0,
+    "cross_track_before": 0.0966518446803093,
+    "file": "replanned_path_02_tick0600.npz",
+    "planning_seconds": 0.018380138997599715,
+    "global_lane": 2
+  },
+  {
+    "planner": "PythonRobotics Dubins; six path families and finite goal-heading candidates",
+    "upstream_commit": "8c392897c7f41a6e4d9aab9cb2e9737a7a6fa031",
+    "radius_m": 1.8,
+    "modes": [
+      "R",
+      "S",
+      "R"
+    ],
+    "segment_lengths_m": [
+      0.21578208541967075,
+      2.218482150950528,
+      1.5987211554602253e-15
+    ],
+    "goal_heading_rad": 1.6649730915488044,
+    "goal_heading_candidates": 11,
+    "goal_heading_mode": "free",
+    "goal_arclength_m": 2.4342642363702005,
+    "goal_xy": [
+      14.049443244934082,
+      7.052752494812012
+    ],
+    "start_pose": [
+      14.291168212890625,
+      4.631004333496094,
+      1.7848520278930664
+    ],
+    "curvature_continuous": false,
+    "position_heading_continuous": true,
+    "shortest_path_certificate": false,
+    "safety_certificate": false,
+    "lane": 0,
+    "task_tick": 700,
+    "time_s": 3.5,
+    "cross_track_before": 0.08625863492488861,
+    "file": "replanned_path_00_tick0700.npz",
+    "planning_seconds": 0.01459538800190785,
+    "global_lane": 0
+  },
+  {
+    "planner": "PythonRobotics Dubins; six path families and finite goal-heading candidates",
+    "upstream_commit": "8c392897c7f41a6e4d9aab9cb2e9737a7a6fa031",
+    "radius_m": 1.8,
+    "modes": [
+      "R",
+      "S",
+      "L"
+    ],
+    "segment_lengths_m": [
+      1.4048167107406904,
+      1.0903471300959666,
+      0.0
+    ],
+    "goal_heading_rad": 1.276707126150328,
+    "goal_heading_candidates": 11,
+    "goal_heading_mode": "free",
+    "goal_arclength_m": 2.495163840836657,
+    "goal_xy": [
+      14.049443244934082,
+      7.052752494812012
+    ],
+    "start_pose": [
+      13.864837646484375,
+      4.6461076736450195,
+      2.0571608543395996
+    ],
+    "curvature_continuous": false,
+    "position_heading_continuous": true,
+    "shortest_path_certificate": false,
+    "safety_certificate": false,
+    "lane": 1,
+    "task_tick": 700,
+    "time_s": 3.5,
+    "cross_track_before": 0.35102060437202454,
+    "file": "replanned_path_01_tick0700.npz",
+    "planning_seconds": 0.015878128000622382,
+    "global_lane": 1
+  },
+  {
+    "planner": "PythonRobotics Dubins; six path families and finite goal-heading candidates",
+    "upstream_commit": "8c392897c7f41a6e4d9aab9cb2e9737a7a6fa031",
+    "radius_m": 1.8,
+    "modes": [
+      "R",
+      "S",
+      "R"
+    ],
+    "segment_lengths_m": [
+      1.159093755847926,
+      1.2228174366948497,
+      0.0
+    ],
+    "goal_heading_rad": 1.3442738749546508,
+    "goal_heading_candidates": 11,
+    "goal_heading_mode": "free",
+    "goal_arclength_m": 2.3819111925427756,
+    "goal_xy": [
+      14.049443244934082,
+      7.052752494812012
+    ],
+    "start_pose": [
+      13.883377075195312,
+      4.7271881103515625,
+      1.9882148504257202
+    ],
+    "curvature_continuous": false,
+    "position_heading_continuous": true,
+    "shortest_path_certificate": false,
+    "safety_certificate": false,
+    "lane": 2,
+    "task_tick": 700,
+    "time_s": 3.5,
+    "cross_track_before": 0.3074601888656616,
+    "file": "replanned_path_02_tick0700.npz",
+    "planning_seconds": 0.014433625001402106,
+    "global_lane": 2
+  },
+  {
+    "lane": 2,
+    "task_tick": 732,
+    "time_s": 3.66,
+    "event": "goal_arrival_original_route",
+    "file": "goal_arrival_original_route_02_tick0732.npz",
+    "start_pose": [
+      13.747543334960938,
+      5.076530456542969,
+      1.9715455770492554
+    ],
+    "goal_xy": [
+      14.049443244934082,
+      7.052752494812012
+    ],
+    "planning_seconds": 0.0,
+    "global_lane": 2
+  },
+  {
+    "lane": 0,
+    "task_tick": 740,
+    "time_s": 3.7,
+    "event": "goal_arrival_original_route",
+    "file": "goal_arrival_original_route_00_tick0740.npz",
+    "start_pose": [
+      14.207977294921875,
+      5.093971252441406,
+      1.7402070760726929
+    ],
+    "goal_xy": [
+      14.049443244934082,
+      7.052752494812012
+    ],
+    "planning_seconds": 0.0,
+    "global_lane": 0
+  },
+  {
+    "lane": 1,
+    "task_tick": 744,
+    "time_s": 3.72,
+    "event": "goal_arrival_original_route",
+    "file": "goal_arrival_original_route_01_tick0744.npz",
+    "start_pose": [
+      13.637771606445312,
+      5.110406875610352,
+      2.0498929023742676
+    ],
+    "goal_xy": [
+      14.049443244934082,
+      7.052752494812012
+    ],
+    "planning_seconds": 0.0,
+    "global_lane": 1
+  }
+]
