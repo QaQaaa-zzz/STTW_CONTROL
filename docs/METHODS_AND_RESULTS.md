@@ -10,6 +10,16 @@ Skill contract:76-D = three25-D history frames + jump_signal; action order steer
 
 Reusable upstream entries are `build_unified_formal_environment`, `load_checkpoint`, `make_checkpoint_policy`, and `unified_envelope_snapshot` for its own model. No new runtime wrapper, training or physics evaluation was launched in this identity pass. Next: read exact action mapping and state-history lifecycle, then implement a bounded interface on the pendulum model while leaving the completed STTW bicycle chapter intact.
 
+## Pendulum skill inference adapter available
+
+`learning/src/sttw_control/pendulum_skill.py` loads either `source` or `rb_run1_candidate` from the bound registry, reusing JIT checkpoint loading, original PPO inference/normalization, host model and action mapping. Reference dependency: add `/home/qy/DVGC/JIT/src` and this checkout's `learning/src` to PYTHONPATH; use `/home/qy/mujoco_playground/.venv/bin/python`. No external source edits. `PendulumSkill(registry_path, skill_id).infer(observation76, knee_position)` returns normalized action and native targets `[steer rad, rear rad/s, hip rad, knee rad]`. Caller owns observation FIFO, last-action memory and physical state; inference never resets or steps them.
+
+Actual inference evidence: `runs/pendulum_bike_handoff/inference_interface.json`, both frozen actors loaded and returned finite four-channel actions on a declared synthetic zero observation. Source output exactly matched the original full-environment inference observed this turn. This is interface verification, not a reachable-state, jump-success or sim2sim result; physics/optimizer steps are zero.
+
+The original full training-environment builder requires a DVGC working directory for historical relative paths and rejects the RB training record under its current aligned-PPO-budget check. The inference adapter therefore uses the identity-bound phase config and host model without constructing training/reset pools. It does not relax checkpoint identity checks or modify the historical budget. Full simulation reset/event/landing lifecycle still needs integration.
+
+Native mapping is steer=0.8*a0 rad, rear=clip(12+12*a1) rad/s; hip/knee use piecewise absolute targets centered at -1.2/2.5 rad with original actuator bounds. Knee center equals its upper bound, so positive normalized knee actions remain at 2.5 rad; this is original semantics, not a conversion bug. Do not feed STTW steering rad/s directly into the position actuator. Current STTW selection remains unchanged. Next: apply ground control on this same pendulum model and preserve its FIFO/events through the skill transition; no raw state-copy between different MJCFs.
+
 ## User clarification: STTW remains bicycle; cross-skill platform is pendulum bicycle
 
 User explicitly clarified the platform: STTW continues on the current bicycle, while cross-skill tasks use a bicycle with a pendulum. Go2 is a training/transfer reference, NOT the cross-skill robot or policy to attach. This corrects the preceding exploratory Go2 compatibility assumption; no Go2 adapter, training or model change was performed. Bark clarification notification was delivered and answered.
