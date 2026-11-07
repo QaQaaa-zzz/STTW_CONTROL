@@ -13,6 +13,7 @@ summary={m:dict(n=sum(x['model']==m for x in rows),arrival=sum(x['arrival'] for 
 for m in models:
  cases=[x for x in rows if x['model']==m]
  summary[m]['stage_counts']={k:sum(x['chain']['stages'][k] for x in cases) for k in cases[0]['chain']['stages']}
+ summary[m]['contact_filtered_complete']=sum(x['chain']['contact_filtered_protocol']['complete'] for x in cases) if all('contact_filtered_protocol' in x['chain'] for x in cases) else None
  summary[m]['failed_checks']={k:sum(not x['chain']['checks'][k] for x in cases) for k in cases[0]['chain']['checks']}
 # Keep paired gains and losses rather than reporting only the net success count.
 base={x['candidate']['source_case_id']:x for x in rows if x['model']=='update2'}
@@ -24,13 +25,13 @@ for origin in origins:
  for ax,m in zip(np.atleast_1d(axs),models):
   for x in [x for x in rows if x['origin']==origin and x['model']==m]:
    d=Path(x['output']);a=np.load(d/'trajectory.npz');t=a['trace'][:,0][a['valid'][:,0]];c=x['candidate'];color={0.:'tab:blue',.5:'tab:orange',1.:'tab:green'}[c['alpha']]
-   ax.plot(t[:,1],t[:,2],color=color,ls='-' if c['speed_m_s']==2 else '--',label=f"v={c['speed_m_s']} alpha={c['alpha']}");ax.scatter(*t[-1,1:3],color=color,marker='o' if x['chain']['complete'] else 'x')
+   ax.plot(t[:,1],t[:,2],color=color,ls='-' if c['speed_m_s']==2 else '--',label=f"v={c['speed_m_s']} alpha={c['alpha']}");ax.scatter(*t[-1,1:3],color=color,marker='o' if x['chain']['complete'] else ('^' if x['chain'].get('contact_filtered_protocol',{}).get('complete') else 'x'))
   route=np.load(d/'ground_route.npz')['xy'];ax.plot(*route.T,'k:',label='Original route');ax.set(title=m,xlabel='x (m)',ylabel='y (m)');ax.axis('equal');ax.legend(fontsize=7)
- fig.suptitle(origin+'; current chassis and Kp1 ground; matched DEV');fig.savefig(r/(origin+'_xy.png'),dpi=150);plt.close(fig)
+ fig.suptitle(origin+'; Kp1 matched DEV; endpoints: circle=strict, triangle=filtered-only, cross=not complete');fig.savefig(r/(origin+'_xy.png'),dpi=150);plt.close(fig)
 (r/'summary.json').write_text(json.dumps(dict(summary=summary,cases=rows),indent=2))
-lines=['# Current-chassis jump adaptation','','Matched DEV: six training origins, six connections per model; not independent TEST.','Original platform/contact/hold and full-chain criteria retained. Sampled training reward selects candidates, not qualification.','','|Model|Arrivals|Strict landing hold|20ms filtered landing (diagnostic)|Full chain (strict)|Gained / lost vs update2|','|---|---:|---:|---:|---:|---:|']
+lines=['# Current-chassis jump adaptation','',f'Matched DEV: {len(origins)} training origins; per-model denominators shown below; not independent TEST.','Original platform/contact/hold and full-chain criteria retained. Sampled training reward selects candidates, not qualification.','','|Model|Arrivals|Strict landing hold|20ms filtered landing (diagnostic)|Full chain (strict)|Gained / lost vs update2|','|---|---:|---:|---:|---:|---:|']
 for m,s in summary.items():lines.append(f"|{m}|{s['arrival']}/{s['n']}|{s['landing']}/{s['n']}|{s['contact_filtered_landing']}/{s['n']}|{s['complete']}/{s['n']}|{s['gained']} / {s['lost']}|")
 lines.extend(['','Failed conditions are overlapping counts, not mutually exclusive causes.'])
-for m,s in summary.items():lines.extend(['',m+': stages '+json.dumps(s['stage_counts'])+'; failed conditions '+json.dumps(s['failed_checks'])])
+for m,s in summary.items():lines.extend(['',m+': declared contact-filter full-chain successes '+str(s['contact_filtered_complete'])+'; stages '+json.dumps(s['stage_counts'])+'; failed conditions '+json.dumps(s['failed_checks'])])
 for origin in origins:lines.extend(['',f'![{origin}]({origin}_xy.png)'])
 (r/'RESULTS.md').write_text('\n'.join(lines)+'\n');print(json.dumps(summary))

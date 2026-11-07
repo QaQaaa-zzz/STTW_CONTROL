@@ -15,6 +15,7 @@ def run_connection_batch(spec, out, plant, ground, policies, history, geometry):
     policy_groups=[(policies[spec['skills'].index(name)],torch.tensor([i for i,s in enumerate(spec['skills']) if s==name],device=device)) for name in dict.fromkeys(spec['skills'])]
     active=torch.zeros(n,device=device,dtype=torch.bool);returned=active.clone();alive=~active
     decided=active.clone();entered=active.clone();consumed=active.clone();ready=active.clone()
+    contact_age=torch.full((n,2),float('inf'),device=device)
     landing_ticks=torch.zeros(n,device=device,dtype=torch.long);transition_speed=torch.zeros(n,device=device)
     last=torch.zeros(n,4,device=device);target=last.clone();acceleration=torch.zeros(n,3,device=device)
     previous_velocity=plant.roots[:,7:10].clone();block_velocity=previous_velocity.clone()
@@ -74,7 +75,10 @@ def run_connection_batch(spec, out, plant, ground, policies, history, geometry):
         _,pitch,_=euler_xyz_from_quat(plant.robot.data.root_link_quat_w)
         pitch=torch.atan2(torch.sin(pitch),torch.cos(pitch))
         wp=plant.rigid[:,wheels,:3]-plant.origin[:,None,:]
-        settled=platform_support_mask(wp,plant.contact[:,wheels],m[:,0],pitch,spec['platform_front_x'],spec['platform_back_x'])&active&alive
+        contact_now=plant.contact[:,wheels,2]>1.
+        contact_age.copy_(torch.where(contact_now,0.,contact_age+.005))
+        contact_mask=contact_age<=ret.get('contact_filter_s',0.)+1e-7
+        settled=platform_support_mask(wp,plant.contact[:,wheels],m[:,0],pitch,spec['platform_front_x'],spec['platform_back_x'],contact_mask)&active&alive
         landing_ticks.copy_(torch.where(settled,landing_ticks+1,0))
         newly_ready=active&alive&~ready&(landing_ticks*.005>=ret['support_s'])
         ready|=newly_ready;transition_speed.copy_(torch.where(newly_ready,speed,transition_speed))

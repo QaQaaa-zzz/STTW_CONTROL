@@ -36,6 +36,16 @@ violations=np.flatnonzero(error>criteria['corridor_half_width_m'])
 prefix=t[:,0]<=decision_time+1e-6 if decision_time is not None else np.ones(len(t),dtype=bool)
 prefix_report=dict(decision_time_s=decision_time,decision_reached=decision_time is not None,max_path_error_before_decision_m=float(error[prefix].max()),corridor_intact_at_decision=bool((error[prefix]<=criteria['corridor_half_width_m']).all()) if decision_time is not None else None,first_corridor_violation_s=float(t[violations[0],0]) if len(violations) else None,scope='Observed full-task corridor history; no relabeling of complete or success_time')
 report=dict(decision_prefix=prefix_report,stages=stages,stage_times=dict(release=jump_time,strict_support=strict_time,ground_return=handoff,final_conditions=task_time),role='Single nominal DEV, no robustness claim',complete=all(checks.values()),success_time_s=task_time if all(checks.values()) else None,first_final_conditions_time_s=task_time,checks=checks,criteria=criteria,passed_waypoints=passed,max_original_path_error_m=float(error.max()),path_rmse_m=float(np.sqrt(np.mean(error**2))),post_handoff_s=post_time,post_handoff_forward_m=post_distance,landing=landing)
+# A separate declared contact-filter protocol never overwrites the historical strict labels.
+if spec.get('landing_return',{}).get('contact_filter_s',0)==.02:
+ filtered_time=landing['contact_filtered_20ms_first_support_completion_s']
+ filtered_checks=dict(checks,stable_landing=landing['contact_filtered_20ms_hold_1s'])
+ filtered_task_time=None
+ if 'final_goal_xy' in criteria:
+  hits=np.flatnonzero((np.linalg.norm(post[:,1:3]-criteria['final_goal_xy'],axis=1)<=criteria['waypoint_radius_m']) & (post[:,0]-post[0,0]>=criteria['minimum_post_handoff_s']) & (post[:,0]>=(filtered_time if filtered_time is not None else float('inf'))) & (post[:,1]-post[0,1]>=criteria['minimum_post_handoff_forward_m'])) if len(post) else np.array([],dtype=int)
+  filtered_checks['final_goal']=bool(len(hits))
+  if len(hits):filtered_task_time=float(post[hits[0],0])
+ report['contact_filtered_protocol']=dict(contact_persistence_s=.02,checks=filtered_checks,complete=all(filtered_checks.values()),success_time_s=filtered_task_time if all(filtered_checks.values()) else None,scope='Separate 20ms contact protocol; original strict complete and success_time retained')
 midpoint_path=a.run/'midpoint_decision.json'
 if midpoint_path.exists():
  midpoint_time=json.loads(midpoint_path.read_text())['time'];before=t[:,0]<=midpoint_time+1e-6

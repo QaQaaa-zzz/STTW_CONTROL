@@ -60,6 +60,11 @@ if spec.get('align_heading',False) or 'start_heading_rad' in spec:
  state['root_velocity'][:3]=quat_apply(rotation[None],state['root_velocity'][:3][None])[0]
  state['root_velocity'][3:]=quat_apply(rotation[None],state['root_velocity'][3:][None])[0]
 
+entry=None
+if spec.get('initial_state_bank'):
+ bank=np.load(spec['initial_state_bank']);indices=spec['entry_indices']
+ entry={key:torch.tensor(bank[key][indices],device='cuda:0',dtype=torch.float32) for key in ('root_pose','root_velocity','joint_position','joint_velocity','observation','last_action')}
+ state={key:entry[key] for key in ('root_pose','root_velocity','joint_position','joint_velocity')}
 plant.reset_idx(torch.arange(n,device='cuda:0'),state=state)
 plant.set_pendulum_locked(False);plant.set_pendulum_locked(True)
 controller=TorchController(json.loads(Path(cfg['controller_config']).read_text()),n,'cuda:0')
@@ -67,6 +72,9 @@ policies=[TorchPendulumSkill(Path(spec['bundles'])/s) for s in spec['skills']]
 history=TorchPendulumObservation(plant.joints,json.loads(Path(spec.get('model_config','learning/configs/pendulum_common_asset.json')).read_text())['mount_rotation_wxyz'],n,'cuda:0')
 geometry=TorchPendulumGeometry(json.loads(Path(spec['geometry']).read_text()),plant.bodies)
 last=torch.zeros(n,4,device='cuda:0');alive=torch.ones(n,dtype=torch.bool,device='cuda:0');entered=torch.zeros_like(alive);consumed=torch.zeros_like(alive)
+if entry is not None:
+ history.frames.copy_(entry['observation'][:,:75].reshape(n,3,25));history.valid_count.copy_(history.frames[:,:,-1].sum(-1).long());last.copy_(entry['last_action'])
+policy_groups=[(policies[spec['skills'].index(name)],torch.tensor([i for i,skill in enumerate(spec['skills']) if skill==name],device='cuda:0')) for name in dict.fromkeys(spec['skills'])]
 returned=False;landing_ticks=0;landing_ready=False;transition_speed=None
 if spec.get('landing_return') and not batch:assert n==1, 'Landing return currently uses a single lane'
 ground_rows=[];ground_command_rows=[];executed_rows=[]
@@ -74,7 +82,7 @@ connection_events=[('exit','connection_decision.json',spec['connection_candidate
 if spec.get('connection_midpoint_candidate'):connection_events.append(('midpoint','midpoint_decision.json',spec['connection_midpoint_candidate']))
 connection_event_index=0;previous_alpha_since_s=0.
 active=False;rows=[];actions=[];observations=[];valid=[];arm_rows=[];body_rows=[];contact_rows=[];start=time.monotonic();steps=round(spec['seconds']/.005)
-(out/'protocol.json').write_text(json.dumps(dict(spec=spec,plant=plant.metadata,joint_names=plant.joints,policies=[s.identity for s in policies],ground_history='last_action zero means no prior jump action; physical FIFO sampled throughout ground approach',initial_translation='common saved snapshot translated to start_x/y0; optional rigid world-yaw alignment rotates pose and both velocities together',role='nominal paired DEV integration; not original donor benchmark',physics_dt=plant.physics_dt,ground_dt=.005,jump_dt=.02,optimizer_updates=0),indent=2))
+(out/'protocol.json').write_text(json.dumps(dict(spec=spec,plant=plant.metadata,joint_names=plant.joints,policies=[s.identity for s in policies],ground_history='entry bank restores three frames, validity and last_action' if entry is not None else 'last_action zero means no prior jump action; physical FIFO sampled throughout ground approach',initial_translation='saved entry bank with original pose, velocities and policy history; PhysX hidden solver state not restored' if entry is not None else 'common saved snapshot translated to start_x/y0; optional rigid world-yaw alignment rotates pose and both velocities together',role='nominal paired DEV integration; not original donor benchmark',physics_dt=plant.physics_dt,ground_dt=.005,jump_dt=.02,optimizer_updates=0),indent=2))
 ground=None
 if spec.get('ground_bundle'):
  from sttw_control.isaac_path_rollout import IsaacPathRollout
@@ -212,13 +220,13 @@ for k in range(steps+1):
   inside=(root[:,0]>=spec.get('platform_front_x',3.6)-1.1)&(root[:,0]<=spec.get('platform_front_x',3.6)+.4);consumed|=entered&~inside;entered|=inside
   signal=(inside&~consumed).float()
   acceleration=root_acceleration if spec.get('root_acceleration_difference',False) else plant.robot.data.body_com_acc_w[:,plant.bodies.index('chasis'),:3]
-  obs=torch.cat((history.frames.flatten(1),signal[:,None]),-1) if k==0 and spec.get('zero_initial_history',False) else history.advance(root,plant.dofs[:,:,0],plant.dofs[:,:,1],acceleration,distance,last,signal)
+  obs=entry['observation'] if k==0 and entry is not None else (torch.cat((history.frames.flatten(1),signal[:,None]),-1) if k==0 and spec.get('zero_initial_history',False) else history.advance(root,plant.dofs[:,:,0],plant.dofs[:,:,1],acceleration,distance,last,signal))
   observations.append(obs)
   if not active and not returned and not bypass_selected and bool((root[:,0]>=spec.get('handoff_x',2.5)).any()):
    plant.set_pendulum_locked(False);active=True
    (out/'handoff.json').write_text(json.dumps(dict(time=k*.005,root=root.cpu().tolist(),position=plant.dofs[:,:,0].cpu().tolist(),velocity=plant.dofs[:,:,1].cpu().tolist(),distance=distance.cpu().tolist()),indent=2))
   if active:
-   for i,policy in enumerate(policies):last[i:i+1],target[i:i+1]=policy.infer(obs[i:i+1],plant.dofs[i:i+1,plant.joints.index('knee_joint'),0])
+   for policy,lanes in policy_groups:last[lanes],target[lanes]=policy.infer(obs[lanes],plant.dofs[lanes,plant.joints.index('knee_joint'),0])
  if active and spec.get('landing_return'):
   # Contact-triggered handback; retain the physical pose/velocity and lock the current arm posture.
   from isaaclab.utils.math import euler_xyz_from_quat

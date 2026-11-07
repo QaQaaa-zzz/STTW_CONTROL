@@ -1,0 +1,1057 @@
+{
+  "summary": {
+    "last150": {
+      "n": 21,
+      "strict_landing": 2,
+      "contact20_landing": 21,
+      "survive8": 19
+    },
+    "update2": {
+      "n": 21,
+      "strict_landing": 9,
+      "contact20_landing": 9,
+      "survive8": 9
+    },
+    "best": {
+      "n": 21,
+      "strict_landing": 12,
+      "contact20_landing": 12,
+      "survive8": 13
+    }
+  },
+  "role": "21 real entries from six TRAIN origins; paired frozen jump DEV; not full-chain success",
+  "cases": [
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 2.2150001525878906,
+      "skill": "last150",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.4350000023841858,
+        0.8650000095367432
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.440000057220459,
+      "interval_s": [
+        2.819999933242798,
+        3.259999990463257
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 2.2800002098083496,
+      "skill": "last150",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.46000000834465027,
+        0.9449999928474426
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.7249999046325684,
+      "interval_s": [
+        2.1050000190734863,
+        2.8299999237060547
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 2.244999885559082,
+      "skill": "last150",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.46000000834465027,
+        0.9399999976158142
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.5149998664855957,
+      "interval_s": [
+        2.0450000762939453,
+        2.559999942779541
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 2.2100000381469727,
+      "skill": "last150",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.46000000834465027,
+        0.8849999904632568
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.6449999809265137,
+      "interval_s": [
+        2.069999933242798,
+        2.7149999141693115
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 1.505000114440918,
+      "skill": "last150",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.4300000071525574,
+        0.8700000047683716
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.6699999570846558,
+      "interval_s": [
+        1.909999966621399,
+        2.5799999237060547
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 1.2350001335144043,
+      "skill": "last150",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.4449999928474426,
+        0.8949999809265137
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.25500011444091797,
+      "interval_s": [
+        1.934999942779541,
+        2.190000057220459
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 2.130000114440918,
+      "skill": "last150",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.46000000834465027,
+        0.9200000166893005
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.4700000286102295,
+      "interval_s": [
+        2.0399999618530273,
+        2.509999990463257
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 2.2250001430511475,
+      "skill": "last150",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.4350000023841858,
+        0.8600000143051147
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.40000009536743164,
+      "interval_s": [
+        2.0299999713897705,
+        2.430000066757202
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 2.330000162124634,
+      "skill": "last150",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.4300000071525574,
+        0.8700000047683716
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.5150001049041748,
+      "interval_s": [
+        2.740000009536743,
+        3.255000114440918
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 1.9899998903274536,
+      "skill": "last150",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.46000000834465027,
+        0.949999988079071
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.7899999618530273,
+      "interval_s": [
+        2.055000066757202,
+        2.8450000286102295
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 2.2750000953674316,
+      "skill": "last150",
+      "first_strict_support_completion_s": 2.994999885559082,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.44999998807907104,
+        0.8899999856948853
+      ],
+      "landing_hold_1s": true,
+      "longest_hold_s": 1.1149998903274536,
+      "interval_s": [
+        1.9950000047683716,
+        3.109999895095825
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 2.184999942779541,
+      "skill": "last150",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.4350000023841858,
+        0.8650000095367432
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.43000006675720215,
+      "interval_s": [
+        2.0199999809265137,
+        2.450000047683716
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 1.899999976158142,
+      "skill": "last150",
+      "first_strict_support_completion_s": 3.0399999618530273,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.4650000035762787,
+        0.925000011920929
+      ],
+      "landing_hold_1s": true,
+      "longest_hold_s": 1.0099999904632568,
+      "interval_s": [
+        2.0399999618530273,
+        3.049999952316284
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 2.184999942779541,
+      "skill": "last150",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.46000000834465027,
+        0.949999988079071
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.570000171661377,
+      "interval_s": [
+        2.109999895095825,
+        2.680000066757202
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 1.9800000190734863,
+      "skill": "last150",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.4449999928474426,
+        0.8899999856948853
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.9350000619888306,
+      "interval_s": [
+        1.975000023841858,
+        2.9100000858306885
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 2.2150001525878906,
+      "skill": "last150",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.45500001311302185,
+        0.8799999952316284
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.35500001907348633,
+      "interval_s": [
+        2.075000047683716,
+        2.430000066757202
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 2.245000123977661,
+      "skill": "last150",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.46000000834465027,
+        0.8899999856948853
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.6100001335144043,
+      "interval_s": [
+        2.0299999713897705,
+        2.640000104904175
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 2.2750000953674316,
+      "skill": "last150",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.44999998807907104,
+        0.8849999904632568
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.5,
+      "interval_s": [
+        2.059999942779541,
+        2.559999942779541
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 2.1700000762939453,
+      "skill": "last150",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.4300000071525574,
+        0.8650000095367432
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.5299999713897705,
+      "interval_s": [
+        1.9700000286102295,
+        2.5
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 1.2950000762939453,
+      "skill": "last150",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.44999998807907104,
+        0.8949999809265137
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.47499990463256836,
+      "interval_s": [
+        2.075000047683716,
+        2.549999952316284
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 2.2699999809265137,
+      "skill": "last150",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.44999998807907104,
+        0.8849999904632568
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.6050000190734863,
+      "interval_s": [
+        2.0450000762939453,
+        2.6500000953674316
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": false,
+      "contact_filtered_20ms_longest_hold_s": 0.25999999046325684,
+      "skill": "update2",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5199999809265137,
+        1.0499999523162842
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.25999999046325684,
+      "interval_s": [
+        1.4950000047683716,
+        1.7549999952316284
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 3.930000066757202,
+      "skill": "update2",
+      "first_strict_support_completion_s": 3.2200000286102295,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.6050000190734863,
+        1.1050000190734863
+      ],
+      "landing_hold_1s": true,
+      "longest_hold_s": 3.0350000858306885,
+      "interval_s": [
+        2.2200000286102295,
+        5.255000114440918
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": false,
+      "contact_filtered_20ms_longest_hold_s": 0.2799999713897705,
+      "skill": "update2",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.6000000238418579,
+        1.1349999904632568
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.25999999046325684,
+      "interval_s": [
+        1.6549999713897705,
+        1.9149999618530273
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": false,
+      "contact_filtered_20ms_longest_hold_s": 0.0,
+      "skill": "update2",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5400000214576721,
+        1.090000033378601
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.0,
+      "interval_s": null
+    },
+    {
+      "contact_filtered_20ms_hold_1s": false,
+      "contact_filtered_20ms_longest_hold_s": 0.0,
+      "skill": "update2",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5400000214576721,
+        1.0850000381469727
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.0,
+      "interval_s": null
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 3.9850001335144043,
+      "skill": "update2",
+      "first_strict_support_completion_s": 4.265000343322754,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5799999833106995,
+        0.9700000286102295
+      ],
+      "landing_hold_1s": true,
+      "longest_hold_s": 2.825000047683716,
+      "interval_s": [
+        3.265000104904175,
+        6.090000152587891
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": false,
+      "contact_filtered_20ms_longest_hold_s": 0.43500006198883057,
+      "skill": "update2",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5799999833106995,
+        1.1150000095367432
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.1950000524520874,
+      "interval_s": [
+        1.5049999952316284,
+        1.7000000476837158
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 5.394999980926514,
+      "skill": "update2",
+      "first_strict_support_completion_s": 3.25,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5,
+        0.8999999761581421
+      ],
+      "landing_hold_1s": true,
+      "longest_hold_s": 2.6449999809265137,
+      "interval_s": [
+        2.25,
+        4.894999980926514
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 4.994999885559082,
+      "skill": "update2",
+      "first_strict_support_completion_s": 2.5799999237060547,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5049999952316284,
+        1.0099999904632568
+      ],
+      "landing_hold_1s": true,
+      "longest_hold_s": 4.615000247955322,
+      "interval_s": [
+        1.5800000429153442,
+        6.195000171661377
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 3.195000171661377,
+      "skill": "update2",
+      "first_strict_support_completion_s": 2.369999885559082,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.6150000095367432,
+        1.125
+      ],
+      "landing_hold_1s": true,
+      "longest_hold_s": 3.195000171661377,
+      "interval_s": [
+        1.3700000047683716,
+        4.565000057220459
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": false,
+      "contact_filtered_20ms_longest_hold_s": 0.0,
+      "skill": "update2",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5400000214576721,
+        1.090000033378601
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.0,
+      "interval_s": null
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 4.244999885559082,
+      "skill": "update2",
+      "first_strict_support_completion_s": 2.674999952316284,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5,
+        1.024999976158142
+      ],
+      "landing_hold_1s": true,
+      "longest_hold_s": 3.504999876022339,
+      "interval_s": [
+        1.6749999523162842,
+        5.179999828338623
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 2.559999942779541,
+      "skill": "update2",
+      "first_strict_support_completion_s": 3.444999933242798,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.6000000238418579,
+        1.1200000047683716
+      ],
+      "landing_hold_1s": true,
+      "longest_hold_s": 1.4350001811981201,
+      "interval_s": [
+        2.444999933242798,
+        3.880000114440918
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": false,
+      "contact_filtered_20ms_longest_hold_s": 0.7250000238418579,
+      "skill": "update2",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5799999833106995,
+        1.1200000047683716
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.30000007152557373,
+      "interval_s": [
+        1.5549999475479126,
+        1.8550000190734863
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": false,
+      "contact_filtered_20ms_longest_hold_s": 0.0,
+      "skill": "update2",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5400000214576721,
+        1.0800000429153442
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.0,
+      "interval_s": null
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 4.659999847412109,
+      "skill": "update2",
+      "first_strict_support_completion_s": 3.575000047683716,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5299999713897705,
+        1.0299999713897705
+      ],
+      "landing_hold_1s": true,
+      "longest_hold_s": 3.3450000286102295,
+      "interval_s": [
+        2.575000047683716,
+        5.920000076293945
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": false,
+      "contact_filtered_20ms_longest_hold_s": 0.26999998092651367,
+      "skill": "update2",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.6000000238418579,
+        1.0399999618530273
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.0849999189376831,
+      "interval_s": [
+        1.225000023841858,
+        1.309999942779541
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 4.704999923706055,
+      "skill": "update2",
+      "first_strict_support_completion_s": 3.424999952316284,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5799999833106995,
+        1.1200000047683716
+      ],
+      "landing_hold_1s": true,
+      "longest_hold_s": 2.669999837875366,
+      "interval_s": [
+        2.424999952316284,
+        5.09499979019165
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": false,
+      "contact_filtered_20ms_longest_hold_s": 0.0,
+      "skill": "update2",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5400000214576721,
+        1.0750000476837158
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.0,
+      "interval_s": null
+    },
+    {
+      "contact_filtered_20ms_hold_1s": false,
+      "contact_filtered_20ms_longest_hold_s": 0.0,
+      "skill": "update2",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5799999833106995,
+        1.125
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.0,
+      "interval_s": null
+    },
+    {
+      "contact_filtered_20ms_hold_1s": false,
+      "contact_filtered_20ms_longest_hold_s": 0.0,
+      "skill": "update2",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5400000214576721,
+        1.090000033378601
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.0,
+      "interval_s": null
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 3.8299999237060547,
+      "skill": "best",
+      "first_strict_support_completion_s": 2.7649998664855957,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5099999904632568,
+        1.0099999904632568
+      ],
+      "landing_hold_1s": true,
+      "longest_hold_s": 2.4100003242492676,
+      "interval_s": [
+        1.7649999856948853,
+        4.175000190734863
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": false,
+      "contact_filtered_20ms_longest_hold_s": 0.0,
+      "skill": "best",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5799999833106995,
+        1.1349999904632568
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.0,
+      "interval_s": null
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 4.664999961853027,
+      "skill": "best",
+      "first_strict_support_completion_s": 2.740000009536743,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5450000166893005,
+        1.0399999618530273
+      ],
+      "landing_hold_1s": true,
+      "longest_hold_s": 1.3350000381469727,
+      "interval_s": [
+        1.7400000095367432,
+        3.075000047683716
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": false,
+      "contact_filtered_20ms_longest_hold_s": 0.6200000047683716,
+      "skill": "best",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5400000214576721,
+        1.0750000476837158
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.35000014305114746,
+      "interval_s": [
+        2.049999952316284,
+        2.4000000953674316
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 2.6550002098083496,
+      "skill": "best",
+      "first_strict_support_completion_s": 2.3899998664855957,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5400000214576721,
+        1.0700000524520874
+      ],
+      "landing_hold_1s": true,
+      "longest_hold_s": 2.195000171661377,
+      "interval_s": [
+        1.3899999856948853,
+        3.5850000381469727
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 1.0550000667572021,
+      "skill": "best",
+      "first_strict_support_completion_s": 2.2899999618530273,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5799999833106995,
+        1.0700000524520874
+      ],
+      "landing_hold_1s": true,
+      "longest_hold_s": 1.0550000667572021,
+      "interval_s": [
+        1.2899999618530273,
+        2.3450000286102295
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": false,
+      "contact_filtered_20ms_longest_hold_s": 0.019999980926513672,
+      "skill": "best",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5600000023841858,
+        1.1150000095367432
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.0,
+      "interval_s": [
+        1.659999966621399,
+        1.659999966621399
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 3.7900002002716064,
+      "skill": "best",
+      "first_strict_support_completion_s": 3.1600000858306885,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5149999856948853,
+        1.0199999809265137
+      ],
+      "landing_hold_1s": true,
+      "longest_hold_s": 3.305000066757202,
+      "interval_s": [
+        2.1600000858306885,
+        5.465000152587891
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 4.519999980926514,
+      "skill": "best",
+      "first_strict_support_completion_s": 2.9749999046325684,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5,
+        1.024999976158142
+      ],
+      "landing_hold_1s": true,
+      "longest_hold_s": 3.7950000762939453,
+      "interval_s": [
+        1.975000023841858,
+        5.769999980926514
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": false,
+      "contact_filtered_20ms_longest_hold_s": 0.0,
+      "skill": "best",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5799999833106995,
+        1.1299999952316284
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.0,
+      "interval_s": null
+    },
+    {
+      "contact_filtered_20ms_hold_1s": false,
+      "contact_filtered_20ms_longest_hold_s": 0.0,
+      "skill": "best",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5400000214576721,
+        1.0800000429153442
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.0,
+      "interval_s": null
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 4.670000076293945,
+      "skill": "best",
+      "first_strict_support_completion_s": 3.0850000381469727,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5,
+        1.024999976158142
+      ],
+      "landing_hold_1s": true,
+      "longest_hold_s": 2.375,
+      "interval_s": [
+        3.5250000953674316,
+        5.900000095367432
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": false,
+      "contact_filtered_20ms_longest_hold_s": 0.0,
+      "skill": "best",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5799999833106995,
+        1.1299999952316284
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.0,
+      "interval_s": null
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 3.174999713897705,
+      "skill": "best",
+      "first_strict_support_completion_s": 3.309999942779541,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5600000023841858,
+        1.0850000381469727
+      ],
+      "landing_hold_1s": true,
+      "longest_hold_s": 2.005000114440918,
+      "interval_s": [
+        2.309999942779541,
+        4.315000057220459
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": false,
+      "contact_filtered_20ms_longest_hold_s": 0.0,
+      "skill": "best",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5400000214576721,
+        1.0950000286102295
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.0,
+      "interval_s": null
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 4.110000133514404,
+      "skill": "best",
+      "first_strict_support_completion_s": 3.1600000858306885,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5299999713897705,
+        1.034999966621399
+      ],
+      "landing_hold_1s": true,
+      "longest_hold_s": 3.265000104904175,
+      "interval_s": [
+        2.1600000858306885,
+        5.425000190734863
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": false,
+      "contact_filtered_20ms_longest_hold_s": 0.7149999141693115,
+      "skill": "best",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5600000023841858,
+        1.1150000095367432
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.41999995708465576,
+      "interval_s": [
+        1.909999966621399,
+        2.3299999237060547
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 2.5199999809265137,
+      "skill": "best",
+      "first_strict_support_completion_s": 2.4700000286102295,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5799999833106995,
+        1.125
+      ],
+      "landing_hold_1s": true,
+      "longest_hold_s": 2.2300000190734863,
+      "interval_s": [
+        1.4700000286102295,
+        3.700000047683716
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 3.750000238418579,
+      "skill": "best",
+      "first_strict_support_completion_s": 2.8350000381469727,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5350000262260437,
+        1.0449999570846558
+      ],
+      "landing_hold_1s": true,
+      "longest_hold_s": 3.445000171661377,
+      "interval_s": [
+        1.8350000381469727,
+        5.28000020980835
+      ]
+    },
+    {
+      "contact_filtered_20ms_hold_1s": false,
+      "contact_filtered_20ms_longest_hold_s": 0.0,
+      "skill": "best",
+      "first_strict_support_completion_s": null,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5600000023841858,
+        1.1100000143051147
+      ],
+      "landing_hold_1s": false,
+      "longest_hold_s": 0.0,
+      "interval_s": null
+    },
+    {
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 3.25,
+      "skill": "best",
+      "first_strict_support_completion_s": 3.484999895095825,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.5450000166893005,
+        1.065000057220459
+      ],
+      "landing_hold_1s": true,
+      "longest_hold_s": 1.8650000095367432,
+      "interval_s": [
+        2.484999895095825,
+        4.349999904632568
+      ]
+    }
+  ]
+}

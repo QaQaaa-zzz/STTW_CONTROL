@@ -8,6 +8,28 @@ import argparse
 parser=argparse.ArgumentParser();parser.add_argument('--run',type=Path,required=True);args=parser.parse_args()
 p=args.run;d=np.load(p/'trajectory.npz');t=d['trace'];v=d['valid'];r=json.loads((p/'results.json').read_text());fig,axes=plt.subplots(2,3,figsize=(15,8.5),layout='constrained');ax=axes.flatten()
 protocol=json.loads((p/'protocol.json').read_text());handoff=json.loads((p/'handoff.json').read_text())['time'] if (p/'handoff.json').exists() else float('inf')
+if protocol['spec'].get('initial_state_bank'):
+ plt.close(fig)
+ models=list(dict.fromkeys(protocol['spec']['skills']));indices=protocol['spec']['entry_indices']
+ fig,axes=plt.subplots(2,len(models),figsize=(6*len(models),9),layout='constrained',sharex='row',sharey='row')
+ cmap=plt.get_cmap('viridis');normal=matplotlib.colors.Normalize(min(indices),max(indices))
+ for col,model in enumerate(models):
+  for lane,skill in enumerate(protocol['spec']['skills']):
+   if skill!=model:continue
+   a=t[v[:,lane],lane];color=cmap(normal(indices[lane]))
+   for row,y in [(0,2),(1,3)]:
+    axes[row,col].plot(a[:,1],a[:,y],color=color,alpha=.8)
+    axes[row,col].scatter(a[-1,1],a[-1,y],color=color,marker='x',s=20)
+  axes[0,col].axhline(0,color='gray',ls=':',label='Platform centerline')
+  axes[0,col].add_patch(matplotlib.patches.Rectangle((3.6,-1),4,2,fill=False,ls='--',color='gray'))
+  axes[0,col].set(title=model,xlabel='World x (m)',ylabel='World y (m)');axes[0,col].set_aspect('equal',adjustable='box')
+  axes[1,col].plot([1,3.6,3.6,7.6],[0,0,.16,.16],color='gray',ls=':')
+  axes[1,col].set(xlabel='World x (m)',ylabel='Root height (m)')
+ for axis in axes.flat:axis.grid(alpha=.2)
+ fig.colorbar(matplotlib.cm.ScalarMappable(norm=normal,cmap=cmap),ax=axes,label='Paired saved entry index')
+ fig.suptitle('Same 21 actual entry states and policy histories; TRAIN-origin DEV\nAll trajectories stop at observed endpoint; crosses are endpoints, not success labels')
+ fig.savefig(p/'xy_jump.png',dpi=150)
+ raise SystemExit(0)
 landing_path=p/'landing_handoff.json'
 landing=json.loads(landing_path.read_text())['time'] if landing_path.exists() else None
 branch=json.loads((p/'forward_branch_decision.json').read_text()) if (p/'forward_branch_decision.json').exists() else None
