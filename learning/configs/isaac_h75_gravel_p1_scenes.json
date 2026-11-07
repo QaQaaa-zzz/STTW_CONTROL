@@ -1,0 +1,138 @@
+{
+  "role": "P1 DEV nested density, shared heights, matched clustered attributes",
+  "scenes": [
+    {
+      "name": "S1",
+      "config": "runs/h75_gravel_p1/S1.json",
+      "output": "runs/h75_gravel_p1/assets/S1",
+      "parameters": {
+        "route": "runs/h75_selected_local300_flat/bundle/route.npz",
+        "density_per_m2": 12,
+        "radius_range_m": [
+          0.055,
+          0.08
+        ],
+        "s_range_m": [
+          3.0,
+          7.0
+        ],
+        "half_width_m": 0.8,
+        "blend_length_m": 0.3,
+        "seed": 20261107,
+        "vertical_scale_m": 0.001,
+        "bounds_m": [
+          -2,
+          24
+        ],
+        "name": "S1",
+        "height_m": 0.01,
+        "horizontal_scale_m": 0.005,
+        "reference_layout_csv": "runs/h75_gravel_g0/assets/S2_5mm/stone_centers.csv"
+      }
+    },
+    {
+      "name": "S3",
+      "config": "runs/h75_gravel_p1/S3.json",
+      "output": "runs/h75_gravel_p1/assets/S3",
+      "parameters": {
+        "route": "runs/h75_selected_local300_flat/bundle/route.npz",
+        "density_per_m2": 36,
+        "radius_range_m": [
+          0.055,
+          0.08
+        ],
+        "s_range_m": [
+          3.0,
+          7.0
+        ],
+        "half_width_m": 0.8,
+        "blend_length_m": 0.3,
+        "seed": 20261107,
+        "vertical_scale_m": 0.001,
+        "bounds_m": [
+          -2,
+          24
+        ],
+        "name": "S3",
+        "height_m": 0.01,
+        "horizontal_scale_m": 0.005,
+        "reference_layout_csv": "runs/h75_gravel_g0/assets/S2_5mm/stone_centers.csv"
+      }
+    },
+    {
+      "name": "S4",
+      "config": "runs/h75_gravel_p1/S4.json",
+      "output": "runs/h75_gravel_p1/assets/S4",
+      "parameters": {
+        "route": "runs/h75_selected_local300_flat/bundle/route.npz",
+        "density_per_m2": 24,
+        "radius_range_m": [
+          0.055,
+          0.08
+        ],
+        "s_range_m": [
+          3.0,
+          7.0
+        ],
+        "half_width_m": 0.8,
+        "blend_length_m": 0.3,
+        "seed": 20261107,
+        "vertical_scale_m": 0.001,
+        "bounds_m": [
+          -2,
+          24
+        ],
+        "name": "S4",
+        "height_m": 0.005,
+        "horizontal_scale_m": 0.005,
+        "reference_layout_csv": "runs/h75_gravel_g0/assets/S2_5mm/stone_centers.csv"
+      }
+    },
+    {
+      "name": "S6",
+      "config": "runs/h75_gravel_p1/S6.json",
+      "output": "runs/h75_gravel_p1/assets/S6",
+      "parameters": {
+        "route": "runs/h75_selected_local300_flat/bundle/route.npz",
+        "density_per_m2": 24,
+        "radius_range_m": [
+          0.055,
+          0.08
+        ],
+        "s_range_m": [
+          3.0,
+          7.0
+        ],
+        "half_width_m": 0.8,
+        "blend_length_m": 0.3,
+        "seed": 20261107,
+        "vertical_scale_m": 0.001,
+        "bounds_m": [
+          -2,
+          24
+        ],
+        "name": "S6",
+        "height_m": 0.01,
+        "horizontal_scale_m": 0.005,
+        "reference_layout_csv": "runs/h75_gravel_g0/assets/S2_5mm/stone_centers.csv",
+        "distribution": "clustered",
+        "cluster_centers_sn_m": [
+          [
+            4.0,
+            0.0
+          ],
+          [
+            6.0,
+            0.0
+          ]
+        ],
+        "cluster_std_sn_m": [
+          0.3,
+          0.25
+        ]
+      }
+    }
+  ],
+  "reference_layout_csv": "runs/h75_gravel_g0/assets/S2_5mm/stone_centers.csv",
+  "seed": 20261107
+}

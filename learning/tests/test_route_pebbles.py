@@ -1,4 +1,5 @@
-import unittest
+import unittest,tempfile
+from pathlib import Path
 import numpy as np
 from sttw_control.route_pebbles import cap_height,stone_layout,project_route
 
@@ -11,6 +12,18 @@ class PebbleGeometryTests(unittest.TestCase):
     def test_height_pair_preserves_centers_and_radii(self):
         a=stone_layout(self.c);b=stone_layout(dict(self.c,height_m=.02))
         np.testing.assert_array_equal(a,b);self.assertEqual(len(a),154)
+    def test_nested_layout_and_cluster_preserve_stone_attributes(self):
+        original=stone_layout(self.c)
+        with tempfile.TemporaryDirectory() as tmp:
+            csv=Path(tmp)/'layout.csv'
+            np.savetxt(csv,np.column_stack((np.arange(len(original)),original)),delimiter=',',header='id,s,n,rs,rn',comments='')
+            cfg=dict(self.c,reference_layout_csv=str(csv))
+            sparse=stone_layout(dict(cfg,density_per_m2=12));dense=stone_layout(dict(cfg,density_per_m2=36))
+            clustered=stone_layout(dict(cfg,distribution='clustered',cluster_centers_sn_m=[[4.,0.],[6.,0.]],cluster_std_sn_m=[.3,.25]))
+            np.testing.assert_array_equal(sparse,original[:len(sparse)])
+            np.testing.assert_array_equal(dense[:len(original)],original)
+            np.testing.assert_array_equal(clustered[:,2:],original[:,2:])
+            self.assertFalse(np.array_equal(clustered[:,:2],original[:,:2]))
     def test_route_projection_sign_and_progress(self):
         route=dict(xy=np.column_stack((np.arange(8.),np.zeros(8))),s=np.arange(8.))
         s,n=project_route(np.array([[3.4,.2],[5.1,-.3]]),route)

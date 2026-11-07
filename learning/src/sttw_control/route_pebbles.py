@@ -19,7 +19,14 @@ def project_route(points, route):
 def stone_layout(config):
     rng=np.random.default_rng(config['seed']);lo,hi=config['s_range_m'];w=config['half_width_m']
     count=round(config['density_per_m2']*(hi-lo)*2*w)
-    return np.column_stack((rng.uniform(lo,hi,count),rng.uniform(-w,w,count),rng.uniform(*config['radius_range_m'],(count,2))))
+    stones=np.column_stack((rng.uniform(lo,hi,count),rng.uniform(-w,w,count),rng.uniform(*config['radius_range_m'],(count,2))))
+    if 'reference_layout_csv' in config:
+        original=np.loadtxt(config['reference_layout_csv'],delimiter=',',skiprows=1,usecols=(1,2,3,4),ndmin=2)
+        shared=min(count,len(original));stones[:shared]=original[:shared]
+    if config.get('distribution')=='clustered':
+        centers=np.asarray(config['cluster_centers_sn_m']);chosen=centers[rng.integers(len(centers),size=count)]
+        stones[:,:2]=np.clip(chosen+rng.normal(size=(count,2))*config['cluster_std_sn_m'],[lo,-w],[hi,w])
+    return stones
 
 
 def cap_height(s,n,stones,config):
