@@ -25,11 +25,6 @@
     "solver_velocity_iterations": 4,
     "wheel_width_m": 0.05,
     "wheel_profile_slices": 21,
-    "pendulum_rest": [
-      -1.2,
-      2.499999
-    ],
-    "pendulum_locked": true,
     "env_spacing": 3.0
   },
   "cases": [
