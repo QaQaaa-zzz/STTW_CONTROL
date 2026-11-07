@@ -1,0 +1,75 @@
+{
+  "status": "complete",
+  "elapsed_s": 87.82554804399842,
+  "physics_lane_steps": 9600,
+  "landing_return_executed": false,
+  "ground_controller": "none; jump policy from reset",
+  "cases": [
+    {
+      "skill": "update2",
+      "duration_s": 8.0,
+      "physical_termination": false,
+      "peak_root_z": 0.5411434173583984,
+      "final_xyz": [
+        8.57175064086914,
+        1.2635102272033691,
+        0.11895305663347244
+      ],
+      "peak_abs_roll_deg": 4.017858505249023,
+      "full_jump_success": "not adjudicated; requires clearance and landing evidence",
+      "terminal_flags": {
+        "ground_domain_exit": null,
+        "ground_policy_fault": null,
+        "ground_alive": null,
+        "roll_limit": false,
+        "low_root": false,
+        "nonfinite_state": false,
+        "legacy_physical_termination_scope": "Legacy field includes controller/domain termination; inspect flags before attributing a physical fall"
+      }
+    },
+    {
+      "skill": "update50",
+      "duration_s": 2.634999990463257,
+      "physical_termination": true,
+      "peak_root_z": 0.1935397833585739,
+      "final_xyz": [
+        3.3148751258850098,
+        0.17751283943653107,
+        0.19182169437408447
+      ],
+      "peak_abs_roll_deg": 54.51986312866211,
+      "full_jump_success": "not adjudicated; requires clearance and landing evidence",
+      "terminal_flags": {
+        "ground_domain_exit": null,
+        "ground_policy_fault": null,
+        "ground_alive": null,
+        "roll_limit": true,
+        "low_root": false,
+        "nonfinite_state": false,
+        "legacy_physical_termination_scope": "Legacy field includes controller/domain termination; inspect flags before attributing a physical fall"
+      }
+    },
+    {
+      "skill": "earlybest",
+      "duration_s": 8.0,
+      "physical_termination": false,
+      "peak_root_z": 0.5475507974624634,
+      "final_xyz": [
+        8.629556655883789,
+        1.2175602912902832,
+        0.11895336210727692
+      ],
+      "peak_abs_roll_deg": 2.793656587600708,
+      "full_jump_success": "not adjudicated; requires clearance and landing evidence",
+      "terminal_flags": {
+        "ground_domain_exit": null,
+        "ground_policy_fault": null,
+        "ground_alive": null,
+        "roll_limit": false,
+        "low_root": false,
+        "nonfinite_state": false,
+        "legacy_physical_termination_scope": "Legacy field includes controller/domain termination; inspect flags before attributing a physical fall"
+      }
+    }
+  ]
+}

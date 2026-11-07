@@ -1,7 +1,7 @@
 {
   "source_config": "/home/qy/DVGC/JIT/runs/phase_u/phase_u_v4_speed2_roll400_missed200_9977856_seed820701_20260826/resolved_config.json",
   "source_sha256": "557e048980f90627b571f2bbbc554c5e66bfab2128ac8cbd799f36058eb7f7e3",
-  "status": "prepared optional landing-shaped stage, not applied to active current150 run",
+  "status": "authorized platform-shaped150 stage after nominal update50 regression",
   "task": {
     "action": {
       "base_rear_speed": 12.0,
@@ -103,7 +103,7 @@
       "failed_episode_return": null,
       "height_coeff": 40.0,
       "illegal_contact_penalty": 0.0,
-      "joint_energy_penalty_coeff": 2.0,
+      "joint_energy_penalty_coeff": 0.1,
       "jump_reward_min_height": 0.35,
       "jump_zone_missed_penalty": 200.0,
       "low_height_penalty": 5.0,
@@ -135,7 +135,8 @@
         "low_speed_weight": 8.0,
         "forward_weight": 4.0,
         "deceleration_weight": 2.0,
-        "deceleration_scale_m_s2": 2.0
+        "deceleration_scale_m_s2": 2.0,
+        "start_x_m": 1.5
       },
       "platform_landing": {
         "hold_s": 1.0,
@@ -270,5 +271,5 @@
       0.0
     ]
   },
-  "reward_change_note": "Retain traversal/deceleration and original physical limits. Add Go2-inspired phase-specific landing support reward, gated by observed flight and existing online platform handoff support plus no nonwheel collision. Reward continued1.5m/s, not Go2 standing still. One-shot1s support bonus. Training support is online proxy; original offline geometric landing and full-chain adjudication remain authoritative. No reward-scale comparison with traversal stage."
+  "reward_change_note": "Retain traversal/deceleration and original physical limits. Add Go2-inspired phase-specific landing support reward, gated by observed flight and existing online platform handoff support plus no nonwheel collision. Reward continued1.5m/s, not Go2 standing still. One-shot1s support bonus. Training support is online proxy; original offline geometric landing and full-chain adjudication remain authoritative. No reward-scale comparison with traversal stage. Momentum shaping starts at approach x1.5, so stopping before the jump signal cannot avoid the speed-deficit cost; original traversal-only config unchanged. Reduce power penalty coefficient2 to0.1: original source jump window old mean-3.96/peak-33.94 vs stationary-arm update50 mean-0.014. Weak regularization retained, actuator/physical limits unchanged. Multi-term reward revision, not single-factor attribution."
 }

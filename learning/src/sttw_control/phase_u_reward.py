@@ -51,7 +51,8 @@ def phase_u_reward(state, action, last_action, events, config):
         timeout=-c['timeout_penalty']*events['timeout_transition'])
     if 'traversal' in c:
         traversal=c['traversal']
-        active=events['jump_zone_seen'].bool()&(state['x']<traversal['end_x_m'])
+        started=(state['x']>=traversal['start_x_m']) if 'start_x_m' in traversal else events['jump_zone_seen'].bool()
+        active=started&(state['x']<traversal['end_x_m'])
         velocity=state['forward_velocity']
         fraction=(velocity/traversal['minimum_forward_m_s']).clamp(0,1)
         height_factor=traversal['stationary_height_fraction']+(1-traversal['stationary_height_fraction'])*fraction

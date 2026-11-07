@@ -65,3 +65,16 @@ def test_online_platform_support_rejects_missing_contact_and_outside_platform():
     f[1,0,2]=0;p[2,1,1]=1.1;p[3,:,0]=3.
     mask=platform_support_mask(p,f,torch.zeros(4),torch.zeros(4),3.6,7.6)
     assert mask.tolist()==[True,False,False,False]
+
+
+def test_platform_stage_cannot_avoid_speed_penalty_by_stopping_before_jump_zone():
+    import json
+    from pathlib import Path
+    from sttw_control.phase_u_reward import phase_u_reward
+    c=json.loads(Path('learning/configs/isaac_phase_u_task_platform.json').read_text())['task']['reward']
+    state={k:torch.zeros(2) for k in ('roll','pitch','yaw','pitch_rate','hip_velocity','knee_velocity','hip_force','knee_force')}
+    state.update(x=torch.full((2,),2.4),z=torch.full((2,),.15),forward_velocity=torch.tensor([0.,2.]),previous_forward_velocity=torch.tensor([0.,2.]),policy_dt=.02)
+    events={k:torch.zeros(2,dtype=torch.bool) for k in ('physical_failure_transition','roll_pitch_failure_transition','stuck_transition','yaw_limit_transition','jump_zone_missed_transition','first_apex_success','illegal_contact','timeout_transition','jump_signal','jump_zone_seen','platform_supported','first_platform_hold')}
+    a=torch.zeros(2,4);reward,_,parts=phase_u_reward(state,a,a,events,c)
+    assert parts['traversal_low_speed'][0]==-8
+    assert reward[0]<0 and reward[1]>reward[0]

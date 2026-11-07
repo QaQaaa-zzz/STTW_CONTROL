@@ -1,0 +1,14 @@
+{
+  "stage": "interrupted_for_reward_revision",
+  "pid": 72499,
+  "completed_updates": 85,
+  "started": 1794045506.2954667,
+  "start_update": 0,
+  "target_update": 150,
+  "stage_completed_updates": 85,
+  "sample_seconds": 10.800165891647339,
+  "optimize_seconds": 0.09666299819946289,
+  "elapsed_s": 971.6919114589691,
+  "reason": "50-update nominal probe suppresses hip/knee action and loses jump; physical-failure decrease is not task convergence",
+  "saved_checkpoint_for_final_comparison": "training/model_update_00075.pt"
+}
