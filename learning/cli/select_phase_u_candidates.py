@@ -12,6 +12,7 @@ for path in sorted((a.run/'training').glob('model_*.pt')):
     suffix=path.stem.removeprefix('model_')
     if suffix=='step_best':update=best['update']
     elif suffix=='initial':update=status.get('start_update',0)
+    elif suffix.startswith('update_'):update=int(suffix.removeprefix('update_'))
     elif suffix.isdigit():update=int(suffix) if status['stage']=='training_complete' and int(suffix)==completed else int(suffix)+1
     else:continue
     row=dict(checkpoint=str(path.resolve()),policy_update=update,score=scores.get(update),role='stored candidate; sampled training reward is not fixed-task performance')

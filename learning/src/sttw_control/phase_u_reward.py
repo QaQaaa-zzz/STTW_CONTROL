@@ -69,10 +69,12 @@ def phase_u_reward(state, action, last_action, events, config):
         components['platform_hold']=landing['hold_bonus']*events['first_platform_hold']
     if 'heading_tracking' in c:
         heading=c['heading_tracking']
-        components['lateral_position']=-heading['position_weight']*(state['y']/heading['position_scale_m']).square()
-        components['lateral_velocity']=-heading['velocity_weight']*(state['lateral_velocity']/heading['velocity_scale_m_s']).square()
-        components['heading_error']=-heading['yaw_weight']*(state['yaw']/heading['yaw_scale_rad']).square()
-        components['heading_rate']=-heading['yaw_rate_weight']*state['yaw_rate'].square()
+        squared_errors=(state['y']/heading['position_scale_m']).square(),(state['lateral_velocity']/heading['velocity_scale_m_s']).square(),(state['yaw']/heading['yaw_scale_rad']).square(),state['yaw_rate'].square()
+        if heading.get('bounded',False):
+            errors=[-torch.expm1(-error) for error in squared_errors]
+        else:errors=squared_errors
+        for name,weight,error in zip(('lateral_position','lateral_velocity','heading_error','heading_rate'),('position_weight','velocity_weight','yaw_weight','yaw_rate_weight'),errors):
+            components[name]=-heading[weight]*error
     total=sum(components.values())
     return total.clamp(c['total_min'],c['total_max']),total,components
 

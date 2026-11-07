@@ -17,7 +17,7 @@ for run in a.runs:
  rotation=Rotation.from_quat(mount[1:]+mount[:1])
  models=list(dict.fromkeys(spec['skills']))
  fig,axes=plt.subplots(3,len(models),figsize=(6.5*len(models),12),layout='constrained',squeeze=False)
- for lane,d in enumerate(sorted(run.glob('lane_*'))):
+ for lane,d in enumerate(sorted(run.glob('lane_*'),key=lambda p:int(p.name.split('_')[-1]))):
   data=np.load(d/'trajectory.npz');mask=data['valid'][:,0];trace=data['trace'][mask,0]
   body=np.load(d/'body_contact.npz');root=body['body_state'][mask,0,list(body['body_names']).index('chasis')]
   yaw=(Rotation.from_quat(root[:,3:7])*rotation).as_euler('xyz')[:,2]

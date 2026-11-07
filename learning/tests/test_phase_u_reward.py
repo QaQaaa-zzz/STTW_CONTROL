@@ -78,3 +78,19 @@ def test_platform_stage_cannot_avoid_speed_penalty_by_stopping_before_jump_zone(
     a=torch.zeros(2,4);reward,_,parts=phase_u_reward(state,a,a,events,c)
     assert parts['traversal_low_speed'][0]==-8
     assert reward[0]<0 and reward[1]>reward[0]
+
+
+def test_heading_cost_is_bounded_without_changing_failure_penalty():
+    import json
+    from pathlib import Path
+    from sttw_control.phase_u_reward import phase_u_reward
+    c=json.loads(Path('learning/configs/isaac_phase_u_task_heading_bounded.json').read_text())['task']['reward']
+    state={k:torch.zeros(3) for k in ('roll','pitch','yaw','yaw_rate','y','lateral_velocity','pitch_rate','hip_velocity','knee_velocity','hip_force','knee_force')}
+    state.update(x=torch.full((3,),5.),z=torch.full((3,),.3),forward_velocity=torch.full((3,),1.5),previous_forward_velocity=torch.full((3,),1.5),policy_dt=.02)
+    for k in ('y','yaw','lateral_velocity','yaw_rate'):state[k]=torch.tensor([0.,1.,100.])
+    events={k:torch.zeros(3,dtype=torch.bool) for k in ('physical_failure_transition','roll_pitch_failure_transition','stuck_transition','yaw_limit_transition','jump_zone_missed_transition','first_apex_success','illegal_contact','timeout_transition','jump_signal','jump_zone_seen','platform_supported','first_platform_hold')}
+    events['roll_pitch_failure_transition'][2]=True
+    parts=phase_u_reward(state,torch.zeros(3,4),torch.zeros(3,4),events,c)[2]
+    cost=sum(parts[k] for k in ('lateral_position','lateral_velocity','heading_error','heading_rate'))
+    assert cost[0]==0 and cost[2]>=-2.600001 and cost[2]<=cost[1]<cost[0]
+    assert parts['roll_pitch_failure'][2]==-400

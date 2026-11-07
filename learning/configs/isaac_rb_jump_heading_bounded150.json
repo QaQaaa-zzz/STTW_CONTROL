@@ -1,0 +1,63 @@
+{
+  "task_spec": "learning/configs/isaac_phase_u_task_heading_bounded.json",
+  "device": "cuda:0",
+  "num_envs": 4096,
+  "updates": 150,
+  "save_interval": 25,
+  "asset": "runs/rb_sttw_platform/isaac_asset/vehicle.urdf",
+  "asset_spec": "learning/configs/rb_sttw_platform.json",
+  "geometry": "runs/rb_sttw_platform/jump_input/geometry.json",
+  "bundle": "runs/rb_sttw_platform/training_bundle",
+  "plant_options": {
+    "physics_dt": 0.0025,
+    "wheel_radius_m": 0.07,
+    "gpu_pair_capacities": [
+      4194304,
+      4194304,
+      16777216
+    ],
+    "servo_mode": "hybrid",
+    "compliant_wheels": null,
+    "wheel_collision": "cylinder",
+    "hull_vertices": 64,
+    "robot_contact_offset": 0.001,
+    "mesh_collision_on_geometry": true,
+    "solver_position_iterations": 16,
+    "solver_velocity_iterations": 4,
+    "wheel_width_m": 0.05,
+    "wheel_profile_slices": 21,
+    "env_spacing": 20.0,
+    "pendulum_rest": [
+      -1.2,
+      2.499999
+    ],
+    "pendulum_locked": false,
+    "terrain_layout": "replicated"
+  },
+  "go2_checkout": "/home/qy/projects/My_unitree_go2_gym",
+  "seed": 28,
+  "status": "150 updates from heading125, bounded heading costs, fixed5e-5; original task and Go2 DR",
+  "reset_note": "original RB rootz0.15, x1.5,vx2, joint velocities0, original8percent airborne RSI retained",
+  "optimizer_initialization": "heading125 actor/critic/normalizers; fresh Adam",
+  "jump_steering_gains": [
+    2.5,
+    0.4
+  ],
+  "root_acceleration_difference": true,
+  "ppo_overrides": {
+    "learning_rate": 5e-05,
+    "schedule": "fixed"
+  },
+  "initial_checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading150/adaptation/training/model_update_00125.pt",
+  "reachable_entry_bank": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rear_comp_approach/entry_bank/entries.npz",
+  "reachable_entry_probability": 0.5,
+  "evaluation_checkpoint_every": 25,
+  "heading_observation": true,
+  "heading_observation_noise": [
+    0.01,
+    0.005,
+    0.005,
+    0.02
+  ],
+  "ground_end_x_m": 25.0
+}

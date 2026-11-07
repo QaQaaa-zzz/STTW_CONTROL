@@ -1,0 +1,380 @@
+[
+  {
+    "lane": "lane_00",
+    "model": "parent150",
+    "old_max_direction_cost": 12.687565209960107,
+    "bounded_max_direction_cost": 2.493651348831696,
+    "old_discounted_direction_cost": 270.959309246533,
+    "bounded_discounted_direction_cost": 96.67458852114598,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_01",
+    "model": "parent150",
+    "old_max_direction_cost": 8.734263288069041,
+    "bounded_max_direction_cost": 2.3153998021552433,
+    "old_discounted_direction_cost": 213.6006973971768,
+    "bounded_discounted_direction_cost": 103.41645526757686,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_02",
+    "model": "parent150",
+    "old_max_direction_cost": 6.427650326328131,
+    "bounded_max_direction_cost": 2.247304063744729,
+    "old_discounted_direction_cost": 161.74103020636892,
+    "bounded_discounted_direction_cost": 88.15163045470544,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_03",
+    "model": "parent150",
+    "old_max_direction_cost": 11.455926851858369,
+    "bounded_max_direction_cost": 2.310662711017961,
+    "old_discounted_direction_cost": 221.42344124132345,
+    "bounded_discounted_direction_cost": 97.99766670268453,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_04",
+    "model": "parent150",
+    "old_max_direction_cost": 8.515519728916999,
+    "bounded_max_direction_cost": 2.3381570415870114,
+    "old_discounted_direction_cost": 136.94789143468188,
+    "bounded_discounted_direction_cost": 70.0095979871069,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_05",
+    "model": "parent150",
+    "old_max_direction_cost": 201.9053265326755,
+    "bounded_max_direction_cost": 2.500061450627301,
+    "old_discounted_direction_cost": 1925.5692386252074,
+    "bounded_discounted_direction_cost": 198.49743311987632,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_06",
+    "model": "parent150",
+    "old_max_direction_cost": 99.07401806277656,
+    "bounded_max_direction_cost": 2.5967463135009248,
+    "old_discounted_direction_cost": 224.7633325626105,
+    "bounded_discounted_direction_cost": 76.22701089248707,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_07",
+    "model": "parent150",
+    "old_max_direction_cost": 4.223278226162815,
+    "bounded_max_direction_cost": 1.9831315398610003,
+    "old_discounted_direction_cost": 109.05460096191796,
+    "bounded_discounted_direction_cost": 68.32081490433424,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_08",
+    "model": "parent150",
+    "old_max_direction_cost": 4.431106403877426,
+    "bounded_max_direction_cost": 1.9327048469953598,
+    "old_discounted_direction_cost": 110.5676680716335,
+    "bounded_discounted_direction_cost": 67.2713143915707,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_09",
+    "model": "parent150",
+    "old_max_direction_cost": 10.973969189301128,
+    "bounded_max_direction_cost": 2.475787117830114,
+    "old_discounted_direction_cost": 259.48127565052624,
+    "bounded_discounted_direction_cost": 99.73976204046733,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_10",
+    "model": "parent150",
+    "old_max_direction_cost": 13.614728994223407,
+    "bounded_max_direction_cost": 2.448189214268268,
+    "old_discounted_direction_cost": 314.61521638282903,
+    "bounded_discounted_direction_cost": 123.92837464403168,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_11",
+    "model": "parent150",
+    "old_max_direction_cost": 2.8084655901545554,
+    "bounded_max_direction_cost": 1.5875436285242235,
+    "old_discounted_direction_cost": 72.34705614606118,
+    "bounded_discounted_direction_cost": 52.5177290701597,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_12",
+    "model": "parent150",
+    "old_max_direction_cost": 15.236828201528972,
+    "bounded_max_direction_cost": 2.312043202628081,
+    "old_discounted_direction_cost": 314.17650570382665,
+    "bounded_discounted_direction_cost": 121.25691948768979,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_13",
+    "model": "parent150",
+    "old_max_direction_cost": 14.481608764832648,
+    "bounded_max_direction_cost": 2.3843148001669205,
+    "old_discounted_direction_cost": 220.13944889658345,
+    "bounded_discounted_direction_cost": 98.29264701264762,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_14",
+    "model": "parent150",
+    "old_max_direction_cost": 11.900807227967633,
+    "bounded_max_direction_cost": 2.4507431828721917,
+    "old_discounted_direction_cost": 335.8981498294898,
+    "bounded_discounted_direction_cost": 127.11360751597203,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_15",
+    "model": "parent150",
+    "old_max_direction_cost": 11.260214671448855,
+    "bounded_max_direction_cost": 2.4164621191116367,
+    "old_discounted_direction_cost": 165.0615359209491,
+    "bounded_discounted_direction_cost": 80.32642482244358,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_16",
+    "model": "parent150",
+    "old_max_direction_cost": 14.454758691669161,
+    "bounded_max_direction_cost": 2.5147604312939897,
+    "old_discounted_direction_cost": 294.0418122223175,
+    "bounded_discounted_direction_cost": 109.58372616127373,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_17",
+    "model": "parent150",
+    "old_max_direction_cost": 6.063368456750508,
+    "bounded_max_direction_cost": 2.1496057863674682,
+    "old_discounted_direction_cost": 137.49168901595107,
+    "bounded_discounted_direction_cost": 80.8568878334426,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_18",
+    "model": "parent150",
+    "old_max_direction_cost": 196.11045868333105,
+    "bounded_max_direction_cost": 1.2364840175058867,
+    "old_discounted_direction_cost": 125.56759609215482,
+    "bounded_discounted_direction_cost": 10.539110135493036,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_19",
+    "model": "parent150",
+    "old_max_direction_cost": 2.8796135173340742,
+    "bounded_max_direction_cost": 1.6377075061470916,
+    "old_discounted_direction_cost": 71.76910967070764,
+    "bounded_discounted_direction_cost": 53.185447068657155,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_20",
+    "model": "parent150",
+    "old_max_direction_cost": 17.524189868573483,
+    "bounded_max_direction_cost": 2.485238642137806,
+    "old_discounted_direction_cost": 322.93710892441254,
+    "bounded_discounted_direction_cost": 121.8410067753375,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_21",
+    "model": "heading125",
+    "old_max_direction_cost": 1.183426689372959,
+    "bounded_max_direction_cost": 0.9145074921505189,
+    "old_discounted_direction_cost": 38.60441490726368,
+    "bounded_discounted_direction_cost": 33.51054909096881,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_22",
+    "model": "heading125",
+    "old_max_direction_cost": 2.6041539812889907,
+    "bounded_max_direction_cost": 1.4004650549599793,
+    "old_discounted_direction_cost": 72.50893476705323,
+    "bounded_discounted_direction_cost": 55.39111321683317,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_23",
+    "model": "heading125",
+    "old_max_direction_cost": 1.434959183221673,
+    "bounded_max_direction_cost": 0.9928913718974468,
+    "old_discounted_direction_cost": 44.206437817604744,
+    "bounded_discounted_direction_cost": 37.70120393058851,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_24",
+    "model": "heading125",
+    "old_max_direction_cost": 27.641412155320698,
+    "bounded_max_direction_cost": 1.9334003653671197,
+    "old_discounted_direction_cost": 298.4489569380711,
+    "bounded_discounted_direction_cost": 38.4043192960501,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_25",
+    "model": "heading125",
+    "old_max_direction_cost": 14.206832545046495,
+    "bounded_max_direction_cost": 2.376990131169042,
+    "old_discounted_direction_cost": 277.37379213794736,
+    "bounded_discounted_direction_cost": 80.14427852386785,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_26",
+    "model": "heading125",
+    "old_max_direction_cost": 15.309592542811947,
+    "bounded_max_direction_cost": 2.4905413156302267,
+    "old_discounted_direction_cost": 480.8139473604203,
+    "bounded_discounted_direction_cost": 158.36162367261235,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_27",
+    "model": "heading125",
+    "old_max_direction_cost": 1.6389767429510491,
+    "bounded_max_direction_cost": 1.0817744689039155,
+    "old_discounted_direction_cost": 49.64815850654377,
+    "bounded_discounted_direction_cost": 41.181704918440694,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_28",
+    "model": "heading125",
+    "old_max_direction_cost": 0.8226981915723837,
+    "bounded_max_direction_cost": 0.5310706046175049,
+    "old_discounted_direction_cost": 24.33871644495005,
+    "bounded_discounted_direction_cost": 22.174098551347072,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_29",
+    "model": "heading125",
+    "old_max_direction_cost": 0.35805342090870745,
+    "bounded_max_direction_cost": 0.31821082753331686,
+    "old_discounted_direction_cost": 16.128306086892408,
+    "bounded_discounted_direction_cost": 15.082032570533638,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_30",
+    "model": "heading125",
+    "old_max_direction_cost": 1.7913813812924482,
+    "bounded_max_direction_cost": 1.1441482423134957,
+    "old_discounted_direction_cost": 92.05496805546628,
+    "bounded_discounted_direction_cost": 62.928130271425154,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_31",
+    "model": "heading125",
+    "old_max_direction_cost": 3.3167214278778614,
+    "bounded_max_direction_cost": 1.710093636911849,
+    "old_discounted_direction_cost": 105.46289247431277,
+    "bounded_discounted_direction_cost": 74.69099545010043,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_32",
+    "model": "heading125",
+    "old_max_direction_cost": 4.1433560029537295,
+    "bounded_max_direction_cost": 1.1231451943298076,
+    "old_discounted_direction_cost": 13.92252449910743,
+    "bounded_discounted_direction_cost": 11.137916965678409,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_33",
+    "model": "heading125",
+    "old_max_direction_cost": 66.3116572040212,
+    "bounded_max_direction_cost": 2.586353325886989,
+    "old_discounted_direction_cost": 1197.4862768501707,
+    "bounded_discounted_direction_cost": 152.61027706332936,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_34",
+    "model": "heading125",
+    "old_max_direction_cost": 5.671645217621157,
+    "bounded_max_direction_cost": 1.8201501156489515,
+    "old_discounted_direction_cost": 80.2921376928819,
+    "bounded_discounted_direction_cost": 55.16460086278501,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_35",
+    "model": "heading125",
+    "old_max_direction_cost": 3.2866951526565673,
+    "bounded_max_direction_cost": 1.4799293732920016,
+    "old_discounted_direction_cost": 64.59608074740562,
+    "bounded_discounted_direction_cost": 45.01060177376067,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_36",
+    "model": "heading125",
+    "old_max_direction_cost": 2.9658419868637527,
+    "bounded_max_direction_cost": 1.5770740053320658,
+    "old_discounted_direction_cost": 77.75580749112531,
+    "bounded_discounted_direction_cost": 55.84921290528577,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_37",
+    "model": "heading125",
+    "old_max_direction_cost": 3.3271829305539433,
+    "bounded_max_direction_cost": 1.6576653561712162,
+    "old_discounted_direction_cost": 93.03572820567192,
+    "bounded_discounted_direction_cost": 66.47421496951445,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_38",
+    "model": "heading125",
+    "old_max_direction_cost": 0.7212361593706385,
+    "bounded_max_direction_cost": 0.580057957978887,
+    "old_discounted_direction_cost": 28.760376884176452,
+    "bounded_discounted_direction_cost": 25.997708878958314,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_39",
+    "model": "heading125",
+    "old_max_direction_cost": 26.134368365492133,
+    "bounded_max_direction_cost": 1.242799211393153,
+    "old_discounted_direction_cost": 81.14769961247444,
+    "bounded_discounted_direction_cost": 23.156628244997897,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_40",
+    "model": "heading125",
+    "old_max_direction_cost": 0.48966242576967434,
+    "bounded_max_direction_cost": 0.42054160104627536,
+    "old_discounted_direction_cost": 17.470437309568215,
+    "bounded_discounted_direction_cost": 16.413043786245677,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  },
+  {
+    "lane": "lane_41",
+    "model": "heading125",
+    "old_max_direction_cost": 138.6616629874743,
+    "bounded_max_direction_cost": 1.7890512723402068,
+    "old_discounted_direction_cost": 924.9085353448494,
+    "bounded_discounted_direction_cost": 40.50524036306048,
+    "scope": "counterfactual direction terms on existing nominal DEV trajectory only, not new reward total or proof of learning incentive"
+  }
+]
