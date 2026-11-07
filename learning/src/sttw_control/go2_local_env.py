@@ -182,10 +182,21 @@ class Go2LocalEnv(VecEnv):
         if self.task_spec:
             r=self.task_spec['reward'];caps=r['caps']
             def huber(x):return torch.where(x.abs()<=1,x*x,2*x.abs()-1)
+            roll_start = r['roll_start']
+            working_roll_start = r['working_roll_start']
+            if 'command_lean_margin' in r:
+                # Use requested motion: slowing down must not shrink the permitted lean.
+                requested_lean = torch.atan(self.reference[:,0].square()*torch.tan(self.reference[:,1])*
+                    math.cos(self.controller.config['caster'])/
+                    (self.controller.config['gravity']*self.controller.config['wheelbase'])).abs()
+                roll_start = (requested_lean+r['command_lean_margin']).clamp(
+                    min=r['roll_start'], max=r['command_lean_soft_limit'])
+                working_roll_start = (requested_lean+r['command_lean_danger_margin']).clamp(
+                    min=r['working_roll_start'], max=r['command_lean_danger_limit'])
             costs=dict(speed=r['speed_weight']*huber((speed-self.reference[:,0])/r['speed_huber_scale']),
                 steer=r['steer_weight']*huber((clean[:,2]-self.reference[:,1])/r['steer_huber_scale']),
-                roll=r['roll_weight']*huber(torch.relu(peak-r['roll_start'])/r['roll_scale']),
-                working_roll=r['working_roll_weight']*huber(torch.relu(peak-r['working_roll_start'])/r['working_roll_scale']),
+                roll=r['roll_weight']*huber(torch.relu(peak-roll_start)/r['roll_scale']),
+                working_roll=r['working_roll_weight']*huber(torch.relu(peak-working_roll_start)/r['working_roll_scale']),
                 roll_rate=r['roll_rate_weight']*huber(torch.relu(clean[:,1].abs()-r['roll_rate_start'])/r['roll_rate_scale']),
                 action=r['action_weight']*action.square().sum(-1),
                 action_change=r['action_change_weight']*(action-self.previous_action).square().sum(-1))

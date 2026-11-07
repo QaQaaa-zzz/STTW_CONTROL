@@ -21,7 +21,7 @@ for folder in a.runs:
   n=int(d['valid'][:,i].sum());ev=d['speed'][:n,i]-d['reference'][:n,i,0];ed=d['measurement'][:n,i,2]-d['reference'][:n,i,1];failed=bool(d['failed'][:,i].any());survived=not failed and n==round(s['seconds']/s['control_dt'])
   tolerance=.01 if name.startswith('post_return_small') else .02
   hold=survived and bool((np.abs(ev[-100:])<=.05).all() and (np.abs(ed[-100:])<=tolerance).all())
-  old=np.load(Path(s['mujoco_reference'])/(name+'.npz'));actual=d['pose'][:n,i,:2];reference=command_xy(d,i,n) if a.current_chassis_reference else old['reference_xy'][:n]
+  actual=d['pose'][:n,i,:2];reference=command_xy(d,i,n) if a.current_chassis_reference else np.load(Path(s['mujoco_reference'])/(name+'.npz'))['reference_xy'][:n]
   if a.start_relative:actual=actual-actual[0];reference=reference-reference[0]
   xy=actual-reference
   cases.append(dict(case=name,survived=survived,final_tracking_hold=hold,end_s=float(d['time'][n-1,i]+d['stop_tick'][n-1,i]*s['physics_dt']),speed_rmse=float(np.sqrt(np.mean(ev**2))),steer_rmse=float(np.sqrt(np.mean(ed**2))),xy_reference_rmse=float(np.sqrt(np.mean(np.sum(xy**2,axis=-1)))),peak_roll=float(d['peak_roll'][:n,i].max())))
