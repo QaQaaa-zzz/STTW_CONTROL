@@ -66,7 +66,8 @@
       "env_spacing": 3.0,
       "track_wheel_contacts": false,
       "track_contact_wrench": true,
-      "max_contact_data_count_per_prim": 128
+      "max_contact_data_count_per_prim": 128,
+      "raw_contact_only": true
     }
   },
   "tasks": {
@@ -228,5 +229,12 @@
         ]
       }
     }
-  }
+  },
+  "enabled_performance_optimizations": [
+    "144 GPU lanes in one packed scene",
+    "physics-step raw patches only within0.8\u20135s",
+    "raw contact views without duplicate wheel ContactSensor aggregate reconstruction",
+    "no per-physics-step wheel aggregate log copies",
+    "250-step raw disk chunks; measured copy/sync and compression time"
+  ]
 }

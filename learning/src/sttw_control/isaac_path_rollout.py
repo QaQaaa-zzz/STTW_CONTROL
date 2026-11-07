@@ -113,7 +113,7 @@ class IsaacPathRollout:
                 contact=self.plant.step(executed) if self.physics_step_override is None else self.physics_step_override(executed)
                 if self.physics_recorder is not None:self.physics_recorder.record(self, lower_tick, physics_tick)
                 if self.randomization is not None:self.measurement=self.randomization.observe(self.plant.observe()[0])
-                if self.diagnostics and getattr(self.plant,'wheel_sensors',[]):
+                if self.diagnostics and getattr(self.plant,'wheel_sensors',[]) and not getattr(self.plant,'raw_contact_only',False):
                     wheel_points.append(torch.stack([s.data.contact_pos_w[:,0] for s in self.plant.wheel_sensors],dim=1).clone())
                     wheel_forces.append(torch.stack([s.data.force_matrix_w[:,0] for s in self.plant.wheel_sensors],dim=1).clone())
                 q=self.plant.roots[:,3:7];x,y,z,w=q.unbind(-1);roll=-(torch.atan2(2*(w*x+y*z),1-2*(x*x+y*y))-torch.pi/2);peak=torch.where(self.alive,torch.maximum(peak,roll.abs()),peak)

@@ -1845,3 +1845,6 @@ Config learning/configs/isaac_h75_tradeoff_repeats.json records all sampled valu
 - 四条前后轮均真实触石，接触点相对网格高度残差绝对值95分位约0.08–0.17mm。S2完整轨迹的粗细网格响应不在10ms/5%/2mm门槛内，按计划选择5mm；S5比较因提前失败而截断，不作为网格收敛证据。未把5mm自动称已证明收敛。
 - 排除终止后高频接触；配对轮心高度比较只用共同存活窗口。实际/参考XY图裁到观察到的路线范围，全部四条/原失败终点保留。G0属于工程检查，不能用这四条证伪整个偏好方法。
 - 证据runs/h75_gravel_g0/evaluation/{RESULTS.md,xy_g0.png,gravel_contact_events.json,termination_summary.json,contact_5ms.npz}；原始仿真和分析失败日志均保留。P0的144条配置已准备、资产映射更新为5mm，但尚未启动完整P0。
+
+### 石子P0诊断重复聚合移除
+原P0首50步183.791秒，按用户要求主动中断并保留原日志。raw_contact_only显式绕过轮传感器聚合/重复日志，原生高频接触、非轮碰撞终止、物理控制合同及144lane保留；增加原生数据同步/压缩计时。改动仅为诊断开销，实际加速尚待新运行确认。配置与证据见docs/GRAVEL_G0.md。
