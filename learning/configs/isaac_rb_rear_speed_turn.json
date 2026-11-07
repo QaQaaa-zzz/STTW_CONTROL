@@ -1,0 +1,57 @@
+{
+  "duration_s": 10.0,
+  "warmup_s": 3.0,
+  "return_s": 7.0,
+  "speed_m_s": 2.3,
+  "steer_slew_rad_s": 0.3,
+  "speed_slew_m_s2": 0.5,
+  "pendulum_locked": true,
+  "controller_config": "learning/configs/rb_sttw_rounded_controller.json",
+  "plant_options": {
+    "physics_dt": 0.0025,
+    "wheel_radius_m": 0.07,
+    "gpu_pair_capacities": [
+      1048576,
+      1048576,
+      1048576
+    ],
+    "servo_mode": "hybrid",
+    "compliant_wheels": null,
+    "wheel_collision": "cylinder",
+    "hull_vertices": 64,
+    "robot_contact_offset": 0.001,
+    "mesh_collision_on_geometry": true,
+    "solver_position_iterations": 16,
+    "solver_velocity_iterations": 4,
+    "wheel_width_m": 0.05,
+    "wheel_profile_slices": 21,
+    "env_spacing": 3.0
+  },
+  "cases": [
+    {
+      "name": "left_kp0",
+      "steer_rad": 0.09274317808092519,
+      "local300": false,
+      "speed_feedback_gain": 0
+    },
+    {
+      "name": "left_kp1",
+      "steer_rad": 0.09274317808092519,
+      "local300": false,
+      "speed_feedback_gain": 1
+    },
+    {
+      "name": "right_kp0",
+      "steer_rad": -0.09274317808092519,
+      "local300": false,
+      "speed_feedback_gain": 0
+    },
+    {
+      "name": "right_kp1",
+      "steer_rad": -0.09274317808092519,
+      "local300": false,
+      "speed_feedback_gain": 1
+    }
+  ],
+  "role": "Nominal left/right R3 at2.3m/s, Kp0/1 matched; no residual or H75; 10s"
+}
