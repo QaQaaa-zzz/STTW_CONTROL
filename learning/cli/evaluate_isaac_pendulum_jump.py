@@ -86,6 +86,7 @@ if spec.get('ground_bundle'):
  np.savez(out/'ground_initial.npz',**ground_state)
  settings=json.loads(Path(spec.get('ground_settings','learning/configs/isaaclab_h75_offroad_selected.json')).read_text())
  settings.update(record_control_commands=True,num_envs=n,alphas=[spec['ground_alpha']]*n,zero_middle=[False]*n,zero_lower=[spec.get('zero_lower',False)]*n,terrains={'plane':'plane'},episode_s=spec['seconds'],initial_state=str(out/'ground_initial.npz'),user_speed_m_s=spec['approach_speed'],auto_reset_horizon=False)
+ settings['rear_speed_feedback_gain']=spec.get('rear_speed_feedback_gain',0.)
  bundle=Path(spec['ground_bundle']);identity=json.loads((bundle/'identity.json').read_text());ground_cfg=json.loads((bundle/'config.json').read_text())
  actor=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],ground_cfg,n,'cuda:0')
  ground=IsaacPathRollout(bundle,settings,actor,plant=plant)

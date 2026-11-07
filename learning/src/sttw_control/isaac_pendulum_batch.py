@@ -59,8 +59,12 @@ def run_connection_batch(spec, out, plant, ground, policy, history, geometry):
             switching=alive&~active&~returned&(root[:,0]>=spec['handoff_x'])
             ids=switching.nonzero().flatten()
             if len(ids):
-                plant.set_pendulum_locked(False,ids);active|=switching;plant.set_steering_position_modes(active)
                 for lane in ids.tolist():event(lane,'handoff',m,root,distance=distance[lane:lane+1].cpu().tolist())
+                if spec.get('stop_at_ground_handoff',False):
+                    alive &= ~switching
+                else:
+                    plant.set_pendulum_locked(False,ids);active|=switching;plant.set_steering_position_modes(active)
+            if spec.get('stop_at_ground_handoff',False):return
             action,proposed=policy.infer(obs,plant.dofs[:,plant.joints.index('knee_joint'),0])
             last=torch.where(active[:,None],action,last);target=torch.where(active[:,None],proposed,target)
         _,pitch,_=euler_xyz_from_quat(plant.robot.data.root_link_quat_w)
@@ -135,7 +139,7 @@ def run_connection_batch(spec, out, plant, ground, policy, history, geometry):
         np.savez_compressed(folder/'executed_jump_targets.npz',trace=jump[j,lane:lane+1],columns=['time','phase_1_jump_2_landing_transition','steering_position_rad','rear_axis_speed_rad_s','hip_position_rad','knee_position_rad'])
         np.savez_compressed(folder/'arm_commands.npz',trace=arms[j,lane:lane+1],columns=['time','hip_target','knee_target','hip_position','knee_position','hip_velocity','knee_velocity','hip_command_torque','knee_command_torque','alive_before_step'])
         for name,value in events[lane].items():(folder/(name+'.json')).write_text(json.dumps(value,indent=2)+'\n')
-        tr=trace[:,0];case=dict(skill=spec['skills'][lane],duration_s=float(tr[-1,0]),physical_termination=not bool(alive[lane]),peak_root_z=float(tr[:,3].max()),final_xyz=tr[-1,1:4].tolist(),peak_abs_roll_deg=float(np.rad2deg(abs(tr[:,5])).max()),full_jump_success='requires original landing and chain analysis')
+        tr=trace[:,0];case=dict(skill=spec['skills'][lane],duration_s=float(tr[-1,0]),physical_termination=not bool(alive[lane]) and not (spec.get('stop_at_ground_handoff',False) and 'handoff' in events[lane]),ground_handoff_reached='handoff' in events[lane],peak_root_z=float(tr[:,3].max()),final_xyz=tr[-1,1:4].tolist(),peak_abs_roll_deg=float(np.rad2deg(abs(tr[:,5])).max()),full_jump_success='requires original landing and chain analysis')
         result=dict(status='complete',elapsed_s=elapsed,elapsed_scope='Shared whole-batch elapsed, not additive per lane',physics_lane_steps=block_tick*round(.02/dt),landing_return_executed=bool(returned[lane]),ground_controller='H75+ECBC (zero lower residual)',cases=[case])
         (folder/'results.json').write_text(json.dumps(result,indent=2)+'\n');cases.append(dict(lane=lane,candidate=candidate,output=str(folder)))
     summary=dict(status='complete',elapsed_s=elapsed,physics_lane_steps=block_tick*round(.02/dt)*n,optimizer_updates=0,cases=cases)

@@ -21,7 +21,7 @@ class IsaacPathRollout:
         self.upper_sha256=identity['files']['actor.npz'];self.lower_sha256=settings['lower_sha256']
         self.record_control_commands=settings.get('record_control_commands',False)
         self.record_body_poses=settings.get('record_body_poses',False)
-        self.physics_recorder=None;self.plant=plant;self.wheel_radius_m=getattr(plant,'wheel_radius_m',.1);self.cc=json.loads(Path(settings['controller_config']).read_text());self.cc['wheel_radius_m']=self.wheel_radius_m;self.controller=TorchController(self.cc,n,self.device)
+        self.rear_speed_feedback_gain=torch.as_tensor(settings.get('rear_speed_feedback_gain',0.),device=self.device);self.physics_recorder=None;self.plant=plant;self.wheel_radius_m=getattr(plant,'wheel_radius_m',.1);self.cc=json.loads(Path(settings['controller_config']).read_text());self.cc['wheel_radius_m']=self.wheel_radius_m;self.controller=TorchController(self.cc,n,self.device)
         self.lower=lower if lower is not None else TorchLocalLower(settings['lower_actor'],settings['lower_sha256'],n,self.device);self.policy=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],self.config,n,self.device);self.policy.weights=actor.weights
         self.physics_dt=getattr(self.plant,'physics_dt',.0002);self.physics_substeps=round(.005/self.physics_dt)
         if self.physics_substeps<1 or abs(self.physics_substeps*self.physics_dt-.005)>1e-9:raise ValueError('physics step must divide STTW .005 s control period')
@@ -102,7 +102,7 @@ class IsaacPathRollout:
             policy_m=m if self.randomization is None else self.measurement
             action,_,finite=self.lower.prepare(policy_m,v,governed,self.previous_reference,self.previous_command,self.controller);applied=torch.where(self.zero_lower[:,None],0.,action*self.scale)
             signals=self.plant.signals;position=self.plant.dofs[:,:,0];row=torch.stack((m[:,5]*self.wheel_radius_m,m[:,2],m[:,3],m[:,0],m[:,1],governed[:,1]),dim=-1);output=self.controller.step(row,self.physical_tick*.005>3.)
-            steer=(output[:,0]+applied[:,0]).clamp(-3,3);steer=torch.maximum(torch.maximum(torch.full_like(steer,-3),(-.8-position[:,signals.steer])/.005),torch.minimum(torch.minimum(torch.full_like(steer,3),(.8-position[:,signals.steer])/.005),steer));command=torch.stack((steer,(governed[:,0]/self.wheel_radius_m+applied[:,1]).clamp(-60,60)),dim=-1)
+            steer=(output[:,0]+applied[:,0]).clamp(-3,3);steer=torch.maximum(torch.maximum(torch.full_like(steer,-3),(-.8-position[:,signals.steer])/.005),torch.minimum(torch.minimum(torch.full_like(steer,3),(.8-position[:,signals.steer])/.005),steer));command=torch.stack((steer,((governed[:,0]+self.rear_speed_feedback_gain*(governed[:,0]-v))/self.wheel_radius_m+applied[:,1]).clamp(-60,60)),dim=-1)
             pre_failure=self.middle.fault|self.middle.domain_exit|~finite|~torch.isfinite(m).all(-1)|(m[:,0].abs()>.7);just_failed=self.alive&pre_failure;new_failure|=just_failed;self.alive&=~pre_failure;active_lower=self.alive.clone();peak=m[:,0].abs();endpoint=self.plant.roots.clone();stop_tick=torch.full((self.n,),self.physics_substeps,device=self.device,dtype=torch.long)
             wheel_points=[];wheel_forces=[]
             for physics_tick in range(self.physics_substeps):

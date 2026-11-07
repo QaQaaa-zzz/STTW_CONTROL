@@ -1,0 +1,109 @@
+{
+  "cases": [
+    {
+      "case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a0.5_update2",
+      "skill": "update2",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rear_comp_approach/rb_connection_seed20261106_root000/lane_06/config.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a0.5_update2",
+      "skill": "update2",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rear_comp_approach/rb_connection_seed20261106_root000/lane_08/config.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a1.0_update2",
+      "skill": "update2",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rear_comp_approach/rb_connection_seed20261106_root000/lane_09/config.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a0.0_update2",
+      "skill": "update2",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rear_comp_approach/rb_connection_seed20261106_root000/lane_10/config.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root002_L5.6_v2.0_a0.5_update2",
+      "skill": "update2",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rear_comp_approach/rb_connection_seed20261106_root002/lane_06/config.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root002_L5.6_v1.8_a0.0_update2",
+      "skill": "update2",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rear_comp_approach/rb_connection_seed20261106_root002/lane_07/config.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root002_L5.6_v1.8_a1.0_update2",
+      "skill": "update2",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rear_comp_approach/rb_connection_seed20261106_root002/lane_09/config.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root002_L5.6_v2.0_a1.0_update2",
+      "skill": "update2",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rear_comp_approach/rb_connection_seed20261106_root002/lane_11/config.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root003_L5.6_v2.0_a0.5_update2",
+      "skill": "update2",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rear_comp_approach/rb_connection_seed20261106_root003/lane_06/config.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root003_L5.6_v1.8_a0.5_update2",
+      "skill": "update2",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rear_comp_approach/rb_connection_seed20261106_root003/lane_08/config.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root003_L5.6_v2.0_a0.0_update2",
+      "skill": "update2",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rear_comp_approach/rb_connection_seed20261106_root003/lane_10/config.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root003_L5.6_v2.0_a1.0_update2",
+      "skill": "update2",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rear_comp_approach/rb_connection_seed20261106_root003/lane_11/config.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root004_L5.6_v1.8_a0.0_update2",
+      "skill": "update2",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rear_comp_approach/rb_connection_seed20261106_root004/lane_07/config.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root004_L5.6_v1.8_a0.5_update2",
+      "skill": "update2",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rear_comp_approach/rb_connection_seed20261106_root004/lane_08/config.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root004_L5.6_v2.0_a0.0_update2",
+      "skill": "update2",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rear_comp_approach/rb_connection_seed20261106_root004/lane_10/config.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root004_L5.6_v2.0_a1.0_update2",
+      "skill": "update2",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rear_comp_approach/rb_connection_seed20261106_root004/lane_11/config.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root005_L5.6_v1.8_a0.5_update2",
+      "skill": "update2",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rear_comp_approach/rb_connection_seed20261106_root005/lane_08/config.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root005_L5.6_v1.8_a1.0_update2",
+      "skill": "update2",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rear_comp_approach/rb_connection_seed20261106_root005/lane_09/config.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root005_L5.6_v2.0_a1.0_update2",
+      "skill": "update2",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rear_comp_approach/rb_connection_seed20261106_root005/lane_11/config.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root008_L5.6_v1.8_a1.0_update2",
+      "skill": "update2",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rear_comp_approach/rb_connection_seed20261106_root008/lane_09/config.json"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root008_L5.6_v2.0_a0.0_update2",
+      "skill": "update2",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rear_comp_approach/rb_connection_seed20261106_root008/lane_10/config.json"
+    }
+  ]
+}
