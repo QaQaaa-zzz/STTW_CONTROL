@@ -90,7 +90,9 @@ for step in range(env.horizon):
             active=(step-fork_step)*.02<intervention['hold_s'];env.policy.hold_channels.copy_(torch.tensor(intervention['hold_channels'],device=env.device,dtype=torch.bool) if active else torch.zeros_like(env.policy.hold_channels))
     if planner is not None:planner.update()
     result=env.step(None)
-    rows.append({key:result[key] for key in ['reward','valid','done','failure','lower_trace']})
+    keys=['reward','valid','done','failure','lower_trace']
+    keys.extend(key for key in ('executed_commands','body_poses') if key in result)
+    rows.append({key:result[key] for key in keys})
     detail.extend(result['diagnostics'])
     if (step+1)%50==0:
         row_chunks.append(transfer(rows));detail_chunks.append(transfer(detail));rows.clear();detail.clear()

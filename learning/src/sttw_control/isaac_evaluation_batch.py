@@ -35,7 +35,7 @@ def split_case(arrays, contract, case, case_index):
     lanes = slice(case_index*6, (case_index+1)*6)
     result = {}
     for key, value in arrays.items():
-        axis = 2 if key in ('lower_trace', 'wheel_contact_points', 'wheel_contact_forces') else 1
+        axis = 2 if key in ('lower_trace', 'wheel_contact_points', 'wheel_contact_forces', 'executed_commands', 'body_poses') else 1
         result[key] = np.take(value, range(lanes.start, lanes.stop), axis=axis)
     output = deepcopy(contract)
     output['batch_source'] = dict(output=case['batch_output'], lane_start=lanes.start, lane_stop=lanes.stop)

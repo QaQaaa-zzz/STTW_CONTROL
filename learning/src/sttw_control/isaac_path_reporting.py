@@ -12,7 +12,7 @@ def load_case(run,baseline_run=None):
     data={}
     for key in archive.files:
         if key not in baseline.files:continue
-        axis=2 if key in ('lower_trace','wheel_contact_points','wheel_contact_forces') else 1
+        axis=2 if key in ('lower_trace','wheel_contact_points','wheel_contact_forces','executed_commands','body_poses') else 1
         data[key]=np.concatenate((np.take(archive[key],policy,axis=axis),np.take(baseline[key],zero,axis=axis)),axis=axis)
     contract['origin']=[contract['origin'][i] for i in policy]+[bc['origin'][i] for i in zero]
     contract['baseline_reuse']=dict(run=str(baseline_run.resolve()),identity=bc['identity'],scope='saved local-coordinate matched case; global clone translations may differ with lane count')

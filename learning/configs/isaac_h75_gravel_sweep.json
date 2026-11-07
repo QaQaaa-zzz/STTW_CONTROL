@@ -1,5 +1,5 @@
 {
-  "role": "PLANNED gravel P0; do not launch until G0 accepted",
+  "role": "Gravel P0 DEV screening; G0 native contacts verified;5mm adopted provisionally, no convergence claim",
   "reference_bundle": "runs/h75_selected_local300_flat/bundle",
   "base_evaluation_config": "runs/h75_gravel_g0/g0_config.json",
   "terrain_generator": "learning/cli/place_isaac_terrain.py",
@@ -32,10 +32,10 @@
   ],
   "include_zero": true,
   "seconds": 10,
-  "max_physics_lane_steps": 3000000,
+  "max_physics_lane_steps": 7200000,
   "optimizer_updates": 0,
-  "reuse": "original flat and 4cm cases at 2.3 m/s only when policy and full condition match; fresh Zero required for changed speed or terrain",
-  "start_condition": "finish current three-candidate review and record adopted policy; no automatic launch",
+  "reuse": "24 matched cases freshly batch evaluated; no old flat trajectory substituted",
+  "start_condition": "G0 actual-contact audit completed; user instructed continued staged progression",
   "seeds": [
     101,
     102,
@@ -85,5 +85,148 @@
   },
   "speed_window": "entire actual observed window; failures separately unqualified",
   "planned_lanes": 144,
-  "planned_lane_physics_steps": 7200000
+  "planned_lane_physics_steps": 7200000,
+  "randomization_by_seed": {
+    "101": {
+      "base_body": "chasis",
+      "friction_range": [
+        0.8443532505610554,
+        0.8443532505610554
+      ],
+      "mass_scale": [
+        0.9943768413336629,
+        0.9943768413336629
+      ],
+      "base_com_m": [
+        0,
+        0
+      ],
+      "latency_s": [
+        0.0,
+        0.0
+      ],
+      "servo_gain_scale": [
+        1.0036511274091764,
+        1.0036511274091764
+      ],
+      "steer_zero_offset_rad": [
+        -0.0008226857552122873,
+        -0.0008226857552122873
+      ],
+      "measurement_noise": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "push_interval_s": 1000000000,
+      "push_velocity_range": {
+        "x": [
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0
+        ]
+      }
+    },
+    "102": {
+      "base_body": "chasis",
+      "friction_range": [
+        0.7659991145004303,
+        0.7659991145004303
+      ],
+      "mass_scale": [
+        1.003437740593609,
+        1.003437740593609
+      ],
+      "base_com_m": [
+        0,
+        0
+      ],
+      "latency_s": [
+        0.0,
+        0.0
+      ],
+      "servo_gain_scale": [
+        0.9918904094704118,
+        0.9918904094704118
+      ],
+      "steer_zero_offset_rad": [
+        0.0007395980861852084,
+        0.0007395980861852084
+      ],
+      "measurement_noise": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "push_interval_s": 1000000000,
+      "push_velocity_range": {
+        "x": [
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0
+        ]
+      }
+    },
+    "103": {
+      "base_body": "chasis",
+      "friction_range": [
+        0.7812683232722948,
+        0.7812683232722948
+      ],
+      "mass_scale": [
+        0.9889727289050418,
+        0.9889727289050418
+      ],
+      "base_com_m": [
+        0,
+        0
+      ],
+      "latency_s": [
+        0.002,
+        0.002
+      ],
+      "servo_gain_scale": [
+        1.0144071458237374,
+        1.0144071458237374
+      ],
+      "steer_zero_offset_rad": [
+        0.0014301699535214782,
+        0.0014301699535214782
+      ],
+      "measurement_noise": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "push_interval_s": 1000000000,
+      "push_velocity_range": {
+        "x": [
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0
+        ]
+      }
+    }
+  }
 }
