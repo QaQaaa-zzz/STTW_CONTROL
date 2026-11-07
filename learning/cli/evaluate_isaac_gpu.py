@@ -26,7 +26,7 @@ if a.channel_protocol:
     s['plant_options']['track_wheel_contacts']=protocol.get('track_wheel_contacts',True)
 intervention=s.get('channel_intervention')
 if intervention and (s.get('randomization') or s['num_envs']!=5 or len(set(s['alphas']))!=1):p.error('channel intervention requires five nominal lanes at one common alpha')
-if not cases:s['terrains']={'evaluation':str(a.terrain)}
+if not cases:s['terrains']=s.get('evaluation_terrains',{'evaluation':str(a.terrain)})
 s.update(diagnostics=True,episode_s=a.seconds)
 if a.asset:s['asset']=str(a.asset.resolve())
 identity=json.loads((a.bundle/'identity.json').read_text());cfg=json.loads((a.bundle/'config.json').read_text());policy=TorchPathPolicy(a.bundle/'actor.npz',identity['files']['actor.npz'],cfg,s['num_envs'],'cuda');plant=None

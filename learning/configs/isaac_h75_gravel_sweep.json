@@ -1,0 +1,71 @@
+{
+  "role": "PLANNED gravel P0; do not launch until G0 accepted",
+  "reference_bundle": "runs/h75_selected_local300_flat/bundle",
+  "base_evaluation_config": "runs/h75_gravel_g0/g0_config.json",
+  "terrain_generator": "learning/cli/place_isaac_terrain.py",
+  "terrain_base_config": "runs/h75_selected_local300_bend/bump_terrain/identity.json",
+  "terrain_overrides": [
+    {
+      "name": "flat"
+    },
+    {
+      "name": "single_6cm"
+    },
+    {
+      "name": "S2"
+    },
+    {
+      "name": "S5"
+    }
+  ],
+  "user_speed_m_s": [
+    2.3,
+    2.6
+  ],
+  "initial_state_protocol": "same full saved 2.3 m/s warm state; 2.6 m/s is a command-change condition, not an equilibrated 2.6 m/s entrance",
+  "alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "include_zero": true,
+  "seconds": 10,
+  "max_physics_lane_steps": 3000000,
+  "optimizer_updates": 0,
+  "reuse": "original flat and 4cm cases at 2.3 m/s only when policy and full condition match; fresh Zero required for changed speed or terrain",
+  "start_condition": "finish current three-candidate review and record adopted policy; no automatic launch",
+  "seeds": [
+    101,
+    102,
+    103
+  ],
+  "evaluation_overrides": {
+    "trace_lanes": 144,
+    "physics_contact_recording": {
+      "chunk_steps": 250,
+      "record_window_s": [
+        0.8,
+        5.0
+      ]
+    }
+  },
+  "tasks": {
+    "A": {
+      "W_m": 0.3,
+      "speed_rmse_m_s": 0.2
+    },
+    "B": {
+      "W_m": 0.6,
+      "speed_rmse_m_s": 0.1
+    },
+    "C": {
+      "W_m": 0.4,
+      "speed_rmse_m_s": 0.15
+    }
+  },
+  "speed_window": "entire actual observed window; failures separately unqualified",
+  "planned_lanes": 144,
+  "planned_lane_physics_steps": 7200000
+}
