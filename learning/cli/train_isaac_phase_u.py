@@ -20,6 +20,7 @@ status=dict(stage='initializing',pid=os.getpid(),completed_updates=0,started=sta
 class RecordedRunner(module.OnPolicyRunner):
     def log(self,locs,width=80,pad=35):
         super().log(locs,width,pad)
+        self.writer.add_scalar('Policy/latent_action_std',self.alg.actor_critic.action_std.mean().item(),locs['it'])
         status.update(stage='training',completed_updates=locs['it']+1,stage_completed_updates=locs['it']+1-status.get('start_update',0),sample_seconds=locs['collection_time'],optimize_seconds=locs['learn_time'],elapsed_s=time.time()-start)
         (a.output/'status.json').write_text(json.dumps(status,indent=2))
 env=PhaseUEnv(cfg,a.output)

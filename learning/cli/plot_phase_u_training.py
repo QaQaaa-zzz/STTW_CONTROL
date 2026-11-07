@@ -9,6 +9,8 @@ from tensorboard.backend.event_processing.event_accumulator import EventAccumula
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('--run',type=Path,required=True);a=p.parse_args()
 events=EventAccumulator(str(a.run/'training'),size_guidance={'scalars':0});events.Reload()
 data={tag:[[v.step,v.value] for v in events.Scalars(tag)] for tag in events.Tags()['scalars']}
+# Native Go2 logs actor.std; this adapter uses that name for frozen observation normalization.
+# Do not interpret the inherited constant tag as action exploration noise.
 (a.run/'training_scalar_summary.json').write_text(json.dumps(data))
 fig,axes=plt.subplots(2,3,figsize=(14,7),layout='constrained');axes=axes.flatten()
 panels=[['Train/mean_step_reward_pre_update'],['Episode/reward'],['Episode/apex_fraction','Episode/physical_failure','Episode/failure','Episode/platform_hold_fraction'],['Loss/value_function'],['Loss/surrogate'],['Loss/learning_rate']]

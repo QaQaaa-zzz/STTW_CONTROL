@@ -17,7 +17,7 @@ Kp1到达新增14、丢失8；路廊内到达新增13、丢失6。存在净改�
 
 跳跃下一阶段：`learning/configs/isaac_rb_jump_current150.json`；从原update2的Actor/Critic/normalizer初始化、fresh Adam、固定学习率1e-4，原网络与Go2随机化，4096×24×150。50%实际入口/42%原reset/8%原airborne RSI。沿用缺速/前进/减速traversal奖励。冻结原update2、采样奖励best、last150，各36完整任务配对，原落地/链路标准不变。尚不能宣称跳跃提升或完成RB。
 
-## Go2源码核对与下一奖励阶段（已实现，尚未运行）
+## Go2源码核对与奖励阶段准备（历史状态，后续执行见下文）
 
 参考本机`My_unitree_go2_gym/legged_gym/envs/Go2_Flip/Go2_Spring_Jump`的实际配置/源码，而不是推测Go2使用最佳模型。其奖励按腾空/落地分阶段：起跳z速度、飞行高度、飞行水平速度、落点、碰撞与接触冲击；落地后水平速度罚适用于停稳任务，本车需要继续行驶所以不照搬。Go2 runner每100更新保存，默认checkpoint=-1取last，无自动best选择。本项目新增的训练采样best仅用于候选提名，不能替代固定任务合格判断。
 
@@ -42,3 +42,9 @@ Kp1到达新增14、丢失8；路廊内到达新增13、丢失6。存在净改�
 update75恢复跳跃，峰root0.585m、最大侧倾0.948°，落地后约1.5m/s，8秒未摔。严格连续支撑仅0.695s未过，不能改称原标准成功。source通过，采样reward-best1反而摔倒，说明必须固定测试选模型。
 
 平台中段姿态/非轮接触合格且轮底贴近台面，前轮接触力却频繁5–15ms低于1N。Go2源码使用current contact OR previous contact。附加20ms逐轮接触保持诊断（原几何、姿态和非轮条件不变）得到update75最长1.86s；这只是接触判读差异，不是能力提升。`platform75_landing.json`同时保留原strict和filtered结果。当前训练还未启用新增可选接触过滤，正式完整链仍按原标准计算。
+
+## 平台奖励150更新完成，固定任务评测进行中
+
+本阶段实际完成150更新、14,745,600策略转移，训练耗时1697.68秒；从原update2权重开始，fresh Adam，非退化update50续训。最后25更新相对之前25更新：采样每步reward1.07081vs1.07008、回合reward1413.46vs1308.99、物理失败.40481vs.50035、apex.65641vs.72188。不同指标有分歧，尚不判为成功收敛。训练奖励best仍为update1，已观察到其名义测试失败；用户要求优先测试最新update150，已加入同初态source/update75/update150三lane8秒诊断，完整108条配对DEV仍在运行。
+
+源码日志注意：上游Go2 runner的Policy/mean_noise_std读取actor.std，而Phase U适配器该字段是冻结观测归一化参数，当前常数4.644不能解释为探索噪声。后续进程增加Policy/latent_action_std记录实际策略分布；当前训练不受此显示问题影响。六项奖励行为测试通过。20ms过滤落地只作为附加诊断汇总，不替代strict或完整链成功标准。

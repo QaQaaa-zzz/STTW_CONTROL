@@ -9,7 +9,7 @@ p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True);r=p.
 rows=json.loads((r/'evaluation_index.json').read_text());models=list(dict.fromkeys(x['model'] for x in rows));origins=sorted({x['origin'] for x in rows})
 for row in rows:
  d=Path(row['output']);row['chain']=json.loads((d/'chain_summary.json').read_text());row['landing']=json.loads((d/'landing.json').read_text())['cases'][0];row['arrival']=(d/'handoff.json').exists()
-summary={m:dict(n=sum(x['model']==m for x in rows),arrival=sum(x['arrival'] for x in rows if x['model']==m),landing=sum(x['landing']['landing_hold_1s'] for x in rows if x['model']==m),complete=sum(x['chain']['complete'] for x in rows if x['model']==m)) for m in models}
+summary={m:dict(n=sum(x['model']==m for x in rows),arrival=sum(x['arrival'] for x in rows if x['model']==m),landing=sum(x['landing']['landing_hold_1s'] for x in rows if x['model']==m),contact_filtered_landing=sum(x['landing']['contact_filtered_20ms_hold_1s'] for x in rows if x['model']==m),complete=sum(x['chain']['complete'] for x in rows if x['model']==m)) for m in models}
 # Keep paired gains and losses rather than reporting only the net success count.
 base={x['candidate']['source_case_id']:x for x in rows if x['model']=='update2'}
 for m in models:
@@ -24,7 +24,7 @@ for origin in origins:
   route=np.load(d/'ground_route.npz')['xy'];ax.plot(*route.T,'k:',label='Original route');ax.set(title=m,xlabel='x (m)',ylabel='y (m)');ax.axis('equal');ax.legend(fontsize=7)
  fig.suptitle(origin+'; current chassis and Kp1 ground; matched DEV');fig.savefig(r/(origin+'_xy.png'),dpi=150);plt.close(fig)
 (r/'summary.json').write_text(json.dumps(dict(summary=summary,cases=rows),indent=2))
-lines=['# Current-chassis jump adaptation','','Matched DEV: six training origins, six connections per model; not independent TEST.','Original platform/contact/hold and full-chain criteria retained. Sampled training reward selects candidates, not qualification.','','|Model|Arrivals|Landing hold|Full chain|Gained / lost vs update2|','|---|---:|---:|---:|---:|']
-for m,s in summary.items():lines.append(f"|{m}|{s['arrival']}/{s['n']}|{s['landing']}/{s['n']}|{s['complete']}/{s['n']}|{s['gained']} / {s['lost']}|")
+lines=['# Current-chassis jump adaptation','','Matched DEV: six training origins, six connections per model; not independent TEST.','Original platform/contact/hold and full-chain criteria retained. Sampled training reward selects candidates, not qualification.','','|Model|Arrivals|Strict landing hold|20ms filtered landing (diagnostic)|Full chain (strict)|Gained / lost vs update2|','|---|---:|---:|---:|---:|---:|']
+for m,s in summary.items():lines.append(f"|{m}|{s['arrival']}/{s['n']}|{s['landing']}/{s['n']}|{s['contact_filtered_landing']}/{s['n']}|{s['complete']}/{s['n']}|{s['gained']} / {s['lost']}|")
 for origin in origins:lines.extend(['',f'![{origin}]({origin}_xy.png)'])
 (r/'RESULTS.md').write_text('\n'.join(lines)+'\n');print(json.dumps(summary))
