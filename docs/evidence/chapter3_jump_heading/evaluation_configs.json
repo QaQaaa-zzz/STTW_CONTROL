@@ -1,0 +1,1201 @@
+{
+  "entry_return_probe.json": {
+    "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading150/entry_return_probe",
+    "plant_config": "runs/rb_h75_ecbc_ground/left90_R2/config.json",
+    "model_config": "learning/configs/rb_sttw_platform.json",
+    "initial_state": "runs/rb_ground_standard1500/initial_state.npz",
+    "geometry": "runs/rb_sttw_platform/jump_input/geometry.json",
+    "bundles": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading150/bundles",
+    "skills": [
+      "parent150",
+      "parent150",
+      "parent150",
+      "parent150",
+      "parent150",
+      "parent150",
+      "parent150",
+      "parent150",
+      "parent150",
+      "parent150",
+      "parent150",
+      "parent150",
+      "parent150",
+      "parent150",
+      "parent150",
+      "parent150",
+      "parent150",
+      "parent150",
+      "parent150",
+      "parent150",
+      "parent150",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125"
+    ],
+    "start_x": 2.0,
+    "approach_speed": 2.0,
+    "seconds": 8.0,
+    "handoff_x": 2.0,
+    "physics_dt": 0.0025,
+    "gpu_pair_capacities": [
+      1048576,
+      1048576,
+      1048576
+    ],
+    "zero_initial_history": true,
+    "root_acceleration_difference": true,
+    "jump_steering_gains": [
+      2.5,
+      0.4
+    ],
+    "optimizer_updates": 0,
+    "maximum_physics_lane_steps": 134400,
+    "role": "Post-entry only; same21 saved states, jump then H75 return. Not a repeated full-approach success claim",
+    "scene_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading150/runout_terrain",
+    "record_body_states": true,
+    "landing_return": {
+      "support_s": 1.0,
+      "speed_m_s": 1.5,
+      "minimum_handoff_speed_m_s": 1.2,
+      "acceleration_m_s2": 0.8,
+      "alpha": 0.5,
+      "contact_filter_s": 0.02
+    },
+    "ground_bundle": "runs/rb_h75_ecbc_ground/left90_R2/bundle",
+    "ground_settings": "runs/rb_h75_ecbc_ground/left90_R2/config.json",
+    "ground_initial_state": "runs/rb_ground_standard1500/initial_state.npz",
+    "zero_lower": true,
+    "ground_alpha": 0.5,
+    "ground_after_landing_only": false,
+    "terrain_base_plane": false,
+    "start_y": 0.0,
+    "start_heading_rad": 1.5792977277427778,
+    "platform_front_x": 3.6,
+    "platform_back_x": 7.6,
+    "completion": {
+      "corridor_half_width_m": 1.0,
+      "waypoints": [
+        [
+          2.0,
+          0.0
+        ]
+      ],
+      "waypoint_radius_m": 1.0,
+      "minimum_post_handoff_s": 2.0,
+      "minimum_post_handoff_forward_m": 2.0,
+      "final_goal_xy": [
+        10.6,
+        0.0
+      ]
+    },
+    "protocol_id": "contact_persistence20ms_handoff_dev",
+    "origin_id": "saved_entry_bank_21",
+    "candidate_id": "v2.0_a0.5",
+    "connection_candidate": {
+      "decision_x_m": -2.0,
+      "speed_m_s": 2.0,
+      "alpha": 0.5
+    },
+    "initial_offset": {
+      "lateral_m": -0.06622033774001246,
+      "yaw_deg": 0.48709439426211176
+    },
+    "data_split": "train",
+    "batch_candidates": [
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 2.0,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a0.5_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 1.8,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a0.5_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 1.8,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a1.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 2.0,
+        "alpha": 0.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a0.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 2.0,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root002_L5.6_v2.0_a0.5_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 1.8,
+        "alpha": 0.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root002_L5.6_v1.8_a0.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 1.8,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root002_L5.6_v1.8_a1.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 2.0,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root002_L5.6_v2.0_a1.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 2.0,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root003_L5.6_v2.0_a0.5_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 1.8,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root003_L5.6_v1.8_a0.5_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 2.0,
+        "alpha": 0.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root003_L5.6_v2.0_a0.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 2.0,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root003_L5.6_v2.0_a1.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 1.8,
+        "alpha": 0.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root004_L5.6_v1.8_a0.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 1.8,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root004_L5.6_v1.8_a0.5_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 2.0,
+        "alpha": 0.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root004_L5.6_v2.0_a0.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 2.0,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root004_L5.6_v2.0_a1.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 1.8,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root005_L5.6_v1.8_a0.5_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 1.8,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root005_L5.6_v1.8_a1.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 2.0,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root005_L5.6_v2.0_a1.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 1.8,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root008_L5.6_v1.8_a1.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 2.0,
+        "alpha": 0.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root008_L5.6_v2.0_a0.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 2.0,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a0.5_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 1.8,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a0.5_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 1.8,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a1.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 2.0,
+        "alpha": 0.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a0.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 2.0,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root002_L5.6_v2.0_a0.5_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 1.8,
+        "alpha": 0.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root002_L5.6_v1.8_a0.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 1.8,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root002_L5.6_v1.8_a1.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 2.0,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root002_L5.6_v2.0_a1.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 2.0,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root003_L5.6_v2.0_a0.5_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 1.8,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root003_L5.6_v1.8_a0.5_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 2.0,
+        "alpha": 0.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root003_L5.6_v2.0_a0.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 2.0,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root003_L5.6_v2.0_a1.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 1.8,
+        "alpha": 0.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root004_L5.6_v1.8_a0.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 1.8,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root004_L5.6_v1.8_a0.5_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 2.0,
+        "alpha": 0.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root004_L5.6_v2.0_a0.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 2.0,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root004_L5.6_v2.0_a1.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 1.8,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root005_L5.6_v1.8_a0.5_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 1.8,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root005_L5.6_v1.8_a1.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 2.0,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root005_L5.6_v2.0_a1.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 1.8,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root008_L5.6_v1.8_a1.0_update2"
+      },
+      {
+        "decision_x_m": -2.0,
+        "speed_m_s": 2.0,
+        "alpha": 0.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root008_L5.6_v2.0_a0.0_update2"
+      }
+    ],
+    "rear_speed_feedback_gain": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "stop_at_ground_handoff": false,
+    "initial_state_bank": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rear_comp_approach/entry_bank/entries.npz",
+    "entry_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ]
+  },
+  "return_alpha0_root000.json": {
+    "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading150/return_alpha0_root000",
+    "plant_config": "runs/rb_h75_ecbc_ground/left90_R2/config.json",
+    "model_config": "learning/configs/rb_sttw_platform.json",
+    "initial_state": "runs/rb_ground_standard1500/initial_state.npz",
+    "geometry": "runs/rb_sttw_platform/jump_input/geometry.json",
+    "bundles": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading150/bundles",
+    "skills": [
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125"
+    ],
+    "start_x": -3.9337796622599877,
+    "approach_speed": 2.0,
+    "seconds": 22.0,
+    "handoff_x": 2.0,
+    "physics_dt": 0.0025,
+    "gpu_pair_capacities": [
+      1048576,
+      1048576,
+      1048576
+    ],
+    "zero_initial_history": true,
+    "root_acceleration_difference": true,
+    "jump_steering_gains": [
+      2.5,
+      0.4
+    ],
+    "optimizer_updates": 0,
+    "maximum_physics_lane_steps": 52800,
+    "role": "DEV: candidate125, ground return alpha0 vs previously measured alpha0.5; six full routes, no training",
+    "scene_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading150/chain_runout_terrain",
+    "record_body_states": true,
+    "landing_return": {
+      "support_s": 1.0,
+      "speed_m_s": 1.5,
+      "minimum_handoff_speed_m_s": 1.2,
+      "acceleration_m_s2": 0.8,
+      "alpha": 0.0,
+      "contact_filter_s": 0.02
+    },
+    "ground_bundle": "runs/rb_h75_ecbc_ground/left90_R2/bundle",
+    "ground_settings": "runs/rb_h75_ecbc_ground/left90_R2/config.json",
+    "ground_initial_state": "runs/rb_ground_standard1500/initial_state.npz",
+    "zero_lower": true,
+    "ground_alpha": 0.5,
+    "ground_after_landing_only": false,
+    "terrain_base_plane": true,
+    "ground_route": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading150/rb_connection_seed20261106_root000_runout_route.npz",
+    "start_y": -9.0,
+    "start_heading_rad": 1.5792977277427778,
+    "platform_front_x": 3.6,
+    "platform_back_x": 7.6,
+    "completion": {
+      "corridor_half_width_m": 1.0,
+      "waypoints": [
+        [
+          -4.0,
+          -8.0
+        ],
+        [
+          -4.0,
+          -4.8
+        ],
+        [
+          -4.0,
+          -2
+        ],
+        [
+          -2.0,
+          0
+        ],
+        [
+          2.0,
+          0
+        ]
+      ],
+      "waypoint_radius_m": 1.0,
+      "minimum_post_handoff_s": 2.0,
+      "minimum_post_handoff_forward_m": 2.0,
+      "final_goal_xy": [
+        10.6,
+        0.0
+      ]
+    },
+    "protocol_id": "ch3_jump_connection_hold_v1",
+    "origin_id": "rb_connection_seed20261106_root000",
+    "candidate_id": "v2.0_a0.5",
+    "connection_candidate": {
+      "decision_x_m": -2.0,
+      "speed_m_s": 2.0,
+      "alpha": 0.5
+    },
+    "initial_offset": {
+      "lateral_m": -0.06622033774001246,
+      "yaw_deg": 0.48709439426211176
+    },
+    "data_split": "train",
+    "batch_candidates": [
+      {
+        "speed_m_s": 2.0,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a0.5_update2"
+      },
+      {
+        "speed_m_s": 1.8,
+        "alpha": 0.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a0.0_update2"
+      },
+      {
+        "speed_m_s": 1.8,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a0.5_update2"
+      },
+      {
+        "speed_m_s": 1.8,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a1.0_update2"
+      },
+      {
+        "speed_m_s": 2.0,
+        "alpha": 0.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a0.0_update2"
+      },
+      {
+        "speed_m_s": 2.0,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a1.0_update2"
+      }
+    ],
+    "rear_speed_feedback_gain": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "stop_at_ground_handoff": false
+  },
+  "return_progress_fix_root000.json": {
+    "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading150/return_progress_fix_root000",
+    "plant_config": "runs/rb_h75_ecbc_ground/left90_R2/config.json",
+    "model_config": "learning/configs/rb_sttw_platform.json",
+    "initial_state": "runs/rb_ground_standard1500/initial_state.npz",
+    "geometry": "runs/rb_sttw_platform/jump_input/geometry.json",
+    "bundles": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading150/bundles",
+    "skills": [
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125"
+    ],
+    "start_x": -3.9337796622599877,
+    "approach_speed": 2.0,
+    "seconds": 22.0,
+    "handoff_x": 2.0,
+    "physics_dt": 0.0025,
+    "gpu_pair_capacities": [
+      1048576,
+      1048576,
+      1048576
+    ],
+    "zero_initial_history": true,
+    "root_acceleration_difference": true,
+    "jump_steering_gains": [
+      2.5,
+      0.4
+    ],
+    "optimizer_updates": 0,
+    "maximum_physics_lane_steps": 52800,
+    "role": "DEV: correct H75 first reference/history initialization at landing progress; same alpha.5 as baseline",
+    "scene_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading150/chain_runout_terrain",
+    "record_body_states": true,
+    "landing_return": {
+      "support_s": 1.0,
+      "speed_m_s": 1.5,
+      "minimum_handoff_speed_m_s": 1.2,
+      "acceleration_m_s2": 0.8,
+      "alpha": 0.5,
+      "contact_filter_s": 0.02
+    },
+    "ground_bundle": "runs/rb_h75_ecbc_ground/left90_R2/bundle",
+    "ground_settings": "runs/rb_h75_ecbc_ground/left90_R2/config.json",
+    "ground_initial_state": "runs/rb_ground_standard1500/initial_state.npz",
+    "zero_lower": true,
+    "ground_alpha": 0.5,
+    "ground_after_landing_only": false,
+    "terrain_base_plane": true,
+    "ground_route": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading150/rb_connection_seed20261106_root000_runout_route.npz",
+    "start_y": -9.0,
+    "start_heading_rad": 1.5792977277427778,
+    "platform_front_x": 3.6,
+    "platform_back_x": 7.6,
+    "completion": {
+      "corridor_half_width_m": 1.0,
+      "waypoints": [
+        [
+          -4.0,
+          -8.0
+        ],
+        [
+          -4.0,
+          -4.8
+        ],
+        [
+          -4.0,
+          -2
+        ],
+        [
+          -2.0,
+          0
+        ],
+        [
+          2.0,
+          0
+        ]
+      ],
+      "waypoint_radius_m": 1.0,
+      "minimum_post_handoff_s": 2.0,
+      "minimum_post_handoff_forward_m": 2.0,
+      "final_goal_xy": [
+        10.6,
+        0.0
+      ]
+    },
+    "protocol_id": "ch3_jump_connection_hold_v1",
+    "origin_id": "rb_connection_seed20261106_root000",
+    "candidate_id": "v2.0_a0.5",
+    "connection_candidate": {
+      "decision_x_m": -2.0,
+      "speed_m_s": 2.0,
+      "alpha": 0.5
+    },
+    "initial_offset": {
+      "lateral_m": -0.06622033774001246,
+      "yaw_deg": 0.48709439426211176
+    },
+    "data_split": "train",
+    "batch_candidates": [
+      {
+        "speed_m_s": 2.0,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a0.5_update2"
+      },
+      {
+        "speed_m_s": 1.8,
+        "alpha": 0.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a0.0_update2"
+      },
+      {
+        "speed_m_s": 1.8,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a0.5_update2"
+      },
+      {
+        "speed_m_s": 1.8,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a1.0_update2"
+      },
+      {
+        "speed_m_s": 2.0,
+        "alpha": 0.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a0.0_update2"
+      },
+      {
+        "speed_m_s": 2.0,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a1.0_update2"
+      }
+    ],
+    "rear_speed_feedback_gain": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "stop_at_ground_handoff": false
+  },
+  "rb_connection_seed20261106_root000_chain_runout.json": {
+    "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading150/chain_runout/rb_connection_seed20261106_root000",
+    "plant_config": "runs/rb_h75_ecbc_ground/left90_R2/config.json",
+    "model_config": "learning/configs/rb_sttw_platform.json",
+    "initial_state": "runs/rb_ground_standard1500/initial_state.npz",
+    "geometry": "runs/rb_sttw_platform/jump_input/geometry.json",
+    "bundles": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading150/bundles",
+    "skills": [
+      "parent150",
+      "parent150",
+      "parent150",
+      "parent150",
+      "parent150",
+      "parent150",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125"
+    ],
+    "start_x": -3.9337796622599877,
+    "approach_speed": 2.0,
+    "seconds": 22.0,
+    "handoff_x": 2.0,
+    "physics_dt": 0.0025,
+    "gpu_pair_capacities": [
+      1048576,
+      1048576,
+      1048576
+    ],
+    "zero_initial_history": true,
+    "root_acceleration_difference": true,
+    "jump_steering_gains": [
+      2.5,
+      0.4
+    ],
+    "optimizer_updates": 0,
+    "maximum_physics_lane_steps": 105600,
+    "role": "DEV forward road/ground runout extended25to35 beyond original10.6 goal; original22s/full corridor/1s handback retained; matched parent150 vs heading125",
+    "scene_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading150/chain_runout_terrain",
+    "record_body_states": true,
+    "landing_return": {
+      "support_s": 1.0,
+      "speed_m_s": 1.5,
+      "minimum_handoff_speed_m_s": 1.2,
+      "acceleration_m_s2": 0.8,
+      "alpha": 0.5,
+      "contact_filter_s": 0.02
+    },
+    "ground_bundle": "runs/rb_h75_ecbc_ground/left90_R2/bundle",
+    "ground_settings": "runs/rb_h75_ecbc_ground/left90_R2/config.json",
+    "ground_initial_state": "runs/rb_ground_standard1500/initial_state.npz",
+    "zero_lower": true,
+    "ground_alpha": 0.5,
+    "ground_after_landing_only": false,
+    "terrain_base_plane": true,
+    "ground_route": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading150/rb_connection_seed20261106_root000_runout_route.npz",
+    "start_y": -9.0,
+    "start_heading_rad": 1.5792977277427778,
+    "platform_front_x": 3.6,
+    "platform_back_x": 7.6,
+    "completion": {
+      "corridor_half_width_m": 1.0,
+      "waypoints": [
+        [
+          -4.0,
+          -8.0
+        ],
+        [
+          -4.0,
+          -4.8
+        ],
+        [
+          -4.0,
+          -2
+        ],
+        [
+          -2.0,
+          0
+        ],
+        [
+          2.0,
+          0
+        ]
+      ],
+      "waypoint_radius_m": 1.0,
+      "minimum_post_handoff_s": 2.0,
+      "minimum_post_handoff_forward_m": 2.0,
+      "final_goal_xy": [
+        10.6,
+        0.0
+      ]
+    },
+    "protocol_id": "ch3_jump_connection_hold_v1",
+    "origin_id": "rb_connection_seed20261106_root000",
+    "candidate_id": "v2.0_a0.5",
+    "connection_candidate": {
+      "decision_x_m": -2.0,
+      "speed_m_s": 2.0,
+      "alpha": 0.5
+    },
+    "initial_offset": {
+      "lateral_m": -0.06622033774001246,
+      "yaw_deg": 0.48709439426211176
+    },
+    "data_split": "train",
+    "batch_candidates": [
+      {
+        "speed_m_s": 2.0,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a0.5_update2"
+      },
+      {
+        "speed_m_s": 1.8,
+        "alpha": 0.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a0.0_update2"
+      },
+      {
+        "speed_m_s": 1.8,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a0.5_update2"
+      },
+      {
+        "speed_m_s": 1.8,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a1.0_update2"
+      },
+      {
+        "speed_m_s": 2.0,
+        "alpha": 0.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a0.0_update2"
+      },
+      {
+        "speed_m_s": 2.0,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a1.0_update2"
+      },
+      {
+        "speed_m_s": 2.0,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a0.5_update2"
+      },
+      {
+        "speed_m_s": 1.8,
+        "alpha": 0.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a0.0_update2"
+      },
+      {
+        "speed_m_s": 1.8,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a0.5_update2"
+      },
+      {
+        "speed_m_s": 1.8,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a1.0_update2"
+      },
+      {
+        "speed_m_s": 2.0,
+        "alpha": 0.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a0.0_update2"
+      },
+      {
+        "speed_m_s": 2.0,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a1.0_update2"
+      }
+    ],
+    "rear_speed_feedback_gain": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "stop_at_ground_handoff": false
+  },
+  "rb_connection_seed20261106_root003_chain_runout.json": {
+    "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading150/chain_runout/rb_connection_seed20261106_root003",
+    "plant_config": "runs/rb_h75_ecbc_ground/left90_R2/config.json",
+    "model_config": "learning/configs/rb_sttw_platform.json",
+    "initial_state": "runs/rb_ground_standard1500/initial_state.npz",
+    "geometry": "runs/rb_sttw_platform/jump_input/geometry.json",
+    "bundles": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading150/bundles",
+    "skills": [
+      "parent150",
+      "parent150",
+      "parent150",
+      "parent150",
+      "parent150",
+      "parent150",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125",
+      "heading125"
+    ],
+    "start_x": -3.9346412935390243,
+    "approach_speed": 2.0,
+    "seconds": 22.0,
+    "handoff_x": 2.0,
+    "physics_dt": 0.0025,
+    "gpu_pair_capacities": [
+      1048576,
+      1048576,
+      1048576
+    ],
+    "zero_initial_history": true,
+    "root_acceleration_difference": true,
+    "jump_steering_gains": [
+      2.5,
+      0.4
+    ],
+    "optimizer_updates": 0,
+    "maximum_physics_lane_steps": 105600,
+    "role": "DEV forward road/ground runout extended25to35 beyond original10.6 goal; original22s/full corridor/1s handback retained; matched parent150 vs heading125",
+    "scene_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading150/chain_runout_terrain",
+    "record_body_states": true,
+    "landing_return": {
+      "support_s": 1.0,
+      "speed_m_s": 1.5,
+      "minimum_handoff_speed_m_s": 1.2,
+      "acceleration_m_s2": 0.8,
+      "alpha": 0.5,
+      "contact_filter_s": 0.02
+    },
+    "ground_bundle": "runs/rb_h75_ecbc_ground/left90_R2/bundle",
+    "ground_settings": "runs/rb_h75_ecbc_ground/left90_R2/config.json",
+    "ground_initial_state": "runs/rb_ground_standard1500/initial_state.npz",
+    "zero_lower": true,
+    "ground_alpha": 0.5,
+    "ground_after_landing_only": false,
+    "terrain_base_plane": true,
+    "ground_route": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading150/rb_connection_seed20261106_root003_runout_route.npz",
+    "start_y": -9.0,
+    "start_heading_rad": 1.585357852704017,
+    "platform_front_x": 3.6,
+    "platform_back_x": 7.6,
+    "completion": {
+      "corridor_half_width_m": 1.0,
+      "waypoints": [
+        [
+          -4.0,
+          -8.0
+        ],
+        [
+          -4.0,
+          -4.8
+        ],
+        [
+          -4.0,
+          -2
+        ],
+        [
+          -2.0,
+          0
+        ],
+        [
+          2.0,
+          0
+        ]
+      ],
+      "waypoint_radius_m": 1.0,
+      "minimum_post_handoff_s": 2.0,
+      "minimum_post_handoff_forward_m": 2.0,
+      "final_goal_xy": [
+        10.6,
+        0.0
+      ]
+    },
+    "protocol_id": "ch3_jump_connection_hold_v1",
+    "origin_id": "rb_connection_seed20261106_root003",
+    "candidate_id": "v2.0_a0.5",
+    "connection_candidate": {
+      "decision_x_m": -2.0,
+      "speed_m_s": 2.0,
+      "alpha": 0.5
+    },
+    "initial_offset": {
+      "lateral_m": -0.06535870646097579,
+      "yaw_deg": 0.8343139778630078
+    },
+    "data_split": "train",
+    "batch_candidates": [
+      {
+        "speed_m_s": 2.0,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root003_L5.6_v2.0_a0.5_update2"
+      },
+      {
+        "speed_m_s": 1.8,
+        "alpha": 0.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root003_L5.6_v1.8_a0.0_update2"
+      },
+      {
+        "speed_m_s": 1.8,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root003_L5.6_v1.8_a0.5_update2"
+      },
+      {
+        "speed_m_s": 1.8,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root003_L5.6_v1.8_a1.0_update2"
+      },
+      {
+        "speed_m_s": 2.0,
+        "alpha": 0.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root003_L5.6_v2.0_a0.0_update2"
+      },
+      {
+        "speed_m_s": 2.0,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root003_L5.6_v2.0_a1.0_update2"
+      },
+      {
+        "speed_m_s": 2.0,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root003_L5.6_v2.0_a0.5_update2"
+      },
+      {
+        "speed_m_s": 1.8,
+        "alpha": 0.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root003_L5.6_v1.8_a0.0_update2"
+      },
+      {
+        "speed_m_s": 1.8,
+        "alpha": 0.5,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root003_L5.6_v1.8_a0.5_update2"
+      },
+      {
+        "speed_m_s": 1.8,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root003_L5.6_v1.8_a1.0_update2"
+      },
+      {
+        "speed_m_s": 2.0,
+        "alpha": 0.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root003_L5.6_v2.0_a0.0_update2"
+      },
+      {
+        "speed_m_s": 2.0,
+        "alpha": 1.0,
+        "rear_speed_feedback_gain": 1,
+        "source_case_id": "rb_connection_seed20261106_root003_L5.6_v2.0_a1.0_update2"
+      }
+    ],
+    "rear_speed_feedback_gain": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "stop_at_ground_handoff": false
+  }
+}

@@ -1,0 +1,128 @@
+[
+  {
+    "lane": "lane_00",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "complete": true,
+      "success_time_s": 12.020000457763672,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 0.47986316680908203
+  },
+  {
+    "lane": "lane_01",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": true,
+        "original_path_corridor": false,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "complete": false,
+      "success_time_s": null,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 1.0217628479003906
+  },
+  {
+    "lane": "lane_02",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "complete": false,
+      "success_time_s": null,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 0.5085182189941406
+  },
+  {
+    "lane": "lane_03",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "complete": true,
+      "success_time_s": 12.039999961853027,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 0.3384895324707031
+  },
+  {
+    "lane": "lane_04",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": false,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "complete": false,
+      "success_time_s": null,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 1.1638228124449486
+  },
+  {
+    "lane": "lane_05",
+    "strict": true,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "complete": true,
+      "success_time_s": 12.539999961853027,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 0.6976124885766869
+  }
+]

@@ -37,20 +37,20 @@ class TorchMiddleControl:
         obs=torch.cat(((self.frames/self.scales).flatten(1),self.mask,context/self.context_scales),dim=-1)
         return obs.clamp(-5,5),~torch.isfinite(obs).all(-1)
 
-    def reset(self,measurement,pose,speed,raw,previous_reference,previous_command,controller):
+    def reset(self,measurement,pose,speed,raw,previous_reference,previous_command,controller,initial_progress=None):
         self.policy.reset(slice(None));self.frames.zero_();self.mask.zero_()
         self.tick=0;self.pose=pose.clone();self.yaw_rate=torch.zeros_like(speed)
-        self.projection=self.route.project(pose[:,:2],torch.zeros_like(speed),torch.zeros_like(speed))
+        self.projection=self.route.project(pose[:,:2],torch.zeros_like(speed) if initial_progress is None else initial_progress,torch.zeros_like(speed))
         self.follower=self.route.pursuit(self.projection['progress'],pose,speed,self.v_user)
         self.nominal,self.rates=self.route.publish(raw,self.follower['command'])
         self.fault=self.follower['numerical_fault'].clone();self.domain_exit=self.follower['invalid'].clone()
         self.record(measurement,speed,previous_reference,previous_command,torch.zeros_like(raw),controller)
 
-    def reset_lanes(self,indices,measurement,pose,speed,raw,previous_reference,previous_command,controller):
+    def reset_lanes(self,indices,measurement,pose,speed,raw,previous_reference,previous_command,controller,initial_progress=None):
         """Initialize returning lanes at a policy boundary without resetting peers."""
         self.policy.reset(indices);self.frames[indices]=0.;self.mask[indices]=0.
         self.pose[indices]=pose[indices];self.yaw_rate[indices]=0.
-        projection=self.route.project(pose[:,:2],torch.zeros_like(speed),torch.zeros_like(speed))
+        projection=self.route.project(pose[:,:2],torch.zeros_like(speed) if initial_progress is None else initial_progress,torch.zeros_like(speed))
         follower=self.route.pursuit(projection['progress'],pose,speed,self.v_user)
         nominal,rates=self.route.publish(raw,follower['command'])
         for key,value in projection.items():self.projection[key][indices]=value[indices]

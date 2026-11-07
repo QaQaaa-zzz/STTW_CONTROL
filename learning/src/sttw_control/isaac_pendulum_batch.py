@@ -9,7 +9,7 @@ from .pendulum_landing import platform_support_mask
 
 
 @torch.no_grad()
-def run_connection_batch(spec, out, plant, ground, policies, history, geometry):
+def run_connection_batch(spec, out, plant, ground, policies, history, geometry, entry=None):
     from isaaclab.utils.math import euler_xyz_from_quat
     n=plant.count;device=plant.device;dt=plant.physics_dt
     candidates=spec['batch_candidates'];steps=round(spec['seconds']/.005)
@@ -18,7 +18,7 @@ def run_connection_batch(spec, out, plant, ground, policies, history, geometry):
     decided=active.clone();entered=active.clone();consumed=active.clone();ready=active.clone()
     contact_age=torch.full((n,2),float('inf'),device=device)
     landing_ticks=torch.zeros(n,device=device,dtype=torch.long);transition_speed=torch.zeros(n,device=device)
-    last=torch.zeros(n,4,device=device);target=last.clone();acceleration=torch.zeros(n,3,device=device)
+    last=torch.zeros(n,4,device=device) if entry is None else entry['last_action'].clone();target=torch.zeros_like(last);acceleration=torch.zeros(n,3,device=device)
     previous_velocity=plant.roots[:,7:10].clone();block_velocity=previous_velocity.clone()
     rows=[];valid=[];actions=[];body_rows=[];contact_rows=[];observations=[]
     ground_commands=[];jump_commands=[];arm_commands=[];phases=[]
@@ -58,7 +58,7 @@ def run_connection_batch(spec, out, plant, ground, policies, history, geometry):
             ground.alpha.copy_(torch.where(crossing,requested_alpha,ground.alpha));decided|=crossing
             inside=(root[:,0]>=spec['platform_front_x']-1.1)&(root[:,0]<=spec['platform_front_x']+.4)
             consumed|=entered&~inside;entered|=inside;signal=(inside&~consumed).float()
-            obs=torch.cat((history.frames.flatten(1),signal[:,None]),-1) if global_tick==0 and spec.get('zero_initial_history',False) else history.advance(root,plant.dofs[:,:,0],plant.dofs[:,:,1],acceleration,distance,last,signal)
+            obs=entry['observation'] if global_tick==0 and entry is not None else torch.cat((history.frames.flatten(1),signal[:,None]),-1) if global_tick==0 and spec.get('zero_initial_history',False) else history.advance(root,plant.dofs[:,:,0],plant.dofs[:,:,1],acceleration,distance,last,signal)
             observations.append(obs.clone())
             switching=alive&~active&~returned&(root[:,0]>=spec['handoff_x'])
             ids=switching.nonzero().flatten()

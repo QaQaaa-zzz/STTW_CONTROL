@@ -26,9 +26,10 @@ class PhaseUEnv:
         x,y,z=5.6,0.,0.;sx,sy,sz=2.,1.,.16
         vertices=np.array([[x+dx*sx,y+dy*sy,z+dz*sz] for dx,dy,dz in [(-1,-1,-1),(1,-1,-1),(1,1,-1),(-1,1,-1),(-1,-1,1),(1,-1,1),(1,1,1),(-1,1,1)]],dtype=np.float32)
         triangles=np.array([[0,2,1],[0,3,2],[4,5,6],[4,6,7],[0,1,5],[0,5,4],[1,2,6],[1,6,5],[2,3,7],[2,7,6],[3,0,4],[3,4,7],[8,9,10],[8,10,11]],dtype=np.int32)
-        vertices=np.concatenate((vertices,np.array([[-5,-4,0],[15,-4,0],[15,4,0],[-5,4,0]],dtype=np.float32)))
+        ground_end=cfg.get('ground_end_x_m',15.)
+        vertices=np.concatenate((vertices,np.array([[-5,-4,0],[ground_end,-4,0],[ground_end,4,0],[-5,4,0]],dtype=np.float32)))
         np.savez(terrain/'terrain.npz',vertices=vertices,triangles=triangles)
-        (terrain/'identity.json').write_text(json.dumps(dict(sha256=hashlib.sha256((terrain/'terrain.npz').read_bytes()).hexdigest(),platform_front_x=3.6,platform_top_z=.16)))
+        (terrain/'identity.json').write_text(json.dumps(dict(sha256=hashlib.sha256((terrain/'terrain.npz').read_bytes()).hexdigest(),platform_front_x=3.6,platform_top_z=.16,ground_bounds_x_m=[-5,ground_end],ground_bounds_y_m=[-4,4])))
         self.plant=IsaacLabVectorPlant(Path(cfg['asset']),[str(terrain)],[0]*self.num_envs,Path(output),**cfg['plant_options'])
         self.physics_substeps=round(self.dt/self.plant.physics_dt)
         self.sensor_substeps=round(self.rand['sensor_dt_s']/self.plant.physics_dt)

@@ -1,0 +1,58 @@
+{
+  "training_config": "learning/configs/isaac_rb_jump_heading150.json",
+  "source_checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/adaptation/training/model_update_00150.pt",
+  "num_envs": 4096,
+  "updates": 150,
+  "physics_dt": 0.0025,
+  "lower_dt": 0.005,
+  "policy_dt": 0.02,
+  "actor_input_dim": 80,
+  "critic_input_dim": 106,
+  "hidden_sizes": [
+    256,
+    256,
+    256
+  ],
+  "activation": "SiLU",
+  "heading_features": [
+    "platform_y_m",
+    "sin_platform_yaw",
+    "cos_platform_yaw_minus_one",
+    "platform_vy_m_s"
+  ],
+  "heading_observation_noise": [
+    0.01,
+    0.005,
+    0.005,
+    0.02
+  ],
+  "algorithm": {
+    "value_loss_coef": 1.0,
+    "use_clipped_value_loss": true,
+    "clip_param": 0.2,
+    "entropy_coef": 0.01,
+    "num_learning_epochs": 5,
+    "num_mini_batches": 4,
+    "learning_rate": 0.0001,
+    "schedule": "fixed",
+    "gamma": 0.99,
+    "lam": 0.95,
+    "desired_kl": 0.01,
+    "max_grad_norm": 1.0,
+    "sym_loss": false
+  },
+  "runner": {
+    "policy_class_name": "PhaseUActorCritic",
+    "algorithm_class_name": "PPO",
+    "num_steps_per_env": 24,
+    "max_iterations": 150,
+    "save_interval": 25,
+    "experiment_name": "go2_spring_jump",
+    "run_name": "",
+    "resume": false,
+    "load_run": -1,
+    "checkpoint": -1,
+    "resume_path": null
+  },
+  "final_evaluation": "parent150, sampled best, heading100, heading_last; 21 matched entries each; 84 total; no handback"
+}

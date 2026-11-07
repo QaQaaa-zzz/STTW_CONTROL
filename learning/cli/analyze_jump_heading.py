@@ -15,12 +15,13 @@ for run in a.runs:
  spec=json.loads((run/'protocol.json').read_text())['spec']
  mount=json.loads(Path(spec['model_config']).read_text())['mount_rotation_wxyz']
  rotation=Rotation.from_quat(mount[1:]+mount[:1])
- fig,axes=plt.subplots(3,2,figsize=(13,12),layout='constrained')
+ models=list(dict.fromkeys(spec['skills']))
+ fig,axes=plt.subplots(3,len(models),figsize=(6.5*len(models),12),layout='constrained',squeeze=False)
  for lane,d in enumerate(sorted(run.glob('lane_*'))):
   data=np.load(d/'trajectory.npz');mask=data['valid'][:,0];trace=data['trace'][mask,0]
   body=np.load(d/'body_contact.npz');root=body['body_state'][mask,0,list(body['body_names']).index('chasis')]
   yaw=(Rotation.from_quat(root[:,3:7])*rotation).as_euler('xyz')[:,2]
-  model=spec['skills'][lane];col=0 if lane<len(spec['skills'])//2 else 1
+  model=spec['skills'][lane];col=models.index(model)
   candidate=spec['batch_candidates'][lane];label=f"v={candidate['speed_m_s']}, alpha={candidate['alpha']}"
   color={0:'#0072B2',.5:'#D55E00',1:'#009E73'}[candidate['alpha']]
   style='-' if candidate['speed_m_s']==2 else '--'
@@ -41,7 +42,7 @@ for run in a.runs:
    selected=trace[:,0]>=entry['events']['handoff']['time_s']
    entry['post_jump']=dict(max_abs_y_m=float(abs(trace[selected,2]).max()),max_abs_yaw_deg=float(np.rad2deg(abs(yaw[selected])).max()),final_y_m=float(trace[-1,2]),final_yaw_deg=float(np.rad2deg(yaw[-1])),end_time_s=float(trace[-1,0]))
   records.append(entry);axes[0,col].set_title(model)
- for col in range(2):
+ for col in range(len(models)):
   axes[0,col].plot(route[:,0],route[:,1],':',color='black',label='Original route');axes[0,col].set_aspect('equal',adjustable='datalim');axes[0,col].set(xlabel='World x (m)',ylabel='World y (m)');axes[0,col].legend(fontsize=7)
   axes[1,col].set(xlabel='Time (s)',ylabel='Body yaw (deg)')
   axes[2,col].set(xlabel='Time (s)',ylabel='World y (m); jump centreline y=0')

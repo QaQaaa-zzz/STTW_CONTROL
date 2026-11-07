@@ -44,7 +44,7 @@ class IsaacPathRollout:
         if settings.get('initial_state'):
             data=np.load(settings['initial_state']);order=[list(data['joint_names']).index(k) for k in self.plant.joints]
             self.initial_state={key:torch.as_tensor(data[key],device=self.device,dtype=torch.float32) for key in ('root_pose','root_velocity','eso','disturbance','gains','previous_reference','previous_command','raw')}
-            for key in ('joint_position','joint_velocity'):self.initial_state[key]=torch.as_tensor(data[key][order],device=self.device,dtype=torch.float32)
+            for key in ('joint_position','joint_velocity'):self.initial_state[key]=torch.as_tensor(data[key][...,order],device=self.device,dtype=torch.float32)
             self.initial_physical_tick=int(data['physical_tick'])
         self.reset()
 
@@ -212,20 +212,15 @@ class IsaacPathRollout:
         measurement,pose,velocity=self.plant.observe();self.measurement[indices]=measurement[indices]
         self.previous_reference[indices]=torch.stack((velocity,measurement[:,2]),-1)[indices]
         self.previous_command[indices]=torch.stack((measurement[:,3],measurement[:,5]),-1)[indices]
+        points=self.route.xy[self.route.route_ids] if self.route.batched else self.route.xy[None]
+        nearest=(points-pose[:,None,:2]).square().sum(-1).argmin(-1)
+        progress=self.route.s[nearest]
         args=(measurement,pose,velocity,self.previous_reference,self.previous_reference,self.previous_command,self.controller)
         if len(indices)==self.n:
-            self.middle.reset(*args);self.tick=0
-        else:self.middle.reset_lanes(indices,*args)
+            self.middle.reset(*args,initial_progress=progress);self.tick=0
+        else:self.middle.reset_lanes(indices,*args,initial_progress=progress)
         self.task_tick[indices]=0
-        points=self.route.xy if self.route.batched else self.route.xy[None]
-        nearest=(points-pose[:,None,:2]).square().sum(-1).argmin(-1)
-        projection=self.route.project(pose[:,:2],self.route.s[nearest],torch.zeros_like(velocity))
-        follower=self.route.pursuit(projection['progress'],pose,velocity,self.speed)
-        for key,value in projection.items():self.middle.projection[key][indices]=value[indices]
-        for key,value in follower.items():self.middle.follower[key][indices]=value[indices]
-        self.preference_progress[indices]=projection['progress'][indices]
-        self.middle.fault[indices]=follower['numerical_fault'][indices]
-        self.middle.domain_exit[indices]=follower['invalid'][indices]
+        self.preference_progress[indices]=self.middle.projection['progress'][indices]
 
     def begin_connection(self,route,speeds,alphas):
         """Assign a new A-to-B task while retaining inherited control dynamics."""

@@ -1,0 +1,554 @@
+[
+  {
+    "root": "rb_connection_seed20261106_root000",
+    "lane": 0,
+    "model": "parent150",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "complete": true,
+      "success_time_s": 12.199999809265137,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 0.7666912078857422
+  },
+  {
+    "root": "rb_connection_seed20261106_root000",
+    "lane": 1,
+    "model": "parent150",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": true,
+        "original_path_corridor": false,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "complete": false,
+      "success_time_s": null,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 1.0118942260742188
+  },
+  {
+    "root": "rb_connection_seed20261106_root000",
+    "lane": 2,
+    "model": "parent150",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "complete": false,
+      "success_time_s": null,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 0.27593421936035156
+  },
+  {
+    "root": "rb_connection_seed20261106_root000",
+    "lane": 3,
+    "model": "parent150",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "complete": true,
+      "success_time_s": 12.239999771118164,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 0.8559989929199219
+  },
+  {
+    "root": "rb_connection_seed20261106_root000",
+    "lane": 4,
+    "model": "parent150",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "complete": false,
+      "success_time_s": null,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 0.4391918182373047
+  },
+  {
+    "root": "rb_connection_seed20261106_root000",
+    "lane": 5,
+    "model": "parent150",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": false,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "complete": false,
+      "success_time_s": null,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 1.1850078604656928
+  },
+  {
+    "root": "rb_connection_seed20261106_root000",
+    "lane": 6,
+    "model": "heading125",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "complete": true,
+      "success_time_s": 12.079999923706055,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 0.6264686584472656
+  },
+  {
+    "root": "rb_connection_seed20261106_root000",
+    "lane": 7,
+    "model": "heading125",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "complete": false,
+      "success_time_s": null,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 0.6522867561193881
+  },
+  {
+    "root": "rb_connection_seed20261106_root000",
+    "lane": 8,
+    "model": "heading125",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "complete": true,
+      "success_time_s": 12.0,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 0.3175525665283203
+  },
+  {
+    "root": "rb_connection_seed20261106_root000",
+    "lane": 9,
+    "model": "heading125",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "complete": true,
+      "success_time_s": 11.979999542236328,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 0.29278564453125
+  },
+  {
+    "root": "rb_connection_seed20261106_root000",
+    "lane": 10,
+    "model": "heading125",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "complete": false,
+      "success_time_s": null,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 0.4000092148780823
+  },
+  {
+    "root": "rb_connection_seed20261106_root000",
+    "lane": 11,
+    "model": "heading125",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": false,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "complete": false,
+      "success_time_s": null,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 1.1165281988344178
+  },
+  {
+    "root": "rb_connection_seed20261106_root003",
+    "lane": 0,
+    "model": "parent150",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "complete": true,
+      "success_time_s": 11.899999618530273,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 0.4174346923828125
+  },
+  {
+    "root": "rb_connection_seed20261106_root003",
+    "lane": 1,
+    "model": "parent150",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": false,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "complete": false,
+      "success_time_s": null,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 12.111254692077637
+  },
+  {
+    "root": "rb_connection_seed20261106_root003",
+    "lane": 2,
+    "model": "parent150",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "complete": false,
+      "success_time_s": null,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 0.1395721435546875
+  },
+  {
+    "root": "rb_connection_seed20261106_root003",
+    "lane": 3,
+    "model": "parent150",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "complete": true,
+      "success_time_s": 12.260000228881836,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 0.5372467041015625
+  },
+  {
+    "root": "rb_connection_seed20261106_root003",
+    "lane": 4,
+    "model": "parent150",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "complete": true,
+      "success_time_s": 12.100000381469727,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 0.8540228605270386
+  },
+  {
+    "root": "rb_connection_seed20261106_root003",
+    "lane": 5,
+    "model": "parent150",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "complete": false,
+      "success_time_s": null,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 0.2966127395629883
+  },
+  {
+    "root": "rb_connection_seed20261106_root003",
+    "lane": 6,
+    "model": "heading125",
+    "strict": true,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "complete": true,
+      "success_time_s": 12.359999656677246,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 0.3708324432373047
+  },
+  {
+    "root": "rb_connection_seed20261106_root003",
+    "lane": 7,
+    "model": "heading125",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "complete": false,
+      "success_time_s": null,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 0.7159280776977539
+  },
+  {
+    "root": "rb_connection_seed20261106_root003",
+    "lane": 8,
+    "model": "heading125",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "complete": true,
+      "success_time_s": 12.399999618530273,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 0.5273838043212891
+  },
+  {
+    "root": "rb_connection_seed20261106_root003",
+    "lane": 9,
+    "model": "heading125",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "complete": false,
+      "success_time_s": null,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 0.3378944396972656
+  },
+  {
+    "root": "rb_connection_seed20261106_root003",
+    "lane": 10,
+    "model": "heading125",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "complete": true,
+      "success_time_s": 11.920000076293945,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 0.3937408924102783
+  },
+  {
+    "root": "rb_connection_seed20261106_root003",
+    "lane": 11,
+    "model": "heading125",
+    "strict": false,
+    "contact20": {
+      "contact_persistence_s": 0.02,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "complete": true,
+      "success_time_s": 12.119999885559082,
+      "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+    },
+    "max_path_error_m": 0.5156097412109375
+  }
+]

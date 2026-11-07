@@ -1,0 +1,719 @@
+{
+  "initial_observation_maxdiff": 0.0,
+  "cases": [
+    {
+      "entry": 0,
+      "model": "parent150",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.9950294494628906
+    },
+    {
+      "entry": 1,
+      "model": "parent150",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.64080810546875
+    },
+    {
+      "entry": 2,
+      "model": "parent150",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.5644397735595703
+    },
+    {
+      "entry": 3,
+      "model": "parent150",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.8602294921875
+    },
+    {
+      "entry": 4,
+      "model": "parent150",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.6184406280517578
+    },
+    {
+      "entry": 5,
+      "model": "parent150",
+      "complete": false,
+      "contact20": false,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": true,
+        "original_path_corridor": false,
+        "stable_landing": true,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "path_max": 4.140567779541016
+    },
+    {
+      "entry": 6,
+      "model": "parent150",
+      "complete": false,
+      "contact20": false,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": false,
+        "continued_forward": true,
+        "final_goal": false
+      },
+      "path_max": 0.7982063293457031
+    },
+    {
+      "entry": 7,
+      "model": "parent150",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.4698524475097656
+    },
+    {
+      "entry": 8,
+      "model": "parent150",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.5241212844848633
+    },
+    {
+      "entry": 9,
+      "model": "parent150",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.8906669616699219
+    },
+    {
+      "entry": 10,
+      "model": "parent150",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.7319793701171875
+    },
+    {
+      "entry": 11,
+      "model": "parent150",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.3791542053222656
+    },
+    {
+      "entry": 12,
+      "model": "parent150",
+      "complete": false,
+      "contact20": false,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": true,
+        "original_path_corridor": false,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "path_max": 1.0472183227539062
+    },
+    {
+      "entry": 13,
+      "model": "parent150",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.5871715545654297
+    },
+    {
+      "entry": 14,
+      "model": "parent150",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.8105993270874023
+    },
+    {
+      "entry": 15,
+      "model": "parent150",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.6156425476074219
+    },
+    {
+      "entry": 16,
+      "model": "parent150",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.9462642669677734
+    },
+    {
+      "entry": 17,
+      "model": "parent150",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.51837158203125
+    },
+    {
+      "entry": 18,
+      "model": "parent150",
+      "complete": false,
+      "contact20": false,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "path_max": 0.1263580322265625
+    },
+    {
+      "entry": 19,
+      "model": "parent150",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.3619213104248047
+    },
+    {
+      "entry": 20,
+      "model": "parent150",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.6979761123657227
+    },
+    {
+      "entry": 0,
+      "model": "heading125",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.23943424224853516
+    },
+    {
+      "entry": 1,
+      "model": "heading125",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.31838226318359375
+    },
+    {
+      "entry": 2,
+      "model": "heading125",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.24393844604492188
+    },
+    {
+      "entry": 3,
+      "model": "heading125",
+      "complete": false,
+      "contact20": false,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "path_max": 0.22851943969726562
+    },
+    {
+      "entry": 4,
+      "model": "heading125",
+      "complete": false,
+      "contact20": false,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": true,
+        "original_path_corridor": false,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "path_max": 1.032613754272461
+    },
+    {
+      "entry": 5,
+      "model": "heading125",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.8317461013793945
+    },
+    {
+      "entry": 6,
+      "model": "heading125",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.26186656951904297
+    },
+    {
+      "entry": 7,
+      "model": "heading125",
+      "complete": false,
+      "contact20": false,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "path_max": 0.17216873168945312
+    },
+    {
+      "entry": 8,
+      "model": "heading125",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.11367034912109375
+    },
+    {
+      "entry": 9,
+      "model": "heading125",
+      "complete": false,
+      "contact20": false,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "path_max": 0.3913764953613281
+    },
+    {
+      "entry": 10,
+      "model": "heading125",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.37960243225097656
+    },
+    {
+      "entry": 11,
+      "model": "heading125",
+      "complete": false,
+      "contact20": false,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "path_max": 0.11534500122070312
+    },
+    {
+      "entry": 12,
+      "model": "heading125",
+      "complete": false,
+      "contact20": false,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": false,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "path_max": 2.442589282989502
+    },
+    {
+      "entry": 13,
+      "model": "heading125",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.3157329559326172
+    },
+    {
+      "entry": 14,
+      "model": "heading125",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.19839859008789062
+    },
+    {
+      "entry": 15,
+      "model": "heading125",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.3456230163574219
+    },
+    {
+      "entry": 16,
+      "model": "heading125",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.36731719970703125
+    },
+    {
+      "entry": 17,
+      "model": "heading125",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.16776657104492188
+    },
+    {
+      "entry": 18,
+      "model": "heading125",
+      "complete": false,
+      "contact20": false,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "path_max": 0.10505390167236328
+    },
+    {
+      "entry": 19,
+      "model": "heading125",
+      "complete": false,
+      "contact20": true,
+      "checks": {
+        "full_window": true,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": true,
+        "ground_return": true,
+        "continued_time": true,
+        "continued_forward": true,
+        "final_goal": true
+      },
+      "path_max": 0.1580181121826172
+    },
+    {
+      "entry": 20,
+      "model": "heading125",
+      "complete": false,
+      "contact20": false,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": true,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "path_max": 0.18137741088867188
+    }
+  ]
+}

@@ -5,7 +5,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import argparse
-parser=argparse.ArgumentParser();parser.add_argument('--run',type=Path,required=True);args=parser.parse_args()
+parser=argparse.ArgumentParser();parser.add_argument('--run',type=Path,required=True);parser.add_argument('--color-by',choices=['entry','alpha'],default='entry');parser.add_argument('--models',nargs='+');parser.add_argument('--output',type=Path);args=parser.parse_args()
 p=args.run;d=np.load(p/'trajectory.npz');t=d['trace'];v=d['valid'];r=json.loads((p/'results.json').read_text());fig,axes=plt.subplots(2,3,figsize=(15,8.5),layout='constrained');ax=axes.flatten()
 protocol=json.loads((p/'protocol.json').read_text());handoff=json.loads((p/'handoff.json').read_text())['time'] if (p/'handoff.json').exists() else float('inf')
 if protocol['spec'].get('initial_state_bank'):
@@ -13,15 +13,22 @@ if protocol['spec'].get('initial_state_bank'):
  groups=protocol['spec']['skills']
  if protocol['spec'].get('jump_heading_feedback'):
   groups=[f'{skill}: yaw gain {gain:g}' for skill,gain in zip(groups,protocol['spec']['jump_heading_feedback']['yaw_gain'])]
- models=list(dict.fromkeys(groups));indices=protocol['spec']['entry_indices']
+ models=args.models or list(dict.fromkeys(groups));indices=protocol['spec']['entry_indices']
  fig,axes=plt.subplots(2,len(models),figsize=(6*len(models),9),layout='constrained',sharex='row',sharey='row',squeeze=False)
  cmap=plt.get_cmap('viridis');normal=matplotlib.colors.Normalize(min(indices),max(indices))
+ if args.color_by=='alpha':
+  entries=json.loads(Path(protocol['spec']['initial_state_bank']).with_suffix('.json').read_text())['entries']
+  candidate=[json.loads(Path(entry['source_config']).read_text())['connection_candidate'] for entry in entries]
+  speed_styles={speed:style for speed,style in zip(sorted({c['speed_m_s'] for c in candidate}),['--','-',':','-.'])}
+  alpha_colors={0:'#0072B2',.25:'#56B4E9',.5:'#D55E00',.75:'#CC79A7',1:'#009E73'}
  for col,model in enumerate(models):
   for lane,skill in enumerate(groups):
    if skill!=model:continue
-   a=t[v[:,lane],lane];color=cmap(normal(indices[lane]))
+   a=t[v[:,lane],lane];color=cmap(normal(indices[lane]));style='-'
+   if args.color_by=='alpha':
+    c=candidate[indices[lane]];color=alpha_colors[c['alpha']];style=speed_styles[c['speed_m_s']]
    for row,y in [(0,2),(1,3)]:
-    axes[row,col].plot(a[:,1],a[:,y],color=color,alpha=.8)
+    axes[row,col].plot(a[:,1],a[:,y],color=color,alpha=.8,linestyle=style)
     axes[row,col].scatter(a[-1,1],a[-1,y],color=color,marker='x',s=20)
   axes[0,col].axhline(0,color='gray',ls=':',label='Platform centerline')
   axes[0,col].add_patch(matplotlib.patches.Rectangle((3.6,-1),4,2,fill=False,ls='--',color='gray'))
@@ -29,9 +36,14 @@ if protocol['spec'].get('initial_state_bank'):
   axes[1,col].plot([1,3.6,3.6,7.6],[0,0,.16,.16],color='gray',ls=':')
   axes[1,col].set(xlabel='World x (m)',ylabel='Root height (m)')
  for axis in axes.flat:axis.grid(alpha=.2)
- fig.colorbar(matplotlib.cm.ScalarMappable(norm=normal,cmap=cmap),ax=axes,label='Paired saved entry index')
+ if args.color_by=='entry':fig.colorbar(matplotlib.cm.ScalarMappable(norm=normal,cmap=cmap),ax=axes,label='Paired saved entry index')
+ else:
+  from matplotlib.lines import Line2D
+  handles=[Line2D([0],[0],color=alpha_colors[alpha],label=f'Entry alpha={alpha:g}') for alpha in sorted({c['alpha'] for c in candidate})]
+  handles += [Line2D([0],[0],color='black',linestyle=style,label=f'Entry speed {speed} m/s') for speed,style in speed_styles.items()]
+  axes[0,-1].legend(handles=handles,fontsize=8)
  fig.suptitle('Same 21 actual entry states and policy histories; TRAIN-origin DEV\nAll trajectories stop at observed endpoint; crosses are endpoints, not success labels')
- fig.savefig(p/'xy_jump.png',dpi=150)
+ fig.savefig(args.output or p/('xy_jump_alpha.png' if args.color_by=='alpha' else 'xy_jump.png'),dpi=150)
  raise SystemExit(0)
 landing_path=p/'landing_handoff.json'
 landing=json.loads(landing_path.read_text())['time'] if landing_path.exists() else None

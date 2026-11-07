@@ -113,7 +113,7 @@ if spec.get('cuda_graph_observation',False):
  plant.signals.observe=CudaTensorFunction(plant.signals.observe,plant.roots,position,velocity)
 if batch:
  from sttw_control.isaac_pendulum_batch import run_connection_batch
- print(run_connection_batch(spec,out,plant,ground,policies,history,geometry),flush=True)
+ print(run_connection_batch(spec,out,plant,ground,policies,history,geometry,entry),flush=True)
  os._exit(0)
 target=torch.zeros(n,4,device='cuda:0')
 selector=None
