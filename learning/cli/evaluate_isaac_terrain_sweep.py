@@ -43,7 +43,6 @@ if a.batch_cases>1:
     for first in range(0,len(pending),a.batch_cases):
         batch=a.output/'batches'/f'case{len(index)}'
         if batch.exists():batch.rename(batch.with_name(batch.name+'_interrupted_'+str(int(time.time()))))
-        batch.mkdir(parents=True)
         config=dict(base,evaluation_role=spec['role'],role=spec['initial_state_protocol']);config.update(spec.get('evaluation_overrides',{}))
         cases=[]
         for seed,speed,terrain in pending[first:first+a.batch_cases]:
@@ -58,6 +57,7 @@ if a.batch_cases>1:
             case.mkdir();(case/'config.json').write_text(json.dumps(dict(config,user_speed_m_s=speed),indent=2))
             cases.append(dict(terrain=name,terrain_path=assets[name],user_speed_m_s=speed,seed=seed,randomization=spec['randomization_by_seed'][str(seed)] if seed is not None else None,output=str(run)))
         if not cases:continue
+        batch.mkdir(parents=True)
         (batch/'config.json').write_text(json.dumps(config,indent=2));(batch/'cases.json').write_text(json.dumps(cases,indent=2))
         with (batch/'evaluation.log').open('w') as log:
             subprocess.run([lab,'-u','learning/cli/evaluate_isaac_gpu.py','--backend','lab','--bundle',str(bundle),'--config',str(batch/'config.json'),'--terrain',cases[0]['terrain_path'],'--case-manifest',str(batch/'cases.json'),'--output',str(batch/'evaluation'),'--seconds',str(spec['seconds'])],env=env,stdout=log,stderr=subprocess.STDOUT,check=True)
@@ -85,6 +85,7 @@ for seed in ([] if a.batch_cases>1 else spec.get('seeds',[None])):
                 subprocess.run([analysis,'learning/cli/plot_isaac_gpu_evaluation.py','--run',str(run),'--rescore-zero','--title',f'H75 | {name} | requested {speed} m/s'],env=env,stdout=log,stderr=subprocess.STDOUT,check=True)
             role='new matched six-lane run'
         record_case(name,speed,seed,run,role)
+status['physics_lane_steps']=sum(json.loads((Path(row['run'])/'status.json').read_text())['physics_steps'] for row in index)
 status.update(stage='complete',finished=time.time(),optimizer_updates=0);(a.output/'status.json').write_text(json.dumps(status,indent=2))
 if spec.get('seeds'):
     subprocess.run([analysis,'learning/cli/analyze_tradeoff_repeats.py','--evaluation',str(a.output)],env=env,check=True)

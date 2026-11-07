@@ -64,7 +64,9 @@ if a.baseline_run:
   terrain_path=next(iter(c['settings']['terrains'].values()))
   terrain_meta={} if terrain_path=='plane' else json.loads((Path(terrain_path)/'identity.json').read_text())
   if terrain_meta.get('height_m',0)>0:
-   if 'start_s_m' in terrain_meta:
+   if 's_range_m' in terrain_meta:
+    start,end=terrain_meta['s_range_m']
+   elif 'start_s_m' in terrain_meta:
     start=terrain_meta['start_s_m'];end=terrain_meta['end_s_m']
    elif 'slope_start_s_m' in terrain_meta:
     start=terrain_meta['slope_start_s_m'];end=terrain_meta['slope_end_s_m']
