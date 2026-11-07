@@ -25,6 +25,12 @@ for folder in a.runs:
   if a.start_relative:actual=actual-actual[0];reference=reference-reference[0]
   xy=actual-reference
   cases.append(dict(case=name,survived=survived,final_tracking_hold=hold,end_s=float(d['time'][n-1,i]+d['stop_tick'][n-1,i]*s['physics_dt']),speed_rmse=float(np.sqrt(np.mean(ev**2))),steer_rmse=float(np.sqrt(np.mean(ed**2))),xy_reference_rmse=float(np.sqrt(np.mean(np.sum(xy**2,axis=-1)))),peak_roll=float(d['peak_roll'][:n,i].max())))
+  if 'ordinary_roll_limit_deg' in s:
+   peak_deg=np.rad2deg(d['peak_roll'][:n,i])
+   cases[-1].update(ordinary_roll_limit_deg=s['ordinary_roll_limit_deg'],
+    transient_roll_limit_deg=s['transient_roll_limit_deg'],
+    seconds_above_ordinary_roll=float(np.sum(peak_deg>s['ordinary_roll_limit_deg'])*s['control_dt']),
+    seconds_above_transient_roll=float(np.sum(peak_deg>s['transient_roll_limit_deg'])*s['control_dt']))
  score=dict(survived=sum(c['survived'] for c in cases),tracking_hold=sum(c['final_tracking_hold'] for c in cases),observed_seconds=sum(c['end_s'] for c in cases),tracking=float(np.mean([c['speed_rmse']/.05+c['steer_rmse']/.02 for c in cases])))
  results.append(dict(**identity,run=str(folder.resolve()),cases=cases,score=score));traces.append(d)
 rank=sorted(results,key=lambda r:(-r['score']['survived'],-r['score']['tracking_hold'],-r['score']['observed_seconds'],r['score']['tracking']))
