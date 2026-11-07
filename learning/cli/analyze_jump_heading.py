@@ -43,7 +43,10 @@ for run in a.runs:
    entry['post_jump']=dict(max_abs_y_m=float(abs(trace[selected,2]).max()),max_abs_yaw_deg=float(np.rad2deg(abs(yaw[selected])).max()),final_y_m=float(trace[-1,2]),final_yaw_deg=float(np.rad2deg(yaw[-1])),end_time_s=float(trace[-1,0]))
   records.append(entry);axes[0,col].set_title(model)
  for col in range(len(models)):
-  axes[0,col].plot(route[:,0],route[:,1],':',color='black',label='Original route');axes[0,col].set_aspect('equal',adjustable='datalim');axes[0,col].set(xlabel='World x (m)',ylabel='World y (m)');axes[0,col].legend(fontsize=7)
+  # Frame the actual observed motion while retaining the fixed route itself.
+  bounds=axes[0,col].dataLim.frozen()
+  axes[0,col].plot(route[:,0],route[:,1],':',color='black',label='Original route');axes[0,col].set_aspect('equal',adjustable='box');axes[0,col].set(xlabel='World x (m)',ylabel='World y (m)');axes[0,col].set_xlim(bounds.x0-.5,bounds.x1+.5);axes[0,col].set_ylim(bounds.y0-.5,bounds.y1+.5)
+  handles,labels=axes[0,col].get_legend_handles_labels();unique=dict(zip(labels,handles));axes[0,col].legend(unique.values(),unique.keys(),fontsize=7)
   axes[1,col].set(xlabel='Time (s)',ylabel='Body yaw (deg)')
   axes[2,col].set(xlabel='Time (s)',ylabel='World y (m); jump centreline y=0')
  for ax in axes.flat:ax.grid(alpha=.25)

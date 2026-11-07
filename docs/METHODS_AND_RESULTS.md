@@ -1879,3 +1879,7 @@ Config learning/configs/isaac_h75_tradeoff_repeats.json records all sampled valu
 ## 第三章：失败跳跃后平地接管的边界（2026-11-07）
 
 新增缺省关闭的ground_recovery试验接口，原平台成功标签不变。42入口配对，全部干预前一致，4条触发；原任务contact20两组均30/42、strict均0。大偏移约2m时直接H75接回不可靠；一条退出为前视目标前向距离.028<.05m，不是侧翻。复用PythonRobotics接回原目标产生13m绕行及3.6m负向x，未采用。保留负结果，不将失败恢复当跳跃成功，详情见[全条件报告](evidence/chapter3_jump_heading/RESULTS.md)。
+
+
+### 第三章：有界方向奖励150更新与候选否决（2026-11-07）
+从heading125权重继续，固定lr5e-5，方向平方罚改有界，Go2随机化及网络保留。150更新35.14分钟。六模型×21入口，后期跳台完成退化；奖励第1轮候选经2根×6连接完整链5/12，不优于125的7/12，拒绝采用。原严格判据分别1/12与1/12，20ms口径不能替换严格口径。全程XY、反例、配置和代码入口见[当前报告](evidence/chapter3_jump_heading/RESULTS.md)。偏航未解决，未追加同奖励训练；本轮后处理依赖错误修复后复用全部权重与已有数据。
