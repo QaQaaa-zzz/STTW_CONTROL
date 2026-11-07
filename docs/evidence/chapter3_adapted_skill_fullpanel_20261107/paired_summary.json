@@ -1,0 +1,1057 @@
+{
+  "role": "Paired DEV skill/approach outcomes; selection uses observed outcomes and is hindsight, not online or independent TEST",
+  "skills": [
+    "source",
+    "rb_run1_candidate"
+  ],
+  "declared_candidate_pairs": 30,
+  "counts": {
+    "both_failed": 24,
+    "only_second": 6
+  },
+  "pairs": [
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 5.6,
+      "disturbance": null,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "status": "evaluated",
+      "outcome": "both_failed",
+      "cases": {
+        "source": {
+          "case_id": "L5.6_v1.8_a0.0_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L5.6_v1.8_a0.0_rb_run1_candidate",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 5.6,
+      "disturbance": null,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "status": "evaluated",
+      "outcome": "both_failed",
+      "cases": {
+        "source": {
+          "case_id": "L5.6_v1.8_a0.5_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L5.6_v1.8_a0.5_rb_run1_candidate",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 5.6,
+      "disturbance": null,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "status": "evaluated",
+      "outcome": "both_failed",
+      "cases": {
+        "source": {
+          "case_id": "L5.6_v1.8_a1.0_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L5.6_v1.8_a1.0_rb_run1_candidate",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "continuation_or_corridor"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 5.6,
+      "disturbance": null,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "status": "evaluated",
+      "outcome": "both_failed",
+      "cases": {
+        "source": {
+          "case_id": "L5.6_v2.0_a0.0_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L5.6_v2.0_a0.0_rb_run1_candidate",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 5.6,
+      "disturbance": null,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "status": "evaluated",
+      "outcome": "both_failed",
+      "cases": {
+        "source": {
+          "case_id": "L5.6_v2.0_a0.5_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L5.6_v2.0_a0.5_rb_run1_candidate",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 5.6,
+      "disturbance": null,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "status": "evaluated",
+      "outcome": "only_second",
+      "cases": {
+        "source": {
+          "case_id": "L5.6_v2.0_a1.0_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L5.6_v2.0_a1.0_rb_run1_candidate",
+          "Y": true,
+          "T_s": 13.15999984741211,
+          "failure_phase": "none"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 7.6,
+      "disturbance": null,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "status": "evaluated",
+      "outcome": "both_failed",
+      "cases": {
+        "source": {
+          "case_id": "L7.6_v1.8_a0.0_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L7.6_v1.8_a0.0_rb_run1_candidate",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 7.6,
+      "disturbance": null,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "status": "evaluated",
+      "outcome": "both_failed",
+      "cases": {
+        "source": {
+          "case_id": "L7.6_v1.8_a0.5_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L7.6_v1.8_a0.5_rb_run1_candidate",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 7.6,
+      "disturbance": null,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "status": "evaluated",
+      "outcome": "both_failed",
+      "cases": {
+        "source": {
+          "case_id": "L7.6_v1.8_a1.0_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L7.6_v1.8_a1.0_rb_run1_candidate",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 7.6,
+      "disturbance": null,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "status": "evaluated",
+      "outcome": "both_failed",
+      "cases": {
+        "source": {
+          "case_id": "L7.6_v2.0_a0.0_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L7.6_v2.0_a0.0_rb_run1_candidate",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 7.6,
+      "disturbance": null,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "status": "evaluated",
+      "outcome": "both_failed",
+      "cases": {
+        "source": {
+          "case_id": "L7.6_v2.0_a0.5_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L7.6_v2.0_a0.5_rb_run1_candidate",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 7.6,
+      "disturbance": null,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "status": "evaluated",
+      "outcome": "both_failed",
+      "cases": {
+        "source": {
+          "case_id": "L7.6_v2.0_a1.0_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L7.6_v2.0_a1.0_rb_run1_candidate",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 9.6,
+      "disturbance": null,
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "status": "evaluated",
+      "outcome": "only_second",
+      "cases": {
+        "source": {
+          "case_id": "L9.6_v1.8_a0.0_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L9.6_v1.8_a0.0_rb_run1_candidate",
+          "Y": true,
+          "T_s": 15.65999984741211,
+          "failure_phase": "none"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 9.6,
+      "disturbance": null,
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "status": "evaluated",
+      "outcome": "only_second",
+      "cases": {
+        "source": {
+          "case_id": "L9.6_v1.8_a0.5_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L9.6_v1.8_a0.5_rb_run1_candidate",
+          "Y": true,
+          "T_s": 15.899999618530273,
+          "failure_phase": "none"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 9.6,
+      "disturbance": null,
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "status": "evaluated",
+      "outcome": "both_failed",
+      "cases": {
+        "source": {
+          "case_id": "L9.6_v1.8_a1.0_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L9.6_v1.8_a1.0_rb_run1_candidate",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 9.6,
+      "disturbance": null,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "status": "evaluated",
+      "outcome": "both_failed",
+      "cases": {
+        "source": {
+          "case_id": "L9.6_v2.0_a0.0_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L9.6_v2.0_a0.0_rb_run1_candidate",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 9.6,
+      "disturbance": null,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "status": "evaluated",
+      "outcome": "only_second",
+      "cases": {
+        "source": {
+          "case_id": "L9.6_v2.0_a0.5_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L9.6_v2.0_a0.5_rb_run1_candidate",
+          "Y": true,
+          "T_s": 15.180000305175781,
+          "failure_phase": "none"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 9.6,
+      "disturbance": null,
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "status": "evaluated",
+      "outcome": "both_failed",
+      "cases": {
+        "source": {
+          "case_id": "L9.6_v2.0_a1.0_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L9.6_v2.0_a1.0_rb_run1_candidate",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 9.6,
+      "disturbance": {
+        "body": "chasis",
+        "duration_s": 0.12,
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "kind": "external_force_N",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "trigger_x_m": -2.5
+      },
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "status": "evaluated",
+      "outcome": "both_failed",
+      "cases": {
+        "source": {
+          "case_id": "L9.6_v1.8_a0.0_pulse0_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L9.6_v1.8_a0.0_pulse0_rb_run1_candidate",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 9.6,
+      "disturbance": {
+        "body": "chasis",
+        "duration_s": 0.12,
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "kind": "external_force_N",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "trigger_x_m": -2.5
+      },
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "status": "evaluated",
+      "outcome": "only_second",
+      "cases": {
+        "source": {
+          "case_id": "L9.6_v1.8_a0.5_pulse0_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L9.6_v1.8_a0.5_pulse0_rb_run1_candidate",
+          "Y": true,
+          "T_s": 15.5,
+          "failure_phase": "none"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 9.6,
+      "disturbance": {
+        "body": "chasis",
+        "duration_s": 0.12,
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "kind": "external_force_N",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "trigger_x_m": -2.5
+      },
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "status": "evaluated",
+      "outcome": "both_failed",
+      "cases": {
+        "source": {
+          "case_id": "L9.6_v1.8_a1.0_pulse0_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L9.6_v1.8_a1.0_pulse0_rb_run1_candidate",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 9.6,
+      "disturbance": {
+        "body": "chasis",
+        "duration_s": 0.12,
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "kind": "external_force_N",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "trigger_x_m": -2.5
+      },
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "status": "evaluated",
+      "outcome": "both_failed",
+      "cases": {
+        "source": {
+          "case_id": "L9.6_v2.0_a0.0_pulse0_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L9.6_v2.0_a0.0_pulse0_rb_run1_candidate",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 9.6,
+      "disturbance": {
+        "body": "chasis",
+        "duration_s": 0.12,
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "kind": "external_force_N",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "trigger_x_m": -2.5
+      },
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "status": "evaluated",
+      "outcome": "both_failed",
+      "cases": {
+        "source": {
+          "case_id": "L9.6_v2.0_a0.5_pulse0_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L9.6_v2.0_a0.5_pulse0_rb_run1_candidate",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "continuation_or_corridor"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 9.6,
+      "disturbance": {
+        "body": "chasis",
+        "duration_s": 0.12,
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "kind": "external_force_N",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "trigger_x_m": -2.5
+      },
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "status": "evaluated",
+      "outcome": "both_failed",
+      "cases": {
+        "source": {
+          "case_id": "L9.6_v2.0_a1.0_pulse0_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L9.6_v2.0_a1.0_pulse0_rb_run1_candidate",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 9.6,
+      "disturbance": {
+        "body": "chasis",
+        "duration_s": 0.12,
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "kind": "external_force_N",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "trigger_x_m": -2.5
+      },
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "status": "evaluated",
+      "outcome": "both_failed",
+      "cases": {
+        "source": {
+          "case_id": "L9.6_v1.8_a0.0_pulse1_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L9.6_v1.8_a0.0_pulse1_rb_run1_candidate",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 9.6,
+      "disturbance": {
+        "body": "chasis",
+        "duration_s": 0.12,
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "kind": "external_force_N",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "trigger_x_m": -2.5
+      },
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "status": "evaluated",
+      "outcome": "only_second",
+      "cases": {
+        "source": {
+          "case_id": "L9.6_v1.8_a0.5_pulse1_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L9.6_v1.8_a0.5_pulse1_rb_run1_candidate",
+          "Y": true,
+          "T_s": 15.5,
+          "failure_phase": "none"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 9.6,
+      "disturbance": {
+        "body": "chasis",
+        "duration_s": 0.12,
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "kind": "external_force_N",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "trigger_x_m": -2.5
+      },
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "status": "evaluated",
+      "outcome": "both_failed",
+      "cases": {
+        "source": {
+          "case_id": "L9.6_v1.8_a1.0_pulse1_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L9.6_v1.8_a1.0_pulse1_rb_run1_candidate",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 9.6,
+      "disturbance": {
+        "body": "chasis",
+        "duration_s": 0.12,
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "kind": "external_force_N",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "trigger_x_m": -2.5
+      },
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "status": "evaluated",
+      "outcome": "both_failed",
+      "cases": {
+        "source": {
+          "case_id": "L9.6_v2.0_a0.0_pulse1_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L9.6_v2.0_a0.0_pulse1_rb_run1_candidate",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 9.6,
+      "disturbance": {
+        "body": "chasis",
+        "duration_s": 0.12,
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "kind": "external_force_N",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "trigger_x_m": -2.5
+      },
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "status": "evaluated",
+      "outcome": "both_failed",
+      "cases": {
+        "source": {
+          "case_id": "L9.6_v2.0_a0.5_pulse1_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L9.6_v2.0_a0.5_pulse1_rb_run1_candidate",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 9.6,
+      "disturbance": {
+        "body": "chasis",
+        "duration_s": 0.12,
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "kind": "external_force_N",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "trigger_x_m": -2.5
+      },
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "status": "evaluated",
+      "outcome": "both_failed",
+      "cases": {
+        "source": {
+          "case_id": "L9.6_v2.0_a1.0_pulse1_source",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        },
+        "rb_run1_candidate": {
+          "case_id": "L9.6_v2.0_a1.0_pulse1_rb_run1_candidate",
+          "Y": false,
+          "T_s": null,
+          "failure_phase": "jump_or_landing"
+        }
+      }
+    }
+  ],
+  "cross_selected_approaches": [
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 5.6,
+      "disturbance": null,
+      "all_candidates_evaluated": true,
+      "selected_by_skill": {
+        "source": {
+          "status": "no_successful_candidate",
+          "choice": null
+        },
+        "rb_run1_candidate": {
+          "status": "candidate_selected",
+          "choice": {
+            "speed_m_s": 2.0,
+            "alpha": 1.0,
+            "executed_outcomes": {
+              "source": {
+                "Y": false,
+                "T_s": null,
+                "case_id": "L5.6_v2.0_a1.0_source"
+              },
+              "rb_run1_candidate": {
+                "Y": true,
+                "T_s": 13.15999984741211,
+                "case_id": "L5.6_v2.0_a1.0_rb_run1_candidate"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 7.6,
+      "disturbance": null,
+      "all_candidates_evaluated": true,
+      "selected_by_skill": {
+        "source": {
+          "status": "no_successful_candidate",
+          "choice": null
+        },
+        "rb_run1_candidate": {
+          "status": "no_successful_candidate",
+          "choice": null
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 9.6,
+      "disturbance": null,
+      "all_candidates_evaluated": true,
+      "selected_by_skill": {
+        "source": {
+          "status": "no_successful_candidate",
+          "choice": null
+        },
+        "rb_run1_candidate": {
+          "status": "candidate_selected",
+          "choice": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5,
+            "executed_outcomes": {
+              "source": {
+                "Y": false,
+                "T_s": null,
+                "case_id": "L9.6_v2.0_a0.5_source"
+              },
+              "rb_run1_candidate": {
+                "Y": true,
+                "T_s": 15.180000305175781,
+                "case_id": "L9.6_v2.0_a0.5_rb_run1_candidate"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 9.6,
+      "disturbance": {
+        "body": "chasis",
+        "duration_s": 0.12,
+        "force_world_N": [
+          0.0,
+          -2.0,
+          0.0
+        ],
+        "kind": "external_force_N",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "trigger_x_m": -2.5
+      },
+      "all_candidates_evaluated": true,
+      "selected_by_skill": {
+        "source": {
+          "status": "no_successful_candidate",
+          "choice": null
+        },
+        "rb_run1_candidate": {
+          "status": "candidate_selected",
+          "choice": {
+            "speed_m_s": 1.8,
+            "alpha": 0.5,
+            "executed_outcomes": {
+              "source": {
+                "Y": false,
+                "T_s": null,
+                "case_id": "L9.6_v1.8_a0.5_pulse0_source"
+              },
+              "rb_run1_candidate": {
+                "Y": true,
+                "T_s": 15.5,
+                "case_id": "L9.6_v1.8_a0.5_pulse0_rb_run1_candidate"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "origin_id": "rb_nominal_upstream_01",
+      "distance_m": 9.6,
+      "disturbance": {
+        "body": "chasis",
+        "duration_s": 0.12,
+        "force_world_N": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "kind": "external_force_N",
+        "site_body_position_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "trigger_x_m": -2.5
+      },
+      "all_candidates_evaluated": true,
+      "selected_by_skill": {
+        "source": {
+          "status": "no_successful_candidate",
+          "choice": null
+        },
+        "rb_run1_candidate": {
+          "status": "candidate_selected",
+          "choice": {
+            "speed_m_s": 1.8,
+            "alpha": 0.5,
+            "executed_outcomes": {
+              "source": {
+                "Y": false,
+                "T_s": null,
+                "case_id": "L9.6_v1.8_a0.5_pulse1_source"
+              },
+              "rb_run1_candidate": {
+                "Y": true,
+                "T_s": 15.5,
+                "case_id": "L9.6_v1.8_a0.5_pulse1_rb_run1_candidate"
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "limits": "Source and RB share adaptation/interface; update2 is excluded from this two-skill claim. Entire candidate matrices must finish before cross-selection. No successful candidate is reported explicitly, never substituted with a survivor. Disturbances and origin families must be separately paired."
+}
