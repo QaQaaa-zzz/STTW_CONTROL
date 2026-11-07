@@ -1,0 +1,8 @@
+{
+  "update": 1,
+  "mean_step_reward": 0.5076095461845398,
+  "samples": 98304,
+  "reward_scaling": 0.1,
+  "checkpoint": "training/model_step_best.pt",
+  "scope": "best sampled pre-update policy in this run; not fixed-case qualification"
+}

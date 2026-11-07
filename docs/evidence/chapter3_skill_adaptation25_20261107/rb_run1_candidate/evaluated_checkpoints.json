@@ -1,0 +1,276 @@
+[
+  {
+    "update": 0,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation25/rb_run1_candidate/training_run/training/model_initial.pt",
+    "nominal": {
+      "nominal_v1.8": {
+        "full_window": false,
+        "strict_support": false
+      },
+      "nominal_v2.0": {
+        "full_window": false,
+        "strict_support": false
+      },
+      "nominal_v2.2": {
+        "full_window": false,
+        "strict_support": false
+      }
+    },
+    "hard": {
+      "L9.6_v2.0_a0.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L9.6_v2.0_a1.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L5.6_v2.0_a0.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L5.6_v2.0_a1.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L7.6_v2.0_a0.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L7.6_v2.0_a1.0": {
+        "success": false,
+        "time_s": null
+      }
+    },
+    "reused_original_nominal": {
+      "nominal_v1.8": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_nominal_skill_retention/rb_run1_candidate_nominal_v1.8",
+      "nominal_v2.0": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_nominal_skill_retention/rb_run1_candidate_nominal_v2.0",
+      "nominal_v2.2": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_nominal_skill_retention/rb_run1_candidate_nominal_v2.2"
+    }
+  },
+  {
+    "update": 5,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation25/rb_run1_candidate/training_run/training/model_update_00005.pt",
+    "nominal": {
+      "nominal_v1.8": {
+        "full_window": false,
+        "strict_support": false
+      },
+      "nominal_v2.0": {
+        "full_window": true,
+        "strict_support": false
+      },
+      "nominal_v2.2": {
+        "full_window": false,
+        "strict_support": false
+      }
+    },
+    "hard": {
+      "L9.6_v2.0_a0.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L9.6_v2.0_a1.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L5.6_v2.0_a0.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L5.6_v2.0_a1.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L7.6_v2.0_a0.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L7.6_v2.0_a1.0": {
+        "success": false,
+        "time_s": null
+      }
+    },
+    "reused_original_nominal": {}
+  },
+  {
+    "update": 10,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation25/rb_run1_candidate/training_run/training/model_update_00010.pt",
+    "nominal": {
+      "nominal_v1.8": {
+        "full_window": false,
+        "strict_support": false
+      },
+      "nominal_v2.0": {
+        "full_window": false,
+        "strict_support": false
+      },
+      "nominal_v2.2": {
+        "full_window": false,
+        "strict_support": false
+      }
+    },
+    "hard": {
+      "L9.6_v2.0_a0.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L9.6_v2.0_a1.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L5.6_v2.0_a0.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L5.6_v2.0_a1.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L7.6_v2.0_a0.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L7.6_v2.0_a1.0": {
+        "success": false,
+        "time_s": null
+      }
+    },
+    "reused_original_nominal": {}
+  },
+  {
+    "update": 15,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation25/rb_run1_candidate/training_run/training/model_update_00015.pt",
+    "nominal": {
+      "nominal_v1.8": {
+        "full_window": false,
+        "strict_support": false
+      },
+      "nominal_v2.0": {
+        "full_window": true,
+        "strict_support": true
+      },
+      "nominal_v2.2": {
+        "full_window": false,
+        "strict_support": false
+      }
+    },
+    "hard": {
+      "L9.6_v2.0_a0.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L9.6_v2.0_a1.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L5.6_v2.0_a0.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L5.6_v2.0_a1.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L7.6_v2.0_a0.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L7.6_v2.0_a1.0": {
+        "success": false,
+        "time_s": null
+      }
+    },
+    "reused_original_nominal": {}
+  },
+  {
+    "update": 20,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation25/rb_run1_candidate/training_run/training/model_update_00020.pt",
+    "nominal": {
+      "nominal_v1.8": {
+        "full_window": false,
+        "strict_support": false
+      },
+      "nominal_v2.0": {
+        "full_window": false,
+        "strict_support": false
+      },
+      "nominal_v2.2": {
+        "full_window": false,
+        "strict_support": false
+      }
+    },
+    "hard": {
+      "L9.6_v2.0_a0.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L9.6_v2.0_a1.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L5.6_v2.0_a0.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L5.6_v2.0_a1.0": {
+        "success": true,
+        "time_s": 13.760000228881836
+      },
+      "L7.6_v2.0_a0.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L7.6_v2.0_a1.0": {
+        "success": false,
+        "time_s": null
+      }
+    },
+    "reused_original_nominal": {}
+  },
+  {
+    "update": 25,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_skill_adaptation25/rb_run1_candidate/training_run/training/model_update_00025.pt",
+    "nominal": {
+      "nominal_v1.8": {
+        "full_window": false,
+        "strict_support": false
+      },
+      "nominal_v2.0": {
+        "full_window": false,
+        "strict_support": true
+      },
+      "nominal_v2.2": {
+        "full_window": false,
+        "strict_support": false
+      }
+    },
+    "hard": {
+      "L9.6_v2.0_a0.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L9.6_v2.0_a1.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L5.6_v2.0_a0.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L5.6_v2.0_a1.0": {
+        "success": true,
+        "time_s": 13.15999984741211
+      },
+      "L7.6_v2.0_a0.0": {
+        "success": false,
+        "time_s": null
+      },
+      "L7.6_v2.0_a1.0": {
+        "success": false,
+        "time_s": null
+      }
+    },
+    "reused_original_nominal": {}
+  }
+]

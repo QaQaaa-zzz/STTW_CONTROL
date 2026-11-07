@@ -1,0 +1,13 @@
+{
+  "stage": "training_complete",
+  "pid": 3337019,
+  "completed_updates": 25,
+  "started": 1794027523.9588113,
+  "start_update": 0,
+  "target_update": 25,
+  "stage_completed_updates": 25,
+  "sample_seconds": 8.749406337738037,
+  "optimize_seconds": 0.10342574119567871,
+  "elapsed_s": 221.81603622436523,
+  "total_physics_steps": 19660800
+}
