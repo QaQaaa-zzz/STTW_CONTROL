@@ -1,0 +1,699 @@
+[
+  {
+    "decision_index": 0,
+    "trigger_x_m": -2.0,
+    "time_s": 5.5600000000000005,
+    "requested_route": "original_jump",
+    "executed_route": "original_jump",
+    "furthest_common_progress_m": 10.188837051391602,
+    "availability": {
+      "available_routes": [
+        "original_jump",
+        "bypass"
+      ],
+      "blocked_routes": []
+    },
+    "root": [
+      [
+        -1.9527428150177002,
+        0.6100019812583923,
+        0.11808246374130249,
+        0.7523360848426819,
+        0.001859688782133162,
+        0.0010212850756943226,
+        0.658776044845581,
+        1.9995335340499878,
+        -0.05312453582882881,
+        -0.0007335023256018758,
+        -0.10873456299304962,
+        -0.00764673063531518,
+        -0.6473067998886108
+      ]
+    ],
+    "selection_wall_s": 0.0819820020115003,
+    "history": "existing begin_connection; controller/filter/ESO/observation history retained",
+    "role": "capability route decision",
+    "decision_state": {
+      "time": 5.5600000000000005,
+      "root": [
+        [
+          -1.9527428150177002,
+          0.6100019812583923,
+          0.11808246374130249,
+          0.7523360848426819,
+          0.001859688782133162,
+          0.0010212850756943226,
+          0.658776044845581,
+          1.9995335340499878,
+          -0.05312453582882881,
+          -0.0007335023256018758,
+          -0.10873456299304962,
+          -0.00764673063531518,
+          -0.6473067998886108
+        ]
+      ],
+      "measurement": [
+        [
+          -0.13241279125213623,
+          0.1081739291548729,
+          -0.08845246583223343,
+          0.08247371017932892,
+          -0.6407885551452637,
+          28.74759292602539,
+          28.942909240722656
+        ]
+      ],
+      "position": [
+        [
+          -1.2002010345458984,
+          1.185891032218933,
+          -0.08845246583223343,
+          2.499999761581421,
+          -4.823190212249756
+        ]
+      ],
+      "velocity": [
+        [
+          0.009291524067521095,
+          -28.74759292602539,
+          0.08247371017932892,
+          0.0034327716566622257,
+          -28.942909240722656
+        ]
+      ],
+      "previous_reference": [
+        [
+          2.0120973587036133,
+          -0.06093581020832062
+        ]
+      ],
+      "previous_alpha": [
+        0.5
+      ],
+      "previous_alpha_duration_s": 5.5600000000000005
+    },
+    "observable_state": {
+      "speed": 1.9932979316241415,
+      "roll": -0.1345503330230713,
+      "roll_rate": 0.10514818131923676,
+      "cross_track": 0.6108479499816895,
+      "heading_error": -0.017097102151461197,
+      "steer": -0.0901220291852951,
+      "steer_rate": 0.05705694854259491,
+      "previous_speed_reference": 2.0109784603118896,
+      "lateral_velocity_heading_frame": -0.06261477708622054,
+      "world_yaw_rate": -0.6533306837081909,
+      "previous_alpha": 0.5,
+      "previous_alpha_duration": 5.54,
+      "remaining_path_to_release": 7.992677330970594,
+      "path_curvature": -0.3169332742691001,
+      "corridor_half_width": 1.0,
+      "pitch": 0.0009153286042469233,
+      "body_angular_y": -0.08062526379205244,
+      "hip": -1.2002006769180298,
+      "knee": 2.499999761581421,
+      "hip_velocity": 2.8436800221243175e-06,
+      "knee_velocity": -0.004182044882327318,
+      "platform_height": 0.16,
+      "remaining_path_to_platform": 9.592677330970574
+    },
+    "selection": {
+      "status": "revision_required",
+      "reason": "no_feasible",
+      "goal_id": "destination",
+      "completed": [],
+      "remaining_goals": [
+        "destination"
+      ],
+      "queries": [
+        {
+          "route_id": "original_jump",
+          "estimates": [
+            {
+              "candidate_id": "v2.0_a0.5",
+              "known": true,
+              "support": 1.9432400766738045,
+              "complete_probability": 0.0,
+              "success_cost": null,
+              "sample_count": 6
+            }
+          ],
+          "ranked_candidates": [
+            "v2.0_a0.5"
+          ],
+          "best_candidate": "v2.0_a0.5",
+          "scope": "Empirical complete-task outcomes; executor must apply feasibility threshold and fallback"
+        },
+        {
+          "route_id": "bypass",
+          "estimates": [
+            {
+              "candidate_id": "v2.0_a0.5",
+              "known": true,
+              "support": 1.9432400766738045,
+              "complete_probability": 0.0,
+              "success_cost": null,
+              "sample_count": 6
+            }
+          ],
+          "ranked_candidates": [
+            "v2.0_a0.5"
+          ],
+          "best_candidate": "v2.0_a0.5",
+          "scope": "Empirical complete-task outcomes; executor must apply feasibility threshold and fallback"
+        }
+      ],
+      "active_reference": {
+        "goal_id": "destination",
+        "route_id": "original_jump",
+        "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/original_extended_reference.npz",
+        "skill_id": "matched_runtime",
+        "candidate_id": "v2.0_a0.5",
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "evidence_rows": 24,
+      "excluded_origin_id": "rb_connection_seed20261106_root002",
+      "scope": "Empirical route recommendation; unavailable support retains current execution, not proof of safety"
+    },
+    "query_state": {
+      "time": 5.54,
+      "root": [
+        [
+          -1.9926773309707642,
+          0.6108479499816895,
+          0.11805571615695953,
+          0.7530118823051453,
+          0.006738458760082722,
+          0.005280013661831617,
+          0.6579512357711792,
+          1.9940770864486694,
+          -0.028527667745947838,
+          0.001511173089966178,
+          -0.10585203766822815,
+          0.005283701233565807,
+          -0.6533306837081909
+        ]
+      ],
+      "measurement": [
+        [
+          -0.1345503330230713,
+          0.10514818131923676,
+          -0.0901220291852951,
+          0.05705694854259491,
+          -0.6484727263450623,
+          28.57351303100586,
+          28.81501007080078
+        ]
+      ],
+      "position": [
+        [
+          -1.2002006769180298,
+          1.7604379653930664,
+          -0.0901220291852951,
+          2.499999761581421,
+          -4.247088432312012
+        ]
+      ],
+      "velocity": [
+        [
+          2.8436800221243175e-06,
+          -28.57351303100586,
+          0.05705694854259491,
+          -0.004182044882327318,
+          -28.81501007080078
+        ]
+      ],
+      "previous_reference": [
+        [
+          2.0109784603118896,
+          -0.06278175115585327
+        ]
+      ],
+      "previous_alpha": [
+        0.5
+      ],
+      "previous_alpha_duration_s": 5.54
+    },
+    "asynchronous": true,
+    "application_delay_sim_s": 0.020000000000000462
+  },
+  {
+    "decision_index": 1,
+    "trigger_x_m": -1.0,
+    "time_s": 6.0600000000000005,
+    "requested_route": "original_jump",
+    "executed_route": "original_jump",
+    "furthest_common_progress_m": 11.185009002685547,
+    "availability": {
+      "available_routes": [
+        "original_jump",
+        "bypass"
+      ],
+      "blocked_routes": []
+    },
+    "root": [
+      [
+        -0.9565709829330444,
+        0.4474049508571625,
+        0.11888666450977325,
+        0.7164245247840881,
+        -0.09142063558101654,
+        -0.08819274604320526,
+        0.6860031485557556,
+        1.9763987064361572,
+        -0.517186164855957,
+        0.0007853338029235601,
+        -0.22575151920318604,
+        0.05790083855390549,
+        -0.26236867904663086
+      ]
+    ],
+    "selection_wall_s": 0.06655289100308437,
+    "history": "existing begin_connection; controller/filter/ESO/observation history retained",
+    "role": "capability route decision",
+    "decision_state": {
+      "time": 6.0600000000000005,
+      "root": [
+        [
+          -0.9565709829330444,
+          0.4474049508571625,
+          0.11888666450977325,
+          0.7164245247840881,
+          -0.09142063558101654,
+          -0.08819274604320526,
+          0.6860031485557556,
+          1.9763987064361572,
+          -0.517186164855957,
+          0.0007853338029235601,
+          -0.22575151920318604,
+          0.05790083855390549,
+          -0.26236867904663086
+        ]
+      ],
+      "measurement": [
+        [
+          -0.04325711727142334,
+          0.23281091451644897,
+          -0.035432662814855576,
+          0.1841142326593399,
+          -0.2623043656349182,
+          29.107431411743164,
+          29.16977882385254
+        ]
+      ],
+      "position": [
+        [
+          -1.2001994848251343,
+          -0.7379951477050781,
+          -0.035432662814855576,
+          2.499999761581421,
+          5.786606311798096
+        ]
+      ],
+      "velocity": [
+        [
+          -0.0037489766255021095,
+          -29.107431411743164,
+          0.1841142326593399,
+          0.0024801406543701887,
+          -29.16977882385254
+        ]
+      ],
+      "previous_reference": [
+        [
+          2.0434505939483643,
+          0.022276924923062325
+        ]
+      ],
+      "previous_alpha": [
+        0.5
+      ],
+      "previous_alpha_duration_s": 6.0600000000000005
+    },
+    "observable_state": {
+      "speed": 2.0419968689287473,
+      "roll": -0.04788970947265625,
+      "roll_rate": 0.23239198327064514,
+      "cross_track": 0.4576718807220459,
+      "heading_error": 0.24931016202682418,
+      "steer": -0.0391608327627182,
+      "steer_rate": 0.18128259479999542,
+      "previous_speed_reference": 2.0427889823913574,
+      "lateral_velocity_heading_frame": -0.0056686412557274135,
+      "world_yaw_rate": -0.2899668216705322,
+      "previous_alpha": 0.5,
+      "previous_alpha_duration": 6.04,
+      "remaining_path_to_release": 6.996093690395206,
+      "path_curvature": 0.0,
+      "corridor_half_width": 1.0,
+      "pitch": 0.0009368308348354226,
+      "body_angular_y": -0.014745913015359949,
+      "hip": -1.2001992464065552,
+      "knee": 2.499999761581421,
+      "hip_velocity": -0.003481291001662612,
+      "knee_velocity": 0.0024347184225916862,
+      "platform_height": 0.16,
+      "remaining_path_to_platform": 8.596093690395186
+    },
+    "selection": {
+      "status": "revision_required",
+      "reason": "unknown",
+      "goal_id": "destination",
+      "completed": [],
+      "remaining_goals": [
+        "destination"
+      ],
+      "queries": [
+        {
+          "route_id": "original_jump",
+          "estimates": [
+            {
+              "candidate_id": "v2.0_a0.5",
+              "known": false,
+              "support": 0.08158105876684303,
+              "complete_probability": null,
+              "success_cost": null,
+              "sample_count": 6
+            }
+          ],
+          "ranked_candidates": [],
+          "best_candidate": null,
+          "scope": "Empirical complete-task outcomes; executor must apply feasibility threshold and fallback"
+        },
+        {
+          "route_id": "bypass",
+          "estimates": [
+            {
+              "candidate_id": "v2.0_a0.5",
+              "known": false,
+              "support": 0.08158105876684303,
+              "complete_probability": null,
+              "success_cost": null,
+              "sample_count": 6
+            }
+          ],
+          "ranked_candidates": [],
+          "best_candidate": null,
+          "scope": "Empirical complete-task outcomes; executor must apply feasibility threshold and fallback"
+        }
+      ],
+      "active_reference": {
+        "goal_id": "destination",
+        "route_id": "original_jump",
+        "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/original_extended_reference.npz",
+        "skill_id": "matched_runtime",
+        "candidate_id": "v2.0_a0.5",
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "evidence_rows": 24,
+      "excluded_origin_id": "rb_connection_seed20261106_root002",
+      "scope": "Empirical route recommendation; unavailable support retains current execution, not proof of safety"
+    },
+    "query_state": {
+      "time": 6.04,
+      "root": [
+        [
+          -0.9960936903953552,
+          0.4576718807220459,
+          0.11886798590421677,
+          0.7182576060295105,
+          -0.08967538923025131,
+          -0.08612262457609177,
+          0.6845781803131104,
+          1.9774655103683472,
+          -0.5093265175819397,
+          0.0009058092255145311,
+          -0.22568148374557495,
+          0.05657746642827988,
+          -0.2899668216705322
+        ]
+      ],
+      "measurement": [
+        [
+          -0.04788970947265625,
+          0.23239198327064514,
+          -0.0391608327627182,
+          0.18128259479999542,
+          -0.28981104493141174,
+          29.09132957458496,
+          29.164505004882812
+        ]
+      ],
+      "position": [
+        [
+          -1.2001992464065552,
+          -0.15418890118598938,
+          -0.0391608327627182,
+          2.499999761581421,
+          -6.195752143859863
+        ]
+      ],
+      "velocity": [
+        [
+          -0.003481291001662612,
+          -29.09132957458496,
+          0.18128259479999542,
+          0.0024347184225916862,
+          -29.164505004882812
+        ]
+      ],
+      "previous_reference": [
+        [
+          2.0427889823913574,
+          0.019954275339841843
+        ]
+      ],
+      "previous_alpha": [
+        0.5
+      ],
+      "previous_alpha_duration_s": 6.04
+    },
+    "asynchronous": true,
+    "application_delay_sim_s": 0.020000000000000462
+  },
+  {
+    "decision_index": 2,
+    "trigger_x_m": 1.0,
+    "time_s": 7.08,
+    "requested_route": "original_jump",
+    "executed_route": "original_jump",
+    "furthest_common_progress_m": 13.219928741455078,
+    "availability": {
+      "available_routes": [
+        "original_jump"
+      ],
+      "blocked_routes": [
+        {
+          "route_id": "bypass",
+          "reason": "missed_diversion"
+        }
+      ]
+    },
+    "root": [
+      [
+        1.078349232673645,
+        0.04781227931380272,
+        0.11880931258201599,
+        0.6867444515228271,
+        -0.023382393643260002,
+        -0.025403199717402458,
+        0.7260783910751343,
+        2.039151668548584,
+        -0.11157593131065369,
+        -0.0034786814358085394,
+        0.044546257704496384,
+        -0.012431266717612743,
+        0.3055190145969391
+      ]
+    ],
+    "selection_wall_s": 0.06947775800654199,
+    "history": "existing begin_connection; controller/filter/ESO/observation history retained",
+    "role": "capability route decision",
+    "decision_state": {
+      "time": 7.08,
+      "root": [
+        [
+          1.078349232673645,
+          0.04781227931380272,
+          0.11880931258201599,
+          0.6867444515228271,
+          -0.023382393643260002,
+          -0.025403199717402458,
+          0.7260783910751343,
+          2.039151668548584,
+          -0.11157593131065369,
+          -0.0034786814358085394,
+          0.044546257704496384,
+          -0.012431266717612743,
+          0.3055190145969391
+        ]
+      ],
+      "measurement": [
+        [
+          0.05569946765899658,
+          -0.04501187056303024,
+          0.04142081364989281,
+          -0.03679480776190758,
+          0.3045681118965149,
+          29.001121520996094,
+          29.23814582824707
+        ]
+      ],
+      "position": [
+        [
+          -1.2002017498016357,
+          -5.316094398498535,
+          0.04142081364989281,
+          2.499999761581421,
+          1.198264718055725
+        ]
+      ],
+      "velocity": [
+        [
+          0.03147479519248009,
+          -29.001121520996094,
+          -0.03679480776190758,
+          -3.103940116488957e-06,
+          -29.23814582824707
+        ]
+      ],
+      "previous_reference": [
+        [
+          2.0440762042999268,
+          0.026803676038980484
+        ]
+      ],
+      "previous_alpha": [
+        0.5
+      ],
+      "previous_alpha_duration_s": 7.08
+    },
+    "observable_state": {
+      "speed": 2.041887738662318,
+      "roll": 0.05658125877380371,
+      "roll_rate": -0.04265196621417999,
+      "cross_track": 0.05014203488826752,
+      "heading_error": 0.07517644892026237,
+      "steer": 0.04220200702548027,
+      "steer_rate": -0.037089042365550995,
+      "previous_speed_reference": 2.0440056324005127,
+      "lateral_velocity_heading_frame": 0.03033894844332083,
+      "world_yaw_rate": 0.31135204434394836,
+      "previous_alpha": 0.5,
+      "previous_alpha_duration": 7.0600000000000005,
+      "remaining_path_to_release": 4.9624460935591586,
+      "path_curvature": 0.0,
+      "corridor_half_width": 1.0,
+      "pitch": 0.0009365792818094576,
+      "body_angular_y": -0.02714927530378531,
+      "hip": -1.2002017498016357,
+      "knee": 2.499999761581421,
+      "hip_velocity": 0.0316060446202755,
+      "knee_velocity": -3.033199391211383e-06,
+      "platform_height": 0.16,
+      "remaining_path_to_platform": 6.562446093559139
+    },
+    "selection": {
+      "status": "revision_required",
+      "reason": "unknown",
+      "goal_id": "destination",
+      "completed": [],
+      "remaining_goals": [
+        "destination"
+      ],
+      "queries": [
+        {
+          "route_id": "original_jump",
+          "estimates": [
+            {
+              "candidate_id": "v2.0_a0.5",
+              "known": false,
+              "support": 8.637220686302827e-06,
+              "complete_probability": null,
+              "success_cost": null,
+              "sample_count": 6
+            }
+          ],
+          "ranked_candidates": [],
+          "best_candidate": null,
+          "scope": "Empirical complete-task outcomes; executor must apply feasibility threshold and fallback"
+        }
+      ],
+      "active_reference": {
+        "goal_id": "destination",
+        "route_id": "original_jump",
+        "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/original_extended_reference.npz",
+        "skill_id": "matched_runtime",
+        "candidate_id": "v2.0_a0.5",
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "evidence_rows": 24,
+      "excluded_origin_id": "rb_connection_seed20261106_root002",
+      "scope": "Empirical route recommendation; unavailable support retains current execution, not proof of safety"
+    },
+    "query_state": {
+      "time": 7.0600000000000005,
+      "root": [
+        [
+          1.0375539064407349,
+          0.05014203488826752,
+          0.11880437284708023,
+          0.6863495707511902,
+          -0.02547021023929119,
+          -0.027635054662823677,
+          0.7263001799583435,
+          2.0383992195129395,
+          -0.12310406565666199,
+          -0.0035100681707262993,
+          0.04210466891527176,
+          -0.012753286398947239,
+          0.31135204434394836
+        ]
+      ],
+      "measurement": [
+        [
+          0.05658125877380371,
+          -0.04265196621417999,
+          0.04220200702548027,
+          -0.037089042365550995,
+          0.31035348773002625,
+          28.998981475830078,
+          29.23882293701172
+        ]
+      ],
+      "position": [
+        [
+          -1.2002017498016357,
+          -4.731950759887695,
+          0.04220200702548027,
+          2.499999761581421,
+          1.7827401161193848
+        ]
+      ],
+      "velocity": [
+        [
+          0.0316060446202755,
+          -28.998981475830078,
+          -0.037089042365550995,
+          -3.033199391211383e-06,
+          -29.23882293701172
+        ]
+      ],
+      "previous_reference": [
+        [
+          2.0440056324005127,
+          0.02773570641875267
+        ]
+      ],
+      "previous_alpha": [
+        0.5
+      ],
+      "previous_alpha_duration_s": 7.0600000000000005
+    },
+    "asynchronous": true,
+    "application_delay_sim_s": 0.019999999999999574
+  }
+]

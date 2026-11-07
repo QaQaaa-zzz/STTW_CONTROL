@@ -1896,3 +1896,6 @@ Config learning/configs/isaac_h75_tradeoff_repeats.json records all sampled valu
 
 ### 第三章：实际任务参考与物理完成确认（2026-11-07）
 复用ContinuousTask分开建议与executor-confirmed reference，修订/未知状态保留实际参考，未应用建议不能确认下一目标，目标不重复记分；新增后处理把既有物理评分回写completed/remaining与修订请求状态。原E5能力18记录按optional/mandatory语义回放各3完成15待修订、0标签差异（同18物理记录，3成功均root002）。一次旧update2/9.6m/30s已知配置的实际接线重放，12000物理步/0训练、85.882秒，严格支撑1.215秒并到达；中途no_feasible保留原执行，最终按物理完成解除旧请求。不是heading125新泛化结果，也未实现即时多目标/LLM重规划。17相关测试与可移植快照离线复算通过。详见[当前报告](evidence/chapter3_jump_heading/RESULTS.md)。
+
+## 第三章承诺前有限次在线查询
+复用原异步能力选择和执行器，forward_branch可配置有序起跳前查询位置；保留首事件并记录全序列，实际路线评分取最后事件。旧update2/root002/9.6m/30s工程重放：三查询5.56/6.06/7.08s，第三次排除错过支路；保持原参考，严格支撑1.215s并完成续行，12000物理lane步、0更新、100.47s。全trace与上次单查询逐值一致，无新选档收益或泛化主张；17测试通过。详见docs/evidence/chapter3_jump_heading/RESULTS.md及reselection_summary.json。

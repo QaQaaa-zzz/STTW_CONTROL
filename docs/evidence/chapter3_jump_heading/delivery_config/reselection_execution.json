@@ -1,0 +1,261 @@
+{
+  "role": "Actual executed references; physical goal confirmation pending independent adjudication",
+  "program": {
+    "goals": [
+      {
+        "goal_id": "destination",
+        "allowed_routes": [
+          "original_jump",
+          "bypass"
+        ]
+      }
+    ]
+  },
+  "routes": [
+    {
+      "route_id": "original_jump",
+      "goal_id": "destination",
+      "task_id": "original_jump:optional",
+      "skill_id": "matched_runtime",
+      "candidates": [
+        "v2.0_a0.5"
+      ],
+      "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/original_extended_reference.npz"
+    },
+    {
+      "route_id": "bypass",
+      "goal_id": "destination",
+      "task_id": "bypass:optional",
+      "skill_id": "matched_runtime",
+      "candidates": [
+        "v2.0_a0.5"
+      ],
+      "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/bypass_reference.npz"
+    }
+  ],
+  "candidates": [
+    {
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "candidate_id": "v2.0_a0.5"
+    }
+  ],
+  "events": [
+    {
+      "status": "reference_executed",
+      "reference": {
+        "goal_id": "destination",
+        "route_id": "original_jump",
+        "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/original_extended_reference.npz",
+        "skill_id": "matched_runtime",
+        "candidate_id": "v2.0_a0.5",
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "proposal_reference": null,
+      "time_s": 0.0,
+      "reason": "Existing upstream reference is physically executing"
+    },
+    {
+      "status": "revision_required",
+      "reason": "no_feasible",
+      "goal_id": "destination",
+      "completed": [],
+      "remaining_goals": [
+        "destination"
+      ],
+      "queries": [
+        {
+          "route_id": "original_jump",
+          "estimates": [
+            {
+              "candidate_id": "v2.0_a0.5",
+              "known": true,
+              "support": 1.9432400766738045,
+              "complete_probability": 0.0,
+              "success_cost": null,
+              "sample_count": 6
+            }
+          ],
+          "ranked_candidates": [
+            "v2.0_a0.5"
+          ],
+          "best_candidate": "v2.0_a0.5",
+          "scope": "Empirical complete-task outcomes; executor must apply feasibility threshold and fallback"
+        },
+        {
+          "route_id": "bypass",
+          "estimates": [
+            {
+              "candidate_id": "v2.0_a0.5",
+              "known": true,
+              "support": 1.9432400766738045,
+              "complete_probability": 0.0,
+              "success_cost": null,
+              "sample_count": 6
+            }
+          ],
+          "ranked_candidates": [
+            "v2.0_a0.5"
+          ],
+          "best_candidate": "v2.0_a0.5",
+          "scope": "Empirical complete-task outcomes; executor must apply feasibility threshold and fallback"
+        }
+      ],
+      "active_reference": {
+        "goal_id": "destination",
+        "route_id": "original_jump",
+        "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/original_extended_reference.npz",
+        "skill_id": "matched_runtime",
+        "candidate_id": "v2.0_a0.5",
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      }
+    },
+    {
+      "status": "reference_executed",
+      "reference": {
+        "goal_id": "destination",
+        "route_id": "original_jump",
+        "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/original_extended_reference.npz",
+        "skill_id": "matched_runtime",
+        "candidate_id": "v2.0_a0.5",
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "proposal_reference": null,
+      "time_s": 5.5600000000000005,
+      "reason": "Actual route applied after availability and deadline checks"
+    },
+    {
+      "status": "revision_required",
+      "reason": "unknown",
+      "goal_id": "destination",
+      "completed": [],
+      "remaining_goals": [
+        "destination"
+      ],
+      "queries": [
+        {
+          "route_id": "original_jump",
+          "estimates": [
+            {
+              "candidate_id": "v2.0_a0.5",
+              "known": false,
+              "support": 0.08158105876684303,
+              "complete_probability": null,
+              "success_cost": null,
+              "sample_count": 6
+            }
+          ],
+          "ranked_candidates": [],
+          "best_candidate": null,
+          "scope": "Empirical complete-task outcomes; executor must apply feasibility threshold and fallback"
+        },
+        {
+          "route_id": "bypass",
+          "estimates": [
+            {
+              "candidate_id": "v2.0_a0.5",
+              "known": false,
+              "support": 0.08158105876684303,
+              "complete_probability": null,
+              "success_cost": null,
+              "sample_count": 6
+            }
+          ],
+          "ranked_candidates": [],
+          "best_candidate": null,
+          "scope": "Empirical complete-task outcomes; executor must apply feasibility threshold and fallback"
+        }
+      ],
+      "active_reference": {
+        "goal_id": "destination",
+        "route_id": "original_jump",
+        "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/original_extended_reference.npz",
+        "skill_id": "matched_runtime",
+        "candidate_id": "v2.0_a0.5",
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      }
+    },
+    {
+      "status": "reference_executed",
+      "reference": {
+        "goal_id": "destination",
+        "route_id": "original_jump",
+        "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/original_extended_reference.npz",
+        "skill_id": "matched_runtime",
+        "candidate_id": "v2.0_a0.5",
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "proposal_reference": null,
+      "time_s": 6.0600000000000005,
+      "reason": "Actual route applied after availability and deadline checks"
+    },
+    {
+      "status": "revision_required",
+      "reason": "unknown",
+      "goal_id": "destination",
+      "completed": [],
+      "remaining_goals": [
+        "destination"
+      ],
+      "queries": [
+        {
+          "route_id": "original_jump",
+          "estimates": [
+            {
+              "candidate_id": "v2.0_a0.5",
+              "known": false,
+              "support": 8.637220686302827e-06,
+              "complete_probability": null,
+              "success_cost": null,
+              "sample_count": 6
+            }
+          ],
+          "ranked_candidates": [],
+          "best_candidate": null,
+          "scope": "Empirical complete-task outcomes; executor must apply feasibility threshold and fallback"
+        }
+      ],
+      "active_reference": {
+        "goal_id": "destination",
+        "route_id": "original_jump",
+        "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/original_extended_reference.npz",
+        "skill_id": "matched_runtime",
+        "candidate_id": "v2.0_a0.5",
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      }
+    },
+    {
+      "status": "reference_executed",
+      "reference": {
+        "goal_id": "destination",
+        "route_id": "original_jump",
+        "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/original_extended_reference.npz",
+        "skill_id": "matched_runtime",
+        "candidate_id": "v2.0_a0.5",
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "proposal_reference": null,
+      "time_s": 7.08,
+      "reason": "Actual route applied after availability and deadline checks"
+    }
+  ],
+  "completed": [],
+  "active_reference": {
+    "goal_id": "destination",
+    "route_id": "original_jump",
+    "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/original_extended_reference.npz",
+    "skill_id": "matched_runtime",
+    "candidate_id": "v2.0_a0.5",
+    "speed_m_s": 2.0,
+    "alpha": 0.5
+  },
+  "proposal_reference": null,
+  "outcome_goal_id": "destination"
+}

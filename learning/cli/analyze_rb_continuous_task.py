@@ -53,6 +53,8 @@ if midpoint_path.exists():
 if spec.get('forward_branch'):
  branch_path=a.run/'forward_branch_decision.json'
  branch=json.loads(branch_path.read_text()) if branch_path.exists() else None
+ decisions_path=a.run/'forward_branch_decisions.json'
+ if decisions_path.exists():branch=json.loads(decisions_path.read_text())[-1]
  executed=branch['executed_route'] if branch else 'original_jump'
  branch_map=json.loads(Path(spec['forward_branch']['map_contract']).read_text())
  route_error=error;half_width=criteria['corridor_half_width_m']

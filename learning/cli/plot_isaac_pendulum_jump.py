@@ -48,6 +48,7 @@ if protocol['spec'].get('initial_state_bank'):
 landing_path=p/'landing_handoff.json'
 landing=json.loads(landing_path.read_text())['time'] if landing_path.exists() else None
 branch=json.loads((p/'forward_branch_decision.json').read_text()) if (p/'forward_branch_decision.json').exists() else None
+if (p/'forward_branch_decisions.json').exists():branch=json.loads((p/'forward_branch_decisions.json').read_text())[-1]
 for i,c in enumerate(r['cases']):
  a=t[v[:,i],i];label='H75+ECBC bypass (jump unused)' if branch and branch['executed_route']=='bypass' else c['skill'];color=plt.get_cmap('tab10')(i)
  ax[0].plot(a[:,1],a[:,2],label=label,color=color);ax[0].plot(a[-1,1],a[-1,2],'x',color=color)
@@ -80,6 +81,12 @@ ax[4].set(xlabel='Time (s)',ylabel='Raw jump-policy rear target, before transiti
 ax[5].axhline(0,ls=':',color='gray');ax[5].set(xlabel='Time (s)',ylabel='Frontmost collision distance to edge (m)')
 if np.isfinite(handoff):
  for a in (ax[2],ax[3],ax[4],ax[5]):a.axvline(handoff,ls=':',color='black',alpha=.5,label='Ground-to-jump handoff')
+if (p/'forward_branch_decisions.json').exists():
+ for decision in json.loads((p/'forward_branch_decisions.json').read_text()):
+  point=np.asarray(decision['root'])[0,:2]
+  ax[0].plot(*point,'o',color='darkorange',ms=4)
+  ax[0].annotate('Q'+str(decision['decision_index']+1),point,fontsize=7)
+  for a in (ax[2],ax[3]):a.axvline(decision['time_s'],ls=':',color='darkorange',alpha=.5)
 trial_role='Single-run engineering DEV' if len(r['cases'])==1 else 'Frozen-policy multi-run DEV'
 if protocol['spec'].get('external_force_pulse'):
  force=json.loads((p/'external_force.json').read_text());trial_role='External-force recorded DEV'

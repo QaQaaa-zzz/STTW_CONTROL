@@ -13,6 +13,9 @@ if pulse and (len(spec['skills'])!=1 or pulse['kind']!='external_force_N' or pul
 if spec.get('connection_selector') and ((not batch and len(spec['skills'])!=1) or not spec.get('ground_bundle') or ('midpoint' in spec['connection_selector'].get('stages',['midpoint']) and not spec.get('connection_midpoint_candidate'))):p.error('Connection selection requires ground execution; midpoint selection additionally requires its event')
 if batch and spec.get('connection_selector') and (spec['connection_selector'].get('stages')!=['exit'] or len(set(spec['skills']))!=1 or len(spec.get('connection_selector_lanes',[True]*len(batch)))!=len(batch)):p.error('Batch selection requires a common frozen skill, exit-only queries and one selector flag per lane')
 if spec.get('forward_branch') and (len(spec['skills'])!=1 or not spec.get('ground_bundle') or spec['forward_branch']['requested_route'] not in ('original_jump','bypass')):p.error('Mapped branch pilot requires one ground lane and a declared original_jump or bypass route')
+if spec.get('forward_branch'):
+ branch_points=spec['forward_branch'].get('decision_positions_x_m',[spec['forward_branch']['decision_x_m']])
+ if not branch_points or any(x>=y for x,y in zip(branch_points,branch_points[1:])) or branch_points[-1]>=spec['handoff_x']:p.error('Route decisions must increase along the approach and precede jump handoff')
 if spec.get('connection_midpoint_candidate'):
  if not spec.get('connection_candidate') or not spec['connection_candidate']['decision_x_m']<spec['connection_midpoint_candidate']['decision_x_m']<spec['handoff_x']:p.error('Midpoint decision must lie strictly between the exit decision and jump handoff')
 out=Path(spec['output']);out.mkdir(exist_ok=True,parents=True)
@@ -130,6 +133,7 @@ target=torch.zeros(n,4,device='cuda:0')
 root_acceleration=torch.zeros(n,3,device='cuda:0')
 branch_decided=False;bypass_selected=False;route_selector=None;route_planner=None
 branch_executor=None;branch_future=None;branch_query_start=None;branch_query_state=None
+branch_decision_index=0;branch_decisions=[]
 if spec.get('forward_branch'):
  from sttw_control.continuous_task import available_forward_routes
  branch_config=spec['forward_branch'];branch_map=json.loads(Path(branch_config['map_contract']).read_text())
@@ -194,7 +198,7 @@ for k in range(steps+1):
   ground.speed.fill_(candidate['speed_m_s']);ground.alpha.fill_(candidate['alpha'])
  if spec.get('forward_branch') and not branch_decided and not active and not returned:
   furthest_common_progress=max(furthest_common_progress,float(ground.middle.projection['progress'][0]))
-  if float(root[0,0])>=branch_config['decision_x_m']:
+  if float(root[0,0])>=branch_points[branch_decision_index]:
    projection=common_route.project(pose[:,:2],torch.full_like(speed,furthest_common_progress),speed*.02)
    furthest_common_progress=max(furthest_common_progress,float(projection['progress'][0]))
    availability=available_forward_routes(branch_routes,['original_jump','bypass'],furthest_progress_m=furthest_common_progress,time_s=k*.005,current_route='original_jump')
@@ -213,7 +217,10 @@ for k in range(steps+1):
       requested,route_choice,observable_state=branch_future.result()
      else:query_ready=False
    if query_ready:
-    branch_decided=True
+    branch_decision_index+=1
+    branch_decided=branch_decision_index==len(branch_points)
+    # An unfinished timed-out query is never superseded by another query.
+    if route_choice is not None and route_choice['status']=='query_timeout':branch_decided=True
     executed=requested if requested in availability['available_routes'] else 'original_jump'
     if route_choice is not None and route_choice['status']=='reference_selected' and executed==requested:
      reference=route_choice['reference']
@@ -222,13 +229,18 @@ for k in range(steps+1):
     if executed=='bypass':
      branch_reference=dict(np.load(branch_map['branch_reference']));np.savez_compressed(out/'executed_branch_reference.npz',**branch_reference)
      ground.begin_connection(TorchPathReference(branch_reference,ground.config,ground.device),ground.speed.clone(),ground.alpha.clone());bypass_selected=True
-    (out/'forward_branch_decision.json').write_text(json.dumps(dict(time_s=k*.005,requested_route=requested,executed_route=executed,furthest_common_progress_m=furthest_common_progress,availability=availability,root=root.cpu().tolist(),selection_wall_s=time.perf_counter()-branch_query_start,history='existing begin_connection; controller/filter/ESO/observation history retained',role='Forced-route pilot' if route_planner is None else route_planner['mode']+' route decision',decision_state=decision_state,observable_state=observable_state,selection=route_choice,query_state=branch_query_state,asynchronous=branch_executor is not None,application_delay_sim_s=k*.005-branch_query_state['time']),indent=2))
+     branch_decided=True
+    decision_record=dict(decision_index=branch_decision_index-1,trigger_x_m=branch_points[branch_decision_index-1],time_s=k*.005,requested_route=requested,executed_route=executed,furthest_common_progress_m=furthest_common_progress,availability=availability,root=root.cpu().tolist(),selection_wall_s=time.perf_counter()-branch_query_start,history='existing begin_connection; controller/filter/ESO/observation history retained',role='Forced-route pilot' if route_planner is None else route_planner['mode']+' route decision',decision_state=decision_state,observable_state=observable_state,selection=route_choice,query_state=branch_query_state,asynchronous=branch_executor is not None,application_delay_sim_s=k*.005-branch_query_state['time'])
+    branch_decisions.append(decision_record)
+    if len(branch_decisions)==1:(out/'forward_branch_decision.json').write_text(json.dumps(decision_record,indent=2))
+    (out/'forward_branch_decisions.json').write_text(json.dumps(branch_decisions,indent=2))
     if branch_config.get('track_task_progress',False):
      cid=next(c['candidate_id'] for c in route_planner['candidates'] if abs(c['speed_m_s']-float(ground.speed[0]))<1e-6 and abs(c['alpha']-float(ground.alpha[0]))<1e-6)
      route_selector.task.record_execution(executed,cid,time_s=k*.005,reason='Actual route applied after availability and deadline checks')
      if route_choice['status']!='reference_selected':
       task=route_selector.task
       (out/'task_revision_request.json').write_text(json.dumps(dict(status='requested',time_s=k*.005,reason=route_choice.get('reason',route_choice['status']),remaining_goals=[g for g in task.program['goals'] if g['goal_id'] not in task.completed],completed=task.completed,active_reference=task.active_reference,observation=observable_state,scope='Historical request event; task_outcome reports final pending goals. Actual reference continues until a new plan is applied'),indent=2))
+    branch_future=None;branch_query_start=None;branch_query_state=None
  if k%4==0:
   inside=(root[:,0]>=spec.get('platform_front_x',3.6)-1.1)&(root[:,0]<=spec.get('platform_front_x',3.6)+.4);consumed|=entered&~inside;entered|=inside
   signal=(inside&~consumed).float()
@@ -326,6 +338,6 @@ if spec.get('forward_branch',{}).get('track_task_progress',False):
  (out/'task_execution.json').write_text(json.dumps(dict(role='Actual executed references; physical goal confirmation pending independent adjudication',program=task.program,routes=route_planner['routes'],candidates=route_planner['candidates'],events=task.events,completed=task.completed,active_reference=task.active_reference,proposal_reference=task.active,outcome_goal_id=branch_config['outcome_goal_id']),indent=2))
 (out/'results.json').write_text(json.dumps(result,indent=2));print(result,flush=True)
 if branch_executor is not None:
- if not branch_decided:(out/'forward_query_unapplied.json').write_text(json.dumps(dict(status='execution_ended_before_application',query_state=branch_query_state,active_jump=active,returned=returned)))
+ if branch_query_state is not None:(out/'forward_query_unapplied.json').write_text(json.dumps(dict(status='execution_ended_before_application',query_state=branch_query_state,active_jump=active,returned=returned)))
  branch_executor.shutdown(wait=False,cancel_futures=True)
 os._exit(0)

@@ -243,3 +243,24 @@ ContinuousTask新增`record_execution`及`active_reference`：启用执行绑定
 例：`PYTHONPATH=learning/src python learning/cli/finalize_task_execution.py --run docs/evidence/chapter3_jump_heading/task_execution_replay/rb_connection_seed20261106_root002_forced_original_jump_extended_reference_capability --output runs/task_replay.json --require-platform`。
 
 新增执行绑定、旧建议不能确认下一目标、重复到达不重复记分、必跳不能被绕行替代、观测完成解除旧修订请求等共17项相关测试通过；实际完整链流水线已生成独立执行/结果文件。首次回放遇到缺失分流文件，已按真实“未到分流点”处理，没有丢掉该失败或新增物理。当前仍未部署LLM、未声称所有路由/来车状态可行，整体任务书未宣布完成。
+
+
+## 承诺起跳前的有限次在线重选
+
+![三次实际查询与完整技能链](task_reselection_xy.png)
+
+本轮优先推进任务接口，不加严验收、不新增训练。复用同一已知旧update2/root002长接近场景，增加三个预定查询位置。保持原模型、控制、400/200/50Hz、30s窗口和原严格成功判据；不是当前heading125的新验证，也不替换它。
+
+|触发位置 x（m）|实际应用时刻（s）|评价结果|实际执行|
+|---|---:|---|---|
+|-2|5.56|no_feasible|保持原路2m/s、α=.5|
+|-1|6.06|unknown|保持原路2m/s、α=.5|
+|1|7.08|unknown；支路入口已过|保持原路，支路被排除|
+
+三次查询含异步应用的墙钟延迟分别82/67/69ms，控制继续执行。每个位置使用新的实际观测，应用前重新检查原地图的单调进度与分流期限；切入绕行后不再跳回固定原路，超时停止本次有限查询序列。未新增线程机制，复用原单工作线程。缺省仍为原单点查询。
+
+9.50s交给跳跃，严格台面连续支撑1.215s，13.44s交回地面，19.46s进入共同目标区域，30s完整窗口完成。物理rollout100.47s、12000物理lane步、0优化。保存的全程trace与上一轮单查询运行逐值相同；这说明本例保留原参考时多次查询没有改变运动，不是重选提高完成率的证据。评价器没有找到新可用方案，不宣称已验证可靠绕行或实时多目标任务修订。
+
+配置新增`forward_branch.decision_positions_x_m`，只允许起跳交权前有序位置；旧`forward_branch_decision.json`保留首事件，新增`forward_branch_decisions.json`保存全序列。评分/绘图读取最后实际路线，避免把首建议误当最终执行。实际执行引用和剩余目标沿用ContinuousTask；本例最终完成，历史修订请求由物理完成解除。17项相关测试通过，完整仿真流水线通过。
+
+[冻结配置](delivery_config/reselection_config.json)、[完整事件序列](delivery_config/reselection_decisions.json)、[结果摘要](delivery_config/reselection_summary.json)、[任务状态](delivery_config/reselection_outcome.json)、[XY原始坐标与参考](task_reselection_xy.npz)。完整高频证据位于数据盘`chapter3_task_reselection/live_root002`。
