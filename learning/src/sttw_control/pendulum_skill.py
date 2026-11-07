@@ -143,9 +143,11 @@ class TorchPendulumSkill:
         self.mean=to(data['mean']);self.std=to(data['std']);self.mapping=self.identity['mapping']
         self.lo=to(np.asarray(self.mapping['ctrl_min'],dtype=np.float32));self.hi=to(np.asarray(self.mapping['ctrl_max'],dtype=np.float32))
 
-    def infer(self, observation, knee_position):
+    def infer(self, observation, knee_position, heading=None):
         import torch
         with torch.no_grad():
+            if self.identity.get('heading_observation'):
+                observation=torch.cat((observation,heading),-1)
             x=(observation-self.mean)/self.std
             for weight,bias in self.weights[:-1]:x=torch.nn.functional.silu(x@weight+bias)
             weight,bias=self.weights[-1];action=torch.tanh((x@weight+bias)[...,:4])

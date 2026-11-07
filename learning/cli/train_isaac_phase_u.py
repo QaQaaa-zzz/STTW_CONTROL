@@ -34,7 +34,11 @@ if cfg.get('resume_checkpoint'):
     initialization.update(initialization='checkpoint model and optimizer resume; fresh simulation and rollout state',resume_checkpoint=cfg['resume_checkpoint'],start_update=runner.current_learning_iteration,learning_rate=runner.alg.learning_rate)
 elif cfg.get('initial_checkpoint'):
     checkpoint=torch.load(cfg['initial_checkpoint'],map_location=cfg['device'],weights_only=False)
-    runner.alg.actor_critic.load_state_dict(checkpoint['model_state_dict'])
+    state=checkpoint['model_state_dict']
+    if env.num_obs==80 and state['mean'].numel()==76:
+        from sttw_control.jump_heading import expand_actor_state
+        state=expand_actor_state(state)
+    runner.alg.actor_critic.load_state_dict(state)
     initialization.update(initial_checkpoint=cfg['initial_checkpoint'],parent_selection=checkpoint.get('infos'),initialization='selected prior actor/critic/normalizer weights; fresh optimizer and rollout state')
 status.update(start_update=runner.current_learning_iteration,completed_updates=runner.current_learning_iteration,target_update=runner.current_learning_iteration+cfg['updates'])
 (a.output/'status.json').write_text(json.dumps(status,indent=2))

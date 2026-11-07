@@ -1,4 +1,5 @@
 """Batched frozen connection trials on the existing Isaac ground/control stack."""
+from .jump_heading import heading_features
 import json
 import time
 from pathlib import Path
@@ -70,7 +71,7 @@ def run_connection_batch(spec, out, plant, ground, policies, history, geometry):
             if spec.get('stop_at_ground_handoff',False):return
             action=torch.empty_like(last);proposed=torch.empty_like(target)
             for policy,lanes in policy_groups:
-                action[lanes],proposed[lanes]=policy.infer(obs[lanes],plant.dofs[lanes,plant.joints.index('knee_joint'),0])
+                action[lanes],proposed[lanes]=policy.infer(obs[lanes],plant.dofs[lanes,plant.joints.index('knee_joint'),0],heading_features(root[lanes]))
             last=torch.where(active[:,None],action,last);target=torch.where(active[:,None],proposed,target)
         _,pitch,_=euler_xyz_from_quat(plant.robot.data.root_link_quat_w)
         pitch=torch.atan2(torch.sin(pitch),torch.cos(pitch))

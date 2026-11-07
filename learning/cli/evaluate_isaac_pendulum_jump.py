@@ -1,4 +1,5 @@
 """Paired frozen Phase U / RB handoff on the common pendulum bicycle."""
+from sttw_control.jump_heading import heading_features
 import os,argparse,json,time
 from pathlib import Path
 import numpy as np
@@ -226,7 +227,10 @@ for k in range(steps+1):
    plant.set_pendulum_locked(False);active=True
    (out/'handoff.json').write_text(json.dumps(dict(time=k*.005,root=root.cpu().tolist(),position=plant.dofs[:,:,0].cpu().tolist(),velocity=plant.dofs[:,:,1].cpu().tolist(),distance=distance.cpu().tolist()),indent=2))
   if active:
-   for policy,lanes in policy_groups:last[lanes],target[lanes]=policy.infer(obs[lanes],plant.dofs[lanes,plant.joints.index('knee_joint'),0])
+   for policy,lanes in policy_groups:last[lanes],target[lanes]=policy.infer(obs[lanes],plant.dofs[lanes,plant.joints.index('knee_joint'),0],heading_features(root[lanes]))
+   if spec.get('jump_heading_feedback'):
+    from sttw_control.jump_heading import correct_grounded_jump_heading
+    target=correct_grounded_jump_heading(target,pose,plant.contact,[plant.bodies.index(w) for w in ('frontwheel','rearwheel')],spec['jump_heading_feedback'])
  if active and spec.get('landing_return'):
   # Contact-triggered handback; retain the physical pose/velocity and lock the current arm posture.
   from isaaclab.utils.math import euler_xyz_from_quat

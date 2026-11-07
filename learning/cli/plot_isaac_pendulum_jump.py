@@ -10,11 +10,14 @@ p=args.run;d=np.load(p/'trajectory.npz');t=d['trace'];v=d['valid'];r=json.loads(
 protocol=json.loads((p/'protocol.json').read_text());handoff=json.loads((p/'handoff.json').read_text())['time'] if (p/'handoff.json').exists() else float('inf')
 if protocol['spec'].get('initial_state_bank'):
  plt.close(fig)
- models=list(dict.fromkeys(protocol['spec']['skills']));indices=protocol['spec']['entry_indices']
- fig,axes=plt.subplots(2,len(models),figsize=(6*len(models),9),layout='constrained',sharex='row',sharey='row')
+ groups=protocol['spec']['skills']
+ if protocol['spec'].get('jump_heading_feedback'):
+  groups=[f'{skill}: yaw gain {gain:g}' for skill,gain in zip(groups,protocol['spec']['jump_heading_feedback']['yaw_gain'])]
+ models=list(dict.fromkeys(groups));indices=protocol['spec']['entry_indices']
+ fig,axes=plt.subplots(2,len(models),figsize=(6*len(models),9),layout='constrained',sharex='row',sharey='row',squeeze=False)
  cmap=plt.get_cmap('viridis');normal=matplotlib.colors.Normalize(min(indices),max(indices))
  for col,model in enumerate(models):
-  for lane,skill in enumerate(protocol['spec']['skills']):
+  for lane,skill in enumerate(groups):
    if skill!=model:continue
    a=t[v[:,lane],lane];color=cmap(normal(indices[lane]))
    for row,y in [(0,2),(1,3)]:

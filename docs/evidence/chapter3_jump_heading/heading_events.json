@@ -1,0 +1,546 @@
+[
+  {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/handoff_filter_probe",
+    "lane": 0,
+    "model": "last150",
+    "candidate": {
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a0.5_update2"
+    },
+    "events": {
+      "handoff": {
+        "time_s": 7.440000057220459,
+        "y_m": 0.034458160400390625,
+        "yaw_deg": 3.8003165316051923,
+        "vy_m_s": 0.12970471382141113
+      },
+      "landing_handoff": {
+        "time_s": 9.399999618530273,
+        "y_m": 0.3908119201660156,
+        "yaw_deg": 11.86501502585647,
+        "vy_m_s": 0.32760104537010193
+      }
+    },
+    "post_jump": {
+      "max_abs_y_m": 0.7666912078857422,
+      "max_abs_yaw_deg": 33.06843555454815,
+      "final_y_m": -0.241119384765625,
+      "final_yaw_deg": 22.72579044615048,
+      "end_time_s": 22.0
+    }
+  },
+  {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/handoff_filter_probe",
+    "lane": 1,
+    "model": "last150",
+    "candidate": {
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a0.0_update2"
+    },
+    "events": {
+      "handoff": {
+        "time_s": 7.579999923706055,
+        "y_m": 0.03512474521994591,
+        "yaw_deg": 12.796237953474629,
+        "vy_m_s": 0.36595845222473145
+      },
+      "landing_handoff": {
+        "time_s": 9.579999923706055,
+        "y_m": 0.6146723031997681,
+        "yaw_deg": 12.91266959747936,
+        "vy_m_s": 0.3445785939693451
+      }
+    },
+    "post_jump": {
+      "max_abs_y_m": 1.0118942260742188,
+      "max_abs_yaw_deg": 14.940444630485736,
+      "final_y_m": 1.0118942260742188,
+      "final_yaw_deg": 9.81904588829748,
+      "end_time_s": 10.739999771118164
+    }
+  },
+  {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/handoff_filter_probe",
+    "lane": 2,
+    "model": "last150",
+    "candidate": {
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a0.5_update2"
+    },
+    "events": {}
+  },
+  {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/handoff_filter_probe",
+    "lane": 3,
+    "model": "last150",
+    "candidate": {
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a1.0_update2"
+    },
+    "events": {
+      "handoff": {
+        "time_s": 7.320000171661377,
+        "y_m": 0.027147293090820312,
+        "yaw_deg": 3.856667898211655,
+        "vy_m_s": 0.1265304982662201
+      },
+      "landing_handoff": {
+        "time_s": 10.239999771118164,
+        "y_m": 0.5400733947753906,
+        "yaw_deg": 8.73913158369482,
+        "vy_m_s": 0.2388899177312851
+      }
+    },
+    "post_jump": {
+      "max_abs_y_m": 0.8559989929199219,
+      "max_abs_yaw_deg": 26.63364508825073,
+      "final_y_m": 0.07401084899902344,
+      "final_yaw_deg": -1.6299665037023336,
+      "end_time_s": 22.0
+    }
+  },
+  {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/handoff_filter_probe",
+    "lane": 4,
+    "model": "last150",
+    "candidate": {
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a0.0_update2"
+    },
+    "events": {}
+  },
+  {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/handoff_filter_probe",
+    "lane": 5,
+    "model": "last150",
+    "candidate": {
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a1.0_update2"
+    },
+    "events": {}
+  },
+  {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/handoff_filter_probe",
+    "lane": 6,
+    "model": "update2",
+    "candidate": {
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a0.5_update2"
+    },
+    "events": {
+      "handoff": {
+        "time_s": 7.360000133514404,
+        "y_m": 0.0077838897705078125,
+        "yaw_deg": 4.08992073650513,
+        "vy_m_s": 0.1421988606452942
+      }
+    },
+    "post_jump": {
+      "max_abs_y_m": 0.3878593444824219,
+      "max_abs_yaw_deg": 32.24699641717969,
+      "final_y_m": 0.3878593444824219,
+      "final_yaw_deg": 31.072619189782962,
+      "end_time_s": 9.270000457763672
+    }
+  },
+  {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/handoff_filter_probe",
+    "lane": 7,
+    "model": "update2",
+    "candidate": {
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a0.0_update2"
+    },
+    "events": {}
+  },
+  {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/handoff_filter_probe",
+    "lane": 8,
+    "model": "update2",
+    "candidate": {
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a0.5_update2"
+    },
+    "events": {
+      "handoff": {
+        "time_s": 7.360000133514404,
+        "y_m": 0.019407272338867188,
+        "yaw_deg": 6.164535769394852,
+        "vy_m_s": 0.18734057247638702
+      },
+      "landing_handoff": {
+        "time_s": 10.380000114440918,
+        "y_m": 0.6504478454589844,
+        "yaw_deg": 15.633489597811034,
+        "vy_m_s": 0.3314495086669922
+      }
+    },
+    "post_jump": {
+      "max_abs_y_m": 1.0474720001220703,
+      "max_abs_yaw_deg": 18.03602205188175,
+      "final_y_m": 1.0474720001220703,
+      "final_yaw_deg": 17.97980458387997,
+      "end_time_s": 11.279999732971191
+    }
+  },
+  {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/handoff_filter_probe",
+    "lane": 9,
+    "model": "update2",
+    "candidate": {
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a1.0_update2"
+    },
+    "events": {
+      "handoff": {
+        "time_s": 7.360000133514404,
+        "y_m": 0.030961990356445312,
+        "yaw_deg": 4.445327808554527,
+        "vy_m_s": 0.14273583889007568
+      },
+      "landing_handoff": {
+        "time_s": 10.880000114440918,
+        "y_m": 0.5190219879150391,
+        "yaw_deg": 11.3111897078974,
+        "vy_m_s": 0.24367302656173706
+      }
+    },
+    "post_jump": {
+      "max_abs_y_m": 0.9309501647949219,
+      "max_abs_yaw_deg": 33.16332542643272,
+      "final_y_m": -0.157318115234375,
+      "final_yaw_deg": -27.51969267373369,
+      "end_time_s": 22.0
+    }
+  },
+  {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/handoff_filter_probe",
+    "lane": 10,
+    "model": "update2",
+    "candidate": {
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a0.0_update2"
+    },
+    "events": {
+      "handoff": {
+        "time_s": 7.21999979019165,
+        "y_m": -0.019073262810707092,
+        "yaw_deg": 7.28933070736361,
+        "vy_m_s": 0.2462480217218399
+      }
+    },
+    "post_jump": {
+      "max_abs_y_m": 0.20260311663150787,
+      "max_abs_yaw_deg": 58.90266495114792,
+      "final_y_m": 0.20260311663150787,
+      "final_yaw_deg": 58.90266495114792,
+      "end_time_s": 8.489999771118164
+    }
+  },
+  {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/handoff_filter_probe",
+    "lane": 11,
+    "model": "update2",
+    "candidate": {
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a1.0_update2"
+    },
+    "events": {}
+  },
+  {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/early_ground_return_probe",
+    "lane": 0,
+    "model": "last150",
+    "candidate": {
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a0.5_update2"
+    },
+    "events": {
+      "handoff": {
+        "time_s": 7.440000057220459,
+        "y_m": 0.034458160400390625,
+        "yaw_deg": 3.8003165316051923,
+        "vy_m_s": 0.12970471382141113
+      },
+      "landing_handoff": {
+        "time_s": 8.5600004196167,
+        "y_m": 0.10733604431152344,
+        "yaw_deg": 6.467608954070915,
+        "vy_m_s": 0.2963576316833496
+      }
+    },
+    "post_jump": {
+      "max_abs_y_m": 0.9395084381103516,
+      "max_abs_yaw_deg": 48.5277330635347,
+      "final_y_m": 0.9395084381103516,
+      "final_yaw_deg": 48.5277330635347,
+      "end_time_s": 9.739999771118164
+    }
+  },
+  {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/early_ground_return_probe",
+    "lane": 1,
+    "model": "last150",
+    "candidate": {
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a0.0_update2"
+    },
+    "events": {
+      "handoff": {
+        "time_s": 7.579999923706055,
+        "y_m": 0.03512474521994591,
+        "yaw_deg": 12.796237953474629,
+        "vy_m_s": 0.36595845222473145
+      },
+      "landing_handoff": {
+        "time_s": 8.720000267028809,
+        "y_m": 0.31766587495803833,
+        "yaw_deg": 14.727702189205598,
+        "vy_m_s": 0.40395861864089966
+      }
+    },
+    "post_jump": {
+      "max_abs_y_m": 0.7913618087768555,
+      "max_abs_yaw_deg": 33.21875492989105,
+      "final_y_m": 0.09936259686946869,
+      "final_yaw_deg": 28.99013032180353,
+      "end_time_s": 22.0
+    }
+  },
+  {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/early_ground_return_probe",
+    "lane": 2,
+    "model": "last150",
+    "candidate": {
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a0.5_update2"
+    },
+    "events": {}
+  },
+  {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/early_ground_return_probe",
+    "lane": 3,
+    "model": "last150",
+    "candidate": {
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a1.0_update2"
+    },
+    "events": {
+      "handoff": {
+        "time_s": 7.320000171661377,
+        "y_m": 0.027147293090820312,
+        "yaw_deg": 3.856667898211655,
+        "vy_m_s": 0.1265304982662201
+      },
+      "landing_handoff": {
+        "time_s": 8.5,
+        "y_m": 0.1712512969970703,
+        "yaw_deg": 7.6837204077335794,
+        "vy_m_s": 0.217047780752182
+      }
+    },
+    "post_jump": {
+      "max_abs_y_m": 0.3938007354736328,
+      "max_abs_yaw_deg": 16.27206222938644,
+      "final_y_m": 0.029146194458007812,
+      "final_yaw_deg": -4.346197448945336,
+      "end_time_s": 21.940000534057617
+    }
+  },
+  {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/early_ground_return_probe",
+    "lane": 4,
+    "model": "last150",
+    "candidate": {
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a0.0_update2"
+    },
+    "events": {}
+  },
+  {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/early_ground_return_probe",
+    "lane": 5,
+    "model": "last150",
+    "candidate": {
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a1.0_update2"
+    },
+    "events": {}
+  },
+  {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/early_ground_return_probe",
+    "lane": 6,
+    "model": "update2",
+    "candidate": {
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a0.5_update2"
+    },
+    "events": {
+      "handoff": {
+        "time_s": 7.360000133514404,
+        "y_m": 0.0077838897705078125,
+        "yaw_deg": 4.08992073650513,
+        "vy_m_s": 0.1421988606452942
+      }
+    },
+    "post_jump": {
+      "max_abs_y_m": 0.3878593444824219,
+      "max_abs_yaw_deg": 32.24699641717969,
+      "final_y_m": 0.3878593444824219,
+      "final_yaw_deg": 31.072619189782962,
+      "end_time_s": 9.270000457763672
+    }
+  },
+  {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/early_ground_return_probe",
+    "lane": 7,
+    "model": "update2",
+    "candidate": {
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a0.0_update2"
+    },
+    "events": {}
+  },
+  {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/early_ground_return_probe",
+    "lane": 8,
+    "model": "update2",
+    "candidate": {
+      "speed_m_s": 1.8,
+      "alpha": 0.5,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a0.5_update2"
+    },
+    "events": {
+      "handoff": {
+        "time_s": 7.360000133514404,
+        "y_m": 0.019407272338867188,
+        "yaw_deg": 6.164535769394852,
+        "vy_m_s": 0.18734057247638702
+      },
+      "landing_handoff": {
+        "time_s": 8.859999656677246,
+        "y_m": 0.3095073699951172,
+        "yaw_deg": 16.21313760783589,
+        "vy_m_s": 0.32695701718330383
+      }
+    },
+    "post_jump": {
+      "max_abs_y_m": 0.9697513580322266,
+      "max_abs_yaw_deg": 41.503825146604534,
+      "final_y_m": 0.0388031005859375,
+      "final_yaw_deg": -4.839898845178036,
+      "end_time_s": 22.0
+    }
+  },
+  {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/early_ground_return_probe",
+    "lane": 9,
+    "model": "update2",
+    "candidate": {
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v1.8_a1.0_update2"
+    },
+    "events": {
+      "handoff": {
+        "time_s": 7.360000133514404,
+        "y_m": 0.030961990356445312,
+        "yaw_deg": 4.445327808554527,
+        "vy_m_s": 0.14273583889007568
+      },
+      "landing_handoff": {
+        "time_s": 9.039999961853027,
+        "y_m": 0.2791309356689453,
+        "yaw_deg": 9.213300952269789,
+        "vy_m_s": 0.14678145945072174
+      }
+    },
+    "post_jump": {
+      "max_abs_y_m": 1.167083740234375,
+      "max_abs_yaw_deg": 36.78118831638586,
+      "final_y_m": -0.02161407470703125,
+      "final_yaw_deg": -1.0443232722226696,
+      "end_time_s": 22.0
+    }
+  },
+  {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/early_ground_return_probe",
+    "lane": 10,
+    "model": "update2",
+    "candidate": {
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a0.0_update2"
+    },
+    "events": {
+      "handoff": {
+        "time_s": 7.21999979019165,
+        "y_m": -0.019073262810707092,
+        "yaw_deg": 7.28933070736361,
+        "vy_m_s": 0.2462480217218399
+      }
+    },
+    "post_jump": {
+      "max_abs_y_m": 0.20260311663150787,
+      "max_abs_yaw_deg": 58.90266495114792,
+      "final_y_m": 0.20260311663150787,
+      "final_yaw_deg": 58.90266495114792,
+      "end_time_s": 8.489999771118164
+    }
+  },
+  {
+    "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_platform150/early_ground_return_probe",
+    "lane": 11,
+    "model": "update2",
+    "candidate": {
+      "speed_m_s": 2.0,
+      "alpha": 1.0,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a1.0_update2"
+    },
+    "events": {}
+  }
+]

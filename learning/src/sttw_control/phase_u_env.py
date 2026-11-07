@@ -18,7 +18,7 @@ from .pendulum_landing import platform_support_mask
 class PhaseUEnv:
     def __init__(self,cfg,output):
         self.cfg=cfg;self.device=cfg['device'];self.num_envs=cfg['num_envs'];self.dt=.02
-        self.num_obs=76;self.num_privileged_obs=106;self.num_actions=4
+        self.num_obs=80 if cfg.get('heading_observation') else 76;self.num_privileged_obs=106;self.num_actions=4
         spec=json.loads(Path(cfg['task_spec']).read_text());self.task=spec['task'];self.rand=spec['randomization']
         self.max_episode_length=self.task['ppo']['episode_horizon'];self.all_ids=torch.arange(self.num_envs,device=self.device)
         # One source-size platform and surrounding ground, replicated with environments.
@@ -46,7 +46,7 @@ class PhaseUEnv:
         self.episode_length_buf=torch.zeros(self.num_envs,dtype=torch.long,device=self.device)
         self.episode_return=torch.zeros(self.num_envs,device=self.device)
         self.last_action=torch.zeros(self.num_envs,4,device=self.device)
-        self.obs_buf=torch.zeros(self.num_envs,76,device=self.device)
+        self.obs_buf=torch.zeros(self.num_envs,self.num_obs,device=self.device)
         self.privileged_obs_buf=torch.zeros(self.num_envs,106,device=self.device)
         self.airborne=torch.zeros(self.num_envs,dtype=torch.bool,device=self.device)
         self.events=initial_events(torch.full((self.num_envs,),1.5,device=self.device),self.task)
@@ -71,7 +71,7 @@ class PhaseUEnv:
     def physical(self):
         root=self.plant.roots.clone();root[:,:3]-=self.plant.origin
         contact=(self.plant.contact[:,self.plant.nonwheel].square().sum(-1)>0).any(-1)
-        critic=self.history.privileged(self.obs_buf,root,self.plant.dofs[:,:,0],self.plant.dofs[:,:,1],contact)
+        critic=self.history.privileged(self.obs_buf[:,:76],root,self.plant.dofs[:,:,0],self.plant.dofs[:,:,1],contact)
         return root,contact,critic
 
     def reset_idx(self,ids):
@@ -100,14 +100,18 @@ class PhaseUEnv:
             self.landing_ticks[ids]=0;self.flight_seen[ids]=False;self.platform_held[ids]=False;self.last_landing_contact[ids]=False
         fresh=initial_events(pose[:,0],self.task)
         for k in self.events:self.events[k][ids]=fresh[k]
-        self.obs_buf[ids]=0;self.obs_buf[ids,-1]=fresh['jump_signal'].float()
+        self.obs_buf[ids]=0;self.obs_buf[ids,75]=fresh['jump_signal'].float()
         if self.entry_bank is not None:
             entry_ids=ids[entry_mask]
-            self.obs_buf[entry_ids]=entry['observation']
+            self.obs_buf[entry_ids,:76]=entry['observation']
             frames=entry['observation'][:,:75].reshape(-1,3,25)
             self.history.frames[entry_ids]=frames
             self.history.valid_count[entry_ids]=frames[:,:,-1].sum(-1).long()
             self.last_action[entry_ids]=entry['last_action']
+        if self.num_obs==80:
+            from .jump_heading import heading_features
+            root=self.plant.roots.clone();root[:,:3]-=self.plant.origin
+            self.obs_buf[ids,76:]=heading_features(root)[ids]
         self.privileged_obs_buf[ids]=self.physical()[2][ids]
 
     def reset(self):
@@ -150,7 +154,7 @@ class PhaseUEnv:
         terminal=classify_terminal(inputs,self.task)
         reward_events=dict(jump_zone_seen=self.events['jump_zone_seen'],jump_signal=self.events['jump_signal'],first_apex_success=self.events['apex_seen']&~previous['apex_seen'],illegal_contact=contact,physical_failure_transition=terminal['physical_failure'],roll_pitch_failure_transition=terminal['roll_limit']|terminal['pitch_limit'],jump_zone_missed_transition=terminal['jump_zone_missed'],stuck_transition=terminal['stuck'],yaw_limit_transition=terminal['yaw_limit'],timeout_transition=terminal['timeout'])
         hip,knee=plant.pendulum_servos.indices
-        reward_state=dict(previous_forward_velocity=previous_forward_velocity,policy_dt=self.dt,x=root[:,0],roll=angles[:,0],pitch=angles[:,1],yaw=angles[:,2],z=root[:,2],forward_velocity=root[:,7],pitch_rate=root[:,11],hip_velocity=plant.dofs[:,hip,1],knee_velocity=plant.dofs[:,knee,1],hip_force=plant.last_pendulum_torque[:,hip],knee_force=plant.last_pendulum_torque[:,knee])
+        reward_state=dict(previous_forward_velocity=previous_forward_velocity,policy_dt=self.dt,x=root[:,0],roll=angles[:,0],pitch=angles[:,1],yaw=angles[:,2],y=root[:,1],lateral_velocity=root[:,8],yaw_rate=root[:,12],z=root[:,2],forward_velocity=root[:,7],pitch_rate=root[:,11],hip_velocity=plant.dofs[:,hip,1],knee_velocity=plant.dofs[:,knee,1],hip_force=plant.last_pendulum_torque[:,hip],knee_force=plant.last_pendulum_torque[:,knee])
         if self.landing_reward:
             wp=plant.rigid[:,self.wheel_ids,:3]-plant.origin[:,None,:]
             forces=plant.contact[:,self.wheel_ids]
@@ -169,7 +173,13 @@ class PhaseUEnv:
         reward,self.episode_return,override=phase_u_episode_reward(clipped,self.episode_return,terminal['stuck'],terminal['yaw_limit'],self.task['reward'])
         done=terminal['terminated']|terminal['truncated'];self.episode_length_buf+=1;self.last_action.copy_(action)
         self.obs_buf=self.history.advance_frame(measured,self.events['jump_signal'].float())
-        self.privileged_obs_buf=self.history.privileged(self.obs_buf,root,plant.dofs[:,:,0],plant.dofs[:,:,1],contact)
+        if self.num_obs==80:
+            from .jump_heading import heading_features
+            extra=heading_features(root)
+            noise=torch.as_tensor(self.cfg['heading_observation_noise'],device=self.device)
+            extra=extra+(2*torch.rand_like(extra)-1)*noise
+            self.obs_buf=torch.cat((self.obs_buf,extra),-1)
+        self.privileged_obs_buf=self.history.privileged(self.obs_buf[:,:76],root,plant.dofs[:,:,0],plant.dofs[:,:,1],contact)
         info=dict(time_outs=terminal['truncated'].float(),reward_parts={**parts,'episode_return_override':override},end_code=terminal['end_code'],apex=self.events['apex_seen'].clone(),unscaled_reward=reward)
         ids=done.nonzero().flatten()
         if len(ids):

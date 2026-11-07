@@ -5,8 +5,8 @@ import numpy as np
 import torch
 from sttw_control.phase_u_actor_critic import PhaseUActorCritic
 p=argparse.ArgumentParser();p.add_argument('--checkpoint',type=Path,required=True);p.add_argument('--source-bundle',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
-model=PhaseUActorCritic(76,106,4,a.source_bundle)
 checkpoint=torch.load(a.checkpoint,map_location='cpu',weights_only=False)
+model=PhaseUActorCritic(checkpoint['model_state_dict']['mean'].numel(),106,4,a.source_bundle)
 model.load_state_dict(checkpoint['model_state_dict']);model.eval()
 a.output.mkdir(parents=True,exist_ok=False)
 arrays={k:getattr(model,k).detach().numpy() for k in ('mean','std','critic_mean','critic_std')}

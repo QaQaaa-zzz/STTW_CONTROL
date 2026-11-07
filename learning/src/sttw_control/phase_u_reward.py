@@ -67,6 +67,12 @@ def phase_u_reward(state, action, last_action, events, config):
         moving=torch.exp(-.5*((state['forward_velocity']-landing['target_forward_m_s'])/landing['speed_sigma']).square())
         components['platform_support']=landing['support_weight']*(.25+.75*moving)*events['platform_supported']
         components['platform_hold']=landing['hold_bonus']*events['first_platform_hold']
+    if 'heading_tracking' in c:
+        heading=c['heading_tracking']
+        components['lateral_position']=-heading['position_weight']*(state['y']/heading['position_scale_m']).square()
+        components['lateral_velocity']=-heading['velocity_weight']*(state['lateral_velocity']/heading['velocity_scale_m_s']).square()
+        components['heading_error']=-heading['yaw_weight']*(state['yaw']/heading['yaw_scale_rad']).square()
+        components['heading_rate']=-heading['yaw_rate_weight']*state['yaw_rate'].square()
     total=sum(components.values())
     return total.clamp(c['total_min'],c['total_max']),total,components
 

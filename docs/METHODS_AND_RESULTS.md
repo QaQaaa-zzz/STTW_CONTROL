@@ -1862,3 +1862,10 @@ Config learning/configs/isaac_h75_tradeoff_repeats.json records all sampled valu
 交接对照：root000各6候选，20ms在线接触协议下latest完整2/6、source1/6；原strict完整仍0/6和1/6。原几何、姿态、1秒时长、路廊和终点要求不变，接触协议与网络提升分别解释。按模型叠加alpha的XY图及原始JSON见docs/evidence/chapter3_rear_comp_approach/RESULTS.md。108条旧协议与72条接触协议扩展仍在执行；72条中12条复用。尚未启动新RB，不宣称整体收敛或第三章完成。
 
 速度：同路线12lane合批实际203.94秒，旧6lane212.30秒，约2.08倍吞吐，受同机负载影响，不承诺固定加速倍数。63lane真实入口probe145.98秒。存在完整回放交接前差异，不能将其归因为尚未执行的跳跃网络。
+
+
+## 2026-11-07：跳跃偏航诊断、两项负结果与航向状态适配
+
+复用原轨迹发现跳跃期间yaw/y累积，落地交回H75后仍有摆动；原76D Actor缺少绝对航向/横向定位反馈。测试提前.15秒接管12条与接地转向增益0/.15/.3各21条；前者latest contact20全链0/6（原2/6），后者较大增益8秒未终止16/21（零增益19/21）且横向漂移未改善，均不采用。不是放宽1秒落地来宣布成功。
+
+启动heading150：父模型为实际platform update150，原隐藏256×3/动作/Critic保留，仅Actor增加4定位特征，新权重零初始化，新增y/yaw/vy代价，原Go2随机化与4096×24×150/400Hz物理/200Hz底层/50Hz策略不变。训练与后续63条同入口评测预算、负结果和代码入口详见docs/evidence/chapter3_jump_heading/RESULTS.md；当前训练中，不能宣称偏航已解决。

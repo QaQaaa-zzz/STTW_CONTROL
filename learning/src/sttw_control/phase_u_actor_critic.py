@@ -19,13 +19,18 @@ class PhaseUActorCritic(nn.Module):
 
     def __init__(self,num_actor_obs,num_critic_obs,num_actions,bundle,**kwargs):
         super().__init__()
-        if (num_actor_obs,num_critic_obs,num_actions)!=(76,106,4):
-            raise ValueError('Phase U requires original 76/106 observations and 4 actions')
+        if num_actor_obs not in (76,80) or (num_critic_obs,num_actions)!=(106,4):
+            raise ValueError('Phase U requires 76 or 80 actor / 106 critic observations and 4 actions')
         path=Path(bundle);self.identity=json.loads((path/'identity.json').read_text())
         raw=(path/'actor.npz').read_bytes()
         if hashlib.sha256(raw).hexdigest()!=self.identity['artifact_sha256']:
             raise ValueError('Phase U export identity mismatch')
-        data=np.load(path/'actor.npz')
+        data=dict(np.load(path/'actor.npz'))
+        if num_actor_obs==80 and len(data['mean'])==76:
+            data['kernel_0']=np.pad(data['kernel_0'],((0,4),(0,0)))
+            data['mean']=np.r_[data['mean'],np.zeros(4,dtype=np.float32)]
+            data['std']=np.r_[data['std'],np.ones(4,dtype=np.float32)]
+        if num_actor_obs==80:self.identity=dict(self.identity,heading_observation=True,actor_observation_dim=80,network='80/106-256-256-256-8/1 SiLU',heading_observation_order=['platform_y_m','sin_platform_yaw','cos_platform_yaw_minus_one','platform_vy_m_s'],heading_frame='straight platform reference y=0, yaw=0; localized state required')
         for name in ('mean','std','critic_mean','critic_std'):
             self.register_buffer(name,torch.as_tensor(data[name]).clone())
         def network(prefix):
