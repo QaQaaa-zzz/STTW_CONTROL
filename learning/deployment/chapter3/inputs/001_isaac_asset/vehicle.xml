@@ -1,0 +1,78 @@
+<mujoco model="orange_bike">
+  <compiler angle="radian" meshdir="/home/qy/ISAAC——SIM/worktrees/jump-landing-v2/sim2sim_v2/runs/deliveries/dual_landing_01966080_20261009/physical_models/physx_conversion_source/meshes" eulerseq="xyz" />
+
+  <option timestep="0.001" tolerance="1e-10" integrator="RK4" cone="elliptic" iterations="50" />
+
+  <size nkey="1" />
+
+  <visual>
+    <global azimuth="-90" elevation="-20" offwidth="1920" offheight="1080" />
+    <headlight diffuse="0.6 0.6 0.6" specular="0.9 0.9 0.9" />
+    <rgba haze="0.15 0.25 0.35 1" />
+  </visual>
+
+  <default>
+    <default class="collision">
+      <geom group="1" density="0" rgba="1 0.3 0.3 0.5" friction="0.80000000000000004 0.0050000000000000001 0.0001" />
+      <default class="collision_wheel">
+        <geom size="0.07 0.07 0.025" type="ellipsoid" priority="1" solref="0.02 0.5" solimp="0" friction="0.80000000000000004 0.0050000000000000001 0.0001" />
+      </default>
+    </default>
+    <default class="visual">
+      <geom contype="0" conaffinity="0" group="2" density="0" friction="0.80000000000000004 0.0050000000000000001 0.0001" />
+    </default>
+    <default class="inertial">
+      <geom contype="0" conaffinity="0" group="2" rgba="0.3 1 0.3 0" friction="0.80000000000000004 0.0050000000000000001 0.0001" />
+      <default class="inertial_wheel">
+        <geom size="0.07 0.005 0" type="cylinder" friction="0.80000000000000004 0.0050000000000000001 0.0001" />
+      </default>
+    </default>
+  </default>
+
+  <worldbody>
+    <body name="chasis" pos="0 0 0.15" quat="0.70710678118654757 0.70710678118654757 -0 -0">
+      <inertial pos="0.027728000000000006 0.050529400000000016 0.00070085200000000007" quat="0.648184987323835 -0.26780962230659305 0.65986002738800598 0.26966436339364536" mass="1.76" diaginertia="0.0209623 0.0176149 0.00490575" />
+      <joint name="floating_base_joint" type="free" />
+      <geom name="base_collision" class="collision" size="0.03 0.065 0.09" pos="0.025000000000000008 0.015000000000000003 0" type="box" contype="2" conaffinity="3" quat="0.70710678118654757 -0.70710678118654757 0 0" friction="0.80000000000000004 0.0050000000000000001 0.0001" />
+      <geom name="chasis" class="inertial" size="0.05 0.045 0.09" pos="0.025000000000000008 0.015000000000000003 0" type="box" mass="0" quat="0.70710678118654757 -0.70710678118654757 0 0" friction="0.80000000000000004 0.0050000000000000001 0.0001" />
+      <geom name="steer_motor" class="inertial" size="0.027 0.022" pos="0.16455000000000003 0.11121600000000002 0.00020771000000000006" type="cylinder" mass="0" quat="0.70710678118654757 -0.70710678118654757 0 0" friction="0.80000000000000004 0.0050000000000000001 0.0001" />
+      <geom name="rear_motor" class="inertial" size="0.024 0.028" pos="-0.11448000000000003 -0.049045000000000012 0.0050771000000000011" quat="0 -1.0000003094489522 0 0" type="cylinder" mass="0" friction="0.80000000000000004 0.0050000000000000001 0.0001" />
+      <geom name="hip_motor" class="inertial" size="0.029 0.028" pos="0.044499000000000004 0.13903000000000001 -0.00029200000000000005" quat="0 -1.0000003094489522 0 0" type="cylinder" mass="0" rgba="0.3 0.3 0.3 1" friction="0.80000000000000004 0.0050000000000000001 0.0001" />
+      <site name="imu_site" pos="0 0 0" rgba="0.5 0.5 0.5 0" quat="0.70710678118654757 -0.70710678118654757 0 0" />
+      <body name="rearwheel" pos="-0.11448000000000003 -0.049045000000000012 0.00020771000000000006" quat="-1.4142135623673724e-06 -0.99999182416757793 -0.0040438941841311818 -7.0710678115766534e-09">
+        <inertial pos="0 0 0" mass="0.17" diaginertia="0.000209667 0.000209667 0.0004165" />
+        <joint name="rearwheel_joint" pos="0 0 0" axis="-0 -0 -1" />
+        <geom class="visual" size="0.07 0.005" type="cylinder" priority="1" solref="0.02 0.5" rgba="0.1 0.1 0.1 1" friction="0.80000000000000004 0.0050000000000000001 0.0001" />
+        <geom name="rearwheel_collision" class="collision_wheel" contype="2" friction="0.80000000000000004 0.0050000000000000001 0.0001" />
+        <geom class="inertial_wheel" mass="0" friction="0.80000000000000004 0.0050000000000000001 0.0001" />
+      </body>
+      <body name="steer" pos="0.16455000000000003 0.071216000000000015 0.00020771000000000006" quat="0.70710678118654757 -0.70710678118654757 0 0">
+        <inertial pos="0 0 -0.03" mass="0.001" diaginertia="2.90833e-06 2.775e-06 2.83333e-07" />
+        <joint name="steering_joint" pos="0 0 0" axis="0 0 1" limited="true" range="-0.8 0.8" />
+        <geom name="steer_collision" class="collision" size="0.015 0.025 0.09" pos="0 0 -0.05" type="box" contype="2" conaffinity="3" friction="0.80000000000000004 0.0050000000000000001 0.0001" />
+        <geom class="inertial" size="0.015 0.025 0.09" pos="0 0 -0.03" type="box" mass="0" friction="0.80000000000000004 0.0050000000000000001 0.0001" />
+        <body name="frontwheel" pos="0 0 -0.12" quat="0.706534 -0.706536 -0.0284268 -0.0284269">
+          <inertial pos="0 0 0" mass="0.13" diaginertia="0.000160333 0.000160333 0.0003185" />
+          <joint name="frontwheel_joint" pos="0 0 0" axis="-0 -0 -1" />
+          <geom class="visual" size="0.07 0.005" type="cylinder" priority="1" solref="0.02 0.5" rgba="0.1 0.1 0.1 1" friction="0.80000000000000004 0.0050000000000000001 0.0001" />
+          <geom name="frontwheel_collision" class="collision_wheel" contype="2" friction="0.80000000000000004 0.0050000000000000001 0.0001" />
+          <geom class="inertial_wheel" mass="0" friction="0.80000000000000004 0.0050000000000000001 0.0001" />
+        </body>
+      </body>
+      <body name="downarm" pos="0.044499000000000004 0.13903000000000001 -0.025292000000000005" quat="0.70710678118654757 -0.70710678118654757 0 0">
+        <inertial pos="7.80615e-08 -0.0151047 0.255211" quat="0.994475 0.104969 -1.15468e-06 -1.2188e-07" mass="0.72" diaginertia="0.00529196 0.00517056 0.000355677" />
+        <joint name="hip_joint" pos="0 0 0" axis="0 1 0" limited="true" range="-1.3 0.5" />
+        <geom name="downarm_collision" class="collision" size="0.025 0.015 0.15" pos="0 0.02 0.15" type="box" contype="4" conaffinity="7" friction="0.80000000000000004 0.0050000000000000001 0.0001" />
+        <geom name="knee_motor_collision" class="collision" size="0.029 0.028" pos="0 -0.028 0.3" quat="0.707107 -0.707107 0 0" type="cylinder" contype="4" conaffinity="7" friction="0.80000000000000004 0.0050000000000000001 0.0001" />
+        <geom name="knee_motor" class="inertial" size="0.029 0.028" pos="0 -0.028 0.3" quat="0.707107 -0.707107 0 0" type="cylinder" mass="0" rgba="0.3 0.3 0.3 1" friction="0.80000000000000004 0.0050000000000000001 0.0001" />
+        <body name="uparm" pos="0 -0.05955 0.41" quat="0 0 1 0">
+          <inertial pos="7.58034e-08 0.033474 -0.18174" quat="0.706109 0.0375261 -0.0375238 0.706112" mass="2.31" diaginertia="0.00595495 0.0052484 0.00157681" />
+          <joint name="knee_joint" pos="0 0 0.11" axis="0 1 0" limited="true" range="-1.5 2.5" />
+          <geom name="uparm_collision" class="collision" size="0.025 0.03 0.125" pos="0 0.03 -0.125" type="box" contype="4" conaffinity="7" friction="0.80000000000000004 0.0050000000000000001 0.0001" />
+          <geom name="load" class="inertial" size="0.04 0.0205 0.06" pos="0 0.035 -0.19" type="box" mass="0" rgba="1 0.3 0.3 1" friction="0.80000000000000004 0.0050000000000000001 0.0001" />
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  </mujoco>

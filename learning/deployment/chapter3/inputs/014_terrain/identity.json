@@ -1,0 +1,23 @@
+{
+  "sha256": "2722c63ebe7295191178087856a9195a505fcdac52a78d1043ddcb653ca3eafe",
+  "platform_front_x": 7.6,
+  "platform_top_z": 0.16,
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/rb_continuous_terrain",
+  "change": "Append flat z=0 continuation x15..25, y-4..4; all source vertices and triangles retained",
+  "platform_back_x": 11.6,
+  "added_terrain": {
+    "bounds": [
+      -5,
+      25,
+      -10,
+      -4
+    ],
+    "height_m": 0.02,
+    "undulation_y_m": [
+      -8.0,
+      -4.8
+    ],
+    "width_m": 2.4,
+    "flat_takeoff": "Turn ends x=-2.0,y=0; 9.6m flat to edge"
+  }
+}

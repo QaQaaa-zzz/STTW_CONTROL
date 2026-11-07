@@ -1899,3 +1899,6 @@ Config learning/configs/isaac_h75_tradeoff_repeats.json records all sampled valu
 
 ## 第三章承诺前有限次在线查询
 复用原异步能力选择和执行器，forward_branch可配置有序起跳前查询位置；保留首事件并记录全序列，实际路线评分取最后事件。旧update2/root002/9.6m/30s工程重放：三查询5.56/6.06/7.08s，第三次排除错过支路；保持原参考，严格支撑1.215s并完成续行，12000物理lane步、0更新、100.47s。全trace与上次单查询逐值一致，无新选档收益或泛化主张；17测试通过。详见docs/evidence/chapter3_jump_heading/RESULTS.md及reselection_summary.json。
+
+## 当前运行代码与依赖闭包交付
+用户要求可多不可少、推送后关机。新增learning/deployment/chapter3：6个相对路径运行配置、实际H75/Local300/heading125/update2数组、原RB模型/mesh/地形/起态/路线/核记录、Go2训练源码、原训练输入及125checkpoint；Isaac Lab/Sim外部SDK版本单列。源与输入hash以及CPU实际加载检查通过，未重跑物理。独立TEST012/019四条均选档前ground_domain_exit，strict/contact20各方法0/2；配对trace逐值一致，实际4864步/0更新，未调参。完整失败XY和阶段评分见docs/evidence/chapter3_jump_heading/test_online。

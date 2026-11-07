@@ -1,0 +1,16 @@
+{
+  "isaaclab": "0.54.3",
+  "isaacsim": "5.1.0.0",
+  "torch": "2.7.0+cu128",
+  "numpy": "1.26.0",
+  "scipy": "1.15.3",
+  "matplotlib": "3.10.3",
+  "tensordict": "0.12.2",
+  "tensorboard": "2.20.0",
+  "imageio": "2.37.0",
+  "Pillow": "11.3.0",
+  "python": "3.11.15 (main, Mar 11 2026, 17:20:07) [GCC 14.3.0]",
+  "isaaclab_source_revision": "090aed18163b2194d5551c7919f7539283677743",
+  "go2_source_revision": "5c47fa3dd43930057d4aa9de3e38fdf0f23a4ab1",
+  "gpu": "NVIDIA GeForce RTX 4090 D, 580.159.03"
+}

@@ -264,3 +264,22 @@ ContinuousTask新增`record_execution`及`active_reference`：启用执行绑定
 配置新增`forward_branch.decision_positions_x_m`，只允许起跳交权前有序位置；旧`forward_branch_decision.json`保留首事件，新增`forward_branch_decisions.json`保存全序列。评分/绘图读取最后实际路线，避免把首建议误当最终执行。实际执行引用和剩余目标沿用ContinuousTask；本例最终完成，历史修订请求由物理完成解除。17项相关测试通过，完整仿真流水线通过。
 
 [冻结配置](delivery_config/reselection_config.json)、[完整事件序列](delivery_config/reselection_decisions.json)、[结果摘要](delivery_config/reselection_summary.json)、[任务状态](delivery_config/reselection_outcome.json)、[XY原始坐标与参考](task_reselection_xy.npz)。完整高频证据位于数据盘`chapter3_task_reselection/live_root002`。
+
+
+## 冻结方法的首批独立测试（预分根012/019）
+
+![TEST012实际与原地图XY](test_online/012_xy.png)
+![TEST019实际与原地图XY](test_online/019_xy.png)
+
+使用原root_split按编号排列的前两条TEST根，运行前冻结heading125、H75、六个train根36条contact20记录及核尺度/门槛。两根各固定2/.5与在线C6，原5.6m接近、22s预算，未按结果挑根，也没有回填测试数据或调参。本批只两个独立根，不足以支持普遍完成率或优势结论；固定2/.5是既有工程基线，不是验证集选出的最佳固定档。
+
+|根|固定方案|C6|实际结束|阶段|
+|---|---|---|---:|---|
+|012|未完成|未完成|4.56s|上游，尚未到选档点|
+|019|未完成|未完成|1.52s|上游，尚未到选档点|
+
+两方法原严格与contact20均0/2；每根两条完整trace逐值一致，尚无查询、无误放行分母，不把它记成评价器选择错误。四条退出均ground_domain_exit=true，policy_fault/roll_limit/low_root/nonfinite为false。源码此标志来自Pure Pursuit预瞄在车后或路径航向差≥90°的域限制，不能称为45°跌倒；现有输出不能区分究竟哪一子条件先触发。原任务仍判未完成，不通过放松限制改写测试结果，也不据此评价跳跃策略好坏。
+
+预声明35200步上限，早退出实际4864物理lane步、0更新，rollout合计41.33s，初始化/分析另计；没有以早失败墙钟宣称提速。任务未覆盖到能力选择的价值区，下一步应处理正常来车到达决策点的适用条件；当前按用户要求先完整交付并关机，不启动续训。
+
+[声明与完整逐条汇总](test_online/summary.json)、[冻结输入清单](test_online/manifest.json)。原始轨迹、路径、各阶段评分及终止标志随精简包保留，不仅展示末端。

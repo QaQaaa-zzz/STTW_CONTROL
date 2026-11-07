@@ -1,0 +1,78 @@
+{
+  "feature_scales": [
+    0.5,
+    0.1,
+    0.5,
+    0.2,
+    0.2,
+    0.2,
+    1.0,
+    0.5,
+    0.3,
+    0.5,
+    0.5,
+    2.0,
+    2.0,
+    0.5,
+    0.5,
+    0.1,
+    0.5,
+    0.5,
+    0.5,
+    1.0,
+    1.0,
+    0.1,
+    2.0
+  ],
+  "bandwidth": 1.0,
+  "minimum_support": 0.5,
+  "minimum_completion": 0.7,
+  "probability_tolerance": 0.05,
+  "time_tolerance_s": 0.1,
+  "mode": "capability",
+  "record_files": [
+    "learning/deployment/chapter3/inputs/020_records.jsonl"
+  ],
+  "map_id": "bba2490762ff3f1c0dc5cfd8cd443d6b0685c506fd727fd83d8e604512efb8aa",
+  "program": {
+    "goals": [
+      {
+        "goal_id": "destination",
+        "allowed_routes": [
+          "original_jump",
+          "bypass"
+        ]
+      }
+    ]
+  },
+  "candidates": [
+    {
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "candidate_id": "v2.0_a0.5"
+    }
+  ],
+  "routes": [
+    {
+      "route_id": "original_jump",
+      "goal_id": "destination",
+      "task_id": "original_jump:optional",
+      "skill_id": "matched_runtime",
+      "candidates": [
+        "v2.0_a0.5"
+      ],
+      "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/original_extended_reference.npz"
+    },
+    {
+      "route_id": "bypass",
+      "goal_id": "destination",
+      "task_id": "bypass:optional",
+      "skill_id": "matched_runtime",
+      "candidates": [
+        "v2.0_a0.5"
+      ],
+      "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/bypass_reference.npz"
+    }
+  ],
+  "role": "Leave entire queried origin out; optional-platform primary task; mandatory-platform scored separately"
+}

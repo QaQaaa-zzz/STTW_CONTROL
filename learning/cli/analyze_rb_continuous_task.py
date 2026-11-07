@@ -63,16 +63,20 @@ if spec.get('forward_branch'):
   along=((t[:,None,1:3]-mapped[None,:-1])*edges).sum(-1)/(edges*edges).sum(-1)
   route_error=np.linalg.norm(t[:,None,1:3]-mapped[None,:-1]-along.clip(0,1)[...,None]*edges,axis=-1).min(-1)
   half_width=branch_map['half_width_m']
+ widths=np.full(len(t),half_width)
+ shared=branch_map.get('shared_prefix')
+ if shared:
+  common=t[:,1]<shared['end_world_x_m'];widths[common]=shared['half_width_m'];route_error=route_error.copy();route_error[common]=error[common]
  hits=np.flatnonzero(np.linalg.norm(t[:,1:3]-branch_map['common_goal_xy'],axis=1)<=criteria.get('goal_radius_m',2.))
  prefix_passed=len(passed)>=spec['forward_branch']['common_waypoint_count']
- destination_complete=bool(checks['full_window'] and prefix_passed and len(hits) and (route_error<=half_width).all())
+ destination_complete=bool(checks['full_window'] and prefix_passed and len(hits) and (route_error<=widths).all())
  jump_complete=bool(checks['stable_landing'] and checks['ground_return'] and checks['continued_time'] and checks['continued_forward'])
  branch_time=branch['time_s'] if branch else None
  before_branch=t[:,0]<=branch_time+1e-6 if branch_time is not None else np.ones(len(t),dtype=bool)
- route_violations=np.flatnonzero(route_error>half_width)
+ route_violations=np.flatnonzero(route_error>widths)
  route_prefix=dict(decision_time_s=branch_time,
   max_error_before_branch_m=float(route_error[before_branch].max()),
-  corridor_intact_at_branch=bool((route_error[before_branch]<=half_width).all()) if branch else None,
+  corridor_intact_at_branch=bool((route_error[before_branch]<=widths[before_branch]).all()) if branch else None,
   max_error_after_branch_m=float(route_error[~before_branch].max()) if (~before_branch).any() else None,
   first_violation_s=float(t[route_violations[0],0]) if len(route_violations) else None,
   scope='Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix.')
@@ -81,7 +85,8 @@ if spec.get('forward_branch'):
   common_goal_xy=branch_map['common_goal_xy'],full_window=checks['full_window'],common_prefix_passed=prefix_passed,
   first_goal_arrival_s=float(t[hits[0],0]) if len(hits) else None,
   max_mapped_path_error_m=float(route_error.max()),mapped_corridor_half_width_m=half_width,
-  mapped_corridor_complete=bool((route_error<=half_width).all()),
+  mapped_corridor_complete=bool((route_error<=widths).all()),
+  shared_prefix_contract=shared,
   optional_platform_task_complete=destination_complete,
   mandatory_platform_task_complete=destination_complete and jump_complete,
   platform_skill_complete=jump_complete,

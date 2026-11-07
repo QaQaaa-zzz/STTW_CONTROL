@@ -1,0 +1,69 @@
+{
+  "role": "Predeclared first two TEST roots, fixed frozen methods; descriptive small independent test, no significance or calibrated-probability claim",
+  "cases": [
+    {
+      "case_id": "012_fixed",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_heading_test_online/012_fixed.json",
+      "origin_id": "rb_connection_seed20261106_root012",
+      "method": "fixed",
+      "distance_m": 5.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.5
+    },
+    {
+      "case_id": "012_C6",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_heading_test_online/012_C6.json",
+      "origin_id": "rb_connection_seed20261106_root012",
+      "method": "C6",
+      "distance_m": 5.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.5
+    },
+    {
+      "case_id": "019_fixed",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_heading_test_online/019_fixed.json",
+      "origin_id": "rb_connection_seed20261106_root019",
+      "method": "fixed",
+      "distance_m": 5.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.5
+    },
+    {
+      "case_id": "019_C6",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_heading_test_online/019_C6.json",
+      "origin_id": "rb_connection_seed20261106_root019",
+      "method": "C6",
+      "distance_m": 5.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.5
+    }
+  ],
+  "selected_roots": [
+    {
+      "origin_id": "rb_connection_seed20261106_root012",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": -0.03012840679371493,
+        "yaw_deg": -1.7860533052570338
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root019",
+      "split": "test",
+      "initial_offset": {
+        "lateral_m": -0.06020143044219341,
+        "yaw_deg": -1.4538022428014021
+      }
+    }
+  ],
+  "source_split": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/root_split.json",
+  "code_revision": "38bcf021",
+  "records_sha256": "5254c6780b65049ba1488eefab82f201c0386a494e47867d7ec6cd6c9ed96c81",
+  "selector_sha256": "76a7b8dbc979de57ebaa36f6a97dec82ab807e739540baaeaffec17c74992ba3",
+  "simulation_python": "/home/qy/miniconda3/envs/env_isaaclab/bin/python",
+  "analysis_python": "/home/qy/miniconda3/envs/mjp/bin/python",
+  "maximum_physics_steps": 35200,
+  "optimizer_updates": 0,
+  "stop_rule": "Run exactly these four cases; no replacement of upstream failures; do not tune using TEST",
+  "baseline": "Previously declared fixed2/.5 engineering baseline; not validation-selected best fixed"
+}

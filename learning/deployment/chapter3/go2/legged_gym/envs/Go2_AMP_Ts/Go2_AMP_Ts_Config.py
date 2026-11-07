@@ -1,0 +1,203 @@
+# SPDX-FileCopyrightText: Copyright (c) 2021 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: BSD-3-Clause
+# 
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice, this
+# list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+# this list of conditions and the following disclaimer in the documentation
+# and/or other materials provided with the distribution.
+#
+# 3. Neither the name of the copyright holder nor the names of its
+# contributors may be used to endorse or promote products derived from
+# this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+# Copyright (c) 2021 ETH Zurich, Nikita Rudin
+import glob
+from legged_gym.envs.base.legged_robot_config import LeggedRobotCfg, LeggedRobotCfgPPO
+MOTION_FILES = glob.glob('datasets/mocap_motions_go2/*')
+
+class Go2_AMP_Ts_Cfg_Yu( LeggedRobotCfg ):
+    class env( LeggedRobotCfg.env ):
+        num_envs = 4096
+        num_observations = 45
+        num_privileged_obs = 309  # =3(线速度，critic评价value用)+45(观测)+70(域随机)+4(足接触)+187(地形) 恢复
+        num_terrain = 187  # terrain_obs_buf 维度（runner init_storage 需要）
+        reference_state_initialization = True
+        reference_state_initialization_prob = 0.85
+        num_domain_rand = 74  # = 70(域随机参数:1摩擦+1恢复+1质量+28连杆质量比+3质心+12kp+12kd+12力矩)+4(足接触) 旧值77(已删线速度)
+        amp_motion_files = MOTION_FILES
+    class init_state( LeggedRobotCfg.init_state ):
+        pos = [0.0, 0.0, 0.42] # x,y,z [m]
+        rot = [0.0, 0.0, 0.0, 1.0] # x,y,z,w [quat]
+        lin_vel = [0.0, 0.0, 0.0]  # x,y,z [m/s]
+        ang_vel = [0.0, 0.0, 0.0]  # x,y,z [rad/s]
+        default_joint_angles = { # = target angles [rad] when action = 0.0
+
+            'FL_hip_joint': 0.1,   # [rad]
+            'RL_hip_joint': 0.1,   # [rad]
+            'FR_hip_joint': -0.1 ,  # [rad]
+            'RR_hip_joint': -0.1,   # [rad]
+
+            'FL_thigh_joint': 0.8,     # [rad]
+            'RL_thigh_joint': 1.0,#1.,   # [rad]
+            'FR_thigh_joint': 0.8,     # [rad]
+            'RR_thigh_joint': 1.0,#1.,   # [rad]
+
+            'FL_calf_joint': -1.5,   # [rad]
+            'RL_calf_joint': -1.5,    # [rad]
+            'FR_calf_joint': -1.5,  # [rad]
+            'RR_calf_joint': -1.5,    # [rad]
+        }
+
+    class control( LeggedRobotCfg.control ):
+        # PD Drive parameters:
+        control_type = 'P'
+        stiffness = {'joint': 20.}  # [N*m/rad]
+        damping = {'joint': 0.5}     # [N*m*s/rad]
+        # action scale: target angle = actionScale * action + defaultAngle
+        action_scale = 0.25
+        # decimation: Number of control action updates @ sim DT per policy DT
+        decimation = 4
+    class commands:
+        curriculum = True
+        max_curriculum = 1.5
+        num_commands = 4 # default: lin_vel_x, lin_vel_y, ang_vel_yaw, heading (in heading mode ang_vel_yaw is recomputed from heading error)
+        resampling_time = 10. # time before command are changed[s]
+        heading_command = True # if true: compute ang vel command from heading error
+        class ranges:
+            lin_vel_x = [-1.0, 1.0] # min max [m/s]
+            lin_vel_y = [-0.6,0.6]   # min max [m/s]
+            ang_vel_yaw = [-3.14, 3.14]    # min max [rad/s]
+            heading = [-3.14, 3.14]
+
+    class asset( LeggedRobotCfg.asset ):
+        armature = 0.00448  # 电机转子惯量（折算到关节的等效惯量）
+        file = '{LEGGED_GYM_ROOT_DIR}/resources/robots/go2/urdf/go2.urdf'
+        name = "go2"
+        foot_name = "foot"
+        penalize_contacts_on = ["thigh", "calf", "base"]
+        terminate_after_contacts_on = ["base"]
+        self_collisions = 0 # 1 to disable, 0 to enable...bitwise filter
+
+    class domain_rand:
+        randomize_friction = True
+        friction_range = [0.05,3.0]
+
+        randomize_restitution = True
+        restitution_range = [0.0, 0.5]
+
+        push_robots = True
+        push_interval_s = 8
+        max_push_vel_xy = 1.0
+        max_push_ang_vel = 1.0
+
+        randomize_base_mass = True
+        added_base_mass_range = [-1,5]
+
+        randomize_link_mass = True
+        multiplied_link_mass_range = [0.8, 1.2]
+
+        randomize_base_com = True
+        added_base_com_range = [-0.1, 0.1]
+
+        randomize_pd_gains = True
+        stiffness_multiplier_range = [0.8, 1.2]  
+        damping_multiplier_range = [0.8, 1.2]    
+
+        randomize_torque = True
+        torque_multiplier_range = [0.8, 1.2]
+
+        randomize_motor_zero_offset = True
+        motor_zero_offset_range = [-0.035, 0.035] # Offset to add to the motor angles
+
+        delay = True  # HIMLoco 式 action delay：0~decimation 子步内随机切换点
+
+    class noise:
+        add_noise = True
+        noise_level = 1.0 # scales other values
+        class noise_scales:
+            dof_pos = 0.01
+            dof_vel = 1.5
+            lin_vel = 0.1
+            ang_vel = 0.2
+            gravity = 0.05
+            height_measurements = 0.1
+
+    class rewards( LeggedRobotCfg.rewards ):
+        soft_dof_pos_limit = 0.9 # percentage of urdf limits, values above this limit are penalized
+        soft_dof_vel_limit = 0.95
+        soft_torque_limit = 0.95
+        only_positive_rewards = False # if true negative total rewards are clipped at zero (avoids early termination problems)
+        base_height_target = 0.4
+        cycle_time=0.5
+        target_foot_height=0.06
+        class scales:
+            termination = 0.0
+            tracking_lin_vel = 1.0
+            tracking_ang_vel = 0.5
+            lin_vel_z = -2.0
+            ang_vel_xy = -0.05
+            orientation = -0.2
+            base_height = -5.0
+            torques = -0.0001
+            dof_acc = -2.5e-7
+            # feet_air_time =  1.0
+            collision = -1.0
+            action_rate = -0.01
+            stumble = -0.5
+            dof_pos_limits=-2.0
+            # feet_clearance=0.1 #feet clearance can increase for more
+            # stand_still=-1.0
+class Go2_AMP_Ts_PPO_Yu( LeggedRobotCfgPPO ):
+    # AMP Teacher-Student：teacher 用 AMP 版 runner/算法/网络（与标准 PPO 区分）
+    runner_class_name = 'OnPolicyRunnerAMP_TS'
+    class algorithm( LeggedRobotCfgPPO.algorithm ):
+        entropy_coef = 0.01
+        amp_replay_buffer_size = 1000000
+
+        # ===== 镜像对称损失（默认关闭；置 True 启用，置换表与 obs 布局逐位对齐）=====
+        sym_loss = False
+        sym_coef = 1.0
+        # AMP_TS：terrain(187) 镜像表（priv 74 维暂不对称作恒等，28连杆质量需 body 顺序核实后启用）
+        terrain_permutation = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 43, 42, 41, 40, 39, 38, 37, 36, 35, 34, 33, 54, 53, 52, 51, 50, 49, 48, 47, 46, 45, 44, 65, 64, 63, 62, 61, 60, 59, 58, 57, 56, 55, 76, 75, 74, 73, 72, 71, 70, 69, 68, 67, 66, 87, 86, 85, 84, 83, 82, 81, 80, 79, 78, 77, 98, 97, 96, 95, 94, 93, 92, 91, 90, 89, 88, 109, 108, 107, 106, 105, 104, 103, 102, 101, 100, 99, 120, 119, 118, 117, 116, 115, 114, 113, 112, 111, 110, 131, 130, 129, 128, 127, 126, 125, 124, 123, 122, 121, 142, 141, 140, 139, 138, 137, 136, 135, 134, 133, 132, 153, 152, 151, 150, 149, 148, 147, 146, 145, 144, 143, 164, 163, 162, 161, 160, 159, 158, 157, 156, 155, 154, 175, 174, 173, 172, 171, 170, 169, 168, 167, 166, 165, 186, 185, 184, 183, 182, 181, 180, 179, 178, 177, 176]
+        frame_stack = 1
+        obs_permutation = [0.0001, -1, 2, -3, 4, -5, 6, -7, 8, -12, 13, 14, -9, 10, 11, -18, 19, 20, -15, 16, 17, -24, 25, 26, -21, 22, 23, -30, 31, 32, -27, 28, 29, -36, 37, 38, -33, 34, 35, -42, 43, 44, -39, 40, 41]
+        act_permutation = [-3, 4, 5, -0.0001, 1, 2, -9, 10, 11, -6, 7, 8]
+
+    class runner( LeggedRobotCfgPPO.runner ):
+        policy_class_name = 'ActorCriticAMP_TS'
+        algorithm_class_name = 'PPO_AMP_TS'
+        run_name = ''
+        experiment_name = 'go2_amp_ts'
+        student_name = 'go2_amp_ts_student'
+        max_iterations = 20000 # number of policy updates
+
+        amp_reward_coef = 0.5
+        amp_motion_files = MOTION_FILES
+        amp_num_preload_transitions = 2000000
+        amp_discr_hidden_dims = [1024, 512]
+
+        min_normalized_std = [0.05, 0.05, 0.05] * 4
+
+    class LSTMEncoder:
+        input_size = 45
+        num_steps_per_env = 24
+        hidden_size = 256
+        num_layers = 1
+        learning_rate = 1e-3
+        save_interval = 500

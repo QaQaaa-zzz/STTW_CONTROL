@@ -1,0 +1,62 @@
+{
+  "task_spec": "learning/deployment/chapter3/inputs/021_isaac_phase_u_task_heading.json",
+  "device": "cuda:0",
+  "num_envs": 4096,
+  "updates": 150,
+  "save_interval": 25,
+  "asset": "learning/deployment/chapter3/inputs/001_isaac_asset/vehicle.urdf",
+  "asset_spec": "learning/deployment/chapter3/inputs/005_rb_sttw_platform.json",
+  "geometry": "learning/deployment/chapter3/inputs/006_geometry.json",
+  "bundle": "learning/deployment/chapter3/inputs/022_training_bundle",
+  "plant_options": {
+    "physics_dt": 0.0025,
+    "wheel_radius_m": 0.07,
+    "gpu_pair_capacities": [
+      4194304,
+      4194304,
+      16777216
+    ],
+    "servo_mode": "hybrid",
+    "compliant_wheels": null,
+    "wheel_collision": "cylinder",
+    "hull_vertices": 64,
+    "robot_contact_offset": 0.001,
+    "mesh_collision_on_geometry": true,
+    "solver_position_iterations": 16,
+    "solver_velocity_iterations": 4,
+    "wheel_width_m": 0.05,
+    "wheel_profile_slices": 21,
+    "env_spacing": 20.0,
+    "pendulum_rest": [
+      -1.2,
+      2.499999
+    ],
+    "pendulum_locked": false,
+    "terrain_layout": "replicated"
+  },
+  "go2_checkout": "learning/deployment/chapter3/go2",
+  "seed": 28,
+  "status": "Heading adaptation from last150, original hidden layers and critic, actor 76+4 localized features; fresh Adam; no external steering correction",
+  "reset_note": "original RB rootz0.15, x1.5,vx2, joint velocities0, original8percent airborne RSI retained",
+  "optimizer_initialization": "last150 weights; four zero first-layer columns and identity normalized added observations; critic unchanged; fresh Adam",
+  "jump_steering_gains": [
+    2.5,
+    0.4
+  ],
+  "root_acceleration_difference": true,
+  "ppo_overrides": {
+    "learning_rate": 0.0001,
+    "schedule": "fixed"
+  },
+  "initial_checkpoint": "learning/deployment/chapter3/inputs/023_model_update_00150.pt",
+  "reachable_entry_bank": "learning/deployment/chapter3/inputs/024_entries.npz",
+  "reachable_entry_probability": 0.5,
+  "evaluation_checkpoint_every": 25,
+  "heading_observation": true,
+  "heading_observation_noise": [
+    0.01,
+    0.005,
+    0.005,
+    0.02
+  ]
+}

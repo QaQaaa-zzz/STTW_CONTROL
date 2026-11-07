@@ -1,0 +1,292 @@
+{
+  "protocol_id": "ch3_jump_connection_hold_v1",
+  "role": "Predeclared first two TEST roots, fixed frozen methods; descriptive small independent test, no significance or calibrated-probability claim",
+  "declared_cases": 4,
+  "evaluated_cases": 4,
+  "rows": [
+    {
+      "case_id": "012_fixed",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_heading_test_online/012_fixed.json",
+      "origin_id": "rb_connection_seed20261106_root012",
+      "method": "fixed",
+      "distance_m": 5.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "disturbance": null,
+      "disturbance_key": "null",
+      "panel_key": [
+        5.6
+      ],
+      "status": "evaluated",
+      "complete": false,
+      "contact_filtered_protocol": {
+        "contact_persistence_s": 0.02,
+        "checks": {
+          "full_window": false,
+          "ordered_approach": false,
+          "original_path_corridor": true,
+          "stable_landing": false,
+          "ground_return": false,
+          "continued_time": false,
+          "continued_forward": false,
+          "final_goal": false
+        },
+        "complete": false,
+        "success_time_s": null,
+        "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+      },
+      "execution": "completed",
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.8921133829594182,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "midpoint": null,
+      "observed_duration_s": 4.559999942779541,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.8921133829594182,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
+    },
+    {
+      "case_id": "012_C6",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_heading_test_online/012_C6.json",
+      "origin_id": "rb_connection_seed20261106_root012",
+      "method": "C6",
+      "distance_m": 5.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "disturbance": null,
+      "disturbance_key": "null",
+      "panel_key": [
+        5.6
+      ],
+      "status": "evaluated",
+      "complete": false,
+      "contact_filtered_protocol": {
+        "contact_persistence_s": 0.02,
+        "checks": {
+          "full_window": false,
+          "ordered_approach": false,
+          "original_path_corridor": true,
+          "stable_landing": false,
+          "ground_return": false,
+          "continued_time": false,
+          "continued_forward": false,
+          "final_goal": false
+        },
+        "complete": false,
+        "success_time_s": null,
+        "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+      },
+      "execution": "completed",
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.8921133829594182,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "midpoint": null,
+      "observed_duration_s": 4.559999942779541,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.8921133829594182,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
+    },
+    {
+      "case_id": "019_fixed",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_heading_test_online/019_fixed.json",
+      "origin_id": "rb_connection_seed20261106_root019",
+      "method": "fixed",
+      "distance_m": 5.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "disturbance": null,
+      "disturbance_key": "null",
+      "panel_key": [
+        5.6
+      ],
+      "status": "evaluated",
+      "complete": false,
+      "contact_filtered_protocol": {
+        "contact_persistence_s": 0.02,
+        "checks": {
+          "full_window": false,
+          "ordered_approach": false,
+          "original_path_corridor": true,
+          "stable_landing": false,
+          "ground_return": false,
+          "continued_time": false,
+          "continued_forward": false,
+          "final_goal": false
+        },
+        "complete": false,
+        "success_time_s": null,
+        "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+      },
+      "execution": "completed",
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.4245114326477051,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "midpoint": null,
+      "observed_duration_s": 1.5199999809265137,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.4245114326477051,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
+    },
+    {
+      "case_id": "019_C6",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_heading_test_online/019_C6.json",
+      "origin_id": "rb_connection_seed20261106_root019",
+      "method": "C6",
+      "distance_m": 5.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "disturbance": null,
+      "disturbance_key": "null",
+      "panel_key": [
+        5.6
+      ],
+      "status": "evaluated",
+      "complete": false,
+      "contact_filtered_protocol": {
+        "contact_persistence_s": 0.02,
+        "checks": {
+          "full_window": false,
+          "ordered_approach": false,
+          "original_path_corridor": true,
+          "stable_landing": false,
+          "ground_return": false,
+          "continued_time": false,
+          "continued_forward": false,
+          "final_goal": false
+        },
+        "complete": false,
+        "success_time_s": null,
+        "scope": "Separate 20ms contact protocol; original strict complete and success_time retained"
+      },
+      "execution": "completed",
+      "success_time_s": null,
+      "checks": {
+        "full_window": false,
+        "ordered_approach": false,
+        "original_path_corridor": true,
+        "stable_landing": false,
+        "ground_return": false,
+        "continued_time": false,
+        "continued_forward": false,
+        "final_goal": false
+      },
+      "max_original_path_error_m": 0.4245114326477051,
+      "stages": {
+        "reached_release_line": false,
+        "airborne_after_handoff": false,
+        "strict_support": false,
+        "ground_return": false,
+        "continued": false
+      },
+      "stage_times": {
+        "release": null,
+        "strict_support": null,
+        "ground_return": null,
+        "final_conditions": null
+      },
+      "decision": null,
+      "handoff": null,
+      "midpoint": null,
+      "observed_duration_s": 1.5199999809265137,
+      "decision_prefix": {
+        "decision_time_s": null,
+        "decision_reached": false,
+        "max_path_error_before_decision_m": 0.4245114326477051,
+        "corridor_intact_at_decision": null,
+        "first_corridor_violation_s": null,
+        "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+      },
+      "failure_phase": "upstream"
+    }
+  ]
+}

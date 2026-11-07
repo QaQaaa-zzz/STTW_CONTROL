@@ -1,0 +1,110 @@
+{
+  "output": "runs/chapter3_portable/chapter3_heading_test_online_012_C6",
+  "plant_config": "learning/deployment/chapter3/inputs/000_config.json",
+  "model_config": "learning/deployment/chapter3/inputs/005_rb_sttw_platform.json",
+  "initial_state": "learning/deployment/chapter3/inputs/004_initial_state.npz",
+  "geometry": "learning/deployment/chapter3/inputs/006_geometry.json",
+  "bundles": "learning/deployment/chapter3/policies",
+  "skills": [
+    "heading125"
+  ],
+  "start_x": -3.969871593206285,
+  "approach_speed": 2.0,
+  "seconds": 22.0,
+  "handoff_x": 2.0,
+  "physics_dt": 0.0025,
+  "gpu_pair_capacities": [
+    1048576,
+    1048576,
+    1048576
+  ],
+  "zero_initial_history": true,
+  "root_acceleration_difference": true,
+  "jump_steering_gains": [
+    2.5,
+    0.4
+  ],
+  "optimizer_updates": 0,
+  "maximum_physics_lane_steps": 8800,
+  "role": "Frozen-method small independent TEST; no fitting or threshold selection",
+  "scene_terrain": "learning/deployment/chapter3/inputs/007_chain_runout_terrain",
+  "record_body_states": true,
+  "landing_return": {
+    "support_s": 1.0,
+    "speed_m_s": 1.5,
+    "minimum_handoff_speed_m_s": 1.2,
+    "acceleration_m_s2": 0.8,
+    "alpha": 0.5,
+    "contact_filter_s": 0.02
+  },
+  "ground_bundle": "learning/deployment/chapter3/inputs/008_bundle",
+  "ground_settings": "learning/deployment/chapter3/inputs/000_config.json",
+  "ground_initial_state": "learning/deployment/chapter3/inputs/004_initial_state.npz",
+  "zero_lower": true,
+  "ground_alpha": 0.5,
+  "ground_after_landing_only": false,
+  "terrain_base_plane": true,
+  "ground_route": "learning/deployment/chapter3/inputs/009_rb_connection_seed20261106_root000_runout_route.npz",
+  "start_y": -9.0,
+  "start_heading_rad": 1.539623816002034,
+  "platform_front_x": 3.6,
+  "platform_back_x": 7.6,
+  "completion": {
+    "corridor_half_width_m": 1.0,
+    "waypoints": [
+      [
+        -4.0,
+        -8.0
+      ],
+      [
+        -4.0,
+        -4.8
+      ],
+      [
+        -4.0,
+        -2
+      ],
+      [
+        -2.0,
+        0
+      ],
+      [
+        2.0,
+        0
+      ]
+    ],
+    "waypoint_radius_m": 1.0,
+    "minimum_post_handoff_s": 2.0,
+    "minimum_post_handoff_forward_m": 2.0,
+    "final_goal_xy": [
+      10.6,
+      0.0
+    ]
+  },
+  "protocol_id": "ch3_jump_connection_hold_v1",
+  "origin_id": "rb_connection_seed20261106_root012",
+  "candidate_id": "v2.0_a0.5",
+  "connection_candidate": {
+    "decision_x_m": -2.0,
+    "speed_m_s": 2.0,
+    "alpha": 0.5,
+    "rear_speed_feedback_gain": 1,
+    "source_case_id": "rb_connection_seed20261106_root012_L5.6_v2.0_a0.5"
+  },
+  "initial_offset": {
+    "lateral_m": -0.03012840679371493,
+    "yaw_deg": -1.7860533052570338
+  },
+  "data_split": "test",
+  "rear_speed_feedback_gain": 1.0,
+  "stop_at_ground_handoff": false,
+  "connection_selector": {
+    "config": "learning/deployment/chapter3/inputs/010_selector_config.json",
+    "records": [
+      "learning/deployment/chapter3/inputs/011_records.jsonl"
+    ],
+    "stages": [
+      "exit"
+    ]
+  }
+}

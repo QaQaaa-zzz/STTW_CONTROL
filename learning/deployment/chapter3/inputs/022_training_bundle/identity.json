@@ -1,0 +1,30 @@
+{
+  "skill_id": "isaac01966080",
+  "source_archive": "/home/qy/ISAAC\u2014\u2014SIM/worktrees/jump-landing-v2/sim2sim_v2/runs/deliveries/dual_landing_01966080_20261009",
+  "source_actor_sha256": "d2648c4f33b3e191293d2a4281d9a95f475f2a2be09c14a0ad8f605235c2d1a0",
+  "artifact_sha256": "92864477673e99c4d138be0ba91684a7f3fda2fff6d5550768ba2333d7ead638",
+  "mapping": {
+    "ctrl_min": [
+      -0.8,
+      -5,
+      -1.3,
+      -1.5
+    ],
+    "ctrl_max": [
+      0.8,
+      40,
+      0.5,
+      2.5
+    ],
+    "hip_initial": -1.2,
+    "knee_initial": 2.5,
+    "knee_target_delta": 0.0,
+    "base_rear_speed": 12.0,
+    "joint_target_semantics": "keyframe_centered_absolute",
+    "rear_speed_delta": 12.0
+  },
+  "conversion": "exact historical actor, critic and normalizers; actor arrays equal existing inference bundle; fresh Go2 Adam, no historical optimizer conversion",
+  "model_scope": "original RB whole vehicle; new Isaac Lab adaptation with friction0.8 and Go2 randomization",
+  "source_learner_sha256": "a419949a00b766ca8b5f80045aeddb5209700236ef8b06a7c140fd3312522c54",
+  "network": "76/106-256-256-256-8/1 SiLU"
+}

@@ -1,0 +1,21 @@
+{
+  "source": "/home/qy/ISAAC\u2014\u2014SIM/worktrees/jump-landing-v2/sim2sim_v2/runs/deliveries/dual_landing_01966080_20261009/physical_models/physx_conversion_source/compiled.xml",
+  "friction": [
+    0.8,
+    0.005,
+    0.0001
+  ],
+  "ground_steering_velocity_gain": 20.0,
+  "mount_rotation_wxyz": [
+    0.7071067811865476,
+    -0.7071067811865476,
+    0.0,
+    0.0
+  ],
+  "pendulum_rest_rad": [
+    -1.2,
+    2.5
+  ],
+  "wheel_radius_m": 0.07,
+  "role": "RB complete physical vehicle, current STTW friction, STTW ground interface; original mass/inertia and force limits retained"
+}

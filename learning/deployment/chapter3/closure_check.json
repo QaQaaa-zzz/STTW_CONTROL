@@ -1,0 +1,9 @@
+{
+  "status": "passed",
+  "project_source_files": 1158,
+  "packaged_input_files": 144,
+  "cases": 6,
+  "unique_jump_bundles_loaded_cpu": 2,
+  "unique_ground_bundles_loaded_cpu": 1,
+  "scope": "All inventoried project source/payload hashes matched; exact jump/H75/Local300 arrays loaded on CPU. No new physics run. SDK environment is external and recorded; historical identity paths are provenance."
+}
