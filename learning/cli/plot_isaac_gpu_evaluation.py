@@ -10,7 +10,8 @@ from sttw_control.isaac_path_reporting import load_case,write_zero_scores,static
 if a.rescore_zero:
  write_zero_scores(a.run);a.baseline_run=a.run
 r,c=load_case(a.run,a.baseline_run);physics_dt=c['physics_dt'];user_speed=float(c["settings"].get("user_speed_m_s",2.3));palette_markers=['o','s','^','D','v','x'];route=np.load(Path(c['bundle'])/'route.npz');labels=['alpha 0','alpha .25','alpha .5','alpha .75','alpha 1','Zero'];colors=['#0072B2','#D55E00','#009E73','#CC79A7','#8A6500','#333333'];styles=['-']*5+['--'];summary=[]
-fig,axs=plt.subplots(2,2,figsize=(12,9));xy,per,cumulative,speed=axs.ravel();last_progress=max(float(r['progress'][np.flatnonzero(r['lower_trace'][:,:,i,6].reshape(-1))[-1],i]) for i in range(6));ref=route['s']<=last_progress+1;xy.plot(*route['xy'][ref].T,':',color='gray',label='Original reference')
+count=r['reward'].shape[1];labels=labels[:count];colors=colors[:count]
+fig,axs=plt.subplots(2,2,figsize=(12,9));xy,per,cumulative,speed=axs.ravel();last_progress=max(float(r['progress'][np.flatnonzero(r['lower_trace'][:,:,i,6].reshape(-1))[-1],i]) for i in range(count));ref=route['s']<=last_progress+1;xy.plot(*route['xy'][ref].T,':',color='gray',label='Original reference')
 for lane,(label,color) in enumerate(zip(labels,colors)):
     trace=r['lower_trace'][:,:,lane].reshape(-1,11);mask=trace[:,6].astype(bool);indices=np.flatnonzero(mask);steps=np.flatnonzero(r['valid'][:,lane]);position=trace[indices,:2];t=indices*.005+trace[indices,7]*physics_dt;rewards=r['reward'][steps,lane]
     xy.plot(*position.T,color=color,label=label,linestyle=styles[lane]);xy.scatter(*position[-1],marker='x',color=color)
@@ -43,7 +44,7 @@ for lane,(label,color,ax) in enumerate(zip(labels,colors,axs.flat)):
 fig.suptitle(a.title+' — true / wheel proxy / requested / governed speeds');fig.savefig(out/'speed_measurements.png',dpi=150);plt.close(fig)
 (out/'metrics.json').write_text(json.dumps(summary,indent=2));print(json.dumps(summary))
 
-(out/'figure_manifest.json').write_text(json.dumps(dict(source=str((a.run/'trajectory.npz').resolve()),outputs=['xy.png','overview.png','xy_all_alpha.png','speed_measurements.png'],role='exploratory DEV, one initial seed, no uncertainty estimate',filtering='active_lower mask only, no smoothing; each lane stops at observed failure',metric_window='individual observed duration; unequal durations do not support direct success rankings',reward='policy solid, same-alpha cached Zero dashed' if a.baseline_run else 'native alpha-weighted rewards; Zero scored alpha0 only',checkpoint=c['identity']['files']['actor.npz'],baseline_reuse=c.get('baseline_reuse'),matplotlib=matplotlib.__version__),indent=2))
+(out/'figure_manifest.json').write_text(json.dumps(dict(source=str((a.run/'trajectory.npz').resolve()),outputs=['xy.png','overview.png','xy_all_alpha.png','speed_measurements.png'],role='exploratory DEV, one initial seed, no uncertainty estimate',filtering='active_lower mask only, no smoothing; each lane stops at observed failure',metric_window='individual observed duration; unequal durations do not support direct success rankings',reward='policy solid, same-alpha cached Zero dashed' if a.baseline_run else 'native alpha-weighted rewards; no Zero in five-lane protocol' if count==5 else 'native alpha-weighted rewards; Zero scored alpha0 only',checkpoint=c['identity']['files']['actor.npz'],baseline_reuse=c.get('baseline_reuse'),matplotlib=matplotlib.__version__),indent=2))
 
 if a.baseline_run:
  from sttw_control.isaac_path_reporting import replay_rewards
@@ -85,3 +86,16 @@ if a.baseline_run:
  manifest=json.loads((out/'figure_manifest.json').read_text());manifest.update(reward_replay_error=closure,paired_baseline_scores=str(a.baseline_run.resolve()),additional_outputs=[stem+'_diagnostics.png' for stem in ['alpha0','alpha025','alpha05','alpha075','alpha1']]);(out/'figure_manifest.json').write_text(json.dumps(manifest,indent=2))
 
 (out/'condition_metrics.json').write_text(json.dumps(static_case_metrics(r,c),indent=2)+'\n')
+
+if count==5 and a.baseline_run is None:
+ from sttw_control.isaac_path_reporting import replay_rewards
+ cfg=json.loads((Path(c['bundle'])/'config.json').read_text());replayed,parts,closure=replay_rewards(r,cfg)
+ np.savez_compressed(out/'reward_components.npz',reward=replayed,**parts)
+ for lane,(label,color) in enumerate(zip(labels,colors)):
+  ids=np.flatnonzero(r['lower_trace'][:,:,lane,6].reshape(-1));time=(ids+1)*.005
+  fig,axes=plt.subplots(2,1,figsize=(10,6),layout='constrained')
+  for key,value in parts.items():
+   axes[0].plot(time,value[ids,lane],label=key);axes[1].plot(time,np.cumsum(value[ids,lane]))
+  axes[0].legend(fontsize=7,ncol=3);axes[0].set(ylabel='Reward per lower step');axes[1].set(xlabel='Time (s)',ylabel='Cumulative component reward');fig.suptitle(a.title+' | '+label+' | true failed endpoints retained')
+  fig.savefig(out/('alpha'+str(lane)+'_components.png'),dpi=150);plt.close(fig)
+ manifest=json.loads((out/'figure_manifest.json').read_text());manifest.update(reward_replay_error=closure);(out/'figure_manifest.json').write_text(json.dumps(manifest,indent=2))

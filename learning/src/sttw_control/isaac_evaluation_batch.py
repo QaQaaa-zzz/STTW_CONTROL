@@ -32,7 +32,8 @@ def batch_settings(settings, cases):
 
 def split_case(arrays, contract, case, case_index):
     """Preserve policy, control and optional physics-contact sampling axes."""
-    lanes = slice(case_index*6, (case_index+1)*6)
+    count=case.get('lane_count',6)
+    lanes = slice(case_index*count, (case_index+1)*count)
     result = {}
     for key, value in arrays.items():
         axis = 2 if key in ('lower_trace', 'wheel_contact_points', 'wheel_contact_forces', 'executed_commands', 'body_poses') else 1
@@ -42,8 +43,8 @@ def split_case(arrays, contract, case, case_index):
     settings = output['settings']
     for key in ('lane_terrain_ids', 'lane_alphas', 'lane_speeds', 'fixed_randomization_groups'):
         settings.pop(key, None)
-    settings.update(num_envs=6, trace_lanes=6, alphas=ALPHAS,
-                    zero_middle=[False]*5+[True], user_speed_m_s=case['user_speed_m_s'],
+    settings.update(num_envs=count, trace_lanes=count, alphas=ALPHAS[:count],
+                    zero_middle=([False]*5+[True])[:count], user_speed_m_s=case['user_speed_m_s'],
                     terrains={'evaluation': case['terrain_path']})
     if case.get('randomization') is not None:
         settings.update(seed=case['seed'],randomization=deepcopy(case['randomization']))
@@ -54,7 +55,7 @@ def split_case(arrays, contract, case, case_index):
             output[key] = {name: value[lanes] for name, value in output[key].items()}
     if 'lab_physics' in output:
         meta = output['lab_physics']
-        meta['num_envs'] = 6
+        meta['num_envs'] = count
         for key in ('env_origins', 'masses', 'materials'):
             meta[key] = meta[key][lanes]
         meta['terrain_layout']['clone_origins'] = meta['terrain_layout']['clone_origins'][lanes]
