@@ -68,3 +68,8 @@
 ## 最新增量：接触采集修复短测
 
 [五档4秒XY、完成记录与采集源码](contact_acquisition/README.md)。正式机制分析尚未完成；与前面的已完成任务证据分开。
+
+
+## 接触机制验证最终结果（精简增量）
+
+[结论、改善与退化轨迹、全部配对指标](contact_mechanism/README.md)。约5.1 MiB，含400条50Hz XY、P0/G3/G5/G6摘要和相关源码；无训练大文件。该支线因当前方案无稳定恢复/选档净收益停止，原STTW偏好主线保留。增量清单见contact_mechanism/MANIFEST.json。

@@ -1,0 +1,104 @@
+{
+  "role": "Descriptive fixed0.4m roadwidth check, no changed selection or claim of task arrival",
+  "summaries": [
+    {
+      "mode": "none",
+      "scope": "3-10s, all150 survived full10s",
+      "conditions": 50,
+      "peak_path_within_0p4m": 29,
+      "peak_path_median_m": 0.2952413558959961,
+      "peak_path_max_m": 2.0036144256591797
+    },
+    {
+      "mode": "cancel_negative",
+      "scope": "3-10s, all150 survived full10s",
+      "conditions": 50,
+      "peak_path_within_0p4m": 28,
+      "peak_path_median_m": 0.3264756202697754,
+      "peak_path_max_m": 1.181279182434082
+    },
+    {
+      "mode": "restore_reference",
+      "scope": "3-10s, all150 survived full10s",
+      "conditions": 50,
+      "peak_path_within_0p4m": 27,
+      "peak_path_median_m": 0.3191051483154297,
+      "peak_path_max_m": 1.0963249206542969
+    }
+  ],
+  "paired_transitions": [
+    {
+      "mode": "cancel_negative",
+      "gained": 2,
+      "lost": 3,
+      "gained_conditions": [
+        [
+          102,
+          2.6,
+          0.25
+        ],
+        [
+          103,
+          2.3,
+          0
+        ]
+      ],
+      "lost_conditions": [
+        [
+          101,
+          2.6,
+          0.25
+        ],
+        [
+          102,
+          2.6,
+          0
+        ],
+        [
+          104,
+          2.3,
+          0.75
+        ]
+      ]
+    },
+    {
+      "mode": "restore_reference",
+      "gained": 2,
+      "lost": 4,
+      "gained_conditions": [
+        [
+          102,
+          2.3,
+          0.75
+        ],
+        [
+          105,
+          2.6,
+          0.25
+        ]
+      ],
+      "lost_conditions": [
+        [
+          102,
+          2.3,
+          0
+        ],
+        [
+          103,
+          2.6,
+          0.25
+        ],
+        [
+          104,
+          2.3,
+          0.75
+        ],
+        [
+          105,
+          2.6,
+          0
+        ]
+      ]
+    }
+  ]
+}

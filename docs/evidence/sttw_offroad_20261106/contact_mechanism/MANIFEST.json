@@ -1,0 +1,141 @@
+{
+  "source_commit": "274fcaac",
+  "files": [
+    {
+      "path": "CONCLUSION.md",
+      "bytes": 4836,
+      "sha256": "0e808744b96efd6eb013c72d5ea67da20abacb2d77e8669fa0f3ee7776e1208f"
+    },
+    {
+      "path": "README.md",
+      "bytes": 1758,
+      "sha256": "1e962ccb443627191e3aae606a2decc703846d97eecd6c48eb3a7e86ca3bbc49"
+    },
+    {
+      "path": "contact_branch_outcomes.json",
+      "bytes": 80569,
+      "sha256": "51faa8c20ba265b4e22ec6db907a4e15f47998070804110364058ec30795b764"
+    },
+    {
+      "path": "contact_selection_choice_differences.json",
+      "bytes": 1429,
+      "sha256": "aa37f46a8df46cde132bd4d2bf564d86ec573ded528ae79ff7174809b3a9719f"
+    },
+    {
+      "path": "contact_selection_heldout.json",
+      "bytes": 55351,
+      "sha256": "b34606619bfe66630c3f27e0b2a2188558052e1b17f624659be9bc16ed9cc34b"
+    },
+    {
+      "path": "flat/config.json",
+      "bytes": 568163,
+      "sha256": "49ac4b284182acd29e42f4b7cd9c017622b291446462311a4588395e12e1bcaa"
+    },
+    {
+      "path": "flat/contact_intervention_effects.json",
+      "bytes": 844898,
+      "sha256": "65d899fa45a393a29b2b7b96e5016c42cacf5e9918d8dd66a7318816a97b0ed2"
+    },
+    {
+      "path": "flat/example.png",
+      "bytes": 277862,
+      "sha256": "37d5e5cae7695f8f524acca6592d4325e3a3b8706e51f471d09eecba6f290aaf"
+    },
+    {
+      "path": "flat/status.json",
+      "bytes": 1733,
+      "sha256": "6fbe26ec7143c2d00b34197c7acbc2c9a04d83966310895472c91678ff538b65"
+    },
+    {
+      "path": "flat/xy_50hz.npz",
+      "bytes": 749838,
+      "sha256": "bd42ebf2c75ea3a489232836100d09f8dd38f6b6b801cf1de252b8ea1777baf4"
+    },
+    {
+      "path": "mechanism_decision.json",
+      "bytes": 18347,
+      "sha256": "cdcb6bec589846a6d68fb9396e9b3914159158113ca8554aa57a52e07a4d08d2"
+    },
+    {
+      "path": "paired_contact_summary.json",
+      "bytes": 792396,
+      "sha256": "6831d190068f5ed480065265867b4824a97dd0195085db2cba4555ddde431c56"
+    },
+    {
+      "path": "recovery_time.json",
+      "bytes": 37866,
+      "sha256": "97e8ad41f07e1dce77b95c69070f2ee9eec0d7f51fa051870150d37b2933c5c7"
+    },
+    {
+      "path": "reference_route.npz",
+      "bytes": 77844,
+      "sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+    },
+    {
+      "path": "ridge/config.json",
+      "bytes": 345737,
+      "sha256": "38c2299b1cf4f62292d838a924ba47b2a8aec88e8a05939863e76092bc5a8794"
+    },
+    {
+      "path": "ridge/contact_intervention_effects.json",
+      "bytes": 357027,
+      "sha256": "4ee36e9cd61b3e4bce3f213761352bd7fbcd54f1cc02cb7ffe3688e6acfcd876"
+    },
+    {
+      "path": "ridge/counterexample.png",
+      "bytes": 287294,
+      "sha256": "be1cb75f62fa5fa193fb3eb350c771235e95a199bc65b9fbb855a5b7acfe5480"
+    },
+    {
+      "path": "ridge/example.png",
+      "bytes": 304318,
+      "sha256": "060dc14e0af45b4fe308c111e0e245480a9adbf2873b96f8f41aac7f222e54b2"
+    },
+    {
+      "path": "ridge/roadwidth.json",
+      "bytes": 1902,
+      "sha256": "392e3276969072a84ff37ffb73242679218303238d5f96f36b52ab974bd23704"
+    },
+    {
+      "path": "ridge/status.json",
+      "bytes": 1133,
+      "sha256": "b09b92de9709f7f6517aa33e1fad37494a1f1dbe3cbe3c1da2c025ecd0b89619"
+    },
+    {
+      "path": "ridge/xy_50hz.npz",
+      "bytes": 472794,
+      "sha256": "900bc717e3212104192afec673f8efe80414f26114c078353ad543c46ce6d36a"
+    },
+    {
+      "path": "source/learning/cli/analyze_contact_selection.py",
+      "bytes": 4953,
+      "sha256": "4db12f2b755661e2006e6c7206f992d9b197d0d922431c7e0f53224182fa4949"
+    },
+    {
+      "path": "source/learning/cli/analyze_contact_torque_intervention.py",
+      "bytes": 8576,
+      "sha256": "1e51a5fac2894c2e75a39efac2013b64f52e4cbfe191bc34c0ddb85f1e43bbd1"
+    },
+    {
+      "path": "source/learning/configs/isaac_h75_contact_torque_flat.json",
+      "bytes": 38933,
+      "sha256": "04dfe6ff9dd73a55d50bf00b7ecb06295528a35c318bb970f5b8a2cf2fe3fd29"
+    },
+    {
+      "path": "source/learning/configs/isaac_h75_contact_torque_ridge.json",
+      "bytes": 26903,
+      "sha256": "7b2f7b581b808dc043c166a901f4b56b144012d02b7be0671e33829727b46649"
+    },
+    {
+      "path": "source/learning/src/sttw_control/contact_torque_geometry.py",
+      "bytes": 3807,
+      "sha256": "3919366198a6ccc2c6b9fda10a2a8b91987c4e47ead5f2e246a9f8ef4a50466b"
+    },
+    {
+      "path": "source/learning/src/sttw_control/contact_torque_intervention.py",
+      "bytes": 6263,
+      "sha256": "eebca0731a86d2a93359e9ec34b6482589a813a8e6e3fbc08dad6c36e34ff15c"
+    }
+  ],
+  "total_bytes": 5372530
+}
