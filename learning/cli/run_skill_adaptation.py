@@ -7,6 +7,7 @@ p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('--plan',type=Path,required=True)
 p.add_argument('--output',type=Path,required=True)
 p.add_argument('--nominal-baseline-manifest',type=Path)
+p.add_argument('--notify',action='store_true')
 a=p.parse_args();plan=json.loads(a.plan.read_text());a.output.mkdir(parents=True,exist_ok=False)
 baselines=json.loads(a.nominal_baseline_manifest.read_text())['cases'] if a.nominal_baseline_manifest else []
 os.environ['PYTHONPATH']=str(Path(__file__).resolve().parents[1]/'src')+os.pathsep+os.environ.get('PYTHONPATH','')
@@ -22,6 +23,8 @@ for cfgpath,panelpath in zip(plan['training_configs'],plan['panels']):
  run([sim,'learning/cli/train_isaac_phase_u.py','--config',cfgpath,'--output',root/'training_run'],f'{skill}:training',root/'training.log')
  trained=json.loads((root/'training_run/status.json').read_text())
  if trained['stage']!='training_complete':raise RuntimeError('Training did not reach its declared end')
+ if a.notify:
+  subprocess.run(['/usr/bin/python3','learning/scripts/notify_chapter3_job.py','--message',f'{skill}的25次更新已结束，后台开始固定工况评测；整批结束后会通知可以继续推进任务。','--receipt',str(root/'training_bark_receipt.json')],check=True)
  rows=[]
  for update in plan['evaluated_updates']:
   folder=root/f'update{update:03d}';folder.mkdir();bundle=folder/'bundles'/skill
@@ -49,7 +52,7 @@ for cfgpath,panelpath in zip(plan['training_configs'],plan['panels']):
    path=folder/(case['case_id']+'.json');path.write_text(json.dumps(spec,indent=2)+'\n');case['config']=str(path)
   pending=dict(current,cases=[c for c in current['cases'] if c['case_id'] not in result_paths])
   path=folder/'manifest.json';path.write_text(json.dumps(pending,indent=2)+'\n')
-  run([sim,'learning/cli/run_jump_approach_pilot.py','--manifest',path,'--count',len(pending['cases'])],f'{skill}:evaluate{update}',folder/'evaluation.log')
+  run([sim,'learning/cli/run_jump_approach_pilot.py','--manifest',path,'--count',len(pending['cases']),'--cuda-graph-observation'],f'{skill}:evaluate{update}',folder/'evaluation.log')
   row=dict(update=update,checkpoint=str(checkpoint),nominal={},hard={},reused_original_nominal={k:str(v) for k,v in result_paths.items()})
   for case in current['cases']:
    out=result_paths.get(case['case_id'],folder/case['case_id'])

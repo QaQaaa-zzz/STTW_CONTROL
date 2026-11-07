@@ -23,7 +23,7 @@ if a.ground_summary:
         for i, name in enumerate(group['candidates']):
             c = lookup[name]
             result = None if group['success_vector'][i] is None else dict(complete=group['success_vector'][i], success_time_s=group['success_costs'][i])
-            groups[(group['origin_id'], group['task_id'])].append(dict(case_id=name,speed=c['speed_m_s'],alpha=c['alpha'],first_speed=c['speed_m_s'],first_alpha=c['alpha'],result=result))
+            groups[(group['origin_id'], (group['task_id'], group.get('case_id', group['origin_id'])))].append(dict(case_id=name,speed=c['speed_m_s'],alpha=c['alpha'],first_speed=c['speed_m_s'],first_alpha=c['alpha'],result=result))
 else:
     m = json.loads(a.manifest.read_text())
     sequences = any('second_candidate' in c for c in m['cases'])
@@ -60,7 +60,10 @@ for (origin, distance), rows in groups.items():
     record = dict(origin_id=origin, declared_candidates=len(rows),
                   evaluated_candidates=sum(c['result'] is not None for c in rows),
                   matched_group_complete=complete, selected={})
-    record['task_id' if a.ground_summary else 'distance_m'] = distance
+    if a.ground_summary:
+        record['task_id'], record['source_case_id'] = distance
+    else:
+        record['distance_m'] = distance
     if complete:
         for name, allowed in methods.items():
             successes = [c for c in rows if allowed(c) and c['result']['complete']]

@@ -1,0 +1,329 @@
+{
+  "status": "completed_slice",
+  "start": 0,
+  "count": 32,
+  "started_unix": 1794020418.4179301,
+  "finished_unix": 1794027292.124932,
+  "completed": [
+    {
+      "origin_id": "v1.9_lat-0.04_yaw-2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat-0.04_yaw-2_oblique-0.4_force_00_0",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 213.27386747000128,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v1.9_lat-0.04_yaw-2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat-0.04_yaw-2_oblique-0.4_force_00_1",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 208.7923826240003,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v1.9_lat-0.04_yaw-2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat-0.04_yaw-2_oblique-0.4_force_00_2",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 207.24018682399765,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v1.9_lat-0.04_yaw-2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat-0.04_yaw-2_oblique-0.4_force_00_3",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 209.79871262699453,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v1.9_lat-0.04_yaw-2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat-0.04_yaw-2_oblique0.4_force_01_0",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 207.65759386800346,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v1.9_lat-0.04_yaw-2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat-0.04_yaw-2_oblique0.4_force_01_1",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 205.31551889500406,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v1.9_lat-0.04_yaw-2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat-0.04_yaw-2_oblique0.4_force_01_2",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 206.61374365800293,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v1.9_lat-0.04_yaw-2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat-0.04_yaw-2_oblique0.4_force_01_3",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 206.9019820970061,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v1.9_lat0.04_yaw2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat0.04_yaw2_oblique-0.4_force_02_0",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 204.37135021499853,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v1.9_lat0.04_yaw2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat0.04_yaw2_oblique-0.4_force_02_1",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 206.7401176200001,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v1.9_lat0.04_yaw2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat0.04_yaw2_oblique-0.4_force_02_2",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 206.22946017899812,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v1.9_lat0.04_yaw2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat0.04_yaw2_oblique-0.4_force_02_3",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 206.6718817910005,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v1.9_lat0.04_yaw2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat0.04_yaw2_oblique0.4_force_03_0",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 206.0016538849959,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v1.9_lat0.04_yaw2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat0.04_yaw2_oblique0.4_force_03_1",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 206.45416748100251,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v1.9_lat0.04_yaw2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat0.04_yaw2_oblique0.4_force_03_2",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 206.71341573500104,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v1.9_lat0.04_yaw2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v1.9_lat0.04_yaw2_oblique0.4_force_03_3",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 204.70318356600183,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.3_lat-0.04_yaw-2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat-0.04_yaw-2_oblique-0.4_force_04_0",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 206.73016982399713,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.3_lat-0.04_yaw-2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat-0.04_yaw-2_oblique-0.4_force_04_1",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 206.97998904600536,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.3_lat-0.04_yaw-2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat-0.04_yaw-2_oblique-0.4_force_04_2",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 206.0645963539937,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.3_lat-0.04_yaw-2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat-0.04_yaw-2_oblique-0.4_force_04_3",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 207.36477204100083,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.3_lat-0.04_yaw-2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat-0.04_yaw-2_oblique0.4_force_05_0",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 206.14877723399695,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.3_lat-0.04_yaw-2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat-0.04_yaw-2_oblique0.4_force_05_1",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 205.6585709630017,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.3_lat-0.04_yaw-2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat-0.04_yaw-2_oblique0.4_force_05_2",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 204.90701607599476,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.3_lat-0.04_yaw-2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat-0.04_yaw-2_oblique0.4_force_05_3",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 206.8497151440024,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.3_lat0.04_yaw2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat0.04_yaw2_oblique-0.4_force_06_0",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 205.08831582400308,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.3_lat0.04_yaw2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat0.04_yaw2_oblique-0.4_force_06_1",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 205.21775114699994,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.3_lat0.04_yaw2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat0.04_yaw2_oblique-0.4_force_06_2",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 206.5360848460041,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.3_lat0.04_yaw2_oblique-0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat0.04_yaw2_oblique-0.4_force_06_3",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 206.11883283500356,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.3_lat0.04_yaw2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat0.04_yaw2_oblique0.4_force_07_0",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 205.8887832620021,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.3_lat0.04_yaw2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat0.04_yaw2_oblique0.4_force_07_1",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 206.8436035659979,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.3_lat0.04_yaw2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat0.04_yaw2_oblique0.4_force_07_2",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 207.2097022779999,
+        "optimizer_updates": 0
+      }
+    },
+    {
+      "origin_id": "v2.3_lat0.04_yaw2_oblique0.4",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ground_force_challenge/v2.3_lat0.04_yaw2_oblique0.4_force_07_3",
+      "outcome": {
+        "status": "complete",
+        "rows": 12,
+        "elapsed_s": 206.14873450399318,
+        "optimizer_updates": 0
+      }
+    }
+  ]
+}
