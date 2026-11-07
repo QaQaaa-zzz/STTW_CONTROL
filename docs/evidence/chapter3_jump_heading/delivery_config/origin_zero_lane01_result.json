@@ -1,0 +1,25 @@
+{
+  "status": "complete",
+  "elapsed_s": 7.987095303993556,
+  "elapsed_scope": "Shared whole-batch elapsed, not additive per lane",
+  "physics_lane_steps": 888,
+  "landing_return_executed": false,
+  "ground_recovery_executed": false,
+  "ground_controller": "H75+ECBC (zero lower residual)",
+  "cases": [
+    {
+      "skill": "heading125",
+      "duration_s": 2.200000047683716,
+      "physical_termination": true,
+      "ground_handoff_reached": false,
+      "peak_root_z": 0.1390509307384491,
+      "final_xyz": [
+        -4.244213581085205,
+        -4.692791938781738,
+        0.12679900228977203
+      ],
+      "peak_abs_roll_deg": 18.786632537841797,
+      "full_jump_success": "requires original landing and chain analysis"
+    }
+  ]
+}

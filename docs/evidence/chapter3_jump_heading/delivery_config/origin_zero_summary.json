@@ -1,0 +1,13 @@
+{
+  "role": "One post-hoc numerical layout diagnostic; no new validation success claim",
+  "origin_id": "rb_connection_seed20261106_root006",
+  "only_layout_change": "env_spacing20to0, independent collision groups retained",
+  "exact_trace_equal": true,
+  "max_trace_difference": 0.0,
+  "end_time_s": 2.200000047683716,
+  "max_roll_deg": 18.786632537841797,
+  "budget_steps": 17600,
+  "actual_steps": 1776,
+  "contact_check_first200ms": "Both lanes max nonwheel force0N, maximum wheel force27.10N. Not a full collision-filter certification.",
+  "conclusion": "Placement affects outcomes; exact numerical mechanism not established. No default global-layout change, no reward/controller training or further spacing scan."
+}

@@ -1888,3 +1888,7 @@ Config learning/configs/isaac_h75_tradeoff_repeats.json records all sampled valu
 ### 第三章：冻结技能的真实在线接续与六根能力表（2026-11-07）
 复用H75+ECBC/ESO、零底层残差和heading125跳跃；单车入口统一既有20ms接触保持与回交进度初始化。两根固定/C6四条实际执行，20ms任务固定1/2、C6 2/2，原严格均0/2；首对选档前275点trace相同，真实选α0后回交续行12.28秒/19.13米。只作DEV技能贯通证据，不宣称普遍提升。接触保持补充150轮28.19分钟与126入口完成，候选无足够整体优势，不替换当前技能、不续加PPO。
 随后冻结125、追加四根24分支/211200物理步/0更新，合并两根既有12条为六根36条能力表：strict1/36、20ms19/36，保留上游失败；20有效状态中17实际候选有核支持，整根排除条件Brier .08709，仅DEV且概率未校准。复用kernel、不训MLP。新薄CLI summarize_connection_support复算已有数据；完整XY、逐阶段判据、身份与两协议记录见[evidence](evidence/chapter3_jump_heading/RESULTS.md)。
+
+
+### 第三章：冻结证据的新验证状态与批量在线选档（2026-11-07）
+原120根划分中validation_tuning前两根006/021、冻结heading125/H75及36条train证据和kernel门槛，未新增训练；实际调用既有批量入口接出口selector与每lane开关。两条C6均选2m/s alpha1、20ms接续通过、strict未过；固定两条失败但上游前缀已明显不同，不作选档因果收益。四条35200物理步、两批77.70/74.42秒。一次env_spacing0工程诊断仅1776物理步、两条同前缀均2.20秒上游退出，未扫描更多spacing或改默认。保留数值上下文限制和所有负例，不将controller退出叫作跌倒；相关[完整报告](evidence/chapter3_jump_heading/RESULTS.md)。单车已有一致前缀的接续证据独立保留，未合并成普适性能结论。

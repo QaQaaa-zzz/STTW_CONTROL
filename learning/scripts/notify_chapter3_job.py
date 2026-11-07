@@ -14,13 +14,14 @@ from zoneinfo import ZoneInfo
 parser = argparse.ArgumentParser()
 parser.add_argument('--pid', type=int)
 parser.add_argument('--message', help='Send a stage notice immediately, without waiting')
+parser.add_argument('--title', default='第三章阶段通知')
 parser.add_argument('--unit', default='ch3-speed-resume.service')
 parser.add_argument('--status', type=Path)
 parser.add_argument('--receipt', type=Path, required=True)
 args = parser.parse_args()
 if args.message:
     when = datetime.datetime.now(ZoneInfo('America/Los_Angeles')).strftime('%Y-%m-%d %H:%M %Z')
-    title = '第三章训练阶段通知'
+    title = args.title
     body = f'{when}\n{args.message}'
 else:
     fd = os.pidfd_open(args.pid)

@@ -9,10 +9,10 @@ from .pendulum_landing import platform_support_mask
 
 
 @torch.no_grad()
-def run_connection_batch(spec, out, plant, ground, policies, history, geometry, entry=None):
+def run_connection_batch(spec, out, plant, ground, policies, history, geometry, entry=None, selector=None):
     from isaaclab.utils.math import euler_xyz_from_quat
     n=plant.count;device=plant.device;dt=plant.physics_dt
-    candidates=spec['batch_candidates'];steps=round(spec['seconds']/.005)
+    candidates=[dict(c) for c in spec['batch_candidates']];selection_lanes=spec.get('connection_selector_lanes',[True]*n);steps=round(spec['seconds']/.005)
     policy_groups=[(policies[spec['skills'].index(name)],torch.tensor([i for i,s in enumerate(spec['skills']) if s==name],device=device)) for name in dict.fromkeys(spec['skills'])]
     active=torch.zeros(n,device=device,dtype=torch.bool);returned=active.clone();alive=~active
     decided=active.clone();entered=active.clone();consumed=active.clone();ready=active.clone()
@@ -55,6 +55,15 @@ def run_connection_batch(spec, out, plant, ground, policies, history, geometry, 
                 event(lane,'connection_decision',m,root,decision_stage='exit',candidate=candidate,
                     previous_alpha_duration_s=global_tick*.005,previous_reference=ground.previous_reference[lane:lane+1].cpu().tolist(),
                     previous_alpha=ground.alpha[lane:lane+1].cpu().tolist(),history='retained; no reset')
+                if selector is not None and selection_lanes[lane]:
+                    from .jump_connection import decision_features
+                    query_start=time.perf_counter()
+                    state,named=decision_features(events[lane]['connection_decision'],out,dict(joint_names=plant.joints),spec)
+                    choice=selector.choose(state,'exit',dict(speed_m_s=float(ground.speed[lane]),alpha=float(ground.alpha[lane])))
+                    candidate.update(choice['candidate']);candidates[lane].update(choice['candidate'])
+                    requested_speed[lane]=candidate['speed_m_s'];requested_alpha[lane]=candidate['alpha']
+                    events[lane]['connection_decision'].update(candidate=candidate,selection=choice,observable_state=named,selection_wall_s=time.perf_counter()-query_start)
+
             ground.speed.copy_(torch.where(crossing,requested_speed,ground.speed))
             ground.alpha.copy_(torch.where(crossing,requested_alpha,ground.alpha));decided|=crossing
             inside=(root[:,0]>=spec['platform_front_x']-1.1)&(root[:,0]<=spec['platform_front_x']+.4)
@@ -143,6 +152,8 @@ def run_connection_batch(spec, out, plant, ground, policies, history, geometry, 
     for lane,candidate in enumerate(candidates):
         folder=out/f'lane_{lane:02d}';folder.mkdir()
         lane_spec=dict(spec);lane_spec.pop('batch_candidates');lane_spec.update(output=str(folder),skills=[spec['skills'][lane]],connection_candidate=dict(spec['connection_candidate'],**candidate))
+        lane_spec.pop('connection_selector_lanes',None)
+        if selector is not None and not selection_lanes[lane]:lane_spec.pop('connection_selector',None)
         protocol=dict(parent,spec=lane_spec,policies=[parent['policies'][lane]],batch_execution=dict(parent_output=str(out),lane=lane,count=n,shared_elapsed_s=elapsed,scope='Experimental mixed-phase GPU batch; requires paired validation before adoption'))
         (folder/'protocol.json').write_text(json.dumps(protocol,indent=2)+'\n');(folder/'ground_controller.json').write_text(json.dumps(controller,indent=2)+'\n')
         (folder/'config.json').write_text(json.dumps(lane_spec,indent=2)+'\n')
@@ -158,7 +169,7 @@ def run_connection_batch(spec, out, plant, ground, policies, history, geometry, 
         np.savez_compressed(folder/'arm_commands.npz',trace=arms[j,lane:lane+1],columns=['time','hip_target','knee_target','hip_position','knee_position','hip_velocity','knee_velocity','hip_command_torque','knee_command_torque','alive_before_step'])
         for name,value in events[lane].items():(folder/(name+'.json')).write_text(json.dumps(value,indent=2)+'\n')
         tr=trace[:,0];case=dict(skill=spec['skills'][lane],duration_s=float(tr[-1,0]),physical_termination=not bool(alive[lane]) and not (spec.get('stop_at_ground_handoff',False) and 'handoff' in events[lane]),ground_handoff_reached='handoff' in events[lane],peak_root_z=float(tr[:,3].max()),final_xyz=tr[-1,1:4].tolist(),peak_abs_roll_deg=float(np.rad2deg(abs(tr[:,5])).max()),full_jump_success='requires original landing and chain analysis')
-        result=dict(status='complete',elapsed_s=elapsed,elapsed_scope='Shared whole-batch elapsed, not additive per lane',physics_lane_steps=block_tick*round(.02/dt),landing_return_executed='landing_handoff' in events[lane],ground_recovery_executed='ground_recovery' in events[lane],ground_controller='H75+ECBC (zero lower residual)',cases=[case])
+        result=dict(status='complete',termination_scope='Legacy physical_termination includes ground-controller/domain exits; it is not a fall-only label. First-exit reason is not captured by this batch report.',elapsed_s=elapsed,elapsed_scope='Shared whole-batch elapsed, not additive per lane',physics_lane_steps=block_tick*round(.02/dt),landing_return_executed='landing_handoff' in events[lane],ground_recovery_executed='ground_recovery' in events[lane],ground_controller='H75+ECBC (zero lower residual)',cases=[case])
         (folder/'results.json').write_text(json.dumps(result,indent=2)+'\n');cases.append(dict(lane=lane,candidate=candidate,output=str(folder)))
     summary=dict(status='complete',elapsed_s=elapsed,physics_lane_steps=block_tick*round(.02/dt)*n,optimizer_updates=0,cases=cases)
     (out/'batch_results.json').write_text(json.dumps(summary,indent=2)+'\n')

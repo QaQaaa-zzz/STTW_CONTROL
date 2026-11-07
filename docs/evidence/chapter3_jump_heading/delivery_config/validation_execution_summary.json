@@ -1,0 +1,454 @@
+{
+  "role": "Prospective validation_tuning with frozen train evidence; numeric batch prefix differences preclude attributing raw method count difference to selection",
+  "rows": [
+    {
+      "origin": "006",
+      "method": "fixed",
+      "strict": false,
+      "contact20": false,
+      "full_window": false,
+      "release_s": null,
+      "handback_s": null,
+      "continued_s": 0.0,
+      "continued_m": 0.0,
+      "decision": null,
+      "prefix_comparison": {
+        "matched_samples": 60,
+        "through_time_s": 1.1799999475479126,
+        "max_position_difference_m": 0.35691195726394653,
+        "max_speed_difference_m_s": 0.6509859561920166,
+        "scope": "Observed pre-selection difference retained; not a causal paired gain comparison"
+      },
+      "observed_end_s": 1.1799999475479126
+    },
+    {
+      "origin": "006",
+      "method": "C6",
+      "strict": false,
+      "contact20": true,
+      "full_window": true,
+      "release_s": 7.38,
+      "handback_s": 9.68,
+      "continued_s": 12.319999694824219,
+      "continued_m": 19.223419189453125,
+      "decision": {
+        "time": 5.42,
+        "root": [
+          [
+            -1.9644222259521484,
+            0.4819868206977844,
+            0.11804609000682831,
+            0.7532920837402344,
+            0.007065390702337027,
+            0.00555979972705245,
+            0.6576247811317444,
+            2.0063273906707764,
+            -0.02508459985256195,
+            0.0013198972446843982,
+            -0.1384333372116089,
+            -0.0031285667791962624,
+            -0.6756625175476074
+          ]
+        ],
+        "measurement": [
+          [
+            -0.13541138172149658,
+            0.1378479301929474,
+            -0.09203965216875076,
+            0.06829821318387985,
+            -0.6695162653923035,
+            28.813831329345703,
+            28.984621047973633
+          ]
+        ],
+        "position": [
+          [
+            -1.2001996040344238,
+            5.0832929611206055,
+            -0.09203965216875076,
+            2.499999761581421,
+            0.26965218782424927
+          ]
+        ],
+        "velocity": [
+          [
+            -0.0036893105134367943,
+            -28.813831329345703,
+            0.06829821318387985,
+            0.001969307428225875,
+            -28.984621047973633
+          ]
+        ],
+        "decision_stage": "exit",
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 2.0,
+          "alpha": 1.0
+        },
+        "previous_alpha_duration_s": 5.42,
+        "previous_reference": [
+          [
+            2.0136613845825195,
+            -0.05582703649997711
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained; no reset",
+        "selection": {
+          "status": "selected",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 1.0
+          },
+          "estimates": [
+            {
+              "candidate_id": "v1.8_a0.0",
+              "known": true,
+              "support": 1.054165056986631,
+              "complete_probability": 1.0,
+              "success_cost": 7.0150654184183185,
+              "sample_count": 3
+            },
+            {
+              "candidate_id": "v1.8_a0.5",
+              "known": true,
+              "support": 2.6590177486644646,
+              "complete_probability": 1.0,
+              "success_cost": 6.827144317575481,
+              "sample_count": 3
+            },
+            {
+              "candidate_id": "v1.8_a1.0",
+              "known": true,
+              "support": 2.1236939273786164,
+              "complete_probability": 0.6956050937041472,
+              "success_cost": 6.834393941173186,
+              "sample_count": 4
+            },
+            {
+              "candidate_id": "v2.0_a0.0",
+              "known": true,
+              "support": 2.7191622208855475,
+              "complete_probability": 1.0,
+              "success_cost": 6.681552987971981,
+              "sample_count": 4
+            },
+            {
+              "candidate_id": "v2.0_a0.5",
+              "known": true,
+              "support": 2.548616741837426,
+              "complete_probability": 1.0,
+              "success_cost": 6.743766175052364,
+              "sample_count": 4
+            },
+            {
+              "candidate_id": "v2.0_a1.0",
+              "known": true,
+              "support": 1.4748021579652888,
+              "complete_probability": 1.0,
+              "success_cost": 6.599999756948132,
+              "sample_count": 2
+            }
+          ],
+          "evidence_rows": 20,
+          "excluded_origin_id": "rb_connection_seed20261106_root006",
+          "fallback": null,
+          "scope": "Empirical Q_hold recommendation, not a calibrated or guaranteed success probability"
+        },
+        "observable_state": {
+          "speed": 2.005553438034196,
+          "roll": -0.13541138172149658,
+          "roll_rate": 0.1378479301929474,
+          "cross_track": 0.4819868206977844,
+          "heading_error": -0.01795810267976986,
+          "steer": -0.09203965216875076,
+          "steer_rate": 0.06829821318387985,
+          "previous_speed_reference": 2.0136613845825195,
+          "lateral_velocity_heading_frame": -0.06110845190957417,
+          "world_yaw_rate": -0.6756625175476074,
+          "previous_alpha": 0.5,
+          "previous_alpha_duration": 5.42,
+          "remaining_path_to_release": 3.964422225952063,
+          "path_curvature": 0.0,
+          "corridor_half_width": 1.0,
+          "pitch": 0.0009164457786177138,
+          "body_angular_y": -0.09186626609865405,
+          "hip": -1.2001996040344238,
+          "knee": 2.499999761581421,
+          "hip_velocity": -0.0036893105134367943,
+          "knee_velocity": 0.001969307428225875,
+          "platform_height": 0.16,
+          "remaining_path_to_platform": 5.564422225952029
+        },
+        "selection_wall_s": 0.001989502998185344
+      },
+      "prefix_comparison": {
+        "matched_samples": 60,
+        "through_time_s": 1.1799999475479126,
+        "max_position_difference_m": 0.35691195726394653,
+        "max_speed_difference_m_s": 0.6509859561920166,
+        "scope": "Observed pre-selection difference retained; not a causal paired gain comparison"
+      },
+      "observed_end_s": 22.0
+    },
+    {
+      "origin": "021",
+      "method": "fixed",
+      "strict": false,
+      "contact20": false,
+      "full_window": false,
+      "release_s": 7.62,
+      "handback_s": null,
+      "continued_s": 0.0,
+      "continued_m": 0.0,
+      "decision": {
+        "time": 5.58,
+        "root": [
+          [
+            -1.9916391372680664,
+            1.1185975074768066,
+            0.11766906082630157,
+            0.7605733275413513,
+            0.04982839524745941,
+            0.041730523109436035,
+            0.6459906697273254,
+            1.9811382293701172,
+            0.179933100938797,
+            -0.003640909679234028,
+            -0.05933196097612381,
+            -0.016452951356768608,
+            -0.7525122165679932
+          ]
+        ],
+        "measurement": [
+          [
+            -0.16262531280517578,
+            0.06028822436928749,
+            -0.10352342575788498,
+            0.05061062425374985,
+            -0.7412417531013489,
+            28.499237060546875,
+            28.891977310180664
+          ]
+        ],
+        "position": [
+          [
+            -1.2002017498016357,
+            0.3894718587398529,
+            -0.10352342575788498,
+            2.499999523162842,
+            -2.649704933166504
+          ]
+        ],
+        "velocity": [
+          [
+            0.030719028785824776,
+            -28.499237060546875,
+            0.05061062425374985,
+            -2.8136573746451177e-06,
+            -28.891977310180664
+          ]
+        ],
+        "decision_stage": "exit",
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 2.0,
+          "alpha": 0.5
+        },
+        "previous_alpha_duration_s": 5.58,
+        "previous_reference": [
+          [
+            1.9988927841186523,
+            -0.09519632160663605
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained; no reset"
+      },
+      "prefix_comparison": {
+        "matched_samples": 277,
+        "through_time_s": 5.519999980926514,
+        "max_position_difference_m": 0.9331731796264648,
+        "max_speed_difference_m_s": 0.3010295629501343,
+        "scope": "Observed pre-selection difference retained; not a causal paired gain comparison"
+      },
+      "observed_end_s": 9.149999618530273
+    },
+    {
+      "origin": "021",
+      "method": "C6",
+      "strict": false,
+      "contact20": true,
+      "full_window": true,
+      "release_s": 7.5,
+      "handback_s": 9.88,
+      "continued_s": 12.119999885559082,
+      "continued_m": 18.91504669189453,
+      "decision": {
+        "time": 5.5200000000000005,
+        "root": [
+          [
+            -1.997239112854004,
+            0.43781358003616333,
+            0.11804812401533127,
+            0.7530502676963806,
+            0.01803141087293625,
+            0.01513566542416811,
+            0.6575416922569275,
+            2.0071351528167725,
+            0.029910696670413017,
+            0.0009190506534650922,
+            -0.10616564750671387,
+            -0.005700057838112116,
+            -0.6719218492507935
+          ]
+        ],
+        "measurement": [
+          [
+            -0.135231614112854,
+            0.10570009052753448,
+            -0.09157871454954147,
+            0.045489951968193054,
+            -0.6657896041870117,
+            28.841615676879883,
+            28.99471092224121
+          ]
+        ],
+        "position": [
+          [
+            -1.2001991271972656,
+            0.8763086199760437,
+            -0.09157871454954147,
+            2.499999761581421,
+            -1.7383567094802856
+          ]
+        ],
+        "velocity": [
+          [
+            -0.0033189128153026104,
+            -28.841615676879883,
+            0.045489951968193054,
+            0.002777565037831664,
+            -28.99471092224121
+          ]
+        ],
+        "decision_stage": "exit",
+        "candidate": {
+          "decision_x_m": -2.0,
+          "speed_m_s": 2.0,
+          "alpha": 1.0
+        },
+        "previous_alpha_duration_s": 5.5200000000000005,
+        "previous_reference": [
+          [
+            2.0143375396728516,
+            -0.05867398530244827
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "history": "retained; no reset",
+        "selection": {
+          "status": "selected",
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 1.0
+          },
+          "estimates": [
+            {
+              "candidate_id": "v1.8_a0.0",
+              "known": true,
+              "support": 0.7524394384509193,
+              "complete_probability": 1.0,
+              "success_cost": 7.00567822935292,
+              "sample_count": 3
+            },
+            {
+              "candidate_id": "v1.8_a0.5",
+              "known": true,
+              "support": 2.160183594326698,
+              "complete_probability": 1.0,
+              "success_cost": 6.826666638967342,
+              "sample_count": 3
+            },
+            {
+              "candidate_id": "v1.8_a1.0",
+              "known": true,
+              "support": 1.9942159268089532,
+              "complete_probability": 0.5882083000041504,
+              "success_cost": 6.833083065620396,
+              "sample_count": 4
+            },
+            {
+              "candidate_id": "v2.0_a0.0",
+              "known": true,
+              "support": 1.9954864301076571,
+              "complete_probability": 1.0,
+              "success_cost": 6.6856739650838914,
+              "sample_count": 4
+            },
+            {
+              "candidate_id": "v2.0_a0.5",
+              "known": true,
+              "support": 2.752578341152532,
+              "complete_probability": 1.0,
+              "success_cost": 6.779212466650278,
+              "sample_count": 4
+            },
+            {
+              "candidate_id": "v2.0_a1.0",
+              "known": true,
+              "support": 1.5299170824875514,
+              "complete_probability": 1.0,
+              "success_cost": 6.59999984067218,
+              "sample_count": 2
+            }
+          ],
+          "evidence_rows": 20,
+          "excluded_origin_id": "rb_connection_seed20261106_root021",
+          "fallback": null,
+          "scope": "Empirical Q_hold recommendation, not a calibrated or guaranteed success probability"
+        },
+        "observable_state": {
+          "speed": 2.006318857452732,
+          "roll": -0.135231614112854,
+          "roll_rate": 0.10570009052753448,
+          "cross_track": 0.43781358003616333,
+          "heading_error": -0.04707918898590733,
+          "steer": -0.09157871454954147,
+          "steer_rate": 0.045489951968193054,
+          "previous_speed_reference": 2.0143375396728516,
+          "lateral_velocity_heading_frame": -0.06458183705719679,
+          "world_yaw_rate": -0.6719218492507935,
+          "previous_alpha": 0.5,
+          "previous_alpha_duration": 5.5200000000000005,
+          "remaining_path_to_release": 3.9972391128539186,
+          "path_curvature": -0.4309778213500962,
+          "corridor_half_width": 1.0,
+          "pitch": 0.0009169751653406166,
+          "body_angular_y": -0.0912924551124103,
+          "hip": -1.2001991271972656,
+          "knee": 2.499999761581421,
+          "hip_velocity": -0.0033189128153026104,
+          "knee_velocity": 0.002777565037831664,
+          "platform_height": 0.16,
+          "remaining_path_to_platform": 5.5972391128538845
+        },
+        "selection_wall_s": 0.0020409139979165047
+      },
+      "prefix_comparison": {
+        "matched_samples": 277,
+        "through_time_s": 5.519999980926514,
+        "max_position_difference_m": 0.9331731796264648,
+        "max_speed_difference_m_s": 0.3010295629501343,
+        "scope": "Observed pre-selection difference retained; not a causal paired gain comparison"
+      },
+      "observed_end_s": 22.0
+    }
+  ]
+}

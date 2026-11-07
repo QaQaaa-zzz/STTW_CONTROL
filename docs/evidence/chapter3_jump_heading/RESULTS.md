@@ -184,3 +184,29 @@ contact1任务数略高但早失败更多；最新contact150也无明显整体�
 复用JumpConnectionSelector和ConnectionCapability、固定23维尺度与门槛、不拟合或调阈值。每条实际有效决策状态查询时排除整根；27条到达决策，20条同时满足完整输入与此前未越廊，17条对实际候选有足够支持（3条未知）。条件Brier=.08709只覆盖这17条，不代表全体36或独立TEST概率校准，也不推断未执行选择的效果。上游失败保留全分母。两套原始[20ms记录](delivery_config/six_root_contact20_records.jsonl)、[严格记录](delivery_config/six_root_strict_records.jsonl)及[核支持逐项摘要](delivery_config/six_root_capability_summary.json)可复查。
 
 复算：`PYTHONPATH=learning/src python learning/cli/summarize_connection_support.py --records docs/evidence/chapter3_jump_heading/delivery_config/six_root_contact20_records.jsonl --config learning/configs/jump_connection_capability_dev.json --output runs/ch3_support_replay.json`。无需新物理或训练。当前保留核工具，不因六根数据启动MLP或继续PPO；下一步为冻结该表后检验新的实际来车状态与任务组织。
+
+
+## 冻结36条训练证据后的新验证状态与批量在线入口
+
+![新验证根006](validation_root006_xy.png)
+
+[新验证根021](validation_root021_xy.png)。两根按原120根划分中的validation_tuning顺序前两根006/021选取，在仿真前冻结heading125/H75、36条train证据、23维尺度和门槛；无调参/训练，不把验证记录回填训练。四条真实执行、35200物理lane步，原严格及20ms口径都保留。它们是新验证状态，不是独立TEST。
+
+|根/方法|到达出口后的实际选择|原严格完整|20ms完整|回交(s)|回交后时间/距离|
+|---|---|---|---|---:|---|
+|006/fixed|未到选档点|False|False|无|0.00s/0.00m|
+|006/C6|2.0/1.0|False|True|9.68|12.32s/19.22m|
+|021/fixed|2.0/0.5|False|False|无|0.00s/0.00m|
+|021/C6|2.0/1.0|False|True|9.88|12.12s/18.92m|
+
+两条C6都选2m/s、α1，查询约1.99/2.04ms、接受20条原train有效证据，并完成跳跃回交续行。固定结果0/2、在线2/2只是原始记录：006固定在1.18s、选档前已退出，021固定在9.15s退出；两组在选档前的观测位置差分别.357/.933m，速度差.651/.301m/s。因此不能将成绩差归因为选档，也不汇总成与前节单车一致前缀配对的“4/4性能提升”。这里只证明在声明的批量布局和实际到达状态下，冻结工具/技能能被真实调用并完成接续。
+
+批量代码复用现有run_connection_batch，新增出口query调用和每lane启用标志；同权重、出口一次选择、无选择旧批量和单车入口保留。每组两条一起实际仿真77.70/74.42秒，加载/分析另计；此前单车测试同时存在4096训练，不能把耗时比当纯代码加速倍数。实际选择写入事件、speed/alpha tensor及导出lane配置。候选不同不改变原观察/失败标签。
+
+[冻结运行单](delivery_config/validation_manifest.json)、[所有事件与前缀差](delivery_config/validation_execution_summary.json)、[006配置](delivery_config/validation_root006.json)、[021配置](delivery_config/validation_root021.json)。固定证据与前节six_root_contact20_records相同；查询排除整根，两个新根不在建表数据里。此阶段无模型拟合、无新增RL。
+
+### 一次同原点诊断，失败与限制保留
+
+[诊断XY](origin_zero_diagnostic_xy.png)、[诊断记录](delivery_config/origin_zero_summary.json)。确认ground_settings.randomization=null后，仅将root006两lane的env_spacing20改0，保持独立碰撞组、模型/控制/几何/频率。两条trace逐值相同，均在2.20s上游退出、没有选档或跳跃；最大侧倾18.79°，不能仅凭results中的physical_termination字段称45°跌倒。原点布局改变了结果，但不能证明浮点精度是唯一根因。
+
+该诊断只实际运行1776物理lane步（上限17600）、0更新，作为看过结果后的工程诊断，独立于四条新验证统计。不追加spacing扫描、奖励修改或训练，不自动更改全局默认。批量入口可做实际状态条件的数据采集；当前不将此异质批量当无混杂的“同出口反事实性能比较”。此前单车两根/四条中，第一对选档前trace相同、第二对同选择全程相同的证据仍独立保留。

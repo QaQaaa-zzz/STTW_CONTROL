@@ -1,0 +1,44 @@
+{
+  "role": "Two prospective validation_tuning roots, fixed data/skill/thresholds; not independent TEST",
+  "cases": [
+    {
+      "case_id": "006",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_heading_validation_online/006.json",
+      "origin_id": "rb_connection_seed20261106_root006",
+      "distance_m": 5.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.5
+    },
+    {
+      "case_id": "021",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_heading_validation_online/021.json",
+      "origin_id": "rb_connection_seed20261106_root021",
+      "distance_m": 5.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.5
+    }
+  ],
+  "selected_roots": [
+    {
+      "origin_id": "rb_connection_seed20261106_root006",
+      "split": "validation_tuning",
+      "initial_offset": {
+        "lateral_m": -0.07714007963614938,
+        "yaw_deg": 0.21495193858476425
+      }
+    },
+    {
+      "origin_id": "rb_connection_seed20261106_root021",
+      "split": "validation_tuning",
+      "initial_offset": {
+        "lateral_m": -0.05237721224376884,
+        "yaw_deg": 1.7388892097413438
+      }
+    }
+  ],
+  "source_split": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_independent_roots/root_split.json",
+  "simulation_python": "/home/qy/miniconda3/envs/env_isaaclab/bin/python",
+  "analysis_python": "/home/qy/miniconda3/envs/mjp/bin/python",
+  "maximum_physics_steps": 35200,
+  "optimizer_updates": 0
+}

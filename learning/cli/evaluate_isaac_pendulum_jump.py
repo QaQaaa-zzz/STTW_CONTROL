@@ -7,10 +7,11 @@ p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p
 spec=json.loads(a.config.read_text())
 if a.cuda_graph_observation:spec['cuda_graph_observation']=True
 batch=spec.get('batch_candidates')
-if batch and (len(batch)!=len(spec['skills']) or not spec.get('ground_bundle') or not spec.get('zero_lower') or not spec.get('landing_return') or not spec.get('connection_candidate') or any(spec.get(k) for k in ('connection_midpoint_candidate','connection_selector','forward_branch','external_force_pulse','video'))):p.error('Batch connection requires frozen jump skills, zero-lower ground, common exit/landing protocol and fixed per-lane candidates')
+if batch and (len(batch)!=len(spec['skills']) or not spec.get('ground_bundle') or not spec.get('zero_lower') or not spec.get('landing_return') or not spec.get('connection_candidate') or any(spec.get(k) for k in ('connection_midpoint_candidate','forward_branch','external_force_pulse','video'))):p.error('Batch connection requires frozen jump skills, zero-lower ground, common exit/landing protocol and per-lane connection candidates')
 pulse=spec.get('external_force_pulse')
 if pulse and (len(spec['skills'])!=1 or pulse['kind']!='external_force_N' or pulse['body']!='chasis' or pulse['duration_s']<=0):p.error('External pulse requires one lane, chasis body, external_force_N and positive duration')
-if spec.get('connection_selector') and (len(spec['skills'])!=1 or not spec.get('ground_bundle') or ('midpoint' in spec['connection_selector'].get('stages',['midpoint']) and not spec.get('connection_midpoint_candidate'))):p.error('Connection selection requires single-lane ground execution; midpoint selection additionally requires its event')
+if spec.get('connection_selector') and ((not batch and len(spec['skills'])!=1) or not spec.get('ground_bundle') or ('midpoint' in spec['connection_selector'].get('stages',['midpoint']) and not spec.get('connection_midpoint_candidate'))):p.error('Connection selection requires ground execution; midpoint selection additionally requires its event')
+if batch and spec.get('connection_selector') and (spec['connection_selector'].get('stages')!=['exit'] or len(set(spec['skills']))!=1 or len(spec.get('connection_selector_lanes',[True]*len(batch)))!=len(batch)):p.error('Batch selection requires a common frozen skill, exit-only queries and one selector flag per lane')
 if spec.get('forward_branch') and (len(spec['skills'])!=1 or not spec.get('ground_bundle') or spec['forward_branch']['requested_route'] not in ('original_jump','bypass')):p.error('Mapped branch pilot requires one ground lane and a declared original_jump or bypass route')
 if spec.get('connection_midpoint_candidate'):
  if not spec.get('connection_candidate') or not spec['connection_candidate']['decision_x_m']<spec['connection_midpoint_candidate']['decision_x_m']<spec['handoff_x']:p.error('Midpoint decision must lie strictly between the exit decision and jump handoff')
@@ -112,11 +113,6 @@ if spec.get('cuda_graph_observation',False):
  from sttw_control.cuda_control import CudaTensorFunction
  position,velocity=plant.dofs.unbind(-1)
  plant.signals.observe=CudaTensorFunction(plant.signals.observe,plant.roots,position,velocity)
-if batch:
- from sttw_control.isaac_pendulum_batch import run_connection_batch
- print(run_connection_batch(spec,out,plant,ground,policies,history,geometry,entry),flush=True)
- os._exit(0)
-target=torch.zeros(n,4,device='cuda:0')
 selector=None
 if spec.get('connection_selector'):
  import hashlib
@@ -126,6 +122,11 @@ if spec.get('connection_selector'):
  evidence=[json.loads(line) for text in evidence_texts.values() for line in text.splitlines() if line.strip()]
  selector=JumpConnectionSelector(evidence,selector_config,origin_id=spec['origin_id'],policy_sha256=dict(ground=ground.upper_sha256,jump=policies[0].identity['artifact_sha256']),model_contract_sha256=hashlib.sha256(Path(cfg['asset']).with_name('contract.json').read_bytes()).hexdigest(),physics_dt=plant.physics_dt,zero_lower=spec['zero_lower'])
  (out/'connection_selector.json').write_text(json.dumps(dict(config=selector_config,evidence_sha256={file:hashlib.sha256(text.encode()).hexdigest() for file,text in evidence_texts.items()},accepted_rows=selector.evidence_rows,excluded_origin_id=spec['origin_id']),indent=2))
+if batch:
+ from sttw_control.isaac_pendulum_batch import run_connection_batch
+ print(run_connection_batch(spec,out,plant,ground,policies,history,geometry,entry,selector),flush=True)
+ os._exit(0)
+target=torch.zeros(n,4,device='cuda:0')
 root_acceleration=torch.zeros(n,3,device='cuda:0')
 branch_decided=False;bypass_selected=False;route_selector=None;route_planner=None
 branch_executor=None;branch_future=None;branch_query_start=None;branch_query_state=None
