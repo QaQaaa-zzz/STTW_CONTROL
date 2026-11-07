@@ -61,6 +61,11 @@ def phase_u_reward(state, action, last_action, events, config):
         components['traversal_forward']=traversal['forward_weight']*(velocity/traversal['target_forward_m_s']).clamp(-1,1)*active
         deceleration=((state['previous_forward_velocity']-velocity)/state['policy_dt']).clamp_min(0)
         components['traversal_deceleration']=-traversal['deceleration_weight']*(deceleration/traversal['deceleration_scale_m_s2']).clamp(max=1)*active*(velocity<traversal['target_forward_m_s'])
+    if 'platform_landing' in c:
+        landing=c['platform_landing']
+        moving=torch.exp(-.5*((state['forward_velocity']-landing['target_forward_m_s'])/landing['speed_sigma']).square())
+        components['platform_support']=landing['support_weight']*(.25+.75*moving)*events['platform_supported']
+        components['platform_hold']=landing['hold_bonus']*events['first_platform_hold']
     total=sum(components.values())
     return total.clamp(c['total_min'],c['total_max']),total,components
 

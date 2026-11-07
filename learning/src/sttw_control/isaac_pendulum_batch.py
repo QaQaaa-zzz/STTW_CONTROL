@@ -4,6 +4,7 @@ import time
 from pathlib import Path
 import numpy as np
 import torch
+from .pendulum_landing import platform_support_mask
 
 
 @torch.no_grad()
@@ -70,9 +71,7 @@ def run_connection_batch(spec, out, plant, ground, policy, history, geometry):
         _,pitch,_=euler_xyz_from_quat(plant.robot.data.root_link_quat_w)
         pitch=torch.atan2(torch.sin(pitch),torch.cos(pitch))
         wp=plant.rigid[:,wheels,:3]-plant.origin[:,None,:]
-        on=((wp[:,:,0]>spec['platform_front_x'])&(wp[:,:,0]<spec['platform_back_x'])&(wp[:,:,1].abs()<.9)&((wp[:,:,2]-.23).abs()<.025)).all(-1)
-        support=(plant.contact[:,wheels,2]>1.).all(-1)
-        settled=on&support&(m[:,0].abs()<.15)&(pitch.abs()<.15)&active&alive
+        settled=platform_support_mask(wp,plant.contact[:,wheels],m[:,0],pitch,spec['platform_front_x'],spec['platform_back_x'])&active&alive
         landing_ticks.copy_(torch.where(settled,landing_ticks+1,0))
         newly_ready=active&alive&~ready&(landing_ticks*.005>=ret['support_s'])
         ready|=newly_ready;transition_speed.copy_(torch.where(newly_ready,speed,transition_speed))

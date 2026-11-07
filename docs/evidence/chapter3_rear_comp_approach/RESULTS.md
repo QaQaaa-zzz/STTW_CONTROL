@@ -16,3 +16,11 @@ Kp1到达新增14、丢失8；路廊内到达新增13、丢失6。存在净改�
 原始证据：`/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rear_comp_approach`。逐case指标见comparison.json，真实失败终点保留。21条Kp1路廊内入口供后续适配，六训练来源，不是独立TEST，不是完整PhysX快照。
 
 跳跃下一阶段：`learning/configs/isaac_rb_jump_current150.json`；从原update2的Actor/Critic/normalizer初始化、fresh Adam、固定学习率1e-4，原网络与Go2随机化，4096×24×150。50%实际入口/42%原reset/8%原airborne RSI。沿用缺速/前进/减速traversal奖励。冻结原update2、采样奖励best、last150，各36完整任务配对，原落地/链路标准不变。尚不能宣称跳跃提升或完成RB。
+
+## Go2源码核对与下一奖励阶段（已实现，尚未运行）
+
+参考本机`My_unitree_go2_gym/legged_gym/envs/Go2_Flip/Go2_Spring_Jump`的实际配置/源码，而不是推测Go2使用最佳模型。其奖励按腾空/落地分阶段：起跳z速度、飞行高度、飞行水平速度、落点、碰撞与接触冲击；落地后水平速度罚适用于停稳任务，本车需要继续行驶所以不照搬。Go2 runner每100更新保存，默认checkpoint=-1取last，无自动best选择。本项目新增的训练采样best仅用于候选提名，不能替代固定任务合格判断。
+
+`isaac_phase_u_task_platform.json`准备了可选落地塑形：复用当前在线交接支撑谓词，先观察到腾空，平台上双轮支撑/姿态小且非轮接触力≤1N，支撑奖励8并偏好1.5m/s继续行驶，首次连续1秒保持奖励40。旧配置不开启则不变化。在线支撑代理与最终几何接触判定有区别；正式成功仍由原离线分析和完整任务判断。该配置尚未训练，当前150保持traversal奖励，结果不能跨奖励直接排名。
+
+验证：`learning/tests/test_phase_u_reward.py`五项通过，包括原奖励兼容、无支撑不得奖、落地继续运动优于停住。物理集成/效果待后续阶段验证。判断收敛须结合后期曲线与固定工况，不把150更新或低成功平台视为收敛；仍进步则分段续训，低成功平台优先调奖励，退化回到经固定测试较好的候选。RB等待基础结果，不称本轮PPO已经完成RB。

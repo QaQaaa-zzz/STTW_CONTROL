@@ -12,6 +12,7 @@ from .pendulum_skill import TorchPendulumObservation,TorchPendulumGeometry,Torch
 from .phase_u_events import initial_events,advance_events,classify_terminal
 from .phase_u_reward import phase_u_reward,phase_u_episode_reward
 from .reachable_jump_bank import ReachableJumpBank
+from .pendulum_landing import platform_support_mask
 
 
 class PhaseUEnv:
@@ -50,6 +51,12 @@ class PhaseUEnv:
         self.airborne=torch.zeros(self.num_envs,dtype=torch.bool,device=self.device)
         self.events=initial_events(torch.full((self.num_envs,),1.5,device=self.device),self.task)
         self.total_physics_steps=0
+        self.landing_reward=self.task['reward'].get('platform_landing')
+        if self.landing_reward:
+            self.landing_ticks=torch.zeros(self.num_envs,dtype=torch.long,device=self.device)
+            self.flight_seen=torch.zeros(self.num_envs,dtype=torch.bool,device=self.device)
+            self.platform_held=self.flight_seen.clone()
+            self.wheel_ids=[self.plant.bodies.index(name) for name in ('frontwheel','rearwheel')]
         self.entry_bank=None
         if cfg.get('reachable_entry_bank'):
             self.entry_probability=cfg['reachable_entry_probability']
@@ -88,6 +95,8 @@ class PhaseUEnv:
         plant.reset_idx(ids,state=dict(root_pose=pose,root_velocity=velocity,joint_position=position,joint_velocity=joint_velocity))
         self.randomization.reset(ids);self.history.frames[ids]=0;self.history.valid_count[ids]=0
         self.last_action[ids]=0;self.episode_length_buf[ids]=0;self.episode_return[ids]=0
+        if self.landing_reward:
+            self.landing_ticks[ids]=0;self.flight_seen[ids]=False;self.platform_held[ids]=False
         fresh=initial_events(pose[:,0],self.task)
         for k in self.events:self.events[k][ids]=fresh[k]
         self.obs_buf[ids]=0;self.obs_buf[ids,-1]=fresh['jump_signal'].float()
@@ -141,6 +150,17 @@ class PhaseUEnv:
         reward_events=dict(jump_zone_seen=self.events['jump_zone_seen'],jump_signal=self.events['jump_signal'],first_apex_success=self.events['apex_seen']&~previous['apex_seen'],illegal_contact=contact,physical_failure_transition=terminal['physical_failure'],roll_pitch_failure_transition=terminal['roll_limit']|terminal['pitch_limit'],jump_zone_missed_transition=terminal['jump_zone_missed'],stuck_transition=terminal['stuck'],yaw_limit_transition=terminal['yaw_limit'],timeout_transition=terminal['timeout'])
         hip,knee=plant.pendulum_servos.indices
         reward_state=dict(previous_forward_velocity=previous_forward_velocity,policy_dt=self.dt,x=root[:,0],roll=angles[:,0],pitch=angles[:,1],yaw=angles[:,2],z=root[:,2],forward_velocity=root[:,7],pitch_rate=root[:,11],hip_velocity=plant.dofs[:,hip,1],knee_velocity=plant.dofs[:,knee,1],hip_force=plant.last_pendulum_torque[:,hip],knee_force=plant.last_pendulum_torque[:,knee])
+        if self.landing_reward:
+            wp=plant.rigid[:,self.wheel_ids,:3]-plant.origin[:,None,:]
+            forces=plant.contact[:,self.wheel_ids]
+            flying=(forces.norm(dim=-1)<=1.).all(-1)&(wp[:,:,2]>.09).all(-1)&self.events['jump_zone_seen']
+            self.flight_seen|=flying
+            support=platform_support_mask(wp,forces,angles[:,0],angles[:,1],3.6,7.6)
+            support&=self.flight_seen&~terminal['terminated']&(plant.contact[:,plant.nonwheel].norm(dim=-1)<=1.).all(-1)
+            self.landing_ticks=torch.where(support,self.landing_ticks+1,0)
+            held=self.landing_ticks*self.dt>=self.landing_reward['hold_s']
+            reward_events.update(platform_supported=support,first_platform_hold=held&~self.platform_held)
+            self.platform_held|=held
         clipped,unclipped,parts=phase_u_reward(reward_state,action,self.last_action,reward_events,self.task['reward'])
         reward,self.episode_return,override=phase_u_episode_reward(clipped,self.episode_return,terminal['stuck'],terminal['yaw_limit'],self.task['reward'])
         done=terminal['terminated']|terminal['truncated'];self.episode_length_buf+=1;self.last_action.copy_(action)
@@ -150,6 +170,7 @@ class PhaseUEnv:
         ids=done.nonzero().flatten()
         if len(ids):
             info['episode']=dict(reward=self.episode_return[ids].mean(),length=self.episode_length_buf[ids].float().mean(),apex_fraction=self.events['apex_seen'][ids].float().mean(),physical_failure=terminal['physical_failure'][ids].float().mean())
+            if self.landing_reward:info['episode']['platform_hold_fraction']=self.platform_held[ids].float().mean()
             self.reset_idx(ids)
         self.total_physics_steps+=self.physics_substeps*self.num_envs
         return self.obs_buf,self.privileged_obs_buf,reward*self.task['ppo']['reward_scaling'],done,info

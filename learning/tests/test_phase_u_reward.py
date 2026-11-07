@@ -41,3 +41,27 @@ def test_traversal_reward_preserves_momentum_instead_of_stationary_height():
 def test_disabled_failed_return_overwrite_retains_dense_cost():
     r,total,override=phase_u_episode_reward(torch.tensor([-15.]),torch.tensor([80.]),torch.tensor([True]),torch.tensor([False]),{'failed_episode_return':None})
     assert r.item()==-15 and total.item()==65 and override.item()==0
+
+
+def test_landing_reward_requires_support_and_prefers_continued_motion():
+    import json
+    from pathlib import Path
+    from sttw_control.phase_u_reward import phase_u_reward
+    c=json.loads(Path('learning/configs/isaac_phase_u_task_platform.json').read_text())['task']['reward']
+    state={k:torch.zeros(4) for k in ('roll','pitch','yaw','pitch_rate','hip_velocity','knee_velocity','hip_force','knee_force')}
+    state.update(x=torch.full((4,),5.),z=torch.full((4,),.3),forward_velocity=torch.tensor([1.5,1.5,0.,1.5]),previous_forward_velocity=torch.tensor([1.5,1.5,0.,1.5]),policy_dt=.02)
+    events={k:torch.zeros(4,dtype=torch.bool) for k in ('physical_failure_transition','roll_pitch_failure_transition','stuck_transition','yaw_limit_transition','jump_zone_missed_transition','first_apex_success','illegal_contact','timeout_transition','jump_signal','jump_zone_seen')}
+    events.update(platform_supported=torch.tensor([False,True,True,True]),first_platform_hold=torch.tensor([False,False,False,True]))
+    action=torch.zeros(4,4);parts=phase_u_reward(state,action,action,events,c)[2]
+    assert parts['platform_support'][0]==0
+    assert parts['platform_support'][1]>parts['platform_support'][2]>0
+    torch.testing.assert_close(parts['platform_hold'],torch.tensor([0.,0.,0.,40.]))
+
+
+def test_online_platform_support_rejects_missing_contact_and_outside_platform():
+    from sttw_control.pendulum_landing import platform_support_mask
+    p=torch.tensor([[[4.,0.,.23],[4.3,0.,.23]]]).repeat(4,1,1)
+    f=torch.zeros(4,2,3);f[:,:,2]=10
+    f[1,0,2]=0;p[2,1,1]=1.1;p[3,:,0]=3.
+    mask=platform_support_mask(p,f,torch.zeros(4),torch.zeros(4),3.6,7.6)
+    assert mask.tolist()==[True,False,False,False]

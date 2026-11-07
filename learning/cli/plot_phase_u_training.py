@@ -11,7 +11,7 @@ events=EventAccumulator(str(a.run/'training'),size_guidance={'scalars':0});event
 data={tag:[[v.step,v.value] for v in events.Scalars(tag)] for tag in events.Tags()['scalars']}
 (a.run/'training_scalar_summary.json').write_text(json.dumps(data))
 fig,axes=plt.subplots(2,3,figsize=(14,7),layout='constrained');axes=axes.flatten()
-panels=[['Train/mean_step_reward_pre_update'],['Episode/reward'],['Episode/apex_fraction','Episode/physical_failure','Episode/failure'],['Loss/value_function'],['Loss/surrogate'],['Loss/learning_rate']]
+panels=[['Train/mean_step_reward_pre_update'],['Episode/reward'],['Episode/apex_fraction','Episode/physical_failure','Episode/failure','Episode/platform_hold_fraction'],['Loss/value_function'],['Loss/surrogate'],['Loss/learning_rate']]
 for ax,tags in zip(axes,panels):
  for tag in tags:
   if tag in data:
