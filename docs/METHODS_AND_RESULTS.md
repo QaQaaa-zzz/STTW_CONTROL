@@ -1874,3 +1874,8 @@ Config learning/configs/isaac_h75_tradeoff_repeats.json records all sampled valu
 ## 第三章：跳跃横漂与落地接管修复（2026-11-07）
 
 从父150增加定位横向/航向输入进行150轮Go2随机化适配，125候选多数轨迹更直，但完整链contact20 5/12→7/12与保存入口子任务17/21→13/21方向不一致，尚不采用为最终模型；早期侧翻及未交回失败保留。拒绝直接转向补偿、提前交回；α0回交试验未全局采用。修复H75回交先按路起点生成首帧历史再覆盖投影的接线错误，按实际固定路径进度统一初始化。修复后六条22秒contact20 3/6、strict1/6，仍不能称偏航全解决。物理400Hz、地面200Hz、跳跃/H75 50Hz。全部实际XY、不同入口alpha、配置和失败分项见[报告](evidence/chapter3_jump_heading/RESULTS.md)。模型与原始日志保留在chapter3_jump_heading150数据目录。
+
+
+## 第三章：失败跳跃后平地接管的边界（2026-11-07）
+
+新增缺省关闭的ground_recovery试验接口，原平台成功标签不变。42入口配对，全部干预前一致，4条触发；原任务contact20两组均30/42、strict均0。大偏移约2m时直接H75接回不可靠；一条退出为前视目标前向距离.028<.05m，不是侧翻。复用PythonRobotics接回原目标产生13m绕行及3.6m负向x，未采用。保留负结果，不将失败恢复当跳跃成功，详情见[全条件报告](evidence/chapter3_jump_heading/RESULTS.md)。

@@ -31,7 +31,7 @@ for run in a.runs:
   axes[1,col].plot(trace[:,0],np.rad2deg(yaw),style,color=color)
   axes[2,col].plot(trace[:,0],trace[:,2],style,color=color)
   entry=dict(run=str(run),lane=lane,model=model,candidate=candidate,events={})
-  for name,marker in [('handoff','o'),('landing_handoff','s')]:
+  for name,marker in [('handoff','o'),('landing_handoff','s'),('ground_recovery','D')]:
    f=d/(name+'.json')
    if f.exists():
     event=json.loads(f.read_text());idx=np.argmin(abs(trace[:,0]-event['time']))
@@ -47,6 +47,6 @@ for run in a.runs:
   axes[1,col].set(xlabel='Time (s)',ylabel='Body yaw (deg)')
   axes[2,col].set(xlabel='Time (s)',ylabel='World y (m); jump centreline y=0')
  for ax in axes.flat:ax.grid(alpha=.25)
- fig.suptitle(f'{run.name}: all lanes, actual failure endpoints\nCircle: jump handoff; square: ground handback; cross: observation end')
+ fig.suptitle(f'{run.name}: all lanes, actual failure endpoints\nCircle: jump handoff; square: successful handback; diamond: failure recovery; cross: observation end')
  fig.savefig(a.output/(run.name+'.png'),dpi=140);plt.close(fig)
 (a.output/'heading.json').write_text(json.dumps(records,indent=2))

@@ -1,0 +1,1346 @@
+[
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_00",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_01",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_02",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_03",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_04",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_05",
+    "strict": false,
+    "contact20": false,
+    "checks": {
+      "full_window": false,
+      "ordered_approach": true,
+      "original_path_corridor": false,
+      "stable_landing": true,
+      "ground_return": false,
+      "continued_time": false,
+      "continued_forward": false,
+      "final_goal": false
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_06",
+    "strict": false,
+    "contact20": false,
+    "checks": {
+      "full_window": false,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": false,
+      "continued_forward": true,
+      "final_goal": false
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_07",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_08",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_09",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_10",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_11",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_12",
+    "strict": false,
+    "contact20": false,
+    "checks": {
+      "full_window": false,
+      "ordered_approach": true,
+      "original_path_corridor": false,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": false,
+      "continued_forward": false,
+      "final_goal": false
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_13",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_14",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_15",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_16",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_17",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_18",
+    "strict": false,
+    "contact20": false,
+    "checks": {
+      "full_window": false,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": false,
+      "ground_return": false,
+      "continued_time": false,
+      "continued_forward": false,
+      "final_goal": false
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_19",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_20",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_21",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_22",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_23",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_24",
+    "strict": false,
+    "contact20": false,
+    "checks": {
+      "full_window": false,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": false,
+      "ground_return": false,
+      "continued_time": false,
+      "continued_forward": false,
+      "final_goal": false
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_25",
+    "strict": false,
+    "contact20": false,
+    "checks": {
+      "full_window": false,
+      "ordered_approach": true,
+      "original_path_corridor": false,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": false,
+      "continued_forward": false,
+      "final_goal": false
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_26",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_27",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_28",
+    "strict": false,
+    "contact20": false,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": false,
+      "ground_return": false,
+      "continued_time": false,
+      "continued_forward": false,
+      "final_goal": false
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_29",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_30",
+    "strict": false,
+    "contact20": false,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": false,
+      "ground_return": false,
+      "continued_time": false,
+      "continued_forward": false,
+      "final_goal": false
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_31",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_32",
+    "strict": false,
+    "contact20": false,
+    "checks": {
+      "full_window": false,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": false,
+      "ground_return": false,
+      "continued_time": false,
+      "continued_forward": false,
+      "final_goal": false
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_33",
+    "strict": false,
+    "contact20": false,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": false,
+      "stable_landing": false,
+      "ground_return": false,
+      "continued_time": false,
+      "continued_forward": false,
+      "final_goal": false
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_34",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_35",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_36",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_37",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_38",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_39",
+    "strict": false,
+    "contact20": false,
+    "checks": {
+      "full_window": false,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": false,
+      "ground_return": false,
+      "continued_time": false,
+      "continued_forward": false,
+      "final_goal": false
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_40",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_recovery_baseline",
+    "lane": "lane_41",
+    "strict": false,
+    "contact20": false,
+    "checks": {
+      "full_window": false,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": false,
+      "ground_return": false,
+      "continued_time": false,
+      "continued_forward": false,
+      "final_goal": false
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_00",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_01",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_02",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_03",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_04",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_05",
+    "strict": false,
+    "contact20": false,
+    "checks": {
+      "full_window": false,
+      "ordered_approach": true,
+      "original_path_corridor": false,
+      "stable_landing": true,
+      "ground_return": false,
+      "continued_time": false,
+      "continued_forward": false,
+      "final_goal": false
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_06",
+    "strict": false,
+    "contact20": false,
+    "checks": {
+      "full_window": false,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": false,
+      "continued_forward": true,
+      "final_goal": false
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_07",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_08",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_09",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_10",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_11",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_12",
+    "strict": false,
+    "contact20": false,
+    "checks": {
+      "full_window": false,
+      "ordered_approach": true,
+      "original_path_corridor": false,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": false,
+      "continued_forward": false,
+      "final_goal": false
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_13",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_14",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_15",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_16",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_17",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_18",
+    "strict": false,
+    "contact20": false,
+    "checks": {
+      "full_window": false,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": false,
+      "ground_return": false,
+      "continued_time": false,
+      "continued_forward": false,
+      "final_goal": false
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_19",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_20",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_21",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_22",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_23",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_24",
+    "strict": false,
+    "contact20": false,
+    "checks": {
+      "full_window": false,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": false,
+      "ground_return": false,
+      "continued_time": false,
+      "continued_forward": false,
+      "final_goal": false
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_25",
+    "strict": false,
+    "contact20": false,
+    "checks": {
+      "full_window": false,
+      "ordered_approach": true,
+      "original_path_corridor": false,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": false,
+      "continued_forward": false,
+      "final_goal": false
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_26",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_27",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_28",
+    "strict": false,
+    "contact20": false,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": false,
+      "ground_return": false,
+      "continued_time": false,
+      "continued_forward": false,
+      "final_goal": false
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_29",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_30",
+    "strict": false,
+    "contact20": false,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": false,
+      "ground_return": false,
+      "continued_time": false,
+      "continued_forward": false,
+      "final_goal": false
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_31",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_32",
+    "strict": false,
+    "contact20": false,
+    "checks": {
+      "full_window": false,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": false,
+      "ground_return": false,
+      "continued_time": false,
+      "continued_forward": false,
+      "final_goal": false
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_33",
+    "strict": false,
+    "contact20": false,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": false,
+      "stable_landing": false,
+      "ground_return": false,
+      "continued_time": false,
+      "continued_forward": false,
+      "final_goal": false
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_34",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_35",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_36",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_37",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_38",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_39",
+    "strict": false,
+    "contact20": false,
+    "checks": {
+      "full_window": false,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": false,
+      "ground_return": false,
+      "continued_time": false,
+      "continued_forward": false,
+      "final_goal": false
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_40",
+    "strict": false,
+    "contact20": true,
+    "checks": {
+      "full_window": true,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": true,
+      "ground_return": true,
+      "continued_time": true,
+      "continued_forward": true,
+      "final_goal": true
+    }
+  },
+  {
+    "run": "entry_ground_recovery",
+    "lane": "lane_41",
+    "strict": false,
+    "contact20": false,
+    "checks": {
+      "full_window": false,
+      "ordered_approach": true,
+      "original_path_corridor": true,
+      "stable_landing": false,
+      "ground_return": false,
+      "continued_time": false,
+      "continued_forward": false,
+      "final_goal": false
+    }
+  }
+]

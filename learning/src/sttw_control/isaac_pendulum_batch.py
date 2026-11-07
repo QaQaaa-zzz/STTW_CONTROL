@@ -17,6 +17,7 @@ def run_connection_batch(spec, out, plant, ground, policies, history, geometry, 
     active=torch.zeros(n,device=device,dtype=torch.bool);returned=active.clone();alive=~active
     decided=active.clone();entered=active.clone();consumed=active.clone();ready=active.clone()
     contact_age=torch.full((n,2),float('inf'),device=device)
+    recovery_ticks=torch.zeros(n,device=device,dtype=torch.long)
     landing_ticks=torch.zeros(n,device=device,dtype=torch.long);transition_speed=torch.zeros(n,device=device)
     last=torch.zeros(n,4,device=device) if entry is None else entry['last_action'].clone();target=torch.zeros_like(last);acceleration=torch.zeros(n,3,device=device)
     previous_velocity=plant.roots[:,7:10].clone();block_velocity=previous_velocity.clone()
@@ -90,12 +91,22 @@ def run_connection_batch(spec, out, plant, ground, policies, history, geometry, 
             transition_speed.copy_(torch.where(advancing,(transition_speed+ret['acceleration_m_s2']*.005).clamp_max(ret['speed_m_s']),transition_speed))
             target[:,1]=torch.where(advancing,transition_speed/plant.wheel_radius_m,target[:,1])
         handing=active&ready&alive&(speed>=ret.get('minimum_handoff_speed_m_s',0))&(global_tick%4==0)
-        ids=handing.nonzero().flatten()
+        recovery=torch.zeros_like(handing)
+        if spec.get('ground_recovery'):
+            rc=spec['ground_recovery']
+            grounded=(wp[:,:,0]>spec['platform_back_x']+rc['clearance_m']).all(-1)
+            grounded&=(wp[:,:,2]-plant.wheel_radius_m).abs().lt(rc['wheel_height_tolerance_m']).all(-1)&contact_now.all(-1)
+            grounded&=(m[:,0].abs()<rc['attitude_limit_rad'])&(pitch.abs()<rc['attitude_limit_rad'])&(root[:,9].abs()<rc['vertical_speed_limit_m_s'])
+            grounded&=active&alive&~ready
+            recovery_ticks.copy_(torch.where(grounded,recovery_ticks+1,0))
+            recovery=grounded&(recovery_ticks*.005>=rc['support_s'])&(speed>=ret.get('minimum_handoff_speed_m_s',0))&(global_tick%4==0)
+        ids=(handing|recovery).nonzero().flatten()
         if len(ids):
-            plant.set_pendulum_locked(True,ids);active&=~handing;returned|=handing
+            plant.set_pendulum_locked(True,ids);active&=~(handing|recovery);returned|=handing|recovery
             plant.set_steering_position_modes(active)
             ground.resume_ground_lanes(ids,ret['speed_m_s'],ret.get('alpha',spec['ground_alpha']))
-            for lane in ids.tolist():event(lane,'landing_handoff',m,root,controller_state='Selected lane ground controller history initialized; no physics reset',arm='locked at current posture')
+            for lane in ids.tolist():
+                event(lane,'ground_recovery' if recovery[lane] else 'landing_handoff',m,root,controller_state='Selected lane ground controller history initialized; no physics reset',arm='locked at current posture',reason='platform hold missed; stable flat ground recovery, NOT jump success' if recovery[lane] else 'platform support completed')
 
     def physics_step(command):
         nonlocal physics_tick,previous_velocity,acceleration
@@ -147,7 +158,7 @@ def run_connection_batch(spec, out, plant, ground, policies, history, geometry, 
         np.savez_compressed(folder/'arm_commands.npz',trace=arms[j,lane:lane+1],columns=['time','hip_target','knee_target','hip_position','knee_position','hip_velocity','knee_velocity','hip_command_torque','knee_command_torque','alive_before_step'])
         for name,value in events[lane].items():(folder/(name+'.json')).write_text(json.dumps(value,indent=2)+'\n')
         tr=trace[:,0];case=dict(skill=spec['skills'][lane],duration_s=float(tr[-1,0]),physical_termination=not bool(alive[lane]) and not (spec.get('stop_at_ground_handoff',False) and 'handoff' in events[lane]),ground_handoff_reached='handoff' in events[lane],peak_root_z=float(tr[:,3].max()),final_xyz=tr[-1,1:4].tolist(),peak_abs_roll_deg=float(np.rad2deg(abs(tr[:,5])).max()),full_jump_success='requires original landing and chain analysis')
-        result=dict(status='complete',elapsed_s=elapsed,elapsed_scope='Shared whole-batch elapsed, not additive per lane',physics_lane_steps=block_tick*round(.02/dt),landing_return_executed=bool(returned[lane]),ground_controller='H75+ECBC (zero lower residual)',cases=[case])
+        result=dict(status='complete',elapsed_s=elapsed,elapsed_scope='Shared whole-batch elapsed, not additive per lane',physics_lane_steps=block_tick*round(.02/dt),landing_return_executed='landing_handoff' in events[lane],ground_recovery_executed='ground_recovery' in events[lane],ground_controller='H75+ECBC (zero lower residual)',cases=[case])
         (folder/'results.json').write_text(json.dumps(result,indent=2)+'\n');cases.append(dict(lane=lane,candidate=candidate,output=str(folder)))
     summary=dict(status='complete',elapsed_s=elapsed,physics_lane_steps=block_tick*round(.02/dt)*n,optimizer_updates=0,cases=cases)
     (out/'batch_results.json').write_text(json.dumps(summary,indent=2)+'\n')
