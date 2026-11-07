@@ -5,12 +5,12 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True);p.add_argument('--output',type=Path);p.add_argument('--baseline-run',type=Path);p.add_argument('--rescore-zero',action='store_true',help='Use the Zero lane in this run for same-alpha paired rewards');p.add_argument('--title',default='H75 fixed-alpha GPU evaluation');a=p.parse_args();out=a.run if a.output is None else a.output;out.mkdir(parents=True,exist_ok=True)
+p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True);p.add_argument('--output',type=Path);p.add_argument('--baseline-run',type=Path);p.add_argument('--rescore-zero',action='store_true',help='Use the Zero lane in this run for same-alpha paired rewards');p.add_argument('--preference-label-prefix',default='alpha');p.add_argument('--title',default='H75 fixed-alpha GPU evaluation');a=p.parse_args();out=a.run if a.output is None else a.output;out.mkdir(parents=True,exist_ok=True)
 from sttw_control.isaac_path_reporting import load_case,write_zero_scores,static_case_metrics
 if a.rescore_zero:
  write_zero_scores(a.run);a.baseline_run=a.run
 r,c=load_case(a.run,a.baseline_run);physics_dt=c['physics_dt'];user_speed=float(c["settings"].get("user_speed_m_s",2.3));palette_markers=['o','s','^','D','v','x'];route=np.load(Path(c['bundle'])/'route.npz');labels=['alpha 0','alpha .25','alpha .5','alpha .75','alpha 1','Zero'];colors=['#0072B2','#D55E00','#009E73','#CC79A7','#8A6500','#333333'];styles=['-']*5+['--'];summary=[]
-count=r['reward'].shape[1];labels=labels[:count];colors=colors[:count]
+count=r['reward'].shape[1];labels=[label.replace('alpha',a.preference_label_prefix) for label in labels[:count]];colors=colors[:count]
 fig,axs=plt.subplots(2,2,figsize=(12,9));xy,per,cumulative,speed=axs.ravel();last_progress=max(float(r['progress'][np.flatnonzero(r['lower_trace'][:,:,i,6].reshape(-1))[-1],i]) for i in range(count));ref=route['s']<=last_progress+1;xy.plot(*route['xy'][ref].T,':',color='gray',label='Original reference')
 for lane,(label,color) in enumerate(zip(labels,colors)):
     trace=r['lower_trace'][:,:,lane].reshape(-1,11);mask=trace[:,6].astype(bool);indices=np.flatnonzero(mask);steps=np.flatnonzero(r['valid'][:,lane]);position=trace[indices,:2];t=indices*.005+trace[indices,7]*physics_dt;rewards=r['reward'][steps,lane]

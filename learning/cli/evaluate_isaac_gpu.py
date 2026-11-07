@@ -61,6 +61,11 @@ if s.get('replanning'):
 if s.get('physics_contact_recording'):
     from sttw_control.physics_contact_recording import PhysicsContactRecorder
     env.physics_recorder=PhysicsContactRecorder(a.output/'physics_contacts',env,s['physics_contact_recording'])
+recovery=None
+if s.get('gravel_recovery'):
+    from sttw_control.gravel_recovery_preference import GravelRecoveryPreference
+    recovery=GravelRecoveryPreference(env,s['gravel_recovery'],a.output,env.physics_recorder)
+    env.physics_recorder=recovery
 branching=None
 if s.get('contact_branching'):
     if env.physics_recorder is not None or intervention or planner is not None:
@@ -76,6 +81,7 @@ if s.get('contact_torque_intervention'):
 fork_step=None
 for step in range(env.horizon):
     if branching is not None:branching.decision(step)
+    if recovery is not None:recovery.decision(step)
     if intervention:
         if fork_step is None and bool(env.alive[0]) and float(env.middle.projection['progress'][0])>=intervention['progress_m']:
             from sttw_control.isaac_path_snapshot import capture,restore
