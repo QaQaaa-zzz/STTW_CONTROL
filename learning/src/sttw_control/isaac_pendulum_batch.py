@@ -8,10 +8,11 @@ from .pendulum_landing import platform_support_mask
 
 
 @torch.no_grad()
-def run_connection_batch(spec, out, plant, ground, policy, history, geometry):
+def run_connection_batch(spec, out, plant, ground, policies, history, geometry):
     from isaaclab.utils.math import euler_xyz_from_quat
     n=plant.count;device=plant.device;dt=plant.physics_dt
     candidates=spec['batch_candidates'];steps=round(spec['seconds']/.005)
+    policy_groups=[(policies[spec['skills'].index(name)],torch.tensor([i for i,s in enumerate(spec['skills']) if s==name],device=device)) for name in dict.fromkeys(spec['skills'])]
     active=torch.zeros(n,device=device,dtype=torch.bool);returned=active.clone();alive=~active
     decided=active.clone();entered=active.clone();consumed=active.clone();ready=active.clone()
     landing_ticks=torch.zeros(n,device=device,dtype=torch.long);transition_speed=torch.zeros(n,device=device)
@@ -66,7 +67,9 @@ def run_connection_batch(spec, out, plant, ground, policy, history, geometry):
                 else:
                     plant.set_pendulum_locked(False,ids);active|=switching;plant.set_steering_position_modes(active)
             if spec.get('stop_at_ground_handoff',False):return
-            action,proposed=policy.infer(obs,plant.dofs[:,plant.joints.index('knee_joint'),0])
+            action=torch.empty_like(last);proposed=torch.empty_like(target)
+            for policy,lanes in policy_groups:
+                action[lanes],proposed[lanes]=policy.infer(obs[lanes],plant.dofs[lanes,plant.joints.index('knee_joint'),0])
             last=torch.where(active[:,None],action,last);target=torch.where(active[:,None],proposed,target)
         _,pitch,_=euler_xyz_from_quat(plant.robot.data.root_link_quat_w)
         pitch=torch.atan2(torch.sin(pitch),torch.cos(pitch))

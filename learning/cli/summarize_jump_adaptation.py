@@ -10,6 +10,10 @@ rows=json.loads((r/'evaluation_index.json').read_text());models=list(dict.fromke
 for row in rows:
  d=Path(row['output']);row['chain']=json.loads((d/'chain_summary.json').read_text());row['landing']=json.loads((d/'landing.json').read_text())['cases'][0];row['arrival']=(d/'handoff.json').exists()
 summary={m:dict(n=sum(x['model']==m for x in rows),arrival=sum(x['arrival'] for x in rows if x['model']==m),landing=sum(x['landing']['landing_hold_1s'] for x in rows if x['model']==m),contact_filtered_landing=sum(x['landing']['contact_filtered_20ms_hold_1s'] for x in rows if x['model']==m),complete=sum(x['chain']['complete'] for x in rows if x['model']==m)) for m in models}
+for m in models:
+ cases=[x for x in rows if x['model']==m]
+ summary[m]['stage_counts']={k:sum(x['chain']['stages'][k] for x in cases) for k in cases[0]['chain']['stages']}
+ summary[m]['failed_checks']={k:sum(not x['chain']['checks'][k] for x in cases) for k in cases[0]['chain']['checks']}
 # Keep paired gains and losses rather than reporting only the net success count.
 base={x['candidate']['source_case_id']:x for x in rows if x['model']=='update2'}
 for m in models:
@@ -26,5 +30,7 @@ for origin in origins:
 (r/'summary.json').write_text(json.dumps(dict(summary=summary,cases=rows),indent=2))
 lines=['# Current-chassis jump adaptation','','Matched DEV: six training origins, six connections per model; not independent TEST.','Original platform/contact/hold and full-chain criteria retained. Sampled training reward selects candidates, not qualification.','','|Model|Arrivals|Strict landing hold|20ms filtered landing (diagnostic)|Full chain (strict)|Gained / lost vs update2|','|---|---:|---:|---:|---:|---:|']
 for m,s in summary.items():lines.append(f"|{m}|{s['arrival']}/{s['n']}|{s['landing']}/{s['n']}|{s['contact_filtered_landing']}/{s['n']}|{s['complete']}/{s['n']}|{s['gained']} / {s['lost']}|")
+lines.extend(['','Failed conditions are overlapping counts, not mutually exclusive causes.'])
+for m,s in summary.items():lines.extend(['',m+': stages '+json.dumps(s['stage_counts'])+'; failed conditions '+json.dumps(s['failed_checks'])])
 for origin in origins:lines.extend(['',f'![{origin}]({origin}_xy.png)'])
 (r/'RESULTS.md').write_text('\n'.join(lines)+'\n');print(json.dumps(summary))

@@ -6,7 +6,7 @@ p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p
 spec=json.loads(a.config.read_text())
 if a.cuda_graph_observation:spec['cuda_graph_observation']=True
 batch=spec.get('batch_candidates')
-if batch and (len(batch)!=len(spec['skills']) or len(set(spec['skills']))!=1 or not spec.get('ground_bundle') or not spec.get('zero_lower') or not spec.get('landing_return') or not spec.get('connection_candidate') or any(spec.get(k) for k in ('connection_midpoint_candidate','connection_selector','forward_branch','external_force_pulse','video'))):p.error('Batch connection requires same frozen jump skill, zero-lower ground, common exit/landing protocol and fixed per-lane candidates')
+if batch and (len(batch)!=len(spec['skills']) or not spec.get('ground_bundle') or not spec.get('zero_lower') or not spec.get('landing_return') or not spec.get('connection_candidate') or any(spec.get(k) for k in ('connection_midpoint_candidate','connection_selector','forward_branch','external_force_pulse','video'))):p.error('Batch connection requires frozen jump skills, zero-lower ground, common exit/landing protocol and fixed per-lane candidates')
 pulse=spec.get('external_force_pulse')
 if pulse and (len(spec['skills'])!=1 or pulse['kind']!='external_force_N' or pulse['body']!='chasis' or pulse['duration_s']<=0):p.error('External pulse requires one lane, chasis body, external_force_N and positive duration')
 if spec.get('connection_selector') and (len(spec['skills'])!=1 or not spec.get('ground_bundle') or ('midpoint' in spec['connection_selector'].get('stages',['midpoint']) and not spec.get('connection_midpoint_candidate'))):p.error('Connection selection requires single-lane ground execution; midpoint selection additionally requires its event')
@@ -104,7 +104,7 @@ if spec.get('cuda_graph_observation',False):
  plant.signals.observe=CudaTensorFunction(plant.signals.observe,plant.roots,position,velocity)
 if batch:
  from sttw_control.isaac_pendulum_batch import run_connection_batch
- print(run_connection_batch(spec,out,plant,ground,policies[0],history,geometry),flush=True)
+ print(run_connection_batch(spec,out,plant,ground,policies,history,geometry),flush=True)
  os._exit(0)
 target=torch.zeros(n,4,device='cuda:0')
 selector=None
