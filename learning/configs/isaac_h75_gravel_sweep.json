@@ -49,6 +49,24 @@
         0.8,
         5.0
       ]
+    },
+    "plant_options": {
+      "wheel_collision": "sdf",
+      "friction_offset_threshold": 0.0,
+      "compliant_wheels": {
+        "frontwheel": {
+          "stiffness": 5324.4083452801915,
+          "damping": 112.38579318769304
+        },
+        "rearwheel": {
+          "stiffness": 7833.38122453075,
+          "damping": 173.11038721684574
+        }
+      },
+      "env_spacing": 3.0,
+      "track_wheel_contacts": false,
+      "track_contact_wrench": true,
+      "max_contact_data_count_per_prim": 128
     }
   },
   "tasks": {
