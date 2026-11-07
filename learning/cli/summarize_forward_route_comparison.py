@@ -5,8 +5,8 @@ import numpy as np
 p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('--manifests',type=Path,nargs='+',required=True)
 p.add_argument('--output',type=Path,required=True)
-a=p.parse_args();rows=[]
-for path in a.manifests:
+args=p.parse_args();rows=[]
+for path in args.manifests:
  for case in json.loads(path.read_text())['cases']:
   spec=json.loads(Path(case['config']).read_text());run=Path(spec['output']);summary=run/'chain_summary.json'
   row=dict(case_id=case['case_id'],config=case['config'],origin_id=spec['origin_id'],status='pending',
@@ -55,4 +55,4 @@ for (origin,pulse),methods in paired.items():
 result=dict(role='Actual forward-route DEV and interface timing; no pooled success claim across task roles',declared_cases=len(rows),evaluated_cases=sum(r['status'].startswith('evaluated') for r in rows),rows=rows,
  paired_comparisons=comparisons,paired_distinct_origins=len({r['origin_id'] for r in comparisons if r['status']=='evaluated'}),
  limits='Wall query latency and simulated control advance are distinct. A zero simulated delay does not demonstrate pending-query motion. Mandatory platform success requires the platform skill; bypass is at most safe exit. Pending rows are not failures; actual XY is retained in each source run.')
-a.output.write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(dict(declared_cases=result['declared_cases'],evaluated_cases=result['evaluated_cases'])))
+args.output.write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(dict(declared_cases=result['declared_cases'],evaluated_cases=result['evaluated_cases'])))
