@@ -1,0 +1,49 @@
+{
+  "skill_id": "heading125",
+  "source_archive": "/home/qy/ISAAC\u2014\u2014SIM/worktrees/jump-landing-v2/sim2sim_v2/runs/deliveries/dual_landing_01966080_20261009",
+  "source_actor_sha256": "d2648c4f33b3e191293d2a4281d9a95f475f2a2be09c14a0ad8f605235c2d1a0",
+  "artifact_sha256": "5cb43fa8f3dcddce647c5e869085deaf2a3794a5e2c06fb0bf67973f27e10240",
+  "mapping": {
+    "ctrl_min": [
+      -0.8,
+      -5,
+      -1.3,
+      -1.5
+    ],
+    "ctrl_max": [
+      0.8,
+      40,
+      0.5,
+      2.5
+    ],
+    "hip_initial": -1.2,
+    "knee_initial": 2.5,
+    "knee_target_delta": 0.0,
+    "base_rear_speed": 12.0,
+    "joint_target_semantics": "keyframe_centered_absolute",
+    "rear_speed_delta": 12.0
+  },
+  "conversion": "exact selected Torch actor/critic/normalizer arrays; no extra optimization",
+  "model_scope": "original RB whole vehicle; new Isaac Lab adaptation with friction0.8 and Go2 randomization",
+  "source_learner_sha256": "a419949a00b766ca8b5f80045aeddb5209700236ef8b06a7c140fd3312522c54",
+  "network": "80/106-256-256-256-8/1 SiLU",
+  "heading_observation": true,
+  "actor_observation_dim": 80,
+  "heading_observation_order": [
+    "platform_y_m",
+    "sin_platform_yaw",
+    "cos_platform_yaw_minus_one",
+    "platform_vy_m_s"
+  ],
+  "heading_frame": "straight platform reference y=0, yaw=0; localized state required",
+  "source_bundle": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/rb_sttw_platform/training_bundle",
+  "training_checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading150/adaptation/training/model_update_00125.pt",
+  "training_checkpoint_sha256": "b3e7b6ba1dc6868bdc44c1314cc90d0fd350741776f78f79a1fbf3b90bd17467",
+  "stored_checkpoint_iter": 125,
+  "scored_policy_update": null,
+  "selection_evidence": {
+    "completed_updates": 125,
+    "scope": "post-update checkpoint; fixed-panel score pending"
+  },
+  "source_note": "source records identify original Phase U initialization; training_checkpoint identifies current weights"
+}

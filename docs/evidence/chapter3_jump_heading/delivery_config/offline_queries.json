@@ -1,0 +1,130 @@
+[
+  {
+    "origin": "000",
+    "query": {
+      "status": "selected",
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": false,
+          "support": 0.0,
+          "complete_probability": null,
+          "success_cost": null,
+          "sample_count": 0
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": true,
+          "support": 0.6660600380821817,
+          "complete_probability": 1.0,
+          "success_cost": 6.819999771118164,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": false,
+          "support": 0.0,
+          "complete_probability": null,
+          "success_cost": null,
+          "sample_count": 0
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": false,
+          "support": 0.32210874641018467,
+          "complete_probability": null,
+          "success_cost": null,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 0.5370628695245817,
+          "complete_probability": 1.0,
+          "success_cost": 7.219999923706054,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": false,
+          "support": 0.0,
+          "complete_probability": null,
+          "success_cost": null,
+          "sample_count": 0
+        }
+      ],
+      "evidence_rows": 3,
+      "excluded_origin_id": "rb_connection_seed20261106_root000",
+      "fallback": null,
+      "scope": "Empirical Q_hold recommendation, not a calibrated or guaranteed success probability"
+    }
+  },
+  {
+    "origin": "003",
+    "query": {
+      "status": "selected",
+      "candidate": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "estimates": [
+        {
+          "candidate_id": "v1.8_a0.0",
+          "known": false,
+          "support": 0.09282880955087378,
+          "complete_probability": null,
+          "success_cost": null,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v1.8_a0.5",
+          "known": false,
+          "support": 0.0,
+          "complete_probability": null,
+          "success_cost": null,
+          "sample_count": 0
+        },
+        {
+          "candidate_id": "v1.8_a1.0",
+          "known": true,
+          "support": 0.7665458206145016,
+          "complete_probability": 0.0,
+          "success_cost": null,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v2.0_a0.0",
+          "known": true,
+          "support": 0.746854133127159,
+          "complete_probability": 1.0,
+          "success_cost": 6.660000419616699,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v2.0_a0.5",
+          "known": true,
+          "support": 0.5370628695245817,
+          "complete_probability": 1.0,
+          "success_cost": 6.619999885559082,
+          "sample_count": 1
+        },
+        {
+          "candidate_id": "v2.0_a1.0",
+          "known": true,
+          "support": 0.9451014304508847,
+          "complete_probability": 1.0,
+          "success_cost": 6.600000038146972,
+          "sample_count": 1
+        }
+      ],
+      "evidence_rows": 5,
+      "excluded_origin_id": "rb_connection_seed20261106_root003",
+      "fallback": null,
+      "scope": "Empirical Q_hold recommendation, not a calibrated or guaranteed success probability"
+    }
+  }
+]

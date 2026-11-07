@@ -1,0 +1,21 @@
+{
+  "recorded_utc": "2026-11-07T15:34:44.150744+00:00",
+  "training": {
+    "stage": "training",
+    "pid": 1049493,
+    "completed_updates": 32,
+    "started": 1794065352.474893,
+    "start_update": 0,
+    "target_update": 150,
+    "stage_completed_updates": 32,
+    "sample_seconds": 12.733786582946777,
+    "optimize_seconds": 0.11898970603942871,
+    "elapsed_s": 320.2774586677551
+  },
+  "online": {
+    "status": "running",
+    "case_id": "000_fixed",
+    "started_unix": 1794065577.8499985
+  },
+  "scope": "Time-stamped snapshot, not live status; no new training or online outcome claimed"
+}

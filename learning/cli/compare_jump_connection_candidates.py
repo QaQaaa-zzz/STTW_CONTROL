@@ -12,6 +12,7 @@ p.add_argument('--output', type=Path, required=True)
 p.add_argument('--summary', type=Path, help='Freeze comparison to evaluated rows in an existing collection summary')
 p.add_argument('--anchor-speed', type=float, default=2.0)
 p.add_argument('--anchor-alpha', type=float, default=0.5)
+p.add_argument('--label-protocol',choices=['strict','contact20'],default='strict')
 a = p.parse_args()
 groups = defaultdict(list)
 if a.ground_summary:
@@ -32,6 +33,7 @@ for case in ([] if a.ground_summary else m['cases']):
     config = json.loads(Path(case['config']).read_text())
     result_path = Path(config['output']) / 'chain_summary.json'
     result = frozen.get(case['case_id']) if frozen is not None else (json.loads(result_path.read_text()) if result_path.exists() else None)
+    if result is not None and a.label_protocol=='contact20':result=result['contact_filtered_protocol']
     candidate = case['second_candidate'] if sequences else case
     first = case['first_candidate'] if sequences else candidate
     groups[(config['origin_id'], case['distance_m'])].append(dict(

@@ -77,6 +77,7 @@ if entry is not None:
  history.frames.copy_(entry['observation'][:,:75].reshape(n,3,25));history.valid_count.copy_(history.frames[:,:,-1].sum(-1).long());last.copy_(entry['last_action'])
 policy_groups=[(policies[spec['skills'].index(name)],torch.tensor([i for i,skill in enumerate(spec['skills']) if skill==name],device='cuda:0')) for name in dict.fromkeys(spec['skills'])]
 returned=False;landing_ticks=0;landing_ready=False;transition_speed=None
+landing_contact_age=torch.full((n,2),float('inf'),device='cuda:0')
 if spec.get('landing_return') and not batch:assert n==1, 'Landing return currently uses a single lane'
 ground_rows=[];ground_command_rows=[];executed_rows=[]
 connection_events=[('exit','connection_decision.json',spec['connection_candidate'])] if spec.get('connection_candidate') else []
@@ -238,9 +239,11 @@ for k in range(steps+1):
   wheels=plant.rigid[:,ids,:3]-plant.origin[:,None,:]
   roll,pitch,yaw=euler_xyz_from_quat(plant.robot.data.root_link_quat_w)
   pitch=torch.atan2(torch.sin(pitch),torch.cos(pitch))
-  on_platform=((wheels[:,:,0]>spec.get('platform_front_x',3.6))&(wheels[:,:,0]<spec.get('platform_back_x',7.6))&(wheels[:,:,1].abs()<.9)&((wheels[:,:,2]-.23).abs()<.025)).all()
-  supported=(plant.contact[:,ids,2]>1.).all()
-  settled=bool(on_platform & supported & (m[:,0].abs()<.15).all() & (pitch.abs()<.15).all())
+  from sttw_control.pendulum_landing import platform_support_mask
+  contact_now=plant.contact[:,ids,2]>1.
+  landing_contact_age.copy_(torch.where(contact_now,0.,landing_contact_age+.005))
+  contact_mask=landing_contact_age<=spec['landing_return'].get('contact_filter_s',0.)+1e-7
+  settled=bool(platform_support_mask(wheels,plant.contact[:,ids],m[:,0],pitch,spec.get('platform_front_x',3.6),spec.get('platform_back_x',7.6),contact_mask).all())
   landing_ticks=landing_ticks+1 if settled else 0
   # Latch stable support, then leave the low-speed ECBC gain singularity under jump steering.
   if not landing_ready and landing_ticks*.005>=spec['landing_return']['support_s']:
@@ -252,17 +255,7 @@ for k in range(steps+1):
   if landing_ready and bool((speed>=spec['landing_return'].get('minimum_handoff_speed_m_s',0)).all()) and k%4==0:
    plant.set_pendulum_locked(True);active=False;returned=True;controller.reset(slice(None))
    if ground is not None:
-    ground.controller.reset(slice(None));ground.lower.reset(slice(None));ground.alive.fill_(True)
-    ground.speed.fill_(spec['landing_return']['speed_m_s'])
-    ground.alpha.fill_(spec['landing_return'].get('alpha',spec['ground_alpha']))
-    ground.measurement=m;ground.previous_reference=torch.stack((speed,m[:,2]),-1)
-    ground.previous_command=torch.stack((m[:,3],m[:,5]),-1)
-    ground.middle.reset(m,pose,speed,ground.previous_reference,ground.previous_reference,ground.previous_command,ground.controller)
-    ground.begin_connection(ground.route,ground.speed.clone(),ground.alpha.clone())
-    nearest=(ground.route.xy[None]-pose[:,None,:2]).square().sum(-1).argmin(-1)
-    ground.middle.projection=ground.route.project(pose[:,:2],ground.route.s[nearest],torch.zeros_like(speed))
-    ground.middle.follower=ground.route.pursuit(ground.middle.projection['progress'],pose,speed,ground.speed)
-    ground.middle.fault=ground.middle.follower['numerical_fault'].clone();ground.middle.domain_exit=ground.middle.follower['invalid'].clone()
+    ground.resume_ground_lanes(torch.arange(n,device='cuda:0'),spec['landing_return']['speed_m_s'],spec['landing_return'].get('alpha',spec['ground_alpha']))
    (out/'landing_handoff.json').write_text(json.dumps(dict(time=k*.005,root=root.cpu().tolist(),position=plant.dofs[:,:,0].cpu().tolist(),velocity=plant.dofs[:,:,1].cpu().tolist(),controller_state='ECBC ESO initialized for resumed ground control; no physical reset',arm='locked at current posture'),indent=2))
  if pulse and not pulse_started and float(root[0,0])>=pulse['trigger_x_m']:
   pulse_started=True;pulse_remaining=round(pulse['duration_s']/plant.physics_dt);pulse_start_time=k*.005

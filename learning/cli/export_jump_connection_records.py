@@ -2,7 +2,7 @@
 import argparse,hashlib,json
 from pathlib import Path
 import numpy as np
-p=argparse.ArgumentParser();p.add_argument('--manifest',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--summary',type=Path,help='Export only cases evaluated in this frozen collection summary');a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--manifest',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--summary',type=Path,help='Export only cases evaluated in this frozen collection summary');p.add_argument('--label-protocol',choices=['strict','contact20'],default='strict');p.add_argument('--protocol-id',help='Declared common protocol identity for this export');a=p.parse_args()
 m=json.loads(a.manifest.read_text());a.output.mkdir(parents=True,exist_ok=True)
 allowed={r['case_id'] for r in json.loads(a.summary.read_text())['rows'] if r['status']=='evaluated'} if a.summary else None
 from sttw_control.jump_connection import fields, decision_features
@@ -21,8 +21,14 @@ for case in m['cases']:
  if key not in identities:identities[key]=hashlib.sha256(contract.read_bytes()).hexdigest()
  map_identity=json.loads((Path(spec['scene_terrain'])/'identity.json').read_text())
  state,named=decision_features(decision,run,protocol,spec) if decision is not None else (None,None)
+ strict_result=result
+ if a.label_protocol=='contact20':result=dict(result,**result['contact_filtered_protocol'])
+ protocol_id=a.protocol_id or (spec['protocol_id']+('__contact20ms' if a.label_protocol=='contact20' else ''))
+ gain=spec.get('rear_speed_feedback_gain',0.)
+ if isinstance(gain,list):gain=gain[protocol['batch_execution']['lane']]
+ controller_contract=dict(rear_speed_feedback_gain=gain,landing_return=spec.get('landing_return'),jump_steering_gains=spec.get('jump_steering_gains'),ground_settings=spec.get('ground_settings'))
  total=result['success_time_s']
- rows.append(dict(protocol_id=spec['protocol_id'],feature_schema=schema['schema_version'],origin_id=spec['origin_id'],case_id=case['case_id'],data_role='pilot_DEV',model_contract_sha256=identities[key],map_sha256=map_identity['sha256'],policy_sha256=dict(ground=ground['upper_sha256'],jump=protocol['policies'][0]['artifact_sha256']),zero_lower=spec['zero_lower'],physics_dt=protocol['physics_dt'],candidate=spec['connection_candidate'],state=state,named_state=named,decision_reached=decision is not None,supervised_input_complete=state is not None and all(v is not None for v in state),Y=int(result['complete']),T_total_s=total,T_after_decision_s=total-decision['time'] if total is not None and decision else None,stages=result['stages'],checks=result['checks'],analysis_only=dict(max_original_path_error_m=result['max_original_path_error_m']),decision_prefix=result.get('decision_prefix'),prefix=dict(path=str(run/'trajectory.npz'),decision_time_s=decision['time'] if decision else None,replay='uninterrupted full-prefix execution, no snapshot restore'),disturbance_protocol=spec.get('external_force_pulse','D0'),source_config=case['config']))
+ rows.append(dict(protocol_id=protocol_id,label_protocol=a.label_protocol,strict_Y=int(strict_result['complete']),controller_contract=controller_contract,feature_schema=schema['schema_version'],origin_id=spec['origin_id'],case_id=case['case_id'],data_role='pilot_DEV',model_contract_sha256=identities[key],map_sha256=map_identity['sha256'],policy_sha256=dict(ground=ground['upper_sha256'],jump=protocol['policies'][0]['artifact_sha256']),zero_lower=spec['zero_lower'],physics_dt=protocol['physics_dt'],candidate=spec['connection_candidate'],state=state,named_state=named,decision_reached=decision is not None,supervised_input_complete=state is not None and all(v is not None for v in state),Y=int(result['complete']),T_total_s=total,T_after_decision_s=total-decision['time'] if total is not None and decision else None,stages=result['stages'],checks=result['checks'],analysis_only=dict(max_original_path_error_m=result['max_original_path_error_m']),decision_prefix=result.get('decision_prefix'),prefix=dict(path=str(run/'trajectory.npz'),decision_time_s=decision['time'] if decision else None,replay='uninterrupted full-prefix execution, no snapshot restore'),disturbance_protocol=spec.get('external_force_pulse','D0'),source_config=case['config']))
  sequence=[spec['connection_candidate']]+([spec['connection_midpoint_candidate']] if spec.get('connection_midpoint_candidate') else [])
  rows[-1].update(decision_stage='exit',target_semantics='fixed_two_stage_sequence' if len(sequence)>1 else 'Q_hold',candidate_sequence=sequence)
  if decision is not None:rows[-1]['candidate']=decision['candidate']
@@ -49,7 +55,7 @@ names=[f['name'] for f in base['features']]
 case_info={c['case_id']:c for c in m['cases']}
 paired=defaultdict(list)
 for row in rows:
-    skill=json.dumps(dict(policies=row['policy_sha256'],model=row['model_contract_sha256'],zero_lower=row['zero_lower'],dt=row['physics_dt']),sort_keys=True)
+    skill=json.dumps(dict(policies=row['policy_sha256'],model=row['model_contract_sha256'],zero_lower=row['zero_lower'],dt=row['physics_dt'],controller_contract=row['controller_contract']),sort_keys=True)
     disturbance=json.dumps(row['disturbance_protocol'],sort_keys=True)
     paired[(row['origin_id'],case_info[row['case_id']]['distance_m'],row['protocol_id'],skill,disturbance)].append(row)
 kernel=[];groups=[]
@@ -79,7 +85,7 @@ mid_kernel=[]
 for row in midpoint_rows:
     if not row['supervised_input_complete'] or (row['decision_prefix'] or {}).get('corridor_intact_at_decision') is not True:
         continue
-    skill=json.dumps(dict(policies=row['policy_sha256'],model=row['model_contract_sha256'],zero_lower=row['zero_lower'],dt=row['physics_dt']),sort_keys=True)
+    skill=json.dumps(dict(policies=row['policy_sha256'],model=row['model_contract_sha256'],zero_lower=row['zero_lower'],dt=row['physics_dt'],controller_contract=row['controller_contract']),sort_keys=True)
     decision_id=json.dumps(dict(origin=row['origin_id'],map=row['map_sha256'],parent=row['parent_candidate'],disturbance=row['disturbance_protocol']),sort_keys=True)
     candidate=row['candidate']
     mid_kernel.append(dict(origin_id=row['origin_id'],decision_id=decision_id,
