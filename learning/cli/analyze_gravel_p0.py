@@ -12,7 +12,7 @@ for case in index:
  with np.load(run/'trajectory.npz') as f:tr=f['lower_trace'].reshape(-1,count,11)
  for lane,b in enumerate(base):
   valid=tr[:,lane,6].astype(bool);peak=float(abs(tr[valid,lane,3]).max())
-  r=dict(terrain=case['terrain'],speed_m_s=case['user_speed_m_s'],parameter_seed=case['seed'],method=['alpha0','alpha025','alpha05','alpha075','alpha1','Zero'][lane],**b,peak_path_error_m=peak)
+  r=dict(terrain=case['terrain'],speed_m_s=case['user_speed_m_s'],parameter_seed=case['seed'],method=case.get('methods',['alpha0','alpha025','alpha05','alpha075','alpha1','Zero'])[lane],**b,peak_path_error_m=peak)
   for name,t in spec['tasks'].items():r['task_'+name]=bool(b['goal_crossed'] and b['final_hold'] and not b['failed'] and peak<=t['W_m'] and b['speed_rmse_m_s']<=t['speed_rmse_m_s'])
   records.append(r)
 (a.evaluation/'gravel_task_metrics.json').write_text(json.dumps(records,indent=2)+'\n')
@@ -22,13 +22,13 @@ events=[]
 batch_paths=sorted({Path(json.loads((Path(case['run'])/'contract.json').read_text())['batch_source']['output']).parent for case in index})
 selected={(case['terrain'],case['user_speed_m_s'],case['seed']) for case in index}
 for batch in batch_paths:
- run=batch/'evaluation';c=json.loads((run/'contract.json').read_text());settings=c['settings'];cases=json.loads((batch/'cases.json').read_text());n=settings['num_envs'];lanes_per_case=cases[0].get('lane_count',6);raw=run/'physics_contacts';meta=json.loads((raw/'index.json').read_text());dt=meta['physics_dt_s'];static=static_wheel_loads(c);collected=[]
+ run=batch/'evaluation';c=json.loads((run/'contract.json').read_text());settings=c['settings'];cases=json.loads((batch/'cases.json').read_text());n=settings['num_envs'];case_ids=np.repeat(np.arange(len(cases)),[v.get('lane_count',6) for v in cases]);case_starts=np.r_[0,np.cumsum([v.get('lane_count',6) for v in cases])];raw=run/'physics_contacts';meta=json.loads((raw/'index.json').read_text());dt=meta['physics_dt_s'];static=static_wheel_loads(c);collected=[]
  terrains=[None if case['terrain'] in ('flat','single_6cm') else np.load(Path(case['terrain_path'])/'terrain.npz') for case in cases]
  for chunk in meta['chunks']:
   with np.load(raw/chunk['file']) as f:d={k:f[k] for k in f.files}
   ticks=len(d['physics_step']);contact=np.zeros((ticks,n,2),bool);vertical=np.zeros((ticks,n,2))
   for lane in range(n):
-   caseid=lane//lanes_per_case;terrain=terrains[caseid]
+   caseid=case_ids[lane];terrain=terrains[caseid]
    for wheel_id,wheel in enumerate(['frontwheel','rearwheel']):
     if terrain is not None:
      raised,_,load,_=raised_contact_and_load(d,wheel,lane,np.asarray(meta['origins'][lane]),terrain)
@@ -41,10 +41,10 @@ for batch in batch_paths:
   collected.append(dict(time=d['physics_step']*dt,contact=contact,vertical=vertical,alive=d['alive_before'],saturated=abs(d['motor_torque'][:,:,steer])>=.999))
  x={k:np.concatenate([q[k] for q in collected]) for k in collected[0]}
  for lane in range(n):
-  case=cases[lane//lanes_per_case]
+  case=cases[case_ids[lane]]
   if (case['terrain'],case['user_speed_m_s'],case['seed']) not in selected:continue
   ct=x['contact'][:,lane];live=x['alive'][:,lane].astype(bool);low=(x['vertical'][:,lane,0]<.2*static['front_load_N'][lane])&live;sat=x['saturated'][:,lane]&live;front=intervals(ct[:,0],x['time'],dt);rear=intervals(ct[:,1],x['time'],dt);lowevents=intervals(low,x['time'],dt);satevents=intervals(sat,x['time'],dt)
-  events.append(dict(terrain=case['terrain'],speed_m_s=case['user_speed_m_s'],parameter_seed=case['seed'],method=['alpha0','alpha025','alpha05','alpha075','alpha1','Zero'][lane%lanes_per_case],recorded_live_s=float(live.sum()*dt),front_events=front,rear_events=rear,front_interevent_onsets_s=np.diff([r['on_s'] for r in front]).tolist(),overlap_ratio=float(ct.all(1).sum()/max(1,ct.any(1).sum())),front_low_load_s=float(low.sum()*dt),front_low_load_longest_s=max([v['duration_s'] for v in lowevents],default=0),steering_saturated_s=float(sat.sum()*dt),steering_saturated_longest_s=max([v['duration_s'] for v in satevents],default=0),load_reference='20% exported-reference-pose quasi-static front load using actual frozen mass/COM',front_static_load_N=static['front_load_N'][lane],raw_batch=str(run)))
+  events.append(dict(terrain=case['terrain'],speed_m_s=case['user_speed_m_s'],parameter_seed=case['seed'],method=case.get('methods',['alpha0','alpha025','alpha05','alpha075','alpha1','Zero'])[lane-case_starts[case_ids[lane]]],recorded_live_s=float(live.sum()*dt),front_events=front,rear_events=rear,front_interevent_onsets_s=np.diff([r['on_s'] for r in front]).tolist(),overlap_ratio=float(ct.all(1).sum()/max(1,ct.any(1).sum())),front_low_load_s=float(low.sum()*dt),front_low_load_longest_s=max([v['duration_s'] for v in lowevents],default=0),steering_saturated_s=float(sat.sum()*dt),steering_saturated_longest_s=max([v['duration_s'] for v in satevents],default=0),load_reference='20% exported-reference-pose quasi-static front load using actual frozen mass/COM',front_static_load_N=static['front_load_N'][lane],raw_batch=str(run)))
 (a.evaluation/'gravel_events.json').write_text(json.dumps(dict(role='Actual physics events in declared0.8-5s record window, stopped at physical termination; flat has zero raised events by definition',lanes=events),indent=2)+'\n')
 # Low-rate motion summaries use actual endpoints; never pad failed trajectories.
 from sttw_control.route_pebbles import project_route
@@ -67,7 +67,7 @@ for case in index:
   metrics={}
   for name,mask in masks.items():
    metrics[name]=dict(observed_samples=int(mask.sum()),observed_s=float(mask.sum()*dt),path_rmse_m=None if not mask.any() else float(np.sqrt(np.mean(tr[mask,lane,3]**2))),speed_rmse_m_s=None if not mask.any() else float(np.sqrt(np.mean((tr[mask,lane,2]-case['user_speed_m_s'])**2))),roll_rms_rad=None if not mask.any() else float(np.sqrt(np.mean(measurement[mask,lane,0]**2))),steering_rate_rms_rad_s=None if not mask.any() else float(np.sqrt(np.mean(measurement[mask,lane,3]**2))))
-  event=next(e for e in events if e['terrain']==case['terrain'] and e['speed_m_s']==case['user_speed_m_s'] and e['parameter_seed']==case['seed'] and e['method']==['alpha0','alpha025','alpha05','alpha075','alpha1','Zero'][lane])
+  event=next(e for e in events if e['terrain']==case['terrain'] and e['speed_m_s']==case['user_speed_m_s'] and e['parameter_seed']==case['seed'] and e['method']==case.get('methods',['alpha0','alpha025','alpha05','alpha075','alpha1','Zero'])[lane])
   residuals=[]
   for event_id,e in enumerate(event['front_events']):
    i=int(np.searchsorted(time,e['on_s'],side='left')-1)

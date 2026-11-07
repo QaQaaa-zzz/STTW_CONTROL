@@ -5,12 +5,13 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True);p.add_argument('--output',type=Path);p.add_argument('--baseline-run',type=Path);p.add_argument('--rescore-zero',action='store_true',help='Use the Zero lane in this run for same-alpha paired rewards');p.add_argument('--preference-label-prefix',default='alpha');p.add_argument('--title',default='H75 fixed-alpha GPU evaluation');a=p.parse_args();out=a.run if a.output is None else a.output;out.mkdir(parents=True,exist_ok=True)
+p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True);p.add_argument('--output',type=Path);p.add_argument('--baseline-run',type=Path);p.add_argument('--rescore-zero',action='store_true',help='Use the Zero lane in this run for same-alpha paired rewards');p.add_argument('--lane-labels',type=json.loads);p.add_argument('--preference-label-prefix',default='alpha');p.add_argument('--title',default='H75 fixed-alpha GPU evaluation');a=p.parse_args();out=a.run if a.output is None else a.output;out.mkdir(parents=True,exist_ok=True)
 from sttw_control.isaac_path_reporting import load_case,write_zero_scores,static_case_metrics
 if a.rescore_zero:
  write_zero_scores(a.run);a.baseline_run=a.run
 r,c=load_case(a.run,a.baseline_run);physics_dt=c['physics_dt'];user_speed=float(c["settings"].get("user_speed_m_s",2.3));palette_markers=['o','s','^','D','v','x'];route=np.load(Path(c['bundle'])/'route.npz');labels=['alpha 0','alpha .25','alpha .5','alpha .75','alpha 1','Zero'];colors=['#0072B2','#D55E00','#009E73','#CC79A7','#8A6500','#333333'];styles=['-']*5+['--'];summary=[]
-count=r['reward'].shape[1];labels=[label.replace('alpha',a.preference_label_prefix) for label in labels[:count]];colors=colors[:count]
+alpha_colors=colors[:5];count=r['reward'].shape[1];labels=a.lane_labels or [label.replace('alpha',a.preference_label_prefix) for label in labels[:count]];colors=colors[:count]
+if count<=5 and not c['settings'].get('gravel_recovery'):colors=[alpha_colors[[0,.25,.5,.75,1].index(alpha)] for alpha in c['settings']['alphas']]
 fig,axs=plt.subplots(2,2,figsize=(12,9));xy,per,cumulative,speed=axs.ravel();last_progress=max(float(r['progress'][np.flatnonzero(r['lower_trace'][:,:,i,6].reshape(-1))[-1],i]) for i in range(count));ref=route['s']<=last_progress+1;xy.plot(*route['xy'][ref].T,':',color='gray',label='Original reference')
 for lane,(label,color) in enumerate(zip(labels,colors)):
     trace=r['lower_trace'][:,:,lane].reshape(-1,11);mask=trace[:,6].astype(bool);indices=np.flatnonzero(mask);steps=np.flatnonzero(r['valid'][:,lane]);position=trace[indices,:2];t=indices*.005+trace[indices,7]*physics_dt;rewards=r['reward'][steps,lane]
@@ -44,7 +45,7 @@ for lane,(label,color,ax) in enumerate(zip(labels,colors,axs.flat)):
 fig.suptitle(a.title+' — true / wheel proxy / requested / governed speeds');fig.savefig(out/'speed_measurements.png',dpi=150);plt.close(fig)
 (out/'metrics.json').write_text(json.dumps(summary,indent=2));print(json.dumps(summary))
 
-(out/'figure_manifest.json').write_text(json.dumps(dict(source=str((a.run/'trajectory.npz').resolve()),outputs=['xy.png','overview.png','xy_all_alpha.png','speed_measurements.png'],role='exploratory DEV, one initial seed, no uncertainty estimate',filtering='active_lower mask only, no smoothing; each lane stops at observed failure',metric_window='individual observed duration; unequal durations do not support direct success rankings',reward='policy solid, same-alpha cached Zero dashed' if a.baseline_run else 'native alpha-weighted rewards; no Zero in five-lane protocol' if count==5 else 'native alpha-weighted rewards; Zero scored alpha0 only',checkpoint=c['identity']['files']['actor.npz'],baseline_reuse=c.get('baseline_reuse'),matplotlib=matplotlib.__version__),indent=2))
+(out/'figure_manifest.json').write_text(json.dumps(dict(source=str((a.run/'trajectory.npz').resolve()),outputs=['xy.png','overview.png','xy_all_alpha.png','speed_measurements.png'],role='exploratory DEV, one initial seed, no uncertainty estimate',filtering='active_lower mask only, no smoothing; each lane stops at observed failure',metric_window='individual observed duration; unequal durations do not support direct success rankings',reward='policy solid, same-alpha cached Zero dashed' if a.baseline_run else 'native alpha-weighted rewards; no Zero in this protocol' if count<=5 else 'native alpha-weighted rewards; Zero scored alpha0 only',checkpoint=c['identity']['files']['actor.npz'],baseline_reuse=c.get('baseline_reuse'),matplotlib=matplotlib.__version__),indent=2))
 
 if a.baseline_run:
  from sttw_control.isaac_path_reporting import replay_rewards
@@ -87,7 +88,7 @@ if a.baseline_run:
 
 (out/'condition_metrics.json').write_text(json.dumps(static_case_metrics(r,c),indent=2)+'\n')
 
-if count==5 and a.baseline_run is None:
+if count<=5 and a.baseline_run is None:
  from sttw_control.isaac_path_reporting import replay_rewards
  cfg=json.loads((Path(c['bundle'])/'config.json').read_text());replayed,parts,closure=replay_rewards(r,cfg)
  np.savez_compressed(out/'reward_components.npz',reward=replayed,**parts)
