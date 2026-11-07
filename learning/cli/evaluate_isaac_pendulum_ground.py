@@ -45,6 +45,10 @@ eso_enabled=torch.tensor([c.get('eso_enabled',True) for c in cases],device=devic
 true_feedback=torch.tensor([c.get('true_speed_feedback',False) for c in cases],device=device)
 turn=torch.tensor([c['steer_rad'] for c in cases],device=device)
 speed_gain=torch.tensor([c.get('speed_feedback_gain',0.) for c in cases],device=device)
+speed_targets=np.full((steps,n),spec['speed_m_s'],dtype=np.float32)
+for i,case in enumerate(cases):
+ for onset,value in case.get('speed_schedule',[]):speed_targets[round(onset/.005):,i]=value
+speed_targets=torch.as_tensor(speed_targets,device=device)
 open_loop=torch.tensor(['open_loop_steer_rate' in c for c in cases],device=device)
 pulse=torch.tensor([c.get('open_loop_steer_rate',0.) for c in cases],device=device)
 alive=torch.ones(n,dtype=torch.bool,device=device);rows=[];masks=[];references=[];commands=[];contacts=[];body_states=[];start=time.monotonic()
@@ -63,6 +67,7 @@ for k in range(steps+1):
  if k==steps or not bool(alive.any()):break
  desired=turn if spec['warmup_s']<=k*.005<spec['return_s'] else torch.zeros_like(turn)
  raw=raw.clone();raw[:,1]+=torch.clamp(desired-raw[:,1],-spec['steer_slew_rad_s']*.005,spec['steer_slew_rad_s']*.005)
+ raw[:,0]+=(speed_targets[k]-raw[:,0]).clamp(-spec.get('speed_slew_m_s2',.5)*.005,spec.get('speed_slew_m_s2',.5)*.005)
  action,obs,finite=lower.prepare(m,v,raw,previous,command,controller)
  for name,policy in candidates.items():action=torch.where(selectors[name][:,None],policy.infer(obs),action)
  applied=torch.where((use_lower & (k*.005>=lower_start))[:,None],action*torch.tensor([1.5,10.],device=device),0.)

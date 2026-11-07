@@ -15,6 +15,7 @@ for i in range(n):
  x=tr[valid[:,i],i];t=x[:,0];label=cases[i]['name'];color=colors[i%len(colors)];style='--' if 'local300' in label else '-'
  axes[0,0].plot(x[:,1],x[:,2],style,color=color,label=label);axes[0,0].plot(x[-1,1],x[-1,2],'x',color=color)
  axes[0,1].plot(t,x[:,4],style,color=color,label=label)
+ if 'reference' in d:axes[0,1].plot(t,d['reference'][valid[:,i],i,0],':',color=color,alpha=.5)
  axes[1,0].plot(t,np.rad2deg(x[:,5]),style,color=color,label=label)
  axes[1,1].plot(t,x[:,9],style,color=color,label=label+' hip');axes[1,1].plot(t,x[:,10],':',color=color,label=label+' knee')
  if 'reference' in d and (i==0 or cases[i]['steer_rad']!=cases[i-1]['steer_rad']):
@@ -27,7 +28,7 @@ for i in range(n):
   axes[0,0].plot([x[0,1],x[0,1]+2*t[-1]],[x[0,2],x[0,2]],':',color='gray',label='2 m/s straight reference')
 axes[0,0].set(xlabel='World x (m)',ylabel='World y (m)',aspect='equal');axes[0,0].legend(fontsize=8)
 if n==1:axes[0,0].set_ylim(-1,1)
-axes[0,1].axhline(protocol.get('spec',{}).get('speed_m_s',2),color='gray',ls=':');axes[0,1].set(xlabel='Time (s)',ylabel='Forward speed (m/s)')
+axes[0,1].set(xlabel='Time (s)',ylabel='Forward speed (m/s)')
 axes[1,0].set(xlabel='Time (s)',ylabel='Roll (deg)');axes[1,1].set(xlabel='Time (s)',ylabel='Pendulum angle (rad)');axes[1,1].legend(fontsize=7,ncol=2)
 for ax in [axes[0,1],axes[1,0],axes[1,1]]:
  for key in ('warmup_s','return_s'):
@@ -61,3 +62,21 @@ if a.baseline_run:
  fig.savefig(a.run/'paired_xy.png',dpi=140);plt.close(fig)
  (a.run/'paired_metrics.json').write_text(json.dumps(dict(baseline=str(a.baseline_run),baseline_prefix=a.baseline_prefix,candidates=protocol['spec'].get('actor_catalog',{}),records=metrics),indent=2))
  with (a.run/'RESULTS.md').open('a') as stream:stream.write('\n![Paired full trajectories and errors](paired_xy.png)\n\nPaired numeric metrics and candidate provenance: [paired_metrics.json](paired_metrics.json).\n')
+
+# Body-speed feedback must be checked against wheel motion as well as XY.
+if any('speed_feedback_gain' in case for case in cases):
+ fig,axs=plt.subplots(3,1,figsize=(12,10),sharex=True,layout='constrained');metrics=[]
+ radius=protocol['controller']['wheel_radius_m']
+ for i,case in enumerate(cases):
+  mask=valid[:,i];x=tr[mask,i];ref=d['reference'][mask,i,0];cmd=d['command'][mask,i,1]*radius;t=x[:,0];color=colors[i%len(colors)]
+  axs[0].plot(t,x[:,4],color=color,label=case['name']);axs[0].plot(t,ref,':',color=color,alpha=.5)
+  axs[1].plot(t,cmd,color=color);axs[1].plot(t,x[:,13],'--',color=color,alpha=.6)
+  axs[2].plot(t,x[:,4]-ref,color=color)
+  window=t>=protocol['spec']['warmup_s'];error=x[window,4]-ref[window]
+  metrics.append(dict(case=case['name'],speed_rmse=float(np.sqrt(np.mean(error**2))),speed_bias=float(error.mean()),
+   max_lateral_drift_m=float(np.max(abs(x[:,2]-x[0,2]))),peak_yaw_deviation_deg=float(np.rad2deg(np.max(abs(np.unwrap(x[:,3])-x[0,3])))),
+   peak_roll_deg=float(np.rad2deg(abs(x[:,5]).max())),rear_limit_fraction=float(np.mean(abs(d['command'][mask,i,1])>=59.999))))
+ axs[0].set_ylabel('Body speed / dotted request (m/s)');axs[0].legend(fontsize=8,ncol=2)
+ axs[1].set_ylabel('Rear command / dashed measured × r (m/s)');axs[2].set_ylabel('Body speed error (m/s)');axs[2].set_xlabel('Time (s)')
+ fig.savefig(a.run/'rear_speed_response.png',dpi=150);plt.close(fig)
+ (a.run/'rear_speed_metrics.json').write_text(json.dumps(metrics,indent=2))
