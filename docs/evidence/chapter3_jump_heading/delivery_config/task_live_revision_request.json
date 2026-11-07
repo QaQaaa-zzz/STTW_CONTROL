@@ -1,0 +1,48 @@
+{
+  "reason": "no_feasible",
+  "remaining_goals": [
+    {
+      "goal_id": "destination",
+      "allowed_routes": [
+        "original_jump",
+        "bypass"
+      ]
+    }
+  ],
+  "completed": [],
+  "active_reference": {
+    "goal_id": "destination",
+    "route_id": "original_jump",
+    "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/original_extended_reference.npz",
+    "skill_id": "matched_runtime",
+    "candidate_id": "v2.0_a0.5",
+    "speed_m_s": 2.0,
+    "alpha": 0.5
+  },
+  "observation": {
+    "speed": 1.9932979316241415,
+    "roll": -0.1345503330230713,
+    "roll_rate": 0.10514818131923676,
+    "cross_track": 0.6108479499816895,
+    "heading_error": -0.017097102151461197,
+    "steer": -0.0901220291852951,
+    "steer_rate": 0.05705694854259491,
+    "previous_speed_reference": 2.0109784603118896,
+    "lateral_velocity_heading_frame": -0.06261477708622054,
+    "world_yaw_rate": -0.6533306837081909,
+    "previous_alpha": 0.5,
+    "previous_alpha_duration": 5.54,
+    "remaining_path_to_release": 7.992677330970594,
+    "path_curvature": -0.3169332742691001,
+    "corridor_half_width": 1.0,
+    "pitch": 0.0009153286042469233,
+    "body_angular_y": -0.08062526379205244,
+    "hip": -1.2002006769180298,
+    "knee": 2.499999761581421,
+    "hip_velocity": 2.8436800221243175e-06,
+    "knee_velocity": -0.004182044882327318,
+    "platform_height": 0.16,
+    "remaining_path_to_platform": 9.592677330970574
+  },
+  "scope": "Request only; actual reference continues until a new plan is applied"
+}

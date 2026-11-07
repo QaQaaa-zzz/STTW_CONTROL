@@ -80,9 +80,9 @@ ax[4].set(xlabel='Time (s)',ylabel='Raw jump-policy rear target, before transiti
 ax[5].axhline(0,ls=':',color='gray');ax[5].set(xlabel='Time (s)',ylabel='Frontmost collision distance to edge (m)')
 if np.isfinite(handoff):
  for a in (ax[2],ax[3],ax[4],ax[5]):a.axvline(handoff,ls=':',color='black',alpha=.5,label='Ground-to-jump handoff')
-trial_role='Frozen-policy paired DEV'
+trial_role='Single-run engineering DEV' if len(r['cases'])==1 else 'Frozen-policy multi-run DEV'
 if protocol['spec'].get('external_force_pulse'):
- force=json.loads((p/'external_force.json').read_text());trial_role='External-force paired DEV'
+ force=json.loads((p/'external_force.json').read_text());trial_role='External-force recorded DEV'
  if force['triggered']:
   begin=force['trigger_time_s'];end=begin+force['protocol']['duration_s']
   label=f"World force {force['protocol']['force_world_N']} N"

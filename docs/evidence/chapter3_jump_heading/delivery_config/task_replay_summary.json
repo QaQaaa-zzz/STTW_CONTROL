@@ -1,0 +1,476 @@
+{
+  "role": "Two semantics on the same18 recorded runs, not36 new trials",
+  "cases": 18,
+  "optional_complete": 3,
+  "mandatory_complete": 3,
+  "optional_revision": 15,
+  "mandatory_revision": 15,
+  "mismatches": 0,
+  "rows": [
+    {
+      "case_id": "rb_connection_seed20261106_root000_forced_original_jump_extended_reference_capability",
+      "optional_status": "revision_required",
+      "mandatory_status": "revision_required",
+      "agrees_with_optional": true,
+      "agrees_with_mandatory": true,
+      "optional_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ]
+        }
+      ],
+      "mandatory_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ],
+          "required_skills": [
+            "platform_jump"
+          ]
+        }
+      ],
+      "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_online_route_comparison/rb_connection_seed20261106_root000_forced_original_jump_extended_reference_capability"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root000_worldFy-2N_original_jump_capability",
+      "optional_status": "revision_required",
+      "mandatory_status": "revision_required",
+      "agrees_with_optional": true,
+      "agrees_with_mandatory": true,
+      "optional_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ]
+        }
+      ],
+      "mandatory_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ],
+          "required_skills": [
+            "platform_jump"
+          ]
+        }
+      ],
+      "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_online_route_comparison/rb_connection_seed20261106_root000_worldFy-2N_original_jump_capability"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root000_worldFy+2N_original_jump_capability",
+      "optional_status": "revision_required",
+      "mandatory_status": "revision_required",
+      "agrees_with_optional": true,
+      "agrees_with_mandatory": true,
+      "optional_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ]
+        }
+      ],
+      "mandatory_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ],
+          "required_skills": [
+            "platform_jump"
+          ]
+        }
+      ],
+      "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_online_route_comparison/rb_connection_seed20261106_root000_worldFy+2N_original_jump_capability"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root002_forced_original_jump_extended_reference_capability",
+      "optional_status": "complete",
+      "mandatory_status": "complete",
+      "agrees_with_optional": true,
+      "agrees_with_mandatory": true,
+      "optional_remaining": [],
+      "mandatory_remaining": [],
+      "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_online_route_comparison/rb_connection_seed20261106_root002_forced_original_jump_extended_reference_capability"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root002_worldFy-2N_original_jump_capability",
+      "optional_status": "complete",
+      "mandatory_status": "complete",
+      "agrees_with_optional": true,
+      "agrees_with_mandatory": true,
+      "optional_remaining": [],
+      "mandatory_remaining": [],
+      "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_online_route_comparison/rb_connection_seed20261106_root002_worldFy-2N_original_jump_capability"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root002_worldFy+2N_original_jump_capability",
+      "optional_status": "complete",
+      "mandatory_status": "complete",
+      "agrees_with_optional": true,
+      "agrees_with_mandatory": true,
+      "optional_remaining": [],
+      "mandatory_remaining": [],
+      "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_online_route_comparison/rb_connection_seed20261106_root002_worldFy+2N_original_jump_capability"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root003_forced_original_jump_extended_reference_capability",
+      "optional_status": "revision_required",
+      "mandatory_status": "revision_required",
+      "agrees_with_optional": true,
+      "agrees_with_mandatory": true,
+      "optional_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ]
+        }
+      ],
+      "mandatory_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ],
+          "required_skills": [
+            "platform_jump"
+          ]
+        }
+      ],
+      "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_online_route_comparison/rb_connection_seed20261106_root003_forced_original_jump_extended_reference_capability"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root003_worldFy-2N_original_jump_capability",
+      "optional_status": "revision_required",
+      "mandatory_status": "revision_required",
+      "agrees_with_optional": true,
+      "agrees_with_mandatory": true,
+      "optional_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ]
+        }
+      ],
+      "mandatory_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ],
+          "required_skills": [
+            "platform_jump"
+          ]
+        }
+      ],
+      "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_online_route_comparison/rb_connection_seed20261106_root003_worldFy-2N_original_jump_capability"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root003_worldFy+2N_original_jump_capability",
+      "optional_status": "revision_required",
+      "mandatory_status": "revision_required",
+      "agrees_with_optional": true,
+      "agrees_with_mandatory": true,
+      "optional_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ]
+        }
+      ],
+      "mandatory_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ],
+          "required_skills": [
+            "platform_jump"
+          ]
+        }
+      ],
+      "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_online_route_comparison/rb_connection_seed20261106_root003_worldFy+2N_original_jump_capability"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root004_forced_original_jump_extended_reference_capability",
+      "optional_status": "revision_required",
+      "mandatory_status": "revision_required",
+      "agrees_with_optional": true,
+      "agrees_with_mandatory": true,
+      "optional_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ]
+        }
+      ],
+      "mandatory_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ],
+          "required_skills": [
+            "platform_jump"
+          ]
+        }
+      ],
+      "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_online_route_comparison/rb_connection_seed20261106_root004_forced_original_jump_extended_reference_capability"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root004_worldFy-2N_original_jump_capability",
+      "optional_status": "revision_required",
+      "mandatory_status": "revision_required",
+      "agrees_with_optional": true,
+      "agrees_with_mandatory": true,
+      "optional_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ]
+        }
+      ],
+      "mandatory_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ],
+          "required_skills": [
+            "platform_jump"
+          ]
+        }
+      ],
+      "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_online_route_comparison/rb_connection_seed20261106_root004_worldFy-2N_original_jump_capability"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root004_worldFy+2N_original_jump_capability",
+      "optional_status": "revision_required",
+      "mandatory_status": "revision_required",
+      "agrees_with_optional": true,
+      "agrees_with_mandatory": true,
+      "optional_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ]
+        }
+      ],
+      "mandatory_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ],
+          "required_skills": [
+            "platform_jump"
+          ]
+        }
+      ],
+      "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_online_route_comparison/rb_connection_seed20261106_root004_worldFy+2N_original_jump_capability"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root005_forced_original_jump_extended_reference_capability",
+      "optional_status": "revision_required",
+      "mandatory_status": "revision_required",
+      "agrees_with_optional": true,
+      "agrees_with_mandatory": true,
+      "optional_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ]
+        }
+      ],
+      "mandatory_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ],
+          "required_skills": [
+            "platform_jump"
+          ]
+        }
+      ],
+      "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_online_route_comparison/rb_connection_seed20261106_root005_forced_original_jump_extended_reference_capability"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root005_worldFy-2N_original_jump_capability",
+      "optional_status": "revision_required",
+      "mandatory_status": "revision_required",
+      "agrees_with_optional": true,
+      "agrees_with_mandatory": true,
+      "optional_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ]
+        }
+      ],
+      "mandatory_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ],
+          "required_skills": [
+            "platform_jump"
+          ]
+        }
+      ],
+      "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_online_route_comparison/rb_connection_seed20261106_root005_worldFy-2N_original_jump_capability"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root005_worldFy+2N_original_jump_capability",
+      "optional_status": "revision_required",
+      "mandatory_status": "revision_required",
+      "agrees_with_optional": true,
+      "agrees_with_mandatory": true,
+      "optional_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ]
+        }
+      ],
+      "mandatory_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ],
+          "required_skills": [
+            "platform_jump"
+          ]
+        }
+      ],
+      "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_online_route_comparison/rb_connection_seed20261106_root005_worldFy+2N_original_jump_capability"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root008_forced_original_jump_extended_reference_capability",
+      "optional_status": "revision_required",
+      "mandatory_status": "revision_required",
+      "agrees_with_optional": true,
+      "agrees_with_mandatory": true,
+      "optional_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ]
+        }
+      ],
+      "mandatory_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ],
+          "required_skills": [
+            "platform_jump"
+          ]
+        }
+      ],
+      "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_online_route_comparison/rb_connection_seed20261106_root008_forced_original_jump_extended_reference_capability"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root008_worldFy-2N_original_jump_capability",
+      "optional_status": "revision_required",
+      "mandatory_status": "revision_required",
+      "agrees_with_optional": true,
+      "agrees_with_mandatory": true,
+      "optional_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ]
+        }
+      ],
+      "mandatory_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ],
+          "required_skills": [
+            "platform_jump"
+          ]
+        }
+      ],
+      "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_online_route_comparison/rb_connection_seed20261106_root008_worldFy-2N_original_jump_capability"
+    },
+    {
+      "case_id": "rb_connection_seed20261106_root008_worldFy+2N_original_jump_capability",
+      "optional_status": "revision_required",
+      "mandatory_status": "revision_required",
+      "agrees_with_optional": true,
+      "agrees_with_mandatory": true,
+      "optional_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ]
+        }
+      ],
+      "mandatory_remaining": [
+        {
+          "goal_id": "destination",
+          "allowed_routes": [
+            "original_jump",
+            "bypass"
+          ],
+          "required_skills": [
+            "platform_jump"
+          ]
+        }
+      ],
+      "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_online_route_comparison/rb_connection_seed20261106_root008_worldFy+2N_original_jump_capability"
+    }
+  ]
+}

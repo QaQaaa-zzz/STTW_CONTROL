@@ -107,3 +107,39 @@ def test_revision_cannot_drop_required_skill_while_preserving_goal_id():
     assert m.active==active and not m.completed
     m.revise_remaining([dict(goal_id='checkpoint',allowed_routes=['left_route'],required_skills=['platform_jump'])],reason='new approach')
     assert m.program['goals'][0]['required_skills']==['platform_jump']
+
+
+def test_recorded_execution_survives_an_unapplied_proposal_and_unknown_query():
+    m=manager()
+    m.record_execution('left_route','slow',time_s=0.,reason='already executing')
+    proposal=m.choose([0.],['left_route'])
+    assert proposal['reference']['candidate_id']=='fast'
+    assert m.active_reference['candidate_id']=='slow'
+    unknown=m.choose([100.],['left_route'])
+    assert unknown['active_reference']['candidate_id']=='slow'
+    m.record_execution('left_route','fast',time_s=1.,reason='executor applied proposal')
+    assert m.active_reference['candidate_id']=='fast' and not m.completed
+
+
+def test_next_goal_needs_actual_execution_binding_after_progress_advances():
+    m=manager()
+    m.routes['second_route']=dict(m.routes['left_route'],route_id='second_route',goal_id='second')
+    m.program['goals'].append(dict(goal_id='second',allowed_routes=['second_route']))
+    m.record_execution('left_route','fast',time_s=0.,reason='initial execution')
+    assert m.observe_goal('checkpoint',arrived=True,upright=True,within_allowed_region=True)
+    m.choose([0.],['second_route'])
+    assert not m.observe_goal('second',arrived=True,upright=True,within_allowed_region=True)
+    m.record_execution('second_route','fast',time_s=2.,reason='next reference applied')
+    assert m.observe_goal('second',arrived=True,upright=True,within_allowed_region=True)
+    assert m.completed==['checkpoint','second']
+
+
+
+def test_completed_goal_does_not_erase_still_executing_reference_or_repeat_credit():
+    m=manager()
+    m.record_execution('left_route','fast',time_s=0.,reason='executing')
+    assert m.observe_goal('checkpoint',arrived=True,upright=True,within_allowed_region=True)
+    assert m.active_reference['route_id']=='left_route'
+    m.record_execution('left_route','fast',time_s=1.,reason='still executing while awaiting next plan')
+    assert not m.observe_goal('checkpoint',arrived=True,upright=True,within_allowed_region=True)
+    assert m.completed==['checkpoint']

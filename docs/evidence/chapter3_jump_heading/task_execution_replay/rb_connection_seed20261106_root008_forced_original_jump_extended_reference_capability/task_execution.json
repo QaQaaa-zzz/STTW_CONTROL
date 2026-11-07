@@ -1,0 +1,70 @@
+{
+  "program": {
+    "goals": [
+      {
+        "goal_id": "destination",
+        "allowed_routes": [
+          "original_jump",
+          "bypass"
+        ]
+      }
+    ]
+  },
+  "routes": [
+    {
+      "route_id": "original_jump",
+      "goal_id": "destination",
+      "task_id": "original_jump:optional",
+      "skill_id": "matched_runtime",
+      "candidates": [
+        "v2.0_a0.5"
+      ],
+      "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/original_extended_reference.npz"
+    },
+    {
+      "route_id": "bypass",
+      "goal_id": "destination",
+      "task_id": "bypass:optional",
+      "skill_id": "matched_runtime",
+      "candidates": [
+        "v2.0_a0.5"
+      ],
+      "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/bypass_reference.npz"
+    }
+  ],
+  "candidates": [
+    {
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "candidate_id": "v2.0_a0.5"
+    }
+  ],
+  "events": [
+    {
+      "status": "reference_executed",
+      "reference": {
+        "goal_id": "destination",
+        "route_id": "original_jump",
+        "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/original_extended_reference.npz",
+        "skill_id": "matched_runtime",
+        "candidate_id": "v2.0_a0.5",
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "proposal_reference": null,
+      "time_s": 0.0,
+      "reason": "Recorded upstream executable reference"
+    }
+  ],
+  "outcome_goal_id": "destination",
+  "source_identity": {
+    "initial_reference_provenance": "Reconstructed from executed run config approach speed/alpha, not a historical initial execution event",
+    "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_online_route_comparison/rb_connection_seed20261106_root008_forced_original_jump_extended_reference_capability",
+    "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_online_route_comparison/rb_connection_seed20261106_root008_forced_original_jump_extended_reference_capability.json",
+    "ground_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+    "jump_sha256": [
+      "80529e5c6ffdc4036da9ee08a4218193d706ae55e23ce02e9cc7cd840c01be39"
+    ],
+    "physics_dt": 0.0025
+  }
+}

@@ -148,6 +148,10 @@ if spec.get('forward_branch'):
    from concurrent.futures import ThreadPoolExecutor
    if branch_config['query_deadline_wall_s']<=0:raise ValueError('Positive route query deadline required')
    branch_executor=ThreadPoolExecutor(max_workers=1)
+ if branch_config.get('track_task_progress',False):
+  if route_selector is None:raise ValueError('Task-progress tracking requires the capability task manager')
+  initial=branch_config['initial_reference']
+  route_selector.task.record_execution(initial['route_id'],initial['candidate_id'],time_s=0.,reason='Existing upstream reference is physically executing')
 pulse_started=False;pulse_remaining=0;pulse_start_time=None;pulse_rows=[]
 if pulse:
  from sttw_control.torch_observation import rotate_inverse
@@ -219,6 +223,12 @@ for k in range(steps+1):
      branch_reference=dict(np.load(branch_map['branch_reference']));np.savez_compressed(out/'executed_branch_reference.npz',**branch_reference)
      ground.begin_connection(TorchPathReference(branch_reference,ground.config,ground.device),ground.speed.clone(),ground.alpha.clone());bypass_selected=True
     (out/'forward_branch_decision.json').write_text(json.dumps(dict(time_s=k*.005,requested_route=requested,executed_route=executed,furthest_common_progress_m=furthest_common_progress,availability=availability,root=root.cpu().tolist(),selection_wall_s=time.perf_counter()-branch_query_start,history='existing begin_connection; controller/filter/ESO/observation history retained',role='Forced-route pilot' if route_planner is None else route_planner['mode']+' route decision',decision_state=decision_state,observable_state=observable_state,selection=route_choice,query_state=branch_query_state,asynchronous=branch_executor is not None,application_delay_sim_s=k*.005-branch_query_state['time']),indent=2))
+    if branch_config.get('track_task_progress',False):
+     cid=next(c['candidate_id'] for c in route_planner['candidates'] if abs(c['speed_m_s']-float(ground.speed[0]))<1e-6 and abs(c['alpha']-float(ground.alpha[0]))<1e-6)
+     route_selector.task.record_execution(executed,cid,time_s=k*.005,reason='Actual route applied after availability and deadline checks')
+     if route_choice['status']!='reference_selected':
+      task=route_selector.task
+      (out/'task_revision_request.json').write_text(json.dumps(dict(status='requested',time_s=k*.005,reason=route_choice.get('reason',route_choice['status']),remaining_goals=[g for g in task.program['goals'] if g['goal_id'] not in task.completed],completed=task.completed,active_reference=task.active_reference,observation=observable_state,scope='Historical request event; task_outcome reports final pending goals. Actual reference continues until a new plan is applied'),indent=2))
  if k%4==0:
   inside=(root[:,0]>=spec.get('platform_front_x',3.6)-1.1)&(root[:,0]<=spec.get('platform_front_x',3.6)+.4);consumed|=entered&~inside;entered|=inside
   signal=(inside&~consumed).float()
@@ -311,6 +321,9 @@ result=dict(status='complete',elapsed_s=time.monotonic()-start,physics_lane_step
 for i,name in enumerate(spec['skills']):
  tr=trace[mask[:,i],i];result['cases'].append(dict(skill=name,duration_s=float(tr[-1,0]),physical_termination=not bool(alive[i]),peak_root_z=float(tr[:,3].max()),final_xyz=tr[-1,1:4].tolist(),peak_abs_roll_deg=float(np.rad2deg(abs(tr[:,5])).max()),full_jump_success='not adjudicated; requires clearance and landing evidence'))
  result['cases'][-1]['terminal_flags']=dict(ground_domain_exit=bool(ground.middle.domain_exit[i]) if ground is not None else None,ground_policy_fault=bool(ground.middle.fault[i]) if ground is not None else None,ground_alive=bool(ground.alive[i]) if ground is not None else None,roll_limit=bool(abs(float(m[i,0]))>=np.pi/4),low_root=bool(root[i,2]<=.05),nonfinite_state=not bool(torch.isfinite(row[i]).all()),legacy_physical_termination_scope='Legacy field includes controller/domain termination; inspect flags before attributing a physical fall')
+if spec.get('forward_branch',{}).get('track_task_progress',False):
+ task=route_selector.task
+ (out/'task_execution.json').write_text(json.dumps(dict(role='Actual executed references; physical goal confirmation pending independent adjudication',program=task.program,routes=route_planner['routes'],candidates=route_planner['candidates'],events=task.events,completed=task.completed,active_reference=task.active_reference,proposal_reference=task.active,outcome_goal_id=branch_config['outcome_goal_id']),indent=2))
 (out/'results.json').write_text(json.dumps(result,indent=2));print(result,flush=True)
 if branch_executor is not None:
  if not branch_decided:(out/'forward_query_unapplied.json').write_text(json.dumps(dict(status='execution_ended_before_application',query_state=branch_query_state,active_jump=active,returned=returned)))

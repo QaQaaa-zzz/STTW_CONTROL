@@ -7,7 +7,7 @@ m=json.loads(a.manifest.read_text());root=a.manifest.parent
 for case in m['cases'][a.start:a.start+a.count]:
  config=Path(case['config']);spec=json.loads(config.read_text());out=Path(spec['output'])
  if a.resume and (root/(case['case_id']+'_summary.json')).exists():continue
- if a.resume and not case.get('analysis_kind') and not spec.get('batch_candidates') and (out/'chain_summary.json').exists() and (out/'xy_jump.png').exists():
+ if a.resume and not case.get('analysis_kind') and not spec.get('batch_candidates') and (out/'chain_summary.json').exists() and (out/'xy_jump.png').exists() and (not (out/'task_execution.json').exists() or (out/'task_outcome.json').exists()):
   (root/(case['case_id']+'_summary.json')).write_text((out/'chain_summary.json').read_text())
   continue
  reuse=a.resume and (out/'results.json').exists()
@@ -32,8 +32,11 @@ for case in m['cases'][a.start:a.start+a.count]:
  summaries=[]
  for result_out in outputs:
   scripts=['analyze_isaac_pendulum_landing.py','plot_isaac_pendulum_jump.py'] if case.get('analysis_kind')=='jump_only' else ['analyze_isaac_pendulum_landing.py','analyze_rb_continuous_task.py','plot_isaac_pendulum_jump.py']
+  if (result_out/'task_execution.json').exists():scripts.append('finalize_task_execution.py')
   for script in scripts:
-   analysis=subprocess.run([m['analysis_python'],'learning/cli/'+script,'--run',str(result_out)])
+   command=[m['analysis_python'],'learning/cli/'+script,'--run',str(result_out)]
+   if script=='finalize_task_execution.py':command.extend(['--output',str(result_out/'task_outcome.json')])
+   analysis=subprocess.run(command)
    if analysis.returncode:
     (root/'status.json').write_text(json.dumps(dict(status='failed',stage='analysis',script=script,case_id=case['case_id'],returncode=analysis.returncode)))
     sys.exit(analysis.returncode)

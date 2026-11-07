@@ -1892,3 +1892,7 @@ Config learning/configs/isaac_h75_tradeoff_repeats.json records all sampled valu
 
 ### 第三章：冻结证据的新验证状态与批量在线选档（2026-11-07）
 原120根划分中validation_tuning前两根006/021、冻结heading125/H75及36条train证据和kernel门槛，未新增训练；实际调用既有批量入口接出口selector与每lane开关。两条C6均选2m/s alpha1、20ms接续通过、strict未过；固定两条失败但上游前缀已明显不同，不作选档因果收益。四条35200物理步、两批77.70/74.42秒。一次env_spacing0工程诊断仅1776物理步、两条同前缀均2.20秒上游退出，未扫描更多spacing或改默认。保留数值上下文限制和所有负例，不将controller退出叫作跌倒；相关[完整报告](evidence/chapter3_jump_heading/RESULTS.md)。单车已有一致前缀的接续证据独立保留，未合并成普适性能结论。
+
+
+### 第三章：实际任务参考与物理完成确认（2026-11-07）
+复用ContinuousTask分开建议与executor-confirmed reference，修订/未知状态保留实际参考，未应用建议不能确认下一目标，目标不重复记分；新增后处理把既有物理评分回写completed/remaining与修订请求状态。原E5能力18记录按optional/mandatory语义回放各3完成15待修订、0标签差异（同18物理记录，3成功均root002）。一次旧update2/9.6m/30s已知配置的实际接线重放，12000物理步/0训练、85.882秒，严格支撑1.215秒并到达；中途no_feasible保留原执行，最终按物理完成解除旧请求。不是heading125新泛化结果，也未实现即时多目标/LLM重规划。17相关测试与可移植快照离线复算通过。详见[当前报告](evidence/chapter3_jump_heading/RESULTS.md)。

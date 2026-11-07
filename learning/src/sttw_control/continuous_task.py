@@ -39,7 +39,27 @@ class ContinuousTask:
             raise ValueError('Unique goals and known routes terminating at each requested goal required')
         self.completed=[]
         self.active=None
+        self.executed_reference=None
+        self.execution_tracking=False
         self.events=[]
+
+    @property
+    def active_reference(self):
+        return self.executed_reference if self.execution_tracking else self.active
+
+    def record_execution(self, route_id, candidate_id, *, time_s, reason):
+        """Bind an applied task-level reference; skill-internal targets are separate."""
+        route=self.routes[route_id];candidate=self.candidates[candidate_id]
+        if candidate_id not in route['candidates']:
+            raise ValueError('Executed candidate must belong to the mapped route')
+        self.execution_tracking=True
+        self.executed_reference=dict(goal_id=route['goal_id'],route_id=route_id,
+            reference_path=route['reference_path'],skill_id=route['skill_id'],
+            candidate_id=candidate_id,speed_m_s=candidate['speed_m_s'],alpha=candidate['alpha'])
+        event=dict(status='reference_executed',reference=self.executed_reference.copy(),
+            proposal_reference=self.active.copy() if self.active else None,time_s=time_s,reason=reason)
+        self.events.append(event)
+        return event
 
     def choose(self, state, available_routes, minimum_completion=.7, probability_tolerance=.05, time_tolerance=.02):
         """Select only supported feasible routes, then efficiency among similar p.
@@ -59,13 +79,14 @@ class ContinuousTask:
             for estimate in query['estimates']:
                 if estimate['known'] and estimate['complete_probability']>=minimum_completion and estimate['success_cost'] is not None:
                     options.append(dict(route_id=route_id,**estimate))
-        previous=self.active if self.active and self.active['goal_id']==goal['goal_id'] else None
+        current=self.active_reference
+        previous=current if current and current['goal_id']==goal['goal_id'] else None
         selected=select_connection_estimate(options,minimum_completion,probability_tolerance,
             previous_candidate=previous['candidate_id'] if previous else None,
             previous_route=previous['route_id'] if previous else None,time_tolerance=time_tolerance)
         if selected is None:
             reason=connection_selection_status([e for q in queries for e in q['estimates']],None) if queries else 'no_available_route'
-            event=dict(status='revision_required',reason=reason,goal_id=goal['goal_id'],completed=list(self.completed),remaining_goals=[g['goal_id'] for g in remaining],queries=queries,active_reference=self.active)
+            event=dict(status='revision_required',reason=reason,goal_id=goal['goal_id'],completed=list(self.completed),remaining_goals=[g['goal_id'] for g in remaining],queries=queries,active_reference=self.active_reference)
             self.events.append(event)
             return event
         route=self.routes[selected['route_id']];candidate=self.candidates[selected['candidate_id']]
@@ -91,7 +112,7 @@ class ContinuousTask:
         done=[g for g in self.program['goals'] if g['goal_id'] in self.completed]
         self.program={**self.program,'goals':done+goals}
         event=dict(status='task_revised',reason=reason,completed=list(self.completed),
-                   remaining_goals=ids,active_reference=self.active)
+                   remaining_goals=ids,active_reference=self.active_reference)
         self.events.append(event)
         return event
 
@@ -99,7 +120,8 @@ class ContinuousTask:
         """Executor supplies physical evidence; a plan or LLM cannot acknowledge it."""
         goal=next(g for g in self.program['goals'] if g['goal_id']==goal_id)
         missing_skills=sorted(set(goal.get('required_skills',()))-set(completed_skills))
-        accepted=bool(not missing_skills and self.active and goal_id==self.active['goal_id'] and arrived and upright and within_allowed_region)
+        reference=self.active_reference
+        accepted=bool(goal_id not in self.completed and not missing_skills and reference and goal_id==reference['goal_id'] and arrived and upright and within_allowed_region)
         if accepted:
             self.completed.append(goal_id);self.active=None
         self.events.append(dict(status='goal_observed',goal_id=goal_id,accepted=accepted,arrived=bool(arrived),upright=bool(upright),within_allowed_region=bool(within_allowed_region),missing_required_skills=missing_skills,completed_skills=list(completed_skills)))

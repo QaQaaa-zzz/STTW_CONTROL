@@ -1,0 +1,24 @@
+{
+  "role": "Known-case engineering integration replay, not new validation/TEST or skill comparison; unchanged frozen original policy",
+  "cases": [
+    {
+      "case_id": "task_execution_root002",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_task_execution/live_config.json",
+      "origin_id": "rb_connection_seed20261106_root002",
+      "distance_m": 9.6,
+      "speed_m_s": 2.0,
+      "alpha": 0.5
+    }
+  ],
+  "simulation_python": "/home/qy/miniconda3/envs/env_isaaclab/bin/python",
+  "analysis_python": "/home/qy/miniconda3/envs/mjp/bin/python",
+  "maximum_physics_steps": 12000,
+  "optimizer_updates": 0,
+  "source_case": {
+    "case_id": "rb_connection_seed20261106_root002_forced_original_jump_extended_reference_capability",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_online_route_comparison/rb_connection_seed20261106_root002_forced_original_jump_extended_reference_capability.json",
+    "origin_id": "rb_connection_seed20261106_root002",
+    "split": "train",
+    "method": "capability"
+  }
+}

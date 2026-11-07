@@ -1,0 +1,135 @@
+{
+  "request_disposition": "resolved_by_observed_completion",
+  "role": "Post-adjudication task progress from actual execution and frozen physical labels; no new planning or simulation",
+  "semantic_variant": "declared_program",
+  "status": "complete",
+  "accepted_goal": true,
+  "completed": [
+    "destination"
+  ],
+  "remaining_goals": [],
+  "active_reference": {
+    "goal_id": "destination",
+    "route_id": "original_jump",
+    "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/original_extended_reference.npz",
+    "skill_id": "matched_runtime",
+    "candidate_id": "v2.0_a0.5",
+    "speed_m_s": 2.0,
+    "alpha": 0.5
+  },
+  "last_proposal": null,
+  "events": [
+    {
+      "status": "reference_executed",
+      "reference": {
+        "goal_id": "destination",
+        "route_id": "original_jump",
+        "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/original_extended_reference.npz",
+        "skill_id": "matched_runtime",
+        "candidate_id": "v2.0_a0.5",
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "proposal_reference": null,
+      "time_s": 0.0,
+      "reason": "Existing upstream reference is physically executing"
+    },
+    {
+      "status": "revision_required",
+      "reason": "no_feasible",
+      "goal_id": "destination",
+      "completed": [],
+      "remaining_goals": [
+        "destination"
+      ],
+      "queries": [
+        {
+          "route_id": "original_jump",
+          "estimates": [
+            {
+              "candidate_id": "v2.0_a0.5",
+              "known": true,
+              "support": 1.9432400766738045,
+              "complete_probability": 0.0,
+              "success_cost": null,
+              "sample_count": 6
+            }
+          ],
+          "ranked_candidates": [
+            "v2.0_a0.5"
+          ],
+          "best_candidate": "v2.0_a0.5",
+          "scope": "Empirical complete-task outcomes; executor must apply feasibility threshold and fallback"
+        },
+        {
+          "route_id": "bypass",
+          "estimates": [
+            {
+              "candidate_id": "v2.0_a0.5",
+              "known": true,
+              "support": 1.9432400766738045,
+              "complete_probability": 0.0,
+              "success_cost": null,
+              "sample_count": 6
+            }
+          ],
+          "ranked_candidates": [
+            "v2.0_a0.5"
+          ],
+          "best_candidate": "v2.0_a0.5",
+          "scope": "Empirical complete-task outcomes; executor must apply feasibility threshold and fallback"
+        }
+      ],
+      "active_reference": {
+        "goal_id": "destination",
+        "route_id": "original_jump",
+        "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/original_extended_reference.npz",
+        "skill_id": "matched_runtime",
+        "candidate_id": "v2.0_a0.5",
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      }
+    },
+    {
+      "status": "reference_executed",
+      "reference": {
+        "goal_id": "destination",
+        "route_id": "original_jump",
+        "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/original_extended_reference.npz",
+        "skill_id": "matched_runtime",
+        "candidate_id": "v2.0_a0.5",
+        "speed_m_s": 2.0,
+        "alpha": 0.5
+      },
+      "proposal_reference": null,
+      "time_s": 5.5600000000000005,
+      "reason": "Actual route applied after availability and deadline checks"
+    },
+    {
+      "status": "goal_observed",
+      "goal_id": "destination",
+      "accepted": true,
+      "arrived": true,
+      "upright": true,
+      "within_allowed_region": true,
+      "missing_required_skills": [],
+      "completed_skills": [
+        "platform_jump",
+        "ground_return",
+        "continued_drive"
+      ]
+    }
+  ],
+  "revision_request": null,
+  "physical_evidence": {
+    "full_window": true,
+    "common_prefix_passed": true,
+    "goal_arrival_s": 19.459999084472656,
+    "within_allowed_region": true,
+    "completed_skills": [
+      "platform_jump",
+      "ground_return",
+      "continued_drive"
+    ]
+  }
+}

@@ -210,3 +210,36 @@ contact1任务数略高但早失败更多；最新contact150也无明显整体�
 [诊断XY](origin_zero_diagnostic_xy.png)、[诊断记录](delivery_config/origin_zero_summary.json)。确认ground_settings.randomization=null后，仅将root006两lane的env_spacing20改0，保持独立碰撞组、模型/控制/几何/频率。两条trace逐值相同，均在2.20s上游退出、没有选档或跳跃；最大侧倾18.79°，不能仅凭results中的physical_termination字段称45°跌倒。原点布局改变了结果，但不能证明浮点精度是唯一根因。
 
 该诊断只实际运行1776物理lane步（上限17600）、0更新，作为看过结果后的工程诊断，独立于四条新验证统计。不追加spacing扫描、奖励修改或训练，不自动更改全局默认。批量入口可做实际状态条件的数据采集；当前不将此异质批量当无混杂的“同出口反事实性能比较”。此前单车两根/四条中，第一对选档前trace相同、第二对同选择全程相同的证据仍独立保留。
+
+
+## 任务程序的真实执行绑定与物理完成回写
+
+![旧冻结update2已知场景的任务接线重放](task_execution_live_xy.png)
+
+本轮处理任务管理接线，未调整模型/控制器/奖励、未新增RL。为验证接口，重放原已记录root002 D0、9.6m接近、30s的旧update2场景；它不是当前heading125的新泛化测试，也不替换当前技能基线。
+
+### 建议、实际执行与物理完成
+
+ContinuousTask新增`record_execution`及`active_reference`：启用执行绑定后，未应用的建议不能当实际参考；未知/超时仍保留执行器当前有效参考；完成目标不会凭空抹掉仍在执行的控制参考，也不能重复给目标计完成。未启用绑定的旧用法保持。真实执行器在初始参考及分流实际应用后记录引用，任务完成由既有物理分析后独立确认。
+
+- `task_execution.json`：程序、建议与实际执行事件；物理完成待确认。
+- `task_revision_request.json`：当时的修订请求，保留未完成目标和实际参考；这是历史事件。
+- `task_outcome.json`：依据冻结物理评分确认目标/剩余任务；它是最终结果入口，不把旧请求当仍待处理。
+
+这里的实际引用是任务级路线与接近候选，不是逐时刻电机目标。跳跃和回交继续使用冻结技能参数，回交目标速度为1.5m/s；它不会因任务记录中的接近速度2m/s而被覆盖，实际电机与跳跃目标仍在原执行日志中单独保存。
+
+运行配置通过`forward_branch.track_task_progress=true`启用，并声明`initial_reference`与`outcome_goal_id`；示例见[本次配置](delivery_config/task_live_config.json)。原单车/批量旧配置缺省不启用。既有`run_jump_approach_pilot`在物理分析后调用finalize；执行记录先写，再发布results完成标记，方便既有resume复用。
+
+本次5.56s能力工具报告no_feasible，执行器保留original_jump、2/.5参考；随后9.50s交跳跃、严格台面支撑1.215s、13.44s交回地面、19.46s进入E5共同目标区，完整30s窗口通过。原始跳台终点条件首次满足20.10s，与E5共同目标2m半径的首次到达分开记录。物理运行85.882秒、12000物理lane步、0更新；因此不能把经验工具的no_feasible当不可达证明，也不能把该次已知配置重放说成算法增益。
+
+物理分析后，原程序及“必跳”语义都确认destination，remaining为空；`request_disposition=resolved_by_observed_completion`。历史修订请求文件保留，最终状态已说明无需再为已完成目标修订。此为**评分后的任务进度确认**，不是实时多目标重规划或LLM已经接入。
+
+### 已保存18条路线的零物理回放
+
+复用原E5能力方法18条完整记录，未到分流点的上游失败也保留。回放中的初始执行引用由已运行配置的速度/α重建，分流引用读取当时实际执行的路线事件；这些不是当年已在线写出的任务进度日志。原任务语义3条完成、15条待修订；同18条在必跳语义下也是3/15，均与原冻结标签零差异。不是36次新试验，不混入当前heading125的验证统计。18条来自原6个上游根的三个条件，3个完成都来自root002，不算3个独立成功根。绕行只到目的地而没有平台技能时，必跳任务仍需修订；对应语义测试通过。
+
+[回放摘要](delivery_config/task_replay_summary.json)、[实际执行记录](delivery_config/task_live_execution.json)、[物理评分](delivery_config/task_live_chain_summary.json)、[最终任务状态](delivery_config/task_live_outcome.json)、[必跳语义](delivery_config/task_live_outcome_mandatory.json)。已导出[18条可移植执行快照与物理摘要](task_execution_replay/)，可在不加载Isaac或权重的情况下重算进度。它复用物理评分，不能替代原始接触/轨迹重新验证。
+
+例：`PYTHONPATH=learning/src python learning/cli/finalize_task_execution.py --run docs/evidence/chapter3_jump_heading/task_execution_replay/rb_connection_seed20261106_root002_forced_original_jump_extended_reference_capability --output runs/task_replay.json --require-platform`。
+
+新增执行绑定、旧建议不能确认下一目标、重复到达不重复记分、必跳不能被绕行替代、观测完成解除旧修订请求等共17项相关测试通过；实际完整链流水线已生成独立执行/结果文件。首次回放遇到缺失分流文件，已按真实“未到分流点”处理，没有丢掉该失败或新增物理。当前仍未部署LLM、未声称所有路由/来车状态可行，整体任务书未宣布完成。

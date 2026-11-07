@@ -1,0 +1,380 @@
+{
+  "decision_prefix": {
+    "decision_time_s": 5.54,
+    "decision_reached": true,
+    "max_path_error_before_decision_m": 0.6451108146596943,
+    "corridor_intact_at_decision": true,
+    "first_corridor_violation_s": null,
+    "scope": "Observed full-task corridor history; no relabeling of complete or success_time"
+  },
+  "stages": {
+    "reached_release_line": true,
+    "airborne_after_handoff": true,
+    "strict_support": true,
+    "ground_return": true,
+    "continued": true
+  },
+  "stage_times": {
+    "release": 9.5,
+    "strict_support": 12.430000305175781,
+    "ground_return": 13.16,
+    "final_conditions": 19.719999313354492
+  },
+  "role": "Single nominal DEV, no robustness claim",
+  "complete": true,
+  "success_time_s": 19.719999313354492,
+  "first_final_conditions_time_s": 19.719999313354492,
+  "checks": {
+    "full_window": true,
+    "ordered_approach": true,
+    "original_path_corridor": true,
+    "stable_landing": true,
+    "ground_return": true,
+    "continued_time": true,
+    "continued_forward": true,
+    "final_goal": true
+  },
+  "criteria": {
+    "corridor_half_width_m": 1.0,
+    "waypoints": [
+      [
+        -4.0,
+        -8.0
+      ],
+      [
+        -4.0,
+        -4.8
+      ],
+      [
+        -4.0,
+        -2
+      ],
+      [
+        -2.0,
+        0
+      ],
+      [
+        6.0,
+        0
+      ]
+    ],
+    "waypoint_radius_m": 1.0,
+    "minimum_post_handoff_s": 2.0,
+    "minimum_post_handoff_forward_m": 2.0,
+    "final_goal_xy": [
+      21.6,
+      0.0
+    ]
+  },
+  "passed_waypoints": [
+    {
+      "point": [
+        -4.0,
+        -8.0
+      ],
+      "time_s": 0.019999999552965164
+    },
+    {
+      "point": [
+        -4.0,
+        -4.8
+      ],
+      "time_s": 1.559999942779541
+    },
+    {
+      "point": [
+        -4.0,
+        -2
+      ],
+      "time_s": 3.0199999809265137
+    },
+    {
+      "point": [
+        -2.0,
+        0
+      ],
+      "time_s": 5.099999904632568
+    },
+    {
+      "point": [
+        6.0,
+        0
+      ],
+      "time_s": 9.020000457763672
+    }
+  ],
+  "max_original_path_error_m": 0.6451108146596943,
+  "path_rmse_m": 0.21121566245436318,
+  "post_handoff_s": 16.84000015258789,
+  "post_handoff_forward_m": 26.140104293823242,
+  "landing": {
+    "skill": "update2",
+    "first_strict_support_completion_s": 12.430000305175781,
+    "airborne_after_handoff": true,
+    "first_airborne_interval_s": [
+      10.050000190734863,
+      10.550000190734863
+    ],
+    "landing_hold_1s": true,
+    "longest_hold_s": 1.0649995803833008,
+    "interval_s": [
+      11.430000305175781,
+      12.494999885559082
+    ]
+  },
+  "forward_task": {
+    "executed_route": "original_jump",
+    "branch_event": {
+      "time_s": 5.5600000000000005,
+      "requested_route": "original_jump",
+      "executed_route": "original_jump",
+      "furthest_common_progress_m": 10.189236640930176,
+      "availability": {
+        "available_routes": [
+          "original_jump",
+          "bypass"
+        ],
+        "blocked_routes": []
+      },
+      "root": [
+        [
+          -1.9523429870605469,
+          0.6146831512451172,
+          0.11812742054462433,
+          0.7512843012809753,
+          0.007314065471291542,
+          0.0058173746801912785,
+          0.6599124670028687,
+          2.002408742904663,
+          -0.017207402735948563,
+          -0.0020523034036159515,
+          -0.08325452357530594,
+          0.007143846713006496,
+          -0.5640876889228821
+        ]
+      ],
+      "selection_wall_s": 0.19012058000225807,
+      "history": "existing begin_connection; controller/filter/ESO/observation history retained",
+      "role": "capability route decision",
+      "decision_state": {
+        "time": 5.5600000000000005,
+        "root": [
+          [
+            -1.9523429870605469,
+            0.6146831512451172,
+            0.11812742054462433,
+            0.7512843012809753,
+            0.007314065471291542,
+            0.0058173746801912785,
+            0.6599124670028687,
+            2.002408742904663,
+            -0.017207402735948563,
+            -0.0020523034036159515,
+            -0.08325452357530594,
+            0.007143846713006496,
+            -0.5640876889228821
+          ]
+        ],
+        "measurement": [
+          [
+            -0.12932348251342773,
+            0.08259201049804688,
+            -0.07763028889894485,
+            0.019889216870069504,
+            -0.5605735778808594,
+            28.540239334106445,
+            28.815444946289062
+          ]
+        ],
+        "position": [
+          [
+            -1.200202226638794,
+            1.1846137046813965,
+            -0.07763028889894485,
+            2.499999761581421,
+            -4.8188700675964355
+          ]
+        ],
+        "velocity": [
+          [
+            0.019652223214507103,
+            -28.540239334106445,
+            0.019889216870069504,
+            -7.18512455932796e-06,
+            -28.815444946289062
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.0121161937713623,
+            -0.06369110196828842
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "previous_alpha_duration_s": 5.5600000000000005
+      },
+      "observable_state": {
+        "speed": 2.004441228113963,
+        "roll": -0.1310558319091797,
+        "roll_rate": 0.09474627673625946,
+        "cross_track": 0.6148397922515869,
+        "heading_error": -0.030048815520982198,
+        "steer": -0.07895730435848236,
+        "steer_rate": -0.16572129726409912,
+        "previous_speed_reference": 2.011591911315918,
+        "lateral_velocity_heading_frame": -0.05623487188366084,
+        "world_yaw_rate": -0.5828677415847778,
+        "previous_alpha": 0.5,
+        "previous_alpha_duration": 5.54,
+        "remaining_path_to_release": 7.992451071739026,
+        "path_curvature": -0.31127679347991544,
+        "corridor_half_width": 1.0,
+        "pitch": 0.0009084818791427196,
+        "body_angular_y": -0.06332688238465516,
+        "hip": -1.2002016305923462,
+        "knee": 2.499999761581421,
+        "hip_velocity": -0.0363161563873291,
+        "knee_velocity": 0.0001345195050816983,
+        "platform_height": 0.16,
+        "remaining_path_to_platform": 9.592451071739006
+      },
+      "selection": {
+        "status": "revision_required",
+        "reason": "no_feasible",
+        "goal_id": "destination",
+        "completed": [],
+        "remaining_goals": [
+          "destination"
+        ],
+        "queries": [
+          {
+            "route_id": "original_jump",
+            "estimates": [
+              {
+                "candidate_id": "v2.0_a0.5",
+                "known": true,
+                "support": 1.897048338238594,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 6
+              }
+            ],
+            "ranked_candidates": [
+              "v2.0_a0.5"
+            ],
+            "best_candidate": "v2.0_a0.5",
+            "scope": "Empirical complete-task outcomes; executor must apply feasibility threshold and fallback"
+          },
+          {
+            "route_id": "bypass",
+            "estimates": [
+              {
+                "candidate_id": "v2.0_a0.5",
+                "known": true,
+                "support": 1.897048338238594,
+                "complete_probability": 0.0,
+                "success_cost": null,
+                "sample_count": 6
+              }
+            ],
+            "ranked_candidates": [
+              "v2.0_a0.5"
+            ],
+            "best_candidate": "v2.0_a0.5",
+            "scope": "Empirical complete-task outcomes; executor must apply feasibility threshold and fallback"
+          }
+        ],
+        "active_reference": null,
+        "evidence_rows": 24,
+        "excluded_origin_id": "rb_connection_seed20261106_root002",
+        "scope": "Empirical route recommendation; unavailable support retains current execution, not proof of safety"
+      },
+      "query_state": {
+        "time": 5.54,
+        "root": [
+          [
+            -1.9924510717391968,
+            0.6148397922515869,
+            0.11810173839330673,
+            0.7518018484115601,
+            0.01159573718905449,
+            0.009563523344695568,
+            0.6592177152633667,
+            2.005225896835327,
+            0.004012535326182842,
+            -0.001421523280441761,
+            -0.09562236815690994,
+            0.010097023099660873,
+            -0.5828677415847778
+          ]
+        ],
+        "measurement": [
+          [
+            -0.1310558319091797,
+            0.09474627673625946,
+            -0.07895730435848236,
+            -0.16572129726409912,
+            -0.5796491503715515,
+            28.553699493408203,
+            29.09210205078125
+          ]
+        ],
+        "position": [
+          [
+            -1.2002016305923462,
+            1.7594449520111084,
+            -0.07895730435848236,
+            2.499999761581421,
+            -4.242443084716797
+          ]
+        ],
+        "velocity": [
+          [
+            -0.0363161563873291,
+            -28.553699493408203,
+            -0.16572129726409912,
+            0.0001345195050816983,
+            -29.09210205078125
+          ]
+        ],
+        "previous_reference": [
+          [
+            2.011591911315918,
+            -0.06591024249792099
+          ]
+        ],
+        "previous_alpha": [
+          0.5
+        ],
+        "previous_alpha_duration_s": 5.54
+      },
+      "asynchronous": true,
+      "application_delay_sim_s": 0.020000000000000462
+    },
+    "route_prefix": {
+      "decision_time_s": 5.5600000000000005,
+      "max_error_before_branch_m": 0.6451108146596943,
+      "corridor_intact_at_branch": true,
+      "max_error_after_branch_m": 0.6140691041946411,
+      "first_violation_s": null,
+      "scope": "Diagnostic under the existing executed-route corridor; labels unchanged. Original and bypass corridor widths may differ even on their shared prefix."
+    },
+    "common_goal_xy": [
+      21.6,
+      0.0
+    ],
+    "full_window": true,
+    "common_prefix_passed": true,
+    "first_goal_arrival_s": 19.079999923706055,
+    "max_mapped_path_error_m": 0.6451108146596943,
+    "mapped_corridor_half_width_m": 1.0,
+    "mapped_corridor_complete": true,
+    "optional_platform_task_complete": true,
+    "mandatory_platform_task_complete": true,
+    "platform_skill_complete": true,
+    "bypass_exit_complete": false,
+    "scope": "E5 declared mapped-route center corridor and full window; bypass cannot complete mandatory platform skill. Not a body-envelope clearance guarantee. Original jump-task labels retained separately."
+  }
+}
