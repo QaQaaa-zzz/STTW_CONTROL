@@ -31,7 +31,7 @@ def front_contact_torques(samples,body_order,radii=(.1,.1,.025)):
     axis=rotate(fork[:,3:7],basis[1].expand(n,3));axle=rotate(wheel[:,3:7],basis[2].expand(n,3))
     forward=rotate(body[:,body_order.index('chasis'),3:7],basis[0].expand(n,3))
     zero=torch.zeros(n,device=device,dtype=body.dtype)
-    result=dict(normal_moment=zero.clone(),friction_moment=zero.clone(),lateral_moment=zero.clone(),negative_lateral=zero.clone(),reference_delta=zero.clone())
+    result=dict(normal_moment=zero.clone(),friction_moment=zero.clone(),lateral_moment=zero.clone(),negative_lateral=zero.clone(),reference_delta=zero.clone(),trail_min=torch.full_like(zero,float('nan')),trail_max=torch.full_like(zero,float('nan')),reference_trail=torch.full_like(zero,float('nan')),force_weighted_trail=torch.full_like(zero,float('nan')),negative_contact_count=zero.clone(),friction_contact_count=zero.clone())
     patches={}
     for kind in ['normal','friction']:
         count=samples['frontwheel_'+kind+'_count'][:,0];start=samples['frontwheel_'+kind+'_start'][:,0]
@@ -61,6 +61,13 @@ def front_contact_torques(samples,body_order,radii=(.1,.1,.025)):
     intersection=fork[:,None,:3]+axis[:,None]*distance[:,:,None]
     trail=((intersection-p)*direction).sum(-1)
     moment=(torch.cross(lever,lateral_force,dim=-1)*axis[:,None]).sum(-1)
+    valid_trail=usable&regular
+    result['friction_contact_count']=valid_trail.sum(1).to(zero.dtype)
+    result['negative_contact_count']=(valid_trail&(trail<0)).sum(1).to(zero.dtype)
+    result['trail_min']=torch.where(valid_trail.any(1),torch.where(valid_trail,trail,float('inf')).min(1).values,float('nan'))
+    result['trail_max']=torch.where(valid_trail.any(1),torch.where(valid_trail,trail,-float('inf')).max(1).values,float('nan'))
+    weights=torch.where(valid_trail,torch.linalg.vector_norm(lateral_force,dim=-1),0.);weight=weights.sum(1)
+    result['force_weighted_trail']=torch.where(weight>0,torch.where(valid_trail,weights*trail,0.).sum(1)/weight.clamp_min(1e-12),float('nan'))
     result['lateral_moment']=torch.where(usable,moment,0.).sum(1)
     result['negative_lateral']=torch.where(usable&regular&(trail<0),moment,0.).sum(1)
     up=basis[2].expand(n,3);q_up=rotate(wheel[:,3:7],rotate_inverse(wheel[:,3:7],up)*torch.tensor(radii,device=device,dtype=body.dtype).square())
@@ -69,6 +76,7 @@ def front_contact_torques(samples,body_order,radii=(.1,.1,.025)):
     horizontal*=torch.where((horizontal*forward).sum(1)>=0,1.,-1.)[:,None]
     regular_reference=axis[:,2].abs()>1e-6
     ref_trail=((fork[:,:3]-reference)*horizontal).sum(1)+(reference[:,2]-fork[:,2])*(axis*horizontal).sum(1)/torch.where(regular_reference,axis[:,2],1.)
+    result['reference_trail']=torch.where(regular_reference,ref_trail,float('nan'))
     delta=(torch.cross(reference[:,None]-p,lateral_force,dim=-1)*axis[:,None]).sum(-1)
     result['reference_delta']=torch.where(usable&(regular_reference&(ref_trail>0))[:,None],delta,0.).sum(1)
     return result
