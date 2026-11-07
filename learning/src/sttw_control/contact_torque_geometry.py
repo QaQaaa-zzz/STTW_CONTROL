@@ -3,6 +3,24 @@ import torch
 from .torch_observation import rotate_inverse
 
 
+def contact_torque_time_batch(samples,body_order):
+    """Flatten time/environment axes, retaining independent native patch offsets."""
+    body=samples['body_state'];ticks,lanes=body.shape[:2]
+    flat={'body_state':body.reshape(ticks*lanes,*body.shape[2:])}
+    for kind in ('normal','friction'):
+        prefix='frontwheel_'+kind+'_'
+        capacity=samples[prefix+'point'].shape[1]
+        for name,value in samples.items():
+            if not name.startswith(prefix):continue
+            if name.endswith('count'):
+                flat[name]=value.reshape(ticks*lanes,-1)
+            elif name.endswith('start'):
+                offset=torch.arange(ticks,device=value.device).reshape(ticks,1,1)*capacity
+                flat[name]=(value+offset).reshape(ticks*lanes,-1)
+            else:flat[name]=value.reshape(ticks*capacity,*value.shape[2:])
+    return {k:v.reshape(ticks,lanes) for k,v in front_contact_torques(flat,body_order).items()}
+
+
 def front_contact_torques(samples,body_order,radii=(.1,.1,.025)):
     body=samples['body_state'];device=body.device;n=len(body)
     fork=body[:,body_order.index('frontfork')];wheel=body[:,body_order.index('frontwheel')]
