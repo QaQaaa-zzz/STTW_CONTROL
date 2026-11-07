@@ -5,6 +5,7 @@ parser=argparse.ArgumentParser(description='Bounded 150-update jump adaptation a
 parser.add_argument('--output',type=Path,required=True)
 parser.add_argument('--approach',type=Path,required=True)
 parser.add_argument('--after-pid',type=int)
+parser.add_argument('--concurrent',action='store_true',help='Explicitly authorized concurrent launch; bypass the shared job queue')
 args=parser.parse_args();r=args.output.resolve();r.mkdir(parents=True,exist_ok=True)
 pid=args.after_pid
 try:fd=os.pidfd_open(pid) if pid is not None else None
@@ -15,7 +16,7 @@ if fd is not None:
 (r/'pipeline_status.json').write_text(json.dumps(dict(stage='training',started=time.time())))
 subprocess.run(['/usr/bin/python3','learning/scripts/notify_chapter3_job.py','--message','第三章跳跃：开始从update2适配当前车型，150更新，4096环境，保留Go2随机化。','--receipt',str(r/'start_notification.json')])
 with (r/'train.log').open('w') as log:
- result=subprocess.run(['bash','learning/scripts/gpu_queue.sh','/home/qy/miniconda3/envs/env_isaaclab/bin/python','learning/cli/train_isaac_phase_u.py','--config','learning/configs/isaac_rb_jump_current150.json','--output',str(r/'adaptation')],stdout=log,stderr=subprocess.STDOUT)
+ result=subprocess.run(([] if args.concurrent else ['bash','learning/scripts/gpu_queue.sh'])+['/home/qy/miniconda3/envs/env_isaaclab/bin/python','learning/cli/train_isaac_phase_u.py','--config','learning/configs/isaac_rb_jump_current150.json','--output',str(r/'adaptation')],stdout=log,stderr=subprocess.STDOUT)
 (r/'pipeline_status.json').write_text(json.dumps(dict(stage='training_complete' if result.returncode==0 else 'failed',exit_code=result.returncode)))
 subprocess.run(['/usr/bin/python3','learning/scripts/notify_chapter3_job.py','--message','第三章跳跃150更新训练阶段已结束，待固定工况评测。可以继续推进任务。' if result.returncode==0 else '第三章跳跃训练失败，请检查日志。可以继续推进任务。','--receipt',str(r/'stage_notification.json')])
 if result.returncode:raise SystemExit(result.returncode)
