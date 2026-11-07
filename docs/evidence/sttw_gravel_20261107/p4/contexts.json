@@ -1,0 +1,6706 @@
+[
+  {
+    "terrain": "S2_map20261108",
+    "terrain_path": "runs/h75_gravel_p4/assets/S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "user_speed_m_s": 2.3,
+    "seed": 101,
+    "task": "A",
+    "lane_start": 0,
+    "lane_count": 4,
+    "alphas": [
+      0.0,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha05",
+      "alpha075",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S2_map20261108_v2p3_seed101/evaluation",
+    "context_id": 0,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.75,
+      0.75
+    ],
+    "source_lanes": [
+      0,
+      1,
+      3,
+      2,
+      2
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      9.0,
+      0.18804347826086557,
+      0.500261014475157,
+      0.2534332084893883
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.10000000000000002,
+        "predicted_cost": 13.940357309538745,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.26666666666666666,
+        "predicted_cost": 11.662495561455726,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.26666666666666666,
+        "predicted_cost": 8.346867065069434,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 7.066210023355176,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.16666666666666666,
+        "predicted_cost": 9.712507433863076,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.10210970504830612,
+        "predicted_cost": 10.76923001330118,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.20421941009661224,
+        "predicted_cost": 15.963752817733388,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.10210970504830612,
+        "predicted_cost": 11.67639156175535,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.5021097050483061,
+        "predicted_cost": 4.0805050125971505,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.09789029495169389,
+        "predicted_cost": 3.3329693861757272,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_path": "runs/h75_gravel_p4/assets/S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "user_speed_m_s": 2.3,
+    "seed": 102,
+    "task": "B",
+    "lane_start": 4,
+    "lane_count": 3,
+    "alphas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S2_map20261108_v2p3_seed102/evaluation",
+    "context_id": 1,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      1,
+      1
+    ],
+    "source_lanes": [
+      4,
+      5,
+      6,
+      6,
+      6
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      9.0,
+      0.18804347826086557,
+      0.500261014475157,
+      0.2534332084893883
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 10.78658020295905,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.13333333333333333,
+        "predicted_cost": 7.542820984278863,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 4.729064060366703,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.43333333333333335,
+        "predicted_cost": 4.060692916567679,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.4666666666666666,
+        "predicted_cost": 4.1775568360554125,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 5.115036694562665,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.10210970504830612,
+        "predicted_cost": 6.129312979059884,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.30210970504830614,
+        "predicted_cost": 3.55272043105153,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.5021097050483061,
+        "predicted_cost": 1.352017733816818,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.7063291151449184,
+        "predicted_cost": 1.013039769578281,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_path": "runs/h75_gravel_p4/assets/S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "user_speed_m_s": 2.3,
+    "seed": 103,
+    "task": "C",
+    "lane_start": 7,
+    "lane_count": 4,
+    "alphas": [
+      0.0,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha05",
+      "alpha075",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S2_map20261108_v2p3_seed103/evaluation",
+    "context_id": 2,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.75,
+      0.75
+    ],
+    "source_lanes": [
+      7,
+      8,
+      10,
+      9,
+      9
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      9.0,
+      0.18804347826086557,
+      0.500261014475157,
+      0.2534332084893883
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.16666666666666666,
+        "predicted_cost": 10.596563770366496,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.3333333333333333,
+        "predicted_cost": 8.44859725597646,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 5.875503050893012,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 4.977473826799425,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 6.289489590952031,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.20421941009661224,
+        "predicted_cost": 6.842835601864393,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.30632911514491834,
+        "predicted_cost": 9.86294502526933,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.10210970504830612,
+        "predicted_cost": 6.773310891648904,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.5021097050483061,
+        "predicted_cost": 2.4028414938763003,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.4042194100966122,
+        "predicted_cost": 1.933062963114608,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_path": "runs/h75_gravel_p4/assets/S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "user_speed_m_s": 2.3,
+    "seed": 104,
+    "task": "A",
+    "lane_start": 11,
+    "lane_count": 4,
+    "alphas": [
+      0.0,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha05",
+      "alpha075",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S2_map20261108_v2p3_seed104/evaluation",
+    "context_id": 3,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.75,
+      0.75
+    ],
+    "source_lanes": [
+      11,
+      12,
+      14,
+      13,
+      13
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      9.0,
+      0.18804347826086557,
+      0.500261014475157,
+      0.2534332084893883
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.10000000000000002,
+        "predicted_cost": 13.940357309538745,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.26666666666666666,
+        "predicted_cost": 11.662495561455726,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.26666666666666666,
+        "predicted_cost": 8.346867065069434,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 7.066210023355176,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.16666666666666666,
+        "predicted_cost": 9.712507433863076,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.10210970504830612,
+        "predicted_cost": 10.76923001330118,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.20421941009661224,
+        "predicted_cost": 15.963752817733388,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.10210970504830612,
+        "predicted_cost": 11.67639156175535,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.5021097050483061,
+        "predicted_cost": 4.0805050125971505,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.09789029495169389,
+        "predicted_cost": 3.3329693861757272,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_path": "runs/h75_gravel_p4/assets/S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "user_speed_m_s": 2.3,
+    "seed": 105,
+    "task": "B",
+    "lane_start": 15,
+    "lane_count": 3,
+    "alphas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S2_map20261108_v2p3_seed105/evaluation",
+    "context_id": 4,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      1,
+      1
+    ],
+    "source_lanes": [
+      15,
+      16,
+      17,
+      17,
+      17
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      9.0,
+      0.18804347826086557,
+      0.500261014475157,
+      0.2534332084893883
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 10.78658020295905,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.13333333333333333,
+        "predicted_cost": 7.542820984278863,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 4.729064060366703,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.43333333333333335,
+        "predicted_cost": 4.060692916567679,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.4666666666666666,
+        "predicted_cost": 4.1775568360554125,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 5.115036694562665,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.10210970504830612,
+        "predicted_cost": 6.129312979059884,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.30210970504830614,
+        "predicted_cost": 3.55272043105153,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.5021097050483061,
+        "predicted_cost": 1.352017733816818,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.7063291151449184,
+        "predicted_cost": 1.013039769578281,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_path": "runs/h75_gravel_p4/assets/S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "user_speed_m_s": 2.6,
+    "seed": 101,
+    "task": "C",
+    "lane_start": 18,
+    "lane_count": 4,
+    "alphas": [
+      0.0,
+      0.25,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha025",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S2_map20261108_v2p6_seed101/evaluation",
+    "context_id": 5,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.25,
+      0.25
+    ],
+    "source_lanes": [
+      18,
+      20,
+      21,
+      19,
+      19
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      9.0,
+      0.16634615384615029,
+      0.500261014475157,
+      0.2534332084893883
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.26666666666666666,
+        "predicted_cost": 8.720513794491072,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.5,
+        "predicted_cost": 6.788372862383674,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 7.860860912161367,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 5.136402763452467,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 4.916643652914714,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.09702983025246764,
+        "predicted_cost": 4.4553578677708385,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.4970298302524676,
+        "predicted_cost": 6.179419333447643,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.4,
+        "predicted_cost": 7.274091489929353,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.20594033949506474,
+        "predicted_cost": 1.8940202749865402,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 2.0426556953180888,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_path": "runs/h75_gravel_p4/assets/S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "user_speed_m_s": 2.6,
+    "seed": 102,
+    "task": "A",
+    "lane_start": 22,
+    "lane_count": 4,
+    "alphas": [
+      0.0,
+      0.25,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha025",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S2_map20261108_v2p6_seed102/evaluation",
+    "context_id": 6,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.25,
+      0.25
+    ],
+    "source_lanes": [
+      22,
+      24,
+      25,
+      23,
+      23
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      9.0,
+      0.16634615384615029,
+      0.500261014475157,
+      0.2534332084893883
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 10.933274505669798,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 8.516460225230206,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.20000000000000004,
+        "predicted_cost": 9.53770305708735,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.06666666666666667,
+        "predicted_cost": 6.583359656118803,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 6.446317697923347,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.4,
+        "predicted_cost": 6.49519770869842,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.4970298302524676,
+        "predicted_cost": 9.073452876838036,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.2,
+        "predicted_cost": 9.172597629964615,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 3.092923759306948,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 3.448161516290538,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_path": "runs/h75_gravel_p4/assets/S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "user_speed_m_s": 2.6,
+    "seed": 103,
+    "task": "B",
+    "lane_start": 26,
+    "lane_count": 3,
+    "alphas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S2_map20261108_v2p6_seed103/evaluation",
+    "context_id": 7,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      1,
+      1
+    ],
+    "source_lanes": [
+      26,
+      27,
+      28,
+      28,
+      28
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      9.0,
+      0.16634615384615029,
+      0.500261014475157,
+      0.2534332084893883
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 9.66529187172018,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 7.093952497870454,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 8.286069129853868,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.6333333333333334,
+        "predicted_cost": 4.868479895276818,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.6666666666666666,
+        "predicted_cost": 4.993971263507859,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 4.097953396198076,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 4.9695429362795895,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.2,
+        "predicted_cost": 7.000087671635101,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.8059403394950647,
+        "predicted_cost": 1.2492044061310026,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.8970298302524677,
+        "predicted_cost": 1.1800690356355872,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_path": "runs/h75_gravel_p4/assets/S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "user_speed_m_s": 2.6,
+    "seed": 104,
+    "task": "C",
+    "lane_start": 29,
+    "lane_count": 4,
+    "alphas": [
+      0.0,
+      0.25,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha025",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S2_map20261108_v2p6_seed104/evaluation",
+    "context_id": 8,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.25,
+      0.25
+    ],
+    "source_lanes": [
+      29,
+      31,
+      32,
+      30,
+      30
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      9.0,
+      0.16634615384615029,
+      0.500261014475157,
+      0.2534332084893883
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.26666666666666666,
+        "predicted_cost": 8.720513794491072,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.5,
+        "predicted_cost": 6.788372862383674,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 7.860860912161367,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 5.136402763452467,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 4.916643652914714,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.09702983025246764,
+        "predicted_cost": 4.4553578677708385,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.4970298302524676,
+        "predicted_cost": 6.179419333447643,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.4,
+        "predicted_cost": 7.274091489929353,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.20594033949506474,
+        "predicted_cost": 1.8940202749865402,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 2.0426556953180888,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_path": "runs/h75_gravel_p4/assets/S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "user_speed_m_s": 2.6,
+    "seed": 105,
+    "task": "A",
+    "lane_start": 33,
+    "lane_count": 4,
+    "alphas": [
+      0.0,
+      0.25,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha025",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S2_map20261108_v2p6_seed105/evaluation",
+    "context_id": 9,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.25,
+      0.25
+    ],
+    "source_lanes": [
+      33,
+      35,
+      36,
+      34,
+      34
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      9.0,
+      0.16634615384615029,
+      0.500261014475157,
+      0.2534332084893883
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 10.933274505669798,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 8.516460225230206,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.20000000000000004,
+        "predicted_cost": 9.53770305708735,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.06666666666666667,
+        "predicted_cost": 6.583359656118803,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 6.446317697923347,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.4,
+        "predicted_cost": 6.49519770869842,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.4970298302524676,
+        "predicted_cost": 9.073452876838036,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.2,
+        "predicted_cost": 9.172597629964615,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 3.092923759306948,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 3.448161516290538,
+        "neighbor_terrains": [
+          "S2",
+          "S1"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_path": "runs/h75_gravel_p4/assets/S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "user_speed_m_s": 2.3,
+    "seed": 101,
+    "task": "B",
+    "lane_start": 37,
+    "lane_count": 3,
+    "alphas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S6_map20261108_v2p3_seed101/evaluation",
+    "context_id": 10,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      1,
+      1
+    ],
+    "source_lanes": [
+      37,
+      38,
+      39,
+      39,
+      39
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      6.0,
+      0.3086956521739065,
+      0.7316696751827879,
+      0.4394506866416979
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 10.78658020295905,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.13333333333333333,
+        "predicted_cost": 7.542820984278863,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 4.729064060366703,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.43333333333333335,
+        "predicted_cost": 4.060692916567679,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.4666666666666666,
+        "predicted_cost": 4.1775568360554125,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 3.9402556869546466,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.2936883218948637,
+        "predicted_cost": 1.9725558747212595,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.5873766437897274,
+        "predicted_cost": 2.7370538418391193,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.7873766437897275,
+        "predicted_cost": 1.0276162557753412,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 1.0,
+        "predicted_cost": 0.5182303016145826,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_path": "runs/h75_gravel_p4/assets/S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "user_speed_m_s": 2.3,
+    "seed": 102,
+    "task": "C",
+    "lane_start": 40,
+    "lane_count": 4,
+    "alphas": [
+      0.0,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha05",
+      "alpha075",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S6_map20261108_v2p3_seed102/evaluation",
+    "context_id": 11,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.75,
+      1
+    ],
+    "source_lanes": [
+      40,
+      41,
+      43,
+      42,
+      43
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      6.0,
+      0.3086956521739065,
+      0.7316696751827879,
+      0.4394506866416979
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.16666666666666666,
+        "predicted_cost": 10.596563770366496,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.3333333333333333,
+        "predicted_cost": 8.44859725597646,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 5.875503050893012,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 4.977473826799425,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 6.289489590952031,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.3063116781051364,
+        "predicted_cost": 5.002171641259686,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.6000000000000001,
+        "predicted_cost": 2.5195380678770887,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.38737664378972736,
+        "predicted_cost": 5.060652995744467,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.7873766437897275,
+        "predicted_cost": 1.6865753772284164,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.7873766437897275,
+        "predicted_cost": 0.8536156820109431,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_path": "runs/h75_gravel_p4/assets/S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "user_speed_m_s": 2.3,
+    "seed": 103,
+    "task": "A",
+    "lane_start": 44,
+    "lane_count": 4,
+    "alphas": [
+      0.0,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha05",
+      "alpha075",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S6_map20261108_v2p3_seed103/evaluation",
+    "context_id": 12,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.75,
+      0.75
+    ],
+    "source_lanes": [
+      44,
+      45,
+      47,
+      46,
+      46
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      6.0,
+      0.3086956521739065,
+      0.7316696751827879,
+      0.4394506866416979
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.10000000000000002,
+        "predicted_cost": 13.940357309538745,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.26666666666666666,
+        "predicted_cost": 11.662495561455726,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.26666666666666666,
+        "predicted_cost": 8.346867065069434,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 7.066210023355176,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.16666666666666666,
+        "predicted_cost": 9.712507433863076,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.20000000000000004,
+        "predicted_cost": 7.737030542550644,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.4000000000000001,
+        "predicted_cost": 3.9052049176054133,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.38737664378972736,
+        "predicted_cost": 8.66833921300064,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.7873766437897275,
+        "predicted_cost": 2.8112225343948474,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.3747532875794548,
+        "predicted_cost": 1.42408525193599,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_path": "runs/h75_gravel_p4/assets/S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "user_speed_m_s": 2.3,
+    "seed": 104,
+    "task": "B",
+    "lane_start": 48,
+    "lane_count": 3,
+    "alphas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S6_map20261108_v2p3_seed104/evaluation",
+    "context_id": 13,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      1,
+      1
+    ],
+    "source_lanes": [
+      48,
+      49,
+      50,
+      50,
+      50
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      6.0,
+      0.3086956521739065,
+      0.7316696751827879,
+      0.4394506866416979
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 10.78658020295905,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.13333333333333333,
+        "predicted_cost": 7.542820984278863,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 4.729064060366703,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.43333333333333335,
+        "predicted_cost": 4.060692916567679,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.4666666666666666,
+        "predicted_cost": 4.1775568360554125,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 3.9402556869546466,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.2936883218948637,
+        "predicted_cost": 1.9725558747212595,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.5873766437897274,
+        "predicted_cost": 2.7370538418391193,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.7873766437897275,
+        "predicted_cost": 1.0276162557753412,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 1.0,
+        "predicted_cost": 0.5182303016145826,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_path": "runs/h75_gravel_p4/assets/S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "user_speed_m_s": 2.3,
+    "seed": 105,
+    "task": "C",
+    "lane_start": 51,
+    "lane_count": 4,
+    "alphas": [
+      0.0,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha05",
+      "alpha075",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S6_map20261108_v2p3_seed105/evaluation",
+    "context_id": 14,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.75,
+      1
+    ],
+    "source_lanes": [
+      51,
+      52,
+      54,
+      53,
+      54
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      6.0,
+      0.3086956521739065,
+      0.7316696751827879,
+      0.4394506866416979
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.16666666666666666,
+        "predicted_cost": 10.596563770366496,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.3333333333333333,
+        "predicted_cost": 8.44859725597646,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 5.875503050893012,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 4.977473826799425,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 6.289489590952031,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.3063116781051364,
+        "predicted_cost": 5.002171641259686,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.6000000000000001,
+        "predicted_cost": 2.5195380678770887,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.38737664378972736,
+        "predicted_cost": 5.060652995744467,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.7873766437897275,
+        "predicted_cost": 1.6865753772284164,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.7873766437897275,
+        "predicted_cost": 0.8536156820109431,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_path": "runs/h75_gravel_p4/assets/S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "user_speed_m_s": 2.6,
+    "seed": 101,
+    "task": "A",
+    "lane_start": 55,
+    "lane_count": 4,
+    "alphas": [
+      0.0,
+      0.25,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha025",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S6_map20261108_v2p6_seed101/evaluation",
+    "context_id": 15,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.25,
+      0
+    ],
+    "source_lanes": [
+      55,
+      57,
+      58,
+      56,
+      55
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      6.0,
+      0.2730769230769172,
+      0.7316696751827879,
+      0.4394506866416979
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 10.933274505669798,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 8.516460225230206,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.20000000000000004,
+        "predicted_cost": 9.53770305708735,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.06666666666666667,
+        "predicted_cost": 6.583359656118803,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 6.446317697923347,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.685785628471631,
+        "predicted_cost": 4.964475086430794,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.6,
+        "predicted_cost": 3.95905711523422,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.29526187615721033,
+        "predicted_cost": 6.305487781139273,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 2.8648188100362093,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 2.4548009923792606,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_path": "runs/h75_gravel_p4/assets/S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "user_speed_m_s": 2.6,
+    "seed": 102,
+    "task": "B",
+    "lane_start": 59,
+    "lane_count": 3,
+    "alphas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S6_map20261108_v2p6_seed102/evaluation",
+    "context_id": 16,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      1,
+      1
+    ],
+    "source_lanes": [
+      59,
+      60,
+      61,
+      61,
+      61
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      6.0,
+      0.2730769230769172,
+      0.7316696751827879,
+      0.4394506866416979
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 9.66529187172018,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 7.093952497870454,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 8.286069129853868,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.6333333333333334,
+        "predicted_cost": 4.868479895276818,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.6666666666666666,
+        "predicted_cost": 4.993971263507859,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 3.508020953964125,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 2.3919957069018825,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.5810475046288414,
+        "predicted_cost": 3.4498862154467287,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.7905237523144207,
+        "predicted_cost": 1.1709432479423256,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 1.0,
+        "predicted_cost": 0.886735286157105,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_path": "runs/h75_gravel_p4/assets/S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "user_speed_m_s": 2.6,
+    "seed": 103,
+    "task": "C",
+    "lane_start": 62,
+    "lane_count": 4,
+    "alphas": [
+      0.0,
+      0.25,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha025",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S6_map20261108_v2p6_seed103/evaluation",
+    "context_id": 17,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.25,
+      0.25
+    ],
+    "source_lanes": [
+      62,
+      64,
+      65,
+      63,
+      63
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      6.0,
+      0.2730769230769172,
+      0.7316696751827879,
+      0.4394506866416979
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.26666666666666666,
+        "predicted_cost": 8.720513794491072,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.5,
+        "predicted_cost": 6.788372862383674,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 7.860860912161367,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 5.136402763452467,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 4.916643652914714,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.5810475046288414,
+        "predicted_cost": 3.5271614618809792,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.7905237523144207,
+        "predicted_cost": 2.681396479016161,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.685785628471631,
+        "predicted_cost": 4.357651742285773,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.1905237523144207,
+        "predicted_cost": 1.7588295537024474,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 1.4693091353631504,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_path": "runs/h75_gravel_p4/assets/S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "user_speed_m_s": 2.6,
+    "seed": 104,
+    "task": "A",
+    "lane_start": 66,
+    "lane_count": 4,
+    "alphas": [
+      0.0,
+      0.25,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha025",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S6_map20261108_v2p6_seed104/evaluation",
+    "context_id": 18,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.25,
+      0
+    ],
+    "source_lanes": [
+      66,
+      68,
+      69,
+      67,
+      66
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      6.0,
+      0.2730769230769172,
+      0.7316696751827879,
+      0.4394506866416979
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 10.933274505669798,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 8.516460225230206,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.20000000000000004,
+        "predicted_cost": 9.53770305708735,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.06666666666666667,
+        "predicted_cost": 6.583359656118803,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 6.446317697923347,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.685785628471631,
+        "predicted_cost": 4.964475086430794,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.6,
+        "predicted_cost": 3.95905711523422,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.29526187615721033,
+        "predicted_cost": 6.305487781139273,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 2.8648188100362093,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 2.4548009923792606,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_path": "runs/h75_gravel_p4/assets/S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "user_speed_m_s": 2.6,
+    "seed": 105,
+    "task": "B",
+    "lane_start": 70,
+    "lane_count": 3,
+    "alphas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S6_map20261108_v2p6_seed105/evaluation",
+    "context_id": 19,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      1,
+      1
+    ],
+    "source_lanes": [
+      70,
+      71,
+      72,
+      72,
+      72
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      6.0,
+      0.2730769230769172,
+      0.7316696751827879,
+      0.4394506866416979
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 9.66529187172018,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 7.093952497870454,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 8.286069129853868,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.6333333333333334,
+        "predicted_cost": 4.868479895276818,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.6666666666666666,
+        "predicted_cost": 4.993971263507859,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 3.508020953964125,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 2.3919957069018825,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.5810475046288414,
+        "predicted_cost": 3.4498862154467287,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.7905237523144207,
+        "predicted_cost": 1.1709432479423256,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 1.0,
+        "predicted_cost": 0.886735286157105,
+        "neighbor_terrains": [
+          "S1",
+          "S4"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_path": "runs/h75_gravel_p4/assets/S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "user_speed_m_s": 2.3,
+    "seed": 101,
+    "task": "C",
+    "lane_start": 73,
+    "lane_count": 4,
+    "alphas": [
+      0.0,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha05",
+      "alpha075",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S2_map20261109_v2p3_seed101/evaluation",
+    "context_id": 20,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.75,
+      0.75
+    ],
+    "source_lanes": [
+      73,
+      74,
+      76,
+      75,
+      75
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      7.0,
+      0.2206521739130388,
+      0.6207287064127507,
+      0.16604244694132334
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.16666666666666666,
+        "predicted_cost": 10.596563770366496,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.3333333333333333,
+        "predicted_cost": 8.44859725597646,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 5.875503050893012,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 4.977473826799425,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 6.289489590952031,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.23955970463451967,
+        "predicted_cost": 6.210518408891525,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.3593395569517795,
+        "predicted_cost": 8.685698032208137,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.11977985231725984,
+        "predicted_cost": 7.045454479685129,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.5197798523172599,
+        "predicted_cost": 2.4627633490423424,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.43955970463451965,
+        "predicted_cost": 1.779681116072122,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_path": "runs/h75_gravel_p4/assets/S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "user_speed_m_s": 2.3,
+    "seed": 102,
+    "task": "A",
+    "lane_start": 77,
+    "lane_count": 4,
+    "alphas": [
+      0.0,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha05",
+      "alpha075",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S2_map20261109_v2p3_seed102/evaluation",
+    "context_id": 21,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.75,
+      0.75
+    ],
+    "source_lanes": [
+      77,
+      78,
+      80,
+      79,
+      79
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      7.0,
+      0.2206521739130388,
+      0.6207287064127507,
+      0.16604244694132334
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.10000000000000002,
+        "predicted_cost": 13.940357309538745,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.26666666666666666,
+        "predicted_cost": 11.662495561455726,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.26666666666666666,
+        "predicted_cost": 8.346867065069434,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 7.066210023355176,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.16666666666666666,
+        "predicted_cost": 9.712507433863076,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.11977985231725984,
+        "predicted_cost": 9.683537596665957,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.23955970463451967,
+        "predicted_cost": 14.047338340737973,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.11977985231725984,
+        "predicted_cost": 12.162556720988604,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.5197798523172599,
+        "predicted_cost": 4.187206731293332,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.08022014768274019,
+        "predicted_cost": 3.061631426148244,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_path": "runs/h75_gravel_p4/assets/S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "user_speed_m_s": 2.3,
+    "seed": 103,
+    "task": "B",
+    "lane_start": 81,
+    "lane_count": 3,
+    "alphas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S2_map20261109_v2p3_seed103/evaluation",
+    "context_id": 22,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      1,
+      1
+    ],
+    "source_lanes": [
+      81,
+      82,
+      83,
+      83,
+      83
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      7.0,
+      0.2206521739130388,
+      0.6207287064127507,
+      0.16604244694132334
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 10.78658020295905,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.13333333333333333,
+        "predicted_cost": 7.542820984278863,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 4.729064060366703,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.43333333333333335,
+        "predicted_cost": 4.060692916567679,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.4666666666666666,
+        "predicted_cost": 4.1775568360554125,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 4.776915232390143,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.11977985231725984,
+        "predicted_cost": 5.449930364192247,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.31977985231725986,
+        "predicted_cost": 3.6701752661310465,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.5197798523172599,
+        "predicted_cost": 1.3783911905519919,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.7593395569517795,
+        "predicted_cost": 0.9428778964594416,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_path": "runs/h75_gravel_p4/assets/S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "user_speed_m_s": 2.3,
+    "seed": 104,
+    "task": "C",
+    "lane_start": 84,
+    "lane_count": 4,
+    "alphas": [
+      0.0,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha05",
+      "alpha075",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S2_map20261109_v2p3_seed104/evaluation",
+    "context_id": 23,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.75,
+      0.75
+    ],
+    "source_lanes": [
+      84,
+      85,
+      87,
+      86,
+      86
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      7.0,
+      0.2206521739130388,
+      0.6207287064127507,
+      0.16604244694132334
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.16666666666666666,
+        "predicted_cost": 10.596563770366496,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.3333333333333333,
+        "predicted_cost": 8.44859725597646,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 5.875503050893012,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 4.977473826799425,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 6.289489590952031,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.23955970463451967,
+        "predicted_cost": 6.210518408891525,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.3593395569517795,
+        "predicted_cost": 8.685698032208137,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.11977985231725984,
+        "predicted_cost": 7.045454479685129,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.5197798523172599,
+        "predicted_cost": 2.4627633490423424,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.43955970463451965,
+        "predicted_cost": 1.779681116072122,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_path": "runs/h75_gravel_p4/assets/S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "user_speed_m_s": 2.3,
+    "seed": 105,
+    "task": "A",
+    "lane_start": 88,
+    "lane_count": 4,
+    "alphas": [
+      0.0,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha05",
+      "alpha075",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S2_map20261109_v2p3_seed105/evaluation",
+    "context_id": 24,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.75,
+      0.75
+    ],
+    "source_lanes": [
+      88,
+      89,
+      91,
+      90,
+      90
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      7.0,
+      0.2206521739130388,
+      0.6207287064127507,
+      0.16604244694132334
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.10000000000000002,
+        "predicted_cost": 13.940357309538745,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.26666666666666666,
+        "predicted_cost": 11.662495561455726,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.26666666666666666,
+        "predicted_cost": 8.346867065069434,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 7.066210023355176,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.16666666666666666,
+        "predicted_cost": 9.712507433863076,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.11977985231725984,
+        "predicted_cost": 9.683537596665957,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.23955970463451967,
+        "predicted_cost": 14.047338340737973,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.11977985231725984,
+        "predicted_cost": 12.162556720988604,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.5197798523172599,
+        "predicted_cost": 4.187206731293332,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.08022014768274019,
+        "predicted_cost": 3.061631426148244,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_path": "runs/h75_gravel_p4/assets/S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "user_speed_m_s": 2.6,
+    "seed": 101,
+    "task": "B",
+    "lane_start": 92,
+    "lane_count": 3,
+    "alphas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S2_map20261109_v2p6_seed101/evaluation",
+    "context_id": 25,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      1,
+      1
+    ],
+    "source_lanes": [
+      92,
+      93,
+      94,
+      94,
+      94
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      7.0,
+      0.19519230769230353,
+      0.6207287064127507,
+      0.16604244694132334
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 9.66529187172018,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 7.093952497870454,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 8.286069129853868,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.6333333333333334,
+        "predicted_cost": 4.868479895276818,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.6666666666666666,
+        "predicted_cost": 4.993971263507859,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 4.231212873894818,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 4.606597066874186,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.2,
+        "predicted_cost": 6.730230080531784,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.7637637179353722,
+        "predicted_cost": 1.2863577893782128,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.918118141032314,
+        "predicted_cost": 1.1276618743593783,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_path": "runs/h75_gravel_p4/assets/S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "user_speed_m_s": 2.6,
+    "seed": 102,
+    "task": "C",
+    "lane_start": 95,
+    "lane_count": 4,
+    "alphas": [
+      0.0,
+      0.25,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha025",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S2_map20261109_v2p6_seed102/evaluation",
+    "context_id": 26,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.25,
+      0.25
+    ],
+    "source_lanes": [
+      95,
+      97,
+      98,
+      96,
+      96
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      7.0,
+      0.19519230769230353,
+      0.6207287064127507,
+      0.16604244694132334
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.26666666666666666,
+        "predicted_cost": 8.720513794491072,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.5,
+        "predicted_cost": 6.788372862383674,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 7.860860912161367,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 5.136402763452467,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 4.916643652914714,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.11811814103231388,
+        "predicted_cost": 4.707915563036218,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.5181181410323139,
+        "predicted_cost": 5.771757095658849,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.4,
+        "predicted_cost": 7.32186540160854,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.16376371793537225,
+        "predicted_cost": 1.9711286211495638,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 1.9373324710983726,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_path": "runs/h75_gravel_p4/assets/S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "user_speed_m_s": 2.6,
+    "seed": 103,
+    "task": "A",
+    "lane_start": 99,
+    "lane_count": 4,
+    "alphas": [
+      0.0,
+      0.25,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha025",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S2_map20261109_v2p6_seed103/evaluation",
+    "context_id": 27,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.25,
+      0.25
+    ],
+    "source_lanes": [
+      99,
+      101,
+      102,
+      100,
+      100
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      7.0,
+      0.19519230769230353,
+      0.6207287064127507,
+      0.16604244694132334
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 10.933274505669798,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 8.516460225230206,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.20000000000000004,
+        "predicted_cost": 9.53770305708735,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.06666666666666667,
+        "predicted_cost": 6.583359656118803,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 6.446317697923347,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.4,
+        "predicted_cost": 6.930046735030634,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.5181181410323139,
+        "predicted_cost": 8.556224588602788,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.2,
+        "predicted_cost": 9.538619618690305,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 3.2280647779983735,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 3.2646873322316536,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_path": "runs/h75_gravel_p4/assets/S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "user_speed_m_s": 2.6,
+    "seed": 104,
+    "task": "B",
+    "lane_start": 103,
+    "lane_count": 3,
+    "alphas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S2_map20261109_v2p6_seed104/evaluation",
+    "context_id": 28,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      1,
+      1
+    ],
+    "source_lanes": [
+      103,
+      104,
+      105,
+      105,
+      105
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      7.0,
+      0.19519230769230353,
+      0.6207287064127507,
+      0.16604244694132334
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 9.66529187172018,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 7.093952497870454,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 8.286069129853868,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.6333333333333334,
+        "predicted_cost": 4.868479895276818,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.6666666666666666,
+        "predicted_cost": 4.993971263507859,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 4.231212873894818,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 4.606597066874186,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.2,
+        "predicted_cost": 6.730230080531784,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.7637637179353722,
+        "predicted_cost": 1.2863577893782128,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.918118141032314,
+        "predicted_cost": 1.1276618743593783,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_path": "runs/h75_gravel_p4/assets/S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "user_speed_m_s": 2.6,
+    "seed": 105,
+    "task": "C",
+    "lane_start": 106,
+    "lane_count": 4,
+    "alphas": [
+      0.0,
+      0.25,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha025",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S2_map20261109_v2p6_seed105/evaluation",
+    "context_id": 29,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.25,
+      0.25
+    ],
+    "source_lanes": [
+      106,
+      108,
+      109,
+      107,
+      107
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      7.0,
+      0.19519230769230353,
+      0.6207287064127507,
+      0.16604244694132334
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.26666666666666666,
+        "predicted_cost": 8.720513794491072,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.5,
+        "predicted_cost": 6.788372862383674,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 7.860860912161367,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 5.136402763452467,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 4.916643652914714,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.11811814103231388,
+        "predicted_cost": 4.707915563036218,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.5181181410323139,
+        "predicted_cost": 5.771757095658849,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.4,
+        "predicted_cost": 7.32186540160854,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.16376371793537225,
+        "predicted_cost": 1.9711286211495638,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 1.9373324710983726,
+        "neighbor_terrains": [
+          "S1",
+          "S2"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_path": "runs/h75_gravel_p4/assets/S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "user_speed_m_s": 2.3,
+    "seed": 101,
+    "task": "A",
+    "lane_start": 110,
+    "lane_count": 5,
+    "alphas": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha025",
+      "alpha05",
+      "alpha075",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S6_map20261109_v2p3_seed101/evaluation",
+    "context_id": 30,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.75,
+      0.25
+    ],
+    "source_lanes": [
+      110,
+      112,
+      114,
+      113,
+      111
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      13.0,
+      0.09456521739130234,
+      1.0696792573907137,
+      0.44569288389513106
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.10000000000000002,
+        "predicted_cost": 13.940357309538745,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.26666666666666666,
+        "predicted_cost": 11.662495561455726,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.26666666666666666,
+        "predicted_cost": 8.346867065069434,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 7.066210023355176,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.16666666666666666,
+        "predicted_cost": 9.712507433863076,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.1718086700346215,
+        "predicted_cost": 10.220418253552312,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.543617340069243,
+        "predicted_cost": 5.640857360478652,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.256382659930757,
+        "predicted_cost": 5.122723805431942,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.343617340069243,
+        "predicted_cost": 8.183778885527305,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 8.645195496614395,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_path": "runs/h75_gravel_p4/assets/S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "user_speed_m_s": 2.3,
+    "seed": 102,
+    "task": "B",
+    "lane_start": 115,
+    "lane_count": 3,
+    "alphas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S6_map20261109_v2p3_seed102/evaluation",
+    "context_id": 31,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      1,
+      0.5
+    ],
+    "source_lanes": [
+      115,
+      116,
+      117,
+      117,
+      116
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      13.0,
+      0.09456521739130234,
+      1.0696792573907137,
+      0.44569288389513106
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 10.78658020295905,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.13333333333333333,
+        "predicted_cost": 7.542820984278863,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 4.729064060366703,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.43333333333333335,
+        "predicted_cost": 4.060692916567679,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.4666666666666666,
+        "predicted_cost": 4.1775568360554125,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 5.114707115132714,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.028191329965378514,
+        "predicted_cost": 2.7367826008955927,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.4281913299653785,
+        "predicted_cost": 1.9838062536375252,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.3718086700346215,
+        "predicted_cost": 2.5595104154746626,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.2,
+        "predicted_cost": 2.5109509464537356,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_path": "runs/h75_gravel_p4/assets/S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "user_speed_m_s": 2.3,
+    "seed": 103,
+    "task": "C",
+    "lane_start": 118,
+    "lane_count": 5,
+    "alphas": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha025",
+      "alpha05",
+      "alpha075",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S6_map20261109_v2p3_seed103/evaluation",
+    "context_id": 32,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.75,
+      0.25
+    ],
+    "source_lanes": [
+      118,
+      120,
+      122,
+      121,
+      119
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      13.0,
+      0.09456521739130234,
+      1.0696792573907137,
+      0.44569288389513106
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.16666666666666666,
+        "predicted_cost": 10.596563770366496,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.3333333333333333,
+        "predicted_cost": 8.44859725597646,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 5.875503050893012,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 4.977473826799425,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 6.289489590952031,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.343617340069243,
+        "predicted_cost": 6.6333025695101355,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.543617340069243,
+        "predicted_cost": 3.602888646076256,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.4281913299653785,
+        "predicted_cost": 3.1093968218497627,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.343617340069243,
+        "predicted_cost": 4.769808949898455,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 4.9762356384243445,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_path": "runs/h75_gravel_p4/assets/S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "user_speed_m_s": 2.3,
+    "seed": 104,
+    "task": "A",
+    "lane_start": 123,
+    "lane_count": 5,
+    "alphas": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha025",
+      "alpha05",
+      "alpha075",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S6_map20261109_v2p3_seed104/evaluation",
+    "context_id": 33,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.75,
+      0.25
+    ],
+    "source_lanes": [
+      123,
+      125,
+      127,
+      126,
+      124
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      13.0,
+      0.09456521739130234,
+      1.0696792573907137,
+      0.44569288389513106
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.10000000000000002,
+        "predicted_cost": 13.940357309538745,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.26666666666666666,
+        "predicted_cost": 11.662495561455726,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.26666666666666666,
+        "predicted_cost": 8.346867065069434,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 7.066210023355176,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.16666666666666666,
+        "predicted_cost": 9.712507433863076,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.1718086700346215,
+        "predicted_cost": 10.220418253552312,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.543617340069243,
+        "predicted_cost": 5.640857360478652,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.256382659930757,
+        "predicted_cost": 5.122723805431942,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.343617340069243,
+        "predicted_cost": 8.183778885527305,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 8.645195496614395,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_path": "runs/h75_gravel_p4/assets/S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "user_speed_m_s": 2.3,
+    "seed": 105,
+    "task": "B",
+    "lane_start": 128,
+    "lane_count": 3,
+    "alphas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S6_map20261109_v2p3_seed105/evaluation",
+    "context_id": 34,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      1,
+      0.5
+    ],
+    "source_lanes": [
+      128,
+      129,
+      130,
+      130,
+      129
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      13.0,
+      0.09456521739130234,
+      1.0696792573907137,
+      0.44569288389513106
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 10.78658020295905,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.13333333333333333,
+        "predicted_cost": 7.542820984278863,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 4.729064060366703,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.43333333333333335,
+        "predicted_cost": 4.060692916567679,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.4666666666666666,
+        "predicted_cost": 4.1775568360554125,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 5.114707115132714,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.028191329965378514,
+        "predicted_cost": 2.7367826008955927,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.4281913299653785,
+        "predicted_cost": 1.9838062536375252,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.3718086700346215,
+        "predicted_cost": 2.5595104154746626,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.2,
+        "predicted_cost": 2.5109509464537356,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_path": "runs/h75_gravel_p4/assets/S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "user_speed_m_s": 2.6,
+    "seed": 101,
+    "task": "C",
+    "lane_start": 131,
+    "lane_count": 5,
+    "alphas": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha025",
+      "alpha05",
+      "alpha075",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S6_map20261109_v2p6_seed101/evaluation",
+    "context_id": 35,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.25,
+      0.75
+    ],
+    "source_lanes": [
+      131,
+      133,
+      135,
+      132,
+      134
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      13.0,
+      0.08365384615384437,
+      1.0696792573907137,
+      0.44569288389513106
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.26666666666666666,
+        "predicted_cost": 8.720513794491072,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.5,
+        "predicted_cost": 6.788372862383674,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 7.860860912161367,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 5.136402763452467,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 4.916643652914714,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.3453077949060442,
+        "predicted_cost": 8.81570197984502,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.5726538974530221,
+        "predicted_cost": 3.1602981446405445,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.5179616923590663,
+        "predicted_cost": 7.400183621492588,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.7179616923590663,
+        "predicted_cost": 4.730827385439568,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 2.5881105860850036,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_path": "runs/h75_gravel_p4/assets/S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "user_speed_m_s": 2.6,
+    "seed": 102,
+    "task": "A",
+    "lane_start": 136,
+    "lane_count": 4,
+    "alphas": [
+      0.0,
+      0.25,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha025",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S6_map20261109_v2p6_seed102/evaluation",
+    "context_id": 36,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.25,
+      0.25
+    ],
+    "source_lanes": [
+      136,
+      138,
+      139,
+      137,
+      137
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      13.0,
+      0.08365384615384437,
+      1.0696792573907137,
+      0.44569288389513106
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 10.933274505669798,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 8.516460225230206,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.20000000000000004,
+        "predicted_cost": 9.53770305708735,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.06666666666666667,
+        "predicted_cost": 6.583359656118803,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 6.446317697923347,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.5179616923590663,
+        "predicted_cost": 14.069693273888749,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.5453077949060442,
+        "predicted_cost": 4.316922133567061,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.3453077949060442,
+        "predicted_cost": 10.588391903365563,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.2,
+        "predicted_cost": 7.7259344927165206,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 4.319399507391024,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_path": "runs/h75_gravel_p4/assets/S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "user_speed_m_s": 2.6,
+    "seed": 103,
+    "task": "B",
+    "lane_start": 140,
+    "lane_count": 3,
+    "alphas": [
+      0.0,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S6_map20261109_v2p6_seed103/evaluation",
+    "context_id": 37,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      1,
+      1
+    ],
+    "source_lanes": [
+      140,
+      141,
+      142,
+      142,
+      142
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      13.0,
+      0.08365384615384437,
+      1.0696792573907137,
+      0.44569288389513106
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 9.66529187172018,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 7.093952497870454,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 8.286069129853868,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.6333333333333334,
+        "predicted_cost": 4.868479895276818,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.6666666666666666,
+        "predicted_cost": 4.993971263507859,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 6.299193245172787,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 3.173987632595034,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.2,
+        "predicted_cost": 5.903527204176869,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.6,
+        "predicted_cost": 2.955373784895687,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.6,
+        "predicted_cost": 1.5687762546527768,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_path": "runs/h75_gravel_p4/assets/S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "user_speed_m_s": 2.6,
+    "seed": 104,
+    "task": "C",
+    "lane_start": 143,
+    "lane_count": 5,
+    "alphas": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha025",
+      "alpha05",
+      "alpha075",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S6_map20261109_v2p6_seed104/evaluation",
+    "context_id": 38,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.25,
+      0.75
+    ],
+    "source_lanes": [
+      143,
+      145,
+      147,
+      144,
+      146
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      13.0,
+      0.08365384615384437,
+      1.0696792573907137,
+      0.44569288389513106
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.26666666666666666,
+        "predicted_cost": 8.720513794491072,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.5,
+        "predicted_cost": 6.788372862383674,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 7.860860912161367,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.3,
+        "predicted_cost": 5.136402763452467,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 4.916643652914714,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.3453077949060442,
+        "predicted_cost": 8.81570197984502,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.5726538974530221,
+        "predicted_cost": 3.1602981446405445,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.5179616923590663,
+        "predicted_cost": 7.400183621492588,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.7179616923590663,
+        "predicted_cost": 4.730827385439568,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 2.5881105860850036,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      }
+    ]
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_path": "runs/h75_gravel_p4/assets/S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "user_speed_m_s": 2.6,
+    "seed": 105,
+    "task": "A",
+    "lane_start": 148,
+    "lane_count": 4,
+    "alphas": [
+      0.0,
+      0.25,
+      0.5,
+      1.0
+    ],
+    "methods": [
+      "alpha0",
+      "alpha025",
+      "alpha05",
+      "alpha1"
+    ],
+    "output": "runs/h75_gravel_p4/evaluation/S6_map20261109_v2p6_seed105/evaluation",
+    "context_id": 39,
+    "method_names": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "selected_alphas": [
+      0.0,
+      0.5,
+      1.0,
+      0.25,
+      0.25
+    ],
+    "source_lanes": [
+      148,
+      150,
+      151,
+      149,
+      149
+    ],
+    "preview_features": [
+      0.01,
+      24.0625,
+      13.0,
+      0.08365384615384437,
+      1.0696792573907137,
+      0.44569288389513106
+    ],
+    "task_only_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 10.933274505669798,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.39999999999999997,
+        "predicted_cost": 8.516460225230206,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.20000000000000004,
+        "predicted_cost": 9.53770305708735,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.06666666666666667,
+        "predicted_cost": 6.583359656118803,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 6.446317697923347,
+        "neighbor_terrains": [
+          "S1",
+          "S2",
+          "S3",
+          "S4",
+          "S5",
+          "S6"
+        ]
+      }
+    ],
+    "task_phase_predictions": [
+      {
+        "alpha": 0,
+        "predicted_qualified_fraction": 0.5179616923590663,
+        "predicted_cost": 14.069693273888749,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.25,
+        "predicted_qualified_fraction": 0.5453077949060442,
+        "predicted_cost": 4.316922133567061,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.5,
+        "predicted_qualified_fraction": 0.3453077949060442,
+        "predicted_cost": 10.588391903365563,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 0.75,
+        "predicted_qualified_fraction": 0.2,
+        "predicted_cost": 7.7259344927165206,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      },
+      {
+        "alpha": 1,
+        "predicted_qualified_fraction": 0.0,
+        "predicted_cost": 4.319399507391024,
+        "neighbor_terrains": [
+          "S6",
+          "S3"
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,84 @@
+{
+  "stage": "P1",
+  "source_revision": "424dfed8856d25fbad31388aebd7427ce19865f1",
+  "role": "P1 DEV factor separation; fixed map seed, five frozen physical parameter groups; no selector/generalization claim",
+  "protocol_source": "learning/configs/isaac_h75_gravel_p1.json",
+  "runtime_sources": [
+    {
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p0/evaluation/batches/case0/evaluation",
+      "contract": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p0/evaluation/batches/case0/evaluation/contract.json",
+      "status": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p0/evaluation/batches/case0/evaluation/status.json",
+      "native_contacts": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p0/evaluation/batches/case0/evaluation/physics_contacts/index.json",
+      "contact_5ms": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p0/evaluation/batches/case0/evaluation/contact_5ms_summary.npz",
+      "contact_5ms_metadata": {
+        "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p0/evaluation/batches/case0/evaluation/physics_contacts",
+        "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p0/evaluation/batches/case0/evaluation",
+        "record_window_s": [
+          0.8,
+          5.0
+        ],
+        "physics_dt_s": 0.0002,
+        "bin_dt_s": 0.005,
+        "recorded_steps": 21001,
+        "lanes": 144,
+        "bins": 841,
+        "alive_filter": "alive_before_this_physics_step; post-failure samples excluded",
+        "boundary_bins": "partial first/last bins retain actual sample counts, never zero padded",
+        "torque_units": "N m; impulses N m s; means/min/max over finite alive observations",
+        "trail_units": "m; actual friction patch local-normal projected steering-axis trail; missing/singular samples remain NaN; reference_trail is a geometry reference only",
+        "load_units": "N from actual native normal buffers; not actuator power or task success",
+        "kernel": "existing contact_torque_time_batch/front_contact_torques; normal/friction own points, full vector steering-axis projection",
+        "elapsed_s": 63.58976516200346
+      },
+      "bundle": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_selected_local300_flat/bundle",
+      "upper_actor_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+      "lower_actor_sha256": "517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125",
+      "physics_dt_s": 0.0002,
+      "lower_dt_s": 0.005,
+      "policy_dt_s": 0.02
+    },
+    {
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p1/evaluation/batches/case12/evaluation",
+      "contract": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p1/evaluation/batches/case12/evaluation/contract.json",
+      "status": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p1/evaluation/batches/case12/evaluation/status.json",
+      "native_contacts": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p1/evaluation/batches/case12/evaluation/physics_contacts/index.json",
+      "contact_5ms": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p1/evaluation/batches/case12/evaluation/contact_5ms_summary.npz",
+      "contact_5ms_metadata": {
+        "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p1/evaluation/batches/case12/evaluation/physics_contacts",
+        "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p1/evaluation/batches/case12/evaluation",
+        "record_window_s": [
+          0.8,
+          5.0
+        ],
+        "physics_dt_s": 0.0002,
+        "bin_dt_s": 0.005,
+        "recorded_steps": 21001,
+        "lanes": 288,
+        "bins": 841,
+        "alive_filter": "alive_before_this_physics_step; post-failure samples excluded",
+        "boundary_bins": "partial first/last bins retain actual sample counts, never zero padded",
+        "torque_units": "N m; impulses N m s; means/min/max over finite alive observations",
+        "trail_units": "m; actual friction patch local-normal projected steering-axis trail; missing/singular samples remain NaN; reference_trail is a geometry reference only",
+        "load_units": "N from actual native normal buffers; not actuator power or task success",
+        "kernel": "existing contact_torque_time_batch/front_contact_torques; normal/friction own points, full vector steering-axis projection",
+        "elapsed_s": 144.5820216350112
+      },
+      "bundle": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_selected_local300_flat/bundle",
+      "upper_actor_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+      "lower_actor_sha256": "517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125",
+      "physics_dt_s": 0.0002,
+      "lower_dt_s": 0.005,
+      "policy_dt_s": 0.02
+    }
+  ],
+  "used_physical_parameter_ids": [
+    101,
+    102,
+    103,
+    104,
+    105
+  ],
+  "preserved_failures": true,
+  "optimizer_updates": 0,
+  "scope": "Source/data index. G0 coarse/fine tolerance failed;5mm adopted per plan, not independently converged. New phase-selection module stopped at P4 gate; no new training."
+}

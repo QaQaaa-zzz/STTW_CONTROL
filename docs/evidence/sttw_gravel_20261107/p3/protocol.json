@@ -1,0 +1,46 @@
+{
+  "role": "P3 initial75 DEV same-start entry/recovery preference cohorts; original P1 route",
+  "base_sweep_config": "learning/configs/isaac_h75_gravel_p1.json",
+  "terrain": "runs/h75_gravel_p1/assets/S6",
+  "source_bundle": "runs/h75_selected_local300_flat/bundle",
+  "output": "runs/h75_gravel_p3",
+  "entry_alphas": [
+    0,
+    0.5,
+    1
+  ],
+  "recovery_alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "speeds_m_s": [
+    2.6
+  ],
+  "seeds": [
+    101,
+    102,
+    103,
+    104,
+    105
+  ],
+  "seconds": 10,
+  "ramp_s": 0.1,
+  "confirmation_s": 0.02,
+  "rear_support_force_N": 0.1,
+  "wheel_bound_radius_m": 0.1,
+  "env_spacing": 0.0,
+  "prefix_acceptance": {
+    "position_max_m": 0.001,
+    "speed_max_m_s": 0.01,
+    "roll_max_rad": 0.0017453292519943296,
+    "observation_max": 0.001,
+    "executed_command_max_rad_s": 0.01
+  },
+  "max_physics_lane_steps": 3750000,
+  "optimizer_updates": 0,
+  "stop_rule": "Audit same-start prefixes; compare fixed diagonal versus recovery alternatives, stop expansion if no task benefit; no new PPO or automatic P4",
+  "selection_reason": "S6 matched clustering changes task rankings in P1; entry0 versus1 taskA differs, speed-priority tradeoff remains; not a new route"
+}

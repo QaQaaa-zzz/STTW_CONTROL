@@ -1,0 +1,3093 @@
+{
+  "source_evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p1/evaluation",
+  "source_metrics_sha256": "122298806de91c7088ad82d0bcdf0e78fccb169bfcde1175c94545b83e15b728",
+  "alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "neighbors": 2,
+  "distance_floor": 0.1,
+  "feature_scale": [
+    0.015,
+    23.90625,
+    6.0,
+    0.07136287625417909,
+    0.5137592649713997,
+    0.27715355805243447
+  ],
+  "feature_names": [
+    "cap_height_m",
+    "stone_density_m2",
+    "planned_centerline_episodes",
+    "median_planned_event_interval_s",
+    "planned_interval_cv",
+    "planned_centerline_coverage"
+  ],
+  "cells": [
+    {
+      "terrain": "S1",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 0,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.14347826086956217,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 4.754636627428835,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 0,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.14347826086956217,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 3.2418882053183014,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 0,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.14347826086956217,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 3.3398814056707393,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 0.25,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.14347826086956217,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 5.347068330197399,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 0.25,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.14347826086956217,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 2.3656225274644633,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 0.25,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.14347826086956217,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 3.341151311402972,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 0.5,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.14347826086956217,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 14.369682687641847,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 0.5,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.14347826086956217,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 4.203404790068602,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 0.5,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.14347826086956217,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 8.280950624164602,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 0.75,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.14347826086956217,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 4.671618519238592,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 0.75,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.14347826086956217,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 1.4981232200590273,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 0.75,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.14347826086956217,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 2.7348007009488216,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 1,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.14347826086956217,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 1.8297927270117533,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 1,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.14347826086956217,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 1.0,
+      "normalized_cost": 0.6243522080414392,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 1,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.14347826086956217,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 1.083347676722792,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 0,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.12692307692307422,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 8.61848195481117,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 0,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.12692307692307422,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 4.748633822058204,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 0,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.12692307692307422,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 5.688548568724241,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 0.25,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.12692307692307422,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 6.547926522744855,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 0.25,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.12692307692307422,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 3.1973479903687716,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 0.25,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.12692307692307422,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 4.18888295227444,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 0.5,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.12692307692307422,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 10.959812675487976,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 0.5,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.12692307692307422,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 5.682424903210584,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 0.5,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.12692307692307422,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 7.507362321645788,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 0.75,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.12692307692307422,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 3.7527913883353192,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 0.75,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.12692307692307422,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 1.43061723808322,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 0.75,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.12692307692307422,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 2.270525514132864,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 1,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.12692307692307422,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 2.552292327237782,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 1,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.12692307692307422,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 1.0,
+      "normalized_cost": 0.9241749363436345,
+      "n": 5
+    },
+    {
+      "terrain": "S1",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 1,
+      "preview_features": [
+        0.01,
+        12.03125,
+        6.0,
+        0.12692307692307422,
+        0.6011393466381197,
+        0.10611735330836454
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 1.5283826276702954,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 0,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 17.043073165168103,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 0,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 7.068924358736185,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 0,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 10.496779232819515,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 0.25,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 27.038053106114205,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 0.25,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 10.055231499329746,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 0.25,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 16.665850592541478,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 0.5,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 8.867010278256299,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 0.5,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 2.873989326894921,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 0.5,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 5.200686675098607,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 0.75,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 3.4639124704762714,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 0.75,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 1.1996145960645683,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 0.75,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 2.056573697472463,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 1,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 4.900938155485025,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 1,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 1.4184811086207012,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 1,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 2.8194039156198687,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 0,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 4.494405532836284,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 0,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 3.484810663457028,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 0,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 3.293309823411877,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 0.25,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 11.4532818509635,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 0.25,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 6.639500120944021,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 0.25,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 8.055121856325396,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 0.5,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 7.488486853834289,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 0.5,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 8.241734597766262,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 0.5,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 7.054278030751872,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 0.75,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 2.4711238322921085,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 0.75,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 1.0,
+      "normalized_cost": 1.0782572635449337,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 0.75,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 1.5392355879931696,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 1,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 4.29234809532925,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 1,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.8,
+      "normalized_cost": 1.421200628190831,
+      "n": 5
+    },
+    {
+      "terrain": "S2",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 1,
+      "preview_features": [
+        0.01,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.764000990313673,
+        0.20724094881398253
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 2.5272603976277788,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 0,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.08152173913043305,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 24.626212103945612,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 0,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.08152173913043305,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 10.350446551434038,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 0,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.08152173913043305,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 15.60026535838299,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 0.25,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.08152173913043305,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 17.14138567500371,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 0.25,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.08152173913043305,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 5.333962619651928,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 0.25,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.08152173913043305,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 9.981858766555652,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 0.5,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.08152173913043305,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 3.7715582391893405,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 0.5,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.08152173913043305,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 1.6060951494490745,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 0.5,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.08152173913043305,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 2.3364292469311416,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 0.75,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.08152173913043305,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 11.01250014230904,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 0.75,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.08152173913043305,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 3.1281938092945296,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 0.75,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.08152173913043305,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 6.316081395605356,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 1,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.08152173913043305,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 24.871241427283326,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 1,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.08152173913043305,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 6.551799190338313,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 1,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.08152173913043305,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 14.09831042482013,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 0,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.07211538461538308,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 18.948656421525076,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 0,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.07211538461538308,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 8.29628150119189,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 0,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.07211538461538308,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 11.81203691167611,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 0.25,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.07211538461538308,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 18.1586867244421,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 0.25,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.07211538461538308,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 9.020480646937123,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 0.25,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.07211538461538308,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 12.055264188090636,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 0.5,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.07211538461538308,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 11.748094435037524,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 0.5,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.07211538461538308,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 6.382219512458386,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 0.5,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.07211538461538308,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 8.113690681092544,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 0.75,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.07211538461538308,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 11.15724437866103,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 0.75,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.07211538461538308,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 5.129190606535783,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 0.75,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.07211538461538308,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 7.423133138140055,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 1,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.07211538461538308,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 9.21496848346398,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 1,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.07211538461538308,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 2.650202710453482,
+      "n": 5
+    },
+    {
+      "terrain": "S3",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 1,
+      "preview_features": [
+        0.01,
+        35.9375,
+        11.0,
+        0.07211538461538308,
+        0.8050858299328655,
+        0.29213483146067415
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 5.2956986667222115,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 0,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.1184782608695627,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 11.121265583529956,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 0,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.1184782608695627,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 4.732719650501081,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 0,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.1184782608695627,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 6.888435167695329,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 0.25,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.1184782608695627,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 2.269068034258629,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 0.25,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.1184782608695627,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 1.5265282950278949,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 0.25,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.1184782608695627,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 1.5872224824761574,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 0.5,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.1184782608695627,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 2.198809393445777,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 0.5,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.1184782608695627,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 0.8,
+      "normalized_cost": 1.0731300267421542,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 0.5,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.1184782608695627,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 1.4064596240292204,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 0.75,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.1184782608695627,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 1.0,
+      "normalized_cost": 0.7001609304657512,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 0.75,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.1184782608695627,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 1.0,
+      "normalized_cost": 0.49371422912484136,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 0.75,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.1184782608695627,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 1.0,
+      "normalized_cost": 0.49711450373693067,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 1,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.1184782608695627,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 0.8,
+      "normalized_cost": 0.9637136536112386,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 1,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.1184782608695627,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 1.0,
+      "normalized_cost": 0.3978097654391567,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 1,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.1184782608695627,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 1.0,
+      "normalized_cost": 0.5929301090569896,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 0,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.10480769230769008,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 1.0,
+      "normalized_cost": 0.9469831017963937,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 0,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.10480769230769008,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 2.143997175921404,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 0,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.10480769230769008,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 1.0,
+      "normalized_cost": 1.150768726395015,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 0.25,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.10480769230769008,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 1.1126579516362374,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 0.25,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.10480769230769008,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 1.5065303916521162,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 0.25,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.10480769230769008,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 1.0,
+      "normalized_cost": 1.0239516406750782,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 0.5,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.10480769230769008,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 1.1881703730254758,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 0.5,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.10480769230769008,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 1.0,
+      "normalized_cost": 0.9952640413365144,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 0.5,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.10480769230769008,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 1.0,
+      "normalized_cost": 0.8946213041120623,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 0.75,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.10480769230769008,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 1.8885144831992267,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 0.75,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.10480769230769008,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 1.0,
+      "normalized_cost": 0.8854379898551983,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 0.75,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.10480769230769008,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 1.1962322478823308,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 1,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.10480769230769008,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 2.347611632732812,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 1,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.10480769230769008,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 1.0,
+      "normalized_cost": 0.8455712982528982,
+      "n": 5
+    },
+    {
+      "terrain": "S4",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 1,
+      "preview_features": [
+        0.005,
+        24.0625,
+        7.0,
+        0.10480769230769008,
+        0.8253447468917752,
+        0.18476903870162298
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 1.4043592624162748,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 0,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 18.240321556468295,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 0,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 35.069904821803895,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 0,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 22.092068423143406,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 0.25,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 14.425612035665168,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 0.25,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 23.664958223999136,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 0.25,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 16.559308923097763,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 0.5,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 15.52971116392536,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 0.5,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 16.57198185948588,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 0.5,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 14.79226245931597,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 0.75,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 14.829441637470577,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 0.75,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 15.578313989435866,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 0.75,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 13.744184766469678,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 1,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 19.72662374409988,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 1,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 14.22499283562268,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 1,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.11739130434782359,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 15.66351096240729,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 0,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 19.294190228737314,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 0,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 33.33514728954256,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 0,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 22.037296731743794,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 0.25,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 11.701639306398944,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 0.25,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 19.951875667452587,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 0.25,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 13.655563817533201,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 0.5,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 15.436943703074636,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 0.5,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 22.587063074773262,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 0.5,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 16.308039631268013,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 0.75,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 13.048023638056753,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 0.75,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 18.07630643206767,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 0.75,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 14.08488846575296,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 1,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 16.726679765394913,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 1,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 22.72518545536702,
+      "n": 5
+    },
+    {
+      "terrain": "S5",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 1,
+      "preview_features": [
+        0.02,
+        24.0625,
+        9.0,
+        0.10384615384615163,
+        0.7502211106534775,
+        0.22846441947565543
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 16.58489665498501,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 0,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.08260869565217216,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 7.856634820691674,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 0,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.08260869565217216,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 4.255597629960796,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 0,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.08260869565217216,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 5.16195303448699,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 0.25,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.08260869565217216,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 3.7537861874952334,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 0.25,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.08260869565217216,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 2.3106227402000092,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 0.25,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.08260869565217216,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 2.556191459784745,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 0.5,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.08260869565217216,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 5.344430627957993,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 0.5,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.08260869565217216,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 2.0457832095595885,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 0.5,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.08260869565217216,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 3.2362296758185294,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 0.75,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.08260869565217216,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 7.719626440170826,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 0.75,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.08260869565217216,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 2.466197655427242,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 0.75,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.08260869565217216,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 4.516087896563301,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "A",
+      "speed_m_s": 2.3,
+      "alpha": 1,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.08260869565217216,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 5.982734895687231,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "B",
+      "speed_m_s": 2.3,
+      "alpha": 1,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.08260869565217216,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 1.8479059082701865,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "C",
+      "speed_m_s": 2.3,
+      "alpha": 1,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.08260869565217216,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 3.479434457085115,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 0,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.07307692307692151,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 13.296929794312552,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 0,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.07307692307692151,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 5.982880778150006,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 0,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.07307692307692151,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 8.341122004995396,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 0.25,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.07307692307692151,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 2.124568995195606,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 0.25,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.07307692307692151,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 2.2479801698681032,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 0.25,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.07307692307692151,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 1.7514527194032883,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 0.5,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.07307692307692151,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.4,
+      "normalized_cost": 10.404710302064206,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 0.5,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.07307692307692151,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 5.827708649578193,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 0.5,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.07307692307692151,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 7.28717350409792,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 0.75,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.07307692307692151,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.2,
+      "normalized_cost": 7.182460216168383,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 0.75,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.07307692307692151,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 2.6110698415741047,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 0.75,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.07307692307692151,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.8,
+      "normalized_cost": 4.304401626813421,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "A",
+      "speed_m_s": 2.6,
+      "alpha": 1,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.07307692307692151,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 3.544005883381343,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "B",
+      "speed_m_s": 2.6,
+      "alpha": 1,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.07307692307692151,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.6,
+      "normalized_cost": 1.3974925524392923,
+      "n": 5
+    },
+    {
+      "terrain": "S6",
+      "task": "C",
+      "speed_m_s": 2.6,
+      "alpha": 1,
+      "preview_features": [
+        0.01,
+        24.0625,
+        12.0,
+        0.07307692307692151,
+        1.1148986116095194,
+        0.383270911360799
+      ],
+      "qualified_fraction": 0.0,
+      "normalized_cost": 2.1592643080667133,
+      "n": 5
+    }
+  ],
+  "state_support": "Common saved warm start only. Remaining recovery state is shared at this decision; P3 recovery-stage selection was not adopted.",
+  "scope": "Task-only averages same P1 cells over terrain;Task+Phase KNN uses ideal geometry preview. No TEST labels, actual contact or physics seed enters selection."
+}

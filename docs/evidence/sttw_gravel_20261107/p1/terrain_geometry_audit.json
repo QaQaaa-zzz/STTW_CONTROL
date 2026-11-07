@@ -1,0 +1,45 @@
+{
+  "role": "Index of actual shared assets, not a new convergence proof",
+  "assets": {
+    "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_selected_local300_bend/flat_mesh_terrain": {
+      "identity": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_selected_local300_bend/flat_mesh_terrain/identity.json",
+      "geometry_audit": null,
+      "kind": "original frozen flat/ridge asset"
+    },
+    "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/sttw_offroad_completed_20261106/h75_terrain_speed_sweep/oblique_6cm": {
+      "identity": "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/sttw_offroad_completed_20261106/h75_terrain_speed_sweep/oblique_6cm/identity.json",
+      "geometry_audit": null,
+      "kind": "original frozen flat/ridge asset"
+    },
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_g0/assets/S2_5mm": {
+      "identity": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_g0/assets/S2_5mm/identity.json",
+      "geometry_audit": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_g0/assets/S2_5mm/geometry_audit.json",
+      "kind": "generated embedded-cap asset"
+    },
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_g0/assets/S5_5mm": {
+      "identity": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_g0/assets/S5_5mm/identity.json",
+      "geometry_audit": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_g0/assets/S5_5mm/geometry_audit.json",
+      "kind": "generated embedded-cap asset"
+    },
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p1/assets/S1": {
+      "identity": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p1/assets/S1/identity.json",
+      "geometry_audit": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p1/assets/S1/geometry_audit.json",
+      "kind": "generated embedded-cap asset"
+    },
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p1/assets/S3": {
+      "identity": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p1/assets/S3/identity.json",
+      "geometry_audit": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p1/assets/S3/geometry_audit.json",
+      "kind": "generated embedded-cap asset"
+    },
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p1/assets/S4": {
+      "identity": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p1/assets/S4/identity.json",
+      "geometry_audit": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p1/assets/S4/geometry_audit.json",
+      "kind": "generated embedded-cap asset"
+    },
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p1/assets/S6": {
+      "identity": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p1/assets/S6/identity.json",
+      "geometry_audit": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_p1/assets/S6/geometry_audit.json",
+      "kind": "generated embedded-cap asset"
+    }
+  }
+}

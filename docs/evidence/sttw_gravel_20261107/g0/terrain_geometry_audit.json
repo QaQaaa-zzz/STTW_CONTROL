@@ -1,0 +1,25 @@
+{
+  "role": "Index of actual shared assets, not a new convergence proof",
+  "assets": {
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_g0/assets/S2_10mm": {
+      "identity": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_g0/assets/S2_10mm/identity.json",
+      "geometry_audit": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_g0/assets/S2_10mm/geometry_audit.json",
+      "kind": "generated embedded-cap asset"
+    },
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_g0/assets/S2_5mm": {
+      "identity": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_g0/assets/S2_5mm/identity.json",
+      "geometry_audit": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_g0/assets/S2_5mm/geometry_audit.json",
+      "kind": "generated embedded-cap asset"
+    },
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_g0/assets/S5_10mm": {
+      "identity": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_g0/assets/S5_10mm/identity.json",
+      "geometry_audit": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_g0/assets/S5_10mm/geometry_audit.json",
+      "kind": "generated embedded-cap asset"
+    },
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_g0/assets/S5_5mm": {
+      "identity": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_g0/assets/S5_5mm/identity.json",
+      "geometry_audit": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_gravel_g0/assets/S5_5mm/geometry_audit.json",
+      "kind": "generated embedded-cap asset"
+    }
+  }
+}

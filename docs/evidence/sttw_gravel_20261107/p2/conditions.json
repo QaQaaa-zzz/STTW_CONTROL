@@ -1,0 +1,1052 @@
+[
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p2",
+    "terrain_id": 0,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p4",
+    "terrain_id": 1,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 1
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 0
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 0.25
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 0.5
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 0.75
+  },
+  {
+    "terrain": "gap0p8",
+    "terrain_id": 2,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 1
+  }
+]

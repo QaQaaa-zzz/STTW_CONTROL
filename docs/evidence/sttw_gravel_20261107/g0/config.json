@@ -1,0 +1,154 @@
+{
+  "role": "Protocol snapshot; actual runtime settings and reused-run provenance are in source_manifest.json",
+  "protocol": {
+    "role": "G0 fixed embedded caps; frozen policies; no training",
+    "scenes": [
+      {
+        "name": "S2_10mm",
+        "config": "runs/h75_gravel_g0/S2_10mm.json",
+        "output": "runs/h75_gravel_g0/assets/S2_10mm",
+        "parameters": {
+          "route": "runs/h75_selected_local300_flat/bundle/route.npz",
+          "density_per_m2": 24,
+          "radius_range_m": [
+            0.055,
+            0.08
+          ],
+          "s_range_m": [
+            3.0,
+            7.0
+          ],
+          "half_width_m": 0.8,
+          "blend_length_m": 0.3,
+          "seed": 20261107,
+          "vertical_scale_m": 0.001,
+          "bounds_m": [
+            -2,
+            24
+          ],
+          "name": "S2",
+          "height_m": 0.01,
+          "horizontal_scale_m": 0.01
+        }
+      },
+      {
+        "name": "S2_5mm",
+        "config": "runs/h75_gravel_g0/S2_5mm.json",
+        "output": "runs/h75_gravel_g0/assets/S2_5mm",
+        "parameters": {
+          "route": "runs/h75_selected_local300_flat/bundle/route.npz",
+          "density_per_m2": 24,
+          "radius_range_m": [
+            0.055,
+            0.08
+          ],
+          "s_range_m": [
+            3.0,
+            7.0
+          ],
+          "half_width_m": 0.8,
+          "blend_length_m": 0.3,
+          "seed": 20261107,
+          "vertical_scale_m": 0.001,
+          "bounds_m": [
+            -2,
+            24
+          ],
+          "name": "S2",
+          "height_m": 0.01,
+          "horizontal_scale_m": 0.005
+        }
+      },
+      {
+        "name": "S5_10mm",
+        "config": "runs/h75_gravel_g0/S5_10mm.json",
+        "output": "runs/h75_gravel_g0/assets/S5_10mm",
+        "parameters": {
+          "route": "runs/h75_selected_local300_flat/bundle/route.npz",
+          "density_per_m2": 24,
+          "radius_range_m": [
+            0.055,
+            0.08
+          ],
+          "s_range_m": [
+            3.0,
+            7.0
+          ],
+          "half_width_m": 0.8,
+          "blend_length_m": 0.3,
+          "seed": 20261107,
+          "vertical_scale_m": 0.001,
+          "bounds_m": [
+            -2,
+            24
+          ],
+          "name": "S5",
+          "height_m": 0.02,
+          "horizontal_scale_m": 0.01
+        }
+      },
+      {
+        "name": "S5_5mm",
+        "config": "runs/h75_gravel_g0/S5_5mm.json",
+        "output": "runs/h75_gravel_g0/assets/S5_5mm",
+        "parameters": {
+          "route": "runs/h75_selected_local300_flat/bundle/route.npz",
+          "density_per_m2": 24,
+          "radius_range_m": [
+            0.055,
+            0.08
+          ],
+          "s_range_m": [
+            3.0,
+            7.0
+          ],
+          "half_width_m": 0.8,
+          "blend_length_m": 0.3,
+          "seed": 20261107,
+          "vertical_scale_m": 0.001,
+          "bounds_m": [
+            -2,
+            24
+          ],
+          "name": "S5",
+          "height_m": 0.02,
+          "horizontal_scale_m": 0.005
+        }
+      }
+    ],
+    "engineering_tolerance": {
+      "contact_time_s": 0.01,
+      "normal_load_relative_integral": 0.05,
+      "wheel_height_rmse_m": 0.002
+    },
+    "later_scenes": {
+      "S1": {
+        "height_m": 0.01,
+        "density_per_m2": 12
+      },
+      "S3": {
+        "height_m": 0.01,
+        "density_per_m2": 36
+      },
+      "S4": {
+        "height_m": 0.005,
+        "density_per_m2": 24
+      },
+      "S6": {
+        "height_m": 0.01,
+        "density_per_m2": 24,
+        "distribution": "clustered",
+        "same_stone_attributes_as": "S2"
+      },
+      "S7": {
+        "height_m": 0.01,
+        "cluster_spacing_m": [
+          0.2,
+          0.4,
+          0.8
+        ],
+        "route": "separate extended constant-curvature route; not generated in G0"
+      }
+    }
+  }
+}

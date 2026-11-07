@@ -1,0 +1,65 @@
+{
+  "role": "Protocol snapshot; actual runtime settings and reused-run provenance are in source_manifest.json",
+  "protocol": {
+    "role": "P4 initial held-out-layout TEST; frozen P1 capability table, no recovery-stage selector adopted",
+    "source_bundle": "runs/h75_selected_local300_flat/bundle",
+    "base_sweep_config": "learning/configs/isaac_h75_gravel_p1.json",
+    "training_evaluation": "runs/h75_gravel_p1/evaluation",
+    "output": "runs/h75_gravel_p4",
+    "terrain_families": [
+      "S2",
+      "S6"
+    ],
+    "map_seeds": [
+      20261108,
+      20261109
+    ],
+    "speeds_m_s": [
+      2.3,
+      2.6
+    ],
+    "seeds": [
+      101,
+      102,
+      103,
+      104,
+      105
+    ],
+    "tasks_cyclic": [
+      "A",
+      "B",
+      "C"
+    ],
+    "methods": [
+      "Fixed-0",
+      "Fixed-0.5",
+      "Fixed-1",
+      "Task-only",
+      "Task+Phase"
+    ],
+    "candidate_alphas": [
+      0,
+      0.25,
+      0.5,
+      0.75,
+      1
+    ],
+    "neighbors": 2,
+    "distance_floor": 0.1,
+    "seconds": 10,
+    "env_spacing": 0.0,
+    "maximum_logical_conditions": 200,
+    "max_physics_lane_steps": 10000000,
+    "optimizer_updates": 0,
+    "gain_gate": {
+      "qualified_fraction_absolute": 0.1,
+      "speed_rmse_worsening_m_s": 0.01,
+      "saturation_worsening_s": 0.05,
+      "no_extra_failures": true
+    },
+    "reuse": "Identical selected frozen alpha within one context shares one actual physical trajectory; report both logical200 and distinct physical lanes",
+    "selection_timing": "Once at saved warm start, before approach; ideal geometry preview only, no future contact/trajectory outcomes; hold selected alpha",
+    "state_support": "Common saved warm start only. Remaining recovery state is shared at this decision; P3 recovery-stage selection was not adopted.",
+    "stop_rule": "If Task+Phase fails the predeclared gain and non-worsening gates, stop selection module; expand to five held-out map seeds only on net gain; no new PPO"
+  }
+}

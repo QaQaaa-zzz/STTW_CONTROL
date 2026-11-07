@@ -1,0 +1,8 @@
+{
+  "capability_sha256": "705b7d9e7f6669c7f6821acd3358f9610660508b4fc54943eedb5519f952cab3",
+  "contexts": 40,
+  "logical_conditions": 200,
+  "distinct_physical_lanes": 152,
+  "physics_lane_steps": 7600000,
+  "frozen_before_test": true
+}

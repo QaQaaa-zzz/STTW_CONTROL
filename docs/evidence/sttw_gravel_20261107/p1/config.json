@@ -1,0 +1,347 @@
+{
+  "role": "Protocol snapshot; actual runtime settings and reused-run provenance are in source_manifest.json",
+  "protocol": {
+    "role": "P1 DEV factor separation; fixed map seed, five frozen physical parameter groups; no selector/generalization claim",
+    "reference_bundle": "runs/h75_selected_local300_flat/bundle",
+    "base_evaluation_config": "runs/h75_gravel_g0/g0_config.json",
+    "terrain_generator": "learning/cli/place_isaac_terrain.py",
+    "terrain_base_config": "runs/h75_selected_local300_bend/bump_terrain/identity.json",
+    "terrain_overrides": [
+      {
+        "name": "S1"
+      },
+      {
+        "name": "S2"
+      },
+      {
+        "name": "S3"
+      },
+      {
+        "name": "S4"
+      },
+      {
+        "name": "S5"
+      },
+      {
+        "name": "S6"
+      }
+    ],
+    "user_speed_m_s": [
+      2.3,
+      2.6
+    ],
+    "initial_state_protocol": "same full saved 2.3 m/s warm state; 2.6 m/s is a command-change condition, not an equilibrated 2.6 m/s entrance",
+    "alphas": [
+      0,
+      0.25,
+      0.5,
+      0.75,
+      1
+    ],
+    "include_zero": true,
+    "seconds": 10,
+    "max_physics_lane_steps": 18000000,
+    "optimizer_updates": 0,
+    "reuse": "72 exact completed S2/S5 P0 lanes reused;288 new lanes in one scene; total360",
+    "start_condition": "P0 differentiated actual contact rhythms, recovery and task-qualified alpha outcomes; no automatic P2/P3/P4",
+    "seeds": [
+      101,
+      102,
+      103,
+      104,
+      105
+    ],
+    "evaluation_overrides": {
+      "trace_lanes": 360,
+      "physics_contact_recording": {
+        "chunk_steps": 250,
+        "record_window_s": [
+          0.8,
+          5.0
+        ]
+      },
+      "plant_options": {
+        "wheel_collision": "sdf",
+        "friction_offset_threshold": 0.0,
+        "compliant_wheels": {
+          "frontwheel": {
+            "stiffness": 5324.4083452801915,
+            "damping": 112.38579318769304
+          },
+          "rearwheel": {
+            "stiffness": 7833.38122453075,
+            "damping": 173.11038721684574
+          }
+        },
+        "env_spacing": 3.0,
+        "track_wheel_contacts": false,
+        "track_contact_wrench": true,
+        "max_contact_data_count_per_prim": 128,
+        "raw_contact_only": true
+      }
+    },
+    "tasks": {
+      "A": {
+        "W_m": 0.3,
+        "speed_rmse_m_s": 0.2
+      },
+      "B": {
+        "W_m": 0.6,
+        "speed_rmse_m_s": 0.1
+      },
+      "C": {
+        "W_m": 0.4,
+        "speed_rmse_m_s": 0.15
+      }
+    },
+    "speed_window": "entire actual observed window; failures separately unqualified",
+    "planned_lanes": 144,
+    "planned_lane_physics_steps": 7200000,
+    "randomization_by_seed": {
+      "101": {
+        "base_body": "chasis",
+        "friction_range": [
+          0.8443532505610554,
+          0.8443532505610554
+        ],
+        "mass_scale": [
+          0.9943768413336629,
+          0.9943768413336629
+        ],
+        "base_com_m": [
+          0,
+          0
+        ],
+        "latency_s": [
+          0.0,
+          0.0
+        ],
+        "servo_gain_scale": [
+          1.0036511274091764,
+          1.0036511274091764
+        ],
+        "steer_zero_offset_rad": [
+          -0.0008226857552122873,
+          -0.0008226857552122873
+        ],
+        "measurement_noise": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "push_interval_s": 1000000000,
+        "push_velocity_range": {
+          "x": [
+            0,
+            0
+          ],
+          "y": [
+            0,
+            0
+          ]
+        }
+      },
+      "102": {
+        "base_body": "chasis",
+        "friction_range": [
+          0.7659991145004303,
+          0.7659991145004303
+        ],
+        "mass_scale": [
+          1.003437740593609,
+          1.003437740593609
+        ],
+        "base_com_m": [
+          0,
+          0
+        ],
+        "latency_s": [
+          0.0,
+          0.0
+        ],
+        "servo_gain_scale": [
+          0.9918904094704118,
+          0.9918904094704118
+        ],
+        "steer_zero_offset_rad": [
+          0.0007395980861852084,
+          0.0007395980861852084
+        ],
+        "measurement_noise": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "push_interval_s": 1000000000,
+        "push_velocity_range": {
+          "x": [
+            0,
+            0
+          ],
+          "y": [
+            0,
+            0
+          ]
+        }
+      },
+      "103": {
+        "base_body": "chasis",
+        "friction_range": [
+          0.7812683232722948,
+          0.7812683232722948
+        ],
+        "mass_scale": [
+          0.9889727289050418,
+          0.9889727289050418
+        ],
+        "base_com_m": [
+          0,
+          0
+        ],
+        "latency_s": [
+          0.002,
+          0.002
+        ],
+        "servo_gain_scale": [
+          1.0144071458237374,
+          1.0144071458237374
+        ],
+        "steer_zero_offset_rad": [
+          0.0014301699535214782,
+          0.0014301699535214782
+        ],
+        "measurement_noise": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "push_interval_s": 1000000000,
+        "push_velocity_range": {
+          "x": [
+            0,
+            0
+          ],
+          "y": [
+            0,
+            0
+          ]
+        }
+      },
+      "104": {
+        "base_body": "chasis",
+        "friction_range": [
+          0.8338564812369536,
+          0.8338564812369536
+        ],
+        "mass_scale": [
+          1.0076859259450939,
+          1.0076859259450939
+        ],
+        "base_com_m": [
+          0,
+          0
+        ],
+        "latency_s": [
+          0.0,
+          0.0
+        ],
+        "servo_gain_scale": [
+          0.9850164759176376,
+          0.9850164759176376
+        ],
+        "steer_zero_offset_rad": [
+          -0.0004997228433781312,
+          -0.0004997228433781312
+        ],
+        "measurement_noise": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "push_interval_s": 1000000000,
+        "push_velocity_range": {
+          "x": [
+            0,
+            0
+          ],
+          "y": [
+            0,
+            0
+          ]
+        }
+      },
+      "105": {
+        "base_body": "chasis",
+        "friction_range": [
+          0.8138195333601544,
+          0.8138195333601544
+        ],
+        "mass_scale": [
+          1.0196583910192503,
+          1.0196583910192503
+        ],
+        "base_com_m": [
+          0,
+          0
+        ],
+        "latency_s": [
+          0.002,
+          0.002
+        ],
+        "servo_gain_scale": [
+          1.0002681736707901,
+          1.0002681736707901
+        ],
+        "steer_zero_offset_rad": [
+          -0.00041424419406817844,
+          -0.00041424419406817844
+        ],
+        "measurement_noise": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "push_interval_s": 1000000000,
+        "push_velocity_range": {
+          "x": [
+            0,
+            0
+          ],
+          "y": [
+            0,
+            0
+          ]
+        }
+      }
+    },
+    "enabled_performance_optimizations": [
+      "144 GPU lanes in one packed scene",
+      "physics-step raw patches only within0.8\u20135s",
+      "raw contact views without duplicate wheel ContactSensor aggregate reconstruction",
+      "no per-physics-step wheel aggregate log copies",
+      "250-step raw disk chunks; measured copy/sync and compression time"
+    ],
+    "stop_rule": "Analyze density/height/clustering and alpha task differences; if Q2 absent stop selector, if no net gain stop module",
+    "evaluation_role": "P1 DEV; original frozen controller stack"
+  }
+}

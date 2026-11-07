@@ -1,0 +1,1370 @@
+[
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 0.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 0.5,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 0.75,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 1.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 0.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 0.5,
+    "task": "B"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 1.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 0.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 0.5,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 0.75,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 1.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 0.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 0.5,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 0.75,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 1.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 0.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 0.5,
+    "task": "B"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 1.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 0.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 0.25,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 0.5,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 1.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 0.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 0.25,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 0.5,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 1.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 0.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 0.5,
+    "task": "B"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 1.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 0.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 0.25,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 0.5,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 1.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 0.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 0.25,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 0.5,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261108",
+    "terrain_family": "S2",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 1.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 0.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 0.5,
+    "task": "B"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 1.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 0.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 0.5,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 0.75,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 1.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 0.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 0.5,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 0.75,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 1.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 0.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 0.5,
+    "task": "B"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 1.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 0.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 0.5,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 0.75,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 1.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 0.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 0.25,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 0.5,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 1.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 0.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 0.5,
+    "task": "B"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 1.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 0.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 0.25,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 0.5,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 1.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 0.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 0.25,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 0.5,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 1.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 0.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 0.5,
+    "task": "B"
+  },
+  {
+    "terrain": "S6_map20261108",
+    "terrain_family": "S6",
+    "map_seed": 20261108,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 1.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 0.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 0.5,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 0.75,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 1.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 0.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 0.5,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 0.75,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 1.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 0.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 0.5,
+    "task": "B"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 1.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 0.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 0.5,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 0.75,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 1.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 0.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 0.5,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 0.75,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 1.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 0.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 0.5,
+    "task": "B"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 1.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 0.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 0.25,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 0.5,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 1.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 0.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 0.25,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 0.5,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 1.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 0.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 0.5,
+    "task": "B"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 1.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 0.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 0.25,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 0.5,
+    "task": "C"
+  },
+  {
+    "terrain": "S2_map20261109",
+    "terrain_family": "S2",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 1.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 0.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 0.25,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 0.5,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 0.75,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 101,
+    "alpha": 1.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 0.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 0.5,
+    "task": "B"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 102,
+    "alpha": 1.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 0.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 0.25,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 0.5,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 0.75,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 103,
+    "alpha": 1.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 0.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 0.25,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 0.5,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 0.75,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 104,
+    "alpha": 1.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 0.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 0.5,
+    "task": "B"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.3,
+    "parameter_seed": 105,
+    "alpha": 1.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 0.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 0.25,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 0.5,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 0.75,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 101,
+    "alpha": 1.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 0.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 0.25,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 0.5,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 102,
+    "alpha": 1.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 0.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 0.5,
+    "task": "B"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 103,
+    "alpha": 1.0,
+    "task": "B"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 0.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 0.25,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 0.5,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 0.75,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 104,
+    "alpha": 1.0,
+    "task": "C"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 0.0,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 0.25,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 0.5,
+    "task": "A"
+  },
+  {
+    "terrain": "S6_map20261109",
+    "terrain_family": "S6",
+    "map_seed": 20261109,
+    "speed_m_s": 2.6,
+    "parameter_seed": 105,
+    "alpha": 1.0,
+    "task": "A"
+  }
+]
