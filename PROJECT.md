@@ -1,3 +1,9 @@
+## 当前独立分支：连续石子任务已按停止条件收尾（2026-11-07）
+
+本节仅适用experiment/sttw-gravel。G0–P4有界协议已完成；P3不扩至300，P4不扩至500，不新增训练。Task-only15/40、Task+Phase16/40，净+2.5pp未达到冻结10pp门槛，Phase模块不采用；原STTW偏好与机械相位证据保留。完整XY、失败、5ms高频诊断与各阶段配置/来源索引见[runs/h75_gravel_closeout/CONCLUSION.md](runs/h75_gravel_closeout/CONCLUSION.md)，接口与过程见[docs/GRAVEL_G0.md](docs/GRAVEL_G0.md)。
+
+本分支没有活动后台任务；以下为保留的既有工程历史，不代表这些任务当前仍运行。项目唯一当前事实以research-hub/STTW_PROJECT_STATE.md为准，未修改其他工作树或第三章。
+
 ## 接续首来源定位为轻扰动基线
 
 进一步读取真实source_trajectory：264个lower步，A全程peak roll仅0.1782°（1.15秒），速度2.171–2.643m/s，退出时侧倾更小。source_state_assessment.json保存实际统计。因此首组斜向凸起不能支撑“强残余侧倾状态决定后续方向”的结论；它保留为轻扰动基线。完整左右候选差异仍有价值，但不能把alpha自身差异冒充A动态影响。后续能力采集应补不同实际出口状态，而不是反复拟合这一个状态或增加重复名义seed假装独立数据。
