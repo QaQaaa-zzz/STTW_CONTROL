@@ -1,0 +1,74 @@
+[
+  {
+    "case": "000_fixed",
+    "candidate": {
+      "decision_x_m": -2.0,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a0.5_update2"
+    },
+    "strict": false,
+    "contact20": false,
+    "release_s": 7.5,
+    "ground_return_s": null,
+    "continued_s": 0.0,
+    "continued_m": 0.0,
+    "selection_wall_s": null,
+    "task_completion20_s": null
+  },
+  {
+    "case": "000_C6",
+    "candidate": {
+      "decision_x_m": -2.0,
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root000_L5.6_v2.0_a0.5_update2"
+    },
+    "strict": false,
+    "contact20": true,
+    "release_s": 7.54,
+    "ground_return_s": 9.72,
+    "continued_s": 12.279999732971191,
+    "continued_m": 19.13201332092285,
+    "selection_wall_s": 0.009072462999029085,
+    "task_completion20_s": 12.15999984741211
+  },
+  {
+    "case": "003_fixed",
+    "candidate": {
+      "decision_x_m": -2.0,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root003_L5.6_v2.0_a0.5_update2"
+    },
+    "strict": false,
+    "contact20": true,
+    "release_s": 7.42,
+    "ground_return_s": 9.72,
+    "continued_s": 12.279999732971191,
+    "continued_m": 19.171791076660156,
+    "selection_wall_s": null,
+    "task_completion20_s": 12.039999961853027
+  },
+  {
+    "case": "003_C6",
+    "candidate": {
+      "decision_x_m": -2.0,
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "rear_speed_feedback_gain": 1,
+      "source_case_id": "rb_connection_seed20261106_root003_L5.6_v2.0_a0.5_update2"
+    },
+    "strict": false,
+    "contact20": true,
+    "release_s": 7.42,
+    "ground_return_s": 9.72,
+    "continued_s": 12.279999732971191,
+    "continued_m": 19.171791076660156,
+    "selection_wall_s": 0.0023043959954520687,
+    "task_completion20_s": 12.039999961853027
+  }
+]

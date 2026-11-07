@@ -1,0 +1,204 @@
+{
+  "stage": "training_complete",
+  "completed_updates": 150,
+  "selection": "up to top distinct stored policies by their own sampled reward, plus final after completion",
+  "scope": "shortlist only; freeze then evaluate all on the same handoff cases",
+  "all_stored": [
+    {
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading_contact150/adaptation/training/model_0.pt",
+      "policy_update": 1,
+      "score": {
+        "update": 1,
+        "mean_step_reward": 2.65047550201416,
+        "samples": 98304,
+        "reward_scaling": 0.1
+      },
+      "role": "stored candidate; sampled training reward is not fixed-task performance"
+    },
+    {
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading_contact150/adaptation/training/model_100.pt",
+      "policy_update": 101,
+      "score": {
+        "update": 101,
+        "mean_step_reward": 0.9445294737815857,
+        "samples": 98304,
+        "reward_scaling": 0.1
+      },
+      "role": "stored candidate; sampled training reward is not fixed-task performance"
+    },
+    {
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading_contact150/adaptation/training/model_125.pt",
+      "policy_update": 126,
+      "score": {
+        "update": 126,
+        "mean_step_reward": 0.876899242401123,
+        "samples": 98304,
+        "reward_scaling": 0.1
+      },
+      "role": "stored candidate; sampled training reward is not fixed-task performance"
+    },
+    {
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading_contact150/adaptation/training/model_150.pt",
+      "policy_update": 150,
+      "score": null,
+      "role": "stored candidate; sampled training reward is not fixed-task performance"
+    },
+    {
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading_contact150/adaptation/training/model_25.pt",
+      "policy_update": 26,
+      "score": {
+        "update": 26,
+        "mean_step_reward": 0.8280236124992371,
+        "samples": 98304,
+        "reward_scaling": 0.1
+      },
+      "role": "stored candidate; sampled training reward is not fixed-task performance"
+    },
+    {
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading_contact150/adaptation/training/model_50.pt",
+      "policy_update": 51,
+      "score": {
+        "update": 51,
+        "mean_step_reward": 0.961723268032074,
+        "samples": 98304,
+        "reward_scaling": 0.1
+      },
+      "role": "stored candidate; sampled training reward is not fixed-task performance"
+    },
+    {
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading_contact150/adaptation/training/model_75.pt",
+      "policy_update": 76,
+      "score": {
+        "update": 76,
+        "mean_step_reward": 0.8664318919181824,
+        "samples": 98304,
+        "reward_scaling": 0.1
+      },
+      "role": "stored candidate; sampled training reward is not fixed-task performance"
+    },
+    {
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading_contact150/adaptation/training/model_initial.pt",
+      "policy_update": 0,
+      "score": {
+        "update": 0,
+        "mean_step_reward": 0.8441871404647827,
+        "samples": 98304,
+        "reward_scaling": 0.1
+      },
+      "role": "stored candidate; sampled training reward is not fixed-task performance"
+    },
+    {
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading_contact150/adaptation/training/model_step_best.pt",
+      "policy_update": 1,
+      "score": {
+        "update": 1,
+        "mean_step_reward": 2.65047550201416,
+        "samples": 98304,
+        "reward_scaling": 0.1
+      },
+      "role": "stored candidate; sampled training reward is not fixed-task performance"
+    },
+    {
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading_contact150/adaptation/training/model_update_00025.pt",
+      "policy_update": 25,
+      "score": {
+        "update": 25,
+        "mean_step_reward": 0.8621381521224976,
+        "samples": 98304,
+        "reward_scaling": 0.1
+      },
+      "role": "stored candidate; sampled training reward is not fixed-task performance"
+    },
+    {
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading_contact150/adaptation/training/model_update_00050.pt",
+      "policy_update": 50,
+      "score": {
+        "update": 50,
+        "mean_step_reward": 0.872578501701355,
+        "samples": 98304,
+        "reward_scaling": 0.1
+      },
+      "role": "stored candidate; sampled training reward is not fixed-task performance"
+    },
+    {
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading_contact150/adaptation/training/model_update_00075.pt",
+      "policy_update": 75,
+      "score": {
+        "update": 75,
+        "mean_step_reward": 0.9250783324241638,
+        "samples": 98304,
+        "reward_scaling": 0.1
+      },
+      "role": "stored candidate; sampled training reward is not fixed-task performance"
+    },
+    {
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading_contact150/adaptation/training/model_update_00100.pt",
+      "policy_update": 100,
+      "score": {
+        "update": 100,
+        "mean_step_reward": 0.8830744624137878,
+        "samples": 98304,
+        "reward_scaling": 0.1
+      },
+      "role": "stored candidate; sampled training reward is not fixed-task performance"
+    },
+    {
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading_contact150/adaptation/training/model_update_00125.pt",
+      "policy_update": 125,
+      "score": {
+        "update": 125,
+        "mean_step_reward": 0.8859724998474121,
+        "samples": 98304,
+        "reward_scaling": 0.1
+      },
+      "role": "stored candidate; sampled training reward is not fixed-task performance"
+    },
+    {
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading_contact150/adaptation/training/model_update_00150.pt",
+      "policy_update": 150,
+      "score": null,
+      "role": "stored candidate; sampled training reward is not fixed-task performance"
+    }
+  ],
+  "candidates": [
+    {
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading_contact150/adaptation/training/model_0.pt",
+      "policy_update": 1,
+      "score": {
+        "update": 1,
+        "mean_step_reward": 2.65047550201416,
+        "samples": 98304,
+        "reward_scaling": 0.1
+      },
+      "role": "stored candidate; sampled training reward is not fixed-task performance"
+    },
+    {
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading_contact150/adaptation/training/model_50.pt",
+      "policy_update": 51,
+      "score": {
+        "update": 51,
+        "mean_step_reward": 0.961723268032074,
+        "samples": 98304,
+        "reward_scaling": 0.1
+      },
+      "role": "stored candidate; sampled training reward is not fixed-task performance"
+    },
+    {
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading_contact150/adaptation/training/model_100.pt",
+      "policy_update": 101,
+      "score": {
+        "update": 101,
+        "mean_step_reward": 0.9445294737815857,
+        "samples": 98304,
+        "reward_scaling": 0.1
+      },
+      "role": "stored candidate; sampled training reward is not fixed-task performance"
+    },
+    {
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading_contact150/adaptation/training/model_150.pt",
+      "policy_update": 150,
+      "score": null,
+      "role": "stored candidate; sampled training reward is not fixed-task performance"
+    }
+  ]
+}

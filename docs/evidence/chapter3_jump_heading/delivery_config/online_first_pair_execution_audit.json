@@ -1,0 +1,13 @@
+{
+  "prefix_samples": 275,
+  "prefix_max_trace_difference": 0.0,
+  "first_motor_command_difference_s": 5.480000019073486,
+  "approach_max_motor_command_difference": [
+    0.1379026174545288,
+    0.5711688995361328
+  ],
+  "units": [
+    "steer_rad_s",
+    "rear_rad_s"
+  ]
+}

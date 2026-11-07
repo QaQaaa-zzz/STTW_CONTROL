@@ -1,0 +1,50 @@
+[
+  {
+    "model": "parent150",
+    "n": 21,
+    "strict": 0,
+    "contact20": 13,
+    "full8": 17,
+    "median_peak_abs_y_m": 0.66009521484375
+  },
+  {
+    "model": "heading125",
+    "n": 21,
+    "strict": 1,
+    "contact20": 12,
+    "full8": 18,
+    "median_peak_abs_y_m": 0.27679443359375
+  },
+  {
+    "model": "contact1",
+    "n": 21,
+    "strict": 1,
+    "contact20": 14,
+    "full8": 15,
+    "median_peak_abs_y_m": 0.2220916748046875
+  },
+  {
+    "model": "contact51",
+    "n": 21,
+    "strict": 1,
+    "contact20": 13,
+    "full8": 18,
+    "median_peak_abs_y_m": 0.23409271240234375
+  },
+  {
+    "model": "contact101",
+    "n": 21,
+    "strict": 0,
+    "contact20": 9,
+    "full8": 16,
+    "median_peak_abs_y_m": 0.1796800047159195
+  },
+  {
+    "model": "contact150",
+    "n": 21,
+    "strict": 0,
+    "contact20": 13,
+    "full8": 17,
+    "median_peak_abs_y_m": 0.16041946411132812
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "recorded_utc": "2026-11-07T16:10:31.338007+00:00",
+  "online": {
+    "status": "completed_slice",
+    "start": 0,
+    "count": 4,
+    "finished_unix": 1794066597.3735805
+  },
+  "training": {
+    "stage": "training_complete",
+    "pid": 1049493,
+    "completed_updates": 150,
+    "started": 1794065352.474893,
+    "start_update": 0,
+    "target_update": 150,
+    "stage_completed_updates": 150,
+    "sample_seconds": 9.71417236328125,
+    "optimize_seconds": 0.10652518272399902,
+    "elapsed_s": 1691.2617347240448,
+    "total_physics_steps": 117964800
+  },
+  "candidate_evaluation": {
+    "stage": "complete",
+    "models": [
+      "parent150",
+      "heading125",
+      "contact1",
+      "contact51",
+      "contact101",
+      "contact150"
+    ],
+    "cases": 126
+  },
+  "capability_collection": {
+    "stage": "complete",
+    "roots": 4,
+    "branches": 24,
+    "optimizer_updates": 0
+  },
+  "adopted_for_next_engineering_stage": "heading125 with frozen H75 and kernel; not universal task qualification",
+  "objective_complete": false
+}

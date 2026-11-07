@@ -25,13 +25,27 @@ heading125为当前继续接续工作的工程基线，不称完全可靠。新b
 
 详细[车辆配置](../../../learning/configs/rb_sttw_platform.json)、[当前权重身份及SHA256](delivery_config/heading125_identity.json)、[完整链配置](delivery_config/complete_chain_root000.json)。部分配置路径指向工作站资产，远端不含大权重/原始轨迹，不能仅凭此精简包在新机器完整重跑物理。
 
-## 正在推进，尚未作为结果
+## 在线接续与补充训练均已完成
 
-1. 接触保持150更新：从heading125权重、fresh Adam、lr5e-5；4096环境×24步，Go2 PPO/域随机化；仅启用已有上一策略步接触并集开关。训练采样50Hz，与执行200Hz的接触检测并不完全相同。原严格评测不变，不自动追加训练。
-2. 当前模型在线C6：两根×固定2/.5或真实出口选档=4条完整任务、0优化。复用高斯核；查询排除整根，仅3/5条可用异根证据，非校准概率、非独立TEST。离线建议root000为1.8/.5、root003为2/.5，不等于已执行成功。
+1. 接触保持150更新已结束（28.19分钟），126入口候选评测完成、无新候选采用。从heading125权重、fresh Adam、lr5e-5；4096环境×24步，Go2 PPO/域随机化；仅启用已有上一策略步接触并集开关。训练采样50Hz，与执行200Hz的接触检测并不完全相同。原严格评测不变，不自动追加训练。
+2. 当前模型在线C6四条已完成：20ms协议固定1/2、在线2/2，原严格协议均0/2。root000实际改α0并回交续行，root003保持α.5且与固定全程trace一致。此为两开发根的实际接口打通证据，详细[轨迹与判据](RESULTS.md#当前heading125的真实在线技能接续四条完成)。
 3. 修复单车在线入口遗漏的20ms接触保持与H75回交进度初始化，复用批量使用的platform_support_mask及resume_ground_lanes，不新写控制器。
 
-见[带时间戳运行快照](delivery_config/running_snapshot.json)、[选档配置](delivery_config/selector_config.json)、[在线配置](delivery_config/online_root000_C6.json)。运行状态可能已变化，快照不作为实时完成证据。
+见[带时间戳运行快照](delivery_config/running_snapshot.json)、[选档配置](delivery_config/selector_config.json)、[在线配置](delivery_config/online_root000_C6.json)。旧快照保留当时状态；在线完成以四条结果和online_stage_summary.json为准；补充训练完成及候选表见RESULTS收尾节，旧快照不作为实时状态。
+
+## 任务书工作索引（策略版本分别保留）
+
+|任务|已有证据与判断|
+|---|---|
+|地面G1–G3|[24根/288名义后缀与窄道](../chapter3_ground_connection_20261106/RESULTS.md)、[已完成队列](../chapter3_completed_queue_20261107/RESULTS.md)；宽路固定档已适用，窄道逐根结果保留。|
+|地面G4|[8根/384外扰后缀](../chapter3_ground_force_20261107/RESULTS.md)；六档均可用，事后最优对最佳固定只余.005秒，不因此新增监督训练。|
+|距离与接近先导|[18诊断](../chapter3_jump_approach_pilot_20261106/RESULTS.md)、[六新根108后缀](../chapter3_jump_six_roots_20261106/RESULTS.md)；属于旧冻结技能版本，不能冒充本轮heading125成绩。|
+|中点R6与36序列|[6根216序列及12条真实在线C6/R6](../chapter3_completed_queue_20261107/RESULTS.md)；旧版本C6 4/6、R6 6/6，最佳固定也6/6，不宣称超越固定。|
+|当前技能与选档接口|本轮两根四条；在线实际选α并完成跳跃回交续行；20ms 2/2、原严格0/2，不要求全工况成功。|
+|原source/RB同域对照|[原对照](../chapter3_cross_skill_20261106/RESULTS.md)、[同预算25更新适配](../chapter3_skill_adaptation25_20261107/RESULTS.md)；保留失败，当前heading125不替代论文source/RB身份。|
+|E5前向支路与重规划|[已有规则/能力分流](../chapter3_forward_route_roots_20261106/README.md)、[队列负结果](../chapter3_completed_queue_20261107/RESULTS.md)；未验证可用的支路不称可靠备用，强制跳跃任务的绕行不算完成。|
+
+以上索引定位既有版本证据，不代表本次重跑全部历史。当前已实测的是两轮各126入口、36链候选、4条在线集成，并补24分支形成同域六根36分支能力表。独立TEST、跨技能归因与适用范围仍须按版本和分母报告；本轮不宣布整份任务书或论文研究全部完成。
 
 ## 代码、配置和复查入口
 
@@ -43,3 +57,7 @@ heading125为当前继续接续工作的工程基线，不称完全可靠。新b
 - Go2原实现`legged_gym/envs/base/legged_robot.py:_reward_feet_air_time`使用当前/上一帧接触OR；本次复用项目已有相同思想开关，没有移植四足动作或物理模型。
 
 原始数据根位于`/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_heading_bounded150`与`chapter3_heading_online`，训练在`chapter3_jump_heading_contact150`。本包仅保留必要图、逐例摘要、配置和身份，不包含pt权重、body_contact、缓存或密钥。
+
+当前六根能力表和零物理复算入口见[RESULTS能力表节](RESULTS.md#当前冻结技能的六根能力表零新增训练)；原严格1/36、20ms19/36，预测支持17/20有效决策状态，未进行MLP拟合或额外PPO。真实在线2/2仅指前述两个开发根，不把离线表当部署表现。
+
+本轮所有已启动作业的[完成快照](delivery_config/completion_snapshot.json)；四个补采根的配置位于delivery_config/capability_root002/004/005/008.json。最初running_snapshot保留历史时点，不表示当前仍在运行。

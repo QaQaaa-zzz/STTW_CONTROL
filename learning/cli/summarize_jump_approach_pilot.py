@@ -29,7 +29,7 @@ for c in m['cases']:
  if summary.exists():
   if origin not in figures:figures[origin]=plt.subplots(len(panels[origin]),2,figsize=(12,4*len(panels[origin])),squeeze=False,layout='constrained')
   fig,axes=figures[origin]
-  result=json.loads(summary.read_text());row.update(status='evaluated',execution='completed',complete=result['complete'],success_time_s=result['success_time_s'],checks=result['checks'],max_original_path_error_m=result['max_original_path_error_m'],stages=result.get('stages'),stage_times=result.get('stage_times'))
+  result=json.loads(summary.read_text());row['contact_filtered_protocol']=result.get('contact_filtered_protocol');row.update(status='evaluated',execution='completed',complete=result['complete'],success_time_s=result['success_time_s'],checks=result['checks'],max_original_path_error_m=result['max_original_path_error_m'],stages=result.get('stages'),stage_times=result.get('stage_times'))
   decision=run/'connection_decision.json';handoff=run/'handoff.json'
   row['decision']=json.loads(decision.read_text()) if decision.exists() else None
   row['handoff']=json.loads(handoff.read_text()) if handoff.exists() else None
@@ -64,6 +64,9 @@ for c in m['cases']:
   prefix_event=row['handoff'] if skills else row['decision']
   if prefix_event is not None:prefixes[c['case_id']]=t[t[:,0]<=prefix_event['time']+.000001]
   axes[i,0].plot(t[:,1],t[:,2],style,color=color,label=label);axes[i,0].plot(t[-1,1],t[-1,2],'x',color=color)
+  for event_file,marker in [('handoff.json','o'),('landing_handoff.json','s')]:
+   if (run/event_file).exists():
+    event=json.loads((run/event_file).read_text());sample=t[np.argmin(abs(t[:,0]-event['time']))];axes[i,0].plot(sample[1],sample[2],marker,color=color,ms=5)
   axes[i,1].plot(t[:,0],t[:,4],style,color=color,label=label)
   if not axes[i,0].get_title():
    route=np.load(run/'ground_route.npz')['xy'];axes[i,0].plot(route[:,0],route[:,1],':',color='gray',label='Original map route')
@@ -94,7 +97,7 @@ for origin,(fig,axes) in figures.items():
  for ax in axes.flat:
   ax.grid(alpha=.2)
   if ax.lines:ax.legend(fontsize=8)
- fig.suptitle(f'Frozen policy / H75 + ECBC | origin {origin} | connection-only candidates\nUnexecuted cases remain pending; crosses mark actual endpoints')
+ fig.suptitle(f'Frozen policy / H75 + ECBC | origin {origin} | connection-only candidates\nCircle: jump release; square: ground handback; cross: actual observation end; pending retained')
  name='xy_candidates.png' if len(figures)==1 else f'xy_candidates_{origin}.png'
  fig.savefig(a.manifest.parent/name,dpi=150)
  plt.close(fig)
