@@ -24,6 +24,8 @@ class TorchController:
         self.eso = torch.zeros(count, 4, device=device, dtype=dtype)
         self.disturbance = torch.zeros(count, device=device, dtype=dtype)
         self.gains = torch.zeros(count, 3, device=device, dtype=dtype)
+        self.scheduled_feedback = (torch.tensor(config['scheduled_feedback'], device=device, dtype=dtype)
+                                   if 'scheduled_feedback' in config else None)
         self.initial_gains = self._system(torch.ones_like(self.disturbance))[-1]
         self.reset(slice(None))
 
@@ -51,6 +53,12 @@ class TorchController:
                               torch.ones_like(v)*c['wc']**3), dim=-1)
         gains = torch.where((det.abs() > 5.)[:, None],
                             (matrix @ target[:, :, None]).squeeze(-1)/det[:, None], self.gains)
+        if self.scheduled_feedback is not None:
+            table = self.scheduled_feedback
+            query = v.clamp(table[0, 0], table[-1, 0])
+            i = (torch.searchsorted(table[:, 0].contiguous(), query)-1).clamp(0, len(table)-2)
+            weight = (query-table[i, 0])/(table[i+1, 0]-table[i, 0])
+            gains = torch.lerp(table[i, 1:], table[i+1, 1:], weight[:, None])
         return a1, a2, a4, ratio, gains
 
     def reset(self, indices):
@@ -66,7 +74,7 @@ class TorchController:
         self.filtered_roll_rate=torch.where(self.roll_rate_filter_hz>0,self.filtered_roll_rate+weight*(roll_rate-self.filtered_roll_rate),roll_rate)
         roll_rate=self.filtered_roll_rate
         a1, a2, a4, ratio, gains = self._system(speed)
-        shift = torch.where(enable_eso, -self.disturbance/a4, 0.)
+        shift = torch.where(enable_eso, -self.disturbance/a4, 0.) if c.get('use_eso_correction', True) else torch.zeros_like(speed)
         if c['fixed_roll_reference'] is not None:
             reference = ratio*c['fixed_roll_reference']
         reference_roll = reference/ratio if c['fixed_roll_reference'] is None else torch.full_like(speed, c['fixed_roll_reference'])
