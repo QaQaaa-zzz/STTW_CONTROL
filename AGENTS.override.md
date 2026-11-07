@@ -9,3 +9,9 @@ Current authorized task: Codex_Lower_Interface_Repair.md. Protect live V5.2: rea
 2026-11-04 user task: execute STTW越野偏好控制研究规划书 first; defer continuous-terrain planning and RB integration until STTW offroad completion. This isolated worktree is experiment/sttw-offroad. Read /home/qy/STTW_CONTROL/research-hub/AGENTS.md and /home/qy/STTW_CONTROL/research-hub/STTW_PROJECT_STATE.md; use the existing exclusive ledger lock. Preserve frozen H75/LOCAL300 and original model; terrain assets are explicit new physical domains. No hardware execution; declare each simulation/training budget before execution. Prior dated task scopes above are historical and do not define this task.
 
 2026-11-06 用户要求所有GPU训练/Isaac评测/采集排队：统一持research-hub/.gpu-job.lock且启动前检查全机CUDA计算进程，存在其他任务时等待，不并发挤占，不终止其他会话任务。此要求适用于本工作树全部会话。
+
+## 长时间等待必须结束当前回复（用户明确要求，2026-11-07）
+- 当剩余工作需要长时间等待仿真、训练、采集或资源排队时，必须先告知用户“开始等待”、等待对象/原因、预计完成时间或合理时间范围，并结束当前回复；不得持续轮询、反复 sleep/wait 或用无进展的状态回复消耗会话。
+- “终止”指结束当前助手回复，不是杀死已授权的后台任务。后台任务保留阶段状态并按既定预算运行；不为等待扩大实验或启动额外任务。
+- 用户再次要求推进时，集中查看一次状态；若已完成，直接分析并推进下一项；若仍需长等，通知后结束回复。只有运行异常或必要的短启动核查才再次检查。
+- 等待期间若有可立即推进的独立工作，先完成该工作，再通知并结束回复。不得以此延长无实际产出的等待。
