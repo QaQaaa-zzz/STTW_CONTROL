@@ -17,7 +17,7 @@ mount=json.loads((a.model_config or Path(spec['model_config'])).read_text())['mo
 mount=Rotation.from_quat(np.array(mount)[[1,2,3,0]])
 root=states[:,:,names.index('chasis')]
 angles=(Rotation.from_quat(root[:,:,3:7].reshape(-1,4))*mount).as_euler('xyz').reshape(*root.shape[:2],3)
-support=np.ones(valid.shape,bool);wheel_bottom=[]
+support=np.ones(valid.shape,bool);geometry_support=np.ones(valid.shape,bool);wheel_bottom=[];wheel_contact=[]
 for name in ('frontwheel','rearwheel'):
     index=names.index(name);g=next(g for g in geometry if g['body']==name)
     body=states[:,:,index];rotation=Rotation.from_quat(body[:,:,3:7].reshape(-1,4))
@@ -33,12 +33,20 @@ for name in ('frontwheel','rearwheel'):
         axial=np.abs(matrix[:,:,:,2])
         extent=np.max(radial[...,None]*radii+axial[...,None]*(np.abs(offsets)+width/(2*count)),axis=-1)
     bottom=center[:,:,2]-extent[:,:,2];wheel_bottom.append(bottom)
-    support&=(center[:,:,0]>=spec.get('platform_front_x',3.6))&(center[:,:,0]<=spec.get('platform_back_x',7.6))&(np.abs(center[:,:,1])+extent[:,:,1]<=1.)
-    support&=(np.abs(bottom-.16)<=.015)&(forces[:,:,index,2]>1.)
+    geometry_support&=(center[:,:,0]>=spec.get('platform_front_x',3.6))&(center[:,:,0]<=spec.get('platform_back_x',7.6))&(np.abs(center[:,:,1])+extent[:,:,1]<=1.)&(np.abs(bottom-.16)<=.015)
+    wheel_contact.append(forces[:,:,index,2]>1.)
+    support&=forces[:,:,index,2]>1.
+support&=geometry_support
 nonwheel=[i for i,name in enumerate(names) if name not in ('frontwheel','rearwheel')]
 no_collision=(np.linalg.norm(forces[:,:,nonwheel],axis=-1)<=1.).all(-1)
 upright=(np.abs(angles[:,:,:2])<=np.deg2rad(15)).all(-1)
 qualified=support&no_collision&upright&valid
+# Supplementary diagnostic only: retain each wheel contact for 20ms, like one Go2 policy period.
+contacts=np.stack(wheel_contact,-1);recent=contacts.copy()
+for tick in range(1,len(time)):
+    first=np.searchsorted(time,time[tick]-.020001)
+    recent[tick]=contacts[first:tick+1].any(axis=0)
+filtered_qualified=recent.all(-1)&geometry_support&no_collision&upright&valid
 handoff_file=a.run/'handoff.json'
 handoff=json.loads(handoff_file.read_text())['time'] if handoff_file.exists() else float('inf')
 wheel_ids=[names.index(name) for name in ('frontwheel','rearwheel')]
@@ -50,8 +58,10 @@ for i,skill in enumerate(spec['skills']):
     flight_changes=np.diff(np.r_[False,airborne[:,i],False].astype(int));flight_start=np.where(flight_changes==1)[0];flight_end=np.where(flight_changes==-1)[0]-1
     flight=[(b,e) for b,e in zip(flight_start,flight_end) if time[e]-time[b]>=.02]
     first_support=float(time[starts[np.flatnonzero(durations>=1.)[0]]]+1.) if (durations>=1.).any() else None
-    rows.append(dict(skill=skill,first_strict_support_completion_s=first_support,airborne_after_handoff=bool(flight),first_airborne_interval_s=[float(time[flight[0][0]]),float(time[flight[0][1]])] if flight else None,landing_hold_1s=bool(len(durations) and durations[j]>=1.),longest_hold_s=float(durations[j]) if j is not None else 0.,interval_s=[float(time[starts[j]]),float(time[ends[j]])] if j is not None else None))
-report=dict(role='nominal DEV landing diagnostic, not complete continuous-task success',criteria=dict(platform_x_m=[spec.get('platform_front_x',3.6),spec.get('platform_back_x',7.6)],platform_y_m=[-1,1],top_z_m=.16,wheel_bottom_tolerance_m=.015,min_each_wheel_vertical_force_N=1.,max_nonwheel_contact_force_N=1.,max_abs_roll_pitch_deg=15,continuous_hold_s=1.,airborne_diagnostic=dict(min_wheel_bottom_m=.02,max_each_wheel_contact_N=1.,minimum_duration_s=.02,scope='both wheels clear ground after handoff; not an independent jump success criterion')),cases=rows)
+    filtered_changes=np.diff(np.r_[False,filtered_qualified[:,i],False].astype(int));fs=np.where(filtered_changes==1)[0];fe=np.where(filtered_changes==-1)[0]-1
+    filtered_longest=float((time[fe]-time[fs]).max()) if len(fs) else 0.
+    rows.append(dict(contact_filtered_20ms_hold_1s=filtered_longest>=1.,contact_filtered_20ms_longest_hold_s=filtered_longest,skill=skill,first_strict_support_completion_s=first_support,airborne_after_handoff=bool(flight),first_airborne_interval_s=[float(time[flight[0][0]]),float(time[flight[0][1]])] if flight else None,landing_hold_1s=bool(len(durations) and durations[j]>=1.),longest_hold_s=float(durations[j]) if j is not None else 0.,interval_s=[float(time[starts[j]]),float(time[ends[j]])] if j is not None else None))
+report=dict(contact_filter_scope='Supplementary 20ms per-wheel persistence diagnostic; original landing_hold_1s and complete-task labels unchanged',role='nominal DEV landing diagnostic, not complete continuous-task success',criteria=dict(platform_x_m=[spec.get('platform_front_x',3.6),spec.get('platform_back_x',7.6)],platform_y_m=[-1,1],top_z_m=.16,wheel_bottom_tolerance_m=.015,min_each_wheel_vertical_force_N=1.,max_nonwheel_contact_force_N=1.,max_abs_roll_pitch_deg=15,continuous_hold_s=1.,airborne_diagnostic=dict(min_wheel_bottom_m=.02,max_each_wheel_contact_N=1.,minimum_duration_s=.02,scope='both wheels clear ground after handoff; not an independent jump success criterion')),cases=rows)
 (a.run/'landing.json').write_text(json.dumps(report,indent=2)+'\n')
 np.savez(a.run/'landing_diagnostics.npz',time=time,qualified=qualified,wheel_support=support,upright=upright,no_nonwheel_contact=no_collision,wheel_bottom=np.stack(wheel_bottom,-1),roll_pitch=angles[:,:,:2],valid=valid)
 print(json.dumps(report,indent=2))

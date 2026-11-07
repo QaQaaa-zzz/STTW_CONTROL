@@ -56,6 +56,7 @@ class PhaseUEnv:
             self.landing_ticks=torch.zeros(self.num_envs,dtype=torch.long,device=self.device)
             self.flight_seen=torch.zeros(self.num_envs,dtype=torch.bool,device=self.device)
             self.platform_held=self.flight_seen.clone()
+            self.last_landing_contact=torch.zeros(self.num_envs,2,dtype=torch.bool,device=self.device)
             self.wheel_ids=[self.plant.bodies.index(name) for name in ('frontwheel','rearwheel')]
         self.entry_bank=None
         if cfg.get('reachable_entry_bank'):
@@ -96,7 +97,7 @@ class PhaseUEnv:
         self.randomization.reset(ids);self.history.frames[ids]=0;self.history.valid_count[ids]=0
         self.last_action[ids]=0;self.episode_length_buf[ids]=0;self.episode_return[ids]=0
         if self.landing_reward:
-            self.landing_ticks[ids]=0;self.flight_seen[ids]=False;self.platform_held[ids]=False
+            self.landing_ticks[ids]=0;self.flight_seen[ids]=False;self.platform_held[ids]=False;self.last_landing_contact[ids]=False
         fresh=initial_events(pose[:,0],self.task)
         for k in self.events:self.events[k][ids]=fresh[k]
         self.obs_buf[ids]=0;self.obs_buf[ids,-1]=fresh['jump_signal'].float()
@@ -155,7 +156,10 @@ class PhaseUEnv:
             forces=plant.contact[:,self.wheel_ids]
             flying=(forces.norm(dim=-1)<=1.).all(-1)&(wp[:,:,2]>.09).all(-1)&self.events['jump_zone_seen']
             self.flight_seen|=flying
-            support=platform_support_mask(wp,forces,angles[:,0],angles[:,1],3.6,7.6)
+            contact_now=forces[:,:,2]>1.
+            contact_mask=(contact_now|self.last_landing_contact) if self.landing_reward.get('filter_contact_one_policy_step',False) else contact_now
+            self.last_landing_contact.copy_(contact_now)
+            support=platform_support_mask(wp,forces,angles[:,0],angles[:,1],3.6,7.6,contact_mask)
             support&=self.flight_seen&~terminal['terminated']&(plant.contact[:,plant.nonwheel].norm(dim=-1)<=1.).all(-1)
             self.landing_ticks=torch.where(support,self.landing_ticks+1,0)
             held=self.landing_ticks*self.dt>=self.landing_reward['hold_s']
