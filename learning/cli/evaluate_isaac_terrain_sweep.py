@@ -13,7 +13,7 @@ p.add_argument('--config',type=Path,default=Path('learning/configs/isaac_h75_ter
 p.add_argument('--assets',type=Path,default=Path('runs/h75_terrain_speed_sweep/assets.json'))
 p.add_argument('--output',type=Path,required=True)
 p.add_argument('--bundle',type=Path)
-p.add_argument('--batch-cases',type=int,default=100,help='Cases per GPU scene, six lanes each; frozen per-seed parameters retained')
+p.add_argument('--batch-cases',type=int,default=341,help='Cases per GPU scene, six lanes each; frozen per-seed parameters retained')
 p.add_argument('--resume',action='store_true',help='Continue recorded unfinished matrix after an interrupted process')
 p.add_argument('--after-pid',type=int,help='Wait for an existing process exit using a kernel pidfd, without polling')
 a=p.parse_args();spec=json.loads(a.config.read_text());assets=json.loads(a.assets.read_text())['terrains'];bundle=(a.bundle or Path(spec['reference_bundle'])).resolve()
