@@ -79,6 +79,8 @@ summary=[]
 for terrain in [t['name'] for t in spec['terrain_overrides']]:
  group=[r for r in records if r['terrain']==terrain];summary.append(dict(terrain=terrain,n=len(group),survived=sum(not r['failed'] for r in group),arrived=sum(r['goal_crossed'] for r in group),final_hold=sum(r['final_hold'] for r in group),**{k:sum(r['task_'+k] for r in group) for k in spec['tasks']}))
 (a.evaluation/'gravel_screening_summary.json').write_text(json.dumps(dict(role='P0 DEV screening; no automatic P1 acceptance and no new selector training',by_terrain=summary,conditions=len(records),physical_parameter_seeds=spec['seeds']),indent=2)+'\n')
-with (a.evaluation/'RESULTS.md').open('a') as f:
+report=a.evaluation/'RESULTS.md'
+report.write_text(report.read_text().split('\n\n## Gravel P0 task screening')[0])
+with report.open('a') as f:
  f.write('\n\n## Gravel P0 task screening\n\n'+json.dumps(summary,indent=2)+'\n\nFull per-condition data: gravel_task_metrics.json/CSV and gravel_events.json. Task success requires original goal + final hold + declared peak-path/speed limits; early failure never becomes qualified through a shorter error window. Inspect all XY/paired reward figures linked above before expanding P1.\n')
 print(json.dumps(summary))
