@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import Normalize
 from PIL import Image,ImageDraw
 
-p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path,required=True);a=p.parse_args();a.output.mkdir(parents=True,exist_ok=True)
+p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path,required=True);p.add_argument('--cases',type=Path,help='JSON list of saved run, terrain, lane, label and output name');a=p.parse_args();a.output.mkdir(parents=True,exist_ok=True)
 ridge=[Path('runs/h75_terrain_speed_sweep/oblique_2cm'),Path('runs/h75_selected_local300_bend/bump_terrain'),Path('runs/h75_terrain_speed_sweep/oblique_6cm')]
 density=[Path('runs/h75_gravel_p1/assets/S1'),Path('runs/h75_gravel_g0/assets/S2_5mm'),Path('runs/h75_gravel_p1/assets/S3')]
 heights=[Path('runs/h75_gravel_p1/assets/S4'),density[1],Path('runs/h75_gravel_g0/assets/S5_5mm')]
@@ -21,34 +21,35 @@ def terrain(path):
  return meta,x,y,h
 
 route=np.load('runs/h75_selected_local300_flat/bundle/route.npz');routexy=route['xy'];rs=route['s'];center=np.array([np.interp(5,rs,routexy[:,j]) for j in range(2)])
-fig,axs=plt.subplots(3,3,figsize=(15,11),layout='constrained')
-for row,paths in enumerate([ridge,density,heights]):
- for col,path in enumerate(paths):
-  meta,x,y,h=terrain(path);ax=axs[row,col];ii=(x>center[0]-3)&(x<center[0]+3);jj=(y>center[1]-3)&(y<center[1]+3);vmax=60 if row==0 else (10 if row==1 else 20)
-  img=ax.pcolormesh(x[ii],y[jj],h[np.ix_(ii,jj)].T*1000,cmap='YlOrBr',norm=Normalize(0,vmax),shading='nearest',rasterized=True)
-  ids=(rs>=2)&(rs<=8);ax.plot(*routexy[ids].T,'--',color='#0072B2',lw=1,label='Original reference')
-  if row==0:title=f'Single ridge | height {meta["height_m"]*100:.0f} cm'
-  else:
-   count=len((path/'stone_centers.csv').read_text().splitlines())-1;title=f'Pebbles | {meta["height_m"]*1000:.0f} mm | {meta["density_per_m2"]:.0f}/m² | N={count}'
-  ax.set(title=title,xlabel='World x (m)',ylabel='World y (m)');ax.set_aspect('equal');ax.legend(fontsize=7,loc='upper left');fig.colorbar(img,ax=ax,label='Actual mesh height (mm)',shrink=.75)
-fig.suptitle('Actual experiment terrain height fields | rows: ridge height / pebble density / pebble height\nNo height magnification in the data; colors show height; rows use different color ranges',fontsize=13)
-fig.savefig(a.output/'terrain_conditions.png',dpi=160);plt.close(fig)
-# Side-view centerline profiles, evaluated on the actual stored grid.
-fig,axs=plt.subplots(1,2,figsize=(13,4),layout='constrained')
-from scipy.interpolate import RegularGridInterpolator
-s=np.linspace(2.5,7.5,1800);xy=np.column_stack([np.interp(s,rs,routexy[:,j]) for j in range(2)])
-for ax,paths in zip(axs,[ridge,heights]):
- for path in paths:
-  meta,x,y,h=terrain(path);z=RegularGridInterpolator((x,y),h)(xy);ax.plot(s,z*1000,label=f'{meta["height_m"]*1000:.0f} mm nominal')
- ax.set(xlabel='Original route distance s (m)',ylabel='Actual centerline mesh height (mm)');ax.legend();ax.grid(alpha=.2)
-axs[0].set_title('Single ridge: 20 / 40 / 60 mm');axs[1].set_title('Pebbles: 5 / 10 / 20 mm, same centers and radii')
-fig.savefig(a.output/'height_profiles.png',dpi=160);plt.close(fig)
+if a.cases is None:
+ fig,axs=plt.subplots(3,3,figsize=(15,11),layout='constrained')
+ for row,paths in enumerate([ridge,density,heights]):
+  for col,path in enumerate(paths):
+   meta,x,y,h=terrain(path);ax=axs[row,col];ii=(x>center[0]-3)&(x<center[0]+3);jj=(y>center[1]-3)&(y<center[1]+3);vmax=60 if row==0 else (10 if row==1 else 20)
+   img=ax.pcolormesh(x[ii],y[jj],h[np.ix_(ii,jj)].T*1000,cmap='YlOrBr',norm=Normalize(0,vmax),shading='nearest',rasterized=True)
+   ids=(rs>=2)&(rs<=8);ax.plot(*routexy[ids].T,'--',color='#0072B2',lw=1,label='Original reference')
+   if row==0:title=f'Single ridge | height {meta["height_m"]*100:.0f} cm'
+   else:
+    count=len((path/'stone_centers.csv').read_text().splitlines())-1;title=f'Pebbles | {meta["height_m"]*1000:.0f} mm | {meta["density_per_m2"]:.0f}/m² | N={count}'
+   ax.set(title=title,xlabel='World x (m)',ylabel='World y (m)');ax.set_aspect('equal');ax.legend(fontsize=7,loc='upper left');fig.colorbar(img,ax=ax,label='Actual mesh height (mm)',shrink=.75)
+ fig.suptitle('Actual experiment terrain height fields | rows: ridge height / pebble density / pebble height\nNo height magnification in the data; colors show height; rows use different color ranges',fontsize=13)
+ fig.savefig(a.output/'terrain_conditions.png',dpi=160);plt.close(fig)
+ # Side-view centerline profiles, evaluated on the actual stored grid.
+ fig,axs=plt.subplots(1,2,figsize=(13,4),layout='constrained')
+ from scipy.interpolate import RegularGridInterpolator
+ s=np.linspace(2.5,7.5,1800);xy=np.column_stack([np.interp(s,rs,routexy[:,j]) for j in range(2)])
+ for ax,paths in zip(axs,[ridge,heights]):
+  for path in paths:
+   meta,x,y,h=terrain(path);z=RegularGridInterpolator((x,y),h)(xy);ax.plot(s,z*1000,label=f'{meta["height_m"]*1000:.0f} mm nominal')
+  ax.set(xlabel='Original route distance s (m)',ylabel='Actual centerline mesh height (mm)');ax.legend();ax.grid(alpha=.2)
+ axs[0].set_title('Single ridge: 20 / 40 / 60 mm');axs[1].set_title('Pebbles: 5 / 10 / 20 mm, same centers and radii')
+ fig.savefig(a.output/'height_profiles.png',dpi=160);plt.close(fig)
 
 os.environ.setdefault('MUJOCO_GL','egl')
 import mujoco
 
-def video(name,run,ground,label):
- contract=json.loads((run/'contract.json').read_text());names=contract['bodies'];lane=2
+def video(name,run,ground,label,lane=2):
+ contract=json.loads((run/'contract.json').read_text());names=contract['bodies'];alpha=contract['settings']['alphas'][lane];speed=contract['settings'].get('user_speed_m_s',2.3)
  with np.load(run/'trajectory.npz') as ar:
   poses=ar['body_poses'][:,:,lane].reshape(-1,len(names),7).copy();trace=ar['lower_trace'][:,:,lane].reshape(-1,11);measurement=ar['measurement'][:,lane].copy()
  # Isaac adapter stores link orientations as xyzw; MuJoCo mocap requires wxyz.
@@ -78,10 +79,12 @@ def video(name,run,ground,label):
    aa=np.r_[routexy[j],.003];bb=np.r_[routexy[j+12],.003]
    if np.linalg.norm(aa[:2]-poses[i,0,:2])>2:continue
    scene=render.scene;geom=scene.geoms[scene.ngeom];mujoco.mjv_initGeom(geom,mujoco.mjtGeom.mjGEOM_CAPSULE,np.zeros(3),np.zeros(3),np.eye(3).ravel(),np.array([.05,.4,.9,1.]));mujoco.mjv_connector(geom,mujoco.mjtGeom.mjGEOM_CAPSULE,.004,aa,bb);scene.ngeom+=1
-  frame=Image.fromarray(render.render());draw=ImageDraw.Draw(frame);draw.rectangle((0,0,960,64),fill=(245,245,245));draw.text((12,8),label,fill=(15,15,15));draw.text((12,27),f'Recorded Isaac Lab poses | H75 + orange Local300 | alpha=0.5 | 2.3 m/s | parameter101 | t={times[i]:.2f}s',fill=(15,15,15));draw.text((12,46),'True geometry scale; original vehicle STL visual meshes; no physics replay or new simulation',fill=(15,15,15));proc.stdin.write(np.asarray(frame).tobytes())
+  frame=Image.fromarray(render.render());draw=ImageDraw.Draw(frame);draw.rectangle((0,0,960,64),fill=(245,245,245));draw.text((12,8),label,fill=(15,15,15));draw.text((12,27),f'Recorded Isaac Lab poses | H75 + orange Local300 | alpha={alpha:g} | request={speed:g} m/s | t={times[i]:.2f}s',fill=(15,15,15));draw.text((12,46),'True geometry scale; original vehicle STL visual meshes; no physics replay or new simulation',fill=(15,15,15));proc.stdin.write(np.asarray(frame).tobytes())
   if k==45:frame.save(a.output/(name+'_frame.png'))
  proc.stdin.close();assert proc.wait()==0;render.close()
- return dict(video=str(path),source=str(run),terrain=str(ground),lane=lane,alpha=.5,frames=len(ids),fps=fps,duration_s=len(ids)/fps,role='visual replay of saved link poses with source XML STL visual meshes; original physics was Isaac Lab; no physics integration',camera='tracking, actual scale, nearest recorded5ms pose,30fps',source_origin=origin.tolist(),source_quaternion_order='xyzw',render_quaternion_order='wxyz',visual_model=str(source_xml),visual_geoms='Original XML group1 STL meshes only; collision proxy boxes hidden; all joint origins are zero in the source vehicle')
+ return dict(video=str(path),source=str(run),terrain=str(ground),lane=lane,alpha=alpha,frames=len(ids),fps=fps,duration_s=len(ids)/fps,role='visual replay of saved link poses with source XML STL visual meshes; original physics was Isaac Lab; no physics integration',camera='tracking, actual scale, nearest recorded5ms pose,30fps',source_origin=origin.tolist(),source_quaternion_order='xyzw',render_quaternion_order='wxyz',visual_model=str(source_xml),visual_geoms='Original XML group1 STL meshes only; collision proxy boxes hidden; all joint origins are zero in the source vehicle')
 records=[]
-for args in [('ridge_6cm',Path('runs/h75_gravel_p0/evaluation/single_6cm_v2p3_seed101/evaluation'),ridge[2],'Single ridge: height60 mm, length0.8 m, half-width0.8 m'),('pebbles_10mm_density24',Path('runs/h75_gravel_p0/evaluation/S2_v2p3_seed101/evaluation'),density[1],'Continuous pebbles: height10 mm, density24/m2, N154, radii55-80 mm')]:
+default_cases=[('ridge_6cm',Path('runs/h75_gravel_p0/evaluation/single_6cm_v2p3_seed101/evaluation'),ridge[2],'Single ridge: height60 mm, length0.8 m, half-width0.8 m'),('pebbles_10mm_density24',Path('runs/h75_gravel_p0/evaluation/S2_v2p3_seed101/evaluation'),density[1],'Continuous pebbles: height10 mm, density24/m2, N154, radii55-80 mm')]
+cases=default_cases if a.cases is None else [(r['name'],Path(r['run']),Path(r['terrain']),r['label'],r['lane']) for r in json.loads(a.cases.read_text())]
+for args in cases:
  records.append(video(*args));(a.output/'manifest.json').write_text(json.dumps(dict(physics_steps=0,optimizer_updates=0,records=records,figure_source='Actual saved terrain height fields; no synthetic rocks or height exaggeration'),indent=2)+'\n');print('completed',args[0],flush=True)
