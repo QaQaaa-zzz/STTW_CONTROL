@@ -1,0 +1,204 @@
+{
+  "updates": 450,
+  "best": {
+    "update": 0,
+    "mean_step_reward": 0.012820068746805191,
+    "samples": 98304,
+    "reward_scaling": 0.1,
+    "checkpoint": "training/model_step_best.pt",
+    "scope": "best sampled pre-update policy in this run; not fixed-case qualification"
+  },
+  "metrics": {
+    "Train/mean_step_reward_pre_update": {
+      "n": 450,
+      "first": 0.012820068746805191,
+      "last": -0.14979436993598938,
+      "first25_mean": -0.11951823816634714,
+      "last25_mean": -0.15073867678642272,
+      "min": -0.21182481944561005,
+      "max": 0.012820068746805191,
+      "finite": true
+    },
+    "Loss/entropy": {
+      "n": 450,
+      "first": -1.5761319398880005,
+      "last": 0.04955090954899788,
+      "first25_mean": -2.8183699083328246,
+      "last25_mean": 0.004259468354284764,
+      "min": -4.025508403778076,
+      "max": 0.06053921952843666,
+      "finite": true
+    },
+    "Loss/value_function": {
+      "n": 450,
+      "first": 30.26428985595703,
+      "last": 0.015281359665095806,
+      "first25_mean": 229.8183120727539,
+      "last25_mean": 0.017029007151722907,
+      "min": 0.01500020083039999,
+      "max": 541.9321899414062,
+      "finite": true
+    },
+    "Loss/surrogate": {
+      "n": 450,
+      "first": -0.0034819860011339188,
+      "last": -0.0012868541525676847,
+      "first25_mean": 0.019573794683092272,
+      "last25_mean": -0.0009433122538393946,
+      "min": -0.0038660774007439613,
+      "max": 0.09971973299980164,
+      "finite": true
+    },
+    "Loss/learning_rate": {
+      "n": 450,
+      "first": 4.999999873689376e-05,
+      "last": 4.999999873689376e-05,
+      "first25_mean": 4.999999873689376e-05,
+      "last25_mean": 4.999999873689376e-05,
+      "min": 4.999999873689376e-05,
+      "max": 4.999999873689376e-05,
+      "finite": true
+    },
+    "Policy/mean_noise_std": {
+      "n": 450,
+      "first": 4.46174955368042,
+      "last": 4.46174955368042,
+      "first25_mean": 4.46174955368042,
+      "last25_mean": 4.46174955368042,
+      "min": 4.46174955368042,
+      "max": 4.46174955368042,
+      "finite": true
+    },
+    "Perf/total_fps": {
+      "n": 450,
+      "first": 5077.0,
+      "last": 5938.0,
+      "first25_mean": 6094.4,
+      "last25_mean": 5967.32,
+      "min": 4795.0,
+      "max": 10195.0,
+      "finite": true
+    },
+    "Perf/collection time": {
+      "n": 450,
+      "first": 19.16741943359375,
+      "last": 16.42357635498047,
+      "first25_mean": 16.30032012939453,
+      "last25_mean": 16.37248432159424,
+      "min": 9.53311538696289,
+      "max": 20.382843017578125,
+      "finite": true
+    },
+    "Perf/learning_time": {
+      "n": 450,
+      "first": 0.194990873336792,
+      "last": 0.12913751602172852,
+      "first25_mean": 0.11340255737304687,
+      "last25_mean": 0.11014308929443359,
+      "min": 0.09559273719787598,
+      "max": 0.674595832824707,
+      "finite": true
+    },
+    "Policy/latent_action_std": {
+      "n": 450,
+      "first": 0.37090378999710083,
+      "last": 0.5907138586044312,
+      "first25_mean": 0.3064178478717804,
+      "last25_mean": 0.583879599571228,
+      "min": 0.24628695845603943,
+      "max": 0.5912861824035645,
+      "finite": true
+    },
+    "Episode/reward": {
+      "n": 449,
+      "first": -100.00000762939453,
+      "last": -100.0,
+      "first25_mean": -99.99341827392578,
+      "last25_mean": -99.99945373535157,
+      "min": -100.00000762939453,
+      "max": -99.94588470458984,
+      "finite": true
+    },
+    "Episode/length": {
+      "n": 449,
+      "first": 38.5,
+      "last": 66.42942810058594,
+      "first25_mean": 76.6096206665039,
+      "last25_mean": 66.31244262695313,
+      "min": 38.5,
+      "max": 92.45729064941406,
+      "finite": true
+    },
+    "Episode/apex_fraction": {
+      "n": 449,
+      "first": 0.0,
+      "last": 0.08426721394062042,
+      "first25_mean": 0.3640107464790344,
+      "last25_mean": 0.09358178615570069,
+      "min": 0.0,
+      "max": 0.530939519405365,
+      "finite": true
+    },
+    "Episode/physical_failure": {
+      "n": 449,
+      "first": 1.0,
+      "last": 1.0,
+      "first25_mean": 0.9984817266464233,
+      "last25_mean": 0.9999447464942932,
+      "min": 0.9891774654388428,
+      "max": 1.0,
+      "finite": true
+    },
+    "Episode/ditch_cross_hold_fraction": {
+      "n": 449,
+      "first": 0.0,
+      "last": 0.0,
+      "first25_mean": 0.0,
+      "last25_mean": 0.0,
+      "min": 0.0,
+      "max": 0.0,
+      "finite": true
+    },
+    "Train/mean_reward": {
+      "n": 449,
+      "first": -10.0,
+      "last": -10.0,
+      "first25_mean": -9.998999977111817,
+      "last25_mean": -10.0,
+      "min": -10.0,
+      "max": -9.980000495910645,
+      "finite": true
+    },
+    "Train/mean_episode_length": {
+      "n": 449,
+      "first": 38.78571319580078,
+      "last": 68.08999633789062,
+      "first25_mean": 77.27342834472657,
+      "last25_mean": 66.59679962158204,
+      "min": 38.78571319580078,
+      "max": 93.62000274658203,
+      "finite": true
+    },
+    "Train/mean_reward/time": {
+      "n": 449,
+      "first": -10.0,
+      "last": -10.0,
+      "first25_mean": -9.998999977111817,
+      "last25_mean": -10.0,
+      "min": -10.0,
+      "max": -9.980000495910645,
+      "finite": true
+    },
+    "Train/mean_episode_length/time": {
+      "n": 449,
+      "first": 38.78571319580078,
+      "last": 68.08999633789062,
+      "first25_mean": 77.27342834472657,
+      "last25_mean": 66.59679962158204,
+      "min": 38.78571319580078,
+      "max": 93.62000274658203,
+      "finite": true
+    }
+  },
+  "runtime_errors": []
+}

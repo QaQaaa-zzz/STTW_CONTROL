@@ -116,6 +116,8 @@ class DitchJumpAdapter:
         self.far_lip = self.near_lip+spec['width_m']
         self.end = min(8., spec['ground_end_x_m'])
         self.halfwidth = 1.
+        # Saturation is a buffer-validity check, not a physical contact limit.
+        self.contact_capacity = env.cfg['plant_options'].get('wheel_contact_buffer_capacity') or env.cfg['plant_options']['wheel_patch_capacity']
         self.bounds = BankEnvelope(vertices,spec,plant.wheel_radius_m,
                                    env.cfg['plant_options']['wheel_width_m']/2,env.device,
                                    env.cfg['plant_options']['wheel_profile_slices'])
@@ -125,9 +127,13 @@ class DitchJumpAdapter:
         self.scorer = JumpReward(env.num_envs,env.device,dt=plant.physics_dt,
                                  width=spec['width_m'],hold_s=1.,
                                  approach_distance=self.near_lip-1.5,rough_support=(mode=='rough'))
+        self.record_diagnostics = env.cfg.get('record_verified_diagnostics',False)
+        self.diagnostics = []
 
     def reset(self, ids):
         self.scorer.reset(ids)
+        if self.record_diagnostics:
+            self.diagnostics = []
 
     def sample(self, env, action, final_tick):
         p = env.plant
@@ -135,10 +141,11 @@ class DitchJumpAdapter:
         body = p.rigid[:,env.wheel_ids,:7]
         wheels = body[:,:,:3]-p.origin[:,None,:]
         wheel_quat = body[:,:,3:7]
-        material = [classify_patches(sensor.contact_physx_view.get_contact_data(dt=p.physics_dt),
+        raw_contact = [sensor.contact_physx_view.get_contact_data(dt=p.physics_dt) for sensor in p.wheel_sensors]
+        material = [classify_patches(raw,
                                      p.origin,wheels[:,i,2],self.near_lip,self.far_lip,
-                                     self.end,self.halfwidth,env.cfg['plant_options']['wheel_patch_capacity'])
-                    for i,sensor in enumerate(p.wheel_sensors)]
+                                     self.end,self.halfwidth,self.contact_capacity)
+                    for i,raw in enumerate(raw_contact)]
         force = p.contact[:,env.wheel_ids]
         finite = (torch.isfinite(root).all(1)&torch.isfinite(p.dofs).all(dim=(1,2))&
                   torch.isfinite(body).all(dim=(1,2))&(wheel_quat.norm(dim=-1)>.5).all(1)&
@@ -168,7 +175,7 @@ class DitchJumpAdapter:
         wheels = torch.nan_to_num(wheels,nan=0.,posinf=0.,neginf=0.)
         def safe(value):
             return torch.nan_to_num(value,nan=0.,posinf=0.,neginf=0.)
-        return self.scorer.step(s=wheels[:,:,0]-self.near_lip,
+        result = self.scorer.step(s=wheels[:,:,0]-self.near_lip,
                                 clearance=self.bounds.clearance(wheels),
                                 clearance_upper=safe(self.bounds.clearance_upper(wheels,wheel_quat)),
                                 loaded=loaded,
@@ -176,3 +183,12 @@ class DitchJumpAdapter:
                                 v=safe(root[:,7]),vn=safe(root[:,9]),roll=safe(roll),
                                 pitch=safe(pitch),roll_rate=safe(roll_rate),pitch_rate=safe(pitch_rate),
                                 failed=failed,timeout=timeout)
+        if self.record_diagnostics:
+            self.diagnostics.append(dict(
+                wheel_x=wheels[:,:,0].clone(),near=near.clone(),target=target.clone(),loaded=loaded.clone(),
+                clearance=self.bounds.clearance(wheels),clearance_upper=self.bounds.clearance_upper(wheels,wheel_quat),
+                roll=roll.clone(),pitch=pitch.clone(),armed=self.scorer.armed.clone(),
+                attempt=self.scorer.attempt.clone(),stage=result[3].clone(),failed=failed.clone(),
+                patch_count=torch.stack([raw[4].reshape(env.num_envs,-1).sum(1) for raw in raw_contact],-1),
+                patch_out_of_bounds=torch.stack([((raw[4]>0)&((raw[5]<0)|(raw[5]+raw[4]>len(raw[1])))).reshape(env.num_envs,-1).any(1) for raw in raw_contact],-1)))
+        return result

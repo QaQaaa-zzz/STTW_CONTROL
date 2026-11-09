@@ -32,9 +32,15 @@ for candidate in cfg['evaluation_checkpoints']:
    parts.append({k:v.cpu().numpy() for k,v in info['reward_parts'].items()});codes.append(info['end_code'].cpu().numpy());support.append(env.platform_held.cpu().numpy().copy())
    if bool(done.all()):break
  env.plant.step=recorder.original_step;recorder.save(out/'physics_contact.npz')
+ if cfg.get('record_verified_diagnostics'):
+  diagnostic=env.verified_jump.diagnostics
+  np.savez_compressed(out/'verified_diagnostics.npz',time=(np.arange(len(diagnostic))+1)*env.plant.physics_dt,
+                      **{k:torch.stack([row[k] for row in diagnostic]).cpu().numpy() for k in diagnostic[0]})
  np.savez_compressed(out/'trajectory.npz',time=(np.arange(len(states))+1)*env.dt,root=np.stack(states),observation=np.stack(observations),action=np.stack(actions),reward=np.stack(rewards),end_code=np.stack(codes),held=np.stack(support),**{'reward_'+k:np.stack([row[k] for row in parts]) for k in parts[0]})
  tr=np.stack(states)[:,0]
  row=dict(candidate=candidate,steps=len(states),duration_s=len(states)*env.dt,terminal_code=int(codes[-1][0]),final_xyz=tr[-1,:3].tolist(),peak_root_z=float(tr[:,2].max()),max_root_x=float(tr[:,0].max()),ditch_cross_hold=bool(env.platform_held[0]),reward_total=float(np.stack(rewards).sum()),reward_parts={k:float(np.stack([x[k] for x in parts]).sum()) for k in parts[0]},scope='Single fixed-seed TRAIN-domain diagnostic with frozen sampled Go2 properties/noise and mean actor; no ground-controller handoff or complete-map success claim')
+ if cfg.get('verified_ditch_reward'):
+  row['verified_stage']=int(info['jump_stage'][0]);row['verified_success']=bool(info['jump_success'][0])
  (out/'summary.json').write_text(json.dumps(row,indent=2));report.append(row)
  (a.output/'status.json').write_text(json.dumps(dict(stage='evaluating',completed=len(report),target=len(cfg['evaluation_checkpoints']))))
 (a.output/'summary.json').write_text(json.dumps(dict(cases=report,elapsed_s=time.time()-start),indent=2))

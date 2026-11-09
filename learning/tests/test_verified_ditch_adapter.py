@@ -7,6 +7,17 @@ from sttw_control.ditch_terrain import build_ditch_terrain
 
 
 class WiringTests(unittest.TestCase):
+    def test_many_valid_contacts_use_actual_allocated_capacity(self):
+        n=100
+        point=torch.tensor([[3.2,0.,0.]]).repeat(n,1)
+        raw=(torch.ones(n,1),point,torch.tensor([[0.,0.,1.]]).repeat(n,1),None,
+             torch.tensor([[n]]),torch.tensor([[0]]))
+        args=(raw,torch.zeros(1,3),torch.tensor([.07]),3.3,3.6,8.,1.)
+        self.assertFalse(classify_patches(*args,64)[0].item())
+        self.assertTrue(classify_patches(*args,256)[0].item())
+        raw[-2][0,0]=256
+        self.assertFalse(classify_patches(*args,256)[0].item())
+
     def test_patch_support_must_stay_on_one_bank_and_in_requested_strip(self):
         # Local coordinates: lanes 0/1 valid, lane 2 touches both banks, lane 3
         # straddles the smooth shoulder, lane 4 has no registered terrain load.

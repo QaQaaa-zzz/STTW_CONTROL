@@ -1,0 +1,25 @@
+{
+  "physics_samples": 792,
+  "max_count": [
+    239,
+    232
+  ],
+  "samples_count_ge64": [
+    434,
+    183
+  ],
+  "out_of_bounds_samples": [
+    [
+      0,
+      0
+    ]
+  ],
+  "example": {
+    "time_s": 0.165,
+    "front_count": 66,
+    "front_near": false,
+    "front_loaded": true,
+    "armed": false
+  },
+  "interpretation": "Scorer used stale64 threshold with allocated256; invalidates reward/learning conclusions of450-update run, not an observed simulator overflow"
+}

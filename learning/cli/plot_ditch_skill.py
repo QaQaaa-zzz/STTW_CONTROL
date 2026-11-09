@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation,PillowWriter
 p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True);a=p.parse_args()
 cfg=json.loads((a.run/'config.json').read_text());terrain=cfg['ditch_terrain'];front=terrain['front_x_m'];back=front+terrain['width_m'];width_cm=100*terrain['width_m']
+verified=cfg.get('verified_ditch_reward',False)
 cases=json.loads((a.run/'summary.json').read_text())['cases'];colors=['#0072B2','#D55E00','#009E73'];styles=['-','--','-.']
 mesh=np.load(a.run/'terrain/terrain.npz');verts=mesh['vertices'];profile=verts[np.abs(verts[:,1])<1e-6];profile=profile[np.argsort(profile[:,0])]
 fig,axes=plt.subplots(2,3,figsize=(15,8),layout='constrained'); xy,xz,v,reward,cumulative,height=axes.ravel()
@@ -16,14 +17,17 @@ for i,c in enumerate(cases):
  xy.plot(r[:,0],r[:,1],style,color=color,label=label);xy.scatter(*r[-1,:2],color=color,marker='x',s=60)
  xz.plot(r[:,0],r[:,2],style,color=color,label=name);xz.scatter(r[-1,0],r[-1,2],color=color,marker='x',s=60)
  v.plot(t,r[:,7],style,color=color,label=name);reward.plot(t,d['reward'][:,0],style,color=color,label=name)
- cumulative.plot(t,np.cumsum(d['reward'][:,0]),style,color=color,label=name);height.plot(t,d['reward_height'][:,0],style,color=color,label=name)
+ cumulative.plot(t,np.cumsum(d['reward'][:,0]),style,color=color,label=name)
+ if verified:
+  diagnostic=np.load(a.run/name/'verified_diagnostics.npz');height.step(diagnostic['time'],diagnostic['stage'][:,0],where='post',color=color,linestyle=style,label=name)
+ else:height.plot(t,d['reward_height'][:,0],style,color=color,label=name)
 for ax in [xy,xz]:
  ax.axvspan(front,back,color='0.8',alpha=.6,label=f'open ditch {width_cm:g}cm');ax.set_xlabel('World x (m)');ax.set_xlim(1.2,max(4.8,max(c['max_root_x'] for c in cases)+.3));ax.set_aspect('equal',adjustable='box')
 xy.plot([1.2,4.8],[0,0],':',color='black',label='original route y=0');xy.set_ylim(-.4,.6);xy.set_ylabel('World y (m)');xy.set_title('Actual XY, all declared candidates');xy.legend(fontsize=7,loc='upper left')
 
 for bank in [profile[profile[:,0]<=front],profile[profile[:,0]>=back]]:xz.plot(bank[:,0],bank[:,2],color='saddlebrown')
 xz.set_ylim(-.25,.7);xz.set_ylabel('Root z (m)');xz.set_title('Actual root XZ; x marks true episode end')
-for ax,title,y in [(v,'Actual forward velocity','vx (m/s)'),(reward,'Per-step clipped reward','reward / step'),(cumulative,'Cumulative clipped reward','reward'),(height,'Inherited height shaping alone','reward / step')]:
+for ax,title,y in [(v,'Actual forward velocity','vx (m/s)'),(reward,'Per-step emitted reward','reward / step'),(cumulative,'Cumulative emitted reward','reward'),(height,'Verified contact stage' if verified else 'Inherited height shaping alone','stage 0-4' if verified else 'reward / step')]:
  ax.set_title(title);ax.set_xlabel('Time (s)');ax.set_ylabel(y);ax.grid(alpha=.2);ax.legend(fontsize=8)
 fig.suptitle(f'{width_cm:g}cm rough-bank ditch | fixed evaluation seed 20261109 | three frozen checkpoints\nSingle initial-condition diagnostic, not a success-rate comparison; no ground-controller handoff',fontsize=12)
 fig.savefig(a.run/'xy_and_rewards.png',dpi=160);plt.close(fig)

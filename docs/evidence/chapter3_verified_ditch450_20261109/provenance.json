@@ -1,0 +1,12 @@
+{
+  "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_verified_ditch450_20261109",
+  "training_code": "6c0dc779",
+  "source_archive_sha256": "9041b9602186654b7f06a9d5f5608fb540d3a250be72915f730f0fd68ad277a8",
+  "samples": 44236800,
+  "physics_steps": 353894400,
+  "role": "TRAIN plus fixed-seed DEV diagnostic, not independent TEST",
+  "seed": 20261109,
+  "validation_episodes": 7,
+  "new_training_updates": 0,
+  "comparison": "initial/mid225/last450 exact root trajectories before and after scoring-capacity fix"
+}
