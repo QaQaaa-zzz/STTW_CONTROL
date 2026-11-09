@@ -1964,3 +1964,5 @@ train/test独立种子各12随机布局+平地；有限库内每回合随机选�
 [共同窗口逐条数据](common_window.json)。60条非平地中56条有抬高轮接触记录，before该字段因传感器错误未知。视频补录已按用户要求取消；原结果与部分补录日志保留。
 
 同工况五alpha图复用旧hard72，见h75_dense_corridor_ridge10/evaluation/alpha_comparison；这些是原H75，不是第76轮。新评测跨alpha随机初态不同，不能冒充同工况偏好消融。
+
+续训模型同工况五alpha补评：alpha_matched/config.json固定13环境、同seed和原随机化/任务；两固定模型×五alpha，共130回合/650万物理lane steps/0优化。各次环境初始化不依赖指定评测alpha，初始化后才替换alpha；initial_cases、物理随机化和新增initial_state保存配对核验，绘图失败即通知而不冒称匹配。新图左原H75、右76轮，各含五alpha的XY、速度、路径误差、每步及累计奖励。启动发现13环境下alpha默认全部整数0被推断Long，已原位明确float32并保留失败日志后恢复，未发生策略采样或更新。

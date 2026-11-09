@@ -1,7 +1,7 @@
 """Original H75 PPO and weights with the shared Isaac/Go2-randomized collector."""
 import argparse,json,os,time,sys
 from pathlib import Path
-p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--evaluate',action='store_true');p.add_argument('--checkpoint',type=Path);p.add_argument('--resume',action='store_true');a=p.parse_args();s=json.loads(a.config.read_text());a.output.mkdir(parents=True,exist_ok=False)
+p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--evaluate',action='store_true');p.add_argument('--checkpoint',type=Path);p.add_argument('--resume',action='store_true');p.add_argument('--eval-alpha',type=float,choices=[0,.25,.5,.75,1]);a=p.parse_args();s=json.loads(a.config.read_text());a.output.mkdir(parents=True,exist_ok=False)
 sys.path.insert(0,str(Path(s['rsl_runtime']).resolve()))
 from isaaclab.app import AppLauncher
 app=AppLauncher(headless=True,device='cuda:0').app
@@ -17,8 +17,10 @@ started=time.time();status=dict(stage='initializing',pid=os.getpid(),completed_u
 (a.output/'config.json').write_text(json.dumps(dict(settings=s,original_training=cfg['training_future_phase_C'],initialization=('checkpoint Actor/Critic/Adam resumed; environments and RNG reset' if a.resume else 'original H75 Actor/Critic/log_std; fresh original-method Adam')),indent=2))
 env=Go2PathEnv(s,a.output)
 (a.output/'randomization.json').write_text(json.dumps(env.rollout.randomization_properties))
-if a.evaluate:env.rollout.alpha.copy_(torch.tensor([s['alphas'][i%5] for i in range(s['num_envs'])],device='cuda'))
+if a.evaluate:env.rollout.alpha.copy_(torch.tensor([a.eval_alpha if a.eval_alpha is not None else s['alphas'][i%5] for i in range(s['num_envs'])],device='cuda'))
 (a.output/'initial_cases.json').write_text(json.dumps(dict(route_ids=env.route.route_ids.cpu().tolist(),alpha=env.rollout.alpha.cpu().tolist(),terrain_ids=env.terrain_kind_id.cpu().tolist(),origins=env.plant.origin.cpu().tolist(),terrain_centers=env.terrain_center.cpu().tolist()),indent=2))
+if a.evaluate:
+ np.savez_compressed(a.output/'initial_state.npz',root=env.plant.roots.cpu().numpy(),dofs=env.plant.dofs.cpu().numpy(),pulse=env.force_world.cpu().numpy(),servo_gain=env.plant.servos.gain.cpu().numpy(),steer_offset=env.rollout.randomization.steer_offset.cpu().numpy())
 def observation():
  return TensorDict({'policy':env.get_observations(),'critic':env.get_privileged_observations()},batch_size=[s['num_envs']])
 obs=observation();algo=make_algorithm(obs,s['rollout_steps'],cfg,'cuda');original=torch.load(a.checkpoint or s['initial_policy'],map_location='cuda',weights_only=False);algo.policy.load_state_dict(original['policy'])

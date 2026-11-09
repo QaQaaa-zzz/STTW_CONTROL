@@ -13,7 +13,7 @@ from .torch_path_reward import costs,failure_reward
 class IsaacPathRollout:
     def __init__(self,bundle,settings,actor,plant=None,lower=None):
         bundle=Path(bundle);self.config=json.loads((bundle/'config.json').read_text());identity=json.loads((bundle/'identity.json').read_text());n=settings['num_envs'];self.n=n;self.device='cuda:0';self.horizon=round(settings['episode_s']/.02)
-        terrain_count=len(settings['terrains']);terrain_ids=settings.get('lane_terrain_ids',[i%terrain_count for i in range(n)]);self.terrain=torch.tensor(terrain_ids,device=self.device);self.alpha=torch.tensor(settings.get('lane_alphas',[settings['alphas'][(i//terrain_count)%len(settings['alphas'])] for i in range(n)]),device=self.device);self.diagnostics=settings.get('diagnostics',False);self.trace_lanes=settings.get('trace_lanes',min(n,15));self.zero_middle=torch.tensor(settings.get('zero_middle',[False]*n),device=self.device)
+        terrain_count=len(settings['terrains']);terrain_ids=settings.get('lane_terrain_ids',[i%terrain_count for i in range(n)]);self.terrain=torch.tensor(terrain_ids,device=self.device);self.alpha=torch.tensor(settings.get('lane_alphas',[settings['alphas'][(i//terrain_count)%len(settings['alphas'])] for i in range(n)]),device=self.device,dtype=torch.float32);self.diagnostics=settings.get('diagnostics',False);self.trace_lanes=settings.get('trace_lanes',min(n,15));self.zero_middle=torch.tensor(settings.get('zero_middle',[False]*n),device=self.device)
         if plant is None:
             from .isaac_vector_env import IsaacVectorPlant
             plant=IsaacVectorPlant(settings['asset'],list(settings['terrains'].values()),terrain_ids)
