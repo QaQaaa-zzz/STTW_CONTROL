@@ -33,7 +33,7 @@ for ax,c in zip(axes.flat,m['cases']):
         f=out/filename
         if f.exists():
             event=json.loads(f.read_text());point=np.asarray(event['root'])[0,:2];ax.plot(*point,marker,markersize=6,label=label)
-    ax.set_aspect('equal',adjustable='box');ax.set(xlabel='World X (m)',ylabel='World Y (m)',title=f"{c['case_id']} | {spec['skills'][0]}; strict full chain={s['complete']}");ax.legend(fontsize=6)
+    ax.set_aspect('equal',adjustable='box');ax.set(xlabel='World X (m)',ylabel='World Y (m)',title=f"{c['case_id']} | {spec['skills'][0]}; strict full chain={s['complete']}")
     program=dict(goals=[dict(goal_id='destination',allowed_routes=['original'],required_skills=['platform_jump','ground_return','continued_drive'])])
     candidates=[dict(candidate_id='initial',speed_m_s=spec['approach_speed'],alpha=spec['ground_alpha'])]
     decision_file=out/'connection_decision.json'
@@ -60,6 +60,10 @@ for ax,c in zip(axes.flat,m['cases']):
     (out/'task_progress.json').write_text(json.dumps(progress,indent=2)+'\n')
     rows.append(dict(scene=c['case_id'],parent_comparison=parent_comparison,skill=spec['skills'][0],filtered_protocol=s.get('contact_filtered_protocol'),unmet_checks=[k for k,v in s['checks'].items() if not v],stage_reached=next((k for k in ['continued','ground_return','strict_support','airborne_after_handoff','reached_release_line'] if s['stages'][k]),'ground_approach'),checks=s['checks'],stages=s['stages'],stage_times=s['stage_times'],complete=s['complete'],duration_s=float(trace[-1,0]),terminal_flags=physical['cases'][0]['terminal_flags'],task_progress=str(out/'task_progress.json'),xy=str(out/'xy_jump.png')))
 for ax in list(axes.flat)[n:]:ax.set_visible(False)
+legend_items={}
+for ax in axes.flat:
+    handles,labels=ax.get_legend_handles_labels();legend_items.update(zip(labels,handles))
+fig.legend(legend_items.values(),legend_items.keys(),loc='outside lower center',ncol=3,fontsize=8)
 fig.savefig(a.manifest.parent/'xy_all_scenes.png',dpi=150);plt.close(fig)
 result=dict(role='Engineering integration, no success-rate adoption gate',scenes=rows,optimizer_updates=0)
 (a.manifest.parent/'stage_summary.json').write_text(json.dumps(result,indent=2)+'\n')
