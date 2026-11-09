@@ -2,6 +2,19 @@
 import torch
 
 
+def ditch_event_components(state, events, config):
+    # Signed progress telescopes; remaining near a goal cannot earn it repeatedly.
+    previous = state['previous_x'].clamp(config['start_x_m'], config['goal_x_m'])
+    current = state['x'].clamp(config['start_x_m'], config['goal_x_m'])
+    return dict(
+        ditch_progress=config['progress_per_m'] * (current - previous),
+        ditch_takeoff=config['takeoff_bonus'] * events['first_ditch_flight'],
+        ditch_clear=config['clear_bonus'] * events['first_ditch_clear'],
+        ditch_recover=config['recover_bonus'] * events['first_platform_hold'],
+        ditch_failure=-config['failure_penalty'] * events['ditch_failed'],
+    )
+
+
 def ditch_goal_components(state, config):
     dx=config['goal_x_m']-state['x'];dy=config['goal_y_m']-state['y']
     distance=torch.sqrt(dx.square()+dy.square())

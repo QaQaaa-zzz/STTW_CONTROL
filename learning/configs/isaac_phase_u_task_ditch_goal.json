@@ -1,7 +1,7 @@
 {
   "source_config": "/home/qy/DVGC/JIT/runs/phase_u/phase_u_v4_speed2_roll400_missed200_9977856_seed820701_20260826/resolved_config.json",
   "source_sha256": "557e048980f90627b571f2bbbc554c5e66bfab2128ac8cbd799f36058eb7f7e3",
-  "status": "Prepared goal-directed ditch reward; not trained; original ditch150 unchanged",
+  "status": "Event-shaped ditch skill candidate; no training results yet",
   "task": {
     "action": {
       "base_rear_speed": 12.0,
@@ -49,7 +49,7 @@
     "physical_limits": {
       "max_abs_pitch": 1.3089969389957472,
       "max_abs_roll": 0.6108652381980153,
-      "max_abs_yaw": 0.7853981633974483,
+      "max_abs_yaw": null,
       "max_backward_distance": 1.0,
       "terminate_on_prohibited_contact": false
     },
@@ -117,53 +117,32 @@
       "rear_wheel_action_diff_penalty": 2.0,
       "roll_coeff": 3.0,
       "roll_pitch_failure_penalty": 400.0,
-      "speed_coeff": 1.0,
+      "speed_coeff": 0.0,
       "speed_sigma": 0.5,
       "steering_action_diff_penalty": 1.0,
       "steering_magnitude_penalty": 0.25,
       "stuck_penalty": 100.0,
-      "survival_reward": 1.5,
+      "survival_reward": 0.0,
       "timeout_penalty": 10.0,
-      "total_max": 50.0,
-      "total_min": -400.0,
-      "yaw_coeff": 0.3,
+      "total_max": 1000.0,
+      "total_min": -1000.0,
+      "yaw_coeff": 0.0,
       "yaw_limit_penalty": 100.0,
-      "traversal": {
-        "minimum_forward_m_s": 1.8,
-        "target_forward_m_s": 2.0,
-        "end_x_m": 3.6,
-        "stationary_height_fraction": 0.25,
-        "low_speed_weight": 8.0,
-        "forward_weight": 4.0,
-        "deceleration_weight": 2.0,
-        "deceleration_scale_m_s2": 2.0,
-        "start_x_m": 1.5
-      },
       "platform_landing": {
         "hold_s": 1.0,
         "target_forward_m_s": 1.5,
         "speed_sigma": 0.5,
-        "support_weight": 8.0,
-        "hold_bonus": 40.0
+        "support_weight": 0.0,
+        "hold_bonus": 0.0
       },
-      "heading_tracking": {
-        "position_weight": 1.0,
-        "position_scale_m": 0.3,
-        "velocity_weight": 0.5,
-        "velocity_scale_m_s": 0.3,
-        "yaw_weight": 1.0,
-        "yaw_scale_rad": 0.1745329252,
-        "yaw_rate_weight": 0.1,
-        "bounded": true
-      },
-      "ditch_goal": {
+      "ditch_events": {
+        "start_x_m": 1.5,
         "goal_x_m": 5.6,
-        "goal_y_m": 0.0,
-        "target_speed_m_s": 1.5,
-        "position_weight": 12.0,
-        "velocity_weight": 8.0,
-        "position_scale_m": 2.0,
-        "velocity_scale_m_s": 0.7
+        "progress_per_m": 20.0,
+        "takeoff_bonus": 10.0,
+        "clear_bonus": 60.0,
+        "recover_bonus": 150.0,
+        "failure_penalty": 400.0
       }
     },
     "schema": "jit_phase_u_formal_v4",
@@ -291,5 +270,5 @@
       0.0
     ]
   },
-  "reward_change_note": "UMV-inspired goal-position and goal-directed-velocity kernels plus existing Go2-style landing/contact and action regularization. All weights are our design, not copied UMV coefficients. Disable fixed0.5m apex reward and low-height cost. Disable inherited jump-zone low-vx-before-apex terminal, which stopped last150 in the ditch; physical collision, roll/pitch/yaw, trench fall, corridor and8s timeout remain. No successful label relaxed. Target5.6m is2m beyond far bank; hold support remains1s. User requests shift front3.6 to3.3m and narrow0.6 to0.3m; geometry and reward change together, not single-factor ablation."
+  "reward_change_note": "Signed x progress plus one-time flight/clear/unchanged 1s recovery events. No repeated near-bank velocity, position, survival or positive posture rewards. Uniform failure penalty400 including unsuccessful horizon; unsuccessful horizon does not bootstrap. User explicitly defers path tracking: no yaw termination or heading/path reward. Keep roll35deg/pitch75deg, body contact and root fall conditions. This changes reward AND task-domain constraints; not a reward-only ablation. Old frozen run tasks unchanged."
 }

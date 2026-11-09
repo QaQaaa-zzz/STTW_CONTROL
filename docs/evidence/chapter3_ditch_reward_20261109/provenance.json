@@ -1,0 +1,28 @@
+{
+  "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ditch_goal30_20261109",
+  "role": "TRAIN and single-seed DEV; not independent test",
+  "training_implementation": "389be691",
+  "checkpoints": [
+    {
+      "file": "model_initial.pt",
+      "sha256": "0b26a23475214c38f396b42633ebe398fafa182019cb214188a575488f4024cd"
+    },
+    {
+      "file": "model_step_best.pt",
+      "sha256": "168959dda3031bce609dcb9cf69dc4994e866a12454106cb5988b6ea60985d21"
+    },
+    {
+      "file": "model_update_00075.pt",
+      "sha256": "ab8a7c2dd236f9a3df269d17c40232a14384bc0c79618035c88c4d7367fe3187"
+    },
+    {
+      "file": "model_update_00150.pt",
+      "sha256": "c3f502723a2df93fbad9024823cb491731c613193976ca2b5446132cf6889135"
+    }
+  ],
+  "training_transitions": 14745600,
+  "policy_dt_s": 0.02,
+  "physics_dt_s": 0.0025,
+  "evaluation_seed": 20261109,
+  "parallel_evaluation": "User authorized one-environment evaluation alongside H75; no timing comparison"
+}

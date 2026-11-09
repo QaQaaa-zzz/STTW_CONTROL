@@ -39,7 +39,7 @@ def build_ditch_terrain(spec):
 def ditch_support_mask(wheels, forces, roll, pitch, forward_velocity, spec):
     on = ((wheels[:,:,0] > spec['front_x_m']+spec['width_m'])
           & (wheels[:,:,0] < spec['ground_end_x_m'])
-          & (wheels[:,:,1].abs() < .9)
+          & (wheels[:,:,1].abs() < spec.get('lateral_limit_m',.9))
           & (wheels[:,:,2] >= .045)
           & (wheels[:,:,2] <= .095+spec['stone_height_max_m'])).all(-1)
     return on & (forces[:,:,2]>1.).all(-1) & (roll.abs()<.15) & (pitch.abs()<.15) & (forward_velocity>=1.)

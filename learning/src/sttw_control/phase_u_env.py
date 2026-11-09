@@ -63,6 +63,7 @@ class PhaseUEnv:
             self.landing_ticks=torch.zeros(self.num_envs,dtype=torch.long,device=self.device)
             self.flight_seen=torch.zeros(self.num_envs,dtype=torch.bool,device=self.device)
             self.platform_held=self.flight_seen.clone()
+            self.ditch_cleared=self.flight_seen.clone()
             self.last_landing_contact=torch.zeros(self.num_envs,2,dtype=torch.bool,device=self.device)
             self.wheel_ids=[self.plant.bodies.index(name) for name in ('frontwheel','rearwheel')]
         self.entry_bank=None
@@ -105,6 +106,7 @@ class PhaseUEnv:
         self.last_action[ids]=0;self.episode_length_buf[ids]=0;self.episode_return[ids]=0
         if self.landing_reward:
             self.landing_ticks[ids]=0;self.flight_seen[ids]=False;self.platform_held[ids]=False;self.last_landing_contact[ids]=False
+            self.ditch_cleared[ids]=False
         fresh=initial_events(pose[:,0],self.task)
         for k in self.events:self.events[k][ids]=fresh[k]
         self.obs_buf[ids]=0;self.obs_buf[ids,75]=fresh['jump_signal'].float()
@@ -134,6 +136,7 @@ class PhaseUEnv:
     def step(self,latent_actions):
         plant=self.plant;action=torch.tanh(latent_actions);target=self.targets(action)
         previous_forward_velocity=plant.roots[:,7].clone()
+        previous_x=plant.roots[:,0].clone()-plant.origin[:,0]
         push_ticks=round(self.rand['push_interval_s']/self.dt)
         ids=((self.episode_length_buf>0)&(self.episode_length_buf%push_ticks==0)).nonzero().flatten()
         if len(ids):push_by_setting_velocity(SimpleNamespace(scene={'robot':plant.robot}),ids,self.rand['push_velocity_range'])
@@ -155,7 +158,7 @@ class PhaseUEnv:
         nonfinite=~torch.isfinite(root).all(-1)|~torch.isfinite(plant.dofs).all(dim=(1,2))|~torch.isfinite(action).all(-1)
         inputs=dict(episode_step=self.events['episode_step'],nonfinite=nonfinite,roll=angles[:,0],pitch=angles[:,1],illegal_contact=contact,backward_exit=root[:,0]<1.5-self.task['physical_limits']['max_backward_distance'],stuck=self.events['stuck'],yaw=angles[:,2],jump_zone_seen=self.events['jump_zone_seen'])
         if self.ditch:
-            inputs['terrain_failure']=(root[:,2]<-.15)|(root[:,1].abs()>.9)|contact
+            inputs['terrain_failure']=(root[:,2]<-.15)|(root[:,1].abs()>self.ditch.get('lateral_limit_m',.9))|contact
         preliminary=classify_terminal(inputs,self.task)
         previous=self.events
         self.events=advance_events(previous,dict(x=root[:,0],z=root[:,2],forward_velocity=root[:,7],vertical_velocity=root[:,9],physical_failure=preliminary['terminated']),self.task)
@@ -164,10 +167,12 @@ class PhaseUEnv:
         reward_events=dict(jump_zone_seen=self.events['jump_zone_seen'],jump_signal=self.events['jump_signal'],first_apex_success=self.events['apex_seen']&~previous['apex_seen'],illegal_contact=contact,physical_failure_transition=terminal['physical_failure'],roll_pitch_failure_transition=terminal['roll_limit']|terminal['pitch_limit'],jump_zone_missed_transition=terminal['jump_zone_missed'],stuck_transition=terminal['stuck'],yaw_limit_transition=terminal['yaw_limit'],timeout_transition=terminal['timeout'])
         hip,knee=plant.pendulum_servos.indices
         reward_state=dict(previous_forward_velocity=previous_forward_velocity,policy_dt=self.dt,x=root[:,0],roll=angles[:,0],pitch=angles[:,1],yaw=angles[:,2],y=root[:,1],lateral_velocity=root[:,8],yaw_rate=root[:,12],z=root[:,2],forward_velocity=root[:,7],pitch_rate=root[:,11],hip_velocity=plant.dofs[:,hip,1],knee_velocity=plant.dofs[:,knee,1],hip_force=plant.last_pendulum_torque[:,hip],knee_force=plant.last_pendulum_torque[:,knee])
+        reward_state['previous_x']=previous_x
         if self.landing_reward:
             wp=plant.rigid[:,self.wheel_ids,:3]-plant.origin[:,None,:]
             forces=plant.contact[:,self.wheel_ids]
             flying=(forces.norm(dim=-1)<=1.).all(-1)&(wp[:,:,2]>.09).all(-1)&self.events['jump_zone_seen']
+            first_flight=flying&~self.flight_seen&~terminal['terminated']
             self.flight_seen|=flying
             contact_now=forces[:,:,2]>1.
             contact_mask=(contact_now|self.last_landing_contact) if self.landing_reward.get('filter_contact_one_policy_step',False) else contact_now
@@ -181,6 +186,11 @@ class PhaseUEnv:
             held=self.landing_ticks*self.dt>=self.landing_reward['hold_s']
             reward_events.update(platform_supported=support,first_platform_hold=held&~self.platform_held)
             self.platform_held|=held
+            if 'ditch_events' in self.task['reward']:
+                clear=(wp[:,:,0]>self.ditch['front_x_m']+self.ditch['width_m']).all(-1)&(wp[:,:,2]>.045).all(-1)&self.flight_seen&~terminal['terminated']
+                reward_events.update(first_ditch_flight=first_flight,first_ditch_clear=clear&~self.ditch_cleared,
+                    ditch_failed=terminal['terminated']|(terminal['timeout']&~self.platform_held))
+                self.ditch_cleared|=clear
         clipped,unclipped,parts=phase_u_reward(reward_state,action,self.last_action,reward_events,self.task['reward'])
         reward,self.episode_return,override=phase_u_episode_reward(clipped,self.episode_return,terminal['stuck'],terminal['yaw_limit'],self.task['reward'])
         done=terminal['terminated']|terminal['truncated'];self.episode_length_buf+=1;self.last_action.copy_(action)
@@ -192,7 +202,10 @@ class PhaseUEnv:
             extra=extra+(2*torch.rand_like(extra)-1)*noise
             self.obs_buf=torch.cat((self.obs_buf,extra),-1)
         self.privileged_obs_buf=self.history.privileged(self.obs_buf[:,:76],root,plant.dofs[:,:,0],plant.dofs[:,:,1],contact)
-        info=dict(time_outs=terminal['truncated'].float(),reward_parts={**parts,'episode_return_override':override},end_code=terminal['end_code'],apex=self.events['apex_seen'].clone(),unscaled_reward=reward)
+        bootstrap_timeout=terminal['truncated']
+        if 'ditch_events' in self.task['reward']:
+            bootstrap_timeout=bootstrap_timeout&~reward_events['ditch_failed']
+        info=dict(time_outs=bootstrap_timeout.float(),reward_parts={**parts,'episode_return_override':override},end_code=terminal['end_code'],apex=self.events['apex_seen'].clone(),unscaled_reward=reward)
         ids=done.nonzero().flatten()
         if len(ids):
             info['episode']=dict(reward=self.episode_return[ids].mean(),length=self.episode_length_buf[ids].float().mean(),apex_fraction=self.events['apex_seen'][ids].float().mean(),physical_failure=terminal['physical_failure'][ids].float().mean())

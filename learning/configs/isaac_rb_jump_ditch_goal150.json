@@ -41,7 +41,7 @@
   },
   "go2_checkout": "/home/qy/projects/My_unitree_go2_gym",
   "seed": 28,
-  "status": "User explicitly selects front3.3m,width0.3m; new goal reward150 updates",
+  "status": "Event-reward candidate; yaw/path constraints deferred by user; not trained",
   "reset_note": "100% ground start x1.5 vx2; no platform entry bank or airborne RSI",
   "optimizer_initialization": "ditch150 update138 weights/normalizers; fresh Adam",
   "jump_steering_gains": [
@@ -70,6 +70,7 @@
     "stone_height_min_m": 0.01,
     "stone_height_max_m": 0.04,
     "stones_per_m2": 30,
-    "seed": 20261109
+    "seed": 20261109,
+    "lateral_limit_m": 3.9
   }
 }

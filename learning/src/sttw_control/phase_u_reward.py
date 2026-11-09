@@ -78,6 +78,14 @@ def phase_u_reward(state, action, last_action, events, config):
     if 'ditch_goal' in c:
         from .ditch_goal_reward import ditch_goal_components
         components.update(ditch_goal_components(state,c['ditch_goal']))
+    if 'ditch_events' in c:
+        from .ditch_goal_reward import ditch_event_components
+        # Retain posture costs, not repeated bonuses for staying on the near bank.
+        for name in ('roll','pitch','yaw'):
+            components[name]=components[name].clamp(max=0)
+        for name in ('physical_failure','roll_pitch_failure','jump_zone_missed','stuck','yaw_limit','timeout'):
+            components[name]=zero
+        components.update(ditch_event_components(state,events,c['ditch_events']))
     total=sum(components.values())
     return total.clamp(c['total_min'],c['total_max']),total,components
 

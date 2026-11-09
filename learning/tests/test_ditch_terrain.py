@@ -38,3 +38,10 @@ def test_trench_failure_is_terminal_and_retains_legacy_codes():
     result=classify_terminal(inputs,config)
     assert result['terminated'].tolist()==[True,True]
     assert result['end_code'].tolist()==[12,3]
+
+
+def test_crossing_skill_can_land_off_center_with_declared_bank_boundary():
+ p=torch.tensor([[[4.6,1.2,.07],[4.3,1.2,.07]]]);f=torch.zeros_like(p);f[:,:,2]=10
+ z=torch.zeros(1);v=torch.ones(1)*1.5
+ assert not ditch_support_mask(p,f,z,z,v,SPEC).item()
+ assert ditch_support_mask(p,f,z,z,v,{**SPEC,'lateral_limit_m':3.9}).item()
