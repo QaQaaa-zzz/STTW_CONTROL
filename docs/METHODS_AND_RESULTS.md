@@ -1902,3 +1902,9 @@ Config learning/configs/isaac_h75_tradeoff_repeats.json records all sampled valu
 
 ## 当前运行代码与依赖闭包交付
 用户要求可多不可少、推送后关机。新增learning/deployment/chapter3：6个相对路径运行配置、实际H75/Local300/heading125/update2数组、原RB模型/mesh/地形/起态/路线/核记录、Go2训练源码、原训练输入及125checkpoint；Isaac Lab/Sim外部SDK版本单列。源与输入hash以及CPU实际加载检查通过，未重跑物理。独立TEST012/019四条均选档前ground_domain_exit，strict/contact20各方法0/2；配对trace逐值一致，实际4864步/0更新，未调参。完整失败XY和阶段评分见docs/evidence/chapter3_jump_heading/test_online。
+
+
+## 第三章多弯道与起伏地形接续（2026-11-08 PST）
+目的：先走通不同几何与地形上的接续，暂不追成功率。六场景使用原RB带摆车/H75+ECBC+ESO/zero_lower、400/200/50Hz；2cm两段sin²起伏，右/左R2单弯及双向S弯，26s工程DEV，无新奖励或训练。update2首批S平地执行到续行，其余存在地面/落台失败；修复参考路径x25末端退出，S平地完整26s，原1.438m路廊偏差保留。上游请求1.8→出弯2m/s的三条验证使右弯/反向S起伏到达跳跃，仍未稳定落台；不继续扫速度。
+复用既有heading125及其20ms接触过滤交接合同，右/左/反向S起伏各1条26s（31200物理步、0训练），三条跳跃前trace与原update2逐值一致。右/左起伏按20ms合同完成整程；反向S执行回交续行但路廊及落台检查不合格。三条原严格完整标签均false，保持分列；技能权重与交接过滤共同改变，不称单因素网络改进。现有多场景工程链可推进LLM，不以新增成功率训练为前置。
+代码prepare_rb_offroad_chain.py、evaluate_isaac_pendulum_jump.py、summarize_multiscene_chain.py；报告回放修正实际初始速度与出弯切换、技能身份及两种物理确认。15项任务管理测试通过，物理汇总与回放状态一致。各场景实际/参考/父模型XY、原始输出和冻结配置见数据盘chapter3_multiscene_heading125_20261108/RESULTS.md；此前批次分别chapter3_multiscene_chain_20261108、chapter3_s_flat_route_extension_20261108、chapter3_terrain_speed_plan_20261108。单条场景DEV，不作泛化或成功率估计；未调用LLM或实机。
