@@ -3,6 +3,12 @@ import argparse,importlib.util,json,os,sys,time
 from pathlib import Path
 p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args()
 cfg=json.loads(a.config.read_text());a.output.mkdir(parents=True,exist_ok=False)
+# Isaac/CUDA teardown can hang after an exception; persist failure and exit promptly.
+def training_exception(kind, error, traceback):
+    (a.output/'status.json').write_text(json.dumps(dict(stage='failed',pid=os.getpid(),error_type=kind.__name__,error=str(error)),indent=2))
+    sys.__excepthook__(kind,error,traceback)
+    sys.stdout.flush();sys.stderr.flush();os._exit(1)
+sys.excepthook=training_exception
 sys.path.insert(0,str(Path(cfg['go2_checkout'])/'rsl_rl'))
 from isaaclab.app import AppLauncher
 app=AppLauncher(headless=True,device=cfg['device']).app
