@@ -44,7 +44,7 @@ def advance_events(previous,signals,config):
 def classify_terminal(inputs,config):
     p=config['physical_limits'];e=config['events'];false=torch.zeros_like(inputs['roll'],dtype=torch.bool)
     roll=inputs['roll'].abs()>p['max_abs_roll'];pitch=inputs['pitch'].abs()>p['max_abs_pitch']
-    failures=(inputs['nonfinite'],roll,pitch,inputs['illegal_contact']&p['terminate_on_prohibited_contact'],inputs['backward_exit'])
+    failures=(inputs['nonfinite'],roll,pitch,inputs['illegal_contact']&p['terminate_on_prohibited_contact'],inputs['backward_exit'],inputs.get('terrain_failure',false))
     physical=false.clone()
     for f in failures:physical|=f
     raw_yaw=false if p.get('max_abs_yaw') is None else inputs['yaw'].abs()>p['max_abs_yaw']
@@ -52,7 +52,7 @@ def classify_terminal(inputs,config):
     horizon=inputs['episode_step']>=config['ppo']['episode_horizon']-1
     missed=config['schema'].endswith('_v4')&(~inputs['jump_zone_seen']&(physical|horizon))
     stuck=raw_stuck&~physical;yaw=raw_yaw&~physical&~stuck
-    conditions=failures+(missed,stuck,yaw);codes=(2,3,4,5,7,11,8,10)
+    conditions=failures+(missed,stuck,yaw);codes=(2,3,4,5,7,12,11,8,10)
     terminated=physical|missed|stuck|yaw;timeout=horizon&~terminated
     code=torch.zeros_like(inputs['episode_step'])
     for f,c in reversed(tuple(zip(conditions,codes))):code=torch.where(f,c,code)

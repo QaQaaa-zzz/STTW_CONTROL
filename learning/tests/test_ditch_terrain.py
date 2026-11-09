@@ -1,0 +1,40 @@
+import numpy as np
+import torch
+from sttw_control.ditch_terrain import build_ditch_terrain, ditch_support_mask
+from sttw_control.phase_u_events import classify_terminal
+
+SPEC=dict(front_x_m=3.6,width_m=.6,ground_end_x_m=25.,stone_height_min_m=.01,stone_height_max_m=.04,stones_per_m2=30,seed=20261109)
+
+
+def test_gap_is_open_and_both_banks_are_rough():
+    vertices, faces = build_ditch_terrain(SPEC)
+    xs=vertices[faces,0]
+    assert np.all((xs.max(1)<=3.60001)|(xs.min(1)>=4.19999))
+    assert not ((vertices[:,0]>3.60001)&(vertices[:,0]<4.19999)).any()
+    for lo,hi in ((2.,3.6),(4.2,8.)):
+        z=vertices[(vertices[:,0]>lo)&(vertices[:,0]<hi),2]
+        assert z.max()>.025 and z.max()<=.04
+    assert np.array_equal(vertices,build_ditch_terrain(SPEC)[0])
+    normal=np.cross(vertices[faces[:,1]]-vertices[faces[:,0]],vertices[faces[:,2]]-vertices[faces[:,0]])
+    assert (normal[:,2]>0).all()
+
+
+def test_landing_requires_both_wheels_across_contact_and_motion():
+    wheels=torch.tensor([[[4.6,0,.09],[4.3,0,.08]]]).repeat(5,1,1)
+    forces=torch.zeros(5,2,3);forces[:,:,2]=15
+    wheels[1,1,0]=4.1
+    forces[2,1,2]=0
+    wheels[3,:,2]=.23 # old raised platform is not this task
+    speed=torch.tensor([1.5,1.5,1.5,1.5,0.])
+    assert ditch_support_mask(wheels,forces,torch.zeros(5),torch.zeros(5),speed,SPEC).tolist()==[True,False,False,False,False]
+
+
+def test_trench_failure_is_terminal_and_retains_legacy_codes():
+    import json
+    from pathlib import Path
+    config=json.loads(Path('learning/configs/isaac_phase_u_task_ditch.json').read_text())['task']
+    inputs={k:torch.zeros(2,dtype=torch.bool) for k in ('nonfinite','illegal_contact','backward_exit','stuck','jump_zone_seen')}
+    inputs.update(roll=torch.tensor([0.,1.]),pitch=torch.zeros(2),yaw=torch.zeros(2),episode_step=torch.zeros(2,dtype=torch.long),terrain_failure=torch.tensor([True,False]))
+    result=classify_terminal(inputs,config)
+    assert result['terminated'].tolist()==[True,True]
+    assert result['end_code'].tolist()==[12,3]

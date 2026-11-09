@@ -28,8 +28,14 @@ class PhaseUEnv:
         triangles=np.array([[0,2,1],[0,3,2],[4,5,6],[4,6,7],[0,1,5],[0,5,4],[1,2,6],[1,6,5],[2,3,7],[2,7,6],[3,0,4],[3,4,7],[8,9,10],[8,10,11]],dtype=np.int32)
         ground_end=cfg.get('ground_end_x_m',15.)
         vertices=np.concatenate((vertices,np.array([[-5,-4,0],[ground_end,-4,0],[ground_end,4,0],[-5,4,0]],dtype=np.float32)))
+        self.ditch=cfg.get('ditch_terrain')
+        if self.ditch:
+            from .ditch_terrain import build_ditch_terrain
+            if cfg['plant_options'].get('terrain_base_plane',False) or cfg.get('reachable_entry_bank') or self.task['reset']['airborne_rsi_probability']:
+                raise ValueError('Ditch training requires open trench and ground-only resets; platform snapshots/RSI are not valid')
+            vertices,triangles=build_ditch_terrain(self.ditch)
         np.savez(terrain/'terrain.npz',vertices=vertices,triangles=triangles)
-        (terrain/'identity.json').write_text(json.dumps(dict(sha256=hashlib.sha256((terrain/'terrain.npz').read_bytes()).hexdigest(),platform_front_x=3.6,platform_top_z=.16,ground_bounds_x_m=[-5,ground_end],ground_bounds_y_m=[-4,4])))
+        (terrain/'identity.json').write_text(json.dumps(dict(sha256=hashlib.sha256((terrain/'terrain.npz').read_bytes()).hexdigest(),platform_front_x=3.6,platform_top_z=None if self.ditch else .16,ditch_terrain=self.ditch,ground_bounds_x_m=[-5,ground_end],ground_bounds_y_m=[-4,4])))
         self.plant=IsaacLabVectorPlant(Path(cfg['asset']),[str(terrain)],[0]*self.num_envs,Path(output),**cfg['plant_options'])
         self.physics_substeps=round(self.dt/self.plant.physics_dt)
         self.sensor_substeps=round(self.rand['sensor_dt_s']/self.plant.physics_dt)
@@ -140,7 +146,7 @@ class PhaseUEnv:
             root_acceleration=(root_velocity-previous_root_velocity)/plant.physics_dt;previous_root_velocity=root_velocity.clone()
             if (tick+1)%self.sensor_substeps==0:
                 plant.refresh();root=plant.roots.clone();root[:,:3]-=plant.origin
-                distance=3.6-(self.geometry.frontmost_x(plant.rigid)-plant.origin[:,0])
+                distance=(self.ditch['front_x_m'] if self.ditch else 3.6)-(self.geometry.frontmost_x(plant.rigid)-plant.origin[:,0])
                 acceleration=root_acceleration if self.cfg.get('root_acceleration_difference',False) else plant.robot.data.body_com_acc_w[:,plant.bodies.index('chasis'),:3]
                 frame=self.history.make_frame(root,plant.dofs[:,:,0],plant.dofs[:,:,1],acceleration,distance,action)
                 measured=self.randomization.sensor_frame(frame)
@@ -148,6 +154,8 @@ class PhaseUEnv:
         root,contact,critic=self.physical();angles=critic[:,99:102]
         nonfinite=~torch.isfinite(root).all(-1)|~torch.isfinite(plant.dofs).all(dim=(1,2))|~torch.isfinite(action).all(-1)
         inputs=dict(episode_step=self.events['episode_step'],nonfinite=nonfinite,roll=angles[:,0],pitch=angles[:,1],illegal_contact=contact,backward_exit=root[:,0]<1.5-self.task['physical_limits']['max_backward_distance'],stuck=self.events['stuck'],yaw=angles[:,2],jump_zone_seen=self.events['jump_zone_seen'])
+        if self.ditch:
+            inputs['terrain_failure']=(root[:,2]<-.15)|(root[:,1].abs()>.9)|contact
         preliminary=classify_terminal(inputs,self.task)
         previous=self.events
         self.events=advance_events(previous,dict(x=root[:,0],z=root[:,2],forward_velocity=root[:,7],vertical_velocity=root[:,9],physical_failure=preliminary['terminated']),self.task)
@@ -165,6 +173,9 @@ class PhaseUEnv:
             contact_mask=(contact_now|self.last_landing_contact) if self.landing_reward.get('filter_contact_one_policy_step',False) else contact_now
             self.last_landing_contact.copy_(contact_now)
             support=platform_support_mask(wp,forces,angles[:,0],angles[:,1],3.6,7.6,contact_mask)
+            if self.ditch:
+                from .ditch_terrain import ditch_support_mask
+                support=ditch_support_mask(wp,forces,angles[:,0],angles[:,1],root[:,7],self.ditch)
             support&=self.flight_seen&~terminal['terminated']&(plant.contact[:,plant.nonwheel].norm(dim=-1)<=1.).all(-1)
             self.landing_ticks=torch.where(support,self.landing_ticks+1,0)
             held=self.landing_ticks*self.dt>=self.landing_reward['hold_s']
@@ -185,7 +196,7 @@ class PhaseUEnv:
         ids=done.nonzero().flatten()
         if len(ids):
             info['episode']=dict(reward=self.episode_return[ids].mean(),length=self.episode_length_buf[ids].float().mean(),apex_fraction=self.events['apex_seen'][ids].float().mean(),physical_failure=terminal['physical_failure'][ids].float().mean())
-            if self.landing_reward:info['episode']['platform_hold_fraction']=self.platform_held[ids].float().mean()
+            if self.landing_reward:info['episode']['ditch_cross_hold_fraction' if self.ditch else 'platform_hold_fraction']=self.platform_held[ids].float().mean()
             self.reset_idx(ids)
         self.total_physics_steps+=self.physics_substeps*self.num_envs
         return self.obs_buf,self.privileged_obs_buf,reward*self.task['ppo']['reward_scaling'],done,info
