@@ -126,7 +126,10 @@ if spec.get('connection_selector'):
  if selector_config.get('schema')=='approach_endpoint_v1':
   from sttw_control.approach_planner import ApproachPlanner
   if spec['origin_id'] in selector_config['training_roots']:raise ValueError('Online planner validation must exclude training roots')
-  selector=ApproachPlanner(selector_config,identity=dict(ground=ground.upper_sha256,jump=policies[0].identity['artifact_sha256'],model_contract=hashlib.sha256(Path(cfg['asset']).with_name('contract.json').read_bytes()).hexdigest(),physics_dt=plant.physics_dt,zero_lower=spec['zero_lower']))
+  planner_identity=dict(ground=ground.upper_sha256,jump=policies[0].identity['artifact_sha256'],model_contract=hashlib.sha256(Path(cfg['asset']).with_name('contract.json').read_bytes()).hexdigest(),physics_dt=plant.physics_dt,zero_lower=spec['zero_lower'])
+  if 'execution_contract' in selector_config['identity']:
+   planner_identity['execution_contract']=dict(completion_protocol='contact_filtered_20ms',landing_return=spec['landing_return'],seconds=spec['seconds'],completion={k:v for k,v in spec['completion'].items() if k!='waypoints'})
+  selector=ApproachPlanner(selector_config,identity=planner_identity)
   accepted_rows=selector_config['training_rows']
  else:
   selector=JumpConnectionSelector(evidence,selector_config,origin_id=spec['origin_id'],policy_sha256=dict(ground=ground.upper_sha256,jump=policies[0].identity['artifact_sha256']),model_contract_sha256=hashlib.sha256(Path(cfg['asset']).with_name('contract.json').read_bytes()).hexdigest(),physics_dt=plant.physics_dt,zero_lower=spec['zero_lower'])
