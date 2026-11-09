@@ -1923,3 +1923,8 @@ P3切换前位置/速度/姿态/观测/命令差异均0；15组成功fork，75�
 建议顺序（未执行）：①从已有P3/P4数据分离切换后响应、已失格前缀、候选不可行和选择错误；②以任务状态为中心选择单阶段/恢复档，只在同暖态原表有可信缺口时另立小预算新布局确认，完整原任务标签保留，原TEST不用于调表；③只有原候选能力不足才立项Isaac地形混合续训，先保留Local300、考虑H75权重续训，真实底层跟踪失配才训练底层。正式轮数/采样量/随机化/评价与停止条件在启动前明确，不自动恢复旧训练。原生Isaac视频与XY/奖励由同次新评价保存，不为补录像重跑所有历史大面板。
 
 来源：lower-first-noalpha/runs/noalpha_v2_formal_20261010/analysis_{0300,0400}/RESULTS_*.md；tolerance-calibration/docs/evidence/tolerance_progress_20261022/full_tail_length75/FINAL_RESULTS.md与该run/uniform/metrics.jsonl；gravel/runs/go2_local{500_comparison,original500,adapted500,300_warm1000}的报告、状态和日志。本轮只读核查/文档，无新训练/评测。
+
+
+## 用户请求：集中石子与10cm单脊（2026-11-08）
+新条件DEV沿原H75/Local300冻结链。将原S2的154颗10mm石子保持沿程/半径、横向中心乘0.25至±0.2m；单脊只将高度扩到0.1m，原网格/长宽不变。两地形×两速度×六方法×三原参数组=72回合/10s/360万物理lane-step上限/0训练。配置isaac_h75_dense_corridor_ridge10.json；脚本及资产来源在runs/h75_dense_corridor_ridge10。用户明确要求不排队直接执行，本轮绕过GPU队列、不终止另会话；service sttw-dense-ridge10，0额外试跑/无自动扩展或重试。原两大任务和已取消低凸脊不恢复。
+复用terrain sweep与分析；analyze_gravel_p0按资产terrain_kind分派石子网格插值或原凸脊接触判据，修复此前仅识别single_6cm名称、对10cm会错误要求grid_x的问题。语法与shell检查通过，真实结果待回收；原数据不改。全局training-failure-hook文档当前路径不存在，本轮复用现有STTW Bark完成/错误通知脚本，未臆造独立失败唤起链已接入。

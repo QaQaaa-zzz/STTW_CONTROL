@@ -23,7 +23,7 @@ batch_paths=sorted({Path(json.loads((Path(case['run'])/'contract.json').read_tex
 selected={(case['terrain'],case['user_speed_m_s'],case['seed']) for case in index}
 for batch in batch_paths:
  run=batch/'evaluation';c=json.loads((run/'contract.json').read_text());settings=c['settings'];cases=json.loads((batch/'cases.json').read_text());n=settings['num_envs'];case_ids=np.repeat(np.arange(len(cases)),[v.get('lane_count',6) for v in cases]);case_starts=np.r_[0,np.cumsum([v.get('lane_count',6) for v in cases])];raw=run/'physics_contacts';meta=json.loads((raw/'index.json').read_text());dt=meta['physics_dt_s'];static=static_wheel_loads(c);collected=[]
- terrains=[None if case['terrain'] in ('flat','single_6cm') else np.load(Path(case['terrain_path'])/'terrain.npz') for case in cases]
+ terrains=[np.load(Path(case['terrain_path'])/'terrain.npz') if json.loads((Path(case['terrain_path'])/'identity.json').read_text()).get('terrain_kind')=='route_pebbles' else None for case in cases]
  for chunk in meta['chunks']:
   with np.load(raw/chunk['file']) as f:d={k:f[k] for k in f.files}
   ticks=len(d['physics_step']);contact=np.zeros((ticks,n,2),bool);vertical=np.zeros((ticks,n,2))
