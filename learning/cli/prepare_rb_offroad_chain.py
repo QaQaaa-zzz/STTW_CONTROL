@@ -11,6 +11,7 @@ p.add_argument('--base',type=Path,default=Path('learning/configs/isaac_rb_ground
 p.add_argument('--platform-offset-x',type=float,default=0.)
 p.add_argument('--turn-end-x',type=float,default=-2.)
 p.add_argument('--seconds',type=float,default=18.)
+p.add_argument('--route-end-x',type=float,default=80.,help='Straight continuation endpoint beyond the task goal and observation window')
 p.add_argument('--start-y',type=float,default=-7.)
 p.add_argument('--bump-start-y',type=float,default=-6.2)
 p.add_argument('--bump-length',type=float,default=1.6)
@@ -18,6 +19,7 @@ p.add_argument('--bump-height',type=float,default=.02)
 p.add_argument('--bend',choices=['right','left','s','reverse_s'],default='right')
 a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False)
 if not 0<=a.bump_height<=.03 or a.bump_length<=0:raise ValueError('Use a declared shallow bump height [0,.03] and positive length')
+if a.route_end_x<=max(a.turn_end_x,10.6+a.platform_offset_x):raise ValueError('Route must continue beyond the bend and final goal')
 c=json.loads(a.base.read_text());source=Path(c['scene_terrain'])
 mesh=np.load(source/'terrain.npz');vertices=mesh['vertices'];triangles=mesh['triangles']
 if c.get('terrain_base_plane'):vertices=vertices.copy();vertices[:,2]=np.maximum(vertices[:,2],0.)
@@ -34,7 +36,7 @@ t=np.concatenate((np.stack((q,q+len(y),q+1),-1),np.stack((q+1,q+len(y),q+len(y)+
 terrain=a.output/'terrain';terrain.mkdir()
 identity=json.loads((source/'identity.json').read_text());identity.update(source=str(source),platform_front_x=3.6+a.platform_offset_x,platform_back_x=7.6+a.platform_offset_x,added_terrain=dict(bounds=[xmin,25,-10,-4],height_m=a.bump_height,undulation_y_m=[a.bump_start_y,a.bump_start_y+a.bump_length],width_m=2.4,flat_takeoff=f'Turn ends x={a.turn_end_x},y=0; {3.6+a.platform_offset_x-a.turn_end_x}m flat to edge'))
 # Northbound straight -> clockwise R2 quarter-circle -> eastbound platform approach.
-a1=np.linspace(0,-2-a.start_y,round((-2-a.start_y)/.02)+1);ang=np.linspace(np.pi,np.pi/2,159)[1:];a3=np.linspace(0,25-a.turn_end_x,round((25-a.turn_end_x)/.02)+1)[1:]
+a1=np.linspace(0,-2-a.start_y,round((-2-a.start_y)/.02)+1);ang=np.linspace(np.pi,np.pi/2,159)[1:];a3=np.linspace(0,a.route_end_x-a.turn_end_x,round((a.route_end_x-a.turn_end_x)/.02)+1)[1:]
 xy=np.concatenate((np.stack((np.full_like(a1,a.turn_end_x-2),a.start_y+a1),-1),np.stack((a.turn_end_x+2*np.cos(ang),-2+2*np.sin(ang)),-1),np.stack((a.turn_end_x+a3,np.zeros_like(a3)),-1)))
 heading=np.r_[np.full_like(a1,np.pi/2),ang-np.pi/2,np.zeros_like(a3)]
 curvature=np.r_[np.zeros_like(a1),np.full_like(ang,-.5),np.zeros_like(a3)]
