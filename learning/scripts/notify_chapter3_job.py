@@ -30,7 +30,7 @@ else:
     state = json.loads(args.status.read_text())
     unit = subprocess.run(['systemctl', '--user', 'show', args.unit, '-p', 'ExecMainStatus', '-p', 'Result'], capture_output=True, text=True).stdout
     fields = dict(line.split('=', 1) for line in unit.splitlines() if '=' in line)
-    finished = state.get('status', state.get('stage')) in ('completed_analysis_pending', 'complete', 'completed_slice', 'completed') and fields.get('Result') == 'success'
+    finished = state.get('status', state.get('stage')) in ('completed_analysis_pending', 'complete', 'completed_slice', 'completed', 'training_complete') and fields.get('Result') == 'success'
     when = datetime.datetime.now(ZoneInfo('America/Los_Angeles')).strftime('%Y-%m-%d %H:%M %Z')
     stage = state.get('stage', 'unknown')
     title = '第三章仿真完成：可以继续推进任务' if finished else '第三章仿真异常：可以继续推进任务'

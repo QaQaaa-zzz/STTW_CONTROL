@@ -1,0 +1,71 @@
+{
+  "task_spec": "learning/configs/isaac_phase_u_task_ditch_goal.json",
+  "device": "cuda:0",
+  "num_envs": 4096,
+  "updates": 150,
+  "save_interval": 25,
+  "asset": "runs/rb_sttw_platform/isaac_asset/vehicle.urdf",
+  "asset_spec": "learning/configs/rb_sttw_platform.json",
+  "geometry": "runs/rb_sttw_platform/jump_input/geometry.json",
+  "bundle": "runs/rb_sttw_platform/training_bundle",
+  "plant_options": {
+    "physics_dt": 0.0025,
+    "wheel_radius_m": 0.07,
+    "gpu_pair_capacities": [
+      4194304,
+      4194304,
+      16777216
+    ],
+    "servo_mode": "hybrid",
+    "compliant_wheels": null,
+    "wheel_collision": "cylinder",
+    "hull_vertices": 64,
+    "robot_contact_offset": 0.001,
+    "mesh_collision_on_geometry": true,
+    "solver_position_iterations": 16,
+    "solver_velocity_iterations": 4,
+    "wheel_width_m": 0.05,
+    "wheel_profile_slices": 21,
+    "env_spacing": 20.0,
+    "pendulum_rest": [
+      -1.2,
+      2.499999
+    ],
+    "pendulum_locked": false,
+    "terrain_layout": "replicated",
+    "terrain_base_plane": false
+  },
+  "go2_checkout": "/home/qy/projects/My_unitree_go2_gym",
+  "seed": 28,
+  "status": "Prepared goal reward candidate; not launched",
+  "reset_note": "100% ground start x1.5 vx2; no platform entry bank or airborne RSI",
+  "optimizer_initialization": "ditch150 update138 actor/critic/normalizers; fresh Adam",
+  "jump_steering_gains": [
+    2.5,
+    0.4
+  ],
+  "root_acceleration_difference": true,
+  "ppo_overrides": {
+    "learning_rate": 5e-05,
+    "schedule": "fixed"
+  },
+  "initial_checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ditch_jump150_20261109/adaptation/training/model_step_best.pt",
+  "evaluation_checkpoint_every": 25,
+  "heading_observation": true,
+  "heading_observation_noise": [
+    0.01,
+    0.005,
+    0.005,
+    0.02
+  ],
+  "ground_end_x_m": 25.0,
+  "ditch_terrain": {
+    "front_x_m": 3.6,
+    "width_m": 0.6,
+    "ground_end_x_m": 25.0,
+    "stone_height_min_m": 0.01,
+    "stone_height_max_m": 0.04,
+    "stones_per_m2": 30,
+    "seed": 20261109
+  }
+}

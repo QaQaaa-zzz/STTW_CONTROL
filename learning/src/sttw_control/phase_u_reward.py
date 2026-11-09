@@ -75,6 +75,9 @@ def phase_u_reward(state, action, last_action, events, config):
         else:errors=squared_errors
         for name,weight,error in zip(('lateral_position','lateral_velocity','heading_error','heading_rate'),('position_weight','velocity_weight','yaw_weight','yaw_rate_weight'),errors):
             components[name]=-heading[weight]*error
+    if 'ditch_goal' in c:
+        from .ditch_goal_reward import ditch_goal_components
+        components.update(ditch_goal_components(state,c['ditch_goal']))
     total=sum(components.values())
     return total.clamp(c['total_min'],c['total_max']),total,components
 
