@@ -106,8 +106,9 @@ for root in roots:
     t=t[t[:,0]<=cut+1e-7]
     ax.plot(t[:,1],t[:,2],label=root[-7:]);ax.plot(t[-1,1],t[-1,2],'o' if event.exists() else 'x',color=ax.lines[-1].get_color())
     root_evidence.append(dict(root=root,start_xy=t[0,1:3].tolist(),decision_reached=event.exists(),end_time_s=cut))
-ax.plot(*np.load(out/'ground_route.npz')['xy'].T,'k:',label='Original reference')
-ax.set(xlim=(-5.5,-1),ylim=(-9.3,1.5),xlabel='World X (m)',ylabel='World Y (m)',
+reference=np.load(out/'ground_route.npz')['xy'];reference=reference[reference[:,0]<=-2]
+ax.plot(*reference.T,'k:',label='Original reference before decision')
+ax.set(xlabel='World X (m)',ylabel='World Y (m)',
        title='20 distinct TRAIN roots, upstream only\nAll use v=2 m/s, alpha=.5; o: decision reached, x: upstream exit')
 ax.set_aspect('equal',adjustable='box');ax.legend(fontsize=7,bbox_to_anchor=(1.02,1),loc='upper left')
 fig.savefig(a.run/'upstream_roots_xy.png',dpi=140);plt.close(fig)
