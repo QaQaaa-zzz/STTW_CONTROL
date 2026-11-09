@@ -2868,3 +2868,8 @@ Go2实际参考：`/home/qy/projects/My_unitree_go2_gym/legged_gym/envs/base/leg
 原始记录：`runs/h75_batch_throughput/batch/status.json`；数据盘`STTW_runs/h75_batch600_throughput/`（config/cases/budget/runtime/batch/status及100个六lane输出）。两项批量映射/拆分测试、相关模块py_compile与git diff --check通过。两次借用GPU后均恢复被暂停进程。
 
 空间维护：数据盘1.1TiB可用/40%使用，无需清理；系统盘30GiB可用。新大产物写数据盘；大任务前检查至少50GB可用，只清理可重建过程文件或重复导出，保留原始轨迹/模型/失败证据。本轮没有删除实验文件。
+
+
+## Saved scene media: original visual meshes
+
+`learning/cli/render_isaac_scene_media.py` reads actual terrain height fields and P0 saved six-link poses. Two10s/30fps/960×640 videos show6cm ridge and10mm pebbles24/m² at2.3m/s,alpha.5,parameter101. MuJoCo/EGL only renders saved poses;0 new physics/optimizer steps. Visuals come from original XML group1 STL meshes; an initial collision-box preview was rejected and superseded. Frame inspection and ffprobe validate appearance and video structure. Sources and coordinate origins: runs/h75_scene_media/manifest.json.
