@@ -37,9 +37,9 @@
   },
   "go2_checkout": "/home/qy/projects/My_unitree_go2_gym",
   "seed": 28,
-  "status": "Prepared goal reward candidate; not launched",
+  "status": "User explicitly selects front3.3m,width0.3m; new goal reward150 updates",
   "reset_note": "100% ground start x1.5 vx2; no platform entry bank or airborne RSI",
-  "optimizer_initialization": "ditch150 update138 actor/critic/normalizers; fresh Adam",
+  "optimizer_initialization": "ditch150 update138 weights/normalizers; fresh Adam",
   "jump_steering_gains": [
     2.5,
     0.4
@@ -60,8 +60,8 @@
   ],
   "ground_end_x_m": 25.0,
   "ditch_terrain": {
-    "front_x_m": 3.6,
-    "width_m": 0.6,
+    "front_x_m": 3.3,
+    "width_m": 0.3,
     "ground_end_x_m": 25.0,
     "stone_height_min_m": 0.01,
     "stone_height_max_m": 0.04,

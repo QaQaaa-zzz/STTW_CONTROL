@@ -131,7 +131,7 @@
       "traversal": {
         "minimum_forward_m_s": 1.8,
         "target_forward_m_s": 2.0,
-        "end_x_m": 4.2,
+        "end_x_m": 3.6,
         "stationary_height_fraction": 0.25,
         "low_speed_weight": 8.0,
         "forward_weight": 4.0,
@@ -157,7 +157,7 @@
         "bounded": true
       },
       "ditch_goal": {
-        "goal_x_m": 6.2,
+        "goal_x_m": 5.6,
         "goal_y_m": 0.0,
         "target_speed_m_s": 1.5,
         "position_weight": 12.0,
@@ -291,5 +291,5 @@
       0.0
     ]
   },
-  "reward_change_note": "UMV-inspired goal-position and goal-directed-velocity kernels plus existing Go2-style landing/contact and action regularization. All weights are our design, not copied UMV coefficients. Disable fixed0.5m apex reward and low-height cost. Disable inherited jump-zone low-vx-before-apex terminal, which stopped last150 in the ditch; physical collision, roll/pitch/yaw, trench fall, corridor and8s timeout remain. No successful label relaxed. Target6.2m is2m beyond far bank; hold support remains1s. Keep0.6m geometry for reward-only next candidate; narrower-gap diagnostics separately declared."
+  "reward_change_note": "UMV-inspired goal-position and goal-directed-velocity kernels plus existing Go2-style landing/contact and action regularization. All weights are our design, not copied UMV coefficients. Disable fixed0.5m apex reward and low-height cost. Disable inherited jump-zone low-vx-before-apex terminal, which stopped last150 in the ditch; physical collision, roll/pitch/yaw, trench fall, corridor and8s timeout remain. No successful label relaxed. Target5.6m is2m beyond far bank; hold support remains1s. User requests shift front3.6 to3.3m and narrow0.6 to0.3m; geometry and reward change together, not single-factor ablation."
 }

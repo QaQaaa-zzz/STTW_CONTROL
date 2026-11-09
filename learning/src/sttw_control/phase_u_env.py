@@ -35,7 +35,7 @@ class PhaseUEnv:
                 raise ValueError('Ditch training requires open trench and ground-only resets; platform snapshots/RSI are not valid')
             vertices,triangles=build_ditch_terrain(self.ditch)
         np.savez(terrain/'terrain.npz',vertices=vertices,triangles=triangles)
-        (terrain/'identity.json').write_text(json.dumps(dict(sha256=hashlib.sha256((terrain/'terrain.npz').read_bytes()).hexdigest(),platform_front_x=3.6,platform_top_z=None if self.ditch else .16,ditch_terrain=self.ditch,ground_bounds_x_m=[-5,ground_end],ground_bounds_y_m=[-4,4])))
+        (terrain/'identity.json').write_text(json.dumps(dict(sha256=hashlib.sha256((terrain/'terrain.npz').read_bytes()).hexdigest(),platform_front_x=self.ditch['front_x_m'] if self.ditch else 3.6,platform_top_z=None if self.ditch else .16,ditch_terrain=self.ditch,ground_bounds_x_m=[-5,ground_end],ground_bounds_y_m=[-4,4])))
         self.plant=IsaacLabVectorPlant(Path(cfg['asset']),[str(terrain)],[0]*self.num_envs,Path(output),**cfg['plant_options'])
         self.physics_substeps=round(self.dt/self.plant.physics_dt)
         self.sensor_substeps=round(self.rand['sensor_dt_s']/self.plant.physics_dt)

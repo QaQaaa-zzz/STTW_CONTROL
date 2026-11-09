@@ -7,6 +7,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation,PillowWriter
 p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True);a=p.parse_args()
+cfg=json.loads((a.run/'config.json').read_text());terrain=cfg['ditch_terrain'];front=terrain['front_x_m'];back=front+terrain['width_m'];width_cm=100*terrain['width_m']
 cases=json.loads((a.run/'summary.json').read_text())['cases'];colors=['#0072B2','#D55E00','#009E73'];styles=['-','--','-.']
 mesh=np.load(a.run/'terrain/terrain.npz');verts=mesh['vertices'];profile=verts[np.abs(verts[:,1])<1e-6];profile=profile[np.argsort(profile[:,0])]
 fig,axes=plt.subplots(2,3,figsize=(15,8),layout='constrained'); xy,xz,v,reward,cumulative,height=axes.ravel()
@@ -17,14 +18,14 @@ for i,c in enumerate(cases):
  v.plot(t,r[:,7],style,color=color,label=name);reward.plot(t,d['reward'][:,0],style,color=color,label=name)
  cumulative.plot(t,np.cumsum(d['reward'][:,0]),style,color=color,label=name);height.plot(t,d['reward_height'][:,0],style,color=color,label=name)
 for ax in [xy,xz]:
- ax.axvspan(3.6,4.2,color='0.8',alpha=.6,label='open ditch 0.60m');ax.set_xlabel('World x (m)');ax.set_xlim(1.2,4.8);ax.set_aspect('equal',adjustable='box')
-xy.plot([1.2,4.8],[0,0],':',color='black',label='original route y=0');xy.set_ylim(-.4,.6);xy.set_ylabel('World y (m)');xy.set_title('Actual XY: all candidates stop at the ditch');xy.legend(fontsize=7,loc='upper left')
+ ax.axvspan(front,back,color='0.8',alpha=.6,label=f'open ditch {width_cm:g}cm');ax.set_xlabel('World x (m)');ax.set_xlim(1.2,max(4.8,max(c['max_root_x'] for c in cases)+.3));ax.set_aspect('equal',adjustable='box')
+xy.plot([1.2,4.8],[0,0],':',color='black',label='original route y=0');xy.set_ylim(-.4,.6);xy.set_ylabel('World y (m)');xy.set_title('Actual XY, all declared candidates');xy.legend(fontsize=7,loc='upper left')
 
-for bank in [profile[profile[:,0]<=3.6],profile[profile[:,0]>=4.2]]:xz.plot(bank[:,0],bank[:,2],color='saddlebrown')
+for bank in [profile[profile[:,0]<=front],profile[profile[:,0]>=back]]:xz.plot(bank[:,0],bank[:,2],color='saddlebrown')
 xz.set_ylim(-.25,.7);xz.set_ylabel('Root z (m)');xz.set_title('Actual root XZ; x marks true episode end')
 for ax,title,y in [(v,'Actual forward velocity','vx (m/s)'),(reward,'Per-step clipped reward','reward / step'),(cumulative,'Cumulative clipped reward','reward'),(height,'Inherited height shaping alone','reward / step')]:
  ax.set_title(title);ax.set_xlabel('Time (s)');ax.set_ylabel(y);ax.grid(alpha=.2);ax.legend(fontsize=8)
-fig.suptitle('60cm rough-bank ditch | fixed evaluation seed 20261109 | three frozen checkpoints\nSingle initial-condition diagnostic, not a success-rate comparison; no ground-controller handoff',fontsize=12)
+fig.suptitle(f'{width_cm:g}cm rough-bank ditch | fixed evaluation seed 20261109 | three frozen checkpoints\nSingle initial-condition diagnostic, not a success-rate comparison; no ground-controller handoff',fontsize=12)
 fig.savefig(a.run/'xy_and_rewards.png',dpi=160);plt.close(fig)
 fig,ax=plt.subplots(3,1,figsize=(11,7),sharex=True,layout='constrained')
 for i,c in enumerate(cases):
@@ -37,7 +38,7 @@ ax[-1].set_xlabel('Time (s), solved physics steps 0.0025s');fig.savefig(a.run/'w
 fig,axs=plt.subplots(3,1,figsize=(9,7),layout='constrained');datasets=[];artists=[]
 for i,c in enumerate(cases):
  name=c['candidate']['name'];d=np.load(a.run/name/'physics_contact.npz');datasets.append(d)
- axs[i].axvspan(3.6,4.2,color='0.85');axs[i].plot([1.2,3.6],[0,0],color='saddlebrown');axs[i].plot([4.2,4.8],[0,0],color='saddlebrown');axs[i].set(xlim=(1.2,4.8),ylim=(-.3,.85),ylabel='z (m)',title=name);axs[i].set_aspect('equal')
+ axs[i].axvspan(front,back,color='0.85');axs[i].plot([1.2,front],[0,0],color='saddlebrown');axs[i].plot([back,4.8],[0,0],color='saddlebrown');axs[i].set(xlim=(1.2,max(4.8,max(c['max_root_x'] for c in cases)+.3)),ylim=(-.3,.85),ylabel='z (m)',title=name);axs[i].set_aspect('equal')
  points,=axs[i].plot([],[],'o',color=colors[i],ms=5);wheels,=axs[i].plot([],[],'o',mfc='none',mec=colors[i],ms=13);text=axs[i].text(.02,.86,'',transform=axs[i].transAxes);artists.append((points,wheels,text))
 axs[-1].set_xlabel('x (m)');fig.suptitle('Measured motion schematic (body centers + wheels); stops at actual termination')
 frames=np.arange(0,max(d['time'][-1] for d in datasets)+.04,.04)
