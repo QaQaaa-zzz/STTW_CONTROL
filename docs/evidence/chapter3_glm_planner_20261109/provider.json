@@ -1,0 +1,7 @@
+{
+  "protocol": "openai_chat_completions",
+  "configured_model": "glm-5.3",
+  "requested_model": "glm-5.3",
+  "response_model": "glm-5.3",
+  "credentials": "read privately; not copied"
+}

@@ -1918,4 +1918,7 @@ Config learning/configs/isaac_h75_tradeoff_repeats.json records all sampled valu
 
 实现：learning/cli/fit_approach_planner.py现支持既有批量lane产物、显式标签合同及未抵达覆盖记录；evaluate_isaac_pendulum_jump.py核验新模型的交接、窗口、续行合同，旧模型接口保留。行为测试2项通过，真实18条数据拟合通过。
 
-证据：[全部18条XY与逐场景结果](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_multiscene_planner_calibration_20261108/RESULTS.md)。新在线配对已冻结为3场景×固定/动力学各1条，初始朝向+0.5度、其余物理/地形/参考不变，6条26s、最多62400物理lane步、0训练；仅DEV工程集成，不称独立TEST。高地形及在线配对结果尚待回收，当前状态见唯一第三章台账。
+证据：[全部18条XY与逐场景结果](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_multiscene_planner_calibration_20261108/RESULTS.md)。新在线配对已冻结为3场景×固定/动力学各1条，初始朝向+0.5度、其余物理/地形/参考不变，6条26s、最多62400物理lane步、0训练；仅DEV工程集成，不称独立TEST。高地形及在线配对已回收：多弯道6条中20ms固定1/3、动力学0/3；4/8cm坡道4条中4cm动力学选1.8m/s、alpha.5并完成20ms整程，其余未完整；原严格均未通过。保留所有上游未到选档及选档后失败，不主张稳定收益。当前状态见唯一第三章台账。
+
+
+GLM端到端集成（用户2026-11-09新授权）：已配置glm-5.3从11场景目录选择4cm坡道左弯，实际状态规划器选1.8m/s、alpha.5，9.94s切跳跃、12.12s回交地面，26s仿真完成20ms合同、原严格未通过。2次真实API请求、10400物理步、0训练，耗时98.43s；21项接口/任务/规划行为测试通过。LLM只选登记场景并解释物理反馈，不生成轨迹或决定是否跳。完整XY、实际数据流和边界见[本次证据](evidence/chapter3_glm_planner_20261109/RESULTS.md)，接口见[数据流说明](CHAPTER3_PLANNER_DATAFLOW.md)。

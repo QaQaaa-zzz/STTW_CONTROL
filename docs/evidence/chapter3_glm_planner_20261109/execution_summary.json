@@ -1,0 +1,184 @@
+{
+  "status": "complete",
+  "scene_id": "ramp_04cm_left",
+  "physics_executed": true,
+  "evidence_mode": "new_physical_execution",
+  "physical_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_glm_planner_integration_20261108/live/evaluation",
+  "completion_protocol": "contact_filtered_20ms",
+  "physical_complete": true,
+  "strict_complete": false,
+  "checks": {
+    "full_window": true,
+    "ordered_approach": true,
+    "original_path_corridor": true,
+    "stable_landing": true,
+    "ground_return": true,
+    "continued_time": true,
+    "continued_forward": true,
+    "final_goal": true
+  },
+  "unmet_checks": [],
+  "stages": {
+    "reached_release_line": true,
+    "airborne_after_handoff": true,
+    "strict_support": false,
+    "ground_return": true,
+    "continued": true
+  },
+  "stage_times": {
+    "release": 9.94,
+    "strict_support": null,
+    "ground_return": 12.120000000000001,
+    "final_conditions": null
+  },
+  "model_summary_role": "Narration only; status above comes from physical checks",
+  "elapsed_s": 98.42968849599856,
+  "planner": {
+    "time_s": 5.58,
+    "state": {
+      "speed": 1.826714816476456,
+      "roll": 0.10153234004974365,
+      "roll_rate": -0.21014611423015594,
+      "cross_track": -0.05258512496948242,
+      "heading_error": -0.06477536805569681,
+      "steer": 0.09814245253801346,
+      "steer_rate": -0.1463319957256317,
+      "previous_speed_reference": 1.8330192565917969,
+      "lateral_velocity_heading_frame": 0.050160701167500876,
+      "world_yaw_rate": 0.6547879576683044,
+      "previous_alpha": 0.5,
+      "previous_alpha_duration": 5.58,
+      "remaining_path_to_release": 7.967402815818616,
+      "path_curvature": 0.0,
+      "corridor_half_width": 1.0,
+      "pitch": 0.0009207343945722979,
+      "body_angular_y": -0.06718269616253074,
+      "hip": -1.2001992464065552,
+      "knee": 2.499999761581421,
+      "hip_velocity": -0.003048140089958906,
+      "knee_velocity": 0.0026814851444214582,
+      "platform_height": 0.16,
+      "remaining_path_to_platform": 9.567402815818596
+    },
+    "candidate": {
+      "decision_x_m": -2.0,
+      "speed_m_s": 1.8,
+      "alpha": 0.5
+    },
+    "selection": {
+      "status": "reference_selected",
+      "candidate": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5
+      },
+      "support_rms": 0.7586759273516485,
+      "estimates": [
+        {
+          "candidate": {
+            "speed_m_s": 1.8,
+            "alpha": 0.0
+          },
+          "score": 0.7791010403628655,
+          "prefix_score": 0.7919003181834028,
+          "suffix_score": 0.983837261424647,
+          "predicted_entry": [
+            0.11297236464476837,
+            -0.007827008167174954,
+            1.9620728287059288,
+            -0.006714431668205385,
+            -0.016228370071495336,
+            0.0076985704901934866
+          ]
+        },
+        {
+          "candidate": {
+            "speed_m_s": 1.8,
+            "alpha": 0.5
+          },
+          "score": 0.9271599606252937,
+          "prefix_score": 0.930657915591514,
+          "suffix_score": 0.9962414170581712,
+          "predicted_entry": [
+            0.05923890729976026,
+            0.04405669153229915,
+            1.8288099553824169,
+            -0.004437111423426609,
+            -0.010207746720117367,
+            -0.03044588934199531
+          ]
+        },
+        {
+          "candidate": {
+            "speed_m_s": 1.8,
+            "alpha": 1.0
+          },
+          "score": 0.6924892533596682,
+          "prefix_score": 0.7021705222953145,
+          "suffix_score": 0.9862123677536342,
+          "predicted_entry": [
+            0.07140530617896612,
+            0.015406735359213646,
+            1.862526623627237,
+            0.0011172480049846847,
+            -0.0007706335091249394,
+            -0.013200128895716567
+          ]
+        },
+        {
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.0
+          },
+          "score": 0.8058418128307675,
+          "prefix_score": 0.8789841395254011,
+          "suffix_score": 0.9167876604302256,
+          "predicted_entry": [
+            -0.009905864274335076,
+            -0.014642204017704833,
+            2.0210615684868114,
+            0.004805255066411685,
+            0.003954013259213133,
+            -0.0010274142447589622
+          ]
+        },
+        {
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 0.5
+          },
+          "score": 0.8499313730537258,
+          "prefix_score": 0.8870821759097652,
+          "suffix_score": 0.958120223960155,
+          "predicted_entry": [
+            0.014937530990444613,
+            0.0009505281703870707,
+            2.041064275585557,
+            0.00045105927096723207,
+            0.00277115265613095,
+            -0.015192211241444754
+          ]
+        },
+        {
+          "candidate": {
+            "speed_m_s": 2.0,
+            "alpha": 1.0
+          },
+          "score": 0.9131916089298606,
+          "prefix_score": 0.9342871610999306,
+          "suffix_score": 0.9774206977807184,
+          "predicted_entry": [
+            -0.00617760019229683,
+            0.01017174700470226,
+            1.8987187741595277,
+            0.0010023771182570231,
+            -0.0002746650407152249,
+            -0.013511500042347219
+          ]
+        }
+      ],
+      "fallback": null,
+      "scope": "Ridge endpoint prediction plus L2 logistic prefix gate and downstream suffix score; no spatial rollout or safety guarantee"
+    }
+  },
+  "source_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_glm_planner_integration_20261108/live"
+}

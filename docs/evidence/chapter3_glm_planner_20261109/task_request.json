@@ -1,0 +1,7 @@
+{
+  "task": "请让车经过4厘米坡道，向左转弯，然后跳上平台，落地后继续开到终点。接近速度和alpha请根据实际车辆状态由规划器决定。",
+  "mode": "execute",
+  "catalog": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_glm_planner_integration_20261108/catalog.json",
+  "maximum_physics_lane_steps": 10400,
+  "maximum_model_requests": 2
+}

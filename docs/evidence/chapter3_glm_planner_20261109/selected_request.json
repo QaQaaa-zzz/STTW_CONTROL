@@ -1,0 +1,8 @@
+{
+  "type": "tool_use",
+  "id": "call_-7101063185041449707",
+  "name": "execute_scene",
+  "input": {
+    "scene_id": "ramp_04cm_left"
+  }
+}
