@@ -27,7 +27,14 @@ class Go2PathEnv:
         saved=np.load(Path(cfg['training_bank'])/'states.npz');self.bank={key:torch.as_tensor(saved[key],device=self.device) for key in saved.files if key!='joint_names'}
         order=[list(saved['joint_names']).index(name) for name in self.plant.joints]
         for key in ('joint_position','joint_velocity'):self.bank[key]=self.bank[key][:,order]
-        routes=np.load(Path(cfg['training_bank'])/'routes.npz');self.speeds=torch.tensor(routes['speed'],device=self.device);self.families=torch.tensor(routes['family'],device=self.device);self.turn_end=torch.tensor(routes['turn_end'],device=self.device)
+        routes=dict(np.load(Path(cfg['training_bank'])/'routes.npz'))
+        if cfg.get('reset_mode')=='common_start':
+            # Rigidly anchor each full path once, before any rollout, to the common start.
+            xy=routes['xy']-routes['xy'][:,:1];heading=routes['heading'][:,0].copy();co=np.cos(heading)[:,None];si=np.sin(heading)[:,None]
+            routes['xy']=np.stack((xy[:,:,0]*co+xy[:,:,1]*si,-xy[:,:,0]*si+xy[:,:,1]*co),axis=-1);routes['heading']=routes['heading']-heading[:,None]
+            np.savez_compressed(Path(output)/'reference_routes.npz',**routes)
+            self.start_state={key:value.clone() for key,value in self.rollout.initial_state.items()};self.start_state['root_pose'][:2]=0
+        self.speeds=torch.tensor(routes['speed'],device=self.device);self.families=torch.tensor(routes['family'],device=self.device);self.turn_end=torch.tensor(routes['turn_end'],device=self.device)
         self.route=TorchPathReference(routes,config,self.device,route_ids=torch.zeros(self.num_envs,device=self.device,dtype=torch.long));r=self.rollout;r.route=self.route;r.middle=TorchMiddleControl(r.policy,self.route,identity['frame_scales'],r.alpha,r.speed)
         for group in ('projection','follower'):
             prefix='closedloop.'+group+'.';setattr(r.middle,group,{key[len(prefix):]:torch.zeros((self.num_envs,)+value.shape[1:],device=self.device,dtype=value.dtype) for key,value in self.bank.items() if key.startswith(prefix)})
@@ -41,6 +48,8 @@ class Go2PathEnv:
         self.reset()
 
     def reset_idx(self,ids):
+        if self.cfg.get('reset_mode')=='common_start':
+            self.reset_common_start(ids);return
         r=self.rollout;count=len(ids);picked=torch.randint(len(self.speeds),(count,),device=self.device);self.route.route_ids[ids]=picked
         state={key:self.bank[key][picked].float() for key in ('root_pose','root_velocity','joint_position','joint_velocity')}
         if self.cfg.get('random_terrain_reset',False):
@@ -69,6 +78,26 @@ class Go2PathEnv:
         self.switch_enabled[ids]=(torch.rand(count,device=self.device)<self.cfg['switch_probability'])&(self.families[picked]>0)&(self.switch_progress[ids]<self.turn_end[picked]-.2)
         levels=torch.tensor([0,.25,.5,.75,1],device=self.device);self.target_alpha[ids]=levels[torch.randint(5,(count,),device=self.device)]
         force=self.force_levels[torch.randint(len(self.force_levels),(count,),device=self.device)];force*=torch.rand(count,device=self.device)<self.cfg['pulse']['probability'];yaw=pose[ids,2];self.force_world[ids]=force[:,None]*torch.stack((-yaw.sin(),yaw.cos(),torch.zeros_like(yaw)),dim=-1);self.pulse_start[ids]=r.physical_tick[ids];self.impulse[ids]=0
+
+    def reset_common_start(self,ids):
+        """Start a complete route from the same warm physical state; no prefix bank."""
+        r=self.rollout;n=len(ids);picked=torch.randint(len(self.speeds),(n,),device=self.device);self.route.route_ids[ids]=picked;r.speed[ids]=self.speeds[picked]
+        layout=self.plant.metadata['terrain_layout'];terrain=torch.randint(len(self.cfg['terrains']),(n,),device=self.device)
+        clone=torch.as_tensor(layout['clone_origins'],device=self.device)[ids];offsets=torch.as_tensor(layout['template_offsets'],device=self.device)[terrain]
+        self.terrain_center[ids]=clone+offsets;self.plant.origin[ids]=self.terrain_center[ids];self.terrain_kind_id[ids]=terrain
+        self.terrain_entered[ids]=False;self.terrain_contacted[ids]=False;self.terrain_cleared[ids]=False
+        self.plant.reset_idx(ids,state=self.start_state);r.controller.reset(ids);r.lower.reset(ids)
+        for key in ('eso','disturbance','gains'):getattr(r.controller,key)[ids]=self.start_state[key]
+        r.previous_reference[ids]=self.start_state['previous_reference'];r.previous_command[ids]=self.start_state['previous_command']
+        levels=torch.tensor(self.cfg['alphas'],device=self.device,dtype=torch.float32);r.alpha[ids]=levels[torch.randint(len(levels),(n,),device=self.device)]
+        r.task_tick[ids]=0;r.physical_tick[ids]=r.initial_physical_tick;r.since_reset_tick[ids]=0;r.alive[ids]=True;r.switched[ids]=False;r.switch_tick[ids]=-1
+        r.randomization.reset(ids);measurement,pose,speed=self.plant.observe();r.measurement[ids]=measurement[ids]
+        raw=self.start_state['raw'].expand(self.num_envs,-1)
+        r.middle.reset_lanes(ids,measurement,pose,speed,raw,r.previous_reference,r.previous_command,r.controller)
+        r.preference_progress[ids]=r.middle.projection['progress'][ids];r.policy.execution_mode[ids]=0
+        self.episode_length_buf[ids]=0;self.episode_reward[ids]=0;self.error_squares[ids]=0;self.switched[ids]=False;self.switch_enabled[ids]=False
+        force=self.force_levels[torch.randint(len(self.force_levels),(n,),device=self.device)];force*=torch.rand(n,device=self.device)<self.cfg['pulse']['probability'];yaw=pose[ids,2]
+        self.force_world[ids]=force[:,None]*torch.stack((-yaw.sin(),yaw.cos(),torch.zeros_like(yaw)),dim=-1);self.pulse_start[ids]=r.physical_tick[ids];self.impulse[ids]=0
 
     def apply_pulse(self,physics_tick):
         r=self.rollout;active=(r.physical_tick-self.pulse_start<round(self.cfg['pulse']['duration_s']/.005))&r.alive;force=self.force_world*active[:,None];self.impulse+=force*.0002

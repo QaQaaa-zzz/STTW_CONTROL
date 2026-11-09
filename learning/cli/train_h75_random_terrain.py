@@ -17,9 +17,18 @@ started=time.time();status=dict(stage='initializing',pid=os.getpid(),completed_u
 (a.output/'config.json').write_text(json.dumps(dict(settings=s,original_training=cfg['training_future_phase_C'],initialization=('checkpoint Actor/Critic/Adam resumed; environments and RNG reset' if a.resume else 'original H75 Actor/Critic/log_std; fresh original-method Adam')),indent=2))
 env=Go2PathEnv(s,a.output)
 (a.output/'randomization.json').write_text(json.dumps(env.rollout.randomization_properties))
+if s.get('reset_mode')=='common_start':
+ _,start_pose,start_speed=env.plant.observe()
+ assert torch.allclose(start_pose[:,:2],torch.zeros_like(start_pose[:,:2]),atol=1e-6)
+ assert torch.allclose(env.route.xy[:,0],torch.zeros_like(env.route.xy[:,0]),atol=1e-6)
+ assert not env.rollout.task_tick.any()
+ assert not env.rollout.lower.mask.any()
+ assert (env.rollout.middle.mask.sum(-1)==1).all()
+ (a.output/'common_start_check.json').write_text(json.dumps(dict(passed=True,environments=s['num_envs'],position_xy_max_m=float(start_pose[:,:2].abs().max()),reference_start_xy_max_m=float(env.route.xy[:,0].abs().max()),start_speed_range_m_s=[float(start_speed.min()),float(start_speed.max())],task_tick=0,lower_history='cleared',middle_history='one common-start frame',prefix_states_restored=False),indent=2))
+
 if a.evaluate:env.rollout.alpha.copy_(torch.tensor([a.eval_alpha if a.eval_alpha is not None else s['alphas'][i%5] for i in range(s['num_envs'])],device='cuda'))
 (a.output/'initial_cases.json').write_text(json.dumps(dict(route_ids=env.route.route_ids.cpu().tolist(),alpha=env.rollout.alpha.cpu().tolist(),terrain_ids=env.terrain_kind_id.cpu().tolist(),origins=env.plant.origin.cpu().tolist(),terrain_centers=env.terrain_center.cpu().tolist()),indent=2))
-if a.evaluate:
+if a.evaluate or s.get('reset_mode')=='common_start':
  np.savez_compressed(a.output/'initial_state.npz',root=env.plant.roots.cpu().numpy(),dofs=env.plant.dofs.cpu().numpy(),pulse=env.force_world.cpu().numpy(),servo_gain=env.plant.servos.gain.cpu().numpy(),steer_offset=env.rollout.randomization.steer_offset.cpu().numpy())
 def observation():
  return TensorDict({'policy':env.get_observations(),'critic':env.get_privileged_observations()},batch_size=[s['num_envs']])
