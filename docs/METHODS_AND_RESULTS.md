@@ -1972,3 +1972,5 @@ train/test独立种子各12随机布局+平地；有限库内每回合随机选�
 已停止旧中途接续五alpha评测。新配置learning/configs/h75_common_start_continue.json从原H75 u77 Actor/Critic/log_std开始，fresh Adam，不继承76轮。原150轮阶段预算4096×24不变；随机完整路径、五alpha、13随机地形库与Go2随机化保留。训练从统一保存的直线预热物理状态起步（实际约2.254m/s），每回合XY0，原路径只在回合前刚性平移/旋转至共同起点与初始切线；无中途bank状态恢复，无运行中重定位。ESO用统一预热值，底层历史清空、中层只记录起点一帧，任务时钟从0开始，满10秒或真实终止。
 
 320条路径的起点与刚性变换保长CPU检查通过，语法/diff通过；入口在真实Isaac初始化后强制核验XY0/路径起点0/任务时钟0/历史状态并保存common_start_check.json，通过后才采样。服务sttw-h75-common-start当前在共享GPU锁等待另一会话chapter3_ditch_goal30训练，未宣称训练开始。原6006 TensorBoard logdir已涵盖新common_start目录；阶段结束及异常Bark配置保留。原76轮是偏离用户初始化要求的尝试，不算新训练成果。
+
+共同起点150轮训练后验收已按用户要求启动：common_start/evaluation，原H75与150轮模型、13固定抽样工况×五alpha，共130回合/650万物理lane steps/0优化。共用起点、完整路径、test地形与seed；参考图读取各回合实际冻结的reference_routes.npz。完成/异常Bark已配置，指标与全部同工况五alpha图待实际评测完成，不沿用旧76轮数字。
