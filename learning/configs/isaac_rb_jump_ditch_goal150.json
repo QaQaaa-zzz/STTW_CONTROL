@@ -33,7 +33,11 @@
     ],
     "pendulum_locked": false,
     "terrain_layout": "replicated",
-    "terrain_base_plane": false
+    "terrain_base_plane": false,
+    "gpu_contact_capacities": [
+      8388608,
+      2097152
+    ]
   },
   "go2_checkout": "/home/qy/projects/My_unitree_go2_gym",
   "seed": 28,
