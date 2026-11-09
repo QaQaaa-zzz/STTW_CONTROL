@@ -1908,3 +1908,14 @@ Config learning/configs/isaac_h75_tradeoff_repeats.json records all sampled valu
 目的：先走通不同几何与地形上的接续，暂不追成功率。六场景使用原RB带摆车/H75+ECBC+ESO/zero_lower、400/200/50Hz；2cm两段sin²起伏，右/左R2单弯及双向S弯，26s工程DEV，无新奖励或训练。update2首批S平地执行到续行，其余存在地面/落台失败；修复参考路径x25末端退出，S平地完整26s，原1.438m路廊偏差保留。上游请求1.8→出弯2m/s的三条验证使右弯/反向S起伏到达跳跃，仍未稳定落台；不继续扫速度。
 复用既有heading125及其20ms接触过滤交接合同，右/左/反向S起伏各1条26s（31200物理步、0训练），三条跳跃前trace与原update2逐值一致。右/左起伏按20ms合同完成整程；反向S执行回交续行但路廊及落台检查不合格。三条原严格完整标签均false，保持分列；技能权重与交接过滤共同改变，不称单因素网络改进。现有多场景工程链可推进LLM，不以新增成功率训练为前置。
 代码prepare_rb_offroad_chain.py、evaluate_isaac_pendulum_jump.py、summarize_multiscene_chain.py；报告回放修正实际初始速度与出弯切换、技能身份及两种物理确认。15项任务管理测试通过，物理汇总与回放状态一致。各场景实际/参考/父模型XY、原始输出和冻结配置见数据盘chapter3_multiscene_heading125_20261108/RESULTS.md；此前批次分别chapter3_multiscene_chain_20261108、chapter3_s_flat_route_extension_20261108、chapter3_terrain_speed_plan_20261108。单条场景DEV，不作泛化或成功率估计；未调用LLM或实机。
+
+
+## 第三章多场景入口预测与高地形覆盖（2026-11-09）
+
+当前先走通地形、弯道、状态选档、跳跃和落地续行，LLM后置。高地形矩阵11工况覆盖起伏8cm、单脊4/8/10cm、坡道和横坡各4/8cm、固定碎石2/4/8cm，搭配四类弯道；保持原物理与失败判据，无新增控制策略训练。
+
+入口校准使用右/左/反向S三个2cm起伏场景，每个六个(v1.8/2 × alpha0/.5/1)候选，共18条TRAIN轨迹。15条抵达选档，3条上游未抵达保留；原严格完整为0/6、2/6、0/6，既有20ms合同完整为3/6、6/6、1/6。后缀通过13/15不等于整程通过。采用动作条件入口回归与前缀/下游评分，未改控制奖励、未更新策略；几何与动力学模型均已拟合，尚未证明在线收益。
+
+实现：learning/cli/fit_approach_planner.py现支持既有批量lane产物、显式标签合同及未抵达覆盖记录；evaluate_isaac_pendulum_jump.py核验新模型的交接、窗口、续行合同，旧模型接口保留。行为测试2项通过，真实18条数据拟合通过。
+
+证据：[全部18条XY与逐场景结果](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_multiscene_planner_calibration_20261108/RESULTS.md)。新在线配对已冻结为3场景×固定/动力学各1条，初始朝向+0.5度、其余物理/地形/参考不变，6条26s、最多62400物理lane步、0训练；仅DEV工程集成，不称独立TEST。高地形及在线配对结果尚待回收，当前状态见唯一第三章台账。
