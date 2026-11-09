@@ -4,6 +4,8 @@ from pathlib import Path
 os.environ['PYTHONPATH']=str(Path(__file__).resolve().parents[1]/'src')+os.pathsep+os.environ.get('PYTHONPATH','')
 p=argparse.ArgumentParser();p.add_argument('--manifest',type=Path,required=True);p.add_argument('--start',type=int,default=0);p.add_argument('--count',type=int,required=True);p.add_argument('--resume',action='store_true');p.add_argument('--cuda-graph-observation',action='store_true');a=p.parse_args()
 m=json.loads(a.manifest.read_text());root=a.manifest.parent
+if not m.get('execution_enabled',True):
+ p.error(m['disabled_reason'])
 for case in m['cases'][a.start:a.start+a.count]:
  config=Path(case['config']);spec=json.loads(config.read_text());out=Path(spec['output'])
  if a.resume and (root/(case['case_id']+'_summary.json')).exists():continue
