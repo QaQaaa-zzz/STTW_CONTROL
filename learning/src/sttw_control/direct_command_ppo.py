@@ -20,7 +20,6 @@ from rsl_rl.algorithms import PPO
 from rsl_rl.modules import ActorCritic
 from rsl_rl.storage import RolloutStorage
 
-from .direct_command_policy import initialize_policy
 
 
 RSL_VERSION = "3.2.0"
@@ -425,6 +424,7 @@ def make_algorithm(obs, steps, spec, device):
                          noise_std_type="log", state_dependent_std=False,
                          actor_obs_normalization=False,
                          critic_obs_normalization=False).to(device)
+    from .direct_command_policy import initialize_policy
     initialize_policy(policy)
     with torch.no_grad():
         policy.log_std.copy_(torch.tensor(ppo['initial_latent_std'],device=device).log())

@@ -36,12 +36,24 @@ class Go2PathEnv:
         self.switch_enabled=torch.zeros(self.num_envs,device=self.device,dtype=torch.bool);self.switch_progress=torch.zeros(self.num_envs,device=self.device);self.target_alpha=torch.zeros(self.num_envs,device=self.device);self.switched=torch.zeros_like(self.switch_enabled)
         self.force_levels=torch.tensor(cfg['pulse']['forces_N'],device=self.device);self.force_world=torch.zeros(self.num_envs,3,device=self.device);self.pulse_start=torch.zeros(self.num_envs,device=self.device,dtype=torch.long);self.impulse=torch.zeros_like(self.force_world)
         self.chassis=torch.tensor([self.plant.bodies.index(cfg['randomization']['base_body'])],device=self.device);self.site_position=torch.tensor(cfg['pulse']['site_body_position_m'],device=self.device).expand(self.num_envs,1,3).contiguous();self.zero_torque=torch.zeros(self.num_envs,1,3,device=self.device);r.training_pulse=self.apply_pulse
+        self.terrain_center=torch.zeros(self.num_envs,3,device=self.device);self.terrain_kind_id=torch.zeros(self.num_envs,device=self.device,dtype=torch.long);self.terrain_entered=torch.zeros(self.num_envs,device=self.device,dtype=torch.bool);self.terrain_cleared=self.terrain_entered.clone();self.terrain_contacted=self.terrain_entered.clone()
         self.sampling_steps=0;self.sampling_started=time.time()
         self.reset()
 
     def reset_idx(self,ids):
         r=self.rollout;count=len(ids);picked=torch.randint(len(self.speeds),(count,),device=self.device);self.route.route_ids[ids]=picked
-        state={key:self.bank[key][picked].float() for key in ('root_pose','root_velocity','joint_position','joint_velocity')};self.plant.reset_idx(ids,state=state)
+        state={key:self.bank[key][picked].float() for key in ('root_pose','root_velocity','joint_position','joint_velocity')}
+        if self.cfg.get('random_terrain_reset',False):
+            layout=self.plant.metadata['terrain_layout']
+            terrain=torch.randint(len(self.cfg['terrains']),(count,),device=self.device)
+            clone=torch.as_tensor(layout['clone_origins'],device=self.device)[ids]
+            offsets=torch.as_tensor(layout['template_offsets'],device=self.device)[terrain]
+            self.terrain_center[ids]=clone+offsets;self.terrain_kind_id[ids]=terrain;self.terrain_entered[ids]=False;self.terrain_cleared[ids]=False;self.terrain_contacted[ids]=False
+            origin=clone+offsets
+            origin[:,:2]-=state['root_pose'][:,:2]
+            origin[:,:2]+=(torch.rand(count,2,device=self.device)-.5)
+            self.plant.origin[ids]=origin
+        self.plant.reset_idx(ids,state=state)
         for key in ('eso','disturbance','gains'):getattr(r.controller,key)[ids]=self.bank['closedloop.physical.controller.'+key][picked]
         for key in ('frames','mask','previous_applied','yaw_rate'):getattr(r.lower,key)[ids]=self.bank['closedloop.lower.'+key][picked]
         r.policy.filtered[ids]=self.bank['closedloop.filtered'][picked];r.policy.offsets[ids]=self.bank['closedloop.offsets'][picked];r.policy.execution_mode[ids]=0
@@ -78,10 +90,19 @@ class Go2PathEnv:
                 out=self.rollout.step(latent=actions)
             Path(self.cfg['profile_output']).write_text(profile.key_averages().table(sort_by='self_cuda_time_total',row_limit=40))
         else:out=self.rollout.step(latent=actions)
+        distance=torch.linalg.vector_norm(self.plant.roots[:,:2]-self.terrain_center[:,:2],dim=-1)
+        self.terrain_entered|=(distance>=2.6)&(self.terrain_kind_id>0)
+        self.terrain_cleared|=(distance>=3.4)&(self.terrain_kind_id>0)
+        for sensor in self.plant.wheel_sensors:
+            points=sensor.data.contact_pos_w.reshape(self.num_envs,-1,3);forces=sensor.data.force_matrix_w.reshape(self.num_envs,-1,3)
+            self.terrain_contacted|=((points[:,:,2]>self.terrain_center[:,2,None]+.003)&(torch.linalg.vector_norm(forces,dim=-1)>.01)).any(-1)&(self.terrain_kind_id>0)
+        self.last_exposure=dict(contacted=self.terrain_contacted.clone(),entered=self.terrain_entered.clone(),cleared=self.terrain_cleared.clone(),terrain=self.terrain_kind_id.clone())
+        self.last_out=out
+        self.last_terminal=dict(domain=(out['failure']&self.rollout.middle.domain_exit).clone(),fault=(out['failure']&self.rollout.middle.fault).clone())
         self.episode_length_buf+=1;self.episode_reward+=out['reward'];self.error_squares+=out['tracking_error'].square();ids=out['done'].nonzero(as_tuple=False).flatten();infos={}
         if len(ids):
             infos['episode']=dict(reward=self.episode_reward[ids].mean(),length=self.episode_length_buf[ids].float().mean()*.02,failure=out['failure'][ids].float().mean(),speed_rmse=torch.sqrt(self.error_squares[ids,0]/self.episode_length_buf[ids]).mean(),path_rmse=torch.sqrt(self.error_squares[ids,1]/self.episode_length_buf[ids]).mean(),switched=self.switched[ids].float().mean())
-            self.reset_idx(ids)
+            if not self.cfg.get('evaluation_mode',False):self.reset_idx(ids)
         obs=self.get_observations();self.sampling_steps+=1
         if self.sampling_steps==1 or self.sampling_steps%6==0:print(json.dumps(dict(sampling_policy_steps=self.sampling_steps,elapsed_sampling_s=time.time()-self.sampling_started)),flush=True)
         return obs,self.privileged_obs_buf,out['reward'],out['done'],infos

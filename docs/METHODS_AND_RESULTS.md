@@ -1942,3 +1942,11 @@ P3切换前位置/速度/姿态/观测/命令差异均0；15组成功fork，75�
 复用P0原生0.2ms记录，4/6cm各50工况：越脊窗口负拖距累计时长中位8.0/53.3ms、对应侧向力矩峰值0.367/0.788Nm、绝对角冲量0.001229/0.008757Nms、占总侧向绝对角冲量2.56/17.27%。这是接触斑分解，不是路径误差的因果占比；新10cm未作同口径分解。G5补偿仍29→28/50，没有净任务收益。逐条件数据、范围与定义见runs/h75_contact_g5/trail_quantification.json及CONCLUSION.md补充。
 
 render_isaac_scene_media原位新增--cases列表，复用已修正xyzw→wxyz与原STL显示；生成密集石子2.3/.5完整、2.6/.5失败、10cm2.6/.5任务C合格及2.6/1失败四片，seed101，保存真实失败，不放大地形。media/README.md、manifest.json指向来源。已检查两张预览、ffprobe四片960×640/30fps/300、75、300、60帧；语法与diff检查通过。MuJoCo只作保存Isaac姿态的离屏显示，非原生Isaac相机录像，0新物理/0优化。Zero明确为Local300+ECBC/ESO、零中层而非纯传统控制。
+
+## 随机必经越野地形续训准备与排队
+
+用户授权随机地形测试后续训，强调沿用H75方法并保证经过地形。原make_algorithm/conditional_rollout_kl抽到torch_path_training供原JAX与Isaac共用；DirectCommandPPO仅把不需要的JAX初始化导入移入旧工厂。RSL3.2在运行目录隔离加载，未替换Isaac环境安装；原H75 Actor/Critic/log_std载入，随机20输入五alpha与冻结actor输出最大差8.94e-8。新Adam权重续训，不称exact resume。原网络/奖励/两学习率/γ/λ/KL回退保持，4096×24×150 GPU样本预算、冻结Local300及既有Go2随机化，未自动扩大轮数。
+
+train/test独立种子各12随机布局+平地；有限库内每回合随机选图和平移，非无限在线造图。2m清空暖态区、半径3m必经环带，石子环480重叠帽面（720方向覆盖检查通过），凸脊/波浪保持完整环脊；散布参数随机，非平地不能从内区连续行驶到外区而在平面绕过。仍单列未触障终止/离地及采样未观测接触，不能把几何过带直接当实际轮接触。新增原生轮接触点20ms观测/进入/穿出标记。
+
+流水线65条原H75测试→150轮→65条末模型配对测试与全部XY/奖励/速度图，不用确认集挑选checkpoint。配置h75_random_terrain_continue/test.json；run=h75_random_terrain_continue，服务sttw-random-h75。启动时另一会话持GPU锁，本服务排队，尚无本轮物理/优化结果，待初次实际运行检查。6006 TensorBoard HTTP200，训练标量待真实采样写入。语法/diff、权重前向与环带覆盖检查通过；未宣称Isaac集成或训练已成功完成。原生地形网格为新协议，不与旧5mm地形冒充同物理对照。
