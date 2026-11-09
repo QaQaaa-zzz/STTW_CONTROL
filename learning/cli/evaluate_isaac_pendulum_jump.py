@@ -123,8 +123,15 @@ if spec.get('connection_selector'):
  selection=spec['connection_selector'];selector_config=json.loads(Path(selection['config']).read_text())
  evidence_texts={file:Path(file).read_text() for file in selection['records']}
  evidence=[json.loads(line) for text in evidence_texts.values() for line in text.splitlines() if line.strip()]
- selector=JumpConnectionSelector(evidence,selector_config,origin_id=spec['origin_id'],policy_sha256=dict(ground=ground.upper_sha256,jump=policies[0].identity['artifact_sha256']),model_contract_sha256=hashlib.sha256(Path(cfg['asset']).with_name('contract.json').read_bytes()).hexdigest(),physics_dt=plant.physics_dt,zero_lower=spec['zero_lower'])
- (out/'connection_selector.json').write_text(json.dumps(dict(config=selector_config,evidence_sha256={file:hashlib.sha256(text.encode()).hexdigest() for file,text in evidence_texts.items()},accepted_rows=selector.evidence_rows,excluded_origin_id=spec['origin_id']),indent=2))
+ if selector_config.get('schema')=='approach_endpoint_v1':
+  from sttw_control.approach_planner import ApproachPlanner
+  if spec['origin_id'] in selector_config['training_roots']:raise ValueError('Online planner validation must exclude training roots')
+  selector=ApproachPlanner(selector_config,identity=dict(ground=ground.upper_sha256,jump=policies[0].identity['artifact_sha256'],model_contract=hashlib.sha256(Path(cfg['asset']).with_name('contract.json').read_bytes()).hexdigest(),physics_dt=plant.physics_dt,zero_lower=spec['zero_lower']))
+  accepted_rows=selector_config['training_rows']
+ else:
+  selector=JumpConnectionSelector(evidence,selector_config,origin_id=spec['origin_id'],policy_sha256=dict(ground=ground.upper_sha256,jump=policies[0].identity['artifact_sha256']),model_contract_sha256=hashlib.sha256(Path(cfg['asset']).with_name('contract.json').read_bytes()).hexdigest(),physics_dt=plant.physics_dt,zero_lower=spec['zero_lower'])
+  accepted_rows=selector.evidence_rows
+ (out/'connection_selector.json').write_text(json.dumps(dict(config=selector_config,evidence_sha256={file:hashlib.sha256(text.encode()).hexdigest() for file,text in evidence_texts.items()},accepted_rows=accepted_rows,excluded_origin_id=spec['origin_id']),indent=2))
 if batch:
  from sttw_control.isaac_pendulum_batch import run_connection_batch
  print(run_connection_batch(spec,out,plant,ground,policies,history,geometry,entry,selector),flush=True)
