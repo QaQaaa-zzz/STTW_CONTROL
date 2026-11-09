@@ -51,6 +51,8 @@ def video(name,run,ground,label):
  contract=json.loads((run/'contract.json').read_text());names=contract['bodies'];lane=2
  with np.load(run/'trajectory.npz') as ar:
   poses=ar['body_poses'][:,:,lane].reshape(-1,len(names),7).copy();trace=ar['lower_trace'][:,:,lane].reshape(-1,11);measurement=ar['measurement'][:,lane].copy()
+ # Isaac adapter stores link orientations as xyzw; MuJoCo mocap requires wxyz.
+ poses[...,3:]=poses[...,[6,3,4,5]]
  origin=np.array(contract['origin'][lane]);poses[...,:3]-=origin
  live=np.flatnonzero(trace[:,6]);poses=poses[live];measurement=measurement[live];times=live*.005+trace[live,7]*contract['physics_dt']
  meta,x,y,h=terrain(ground);zmax=float(h.max());doc=ET.Element('mujoco');ET.SubElement(doc,'visual');asset=ET.SubElement(doc,'asset');world=ET.SubElement(doc,'worldbody')
@@ -79,7 +81,7 @@ def video(name,run,ground,label):
   frame=Image.fromarray(render.render());draw=ImageDraw.Draw(frame);draw.rectangle((0,0,960,64),fill=(245,245,245));draw.text((12,8),label,fill=(15,15,15));draw.text((12,27),f'Recorded Isaac Lab poses | H75 + orange Local300 | alpha=0.5 | 2.3 m/s | parameter101 | t={times[i]:.2f}s',fill=(15,15,15));draw.text((12,46),'True geometry scale; original vehicle STL visual meshes; no physics replay or new simulation',fill=(15,15,15));proc.stdin.write(np.asarray(frame).tobytes())
   if k==45:frame.save(a.output/(name+'_frame.png'))
  proc.stdin.close();assert proc.wait()==0;render.close()
- return dict(video=str(path),source=str(run),terrain=str(ground),lane=lane,alpha=.5,frames=len(ids),fps=fps,duration_s=len(ids)/fps,role='visual replay of saved link poses with source XML STL visual meshes; original physics was Isaac Lab; no physics integration',camera='tracking, actual scale, nearest recorded5ms pose,30fps',source_origin=origin.tolist(),visual_model=str(source_xml),visual_geoms='Original XML group1 STL meshes only; collision proxy boxes hidden; all joint origins are zero in the source vehicle')
+ return dict(video=str(path),source=str(run),terrain=str(ground),lane=lane,alpha=.5,frames=len(ids),fps=fps,duration_s=len(ids)/fps,role='visual replay of saved link poses with source XML STL visual meshes; original physics was Isaac Lab; no physics integration',camera='tracking, actual scale, nearest recorded5ms pose,30fps',source_origin=origin.tolist(),source_quaternion_order='xyzw',render_quaternion_order='wxyz',visual_model=str(source_xml),visual_geoms='Original XML group1 STL meshes only; collision proxy boxes hidden; all joint origins are zero in the source vehicle')
 records=[]
 for args in [('ridge_6cm',Path('runs/h75_gravel_p0/evaluation/single_6cm_v2p3_seed101/evaluation'),ridge[2],'Single ridge: height60 mm, length0.8 m, half-width0.8 m'),('pebbles_10mm_density24',Path('runs/h75_gravel_p0/evaluation/S2_v2p3_seed101/evaluation'),density[1],'Continuous pebbles: height10 mm, density24/m2, N154, radii55-80 mm')]:
  records.append(video(*args));(a.output/'manifest.json').write_text(json.dumps(dict(physics_steps=0,optimizer_updates=0,records=records,figure_source='Actual saved terrain height fields; no synthetic rocks or height exaggeration'),indent=2)+'\n');print('completed',args[0],flush=True)

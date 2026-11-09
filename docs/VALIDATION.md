@@ -2873,3 +2873,6 @@ Go2实际参考：`/home/qy/projects/My_unitree_go2_gym/legged_gym/envs/base/leg
 ## Saved scene media: original visual meshes
 
 `learning/cli/render_isaac_scene_media.py` reads actual terrain height fields and P0 saved six-link poses. Two10s/30fps/960×640 videos show6cm ridge and10mm pebbles24/m² at2.3m/s,alpha.5,parameter101. MuJoCo/EGL only renders saved poses;0 new physics/optimizer steps. Visuals come from original XML group1 STL meshes; an initial collision-box preview was rejected and superseded. Frame inspection and ffprobe validate appearance and video structure. Sources and coordinate origins: runs/h75_scene_media/manifest.json.
+
+## Saved-pose scene video quaternion correction
+Corrected render_isaac_scene_media.py: saved Isaac adapter body poses use xyzw, MuJoCo mocap uses wxyz. Prior STL videos displayed incorrect link orientations and are superseded; original videos retained under runs/h75_scene_media/incorrect_quaternion_preview. Both current videos regenerated, 300 frames/30 fps/10 s/960x640 confirmed with ffprobe and decoded multi-time frame inspection. All 2000 recorded poses per case checked against URDF joint anchors; maximum discrepancy 3.219e-6 m (pose_mapping_check.json). No changed physics, source trajectories, controller or model weights; no new simulation. This supersedes the earlier visual-completion claim for the malformed STL videos.
