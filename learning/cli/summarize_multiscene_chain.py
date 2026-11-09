@@ -9,7 +9,16 @@ import matplotlib.pyplot as plt
 from sttw_control.continuous_task import ContinuousTask
 
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('--manifest',type=Path,required=True);a=p.parse_args()
-m=json.loads(a.manifest.read_text());rows=[];n=len(m['cases']);fig,axes=plt.subplots((n+1)//2,2,figsize=(13,4*((n+1)//2)),layout='constrained',squeeze=False)
+m=json.loads(a.manifest.read_text());cases=[]
+for case in m['cases']:
+    spec=json.loads(Path(case['config']).read_text())
+    if spec.get('batch_candidates'):
+        for lane in json.loads((Path(spec['output'])/'batch_results.json').read_text())['cases']:
+            method=m['lane_methods'][lane['lane']] if 'lane_methods' in m else f"lane_{lane['lane']:02d}"
+            cases.append(dict(case,case_id=case['case_id']+'_'+method,config=str(Path(lane['output'])/'config.json')))
+    else:cases.append(case)
+m['cases']=cases
+rows=[];n=len(cases);fig,axes=plt.subplots((n+1)//2,2,figsize=(13,3*((n+1)//2)),layout='constrained',squeeze=False)
 for ax,c in zip(axes.flat,m['cases']):
     spec=json.loads(Path(c['config']).read_text());out=Path(spec['output']);s=json.loads((out/'chain_summary.json').read_text());physical=json.loads((out/'results.json').read_text())
     z=np.load(out/'trajectory.npz');trace=z['trace'][z['valid'][:,0],0];route=np.load(out/'ground_route.npz')['xy']
@@ -58,7 +67,7 @@ for ax,c in zip(axes.flat,m['cases']):
         assert accepted_filtered==s['contact_filtered_protocol']['complete']
         progress['contact_filtered_20ms']=dict(status='complete' if accepted_filtered else 'incomplete',events=filtered_task.events,remaining=[] if accepted_filtered else ['destination'],scope='Separate declared deployment contact protocol; strict status above unchanged')
     (out/'task_progress.json').write_text(json.dumps(progress,indent=2)+'\n')
-    rows.append(dict(scene=c['case_id'],parent_comparison=parent_comparison,skill=spec['skills'][0],filtered_protocol=s.get('contact_filtered_protocol'),unmet_checks=[k for k,v in s['checks'].items() if not v],stage_reached=next((k for k in ['continued','ground_return','strict_support','airborne_after_handoff','reached_release_line'] if s['stages'][k]),'ground_approach'),checks=s['checks'],stages=s['stages'],stage_times=s['stage_times'],complete=s['complete'],duration_s=float(trace[-1,0]),terminal_flags=physical['cases'][0]['terminal_flags'],task_progress=str(out/'task_progress.json'),xy=str(out/'xy_jump.png')))
+    rows.append(dict(scene=c['case_id'],parent_comparison=parent_comparison,skill=spec['skills'][0],filtered_protocol=s.get('contact_filtered_protocol'),unmet_checks=[k for k,v in s['checks'].items() if not v],stage_reached=next((k for k in ['continued','ground_return','strict_support','airborne_after_handoff','reached_release_line'] if s['stages'][k]),'ground_approach'),checks=s['checks'],stages=s['stages'],stage_times=s['stage_times'],complete=s['complete'],duration_s=float(trace[-1,0]),terminal_flags=physical['cases'][0].get('terminal_flags'),physical_termination=physical['cases'][0]['physical_termination'],task_progress=str(out/'task_progress.json'),xy=str(out/'xy_jump.png')))
 for ax in list(axes.flat)[n:]:ax.set_visible(False)
 legend_items={}
 for ax in axes.flat:
@@ -84,7 +93,8 @@ if filtered:
         f=r['filtered_protocol'];lines.append('| '+r['scene']+' | '+str(f['checks']['stable_landing'])+' | '+str(f['complete'])+' |')
 lines.extend(['', '## Unfinished stages and physical termination', '', '| Scene | Furthest observed stage | Unmet checks | Termination evidence |', '|---|---|---|---|'])
 for r in rows:
-    flags=r['terminal_flags'];stop=[k for k in ['ground_domain_exit','ground_policy_fault','roll_limit','low_root','nonfinite_state'] if flags.get(k)]
+    flags=r['terminal_flags'] or {};stop=[k for k in ['ground_domain_exit','ground_policy_fault','roll_limit','low_root','nonfinite_state'] if flags.get(k)]
+    if r['terminal_flags'] is None:stop.append('First-exit flags not recorded; physical_termination='+str(r['physical_termination']))
     if not flags.get('ground_alive',True):stop.append('ground_alive=false')
     lines.append('| '+r['scene']+' | '+r['stage_reached']+' | '+', '.join(r['unmet_checks'])+' | '+(', '.join(stop) or 'No recorded termination flag')+' |')
 (a.manifest.parent/'RESULTS.md').write_text('\n'.join(lines)+'\n')
