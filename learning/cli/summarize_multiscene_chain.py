@@ -24,9 +24,14 @@ for ax,c in zip(axes.flat,m['cases']):
             event=json.loads(f.read_text());point=np.asarray(event['root'])[0,:2];ax.plot(*point,marker,markersize=6,label=label)
     ax.set_aspect('equal',adjustable='box');ax.set(xlabel='World X (m)',ylabel='World Y (m)',title=f"{c['case_id']}; full chain={s['complete']}");ax.legend(fontsize=6)
     program=dict(goals=[dict(goal_id='destination',allowed_routes=['original'],required_skills=['platform_jump','ground_return','continued_drive'])])
-    routes=[dict(route_id='original',goal_id='destination',task_id=c['case_id'],skill_id='update2',candidates=['fixed'],reference_path=spec['ground_route'])]
-    task=ContinuousTask(program,routes,[dict(candidate_id='fixed',speed_m_s=2.,alpha=.5)],None)
-    task.record_execution('original','fixed',time_s=0.,reason='Recorded frozen full-route execution')
+    candidates=[dict(candidate_id='initial',speed_m_s=spec['approach_speed'],alpha=spec['ground_alpha'])]
+    decision_file=out/'connection_decision.json'
+    decision=json.loads(decision_file.read_text()) if decision_file.exists() else None
+    if decision:candidates.append(dict(candidate_id='exit',speed_m_s=decision['candidate']['speed_m_s'],alpha=decision['candidate']['alpha']))
+    routes=[dict(route_id='original',goal_id='destination',task_id=c['case_id'],skill_id=spec['skills'][0],candidates=[v['candidate_id'] for v in candidates],reference_path=spec['ground_route'])]
+    task=ContinuousTask(program,routes,candidates,None)
+    task.record_execution('original','initial',time_s=0.,reason='Initial reference reconstructed from executed config')
+    if decision:task.record_execution('original','exit',time_s=decision['time'],reason='Recorded actual approach decision')
     skills=[]
     if s['checks']['stable_landing']:skills.append('platform_jump')
     if s['checks']['ground_return']:skills.append('ground_return')
@@ -35,16 +40,21 @@ for ax,c in zip(axes.flat,m['cases']):
     assert accepted==s['complete']
     progress=dict(status='complete' if accepted else 'incomplete',role='Post-run physical task-progress replay; not online LLM execution',events=task.events,remaining=[] if accepted else ['destination'])
     (out/'task_progress.json').write_text(json.dumps(progress,indent=2)+'\n')
-    rows.append(dict(scene=c['case_id'],unmet_checks=[k for k,v in s['checks'].items() if not v],stage_reached=next((k for k in ['continued','ground_return','strict_support','airborne_after_handoff','reached_release_line'] if s['stages'][k]),'ground_approach'),checks=s['checks'],stages=s['stages'],stage_times=s['stage_times'],complete=s['complete'],duration_s=float(trace[-1,0]),terminal_flags=physical['cases'][0]['terminal_flags'],task_progress=str(out/'task_progress.json'),xy=str(out/'xy_jump.png')))
+    rows.append(dict(scene=c['case_id'],skill=spec['skills'][0],filtered_protocol=s.get('contact_filtered_protocol'),unmet_checks=[k for k,v in s['checks'].items() if not v],stage_reached=next((k for k in ['continued','ground_return','strict_support','airborne_after_handoff','reached_release_line'] if s['stages'][k]),'ground_approach'),checks=s['checks'],stages=s['stages'],stage_times=s['stage_times'],complete=s['complete'],duration_s=float(trace[-1,0]),terminal_flags=physical['cases'][0]['terminal_flags'],task_progress=str(out/'task_progress.json'),xy=str(out/'xy_jump.png')))
 for ax in list(axes.flat)[n:]:ax.set_visible(False)
 fig.savefig(a.manifest.parent/'xy_all_scenes.png',dpi=150);plt.close(fig)
 result=dict(role='Engineering integration, no success-rate adoption gate',scenes=rows,optimizer_updates=0)
 (a.manifest.parent/'stage_summary.json').write_text(json.dumps(result,indent=2)+'\n')
 lines=['# Multi-scene continuous-task integration','','![All declared scenes](xy_all_scenes.png)','',
-       'Frozen update2 + H75/ECBC, zero lower residual. New geometry; one run per scene, no robustness claim. Existing strict labels retained.',
+       'Frozen skills listed per scene + H75/ECBC, zero lower residual. One run per scene, no robustness claim. Original strict labels retained; contact-filter labels are separate.',
        'Task progress is replayed from physical results after each run; not online LLM completion.', '',
-       '| Scene | Reached jump | Airborne | Strict support | Ground return | Continued | Full chain |', '|---|---|---|---|---|---|---|']
-for r in rows:lines.append('| '+r['scene']+' | '+' | '.join(str(r['stages'][k]) for k in ['reached_release_line','airborne_after_handoff','strict_support','ground_return','continued'])+' | '+str(r['complete'])+' |')
+       '| Scene | Skill | Reached jump | Airborne | Strict support | Ground return | Continued | Strict full chain |', '|---|---|---|---|---|---|---|---|']
+for r in rows:lines.append('| '+r['scene']+' | '+r['skill']+' | '+' | '.join(str(r['stages'][k]) for k in ['reached_release_line','airborne_after_handoff','strict_support','ground_return','continued'])+' | '+str(r['complete'])+' |')
+filtered=[r for r in rows if r['filtered_protocol'] is not None]
+if filtered:
+    lines.extend(['', '## Separately declared 20ms contact protocol', '', '| Scene | Filtered support | Filtered full chain |', '|---|---|---|'])
+    for r in filtered:
+        f=r['filtered_protocol'];lines.append('| '+r['scene']+' | '+str(f['checks']['stable_landing'])+' | '+str(f['complete'])+' |')
 lines.extend(['', '## Unfinished stages and physical termination', '', '| Scene | Furthest observed stage | Unmet checks | Termination evidence |', '|---|---|---|---|'])
 for r in rows:
     flags=r['terminal_flags'];stop=[k for k in ['ground_domain_exit','ground_policy_fault','roll_limit','low_root','nonfinite_state'] if flags.get(k)]
