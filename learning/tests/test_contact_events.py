@@ -1,31 +1,33 @@
-import torch
-from sttw_control.contact_events import WheelClearanceEvents
+import numpy as np
+from sttw_control.contact_events import extract_contact_events
 
 
-def test_airborne_gap_is_not_clearance_and_dispatch_waits_for_decision():
-    events=WheelClearanceEvents(2,'cpu',.0002,confirmation_s=.001)
-    alive=torch.tensor([True,True]);beyond=torch.tensor([False,False]);ground=torch.tensor([True,True])
-    events.update(torch.tensor([[True,False],[True,True]]),beyond,ground,alive)
-    events.update(torch.tensor([[False,True],[False,False]]),beyond,ground,alive)
-    for _ in range(8):events.update(torch.zeros(2,2,dtype=torch.bool),torch.ones(2,dtype=torch.bool),torch.zeros(2,dtype=torch.bool),alive)
-    assert not events.take_ready(alive).any()  # no support while airborne
-    events.update(torch.zeros(2,2,dtype=torch.bool),torch.tensor([True,False]),ground,alive)
-    assert events.confirmed.tolist()==[11,-1]
-    assert not events.dispatched.any()
-    assert events.take_ready(alive).tolist()==[True,False]
-    assert not events.take_ready(alive).any()
-    events.update(torch.zeros(2,2,dtype=torch.bool),torch.ones(2,dtype=torch.bool),ground,torch.tensor([True,False]))
-    assert not events.take_ready(torch.tensor([True,False])).any()
+def fixture():
+ t=np.arange(8)*.1;p=np.zeros((8,2,3));p[:,:,0]=np.arange(8)[:,None]*.2
+ f=np.zeros_like(p);f[:,:,2]=10;f[1:3,:,2]=0;f[3,1,2]=0
+ return t,p,f,np.ones(8,dtype=bool)
 
 
-def test_recontact_restarts_confirmation_interval():
-    events=WheelClearanceEvents(1,'cpu',.0002,confirmation_s=.0006)
-    yes=torch.tensor([True]);no_contact=torch.zeros(1,2,dtype=torch.bool)
-    events.update(torch.ones(1,2,dtype=torch.bool),yes,yes,yes)
-    for _ in range(2):events.update(no_contact,yes,yes,yes)
-    assert events.confirmed.item()==-1
-    events.update(torch.tensor([[False,True]]),yes,yes,yes)
-    for _ in range(2):events.update(no_contact,yes,yes,yes)
-    assert events.confirmed.item()==-1
-    events.update(no_contact,yes,yes,yes)
-    assert events.take_ready(yes).item()
+def test_no_recovery_is_inferred_from_touchdown():
+ result=extract_contact_events(*fixture(),.5,1.)
+ assert result['recovery_status'].startswith('unlabelled')
+ assert [e['time_s'] for e in result['events'] if e['kind']=='support_lost']==[.1]
+ assert next(e for e in result['events'] if e['kind']=='first_far_bank_contact_proxy')['wheels']==[0]
+
+
+def test_hold_and_failure_and_censoring_are_distinct():
+ args=fixture();mask=np.ones(8,dtype=bool)
+ assert extract_contact_events(*args,.5,1.,mask,.2)['recovery_status']=='observed'
+ assert extract_contact_events(*args,.5,1.,mask,1.)['recovery_status']=='right_censored_at_observation_end'
+ assert extract_contact_events(*args,.5,1.,mask,1.,True)['recovery_status']=='failed_before_recovery'
+
+
+def test_invalid_interval_breaks_recovery_hold():
+ t,p,f,v=fixture();v[5]=False
+ assert extract_contact_events(t,p,f,v,.5,1.,np.ones(8,dtype=bool),.3)['recovery_status']=='right_censored_at_observation_end'
+
+
+def test_starting_airborne_does_not_invent_observed_takeoff():
+ t,p,f,v=fixture();f[0]=0
+ result=extract_contact_events(t,p,f,v,.5,1.)
+ assert not any(e['kind']=='support_lost' for e in result['events'])

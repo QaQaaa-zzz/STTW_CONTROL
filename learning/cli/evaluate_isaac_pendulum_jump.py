@@ -181,6 +181,10 @@ if pulse:
   plant.robot.permanent_wrench_composer.set_forces_and_torques(forces=local[:,None].contiguous(),torques=pulse_zero,positions=pulse_site,body_ids=pulse_body,is_global=False)
   pulse_rows.append(torch.cat((torch.full((1,1),k*.005+pulse_step_tick*plant.physics_dt,device='cuda:0'),force),-1))
   pulse_step_tick+=1;pulse_remaining=max(0,pulse_remaining-1)
+physics_recorder=None
+if spec.get('record_physics_contacts',False):
+ from sttw_control.physics_contact_recording import PhysicsContactRecorder
+ physics_recorder=PhysicsContactRecorder(plant,lambda: (alive,3 if returned else 1 if active else 0))
 previous_root_velocity=plant.roots[:,7:10].clone()
 for k in range(steps+1):
  if ground is not None and not active and (returned or not spec.get('ground_after_landing_only',False)) and k%4:continue
@@ -330,6 +334,7 @@ if pulse:
  applied=torch.stack(pulse_rows).cpu().numpy() if pulse_rows else np.empty((0,1,4))
  np.savez_compressed(out/'external_force.npz',samples=applied,columns=['time_s','world_Fx_N','world_Fy_N','world_Fz_N'],physics_dt_s=plant.physics_dt)
  (out/'external_force.json').write_text(json.dumps(dict(protocol=pulse,triggered=pulse_started,trigger_time_s=pulse_start_time,impulse_world_Ns=(applied[:,:,1:].sum(0)*plant.physics_dt).tolist(),scope='Prescribed world-frame force at body-local site; position crossing sampled at current execution rate; omitted intervals have zero force, not velocity replacement'),indent=2)+'\n')
+if physics_recorder is not None:physics_recorder.save(out/'physics_contact.npz')
 if ground_command_rows:np.savez_compressed(out/'executed_ground_commands.npz',trace=torch.cat(ground_command_rows).cpu().numpy(),columns=['time','steer_rate_rad_s','rear_axis_speed_rad_s','alive_before_step','phase_0_ground_3_return'],semantics='Actual motor input passed to plant.step after controller limits and optional randomization; plant servo limits still apply')
 if executed_rows:np.savez_compressed(out/'executed_jump_targets.npz',trace=torch.stack(executed_rows).cpu().numpy(),columns=['time','phase_1_jump_2_landing_transition','steering_position_rad','rear_axis_speed_rad_s','hip_position_rad','knee_position_rad'],semantics='Actual target after landing override, before plant servo dynamics; not measured torque')
 if ground_rows:np.savez(out/'ground_tracking.npz',trace=torch.cat(ground_rows).cpu().numpy(),columns=['x','y','speed','cross_track','abs_roll','reward','alive','physics_ticks','speed_reference','steer_reference','wheel_speed_estimate'])
