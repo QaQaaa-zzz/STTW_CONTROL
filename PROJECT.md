@@ -1,3 +1,7 @@
+## 2026-11-08 用户要求的近期研究复审
+
+当前两个支线的原预算保持停止；复审收窄机制否定，不自动重启训练/仿真。原Local300身份与四元数控制链核对无本次渲染同类错误。G6存在候选可行上限，P3存在切换前任务已失格，P4只检验入障地图KNN；详见[方法台账末节](docs/METHODS_AND_RESULTS.md)与runs/h75_scene_media/research_audit.json。冻结数字/失败/原报告保留，当前全项目事实仍以独立研究台账为准。
+
 ## 当前独立分支：连续石子任务已按停止条件收尾（2026-11-07）
 
 本节仅适用experiment/sttw-gravel。G0–P4有界协议已完成；P3不扩至300，P4不扩至500，不新增训练。Task-only15/40、Task+Phase16/40，净+2.5pp未达到冻结10pp门槛，Phase模块不采用；原STTW偏好与机械相位证据保留。完整XY、失败、5ms高频诊断与各阶段配置/来源索引见[runs/h75_gravel_closeout/CONCLUSION.md](runs/h75_gravel_closeout/CONCLUSION.md)，接口与过程见[docs/GRAVEL_G0.md](docs/GRAVEL_G0.md)。
