@@ -66,6 +66,12 @@ class PhaseUEnv:
             self.ditch_cleared=self.flight_seen.clone()
             self.last_landing_contact=torch.zeros(self.num_envs,2,dtype=torch.bool,device=self.device)
             self.wheel_ids=[self.plant.bodies.index(name) for name in ('frontwheel','rearwheel')]
+        self.verified_jump = None
+        if cfg.get('verified_ditch_reward'):
+            if self.landing_reward is None or self.task['ppo']['discounting'] != 1.:
+                raise ValueError('Verified scoring requires landing instrumentation and gamma=1')
+            from .ditch_jump_adapter import DitchJumpAdapter
+            self.verified_jump = DitchJumpAdapter(self, vertices)
         self.entry_bank=None
         if cfg.get('reachable_entry_bank'):
             self.entry_probability=cfg['reachable_entry_probability']
@@ -107,6 +113,8 @@ class PhaseUEnv:
         if self.landing_reward:
             self.landing_ticks[ids]=0;self.flight_seen[ids]=False;self.platform_held[ids]=False;self.last_landing_contact[ids]=False
             self.ditch_cleared[ids]=False
+        if self.verified_jump is not None:
+            self.verified_jump.reset(ids)
         fresh=initial_events(pose[:,0],self.task)
         for k in self.events:self.events[k][ids]=fresh[k]
         self.obs_buf[ids]=0;self.obs_buf[ids,75]=fresh['jump_signal'].float()
@@ -141,10 +149,21 @@ class PhaseUEnv:
         ids=((self.episode_length_buf>0)&(self.episode_length_buf%push_ticks==0)).nonzero().flatten()
         if len(ids):push_by_setting_velocity(SimpleNamespace(scene={'robot':plant.robot}),ids,self.rand['push_velocity_range'])
         previous_root_velocity=plant.robot.data.root_link_lin_vel_w.clone()
+        verified = self.verified_jump is not None
+        if verified:
+            jump_rew = torch.zeros_like(previous_x)
+            jump_code = torch.zeros_like(self.episode_length_buf)
         for tick in range(self.physics_substeps):
             delivered=self.randomization.command(target)
             command=torch.stack((torch.zeros_like(delivered[:,0]),delivered[:,1]),-1)
-            plant.step(command,pendulum_target=delivered[:,2:],steering_position_target=delivered[:,:1],refresh_diagnostics=False)
+            plant.step(command,pendulum_target=delivered[:,2:],steering_position_target=delivered[:,:1],refresh_diagnostics=verified)
+            if verified:
+                inc, jump_done, jump_success, jump_stage = self.verified_jump.sample(
+                    self, action, tick == self.physics_substeps-1)
+                # First terminal substep wins. JumpReward pays zero after closure.
+                now = jump_done & (jump_code==0)
+                jump_code = torch.where(now,torch.where(jump_success,13,self.verified_jump.end_code),jump_code)
+                jump_rew += inc
             root_velocity=plant.robot.data.root_link_lin_vel_w
             root_acceleration=(root_velocity-previous_root_velocity)/plant.physics_dt;previous_root_velocity=root_velocity.clone()
             if (tick+1)%self.sensor_substeps==0:
@@ -153,7 +172,9 @@ class PhaseUEnv:
                 acceleration=root_acceleration if self.cfg.get('root_acceleration_difference',False) else plant.robot.data.body_com_acc_w[:,plant.bodies.index('chasis'),:3]
                 frame=self.history.make_frame(root,plant.dofs[:,:,0],plant.dofs[:,:,1],acceleration,distance,action)
                 measured=self.randomization.sensor_frame(frame)
-        plant.sensor.update(self.dt,force_recompute=True);plant.refresh()
+        if not verified:
+            plant.sensor.update(self.dt,force_recompute=True)
+            plant.refresh()
         root,contact,critic=self.physical();angles=critic[:,99:102]
         nonfinite=~torch.isfinite(root).all(-1)|~torch.isfinite(plant.dofs).all(dim=(1,2))|~torch.isfinite(action).all(-1)
         inputs=dict(episode_step=self.events['episode_step'],nonfinite=nonfinite,roll=angles[:,0],pitch=angles[:,1],illegal_contact=contact,backward_exit=root[:,0]<1.5-self.task['physical_limits']['max_backward_distance'],stuck=self.events['stuck'],yaw=angles[:,2],jump_zone_seen=self.events['jump_zone_seen'])
@@ -168,7 +189,7 @@ class PhaseUEnv:
         hip,knee=plant.pendulum_servos.indices
         reward_state=dict(previous_forward_velocity=previous_forward_velocity,policy_dt=self.dt,x=root[:,0],roll=angles[:,0],pitch=angles[:,1],yaw=angles[:,2],y=root[:,1],lateral_velocity=root[:,8],yaw_rate=root[:,12],z=root[:,2],forward_velocity=root[:,7],pitch_rate=root[:,11],hip_velocity=plant.dofs[:,hip,1],knee_velocity=plant.dofs[:,knee,1],hip_force=plant.last_pendulum_torque[:,hip],knee_force=plant.last_pendulum_torque[:,knee])
         reward_state['previous_x']=previous_x
-        if self.landing_reward:
+        if self.landing_reward and not verified:
             wp=plant.rigid[:,self.wheel_ids,:3]-plant.origin[:,None,:]
             forces=plant.contact[:,self.wheel_ids]
             flying=(forces.norm(dim=-1)<=1.).all(-1)&(wp[:,:,2]>.09).all(-1)&self.events['jump_zone_seen']
@@ -191,9 +212,19 @@ class PhaseUEnv:
                 reward_events.update(first_ditch_flight=first_flight,first_ditch_clear=clear&~self.ditch_cleared,
                     ditch_failed=terminal['terminated']|(terminal['timeout']&~self.platform_held))
                 self.ditch_cleared|=clear
-        clipped,unclipped,parts=phase_u_reward(reward_state,action,self.last_action,reward_events,self.task['reward'])
-        reward,self.episode_return,override=phase_u_episode_reward(clipped,self.episode_return,terminal['stuck'],terminal['yaw_limit'],self.task['reward'])
-        done=terminal['terminated']|terminal['truncated'];self.episode_length_buf+=1;self.last_action.copy_(action)
+        if verified:
+            reward, done = jump_rew, jump_done.clone()
+            self.platform_held.copy_(jump_success)
+            parts = dict(verified_jump=reward)
+            override = torch.zeros_like(reward)
+            self.episode_return += reward
+            terminal['end_code'] = jump_code
+            terminal['physical_failure'] = (jump_code==2)|(jump_code==3)|(jump_code==4)|(jump_code==7)|(jump_code==12)
+        else:
+            clipped,unclipped,parts=phase_u_reward(reward_state,action,self.last_action,reward_events,self.task['reward'])
+            reward,self.episode_return,override=phase_u_episode_reward(clipped,self.episode_return,terminal['stuck'],terminal['yaw_limit'],self.task['reward'])
+            done=terminal['terminated']|terminal['truncated']
+        self.episode_length_buf+=1;self.last_action.copy_(action)
         self.obs_buf=self.history.advance_frame(measured,self.events['jump_signal'].float())
         if self.num_obs==80:
             from .jump_heading import heading_features
@@ -203,9 +234,14 @@ class PhaseUEnv:
             self.obs_buf=torch.cat((self.obs_buf,extra),-1)
         self.privileged_obs_buf=self.history.privileged(self.obs_buf[:,:76],root,plant.dofs[:,:,0],plant.dofs[:,:,1],contact)
         bootstrap_timeout=terminal['truncated']
-        if 'ditch_events' in self.task['reward']:
+        if verified:
+            bootstrap_timeout = torch.zeros_like(done)
+        elif 'ditch_events' in self.task['reward']:
             bootstrap_timeout=bootstrap_timeout&~reward_events['ditch_failed']
         info=dict(time_outs=bootstrap_timeout.float(),reward_parts={**parts,'episode_return_override':override},end_code=terminal['end_code'],apex=self.events['apex_seen'].clone(),unscaled_reward=reward)
+        if verified:
+            info['jump_stage'] = jump_stage.clone()
+            info['jump_success'] = jump_success.clone()
         ids=done.nonzero().flatten()
         if len(ids):
             info['episode']=dict(reward=self.episode_return[ids].mean(),length=self.episode_length_buf[ids].float().mean(),apex_fraction=self.events['apex_seen'][ids].float().mean(),physical_failure=terminal['physical_failure'][ids].float().mean())

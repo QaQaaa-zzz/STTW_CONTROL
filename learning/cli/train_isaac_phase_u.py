@@ -14,6 +14,8 @@ path=Path(cfg['go2_checkout'])/'rsl_rl/rsl_rl/runners/on_policy_runner.py'
 spec=importlib.util.spec_from_file_location('phase_u_go2_runner',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);module.PhaseUActorCritic=PhaseUActorCritic
 recipe=spring_jump_recipe(cfg['go2_checkout']);train=recipe['train'];train['policy']={'bundle':cfg['bundle']};train['runner'].update(policy_class_name='PhaseUActorCritic',max_iterations=cfg['updates'],save_interval=cfg['save_interval'])
 train['algorithm'].update(cfg.get('ppo_overrides',{}))
+if cfg.get('verified_ditch_reward') and train['algorithm'].get('gamma') != 1.:
+    raise ValueError('PPO must use gamma=1 for the verified finite-horizon reward')
 torch.manual_seed(cfg['seed']);torch.set_num_threads(2);start=time.time()
 status=dict(stage='initializing',pid=os.getpid(),completed_updates=0,started=start)
 (a.output/'config.json').write_text(json.dumps(dict(task=cfg,go2_recipe=recipe),indent=2));(a.output/'status.json').write_text(json.dumps(status,indent=2))
