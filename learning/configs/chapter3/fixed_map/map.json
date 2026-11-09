@@ -1,0 +1,251 @@
+{
+  "schema": "map_task_graph_v1",
+  "map_id": "platform_bypass_2faf36cdbaba",
+  "assets": {
+    "original": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/original_extended_reference.npz",
+      "sha256": "7527ac9b9e588550f1e83cb824daf0465494e298f862f705967296397f3d4017"
+    },
+    "bypass": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/bypass_reference.npz",
+      "sha256": "d60c300e783d63bba6192b1ab156df555f5d9e9c252dbdafd8a6da7f790fe61e"
+    },
+    "scene_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_approach_pilot/scene_L9.6/terrain",
+    "plant_config": "runs/rb_h75_ecbc_ground/left90_R2/config.json",
+    "map_contract": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_bypass_reference_repair/map_contract.json"
+  },
+  "regions": [
+    {
+      "region_id": "start",
+      "center_xy_m": [
+        -3.96,
+        -9.0
+      ]
+    },
+    {
+      "region_id": "junction",
+      "center_xy_m": [
+        -2.0,
+        0.0
+      ]
+    },
+    {
+      "region_id": "launch",
+      "center_xy_m": [
+        6.0,
+        0.0
+      ]
+    },
+    {
+      "region_id": "platform_exit",
+      "center_xy_m": [
+        11.6,
+        0.0
+      ]
+    },
+    {
+      "region_id": "landing",
+      "center_xy_m": [
+        14.6,
+        0.0
+      ]
+    },
+    {
+      "region_id": "side_entry",
+      "center_xy_m": [
+        4.0,
+        -2.0
+      ]
+    },
+    {
+      "region_id": "side_exit",
+      "center_xy_m": [
+        12.6,
+        -2.0
+      ]
+    },
+    {
+      "region_id": "merge",
+      "center_xy_m": [
+        16.6,
+        0.0
+      ]
+    },
+    {
+      "region_id": "destination",
+      "center_xy_m": [
+        21.6,
+        0.0
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "connection_id": "upstream",
+      "from_region": "start",
+      "to_region": "junction",
+      "reference_asset": "original",
+      "s_start_m": 0.0,
+      "s_end_m": 10.141579715693258,
+      "length_m": 10.141579715693258,
+      "half_width_m": 1.0,
+      "skills": [
+        "ground"
+      ],
+      "role": "ground",
+      "physical_validation": "not_established_for_new_task_contract"
+    },
+    {
+      "connection_id": "prepare_jump",
+      "from_region": "junction",
+      "to_region": "launch",
+      "reference_asset": "original",
+      "s_start_m": 10.141579715693258,
+      "s_end_m": 18.141579715693087,
+      "length_m": 7.9999999999998295,
+      "half_width_m": 1.0,
+      "skills": [
+        "ground"
+      ],
+      "role": "jump_preparation",
+      "physical_validation": "not_established_for_new_task_contract"
+    },
+    {
+      "connection_id": "cross_platform",
+      "from_region": "launch",
+      "to_region": "platform_exit",
+      "reference_asset": "original",
+      "s_start_m": 18.141579715693087,
+      "s_end_m": 23.74157971569301,
+      "length_m": 5.599999999999923,
+      "half_width_m": 1.0,
+      "skills": [
+        "jump_update2"
+      ],
+      "role": "jump",
+      "physical_validation": "not_established_for_new_task_contract"
+    },
+    {
+      "connection_id": "land_return",
+      "from_region": "platform_exit",
+      "to_region": "landing",
+      "reference_asset": "original",
+      "s_start_m": 23.74157971569301,
+      "s_end_m": 26.74157971569298,
+      "length_m": 2.999999999999968,
+      "half_width_m": 1.0,
+      "skills": [
+        "land_return"
+      ],
+      "role": "landing",
+      "physical_validation": "not_established_for_new_task_contract"
+    },
+    {
+      "connection_id": "merge_straight",
+      "from_region": "landing",
+      "to_region": "merge",
+      "reference_asset": "original",
+      "s_start_m": 26.74157971569298,
+      "s_end_m": 28.74157971569298,
+      "length_m": 2.0,
+      "half_width_m": 1.0,
+      "skills": [
+        "ground"
+      ],
+      "role": "ground",
+      "physical_validation": "not_established_for_new_task_contract"
+    },
+    {
+      "connection_id": "diverge",
+      "from_region": "junction",
+      "to_region": "side_entry",
+      "reference_asset": "bypass",
+      "s_start_m": 0.0,
+      "s_end_m": 6.347754314082824,
+      "length_m": 6.347754314082824,
+      "half_width_m": 0.6,
+      "skills": [
+        "ground"
+      ],
+      "role": "ground",
+      "physical_validation": "not_established_for_new_task_contract"
+    },
+    {
+      "connection_id": "side_passage",
+      "from_region": "side_entry",
+      "to_region": "side_exit",
+      "reference_asset": "bypass",
+      "s_start_m": 6.347754314082824,
+      "s_end_m": 14.947754314082824,
+      "length_m": 8.6,
+      "half_width_m": 0.6,
+      "skills": [
+        "ground"
+      ],
+      "role": "ground",
+      "physical_validation": "not_established_for_new_task_contract"
+    },
+    {
+      "connection_id": "rejoin",
+      "from_region": "side_exit",
+      "to_region": "merge",
+      "reference_asset": "bypass",
+      "s_start_m": 14.947754314082824,
+      "s_end_m": 19.50576023665193,
+      "length_m": 4.558005922569107,
+      "half_width_m": 0.6,
+      "skills": [
+        "ground"
+      ],
+      "role": "ground",
+      "physical_validation": "not_established_for_new_task_contract"
+    },
+    {
+      "connection_id": "to_goal",
+      "from_region": "merge",
+      "to_region": "destination",
+      "reference_asset": "original",
+      "s_start_m": 28.74157971569298,
+      "s_end_m": 33.741579715692794,
+      "length_m": 4.999999999999815,
+      "half_width_m": 1.0,
+      "skills": [
+        "ground"
+      ],
+      "role": "ground",
+      "physical_validation": "not_established_for_new_task_contract"
+    }
+  ],
+  "skills": [
+    {
+      "skill_id": "ground",
+      "family": "ground",
+      "backend": "H75_ECBC_ESO",
+      "bundle": "runs/rb_h75_ecbc_ground/left90_R2/bundle",
+      "zero_lower": true
+    },
+    {
+      "skill_id": "jump_update2",
+      "family": "jump",
+      "backend": "frozen_jump",
+      "bundle": "runs/rb_sttw_platform/evaluation_bundles/update2"
+    },
+    {
+      "skill_id": "land_return",
+      "family": "landing",
+      "backend": "existing_landing_handoff",
+      "settings": {
+        "support_s": 1.0,
+        "speed_m_s": 1.5,
+        "minimum_handoff_speed_m_s": 1.2,
+        "acceleration_m_s2": 0.8,
+        "alpha": 0.5
+      }
+    }
+  ],
+  "unsupported_skills": [
+    "RecoveryBridge adapter must bind exact checkpoint/interface/evidence before use"
+  ],
+  "physical_validation": "Two topological routes exist; two constraint-satisfying physical routes NOT yet established",
+  "source_base_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_forward_branch/forced_original_jump_extended_reference.json"
+}

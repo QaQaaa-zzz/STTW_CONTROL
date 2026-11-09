@@ -1,0 +1,12 @@
+{
+  "task_id": "same_map_destination",
+  "start_region": "junction",
+  "goal_region": "destination",
+  "hard_constraints": {
+    "forbidden_connections": [],
+    "ordered_required_regions": [],
+    "required_skill_families": [],
+    "maximum_remaining_time_s": 26.0,
+    "completion_protocol_id": "E5_shared_road_v1_original_strict"
+  }
+}
