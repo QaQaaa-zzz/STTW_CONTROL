@@ -1,4 +1,4 @@
-"""Add a rolling approach and right turn to the existing RB platform scene."""
+"""Add single or reverse bends and a declared rolling approach to the RB platform."""
 import argparse
 import hashlib
 import json
@@ -14,7 +14,10 @@ p.add_argument('--seconds',type=float,default=18.)
 p.add_argument('--start-y',type=float,default=-7.)
 p.add_argument('--bump-start-y',type=float,default=-6.2)
 p.add_argument('--bump-length',type=float,default=1.6)
+p.add_argument('--bump-height',type=float,default=.02)
+p.add_argument('--bend',choices=['right','left','s','reverse_s'],default='right')
 a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False)
+if not 0<=a.bump_height<=.03 or a.bump_length<=0:raise ValueError('Use a declared shallow bump height [0,.03] and positive length')
 c=json.loads(a.base.read_text());source=Path(c['scene_terrain'])
 mesh=np.load(source/'terrain.npz');vertices=mesh['vertices'];triangles=mesh['triangles']
 if c.get('terrain_base_plane'):vertices=vertices.copy();vertices[:,2]=np.maximum(vertices[:,2],0.)
@@ -23,24 +26,57 @@ vertices=vertices.copy();vertices[:,0]+=a.platform_offset_x
 xmin=min(-5,a.turn_end_x-3);x=np.linspace(xmin,25,round((25-xmin)/.05)+1);y=np.linspace(-10,-4,121)
 xx,yy=np.meshgrid(x,y,indexing='ij')
 phase=(yy-a.bump_start_y)/a.bump_length
-z=np.where((phase>0)&(phase<1),.02*np.sin(2*np.pi*phase)**2,0.)
+z=np.where((phase>0)&(phase<1),a.bump_height*np.sin(2*np.pi*phase)**2,0.)
 z*=np.clip((1.2-np.abs(xx-(a.turn_end_x-2)))/.2,0,1)
 v=np.stack((xx,yy,z),-1).reshape(-1,3).astype(np.float32)
 i,j=np.meshgrid(np.arange(len(x)-1),np.arange(len(y)-1),indexing='ij');q=(i*len(y)+j).ravel()
 t=np.concatenate((np.stack((q,q+len(y),q+1),-1),np.stack((q+1,q+len(y),q+len(y)+1),-1)))+len(vertices)
 terrain=a.output/'terrain';terrain.mkdir()
-np.savez(terrain/'terrain.npz',vertices=np.concatenate((vertices,v)),triangles=np.concatenate((triangles,t)))
-identity=json.loads((source/'identity.json').read_text());identity.update(sha256=hashlib.sha256((terrain/'terrain.npz').read_bytes()).hexdigest(),source=str(source),platform_front_x=3.6+a.platform_offset_x,platform_back_x=7.6+a.platform_offset_x,added_terrain=dict(bounds=[xmin,25,-10,-4],height_m=.02,undulation_y_m=[a.bump_start_y,a.bump_start_y+a.bump_length],width_m=2.4,flat_takeoff=f'Turn ends x={a.turn_end_x},y=0; {3.6+a.platform_offset_x-a.turn_end_x}m flat to edge'))
-(terrain/'identity.json').write_text(json.dumps(identity,indent=2))
+identity=json.loads((source/'identity.json').read_text());identity.update(source=str(source),platform_front_x=3.6+a.platform_offset_x,platform_back_x=7.6+a.platform_offset_x,added_terrain=dict(bounds=[xmin,25,-10,-4],height_m=a.bump_height,undulation_y_m=[a.bump_start_y,a.bump_start_y+a.bump_length],width_m=2.4,flat_takeoff=f'Turn ends x={a.turn_end_x},y=0; {3.6+a.platform_offset_x-a.turn_end_x}m flat to edge'))
 # Northbound straight -> clockwise R2 quarter-circle -> eastbound platform approach.
 a1=np.linspace(0,-2-a.start_y,round((-2-a.start_y)/.02)+1);ang=np.linspace(np.pi,np.pi/2,159)[1:];a3=np.linspace(0,25-a.turn_end_x,round((25-a.turn_end_x)/.02)+1)[1:]
 xy=np.concatenate((np.stack((np.full_like(a1,a.turn_end_x-2),a.start_y+a1),-1),np.stack((a.turn_end_x+2*np.cos(ang),-2+2*np.sin(ang)),-1),np.stack((a.turn_end_x+a3,np.zeros_like(a3)),-1)))
 heading=np.r_[np.full_like(a1,np.pi/2),ang-np.pi/2,np.zeros_like(a3)]
 curvature=np.r_[np.zeros_like(a1),np.full_like(ang,-.5),np.zeros_like(a3)]
+if a.bend in ('s','reverse_s'):
+ # Two opposite R2, 60-degree arcs; same eastbound exit and fixed platform.
+ points=[np.array([0.,0.])];heads=[0.];curves=[0.]
+ for length,kappa in [(4.,0.),(2*np.pi/3,.5),(2*np.pi/3,-.5)]:
+  start=points[-1].copy();h=heads[-1]
+  for u in np.linspace(0,length,round(length/.02)+1)[1:]:
+   delta=np.array([u*np.cos(h),u*np.sin(h)]) if kappa==0 else np.array([(np.sin(h+kappa*u)-np.sin(h))/kappa,(-np.cos(h+kappa*u)+np.cos(h))/kappa])
+   points.append(start+delta);heads.append(h+kappa*u);curves.append(kappa)
+ xy=np.array(points);xy+=np.array([a.turn_end_x,0.])-xy[-1]
+ prefix_start=xy[0].copy()
+ tail=np.stack((a.turn_end_x+a3,np.zeros_like(a3)),-1)
+ xy=np.concatenate((xy,tail));heading=np.r_[heads,np.zeros_like(a3)];curvature=np.r_[curves,np.zeros_like(a3)]
+ # A separate prefix patch before the platform mesh's x-min; plane carries the turns.
+ px=np.linspace(prefix_start[0]-.5,prefix_start[0]+4.,91);py=np.linspace(prefix_start[1]-1.2,prefix_start[1]+1.2,49)
+ xx,yy=np.meshgrid(px,py,indexing='ij');phase=(xx-prefix_start[0]-1.)/a.bump_length
+ z=np.where((phase>0)&(phase<1),a.bump_height*np.sin(2*np.pi*phase)**2,0.)*np.clip((1.2-abs(yy-prefix_start[1]))/.2,0,1)
+ v=np.stack((xx,yy,z),-1).reshape(-1,3).astype(np.float32)
+ i,j=np.meshgrid(np.arange(len(px)-1),np.arange(len(py)-1),indexing='ij');q=(i*len(py)+j).ravel()
+ t=np.concatenate((np.stack((q,q+len(py),q+1),-1),np.stack((q+1,q+len(py),q+len(py)+1),-1)))+len(vertices)
+ identity['added_terrain']=dict(bounds=[float(px[0]),float(px[-1]),float(py[0]),float(py[-1])],height_m=a.bump_height,width_m=2.4,profile='two sin-squared bumps along initial straight',bump_start_world_x=float(prefix_start[0]+1),bump_length_m=a.bump_length)
+if a.bend in ('left','reverse_s'):
+ xy[:,1]*=-1;heading*=-1;curvature*=-1
+ vertices=vertices.copy();vertices[:,1]*=-1;v[:,1]*=-1
+ triangles=triangles[:,[0,2,1]];t=t[:,[0,2,1]]
+vertices=np.concatenate((vertices,v));triangles=np.concatenate((triangles,t))
+np.savez(terrain/'terrain.npz',vertices=vertices,triangles=triangles)
+identity.update(sha256=hashlib.sha256((terrain/'terrain.npz').read_bytes()).hexdigest(),bend=a.bend,bump_height_m=a.bump_height,
+                patch_mirrored_y=a.bend in ('left','reverse_s'),route_scope='new geometry; frozen vehicle and controllers unchanged')
+identity['added_terrain']['height_m']=a.bump_height
+(terrain/'identity.json').write_text(json.dumps(identity,indent=2))
 s=np.r_[0,np.cumsum(np.linalg.norm(np.diff(xy,axis=0),axis=1))]
 np.savez(a.output/'route.npz',s=s,xy=xy,heading=heading,curvature=curvature)
 c.update(output=str(a.output/'evaluation'),scene_terrain=str(terrain),ground_route=str(a.output/'route.npz'),start_x=a.turn_end_x-2,start_y=a.start_y,start_heading_rad=float(np.pi/2),ground_after_landing_only=False,seconds=a.seconds,maximum_physics_lane_steps=round(a.seconds/c['physics_dt']),role='Nominal DEV full rolling terrain, right turn, flat approach, platform jump and resumed path tracking; same frozen controllers; no training')
 c['platform_front_x']=3.6+a.platform_offset_x;c['platform_back_x']=7.6+a.platform_offset_x;c['handoff_x']=2.+a.platform_offset_x
 c['completion']=dict(corridor_half_width_m=1.,waypoints=[[a.turn_end_x-2,a.bump_start_y],[a.turn_end_x-2,a.bump_start_y+a.bump_length],[a.turn_end_x-2,-2],[a.turn_end_x,0],[2+a.platform_offset_x,0]],waypoint_radius_m=1.,minimum_post_handoff_s=2.,minimum_post_handoff_forward_m=2.)
+if a.bend!='right':
+ c.update(start_x=float(xy[0,0]),start_y=float(xy[0,1]),start_heading_rad=float(heading[0]))
+ c['completion']['waypoints']=[xy[np.argmin(abs(s-distance))].tolist() for distance in (1.,3.,4.)]+[[a.turn_end_x,0.],[c['handoff_x'],0.]]
+c['completion']['final_goal_xy']=[c['platform_back_x']+3.,0.]
+c['role']=f'Engineering integration: {a.bend} bend, {a.bump_height}m rolling terrain, jump and continuation; not a success-rate study'
 (a.output/'config.json').write_text(json.dumps(c,indent=2)+'\n')
 print(a.output/'config.json')
