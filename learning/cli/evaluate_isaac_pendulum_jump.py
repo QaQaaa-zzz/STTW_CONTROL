@@ -183,7 +183,7 @@ if pulse:
   pulse_step_tick+=1;pulse_remaining=max(0,pulse_remaining-1)
 physics_recorder=None
 if spec.get('record_physics_contacts',False):
- from sttw_control.physics_contact_recording import PhysicsContactRecorder
+ from sttw_control.jump_contact_recording import PhysicsContactRecorder
  physics_recorder=PhysicsContactRecorder(plant,lambda: (alive,3 if returned else 1 if active else 0))
 previous_root_velocity=plant.roots[:,7:10].clone()
 for k in range(steps+1):

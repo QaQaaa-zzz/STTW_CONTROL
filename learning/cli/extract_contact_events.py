@@ -2,7 +2,7 @@
 import argparse,json
 from pathlib import Path
 import numpy as np
-from sttw_control.contact_events import extract_contact_events
+from sttw_control.jump_event_labels import extract_contact_events
 p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('--input',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
 p.add_argument('--far-edge-x',type=float,required=True);p.add_argument('--far-bank-half-width',type=float,required=True)

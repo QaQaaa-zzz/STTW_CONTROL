@@ -1,31 +1,38 @@
-"""Opt-in solved-step evidence for event modelling; no controller reset or action edits."""
+"""Chunked solved-physics-step contact buffers for frozen STTW diagnostics."""
+import json
+from pathlib import Path
 import numpy as np
 import torch
 
 
 class PhysicsContactRecorder:
-    def __init__(self,plant,context):
-        self.plant=plant;self.context=context;self.rows=[];self.original_step=plant.step
-        plant.step=self.step
-
-    def step(self,*args,**kwargs):
-        result=self.original_step(*args,**kwargs)
-        p=self.plant
-        # Fast policy steps omit diagnostic contact refresh. Sample after the solved step.
-        if not kwargs.get('refresh_diagnostics',True):
-            p.sensor.update(p.physics_dt,force_recompute=True)
-        body=p.rigid.clone();body[:,:,:3]-=p.origin[:,None,:]
-        root=p.robot.data.root_link_state_w.clone();root[:,:3]-=p.origin
-        joints=torch.stack((p.robot.data.joint_pos,p.robot.data.joint_vel),-1)
-        force=p.sensor.data.net_forces_w[:,p.contact_order]
-        alive,phase=self.context()
-        self.rows.append((body,force.clone(),root,joints.clone(),alive.clone(),phase))
-        return result
-
-    def save(self,path):
-        p=self.plant
-        arrays=[torch.stack([r[i] for r in self.rows]).cpu().numpy() for i in range(5)]
-        np.savez_compressed(path,time=np.arange(1,len(self.rows)+1)*p.physics_dt,
-            body_state=arrays[0],contact=arrays[1],root_state_wxyz=arrays[2],joint_state=arrays[3],
-            valid=arrays[4],phase=np.array([r[5] for r in self.rows]),body_names=p.bodies,joint_names=p.joints,
-            physics_dt_s=p.physics_dt,semantics='Solved-step samples; valid is alive before step, terminal transition retained. Net forces do not identify terrain collider. Controller hidden states are not saved by this recorder.')
+    def __init__(self, output, env, config):
+        if not env.plant.track_contact_wrench or env.plant.servo_mode != 'explicit':
+            raise ValueError('Contact wrench recording requires tracked wheels and explicit motor torque')
+        self.output=Path(output);self.output.mkdir()
+        self.chunk_steps=int(config.get('chunk_steps',250))
+        self.buffers=None;self.used=0;self.total=0;self.chunks=[]
+        self.metadata=dict(physics_dt_s=env.physics_dt,body_order=env.plant.bodies,joint_order=env.plant.joints,
+            origins=env.plant.origin.cpu().tolist(),sampling='post-solve every physics step, world coordinates, body quaternion xyzw',
+            force_units='N (API dt=physics_dt); points m; motor torque Nm in generalized joint coordinates',
+            indexing='normal_count/start and friction_count/start independently index each wheel flat patch buffer; only counted entries valid',
+            phase='alive_before_this_step retained; same-step motor_torque is applied explicit actuator contribution, not passive torque',
+            motor_limits=env.plant.servos.force.cpu().tolist() if hasattr(env.plant.servos,'force') else None)
+    def record(self, env, lower_tick, physics_tick):
+        values=env.plant.read_wheel_contact_samples()
+        values.update(alive_before=env.alive.clone(),alpha=env.alpha.clone())
+        if self.buffers is None:
+            self.buffers={k:torch.empty((self.chunk_steps,)+v.shape,device=v.device,dtype=v.dtype) for k,v in values.items()}
+        for key,value in values.items():self.buffers[key][self.used].copy_(value)
+        self.used+=1;self.total+=1
+        if self.used==self.chunk_steps:self.flush()
+    def flush(self):
+        if not self.used:return
+        name=f'chunk_{len(self.chunks):05d}.npz'
+        arrays={k:v[:self.used].cpu().numpy() for k,v in self.buffers.items()}
+        arrays['physics_step']=np.arange(self.total-self.used+1,self.total+1,dtype=np.int64)
+        np.savez_compressed(self.output/name,**arrays)
+        self.chunks.append(dict(file=name,first_step=self.total-self.used+1,last_step=self.total));self.used=0
+    def close(self):
+        self.flush();self.metadata.update(total_physics_steps=self.total,chunks=self.chunks)
+        (self.output/'index.json').write_text(json.dumps(self.metadata,indent=2)+'\n')
