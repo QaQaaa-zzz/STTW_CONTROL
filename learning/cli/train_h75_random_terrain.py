@@ -1,7 +1,7 @@
 """Original H75 PPO and weights with the shared Isaac/Go2-randomized collector."""
 import argparse,json,os,time,sys
 from pathlib import Path
-p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--evaluate',action='store_true');p.add_argument('--checkpoint',type=Path);a=p.parse_args();s=json.loads(a.config.read_text());a.output.mkdir(parents=True,exist_ok=False)
+p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--evaluate',action='store_true');p.add_argument('--checkpoint',type=Path);p.add_argument('--resume',action='store_true');a=p.parse_args();s=json.loads(a.config.read_text());a.output.mkdir(parents=True,exist_ok=False)
 sys.path.insert(0,str(Path(s['rsl_runtime']).resolve()))
 from isaaclab.app import AppLauncher
 app=AppLauncher(headless=True,device='cuda:0').app
@@ -14,7 +14,7 @@ from sttw_control.torch_path_training import make_algorithm
 cfg=json.loads((Path(s['bundle'])/'config.json').read_text());torch.manual_seed(s['seed']);torch.set_num_threads(2)
 s['evaluation_mode']=a.evaluate;s['trace_lanes']=s['num_envs']
 started=time.time();status=dict(stage='initializing',pid=os.getpid(),completed_updates=0,updates=s['updates']);status_path=a.output/'status.json';status_path.write_text(json.dumps(status))
-(a.output/'config.json').write_text(json.dumps(dict(settings=s,original_training=cfg['training_future_phase_C'],initialization='original H75 Actor/Critic/log_std; fresh original-method Adam; not exact optimizer resume'),indent=2))
+(a.output/'config.json').write_text(json.dumps(dict(settings=s,original_training=cfg['training_future_phase_C'],initialization=('checkpoint Actor/Critic/Adam resumed; environments and RNG reset' if a.resume else 'original H75 Actor/Critic/log_std; fresh original-method Adam')),indent=2))
 env=Go2PathEnv(s,a.output)
 (a.output/'randomization.json').write_text(json.dumps(env.rollout.randomization_properties))
 if a.evaluate:env.rollout.alpha.copy_(torch.tensor([s['alphas'][i%5] for i in range(s['num_envs'])],device='cuda'))
@@ -22,10 +22,13 @@ if a.evaluate:env.rollout.alpha.copy_(torch.tensor([s['alphas'][i%5] for i in ra
 def observation():
  return TensorDict({'policy':env.get_observations(),'critic':env.get_privileged_observations()},batch_size=[s['num_envs']])
 obs=observation();algo=make_algorithm(obs,s['rollout_steps'],cfg,'cuda');original=torch.load(a.checkpoint or s['initial_policy'],map_location='cuda',weights_only=False);algo.policy.load_state_dict(original['policy'])
+start_update=int(original['update']) if a.resume else 0
+if a.resume:algo.optimizer.load_state_dict(original['optimizer'])
+status.update(completed_updates=start_update);status_path.write_text(json.dumps(status))
 writer=SummaryWriter(str(a.output/'tb'));writer.add_scalar('stage/started',1,0);writer.flush()
 def save(update,name):
  torch.save(dict(policy=algo.policy.state_dict(),optimizer=algo.optimizer.state_dict(),update=update,config=cfg),a.output/name)
-save(0,'model_initial.pt');history=[];rejections=0
+save(start_update,'model_initial.pt');history=[];rejections=0
 if a.evaluate:
  frames=[];flags=[];rewards=[];domains=[];faults=[];poses=[];progresses=[]
  with torch.no_grad():
@@ -35,7 +38,7 @@ if a.evaluate:
  np.savez_compressed(a.output/'trajectory.npz',lower_trace=np.stack(frames),reward=np.stack(rewards),failure=np.stack(flags),pose=np.stack(poses),progress=np.stack(progresses),domain_exit=np.stack(domains),policy_fault=np.stack(faults),alpha=env.rollout.alpha.cpu().numpy(),route_ids=env.route.route_ids.cpu().numpy(),terrain=env.terrain_kind_id.cpu().numpy(),terrain_entered=env.terrain_entered.cpu().numpy(),terrain_contacted=env.terrain_contacted.cpu().numpy(),terrain_cleared=env.terrain_cleared.cpu().numpy())
  status.update(stage='evaluation_complete',failed_lanes=int(np.stack(flags).any(0).sum()),conditions=s['num_envs'],elapsed_s=time.time()-started);status_path.write_text(json.dumps(status,indent=2,default=lambda x:float(x)))
 else:
- for update in range(s['updates']):
+ for update in range(start_update,s['updates']):
   begin=time.time();rs=[];failures=0;domains=0;faults=0;ended=0;contacted_episodes=0;cleared_episodes=0;alpha_stats={str(x):dict(samples=0,reward_sum=0.,early_terminations=0) for x in s['alphas']}
   with torch.no_grad():
    for step in range(s['rollout_steps']):

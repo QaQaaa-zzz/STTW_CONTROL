@@ -157,7 +157,7 @@ class IsaacLabVectorPlant:
         self.wheel_sensors=[]
         if track_wheel_contacts or track_contact_wrench:
             terrain_filter='/World/Envs/Env_.*/Terrain_.*' if replicated_terrain else '/World/Terrain_.*'
-            filters=plane_paths+([terrain_filter] if terrain_sources else [])
+            filters=plane_paths+([f'/World/Envs/Env_.*/Terrain_{i}' for i,path in enumerate(terrain_paths) if str(path)!='plane'] if replicated_terrain else ([terrain_filter] if terrain_sources else []))
             self.wheel_sensors=[ContactSensor(ContactSensorCfg(prim_path=f'/World/Envs/Env_.*/Robot/{wheel}',filter_prim_paths_expr=filters,track_contact_points=True,track_friction_forces=track_contact_wrench,max_contact_data_count_per_prim=max_contact_data_count_per_prim,update_period=0.)) for wheel in ('frontwheel','rearwheel')]
         self.sim.reset();self.robot.update(self.physics_dt);self.sensor.update(self.physics_dt,force_recompute=True)
         for sensor in self.wheel_sensors:sensor.update(self.physics_dt,force_recompute=True)
