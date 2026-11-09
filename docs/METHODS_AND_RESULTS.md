@@ -1974,3 +1974,5 @@ train/test独立种子各12随机布局+平地；有限库内每回合随机选�
 320条路径的起点与刚性变换保长CPU检查通过，语法/diff通过；入口在真实Isaac初始化后强制核验XY0/路径起点0/任务时钟0/历史状态并保存common_start_check.json，通过后才采样。服务sttw-h75-common-start当前在共享GPU锁等待另一会话chapter3_ditch_goal30训练，未宣称训练开始。原6006 TensorBoard logdir已涵盖新common_start目录；阶段结束及异常Bark配置保留。原76轮是偏离用户初始化要求的尝试，不算新训练成果。
 
 共同起点150轮训练后验收已按用户要求启动：common_start/evaluation，原H75与150轮模型、13固定抽样工况×五alpha，共130回合/650万物理lane steps/0优化。共用起点、完整路径、test地形与seed；参考图读取各回合实际冻结的reference_routes.npz。完成/异常Bark已配置，指标与全部同工况五alpha图待实际评测完成，不沿用旧76轮数字。
+
+共同起点150轮配对结果：完整观察24/65→25/65，路径RMSE共同窗口0.5831→0.4616m，速度0.1774→0.3523m/s，整体减速仍明显；新增完整2、丢失1。平地工况5五alpha两模型均domain终止，优先查起步跟踪/运行域，不能全归因越野。13工况×5偏好非65独立地形；新模型不作全面替代。全部图/分项信号/结果见h75_random_terrain_continue/common_start/evaluation/RESULTS.md；0新仿真。
