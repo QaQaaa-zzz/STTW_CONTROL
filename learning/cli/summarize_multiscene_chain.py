@@ -12,7 +12,10 @@ m=json.loads(a.manifest.read_text());rows=[];n=len(m['cases']);fig,axes=plt.subp
 for ax,c in zip(axes.flat,m['cases']):
     spec=json.loads(Path(c['config']).read_text());out=Path(spec['output']);s=json.loads((out/'chain_summary.json').read_text());physical=json.loads((out/'results.json').read_text())
     z=np.load(out/'trajectory.npz');trace=z['trace'][z['valid'][:,0],0];route=np.load(out/'ground_route.npz')['xy']
-    ax.plot(*route.T,'k:',label='Original reference');ax.plot(trace[:,1],trace[:,2],label='Actual XY')
+    # Show the declared task and observed travel; omit the unused continuation tail.
+    view_end=max(float(trace[:,1].max()),spec['completion']['final_goal_xy'][0])+2.
+    visible_route=route[route[:,0]<=view_end]
+    ax.plot(*visible_route.T,'k:',label='Original reference (task view)');ax.plot(trace[:,1],trace[:,2],label='Actual XY')
     ax.plot(trace[-1,1],trace[-1,2],'o' if s['complete'] else 'x',color='red',label='Observed endpoint')
     ax.axvspan(spec['platform_front_x'],spec['platform_back_x'],alpha=.12,color='gray',label='Platform X range')
     for filename,marker,label in [('connection_decision.json','s','Approach decision'),('handoff.json','^','Jump handoff'),('landing_handoff.json','v','Ground return')]:
@@ -32,7 +35,7 @@ for ax,c in zip(axes.flat,m['cases']):
     assert accepted==s['complete']
     progress=dict(status='complete' if accepted else 'incomplete',role='Post-run physical task-progress replay; not online LLM execution',events=task.events,remaining=[] if accepted else ['destination'])
     (out/'task_progress.json').write_text(json.dumps(progress,indent=2)+'\n')
-    rows.append(dict(scene=c['case_id'],checks=s['checks'],stages=s['stages'],stage_times=s['stage_times'],complete=s['complete'],duration_s=float(trace[-1,0]),terminal_flags=physical['cases'][0]['terminal_flags'],task_progress=str(out/'task_progress.json'),xy=str(out/'xy_jump.png')))
+    rows.append(dict(scene=c['case_id'],unmet_checks=[k for k,v in s['checks'].items() if not v],stage_reached=next((k for k in ['continued','ground_return','strict_support','airborne_after_handoff','reached_release_line'] if s['stages'][k]),'ground_approach'),checks=s['checks'],stages=s['stages'],stage_times=s['stage_times'],complete=s['complete'],duration_s=float(trace[-1,0]),terminal_flags=physical['cases'][0]['terminal_flags'],task_progress=str(out/'task_progress.json'),xy=str(out/'xy_jump.png')))
 for ax in list(axes.flat)[n:]:ax.set_visible(False)
 fig.savefig(a.manifest.parent/'xy_all_scenes.png',dpi=150);plt.close(fig)
 result=dict(role='Engineering integration, no success-rate adoption gate',scenes=rows,optimizer_updates=0)
@@ -42,5 +45,10 @@ lines=['# Multi-scene continuous-task integration','','![All declared scenes](xy
        'Task progress is replayed from physical results after each run; not online LLM completion.', '',
        '| Scene | Reached jump | Airborne | Strict support | Ground return | Continued | Full chain |', '|---|---|---|---|---|---|---|']
 for r in rows:lines.append('| '+r['scene']+' | '+' | '.join(str(r['stages'][k]) for k in ['reached_release_line','airborne_after_handoff','strict_support','ground_return','continued'])+' | '+str(r['complete'])+' |')
+lines.extend(['', '## Unfinished stages and physical termination', '', '| Scene | Furthest observed stage | Unmet checks | Termination evidence |', '|---|---|---|---|'])
+for r in rows:
+    flags=r['terminal_flags'];stop=[k for k in ['ground_domain_exit','ground_policy_fault','roll_limit','low_root','nonfinite_state'] if flags.get(k)]
+    if not flags.get('ground_alive',True):stop.append('ground_alive=false')
+    lines.append('| '+r['scene']+' | '+r['stage_reached']+' | '+', '.join(r['unmet_checks'])+' | '+(', '.join(stop) or 'No recorded termination flag')+' |')
 (a.manifest.parent/'RESULTS.md').write_text('\n'.join(lines)+'\n')
 print(json.dumps([{k:r[k] for k in ('scene','stages','complete')} for r in rows]))
