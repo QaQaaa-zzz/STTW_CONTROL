@@ -22,10 +22,18 @@ if cases:
 if not 1<=s['num_envs']<=4096:p.error('evaluation supports 1 to 4096 lanes')
 if cases and a.channel_protocol:p.error('case batching is for fixed-case evaluation, not shared-state interventions')
 if a.channel_protocol:
-    protocol=json.loads(a.channel_protocol.read_text());s.update(num_envs=5,alphas=[a.protocol_alpha]*5,zero_middle=[False]*5,case_labels=protocol['case_labels'],evaluation_role=protocol['evaluation_role'],channel_intervention=dict(progress_m=protocol['fork_phases_m'][a.protocol_phase],hold_s=protocol['hold_s'],hold_channels=protocol['hold_channels'],phase=a.protocol_phase,kind=protocol.get('kind','hold'),post_fork_seconds=protocol.get('post_fork_seconds'),target_alpha=protocol.get('target_alpha'),execution_modes=protocol.get('execution_modes')))
+    protocol=json.loads(a.channel_protocol.read_text());s.update(num_envs=5,alphas=[a.protocol_alpha]*5,zero_middle=[False]*5,case_labels=protocol['case_labels'],evaluation_role=protocol['evaluation_role'],channel_intervention=dict(progress_m=protocol['fork_phases_m'][a.protocol_phase],hold_s=protocol['hold_s'],hold_channels=protocol['hold_channels'],phase=a.protocol_phase,kind=protocol.get('kind','hold'),channel_mode=protocol.get('channel_mode',protocol.get('kind','hold')),post_fork_seconds=protocol.get('post_fork_seconds'),target_alpha=protocol.get('target_alpha'),execution_modes=protocol.get('execution_modes')))
     s['plant_options']['track_wheel_contacts']=protocol.get('track_wheel_contacts',True)
 intervention=s.get('channel_intervention')
-if intervention and (s.get('randomization') or s['num_envs']!=5 or len(set(s['alphas']))!=1):p.error('channel intervention requires five nominal lanes at one common alpha')
+if intervention:
+    if s['num_envs']!=5 or len(set(s['alphas']))!=1:p.error('channel intervention requires five lanes at one common alpha')
+    if s.get('randomization'):
+        randomization=s['randomization']
+        ranges=('friction_range','mass_scale','base_com_m','latency_s','servo_gain_scale','steer_zero_offset_rad')
+        if (any(randomization[key][0]!=randomization[key][1] for key in ranges)
+                or any(randomization['measurement_noise'])
+                or randomization['push_interval_s']<=a.seconds):
+            p.error('forks require fixed physical parameters, zero observation noise and no periodic push')
 if not cases:s['terrains']=s.get('evaluation_terrains',{'evaluation':str(a.terrain)})
 s.update(diagnostics=True,episode_s=a.seconds)
 if a.asset:s['asset']=str(a.asset.resolve())
@@ -41,7 +49,7 @@ env=IsaacPathRollout(a.bundle,s,policy,plant=plant,lower=lower)
 if s.get('fixed_randomization_groups'):
     from sttw_control.isaaclab_randomization import apply_fixed_evaluation_groups
     apply_fixed_evaluation_groups(env,s['fixed_randomization_groups'])
-if intervention:env.policy.channel_intervention_mode=intervention.get('kind','hold')
+if intervention:env.policy.channel_intervention_mode=intervention.get('channel_mode',intervention.get('kind','hold'))
 if s.get('record_controller_terms'):env.controller.config['record_terms']=True
 contract=dict(backend=a.backend,settings=s,bundle=str(a.bundle.resolve()),identity=identity,terrain=env.plant.terrain_identity,bodies=env.plant.bodies,origin=env.plant.origin.cpu().tolist(),role=s.get('evaluation_role','fixed preference DEV; Zero is frozen LOCAL300 plus ECBC/ESO, no H75 correction'),physics_dt=env.physics_dt,lower_dt=.005,policy_dt=.02)
 if lower is not None:

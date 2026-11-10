@@ -1,0 +1,102 @@
+{
+  "experiment_id": "H75_ALPHA_CROSSOVER",
+  "title": "\u8fdb\u573a\u504f\u597d \u00d7 \u540e\u7eed\u504f\u597d\u4ea4\u53c9\u5b9e\u9a8c",
+  "evaluation_role": "Fixed-parameter paired mechanism DEV; original H75+Local300; no training",
+  "case_labels": [
+    "unreset_prefix",
+    "restored_prefix",
+    "restored_alpha05",
+    "restored_alpha1",
+    "Zero_after_fork"
+  ],
+  "kind": "switch",
+  "channel_mode": "zero",
+  "hold_s": 10,
+  "hold_channels": [
+    [
+      false,
+      false
+    ],
+    [
+      false,
+      false
+    ],
+    [
+      false,
+      false
+    ],
+    [
+      false,
+      false
+    ],
+    [
+      true,
+      true
+    ]
+  ],
+  "fork_phases_m": {
+    "entry_projection": 2.5
+  },
+  "track_wheel_contacts": false,
+  "execution_modes": [
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "prefix_alphas": [
+    0.5,
+    1
+  ],
+  "target_alphas": [
+    0.5,
+    1
+  ],
+  "seeds": [
+    101,
+    102,
+    103
+  ],
+  "terrains": [
+    "dense_corridor",
+    "single_10cm"
+  ],
+  "speeds": [
+    2.3,
+    2.6
+  ],
+  "scenes": 24,
+  "lanes": 120,
+  "episode_s": 10,
+  "max_physics_lane_steps": 6000000,
+  "optimizer_updates": 0,
+  "data_role": "familiar-layout mechanism DEV",
+  "interpretation": "Common saved start, prefix alpha to s=2.5 m BEFORE obstacle; continuation alpha afterwards. Not a post-impact intervention. Source pre-fork failures retained, no replacements. Restored-prefix control quantifies snapshot effect.",
+  "stop_rule": "24 scenes or runtime error; native failures retained; no automatic retry or budget extension",
+  "code_revision": "20648a40a8466f28fe318154734735208cca1cd6",
+  "initialization": "frozen H75+Local300; existing saved initial_state",
+  "primary_outcomes": [
+    "termination cause",
+    "full 10s observation",
+    "original goal arrival and final hold",
+    "path and speed errors",
+    "roll peak",
+    "contact impulses",
+    "steering rate and torque occupation"
+  ],
+  "tasks": {
+    "A": {
+      "W_m": 0.3,
+      "speed_rmse_m_s": 0.2
+    },
+    "B": {
+      "W_m": 0.6,
+      "speed_rmse_m_s": 0.1
+    },
+    "C": {
+      "W_m": 0.4,
+      "speed_rmse_m_s": 0.15
+    }
+  }
+}

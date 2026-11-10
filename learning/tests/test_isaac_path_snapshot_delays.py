@@ -20,6 +20,7 @@ def test_delayed_branch_preserves_history_and_untouched_lane():
         obj=env if group=='rollout' else SimpleNamespace()
         if group!='rollout':setattr(env,group,obj)
         for name in names:setattr(obj,name,torch.arange(3,dtype=torch.float32))
+    env.controller.filtered_roll_rate=torch.arange(3.)
     env.middle.tick=4;env.middle.projection={'progress':torch.arange(3.)};env.middle.follower={'command':torch.ones(3,2)}
     data=SimpleNamespace(root_link_pose_w=torch.tensor([[0.,0,0,1,0,0,0]]*3),root_com_vel_w=torch.arange(18.).reshape(3,6))
     robot=SimpleNamespace(data=data)
