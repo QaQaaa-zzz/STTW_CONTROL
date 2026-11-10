@@ -7,7 +7,7 @@ from sttw_control.ditch_event_model import EventTransitionNetwork,KnownHeightMap
 
 
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--collection',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--updates',type=int,default=600);p.add_argument('--conditional-event-targets',action='store_true')
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--collection',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--updates',type=int,default=600);p.add_argument('--conditional-event-targets',action='store_true');p.add_argument('--prefix-stride',type=int,default=0);p.add_argument('--skip-offline-selection',action='store_true')
  a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False);torch.set_num_threads(2);torch.manual_seed(20261110);rng=np.random.default_rng(20261110);start=time.monotonic()
  cfg=json.loads((a.collection/'config.json').read_text());protocol=json.loads((a.collection/'protocol.json').read_text());summary=json.loads((a.collection/'evaluation/summary.json').read_text());data=dict(np.load(a.collection/'evaluation/trajectories.npz'));routes=np.load(cfg['ground_handoff']['reference_path'])['xy']
  roles=np.array([c['role'] for c in protocol['cases']]);terrain_file=a.collection/'evaluation/terrain/terrain.npz';terrain=KnownHeightMap(np.load(terrain_file)['vertices'],cfg['ditch_terrain'])
@@ -30,12 +30,22 @@ def main():
   if ground_only[lane]:
    hit=float(case['success']);t=float(data['event_time'][lane,4]) if hit else end_t
    target=state(lane,t,data['event_root_xyzw'][lane,4],False) if hit else terminal
-   records.append((lane,4,first,target,t,hit));continue
+   records.append((lane,4,first,target,t,hit))
+   if a.prefix_stride:
+    for ix in range(a.prefix_stride,case['steps'],a.prefix_stride):
+     at=ix*.02
+     if at<t:records.append((lane,4,state(lane,at,data['root_xyzw'][ix-1,lane],data['road_violation_history'][ix-1,lane]),target,t-at,hit))
+   continue
   points=[(0.,first)]
   t=case['entry_s']
   if t is None:points.append(None)
   else:
    k=max(0,min(round(t/.02)-1,len(hidden)-1));points.append((t,state(lane,t,data['root_xyzw'][k,lane],data['road_violation_history'][k,lane])))
+  if a.prefix_stride:
+   nt,ns=points[1] if points[1] is not None else (end_t,terminal)
+   for ix in range(a.prefix_stride,case['steps'],a.prefix_stride):
+    at=ix*.02
+    if at<nt:records.append((lane,0,state(lane,at,data['root_xyzw'][ix-1,lane],data['road_violation_history'][ix-1,lane]),ns,nt-at,float(points[1] is not None)))
   for event in (0,2,3,4):
    t=float(data['event_time'][lane,event]);points.append((t,state(lane,t,data['event_root_xyzw'][lane,event],data['event_road_violation'][lane,event])) if np.isfinite(t) else None)
   for mode in range(5):
@@ -62,7 +72,7 @@ def main():
    logs.append(dict(update=update+1,train_loss=float(loss),dev_loss=validation));print(logs[-1],flush=True)
    if validation<best:best=validation;selected=update+1;weights=copy.deepcopy(model.state_dict())
  model.load_state_dict(weights);torch.save(dict(constructor=constructor,state_dict=weights),a.output/'model.pt')
- meta=dict(inference_common_random_numbers=True,plan_skill_feature='last candidate parameter:1jump,0ground' if ground_only.any() else None,terrain_file=str(terrain_file),terrain_spec=cfg['ditch_terrain'],goal=cfg['ground_handoff']['goal'],candidate_parameters=params.tolist(),candidate_names=protocol['candidates'],selected_update=selected,training_logs=logs,collection=str(a.collection),scope='Exploratory same-map event model; grouped starts only; no map generalization or planning benefit claim',conditional_event_targets=a.conditional_event_targets,state='root xyzw13 + TRAIN-only PCA16 of causal80+352 history + prior road violation; history compression is not a Markov guarantee')
+ meta=dict(prefix_stride_policy_steps=a.prefix_stride,inference_common_random_numbers=True,plan_skill_feature='last candidate parameter:1jump,0ground' if ground_only.any() else None,terrain_file=str(terrain_file),terrain_spec=cfg['ditch_terrain'],goal=cfg['ground_handoff']['goal'],candidate_parameters=params.tolist(),candidate_names=protocol['candidates'],selected_update=selected,training_logs=logs,collection=str(a.collection),scope='Exploratory same-map event model; grouped starts only; no map generalization or planning benefit claim',conditional_event_targets=a.conditional_event_targets,state='root xyzw13 + TRAIN-only PCA16 of causal80+352 history + prior road violation; history compression is not a Markov guarantee')
  (a.output/'model.json').write_text(json.dumps(meta,indent=2));np.savez_compressed(a.output/'transitions.npz',lane=lanes,mode=modes,state=s,next_state=ns,time=dt,hit=hit,role=roles[lanes])
  metrics={}
  with torch.no_grad():
@@ -72,6 +82,9 @@ def main():
   for mode in range(6):
    keep=(roles[lanes]==role)&(modes==mode);positive=keep&(hit>0)
    metrics[role][str(mode)]=dict(n=int(keep.sum()),events=int(positive.sum()),event_brier=float(np.mean((prob[keep]-hit[keep])**2)),time_mae_s=float(np.mean(abs(pred_t.numpy()[positive]-dt[positive]))) if positive.any() else None,xy_error_m=float(np.linalg.norm(pred[positive,:2]-ns[positive,:2],axis=1).mean()) if positive.any() else None)
+ if a.skip_offline_selection:
+  result=dict(metrics=metrics,selected_update=selected,elapsed_s=time.monotonic()-start,scope='Prediction on actual published-state segments; no complete counterfactual panel, so no offline route-selection score')
+  (a.output/'results.json').write_text(json.dumps(result,indent=2));print(json.dumps(result,indent=2));return
  initial=np.stack(initial);planner=EventPlanner(a.output);scores=planner.score(initial,lane_params,particles=32)
  success=np.array([c['success'] for c in summary['cases']]).reshape(-1,len(params));selection=np.array(scores['score']).reshape(-1,len(params)).argmax(1);fixed=int(success[roles[::len(params)]=='TRAIN'].sum(0).argmax());comparison={}
  for role in ('TRAIN','DEV','TEST'):

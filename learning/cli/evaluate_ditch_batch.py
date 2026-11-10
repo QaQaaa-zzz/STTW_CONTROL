@@ -19,7 +19,7 @@ if cfg.get('evaluation_checkpoint'):
  policy.load_state_dict(torch.load(cfg['evaluation_checkpoint'],map_location=cfg['device'],weights_only=False)['model_state_dict'])
 (a.output/'config.json').write_text(json.dumps(cfg,indent=2))
 (a.output/'randomized_properties.json').write_text(json.dumps(env.properties))
-obs,_=task.reset();rows=[];valid=[];rewards=[];stages=[];phases=[];observations=[];actions=[];codes=[];histories=[];road_history=[]
+obs,_=task.reset();rows=[];valid=[];rewards=[];stages=[];phases=[];observations=[];actions=[];codes=[];histories=[];road_history=[];route_history=[]
 initial_root=env.physical()[0].cpu().numpy();initial_obs=obs.cpu().numpy().copy()
 if cfg.get('event_planner'):
  from sttw_control.ditch_event_model import EventPlanner
@@ -36,8 +36,14 @@ if cfg.get('event_planner'):
  g.resume_ground_lanes(env.all_ids,task.approach['speed_m_s'],task.approach['alpha'])
  (a.output/'planning.json').write_text(json.dumps(dict(selected=selected.tolist(),model_choice=chosen.tolist(),scores=scores.tolist(),query_s=time.monotonic()-query_start,prediction=prediction,scope='Online pre-motion candidate query from actual reset state and controller history; no measured futures supplied'),indent=2))
 
+moving=None
+if cfg.get('moving_event_planner'):
+ from sttw_control.moving_ditch_planner import MovingDitchPlanner
+ moving=MovingDitchPlanner(task,cfg['moving_event_planner'],a.output)
 with torch.no_grad():
  for step in range(env.max_episode_length):
+  if moving is not None:moving.tick(step,obs)
+  route_history.append(task.ground.route.route_ids.clone())
   active=~task.finished;latent=policy.act_inference(obs)
   observations.append(obs.clone());actions.append(torch.tanh(latent));valid.append(active.clone())
   if cfg.get('record_controller_history'):
@@ -48,8 +54,10 @@ with torch.no_grad():
   if step%50==0:
    (a.output/'status.json').write_text(json.dumps(dict(stage='evaluating',steps=step+1,active=int((~task.finished).sum()),elapsed_s=time.monotonic()-start)))
   if bool(task.finished.all()):break
+if moving is not None:moving.save()
 arrays=dict(time=(np.arange(len(rows))+1)*env.dt,initial_root_xyzw=initial_root,initial_observation=initial_obs)
 if histories:arrays['controller_history']=torch.stack(histories).cpu().numpy()
+arrays['reference_route_id']=torch.stack(route_history).cpu().numpy()
 arrays['road_violation_history']=torch.stack(road_history).cpu().numpy()
 if task.physics_roots:
  arrays['physics_root_xyzw']=torch.stack(task.physics_roots).cpu().numpy()
