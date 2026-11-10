@@ -36,7 +36,8 @@ for j,ax in enumerate(axes):
   xy=root[valid[:,k],k,:2];passed=cases[k]['success'];ax.plot(xy[:,0],xy[:,1],color=colors[j],alpha=.8 if passed else .22,lw=1.6 if passed else .7);ax.scatter(*xy[-1],marker='o' if passed else 'x',s=12,color=colors[j])
  ax.axvspan(cfg['ditch_terrain']['front_x_m'],cfg['ditch_terrain']['front_x_m']+cfg['ditch_terrain']['width_m'],color='.7',alpha=.4)
  ax.set(title=f"{names[j]}: {success[:,j].sum()}/{len(success)} complete (all data roles pooled for overview only)",xlabel='World x (m)',ylabel='World y (m)');ax.set_aspect('equal',adjustable='datalim');ax.grid(alpha=.2)
-axes[0].legend(loc='upper right');fig.suptitle('heading125 + frozen H75, v=2 m/s, alpha=0.5; markers are actual termination; no smoothing')
+axes[0].legend(loc='upper right');command_label='candidate-specific speed/alpha' if 'event_candidate_parameters' in cfg else f"v={cfg['ground_handoff']['approach']['speed_m_s']} m/s, alpha={cfg['ground_handoff']['approach']['alpha']}"
+fig.suptitle('heading125 + frozen H75; '+command_label+'; markers are actual termination; no smoothing')
 fig.savefig(a.output/'xy_all_candidates.png',dpi=160,facecolor='white');plt.close(fig)
 if 'land_bridge_y_interval_m' in cfg['ditch_terrain']:
  from matplotlib.patches import Rectangle

@@ -1,0 +1,680 @@
+{
+  "cases": [
+    {
+      "lane": 3,
+      "selected": 1,
+      "ground_steps": 440,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 7,
+      "selected": 13,
+      "ground_steps": 175,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 9,
+      "selected": 13,
+      "ground_steps": 177,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 10,
+      "selected": 1,
+      "ground_steps": 439,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 11,
+      "selected": 1,
+      "ground_steps": 434,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 13,
+      "selected": 1,
+      "ground_steps": 433,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 15,
+      "selected": 1,
+      "ground_steps": 438,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 19,
+      "selected": 0,
+      "ground_steps": 454,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 20,
+      "selected": 13,
+      "ground_steps": 176,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 22,
+      "selected": 13,
+      "ground_steps": 175,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 23,
+      "selected": 1,
+      "ground_steps": 440,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 25,
+      "selected": 0,
+      "ground_steps": 444,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 26,
+      "selected": 0,
+      "ground_steps": 445,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 27,
+      "selected": 13,
+      "ground_steps": 176,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 28,
+      "selected": 1,
+      "ground_steps": 435,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 31,
+      "selected": 0,
+      "ground_steps": 474,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 34,
+      "selected": 13,
+      "ground_steps": 175,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 40,
+      "selected": 0,
+      "ground_steps": 452,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 41,
+      "selected": 13,
+      "ground_steps": 177,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 42,
+      "selected": 13,
+      "ground_steps": 176,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 43,
+      "selected": 1,
+      "ground_steps": 437,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 44,
+      "selected": 13,
+      "ground_steps": 177,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 45,
+      "selected": 0,
+      "ground_steps": 442,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 46,
+      "selected": 1,
+      "ground_steps": 437,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 47,
+      "selected": 0,
+      "ground_steps": 440,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 48,
+      "selected": 0,
+      "ground_steps": 448,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 50,
+      "selected": 1,
+      "ground_steps": 435,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 54,
+      "selected": 13,
+      "ground_steps": 176,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 56,
+      "selected": 0,
+      "ground_steps": 443,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 61,
+      "selected": 13,
+      "ground_steps": 176,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 62,
+      "selected": 0,
+      "ground_steps": 440,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 63,
+      "selected": 0,
+      "ground_steps": 448,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 64,
+      "selected": 13,
+      "ground_steps": 176,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 65,
+      "selected": 13,
+      "ground_steps": 177,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 66,
+      "selected": 1,
+      "ground_steps": 441,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 67,
+      "selected": 0,
+      "ground_steps": 450,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 68,
+      "selected": 0,
+      "ground_steps": 442,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 69,
+      "selected": 1,
+      "ground_steps": 436,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 75,
+      "selected": 1,
+      "ground_steps": 441,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 80,
+      "selected": 0,
+      "ground_steps": 444,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 81,
+      "selected": 0,
+      "ground_steps": 443,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 84,
+      "selected": 1,
+      "ground_steps": 437,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 86,
+      "selected": 1,
+      "ground_steps": 434,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 90,
+      "selected": 1,
+      "ground_steps": 438,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 92,
+      "selected": 13,
+      "ground_steps": 176,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 93,
+      "selected": 13,
+      "ground_steps": 176,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 94,
+      "selected": 0,
+      "ground_steps": 441,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 95,
+      "selected": 13,
+      "ground_steps": 176,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 4,
+      "selected": 13,
+      "ground_steps": 73,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 17,
+      "selected": 13,
+      "ground_steps": 73,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 39,
+      "selected": 11,
+      "ground_steps": 79,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 0,
+      "selected": 13,
+      "ground_steps": 73,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 1,
+      "selected": 13,
+      "ground_steps": 73,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 2,
+      "selected": 13,
+      "ground_steps": 72,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 5,
+      "selected": 9,
+      "ground_steps": 80,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 6,
+      "selected": 9,
+      "ground_steps": 80,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 8,
+      "selected": 11,
+      "ground_steps": 79,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 12,
+      "selected": 9,
+      "ground_steps": 80,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 14,
+      "selected": 11,
+      "ground_steps": 79,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 18,
+      "selected": 9,
+      "ground_steps": 80,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 21,
+      "selected": 11,
+      "ground_steps": 80,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 24,
+      "selected": 11,
+      "ground_steps": 79,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 32,
+      "selected": 11,
+      "ground_steps": 80,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 35,
+      "selected": 9,
+      "ground_steps": 79,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 38,
+      "selected": 13,
+      "ground_steps": 73,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 49,
+      "selected": 9,
+      "ground_steps": 80,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 51,
+      "selected": 13,
+      "ground_steps": 72,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 52,
+      "selected": 11,
+      "ground_steps": 79,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 53,
+      "selected": 9,
+      "ground_steps": 80,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 55,
+      "selected": 11,
+      "ground_steps": 79,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 57,
+      "selected": 13,
+      "ground_steps": 72,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 58,
+      "selected": 13,
+      "ground_steps": 73,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 59,
+      "selected": 13,
+      "ground_steps": 74,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 60,
+      "selected": 9,
+      "ground_steps": 80,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 70,
+      "selected": 11,
+      "ground_steps": 79,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 71,
+      "selected": 11,
+      "ground_steps": 78,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 73,
+      "selected": 11,
+      "ground_steps": 79,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 74,
+      "selected": 9,
+      "ground_steps": 80,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 77,
+      "selected": 9,
+      "ground_steps": 79,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 78,
+      "selected": 9,
+      "ground_steps": 80,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 79,
+      "selected": 9,
+      "ground_steps": 80,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 82,
+      "selected": 9,
+      "ground_steps": 80,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 85,
+      "selected": 13,
+      "ground_steps": 72,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 87,
+      "selected": 13,
+      "ground_steps": 73,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 88,
+      "selected": 9,
+      "ground_steps": 80,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 89,
+      "selected": 9,
+      "ground_steps": 79,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 91,
+      "selected": 13,
+      "ground_steps": 72,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 16,
+      "selected": 11,
+      "ground_steps": 81,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 29,
+      "selected": 11,
+      "ground_steps": 79,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 33,
+      "selected": 11,
+      "ground_steps": 79,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 36,
+      "selected": 13,
+      "ground_steps": 74,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 37,
+      "selected": 11,
+      "ground_steps": 79,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 72,
+      "selected": 11,
+      "ground_steps": 78,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 76,
+      "selected": 9,
+      "ground_steps": 80,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 83,
+      "selected": 13,
+      "ground_steps": 73,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    },
+    {
+      "lane": 30,
+      "selected": 13,
+      "ground_steps": 76,
+      "speed_mismatch": 0,
+      "alpha_mismatch": 0
+    }
+  ],
+  "total_ground_steps": 20673,
+  "speed_mismatches": 0,
+  "alpha_mismatches": 0,
+  "scope": "Effective ground requests after actual step, before jump or all-ground route; physical tracking errors are separate; jump handback deliberately uses fixed1.5m/s alpha.5"
+}

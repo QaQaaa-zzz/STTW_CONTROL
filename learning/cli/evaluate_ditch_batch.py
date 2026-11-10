@@ -19,7 +19,7 @@ if cfg.get('evaluation_checkpoint'):
  policy.load_state_dict(torch.load(cfg['evaluation_checkpoint'],map_location=cfg['device'],weights_only=False)['model_state_dict'])
 (a.output/'config.json').write_text(json.dumps(cfg,indent=2))
 (a.output/'randomized_properties.json').write_text(json.dumps(env.properties))
-obs,_=task.reset();rows=[];valid=[];rewards=[];stages=[];phases=[];observations=[];actions=[];codes=[];histories=[];road_history=[];route_history=[]
+obs,_=task.reset();rows=[];valid=[];rewards=[];stages=[];phases=[];observations=[];actions=[];codes=[];histories=[];road_history=[];route_history=[];speed_requests=[];alpha_requests=[]
 initial_root=env.physical()[0].cpu().numpy();initial_obs=obs.cpu().numpy().copy()
 if cfg.get('event_planner'):
  from sttw_control.ditch_event_model import EventPlanner
@@ -50,6 +50,7 @@ with torch.no_grad():
    g=task.ground
    histories.append(torch.cat([value.flatten(1) for value in (g.controller.eso,g.controller.disturbance[:,None],g.controller.gains,g.previous_reference,g.previous_command,g.policy.filtered,g.policy.offsets,g.middle.frames,g.middle.mask)],-1).clone())
   obs,_,reward,done,info=task.step(latent)
+  speed_requests.append(task.ground.speed.clone());alpha_requests.append(task.ground.alpha.clone())
   road_history.append(info['road_violation'].clone());rows.append(env.physical()[0]);rewards.append(info['unscaled_reward']);stages.append(info['jump_stage']);phases.append(task.phase.clone());codes.append(info['end_code'])
   if step%50==0:
    (a.output/'status.json').write_text(json.dumps(dict(stage='evaluating',steps=step+1,active=int((~task.finished).sum()),elapsed_s=time.monotonic()-start)))
@@ -58,6 +59,8 @@ if moving is not None:moving.save()
 arrays=dict(time=(np.arange(len(rows))+1)*env.dt,initial_root_xyzw=initial_root,initial_observation=initial_obs)
 if histories:arrays['controller_history']=torch.stack(histories).cpu().numpy()
 arrays['reference_route_id']=torch.stack(route_history).cpu().numpy()
+arrays['ground_requested_speed_m_s']=torch.stack(speed_requests).cpu().numpy()
+arrays['ground_requested_alpha']=torch.stack(alpha_requests).cpu().numpy()
 arrays['road_violation_history']=torch.stack(road_history).cpu().numpy()
 if task.physics_roots:
  arrays['physics_root_xyzw']=torch.stack(task.physics_roots).cpu().numpy()

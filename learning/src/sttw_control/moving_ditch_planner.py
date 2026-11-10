@@ -80,6 +80,7 @@ class MovingDitchPlanner:
                 scores=np.asarray(prediction['score'])
             else:
                 prediction=None;scores=np.zeros(len(self.parameters));scores[self.config['fixed_jump_candidate']]=.5;scores[self.parameters[:,-1]<.5]=1.
+                if 'fixed_ground_candidate' in self.config:scores[self.config['fixed_ground_candidate']]=1.1
             if self.methods[lane]=='state_rule' and roots[lane,0]>=self.config['detour_commit_x_m']:
                 scores[self.parameters[:,-1]<.5]=-1.
             masked=np.where(allowed[0],scores,-np.inf);proposed=int(masked.argmax()) if allowed.any() else None
