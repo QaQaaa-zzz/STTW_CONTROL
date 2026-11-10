@@ -1,0 +1,519 @@
+{
+  "metrics": [
+    {
+      "skill": "ground",
+      "mode": 4,
+      "n": 20,
+      "events": 16,
+      "one_step_brier": 0.09637149220254763,
+      "one_step_time_error_s": 0.46734597921371446,
+      "one_step_xy_error_m": 0.8001942411065102,
+      "rollout_xy_error_m": 0.7605594250374719,
+      "one_step_height_error_m": 0.044656950514763594,
+      "rollout_height_error_m": 0.05199664505198598,
+      "one_step_velocity_error_m_s": 0.2980294809676707
+    },
+    {
+      "skill": "jump",
+      "mode": 0,
+      "n": 28,
+      "events": 28,
+      "one_step_brier": 4.3924307112165805e-07,
+      "one_step_time_error_s": 0.13360827752522056,
+      "one_step_xy_error_m": 0.313294756891472,
+      "rollout_xy_error_m": 0.3227751599950347,
+      "one_step_height_error_m": 0.10101215727627277,
+      "rollout_height_error_m": 0.12719803070649505,
+      "one_step_velocity_error_m_s": 0.27963780851236414
+    },
+    {
+      "skill": "jump",
+      "mode": 1,
+      "n": 28,
+      "events": 28,
+      "one_step_brier": 0.0001231107047669409,
+      "one_step_time_error_s": 0.0747256875038147,
+      "one_step_xy_error_m": 0.19487233832478523,
+      "rollout_xy_error_m": 0.2858467248816342,
+      "one_step_height_error_m": 0.06718880896057401,
+      "rollout_height_error_m": 0.052073495728628974,
+      "one_step_velocity_error_m_s": 0.3014137094308223
+    },
+    {
+      "skill": "jump",
+      "mode": 2,
+      "n": 28,
+      "events": 28,
+      "one_step_brier": 3.1678598309119775e-05,
+      "one_step_time_error_s": 0.05300027238471167,
+      "one_step_xy_error_m": 0.13756728418437497,
+      "rollout_xy_error_m": 0.4890144781834769,
+      "one_step_height_error_m": 0.05738998630217144,
+      "rollout_height_error_m": 0.20519988132374628,
+      "one_step_velocity_error_m_s": 0.6241810795451913
+    },
+    {
+      "skill": "jump",
+      "mode": 3,
+      "n": 28,
+      "events": 28,
+      "one_step_brier": 9.106029618217398e-06,
+      "one_step_time_error_s": 0.05339934415782669,
+      "one_step_xy_error_m": 0.1916730941406318,
+      "rollout_xy_error_m": 0.5837996531530318,
+      "one_step_height_error_m": 0.10722498835197516,
+      "rollout_height_error_m": 0.05681256151625088,
+      "one_step_velocity_error_m_s": 0.6668406960421375
+    },
+    {
+      "skill": "jump",
+      "mode": 4,
+      "n": 28,
+      "events": 5,
+      "one_step_brier": 0.1426636412652798,
+      "one_step_time_error_s": 0.6340024471282959,
+      "one_step_xy_error_m": 1.8014187932014465,
+      "rollout_xy_error_m": 0.7498756691443134,
+      "one_step_height_error_m": 3.8411853075027467,
+      "rollout_height_error_m": 5.132875010371208,
+      "one_step_velocity_error_m_s": 0.4377465069293976
+    }
+  ],
+  "completion_brier": 0.12530053392261775,
+  "completion": [
+    {
+      "lane": 3,
+      "root": 15,
+      "decision_x": 1.8,
+      "success": true,
+      "probability": 0.8863946992020895,
+      "predicted_duration_s": 6.805703163146973,
+      "actual_duration_s": 7.879999961853027
+    },
+    {
+      "lane": 19,
+      "root": 2,
+      "decision_x": 1.8,
+      "success": true,
+      "probability": 0.8845385767904401,
+      "predicted_duration_s": 7.420011401176453,
+      "actual_duration_s": 7.979999389648437
+    },
+    {
+      "lane": 26,
+      "root": 8,
+      "decision_x": 1.8,
+      "success": true,
+      "probability": 0.6155957693384633,
+      "predicted_duration_s": 7.692605495452881,
+      "actual_duration_s": 7.959999885559082
+    },
+    {
+      "lane": 42,
+      "root": 10,
+      "decision_x": 1.8,
+      "success": true,
+      "probability": 0.6732959470447302,
+      "predicted_duration_s": 7.533290266990662,
+      "actual_duration_s": 8.079999771118164
+    },
+    {
+      "lane": 48,
+      "root": 13,
+      "decision_x": 1.8,
+      "success": true,
+      "probability": 0.7935506718204631,
+      "predicted_duration_s": 7.194060325622559,
+      "actual_duration_s": 7.979999389648437
+    },
+    {
+      "lane": 66,
+      "root": 11,
+      "decision_x": 1.8,
+      "success": true,
+      "probability": 0.8166835652138225,
+      "predicted_duration_s": 7.566412657499313,
+      "actual_duration_s": 7.9199999237060545
+    },
+    {
+      "lane": 73,
+      "root": 6,
+      "decision_x": 1.8,
+      "success": true,
+      "probability": 0.8279509951502277,
+      "predicted_duration_s": 7.554379463195801,
+      "actual_duration_s": 7.879999961853027
+    },
+    {
+      "lane": 74,
+      "root": 14,
+      "decision_x": 1.8,
+      "success": true,
+      "probability": 0.7963529896151026,
+      "predicted_duration_s": 7.141389012336731,
+      "actual_duration_s": 7.999999847412109
+    },
+    {
+      "lane": 77,
+      "root": 9,
+      "decision_x": 1.8,
+      "success": true,
+      "probability": 0.8378936937307052,
+      "predicted_duration_s": 7.261090070009232,
+      "actual_duration_s": 7.899999465942383
+    },
+    {
+      "lane": 83,
+      "root": 0,
+      "decision_x": 1.8,
+      "success": true,
+      "probability": 0.521913917842848,
+      "predicted_duration_s": 7.824066787958145,
+      "actual_duration_s": 7.899999465942383
+    },
+    {
+      "lane": 98,
+      "root": 12,
+      "decision_x": 1.8,
+      "success": true,
+      "probability": 0.8413475206063428,
+      "predicted_duration_s": 7.3972190618515015,
+      "actual_duration_s": 7.879999961853027
+    },
+    {
+      "lane": 103,
+      "root": 4,
+      "decision_x": 1.8,
+      "success": true,
+      "probability": 0.5721933202725902,
+      "predicted_duration_s": 7.744377851486206,
+      "actual_duration_s": 7.979999389648437
+    },
+    {
+      "lane": 111,
+      "root": 5,
+      "decision_x": 1.8,
+      "success": true,
+      "probability": 0.8553190647094129,
+      "predicted_duration_s": 7.738944858312607,
+      "actual_duration_s": 7.9199999237060545
+    },
+    {
+      "lane": 151,
+      "root": 7,
+      "decision_x": 1.8,
+      "success": true,
+      "probability": 0.745927755059016,
+      "predicted_duration_s": 7.56811249256134,
+      "actual_duration_s": 7.9199999237060545
+    },
+    {
+      "lane": 170,
+      "root": 3,
+      "decision_x": 1.8,
+      "success": true,
+      "probability": 0.8270601835835947,
+      "predicted_duration_s": 7.3127121925354,
+      "actual_duration_s": 7.9199999237060545
+    },
+    {
+      "lane": 174,
+      "root": 1,
+      "decision_x": 1.8,
+      "success": true,
+      "probability": 0.5173515033040048,
+      "predicted_duration_s": 7.888087898492813,
+      "actual_duration_s": 8.019999351501465
+    },
+    {
+      "lane": 6,
+      "root": 10,
+      "decision_x": 4.0,
+      "success": false,
+      "probability": 0.11968482948591805,
+      "predicted_duration_s": 7.288986438099528,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 23,
+      "root": 5,
+      "decision_x": 4.0,
+      "success": true,
+      "probability": 0.12145528740425798,
+      "predicted_duration_s": 6.5536341646220535,
+      "actual_duration_s": 7.279999504089355
+    },
+    {
+      "lane": 30,
+      "root": 8,
+      "decision_x": 4.0,
+      "success": false,
+      "probability": 0.13176303965954814,
+      "predicted_duration_s": 6.9595488823833875,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 41,
+      "root": 9,
+      "decision_x": 4.0,
+      "success": false,
+      "probability": 0.1403225471781563,
+      "predicted_duration_s": 7.248040053411387,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 43,
+      "root": 2,
+      "decision_x": 4.0,
+      "success": false,
+      "probability": 0.1377379787914515,
+      "predicted_duration_s": 7.51239411791903,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 53,
+      "root": 11,
+      "decision_x": 4.0,
+      "success": false,
+      "probability": 0.41626658940383676,
+      "predicted_duration_s": 4.961100995540619,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 97,
+      "root": 12,
+      "decision_x": 4.0,
+      "success": false,
+      "probability": 0.5095579125193956,
+      "predicted_duration_s": 5.546361923217773,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 106,
+      "root": 13,
+      "decision_x": 4.0,
+      "success": false,
+      "probability": 0.1455925991341518,
+      "predicted_duration_s": 6.561272616527276,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 124,
+      "root": 14,
+      "decision_x": 4.0,
+      "success": false,
+      "probability": 0.14295392829450881,
+      "predicted_duration_s": 7.621643003047211,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 127,
+      "root": 6,
+      "decision_x": 4.0,
+      "success": false,
+      "probability": 0.10201431014527626,
+      "predicted_duration_s": 7.2924174388172105,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 133,
+      "root": 7,
+      "decision_x": 4.0,
+      "success": false,
+      "probability": 0.09491342346749024,
+      "predicted_duration_s": 7.363538729510765,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 140,
+      "root": 1,
+      "decision_x": 4.0,
+      "success": false,
+      "probability": 0.31071056887143844,
+      "predicted_duration_s": 5.43130487203598,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 143,
+      "root": 15,
+      "decision_x": 4.0,
+      "success": false,
+      "probability": 0.1116278187421075,
+      "predicted_duration_s": 7.409867014444899,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 144,
+      "root": 4,
+      "decision_x": 4.0,
+      "success": false,
+      "probability": 0.445094490405961,
+      "predicted_duration_s": 4.173872232437134,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 176,
+      "root": 3,
+      "decision_x": 4.0,
+      "success": true,
+      "probability": 0.1583934708237772,
+      "predicted_duration_s": 7.10496912652161,
+      "actual_duration_s": 7.26
+    },
+    {
+      "lane": 183,
+      "root": 0,
+      "decision_x": 4.0,
+      "success": false,
+      "probability": 0.13824803801762134,
+      "predicted_duration_s": 6.43717695147825,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 63,
+      "root": 3,
+      "decision_x": 6.0,
+      "success": false,
+      "probability": 0.13438597027768442,
+      "predicted_duration_s": 6.647725466958946,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 100,
+      "root": 7,
+      "decision_x": 6.0,
+      "success": true,
+      "probability": 0.14638454928648167,
+      "predicted_duration_s": 5.856322351028211,
+      "actual_duration_s": 5.819999504089355
+    },
+    {
+      "lane": 13,
+      "root": 0,
+      "decision_x": 6.0,
+      "success": false,
+      "probability": 0.14311099335196148,
+      "predicted_duration_s": 6.494746388452768,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 20,
+      "root": 9,
+      "decision_x": 6.0,
+      "success": false,
+      "probability": 0.10461429492976303,
+      "predicted_duration_s": 6.1007496023667045,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 38,
+      "root": 15,
+      "decision_x": 6.0,
+      "success": false,
+      "probability": 0.12933880223194572,
+      "predicted_duration_s": 6.092384995921748,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 55,
+      "root": 13,
+      "decision_x": 6.0,
+      "success": false,
+      "probability": 0.13342406736940046,
+      "predicted_duration_s": 6.180537190711675,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 90,
+      "root": 14,
+      "decision_x": 6.0,
+      "success": false,
+      "probability": 0.13378427998918546,
+      "predicted_duration_s": 5.8644459521133285,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 92,
+      "root": 4,
+      "decision_x": 6.0,
+      "success": false,
+      "probability": 0.21061875992029577,
+      "predicted_duration_s": 6.508365402289201,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 114,
+      "root": 1,
+      "decision_x": 6.0,
+      "success": false,
+      "probability": 0.1482621401113019,
+      "predicted_duration_s": 6.318070138338953,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 142,
+      "root": 8,
+      "decision_x": 6.0,
+      "success": true,
+      "probability": 0.1689920575612681,
+      "predicted_duration_s": 6.1494450299069285,
+      "actual_duration_s": 5.799999504089355
+    },
+    {
+      "lane": 148,
+      "root": 11,
+      "decision_x": 6.0,
+      "success": false,
+      "probability": 0.12904034008777818,
+      "predicted_duration_s": 6.232682043133536,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 159,
+      "root": 5,
+      "decision_x": 6.0,
+      "success": false,
+      "probability": 0.13544179258266834,
+      "predicted_duration_s": 6.2168939048133325,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 162,
+      "root": 12,
+      "decision_x": 6.0,
+      "success": true,
+      "probability": 0.14792320424740654,
+      "predicted_duration_s": 6.26871218305314,
+      "actual_duration_s": 6.279999999999999
+    },
+    {
+      "lane": 171,
+      "root": 10,
+      "decision_x": 6.0,
+      "success": false,
+      "probability": 0.15541721788700674,
+      "predicted_duration_s": 6.426740599621553,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 181,
+      "root": 6,
+      "decision_x": 6.0,
+      "success": false,
+      "probability": 0.13795215629981106,
+      "predicted_duration_s": 5.918528033998882,
+      "actual_duration_s": null
+    },
+    {
+      "lane": 47,
+      "root": 2,
+      "decision_x": 6.0,
+      "success": false,
+      "probability": 0.1123185912672839,
+      "predicted_duration_s": 5.6099983186795725,
+      "actual_duration_s": null
+    }
+  ],
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_or_detour/moving_baselines",
+  "scope": "Frozen model. One-step prediction receives measured previous event; rollout uses only original query state. Positive-event errors exclude missing targets; all observed failures remain in probabilities. Prefix-conditioned diagnostics, not a new planning test."
+}

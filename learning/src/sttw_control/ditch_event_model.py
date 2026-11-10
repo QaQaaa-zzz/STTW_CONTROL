@@ -52,8 +52,8 @@ class KnownHeightMap:
 
 
 class EventTransitionNetwork(nn.Module):
-    def __init__(self,dimension,state_mean,state_std,plan_mean,plan_std,residual_mean,residual_std,conditional_event_targets=False,plan_dimension=10):
-        super().__init__();self.dimension=dimension;self.conditional_event_targets=conditional_event_targets
+    def __init__(self,dimension,state_mean,state_std,plan_mean,plan_std,residual_mean,residual_std,conditional_event_targets=False,plan_dimension=10,ground_height_hold=False):
+        super().__init__();self.dimension=dimension;self.conditional_event_targets=conditional_event_targets;self.ground_height_hold=ground_height_hold
         for name,value in dict(state_mean=state_mean,state_std=state_std,plan_mean=plan_mean,plan_std=plan_std,residual_mean=residual_mean,residual_std=residual_std).items():self.register_buffer(name,torch.as_tensor(value,dtype=torch.float32))
         self.terrain=nn.Sequential(nn.Linear(128,32),nn.SiLU(),nn.Linear(32,32),nn.SiLU())
         self.shared=nn.Sequential(nn.Linear(dimension+plan_dimension+6+32,128),nn.SiLU(),nn.Linear(128,64),nn.SiLU())
@@ -65,12 +65,15 @@ class EventTransitionNetwork(nn.Module):
         value=all_heads[torch.arange(len(mode),device=mode.device),head]
         d=self.dimension
         return value[:,:d],value[:,d:2*d].clamp(-4,3),value[:,-2],value[:,-1]
-    @staticmethod
-    def physical_baseline(state,dt):
-        result=state.clone();result[:,:3]+=state[:,7:10]*dt[:,None];return result
+    def physical_baseline(self,state,dt,mode=None):
+        result=state.clone();result[:,:3]+=state[:,7:10]*dt[:,None]
+        if self.ground_height_hold:
+            ground=(mode==0)|(mode==4)
+            result[:,2]=torch.where(ground,state[:,2],result[:,2])
+        return result
     def loss(self,state,plan,crop,mode,next_state,dt,hit):
         mean,logvar,logtime,logit=self(state,plan,crop,mode)
-        target=(next_state-self.physical_baseline(state,dt)-self.residual_mean)/self.residual_std
+        target=(next_state-self.physical_baseline(state,dt,mode)-self.residual_mean)/self.residual_std
         weights=hit if self.conditional_event_targets else torch.ones_like(hit)
         denominator=weights.sum().clamp_min(1.)
         state_loss=(.5*((mean-target).square()*(-logvar).exp()+logvar).mean(-1)*weights).sum()/denominator
@@ -108,7 +111,7 @@ class EventPlanner:
             noise_np=rng.standard_normal(noise_shape).astype(np.float32)
             noise=torch.from_numpy(np.tile(noise_np,(n,1)) if self.meta.get('inference_common_random_numbers',False) else noise_np)
             residual=(mean+noise*torch.exp(.5*logvar))*self.model.residual_std+self.model.residual_mean
-            nxt=(self.model.physical_baseline(inp,dt)+residual).numpy()
+            nxt=(self.model.physical_baseline(inp,dt,torch.full((len(s),),mode,dtype=torch.long))+residual).numpy()
             q=nxt[:,3:7];nxt[:,3:7]=q/np.maximum(np.linalg.norm(q,axis=-1,keepdims=True),1e-8)
             nxt[:,-1]=nxt[:,-1].clip(0,1)
             if self.model.conditional_event_targets:nxt[:,-1]=np.maximum(s[:,-1],nxt[:,-1])

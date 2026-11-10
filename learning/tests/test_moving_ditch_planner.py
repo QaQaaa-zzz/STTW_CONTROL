@@ -24,3 +24,16 @@ def test_same_route_publication_does_not_reinitialize_ground_controller():
     assert planner.task.ground.controller is memory
     assert planner.task.phase.tolist()==[0,3]
     assert planner.task.ground_only.tolist()==[False,True]
+
+
+def test_ground_event_baseline_does_not_extrapolate_landing_fall():
+    from sttw_control.ditch_event_model import EventTransitionNetwork
+    state=torch.zeros(3,30);state[:,2]=.15;state[:,7]=2.;state[:,9]=-2.
+    dt=torch.full((3,),3.);modes=torch.tensor([0,2,4])
+    corrected=EventTransitionNetwork.physical_baseline(SimpleNamespace(ground_height_hold=True),state,dt,modes)
+    old=EventTransitionNetwork.physical_baseline(SimpleNamespace(ground_height_hold=False),state,dt,modes)
+    torch.testing.assert_close(corrected[:,2],torch.tensor([.15,-5.85,.15]))
+    torch.testing.assert_close(old[:,2],torch.full((3,),-5.85))
+    torch.testing.assert_close(corrected[:,0],old[:,0])
+    # This is the predictor prior, never a modification of physical state.
+    torch.testing.assert_close(state[:,2],torch.full((3,),.15))

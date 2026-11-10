@@ -23,10 +23,12 @@ class MovingDitchPlanner:
         self.parameters=np.asarray(config.get('candidate_parameters',self.planner.meta['candidate_parameters']),np.float32)
         self.roads=np.load(task.env.cfg['task_reference_path'])['xy'][:len(self.parameters)]
         self.threshold=np.broadcast_to(np.asarray(config['decision_x_m']),task.env.num_envs)
+        self.predictors={'event_model':self.planner}
+        self.predictors.update({name:EventPlanner(path) for name,path in config.get('event_models',{}).items()})
         self.completion=None
         if 'direct_model' in config:
             from .ditch_completion_model import CompletionPlanner
-            self.completion=CompletionPlanner(config['direct_model'])
+            self.completion=CompletionPlanner(config['direct_model']);self.predictors['direct_success']=self.completion
         self.methods=config['methods'];self.queried=np.zeros(task.env.num_envs,bool);self.pending={};self.records=[]
     def admission(self,roots):
         distance=route_distances(roots,self.roads);allowed=distance<=self.task.road_half_width
@@ -68,9 +70,9 @@ class MovingDitchPlanner:
             if self.methods[lane]=='forced':
                 eligible[:]=False;eligible[self.config['forced_candidates'][lane]]=True;allowed&=eligible[None]
                 prediction=None;scores=eligible.astype(float)
-            elif self.methods[lane] in ('event_model','direct_success'):
+            elif self.methods[lane] in self.predictors:
                 history=torch.cat([v.flatten(1) for v in (g.controller.eso,g.controller.disturbance[:,None],g.controller.gains,g.previous_reference,g.previous_command,g.policy.filtered,g.policy.offsets,g.middle.frames,g.middle.mask)],-1)[lane:lane+1].cpu().numpy()
-                predictor=self.completion if self.methods[lane]=='direct_success' else self.planner
+                predictor=self.predictors[self.methods[lane]]
                 state=predictor.encode(roots[lane:lane+1],observation[lane:lane+1].cpu().numpy(),history,task.road_violation[lane:lane+1].cpu().numpy())
                 prediction=predictor.score(np.repeat(state,len(self.parameters),0),self.parameters,particles=32)
                 scores=np.asarray(prediction['score'])
