@@ -1,0 +1,16 @@
+{
+  "initial_state_fields": [
+    "root",
+    "joint_state",
+    "observation"
+  ],
+  "physical_properties_identical": true,
+  "cases": [
+    "left",
+    "right",
+    "left_v20_a0",
+    "left_v18_a0",
+    "right_v20_a0",
+    "right_v18_a0"
+  ]
+}

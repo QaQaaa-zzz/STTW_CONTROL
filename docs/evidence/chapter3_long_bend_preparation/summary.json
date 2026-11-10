@@ -1,0 +1,158 @@
+[
+  {
+    "case": "left",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_long_bend_goal/left",
+    "route": "left",
+    "condition": {
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "jump_start_x_m": 9.0
+    },
+    "entry_yaw_deg": -33.223452753488914,
+    "entry_vy_m_s": -1.0970981121063232,
+    "entry_y_m": 0.06726376712322235,
+    "handoff_s": null,
+    "arrival_s": null,
+    "goal_completed": false,
+    "corridor_until_end_or_arrival": false,
+    "first_corridor_exit_s": 2.05,
+    "max_centerline_distance_m": 1.3509421868799731,
+    "end_code": 3,
+    "duration_s": 5.64,
+    "final_xyz": [
+      11.367049217224121,
+      -1.0115563869476318,
+      0.10818000882863998
+    ]
+  },
+  {
+    "case": "right",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_long_bend_goal/right",
+    "route": "right",
+    "condition": {
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "jump_start_x_m": 9.0
+    },
+    "entry_yaw_deg": 13.018076320533472,
+    "entry_vy_m_s": 0.4013919234275818,
+    "entry_y_m": 0.5420879125595093,
+    "handoff_s": null,
+    "arrival_s": null,
+    "goal_completed": false,
+    "corridor_until_end_or_arrival": true,
+    "first_corridor_exit_s": null,
+    "max_centerline_distance_m": 0.5720860362052917,
+    "end_code": 12,
+    "duration_s": 4.62,
+    "final_xyz": [
+      10.309028625488281,
+      0.5710777640342712,
+      0.08318916708230972
+    ]
+  },
+  {
+    "case": "left_v20_a0",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_long_bend_preparation/left_v20_a0",
+    "route": "left",
+    "condition": {
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "jump_start_x_m": 9.0
+    },
+    "entry_yaw_deg": -39.37368548780691,
+    "entry_vy_m_s": -1.1948177814483643,
+    "entry_y_m": 0.09155375510454178,
+    "handoff_s": null,
+    "arrival_s": null,
+    "goal_completed": false,
+    "corridor_until_end_or_arrival": false,
+    "first_corridor_exit_s": 1.9925,
+    "max_centerline_distance_m": 1.5995265056861774,
+    "end_code": 3,
+    "duration_s": 5.88,
+    "final_xyz": [
+      11.262170791625977,
+      -0.9420112371444702,
+      0.13656777143478394
+    ]
+  },
+  {
+    "case": "left_v18_a0",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_long_bend_preparation/left_v18_a0",
+    "route": "left",
+    "condition": {
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "jump_start_x_m": 9.0
+    },
+    "entry_yaw_deg": null,
+    "entry_vy_m_s": null,
+    "entry_y_m": null,
+    "handoff_s": null,
+    "arrival_s": null,
+    "goal_completed": false,
+    "corridor_until_end_or_arrival": false,
+    "first_corridor_exit_s": 2.1575,
+    "max_centerline_distance_m": 1.1042679701218379,
+    "end_code": 15,
+    "duration_s": 4.6000000000000005,
+    "final_xyz": [
+      8.116652488708496,
+      -0.8361430764198303,
+      0.11901979893445969
+    ]
+  },
+  {
+    "case": "right_v20_a0",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_long_bend_preparation/right_v20_a0",
+    "route": "right",
+    "condition": {
+      "speed_m_s": 2.0,
+      "alpha": 0.0,
+      "jump_start_x_m": 9.0
+    },
+    "entry_yaw_deg": 30.05259489859273,
+    "entry_vy_m_s": 0.8436259627342224,
+    "entry_y_m": 0.5008473992347717,
+    "handoff_s": null,
+    "arrival_s": null,
+    "goal_completed": false,
+    "corridor_until_end_or_arrival": false,
+    "first_corridor_exit_s": 2.0375,
+    "max_centerline_distance_m": 1.4628977806478745,
+    "end_code": 3,
+    "duration_s": 5.92,
+    "final_xyz": [
+      11.422442436218262,
+      1.4111113548278809,
+      0.0996612012386322
+    ]
+  },
+  {
+    "case": "right_v18_a0",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_long_bend_preparation/right_v18_a0",
+    "route": "right",
+    "condition": {
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "jump_start_x_m": 9.0
+    },
+    "entry_yaw_deg": 40.58793400169427,
+    "entry_vy_m_s": 1.070242166519165,
+    "entry_y_m": 0.9824203252792358,
+    "handoff_s": null,
+    "arrival_s": null,
+    "goal_completed": false,
+    "corridor_until_end_or_arrival": false,
+    "first_corridor_exit_s": 2.2600000000000002,
+    "max_centerline_distance_m": 1.9199870824813843,
+    "end_code": 3,
+    "duration_s": 6.44,
+    "final_xyz": [
+      10.97926139831543,
+      1.9199870824813843,
+      0.11508150398731232
+    ]
+  }
+]
