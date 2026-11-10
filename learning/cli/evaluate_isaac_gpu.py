@@ -2,7 +2,7 @@
 import argparse,json,time
 from pathlib import Path
 import numpy as np
-p=argparse.ArgumentParser();p.add_argument('--case-manifest',type=Path);p.add_argument('--configured-lanes',action='store_true');p.add_argument('--channel-protocol',type=Path);p.add_argument('--protocol-alpha',type=float,choices=(0,.25,.5,.75,1),default=.5);p.add_argument('--protocol-phase',choices=('entry_projection','exit_projection'),default='entry_projection');p.add_argument('--lower-training-run',type=Path);p.add_argument('--lower-checkpoint',type=Path);p.add_argument('--backend',choices=['gym','lab'],default='gym');p.add_argument('--asset',type=Path);p.add_argument('--bundle',type=Path,required=True);p.add_argument('--config',type=Path,required=True);p.add_argument('--terrain',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--seconds',type=float,default=6);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--case-manifest',type=Path);p.add_argument('--configured-lanes',action='store_true');p.add_argument('--channel-protocol',type=Path);p.add_argument('--fork-alpha',type=float,choices=(0,.25,.5,.75,1));p.add_argument('--protocol-alpha',type=float,choices=(0,.25,.5,.75,1),default=.5);p.add_argument('--protocol-phase',choices=('entry_projection','exit_projection'),default='entry_projection');p.add_argument('--lower-training-run',type=Path);p.add_argument('--lower-checkpoint',type=Path);p.add_argument('--backend',choices=['gym','lab'],default='gym');p.add_argument('--asset',type=Path);p.add_argument('--bundle',type=Path,required=True);p.add_argument('--config',type=Path,required=True);p.add_argument('--terrain',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--seconds',type=float,default=6);a=p.parse_args()
 if (a.lower_training_run is None)!=(a.lower_checkpoint is None):p.error('--lower-training-run and --lower-checkpoint are required together')
 if a.backend=='gym':
     from isaacgym import gymapi
@@ -42,6 +42,7 @@ if s.get('fixed_randomization_groups'):
     from sttw_control.isaaclab_randomization import apply_fixed_evaluation_groups
     apply_fixed_evaluation_groups(env,s['fixed_randomization_groups'])
 if intervention:env.policy.channel_intervention_mode=intervention.get('kind','hold')
+if s.get('record_controller_terms'):env.controller.config['record_terms']=True
 contract=dict(backend=a.backend,settings=s,bundle=str(a.bundle.resolve()),identity=identity,terrain=env.plant.terrain_identity,bodies=env.plant.bodies,origin=env.plant.origin.cpu().tolist(),role=s.get('evaluation_role','fixed preference DEV; Zero is frozen LOCAL300 plus ECBC/ESO, no H75 correction'),physics_dt=env.physics_dt,lower_dt=.005,policy_dt=.02)
 if lower is not None:
     contract['lower_identity']=lower.identity
@@ -86,6 +87,9 @@ for step in range(env.horizon):
         if fork_step is None and bool(env.alive[0]) and float(env.middle.projection['progress'][0])>=intervention['progress_m']:
             from sttw_control.isaac_path_snapshot import capture,restore
             state=capture(env,0);restore(env,state,[1,2,3,4]);fork_step=step
+            if a.fork_alpha is not None:
+                env.switched.copy_(env.alpha!=a.fork_alpha);env.switch_tick[env.switched]=env.tick*4;env.alpha.fill_(a.fork_alpha)
+                intervention['fork_alpha']=a.fork_alpha
             if intervention.get('kind')=='switch':
                 target=torch.tensor(intervention['target_alpha'],device=env.device)
                 env.switched.copy_(target!=env.alpha);env.switch_tick[env.switched]=env.tick*4

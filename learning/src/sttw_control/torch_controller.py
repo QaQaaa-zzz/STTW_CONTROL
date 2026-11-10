@@ -72,7 +72,10 @@ class TorchController:
         reference_roll = reference/ratio if c['fixed_roll_reference'] is None else torch.full_like(speed, c['fixed_roll_reference'])
         reference_roll = reference_roll*self.roll_reference_scale
         error = torch.stack((reference-steer, reference_roll-roll+shift, -roll_rate), dim=-1)
-        u = (gains*self.feedback_gain_scale*error).sum(-1).clamp(-c['max_steer_rate'], c['max_steer_rate'])
+        terms = gains*self.feedback_gain_scale*error
+        u = terms.sum(-1).clamp(-c['max_steer_rate'], c['max_steer_rate'])
+        if c.get('record_terms',False):
+            self.last_terms=torch.cat((measurement,terms,terms.sum(-1,keepdim=True),u[:,None]),dim=-1)
         e0, e1 = steer-self.eso[:, 0], roll-self.eso[:, 1]
         derivative = torch.stack((steer_rate+30*e0,
                                   self.eso[:, 2]+3*c['wo']*e1,
@@ -114,6 +117,7 @@ class TorchVelocityServos:
     def torque(self, command, joint_velocity):
         target = torch.maximum(self.control[:, 0], torch.minimum(self.control[:, 1], command*self.sign))
         force = self.gain*(target-joint_velocity[:, self.indices])
+        self.requested_torque=force
         force = torch.maximum(self.force[:, 0], torch.minimum(self.force[:, 1], force))
         result = torch.zeros_like(joint_velocity)
         result[:, self.indices] = force

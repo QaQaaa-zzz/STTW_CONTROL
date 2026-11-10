@@ -1,0 +1,65 @@
+{
+  "counts": {
+    "alpha0": {
+      "n": 12,
+      "complete": 9,
+      "arrival_hold": 5,
+      "A": 3,
+      "B": 0,
+      "C": 1
+    },
+    "alpha025": {
+      "n": 12,
+      "complete": 8,
+      "arrival_hold": 7,
+      "A": 0,
+      "B": 0,
+      "C": 2
+    },
+    "alpha05": {
+      "n": 12,
+      "complete": 11,
+      "arrival_hold": 11,
+      "A": 2,
+      "B": 2,
+      "C": 5
+    },
+    "alpha075": {
+      "n": 12,
+      "complete": 6,
+      "arrival_hold": 4,
+      "A": 0,
+      "B": 0,
+      "C": 0
+    },
+    "alpha1": {
+      "n": 12,
+      "complete": 5,
+      "arrival_hold": 5,
+      "A": 0,
+      "B": 3,
+      "C": 1
+    },
+    "Zero": {
+      "n": 12,
+      "complete": 0,
+      "arrival_hold": 0,
+      "A": 0,
+      "B": 0,
+      "C": 0
+    }
+  },
+  "nominal_peak_increase_pct": 4.873857834938988,
+  "nominal_roll_control_decrease_pct": 20.401453910845035,
+  "polynomial_max_error": 9.521272659185342e-13,
+  "expm_max_error": 4.3021142204224816e-16,
+  "speed_points": 82,
+  "contact_chunks": 85,
+  "contact_record_window": [
+    0.8,
+    5.0
+  ],
+  "contact_missing": [],
+  "controller_sha256": "418a55486c863f5efb249c22987bc43017aee95ff0913582f59508230b18e00c",
+  "scope": "Frozen-speed nominal ECBC only; no ESO, Local300, saturation or nonlinear contact certificate"
+}

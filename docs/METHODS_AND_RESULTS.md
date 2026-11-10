@@ -1998,3 +1998,7 @@ source_type=repo_artifact；artifact_checked。共同起点150轮模型无外部
 
 
 用户要求视频不排队，已仅拆出视频补录/渲染为sttw-h75-no-push-video-direct，PID4089343真实采样；未停止第三章训练。原H75比较独立服务sttw-h75-no-push-comparison仍共享锁排队。近期交付见[精简包](evidence/h75_recent_20261109/README.md)：代码随本分支、原H75/Local300/150轮/弃用76轮权重、任务输入、地形、训练日志、全部共同起点评测逐步数据及XY图，重复内容相对链接去重约87MiB。382文件哈希通过、三checkpoint CPU加载通过（150/76身份正确），无新机器GPU复现声明；视频和无推扰原H75尚未完成。
+
+
+## α接触与恢复机制推进
+用户报告/PDF/复算包核验后，独立82速度点和72条统计复算通过；具体审查、100回合同入口通道消融及后续选档验证见 /media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_mechanism/REVIEW.md。原H75/Local300冻结，不新增训练。新采集记录未限幅控制/伺服请求量，已有完整恢复副本检查物理缓存差异。

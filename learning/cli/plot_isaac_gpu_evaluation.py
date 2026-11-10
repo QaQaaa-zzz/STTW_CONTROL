@@ -11,7 +11,7 @@ if a.rescore_zero:
  write_zero_scores(a.run);a.baseline_run=a.run
 r,c=load_case(a.run,a.baseline_run);physics_dt=c['physics_dt'];user_speed=float(c["settings"].get("user_speed_m_s",2.3));palette_markers=['o','s','^','D','v','x'];route=np.load(Path(c['bundle'])/'route.npz');labels=['alpha 0','alpha .25','alpha .5','alpha .75','alpha 1','Zero'];colors=['#0072B2','#D55E00','#009E73','#CC79A7','#8A6500','#333333'];styles=['-']*5+['--'];summary=[]
 alpha_colors=colors[:5];count=r['reward'].shape[1];labels=a.lane_labels or [label.replace('alpha',a.preference_label_prefix) for label in labels[:count]];colors=colors[:count]
-if count<=5 and not c['settings'].get('gravel_recovery'):colors=[alpha_colors[[0,.25,.5,.75,1].index(alpha)] for alpha in c['settings']['alphas']]
+if count<=5 and not a.lane_labels and not c['settings'].get('gravel_recovery'):colors=[alpha_colors[[0,.25,.5,.75,1].index(alpha)] for alpha in c['settings']['alphas']]
 fig,axs=plt.subplots(2,2,figsize=(12,9));xy,per,cumulative,speed=axs.ravel();last_progress=max(float(r['progress'][np.flatnonzero(r['lower_trace'][:,:,i,6].reshape(-1))[-1],i]) for i in range(count));ref=route['s']<=last_progress+1;xy.plot(*route['xy'][ref].T,':',color='gray',label='Original reference')
 for lane,(label,color) in enumerate(zip(labels,colors)):
     trace=r['lower_trace'][:,:,lane].reshape(-1,11);mask=trace[:,6].astype(bool);indices=np.flatnonzero(mask);steps=np.flatnonzero(r['valid'][:,lane]);position=trace[indices,:2];t=indices*.005+trace[indices,7]*physics_dt;rewards=r['reward'][steps,lane]

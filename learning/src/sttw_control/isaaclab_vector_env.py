@@ -335,6 +335,7 @@ class IsaacLabVectorPlant:
                                    'friction_count', 'friction_start'), friction):
                 samples[wheel + '_' + key] = value.clone()
         samples['motor_torque'] = self.last_motor_torque.clone()
+        samples['motor_requested_torque'] = self.servos.requested_torque.clone()
         if self.diagnostic_joint_torque is not None:
             samples['diagnostic_joint_torque'] = self.last_diagnostic_joint_torque.clone()
         samples['joint_position'] = self.dofs[..., 0].clone()

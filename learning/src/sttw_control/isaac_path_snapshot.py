@@ -25,6 +25,7 @@ def capture(env,lane):
         for name in names:state[group+'.'+name]=getattr(obj,name)[lane].clone()
     for group in ('projection','follower'):
         for name,value in getattr(env.middle,group).items():state['middle.'+group+'.'+name]=value[lane].clone()
+    state['controller.filtered_roll_rate']=env.controller.filtered_roll_rate[lane].clone()
     state['policy_tick']=torch.tensor(env.tick,device=env.device);state['middle_tick']=torch.tensor(env.middle.tick,device=env.device)
     if env.randomization is not None:
         state['randomization.steer_offset']=env.randomization.steer_offset[lane].clone()
@@ -52,6 +53,7 @@ def restore(env,state,lanes):
         for name in names:getattr(obj,name)[ids]=state[group+'.'+name]
     for group in ('projection','follower'):
         for name,value in getattr(env.middle,group).items():value[ids]=state['middle.'+group+'.'+name]
+    env.controller.filtered_roll_rate[ids]=state.get('controller.filtered_roll_rate',torch.zeros_like(state['controller.disturbance']))
     env.tick=int(state['policy_tick']);env.middle.tick=int(state['middle_tick'])
 
     if env.randomization is not None:

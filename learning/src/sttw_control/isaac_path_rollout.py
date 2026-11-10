@@ -134,6 +134,8 @@ class IsaacPathRollout:
                     domain_exit=self.middle.domain_exit.clone(),policy_fault=self.middle.fault.clone(),alpha=self.alpha.clone(),switch_tick=self.switch_tick.clone(),execution_mode=self.policy.execution_mode.clone(),channel_progress=self.middle.flags['channel_progress'].clone(),
                     contact_force=self.plant.contact.clone(),body_state=self.plant.rigid.clone(),
                     reward_normal=terms['reward'].clone(),**{f'{group}_{key}':value.clone() for group in ('raw','effective') for key,value in terms[group].items()}))
+                if self.cc.get('record_terms',False) or self.controller.config.get('record_terms',False):
+                    details[-1].update(controller_terms=self.controller.last_terms.clone(),controller_output=output.clone(),controller_gains=self.controller.gains.clone(),lower_residual=applied.clone(),final_command=command.clone())
                 if wheel_points:
                     details[-1].update(wheel_contact_points=torch.stack(wheel_points),wheel_contact_forces=torch.stack(wheel_forces))
         rate=(self.policy.offsets-initial_offsets)/.02;c=self.config['path_reward'];rate_cost=c['offset_rate_weight']*((rate/torch.tensor(c['offset_rate_scales'],device=self.device))**2).sum(-1);reward-=c['scale']*.02*rate_cost.clamp_max(c['component_caps']['offset_rate'])
