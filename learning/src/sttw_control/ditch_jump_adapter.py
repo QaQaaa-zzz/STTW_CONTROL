@@ -135,7 +135,7 @@ class DitchJumpAdapter:
             raise ValueError('Verified ditch scoring requires the pinned open rough-bank map and filtered wheel contacts')
         self.near_lip = spec['front_x_m']
         self.far_lip = self.near_lip+spec['width_m']
-        self.end = min(8., spec['ground_end_x_m'])
+        self.end = spec['ground_end_x_m']
         self.halfwidth = 1.
         # Saturation is a buffer-validity check, not a physical contact limit.
         self.contact_capacity = env.cfg['plant_options'].get('wheel_contact_buffer_capacity') or env.cfg['plant_options']['wheel_patch_capacity']

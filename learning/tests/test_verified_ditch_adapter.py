@@ -7,6 +7,26 @@ from sttw_control.ditch_terrain import build_ditch_terrain
 
 
 class WiringTests(unittest.TestCase):
+    def test_shifted_ditch_far_bank_uses_map_extent(self):
+        from types import SimpleNamespace as NS
+        from sttw_control.ditch_jump_adapter import DitchJumpAdapter
+        spec=dict(front_x_m=10.3,width_m=.3,ground_end_x_m=25.,
+                  rough_x_intervals_m=[[2.,7.],[12.,22.]],stones_per_m2=0,
+                  seed=1,stone_height_min_m=0.,stone_height_max_m=0.)
+        plant=NS(wheel_sensors=[None,None],wheel_radius_m=.07,physics_dt=.0025)
+        env=NS(plant=plant,ditch=spec,num_envs=1,device='cpu',cfg=dict(
+            plant_options=dict(terrain_base_plane=False,wheel_collision='cylinder',
+                wheel_patch_capacity=64,wheel_width_m=.05,wheel_profile_slices=21),
+            verified_ditch_support_mode='rough'))
+        adapter=DitchJumpAdapter(env,build_ditch_terrain(spec)[0])
+        points=torch.tensor([[11.,0.,0.],[24.,0.,0.],[26.,0.,0.]])
+        raw=(torch.full((3,1),5.),points,torch.tensor([[0.,0.,1.]]).repeat(3,1),
+             None,torch.ones(3,1,dtype=torch.long),torch.arange(3)[:,None])
+        near,far=classify_patches(raw,torch.zeros(3,3),torch.full((3,),.07),
+            adapter.near_lip,adapter.far_lip,adapter.end,adapter.halfwidth,64)
+        self.assertEqual(far.tolist(),[True,True,False])
+        self.assertEqual(near.tolist(),[False,False,False])
+
     def test_many_valid_contacts_use_actual_allocated_capacity(self):
         n=100
         point=torch.tensor([[3.2,0.,0.]]).repeat(n,1)
