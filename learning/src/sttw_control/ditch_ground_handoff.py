@@ -41,6 +41,7 @@ class DitchGroundHandoff:
             route=dict(s=ss,xy=np.column_stack((ss-5.,np.zeros_like(ss))),heading=np.zeros_like(ss),curvature=np.zeros_like(ss))
         self.ground.begin_connection(TorchPathReference(route,config,env.device),self.ground.speed.clone(),self.ground.alpha.clone())
         self.active=False;self.commands=[];self.command_times=[];self.command_phases=[]
+        self.history=[];self.record_history=spec.get("record_controller_history",False)
         self.approach=spec.get('approach')
         self.approaching=self.approach is not None
         self.approach_initialized=False
@@ -109,6 +110,20 @@ class DitchGroundHandoff:
                 e.privileged_obs_buf=e.physical()[2]
             return result
         g.physics_step_override=physics
+        if self.record_history:
+            # Observation-only trace; no solver snapshot, restoration, or control mutation.
+            groups={
+                'controller':(g.controller,('eso','disturbance','gains')),
+                'lower':(g.lower,('frames','mask','previous_applied','yaw_rate')),
+                'policy':(g.policy,('filtered','offsets','execution_mode','hold_channels')),
+                'middle':(g.middle,('frames','mask','pose','yaw_rate','nominal','rates','fault','domain_exit')),
+                'rollout':(g,('previous_reference','previous_command','measurement','alpha','speed','task_tick','physical_tick')),
+            }
+            row={group+'_'+key:getattr(obj,key).detach().cpu().numpy().copy()
+                 for group,(obj,keys) in groups.items() for key in keys}
+            row.update(root_xyzw=e.physical()[0].detach().cpu().numpy().copy(),
+                       joint_state=e.plant.dofs.detach().cpu().numpy().copy())
+            self.history.append(row)
         result=g.step();self.commands.append(result['executed_commands'].cpu().numpy())
         self.command_times.append(float(e.episode_length_buf[0])*e.dt)
         self.command_phases.append('approach' if self.approaching else 'continuation')

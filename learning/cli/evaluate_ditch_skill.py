@@ -56,6 +56,9 @@ for candidate in cfg['evaluation_checkpoints']:
    if bool(done.all()):break
  if handoff is not None:
   np.savez_compressed(out/'ground_commands.npz',commands=np.asarray(handoff.commands),policy_start_time_s=np.asarray(handoff.command_times),phase=np.asarray(handoff.command_phases))
+ if handoff is not None and handoff.history:
+  np.savez_compressed(out/'ground_controller_history.npz',time=np.asarray(handoff.command_times),phase=np.asarray(handoff.command_phases),
+      **{key:np.stack([row[key] for row in handoff.history]) for key in handoff.history[0]})
  env.plant.step=recorder.original_step;recorder.save(out/'physics_contact.npz')
  if cfg.get('record_verified_diagnostics'):
   diagnostic=env.verified_jump.diagnostics
