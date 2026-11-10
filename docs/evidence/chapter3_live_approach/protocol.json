@@ -1,0 +1,8 @@
+{
+  "budget": "one8s episode,1GPU lane,0training; expected under2min",
+  "role": "common environment reset x1.5/vx2 then actual H75 ground approach to x2, source heading125 jump, capture handback",
+  "history": "measured physical/controller motion; jump action history zero during ground segment as existing connection batch",
+  "conditions": "nominal same-height flat30cm trench3.3..3.6; source policy reference3.6; stage3 handback; continuous task window8s",
+  "acceptance": "record approach entry and actual physical results; no requirement for1s simultaneous support; no synthesized entry4",
+  "paired_extension": "two8s runs, same physical reset/seed, speed1.8 alpha.5 or speed2 alpha0, same x2 activation; no training"
+}

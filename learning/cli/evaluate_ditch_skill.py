@@ -44,6 +44,7 @@ for candidate in cfg['evaluation_checkpoints']:
   env.last_action[:]=to(bank['last_action'][i]);env.obs_buf[:,76:]=heading_features(root)
   env.privileged_obs_buf=env.physical()[2];obs=env.obs_buf
   np.savez_compressed(out/'restored_entry.npz',root=root.cpu().numpy(),observation=obs.cpu().numpy(),joint_position=env.plant.dofs[:,:,0].cpu().numpy(),joint_velocity=env.plant.dofs[:,:,1].cpu().numpy())
+ np.savez_compressed(out/'initial_state.npz',root=env.physical()[0].cpu().numpy(),joint_state=env.plant.dofs.cpu().numpy(),observation=obs.cpu().numpy())
  recorder=PhysicsContactRecorder(env.plant,lambda:(torch.ones(1,dtype=torch.bool,device=cfg['device']),1))
  states=[];observations=[];actions=[];rewards=[];parts=[];codes=[];support=[]
  with torch.no_grad():
@@ -54,7 +55,7 @@ for candidate in cfg['evaluation_checkpoints']:
    parts.append({k:v.cpu().numpy() for k,v in info['reward_parts'].items()});codes.append(info['end_code'].cpu().numpy());support.append(env.platform_held.cpu().numpy().copy())
    if bool(done.all()):break
  if handoff is not None:
-  np.savez_compressed(out/'ground_commands.npz',commands=np.asarray(handoff.commands))
+  np.savez_compressed(out/'ground_commands.npz',commands=np.asarray(handoff.commands),policy_start_time_s=np.asarray(handoff.command_times),phase=np.asarray(handoff.command_phases))
  env.plant.step=recorder.original_step;recorder.save(out/'physics_contact.npz')
  if cfg.get('record_verified_diagnostics'):
   diagnostic=env.verified_jump.diagnostics
@@ -65,6 +66,8 @@ for candidate in cfg['evaluation_checkpoints']:
  row=dict(candidate=candidate,terrain_id=terrain_id,terrain_spec=env.terrain_specs[terrain_id],steps=len(states),duration_s=len(states)*env.dt,terminal_code=int(codes[-1][0]),final_xyz=tr[-1,:3].tolist(),peak_root_z=float(tr[:,2].max()),max_root_x=float(tr[:,0].max()),ditch_cross_hold=bool(env.platform_held[0]),reward_total=float(np.stack(rewards).sum()),reward_parts={k:float(np.stack([x[k] for x in parts]).sum()) for k in parts[0]},scope='Single fixed-seed TRAIN-domain diagnostic with frozen sampled Go2 properties/noise and mean actor; no ground-controller handoff or complete-map success claim')
  if handoff is not None:
   row['ground_handoff_executed']=handoff.active
+  row['live_approach_executed']=handoff.approach_initialized
+  row['approach_reached_jump']=handoff.approach_initialized and not handoff.approaching
   row['handoff_stage_requested']=handoff.handoff_stage
   row['verified_success_scope']='jump scorer only; inspect ground failure and final state separately'
   row['action_log_scope']='jump actor proposals; after handoff actual ground commands are in ground_commands.npz'

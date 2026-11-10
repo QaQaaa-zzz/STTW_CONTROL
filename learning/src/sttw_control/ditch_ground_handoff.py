@@ -32,7 +32,10 @@ class DitchGroundHandoff:
         ss=np.arange(0,30.01,.02)
         route=dict(s=ss,xy=np.column_stack((ss-5.,np.zeros_like(ss))),heading=np.zeros_like(ss),curvature=np.zeros_like(ss))
         self.ground.begin_connection(TorchPathReference(route,config,env.device),self.ground.speed.clone(),self.ground.alpha.clone())
-        self.active=False;self.commands=[]
+        self.active=False;self.commands=[];self.command_times=[];self.command_phases=[]
+        self.approach=spec.get('approach')
+        self.approaching=self.approach is not None
+        self.approach_initialized=False
         (self.output/'ground_identity.json').write_text(json.dumps(dict(upper_sha256=self.ground.upper_sha256,
             lower_sha256=self.ground.lower_sha256,zero_lower=True,controller='H75 + ECBC/ESO; lower residual zero',
             reference='Original world-local y=0, no reanchoring at landing',control_dt_s=.005,policy_dt_s=.02,
@@ -41,7 +44,16 @@ class DitchGroundHandoff:
 
     def step(self, latent):
         e=self.env;g=self.ground
-        if not self.active and int(e.verified_jump.scorer.stage[0])>=self.handoff_stage:
+        if self.approaching:
+            if not self.approach_initialized:
+                g.resume_ground_lanes(e.all_ids,self.approach['speed_m_s'],self.approach['alpha'])
+                self.approach_initialized=True
+            if float(e.physical()[0][0,0])>=self.approach['jump_start_x_m']:
+                self.approaching=False
+                np.savez_compressed(self.output/'approach_entry.npz',root=e.physical()[0].cpu().numpy(),
+                    observation=e.obs_buf.cpu().numpy(),joint_state=e.plant.dofs.cpu().numpy(),
+                    time_s=float(e.episode_length_buf[0])*e.dt)
+        if not self.approaching and not self.active and int(e.verified_jump.scorer.stage[0])>=self.handoff_stage:
             before=e.physical()[0].clone()
             if self.leg_hold=='joint_brake':
                 e.plant.set_pendulum_locked(True)
@@ -57,7 +69,7 @@ class DitchGroundHandoff:
                 root=before.cpu().tolist(),stage=self.handoff_stage,physical_reset=False,leg_hold=self.leg_hold,
                 leg_target=e.plant.pendulum_target.cpu().tolist(),
                 unchanged_root=bool(torch.equal(before,e.physical()[0]))),indent=2))
-        if not self.active:
+        if not self.active and not self.approaching:
             transition=e.step(latent)
             if self.handoff_stage==4 and bool(transition[4]['jump_success'].all()) and int(e.episode_length_buf[0])<e.max_episode_length:
                 obs,priv,reward,done,info=transition
@@ -66,15 +78,30 @@ class DitchGroundHandoff:
         reward=torch.zeros(1,device=e.device);code=torch.zeros(1,device=e.device,dtype=torch.long);tick=0
         def physics(command):
             nonlocal reward,code,tick
+            old_velocity=e.plant.roots[:,7:10].clone()
             result=e.plant.step(command,refresh_diagnostics=True)
             inc,done,success,stage=e.verified_jump.sample(e,torch.zeros(1,4,device=e.device),tick==e.physics_substeps-1)
             terminal=e.verified_jump.physical_failure if self.task_continuation or self.handoff_stage==4 else done
             reason=e.verified_jump.end_code if self.task_continuation or self.handoff_stage==4 else torch.where(success,13,e.verified_jump.end_code)
             code=torch.where(terminal&(code==0),reason,code)
             reward+=inc;tick+=1
+            if self.approaching and tick==e.physics_substeps:
+                from .phase_u_events import advance_events
+                from .jump_heading import heading_features
+                root=e.physical()[0]
+                acceleration=(root[:,7:10]-old_velocity)/e.plant.physics_dt
+                reference=e.cfg.get('policy_obstacle_reference_x_m',e.ditch['front_x_m'])
+                distance=reference-(e.geometry.frontmost_x(e.plant.rigid)-e.plant.origin[:,0])
+                # Existing chain convention: zero jump action history during ground approach.
+                frame=e.history.make_frame(root,e.plant.dofs[:,:,0],e.plant.dofs[:,:,1],acceleration,distance,e.last_action)
+                e.events=advance_events(e.events,dict(x=root[:,0],z=root[:,2],vertical_velocity=root[:,9],physical_failure=e.verified_jump.physical_failure,forward_velocity=root[:,7]),e.task)
+                e.obs_buf=torch.cat((e.history.advance_frame(e.randomization.sensor_frame(frame),e.events['jump_signal'].float()),heading_features(root)),-1)
+                e.privileged_obs_buf=e.physical()[2]
             return result
         g.physics_step_override=physics
         result=g.step();self.commands.append(result['executed_commands'].cpu().numpy())
+        self.command_times.append(float(e.episode_length_buf[0])*e.dt)
+        self.command_phases.append('approach' if self.approaching else 'continuation')
         scorer=e.verified_jump.scorer
         supervisor_failure=result['failure']&~scorer.done
         # A ground supervisor stop is a task failure, not a physical-success exit.
