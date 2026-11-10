@@ -1,0 +1,98 @@
+[
+  {
+    "lane": 0,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": false,
+    "working_roll_exceeded": true,
+    "path_rmse_m": 0.5059500932693481,
+    "speed_rmse_m_s": 0.19944614171981812,
+    "peak_roll_rad": 0.4880737066268921,
+    "requested_speed_m_s": 2.3
+  },
+  {
+    "lane": 1,
+    "failed": false,
+    "observed_seconds": 9.999999999888242,
+    "goal_crossed": true,
+    "final_hold": true,
+    "working_roll_exceeded": true,
+    "path_rmse_m": 0.2514458894729614,
+    "speed_rmse_m_s": 0.15163402259349823,
+    "peak_roll_rad": 0.45230376720428467,
+    "requested_speed_m_s": 2.3
+  },
+  {
+    "lane": 2,
+    "failed": true,
+    "observed_seconds": 1.9799999998882414,
+    "goal_crossed": false,
+    "final_hold": false,
+    "working_roll_exceeded": true,
+    "path_rmse_m": 0.17338070273399353,
+    "speed_rmse_m_s": 0.3511812090873718,
+    "peak_roll_rad": 0.5708968639373779,
+    "requested_speed_m_s": 2.3
+  },
+  {
+    "lane": 3,
+    "failed": true,
+    "observed_seconds": 1.6653999999898952,
+    "goal_crossed": false,
+    "final_hold": false,
+    "working_roll_exceeded": true,
+    "path_rmse_m": 0.0454217791557312,
+    "speed_rmse_m_s": 0.07573926448822021,
+    "peak_roll_rad": 0.6451206207275391,
+    "requested_speed_m_s": 2.3
+  },
+  {
+    "lane": 4,
+    "failed": true,
+    "observed_seconds": 2.0199999998882414,
+    "goal_crossed": false,
+    "final_hold": false,
+    "working_roll_exceeded": true,
+    "path_rmse_m": 0.17038428783416748,
+    "speed_rmse_m_s": 0.33814677596092224,
+    "peak_roll_rad": 0.531720757484436,
+    "requested_speed_m_s": 2.3
+  },
+  {
+    "lane": 5,
+    "failed": true,
+    "observed_seconds": 1.674399999976158,
+    "goal_crossed": false,
+    "final_hold": false,
+    "working_roll_exceeded": true,
+    "path_rmse_m": 0.049991410225629807,
+    "speed_rmse_m_s": 0.09293314814567566,
+    "peak_roll_rad": 0.6644153594970703,
+    "requested_speed_m_s": 2.3
+  },
+  {
+    "lane": 6,
+    "failed": true,
+    "observed_seconds": 1.9799999998882414,
+    "goal_crossed": false,
+    "final_hold": false,
+    "working_roll_exceeded": true,
+    "path_rmse_m": 0.1716001033782959,
+    "speed_rmse_m_s": 0.3695546090602875,
+    "peak_roll_rad": 0.5723947882652283,
+    "requested_speed_m_s": 2.3
+  },
+  {
+    "lane": 7,
+    "failed": true,
+    "observed_seconds": 1.9199999998882413,
+    "goal_crossed": false,
+    "final_hold": false,
+    "working_roll_exceeded": true,
+    "path_rmse_m": 0.13485164940357208,
+    "speed_rmse_m_s": 0.4437428414821625,
+    "peak_roll_rad": 0.700197160243988,
+    "requested_speed_m_s": 2.3
+  }
+]

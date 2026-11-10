@@ -1,0 +1,4622 @@
+[
+  {
+    "case": "flat_force+0_v2.3_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+0_v2.3_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+0_v2.3_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+0_v2.3_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 0,
+      "lane_stop": 8
+    },
+    "config": "flat_force+0_v2.3_seed101.json"
+  },
+  {
+    "case": "flat_force+0_v2.3_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+0_v2.3_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+0_v2.3_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+0_v2.3_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 8,
+      "lane_stop": 16
+    },
+    "config": "flat_force+0_v2.3_seed102.json"
+  },
+  {
+    "case": "flat_force+0_v2.3_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+0_v2.3_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+0_v2.3_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+0_v2.3_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 16,
+      "lane_stop": 24
+    },
+    "config": "flat_force+0_v2.3_seed103.json"
+  },
+  {
+    "case": "flat_force+0_v2.6_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+0_v2.6_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+0_v2.6_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+0_v2.6_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 24,
+      "lane_stop": 32
+    },
+    "config": "flat_force+0_v2.6_seed101.json"
+  },
+  {
+    "case": "flat_force+0_v2.6_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+0_v2.6_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+0_v2.6_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+0_v2.6_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 32,
+      "lane_stop": 40
+    },
+    "config": "flat_force+0_v2.6_seed102.json"
+  },
+  {
+    "case": "flat_force+0_v2.6_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+0_v2.6_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+0_v2.6_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+0_v2.6_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 40,
+      "lane_stop": 48
+    },
+    "config": "flat_force+0_v2.6_seed103.json"
+  },
+  {
+    "case": "flat_force-8_v2.3_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-8_v2.3_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-8_v2.3_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-8_v2.3_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 48,
+      "lane_stop": 56
+    },
+    "config": "flat_force-8_v2.3_seed101.json"
+  },
+  {
+    "case": "flat_force-8_v2.3_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-8_v2.3_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-8_v2.3_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-8_v2.3_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 56,
+      "lane_stop": 64
+    },
+    "config": "flat_force-8_v2.3_seed102.json"
+  },
+  {
+    "case": "flat_force-8_v2.3_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-8_v2.3_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-8_v2.3_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-8_v2.3_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 64,
+      "lane_stop": 72
+    },
+    "config": "flat_force-8_v2.3_seed103.json"
+  },
+  {
+    "case": "flat_force-8_v2.6_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-8_v2.6_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-8_v2.6_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-8_v2.6_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 72,
+      "lane_stop": 80
+    },
+    "config": "flat_force-8_v2.6_seed101.json"
+  },
+  {
+    "case": "flat_force-8_v2.6_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-8_v2.6_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-8_v2.6_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-8_v2.6_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 80,
+      "lane_stop": 88
+    },
+    "config": "flat_force-8_v2.6_seed102.json"
+  },
+  {
+    "case": "flat_force-8_v2.6_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-8_v2.6_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-8_v2.6_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-8_v2.6_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 88,
+      "lane_stop": 96
+    },
+    "config": "flat_force-8_v2.6_seed103.json"
+  },
+  {
+    "case": "flat_force+8_v2.3_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+8_v2.3_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+8_v2.3_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+8_v2.3_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 96,
+      "lane_stop": 104
+    },
+    "config": "flat_force+8_v2.3_seed101.json"
+  },
+  {
+    "case": "flat_force+8_v2.3_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+8_v2.3_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+8_v2.3_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+8_v2.3_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 104,
+      "lane_stop": 112
+    },
+    "config": "flat_force+8_v2.3_seed102.json"
+  },
+  {
+    "case": "flat_force+8_v2.3_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+8_v2.3_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+8_v2.3_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+8_v2.3_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 112,
+      "lane_stop": 120
+    },
+    "config": "flat_force+8_v2.3_seed103.json"
+  },
+  {
+    "case": "flat_force+8_v2.6_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+8_v2.6_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+8_v2.6_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+8_v2.6_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 120,
+      "lane_stop": 128
+    },
+    "config": "flat_force+8_v2.6_seed101.json"
+  },
+  {
+    "case": "flat_force+8_v2.6_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+8_v2.6_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+8_v2.6_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+8_v2.6_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 128,
+      "lane_stop": 136
+    },
+    "config": "flat_force+8_v2.6_seed102.json"
+  },
+  {
+    "case": "flat_force+8_v2.6_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+8_v2.6_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+8_v2.6_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+8_v2.6_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 136,
+      "lane_stop": 144
+    },
+    "config": "flat_force+8_v2.6_seed103.json"
+  },
+  {
+    "case": "flat_force-16_v2.3_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-16_v2.3_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-16_v2.3_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-16_v2.3_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 144,
+      "lane_stop": 152
+    },
+    "config": "flat_force-16_v2.3_seed101.json"
+  },
+  {
+    "case": "flat_force-16_v2.3_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-16_v2.3_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-16_v2.3_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-16_v2.3_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 152,
+      "lane_stop": 160
+    },
+    "config": "flat_force-16_v2.3_seed102.json"
+  },
+  {
+    "case": "flat_force-16_v2.3_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-16_v2.3_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-16_v2.3_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-16_v2.3_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 160,
+      "lane_stop": 168
+    },
+    "config": "flat_force-16_v2.3_seed103.json"
+  },
+  {
+    "case": "flat_force-16_v2.6_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-16_v2.6_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-16_v2.6_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-16_v2.6_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 168,
+      "lane_stop": 176
+    },
+    "config": "flat_force-16_v2.6_seed101.json"
+  },
+  {
+    "case": "flat_force-16_v2.6_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-16_v2.6_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-16_v2.6_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-16_v2.6_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 176,
+      "lane_stop": 184
+    },
+    "config": "flat_force-16_v2.6_seed102.json"
+  },
+  {
+    "case": "flat_force-16_v2.6_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-16_v2.6_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-16_v2.6_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-16_v2.6_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 184,
+      "lane_stop": 192
+    },
+    "config": "flat_force-16_v2.6_seed103.json"
+  },
+  {
+    "case": "flat_force+16_v2.3_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+16_v2.3_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+16_v2.3_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+16_v2.3_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 192,
+      "lane_stop": 200
+    },
+    "config": "flat_force+16_v2.3_seed101.json"
+  },
+  {
+    "case": "flat_force+16_v2.3_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+16_v2.3_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+16_v2.3_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+16_v2.3_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 200,
+      "lane_stop": 208
+    },
+    "config": "flat_force+16_v2.3_seed102.json"
+  },
+  {
+    "case": "flat_force+16_v2.3_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+16_v2.3_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+16_v2.3_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+16_v2.3_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 208,
+      "lane_stop": 216
+    },
+    "config": "flat_force+16_v2.3_seed103.json"
+  },
+  {
+    "case": "flat_force+16_v2.6_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+16_v2.6_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+16_v2.6_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+16_v2.6_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 216,
+      "lane_stop": 224
+    },
+    "config": "flat_force+16_v2.6_seed101.json"
+  },
+  {
+    "case": "flat_force+16_v2.6_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+16_v2.6_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+16_v2.6_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+16_v2.6_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 224,
+      "lane_stop": 232
+    },
+    "config": "flat_force+16_v2.6_seed102.json"
+  },
+  {
+    "case": "flat_force+16_v2.6_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+16_v2.6_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+16_v2.6_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+16_v2.6_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 232,
+      "lane_stop": 240
+    },
+    "config": "flat_force+16_v2.6_seed103.json"
+  },
+  {
+    "case": "flat_force-32_v2.3_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-32_v2.3_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-32_v2.3_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-32_v2.3_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 240,
+      "lane_stop": 248
+    },
+    "config": "flat_force-32_v2.3_seed101.json"
+  },
+  {
+    "case": "flat_force-32_v2.3_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-32_v2.3_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-32_v2.3_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-32_v2.3_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 248,
+      "lane_stop": 256
+    },
+    "config": "flat_force-32_v2.3_seed102.json"
+  },
+  {
+    "case": "flat_force-32_v2.3_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-32_v2.3_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-32_v2.3_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-32_v2.3_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 256,
+      "lane_stop": 264
+    },
+    "config": "flat_force-32_v2.3_seed103.json"
+  },
+  {
+    "case": "flat_force-32_v2.6_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-32_v2.6_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-32_v2.6_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-32_v2.6_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 264,
+      "lane_stop": 272
+    },
+    "config": "flat_force-32_v2.6_seed101.json"
+  },
+  {
+    "case": "flat_force-32_v2.6_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-32_v2.6_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-32_v2.6_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-32_v2.6_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 272,
+      "lane_stop": 280
+    },
+    "config": "flat_force-32_v2.6_seed102.json"
+  },
+  {
+    "case": "flat_force-32_v2.6_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-32_v2.6_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-32_v2.6_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force-32_v2.6_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 280,
+      "lane_stop": 288
+    },
+    "config": "flat_force-32_v2.6_seed103.json"
+  },
+  {
+    "case": "flat_force+32_v2.3_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+32_v2.3_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+32_v2.3_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+32_v2.3_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 288,
+      "lane_stop": 296
+    },
+    "config": "flat_force+32_v2.3_seed101.json"
+  },
+  {
+    "case": "flat_force+32_v2.3_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+32_v2.3_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+32_v2.3_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+32_v2.3_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 296,
+      "lane_stop": 304
+    },
+    "config": "flat_force+32_v2.3_seed102.json"
+  },
+  {
+    "case": "flat_force+32_v2.3_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+32_v2.3_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+32_v2.3_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+32_v2.3_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 304,
+      "lane_stop": 312
+    },
+    "config": "flat_force+32_v2.3_seed103.json"
+  },
+  {
+    "case": "flat_force+32_v2.6_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+32_v2.6_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+32_v2.6_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+32_v2.6_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 312,
+      "lane_stop": 320
+    },
+    "config": "flat_force+32_v2.6_seed101.json"
+  },
+  {
+    "case": "flat_force+32_v2.6_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+32_v2.6_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+32_v2.6_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+32_v2.6_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 320,
+      "lane_stop": 328
+    },
+    "config": "flat_force+32_v2.6_seed102.json"
+  },
+  {
+    "case": "flat_force+32_v2.6_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+32_v2.6_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+32_v2.6_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/flat_force+32_v2.6_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 328,
+      "lane_stop": 336
+    },
+    "config": "flat_force+32_v2.6_seed103.json"
+  },
+  {
+    "case": "dense10_force+0_v2.3_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+0_v2.3_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+0_v2.3_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+0_v2.3_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 336,
+      "lane_stop": 344
+    },
+    "config": "dense10_force+0_v2.3_seed101.json"
+  },
+  {
+    "case": "dense10_force+0_v2.3_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+0_v2.3_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+0_v2.3_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+0_v2.3_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 344,
+      "lane_stop": 352
+    },
+    "config": "dense10_force+0_v2.3_seed102.json"
+  },
+  {
+    "case": "dense10_force+0_v2.3_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+0_v2.3_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+0_v2.3_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+0_v2.3_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 352,
+      "lane_stop": 360
+    },
+    "config": "dense10_force+0_v2.3_seed103.json"
+  },
+  {
+    "case": "dense10_force+0_v2.6_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+0_v2.6_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+0_v2.6_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+0_v2.6_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 360,
+      "lane_stop": 368
+    },
+    "config": "dense10_force+0_v2.6_seed101.json"
+  },
+  {
+    "case": "dense10_force+0_v2.6_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+0_v2.6_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+0_v2.6_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+0_v2.6_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 368,
+      "lane_stop": 376
+    },
+    "config": "dense10_force+0_v2.6_seed102.json"
+  },
+  {
+    "case": "dense10_force+0_v2.6_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+0_v2.6_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+0_v2.6_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+0_v2.6_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 376,
+      "lane_stop": 384
+    },
+    "config": "dense10_force+0_v2.6_seed103.json"
+  },
+  {
+    "case": "dense10_force-8_v2.3_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-8_v2.3_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-8_v2.3_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-8_v2.3_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 384,
+      "lane_stop": 392
+    },
+    "config": "dense10_force-8_v2.3_seed101.json"
+  },
+  {
+    "case": "dense10_force-8_v2.3_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-8_v2.3_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-8_v2.3_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-8_v2.3_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 392,
+      "lane_stop": 400
+    },
+    "config": "dense10_force-8_v2.3_seed102.json"
+  },
+  {
+    "case": "dense10_force-8_v2.3_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-8_v2.3_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-8_v2.3_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-8_v2.3_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 400,
+      "lane_stop": 408
+    },
+    "config": "dense10_force-8_v2.3_seed103.json"
+  },
+  {
+    "case": "dense10_force-8_v2.6_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-8_v2.6_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-8_v2.6_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-8_v2.6_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 408,
+      "lane_stop": 416
+    },
+    "config": "dense10_force-8_v2.6_seed101.json"
+  },
+  {
+    "case": "dense10_force-8_v2.6_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-8_v2.6_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-8_v2.6_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-8_v2.6_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 416,
+      "lane_stop": 424
+    },
+    "config": "dense10_force-8_v2.6_seed102.json"
+  },
+  {
+    "case": "dense10_force-8_v2.6_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-8_v2.6_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-8_v2.6_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-8_v2.6_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 424,
+      "lane_stop": 432
+    },
+    "config": "dense10_force-8_v2.6_seed103.json"
+  },
+  {
+    "case": "dense10_force+8_v2.3_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+8_v2.3_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+8_v2.3_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+8_v2.3_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 432,
+      "lane_stop": 440
+    },
+    "config": "dense10_force+8_v2.3_seed101.json"
+  },
+  {
+    "case": "dense10_force+8_v2.3_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+8_v2.3_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+8_v2.3_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+8_v2.3_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 440,
+      "lane_stop": 448
+    },
+    "config": "dense10_force+8_v2.3_seed102.json"
+  },
+  {
+    "case": "dense10_force+8_v2.3_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+8_v2.3_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+8_v2.3_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+8_v2.3_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 448,
+      "lane_stop": 456
+    },
+    "config": "dense10_force+8_v2.3_seed103.json"
+  },
+  {
+    "case": "dense10_force+8_v2.6_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+8_v2.6_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+8_v2.6_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+8_v2.6_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 456,
+      "lane_stop": 464
+    },
+    "config": "dense10_force+8_v2.6_seed101.json"
+  },
+  {
+    "case": "dense10_force+8_v2.6_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+8_v2.6_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+8_v2.6_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+8_v2.6_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 464,
+      "lane_stop": 472
+    },
+    "config": "dense10_force+8_v2.6_seed102.json"
+  },
+  {
+    "case": "dense10_force+8_v2.6_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+8_v2.6_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+8_v2.6_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+8_v2.6_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 472,
+      "lane_stop": 480
+    },
+    "config": "dense10_force+8_v2.6_seed103.json"
+  },
+  {
+    "case": "dense10_force-16_v2.3_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-16_v2.3_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-16_v2.3_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-16_v2.3_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 480,
+      "lane_stop": 488
+    },
+    "config": "dense10_force-16_v2.3_seed101.json"
+  },
+  {
+    "case": "dense10_force-16_v2.3_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-16_v2.3_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-16_v2.3_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-16_v2.3_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 488,
+      "lane_stop": 496
+    },
+    "config": "dense10_force-16_v2.3_seed102.json"
+  },
+  {
+    "case": "dense10_force-16_v2.3_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-16_v2.3_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-16_v2.3_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-16_v2.3_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 496,
+      "lane_stop": 504
+    },
+    "config": "dense10_force-16_v2.3_seed103.json"
+  },
+  {
+    "case": "dense10_force-16_v2.6_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-16_v2.6_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-16_v2.6_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-16_v2.6_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 504,
+      "lane_stop": 512
+    },
+    "config": "dense10_force-16_v2.6_seed101.json"
+  },
+  {
+    "case": "dense10_force-16_v2.6_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-16_v2.6_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-16_v2.6_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-16_v2.6_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 512,
+      "lane_stop": 520
+    },
+    "config": "dense10_force-16_v2.6_seed102.json"
+  },
+  {
+    "case": "dense10_force-16_v2.6_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-16_v2.6_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-16_v2.6_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-16_v2.6_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 520,
+      "lane_stop": 528
+    },
+    "config": "dense10_force-16_v2.6_seed103.json"
+  },
+  {
+    "case": "dense10_force+16_v2.3_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+16_v2.3_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+16_v2.3_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+16_v2.3_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 528,
+      "lane_stop": 536
+    },
+    "config": "dense10_force+16_v2.3_seed101.json"
+  },
+  {
+    "case": "dense10_force+16_v2.3_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+16_v2.3_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+16_v2.3_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+16_v2.3_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 536,
+      "lane_stop": 544
+    },
+    "config": "dense10_force+16_v2.3_seed102.json"
+  },
+  {
+    "case": "dense10_force+16_v2.3_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+16_v2.3_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+16_v2.3_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+16_v2.3_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 544,
+      "lane_stop": 552
+    },
+    "config": "dense10_force+16_v2.3_seed103.json"
+  },
+  {
+    "case": "dense10_force+16_v2.6_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+16_v2.6_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+16_v2.6_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+16_v2.6_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 552,
+      "lane_stop": 560
+    },
+    "config": "dense10_force+16_v2.6_seed101.json"
+  },
+  {
+    "case": "dense10_force+16_v2.6_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+16_v2.6_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+16_v2.6_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+16_v2.6_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 560,
+      "lane_stop": 568
+    },
+    "config": "dense10_force+16_v2.6_seed102.json"
+  },
+  {
+    "case": "dense10_force+16_v2.6_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+16_v2.6_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+16_v2.6_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+16_v2.6_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 568,
+      "lane_stop": 576
+    },
+    "config": "dense10_force+16_v2.6_seed103.json"
+  },
+  {
+    "case": "dense10_force-32_v2.3_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-32_v2.3_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-32_v2.3_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-32_v2.3_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 576,
+      "lane_stop": 584
+    },
+    "config": "dense10_force-32_v2.3_seed101.json"
+  },
+  {
+    "case": "dense10_force-32_v2.3_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-32_v2.3_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-32_v2.3_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-32_v2.3_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 584,
+      "lane_stop": 592
+    },
+    "config": "dense10_force-32_v2.3_seed102.json"
+  },
+  {
+    "case": "dense10_force-32_v2.3_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-32_v2.3_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-32_v2.3_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-32_v2.3_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 592,
+      "lane_stop": 600
+    },
+    "config": "dense10_force-32_v2.3_seed103.json"
+  },
+  {
+    "case": "dense10_force-32_v2.6_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-32_v2.6_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-32_v2.6_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-32_v2.6_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 600,
+      "lane_stop": 608
+    },
+    "config": "dense10_force-32_v2.6_seed101.json"
+  },
+  {
+    "case": "dense10_force-32_v2.6_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-32_v2.6_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-32_v2.6_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-32_v2.6_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 608,
+      "lane_stop": 616
+    },
+    "config": "dense10_force-32_v2.6_seed102.json"
+  },
+  {
+    "case": "dense10_force-32_v2.6_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-32_v2.6_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-32_v2.6_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force-32_v2.6_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 616,
+      "lane_stop": 624
+    },
+    "config": "dense10_force-32_v2.6_seed103.json"
+  },
+  {
+    "case": "dense10_force+32_v2.3_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+32_v2.3_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+32_v2.3_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+32_v2.3_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 624,
+      "lane_stop": 632
+    },
+    "config": "dense10_force+32_v2.3_seed101.json"
+  },
+  {
+    "case": "dense10_force+32_v2.3_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+32_v2.3_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+32_v2.3_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+32_v2.3_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 632,
+      "lane_stop": 640
+    },
+    "config": "dense10_force+32_v2.3_seed102.json"
+  },
+  {
+    "case": "dense10_force+32_v2.3_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+32_v2.3_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+32_v2.3_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+32_v2.3_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 640,
+      "lane_stop": 648
+    },
+    "config": "dense10_force+32_v2.3_seed103.json"
+  },
+  {
+    "case": "dense10_force+32_v2.6_seed101",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+32_v2.6_seed101",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+32_v2.6_seed101/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+32_v2.6_seed101/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 648,
+      "lane_stop": 656
+    },
+    "config": "dense10_force+32_v2.6_seed101.json"
+  },
+  {
+    "case": "dense10_force+32_v2.6_seed102",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+32_v2.6_seed102",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+32_v2.6_seed102/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+32_v2.6_seed102/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 656,
+      "lane_stop": 664
+    },
+    "config": "dense10_force+32_v2.6_seed102.json"
+  },
+  {
+    "case": "dense10_force+32_v2.6_seed103",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+32_v2.6_seed103",
+    "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+32_v2.6_seed103/trajectory.npz",
+    "applied_force": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/dense10_force+32_v2.6_seed103/applied_pulse.npz",
+    "identity": {
+      "source_actor": {
+        "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+        "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+        "artifact": "actor.npz",
+        "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "conversion": "exact arrays, no optimization or architecture change"
+      },
+      "route_name": "left90_R2",
+      "world_anchor": [
+        7.8955950737,
+        -0.000246021285,
+        -6.4409869e-05
+      ],
+      "frame_scales": [
+        0.3,
+        1.5,
+        0.35,
+        3.0,
+        3.0,
+        2.0,
+        3.0,
+        3.0,
+        3.0,
+        0.35,
+        0.8,
+        0.45,
+        3.0,
+        0.35,
+        3.0,
+        60.0,
+        1.5,
+        10.0,
+        0.3,
+        0.3
+      ],
+      "files": {
+        "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+      }
+    },
+    "code_revision": "a6bfc8fcb7bd21d7fac7c8bb27043af29983922b",
+    "batch_source": {
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan/batches/batch_000",
+      "lane_start": 664,
+      "lane_stop": 672
+    },
+    "config": "dense10_force+32_v2.6_seed103.json"
+  }
+]
