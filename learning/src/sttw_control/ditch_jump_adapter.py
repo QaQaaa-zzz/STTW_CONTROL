@@ -149,11 +149,15 @@ class DitchJumpAdapter:
                                  width=spec['width_m'],hold_s=1.,
                                  approach_distance=self.near_lip-1.5,rough_support=(mode=='rough'),
                                  landing_focus=env.cfg.get('ditch_landing_focus',False))
+        self.observed_support = torch.zeros(env.num_envs,device=env.device,dtype=torch.bool)
+        self.observed_flight = self.observed_support.clone()
         self.record_diagnostics = env.cfg.get('record_verified_diagnostics',False)
         self.diagnostics = []
 
     def reset(self, ids):
         self.scorer.reset(ids)
+        self.observed_support[ids]=False
+        self.observed_flight[ids]=False
         if self.record_diagnostics:
             self.diagnostics = []
 
@@ -175,6 +179,8 @@ class DitchJumpAdapter:
                   torch.isfinite(action).all(1))
         loaded = force.norm(dim=-1)>1.
         near, target = (torch.stack(q,dim=1)&(force[:,:,2]>1.) for q in zip(*material))
+        self.observed_support |= near.any(-1)
+        self.observed_flight |= ~loaded.any(-1) & (self.bounds.clearance(wheels)>.015).all(-1)
         roll, pitch = critic[:,99], critic[:,100]
         # Privileged qvel[3:6] contains angular velocity in the virtual,
         # upright body frame. Euler rates retain the correct sign when yawed.

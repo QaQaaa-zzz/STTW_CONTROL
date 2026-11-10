@@ -1,0 +1,56 @@
+[
+  {
+    "model": "initial",
+    "root_identical": true,
+    "duration": 1.76,
+    "peak_root_z": 0.5097765326499939,
+    "old_reward": -100.0,
+    "new_reward": -55.00000762939453,
+    "new_stage": 2,
+    "max_patch_count": [
+      [
+        206,
+        210
+      ]
+    ],
+    "near_support": true,
+    "physical_flight_steps": 450,
+    "success": false
+  },
+  {
+    "model": "mid50",
+    "root_identical": true,
+    "duration": 1.6,
+    "peak_root_z": 0.5118977427482605,
+    "old_reward": -100.0,
+    "new_reward": -65.0,
+    "new_stage": 2,
+    "max_patch_count": [
+      [
+        208,
+        205
+      ]
+    ],
+    "near_support": true,
+    "physical_flight_steps": 371,
+    "success": false
+  },
+  {
+    "model": "last125",
+    "root_identical": true,
+    "duration": 8.0,
+    "peak_root_z": 0.14789646863937378,
+    "old_reward": -95.0,
+    "new_reward": -95.0,
+    "new_stage": 0,
+    "max_patch_count": [
+      [
+        205,
+        216
+      ]
+    ],
+    "near_support": true,
+    "physical_flight_steps": 526,
+    "success": false
+  }
+]

@@ -269,6 +269,11 @@ class PhaseUEnv:
         if len(ids):
             info['episode']=dict(reward=self.episode_return[ids].mean(),length=self.episode_length_buf[ids].float().mean(),apex_fraction=self.events['apex_seen'][ids].float().mean(),physical_failure=terminal['physical_failure'][ids].float().mean())
             if self.landing_reward:info['episode']['ditch_cross_hold_fraction' if self.ditch else 'platform_hold_fraction']=self.platform_held[ids].float().mean()
+            if verified:
+                info['episode']['verified_near_support_fraction']=self.verified_jump.observed_support[ids].float().mean()
+                info['episode']['physical_flight_fraction']=self.verified_jump.observed_flight[ids].float().mean()
+                for stage in (1,2,3,4):
+                    info['episode'][f'verified_stage{stage}_fraction']=(jump_stage[ids]>=stage).float().mean()
             self.reset_idx(ids)
         self.total_physics_steps+=self.physics_substeps*self.num_envs
         return self.obs_buf,self.privileged_obs_buf,reward*self.task['ppo']['reward_scaling'],done,info

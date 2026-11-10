@@ -29,6 +29,12 @@ class RecordedRunner(module.OnPolicyRunner):
     def log(self,locs,width=80,pad=35):
         super().log(locs,width,pad)
         self.writer.add_scalar('Policy/latent_action_std',self.alg.actor_critic.action_std.mean().item(),locs['it'])
+        if self.env.verified_jump is not None:
+            support=float(self.env.verified_jump.observed_support.float().mean())
+            self.writer.add_scalar('Diagnostics/verified_support_seen_fraction',support,locs['it'])
+            status['verified_support_seen_fraction']=support
+            if locs['it']==0 and support<cfg.get('minimum_initial_support_fraction',0.):
+                raise RuntimeError('Initial terrain contact coverage below configured minimum; stopping before further training')
         status.update(stage='training',completed_updates=locs['it']+1,stage_completed_updates=locs['it']+1-status.get('start_update',0),sample_seconds=locs['collection_time'],optimize_seconds=locs['learn_time'],elapsed_s=time.time()-start)
         (a.output/'status.json').write_text(json.dumps(status,indent=2))
 env=PhaseUEnv(cfg,a.output)

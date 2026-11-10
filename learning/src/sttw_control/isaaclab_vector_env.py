@@ -162,8 +162,11 @@ class IsaacLabVectorPlant:
         self.sensor=ContactSensor(ContactSensorCfg(prim_path='/World/Envs/Env_.*/Robot/.*',update_period=0.,history_length=1))
         self.wheel_sensors=[]
         if track_wheel_contacts or track_contact_wrench:
-            terrain_filter='/World/Envs/Env_.*/Terrain_.*' if replicated_terrain else '/World/Terrain_.*'
-            filters=plane_paths+([terrain_filter] if terrain_sources else [])
+            # PhysX filter columns must name each terrain shape explicitly. A wildcard
+            # column can bind only the first tile and silently miss reset-selected maps.
+            terrain_filters=([f'/World/Envs/Env_.*/Terrain_{i}' for i in range(len(terrain_paths))]
+                             if replicated_terrain else ['/World/Terrain_.*'])
+            filters=plane_paths+(terrain_filters if terrain_sources else [])
             self.wheel_sensors=[ContactSensor(ContactSensorCfg(prim_path=f'/World/Envs/Env_.*/Robot/{wheel}',filter_prim_paths_expr=filters,track_contact_points=not wheel_raw_contacts_only,track_friction_forces=track_contact_wrench,max_contact_data_count_per_prim=(wheel_contact_buffer_capacity or wheel_patch_capacity),update_period=0.)) for wheel in ('frontwheel','rearwheel')]
         self.sim.reset();self.robot.update(self.physics_dt);self.sensor.update(self.physics_dt,force_recompute=True)
         for sensor in self.wheel_sensors:sensor.update(self.physics_dt,force_recompute=True)
