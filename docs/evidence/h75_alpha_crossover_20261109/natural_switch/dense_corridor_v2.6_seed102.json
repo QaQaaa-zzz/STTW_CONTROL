@@ -1,0 +1,161 @@
+{
+  "asset": "runs/isaac_urdf_drive/vehicle.urdf",
+  "controller_config": "runs/isaac_signals_parity/dynamic.json",
+  "lower_actor": "runs/local300_torch_portable_parity/actor.npz",
+  "lower_sha256": "517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125",
+  "plant_options": {
+    "wheel_collision": "sdf",
+    "friction_offset_threshold": 0.0,
+    "compliant_wheels": {
+      "frontwheel": {
+        "stiffness": 5324.4083452801915,
+        "damping": 112.38579318769304
+      },
+      "rearwheel": {
+        "stiffness": 7833.38122453075,
+        "damping": 173.11038721684574
+      }
+    },
+    "env_spacing": 3.0,
+    "track_wheel_contacts": false,
+    "track_contact_wrench": true,
+    "max_contact_data_count_per_prim": 128,
+    "raw_contact_only": true
+  },
+  "initial_state": "runs/h75_selected_local300_flat/initial_state.npz",
+  "selected_lower": "learning/configs/isaaclab_selected_lower.json",
+  "role": "Fixed-parameter paired mechanism DEV; original H75+Local300; no training",
+  "evaluation_role": "Fixed-parameter paired mechanism DEV; original H75+Local300; no training",
+  "num_envs": 11,
+  "alphas": [
+    0.0,
+    0.0,
+    0.0,
+    0.5,
+    0.5,
+    0.5,
+    1.0,
+    1.0,
+    1.0,
+    0.5,
+    0.5
+  ],
+  "zero_middle": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    true
+  ],
+  "case_labels": [
+    "0_to_0",
+    "0_to_0.5",
+    "0_to_1",
+    "0.5_to_0",
+    "0.5_to_0.5",
+    "0.5_to_1",
+    "1_to_0",
+    "1_to_0.5",
+    "1_to_1",
+    "fixed05_duplicate",
+    "Zero_from_start"
+  ],
+  "auto_reset_horizon": false,
+  "user_speed_m_s": 2.6,
+  "seed": 102,
+  "trace_lanes": 11,
+  "physics_contact_recording": {
+    "chunk_steps": 250,
+    "record_window_s": [
+      0.8,
+      10.0
+    ]
+  },
+  "episode_s": 10.0,
+  "record_control_commands": true,
+  "record_body_poses": true,
+  "record_controller_terms": true,
+  "randomization": {
+    "base_body": "chasis",
+    "friction_range": [
+      0.7659991145004303,
+      0.7659991145004303
+    ],
+    "mass_scale": [
+      1.003437740593609,
+      1.003437740593609
+    ],
+    "base_com_m": [
+      0,
+      0
+    ],
+    "latency_s": [
+      0.0,
+      0.0
+    ],
+    "servo_gain_scale": [
+      0.9918904094704118,
+      0.9918904094704118
+    ],
+    "steer_zero_offset_rad": [
+      0.0007395980861852084,
+      0.0007395980861852084
+    ],
+    "measurement_noise": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "push_interval_s": 1000000000,
+    "push_velocity_range": {
+      "x": [
+        0,
+        0
+      ],
+      "y": [
+        0,
+        0
+      ]
+    }
+  },
+  "alpha_switch": {
+    "target_alpha": [
+      0.0,
+      0.5,
+      1.0,
+      0.0,
+      0.5,
+      1.0,
+      0.0,
+      0.5,
+      1.0,
+      0.5,
+      0.5
+    ],
+    "execution_modes": [
+      "independent",
+      "independent",
+      "independent",
+      "independent",
+      "independent",
+      "independent",
+      "independent",
+      "independent",
+      "independent",
+      "independent",
+      "independent"
+    ],
+    "progress_s_m": 2.5,
+    "progress_frame": "original_route"
+  }
+}

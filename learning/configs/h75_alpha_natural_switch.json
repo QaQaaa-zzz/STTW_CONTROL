@@ -1,0 +1,89 @@
+{
+  "experiment_id": "H75_ALPHA_NATURAL_SWITCH",
+  "title": "\u5171\u540c\u8d77\u70b9\u65e0\u5feb\u7167\u6062\u590d\uff1a\u5206\u6bb5alpha\u786e\u8ba4",
+  "evaluation_role": "Fixed-parameter paired mechanism DEV; original H75+Local300; no training",
+  "case_labels": [
+    "0_to_0",
+    "0_to_0.5",
+    "0_to_1",
+    "0.5_to_0",
+    "0.5_to_0.5",
+    "0.5_to_1",
+    "1_to_0",
+    "1_to_0.5",
+    "1_to_1",
+    "fixed05_duplicate",
+    "Zero_from_start"
+  ],
+  "track_wheel_contacts": false,
+  "execution_modes": [
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent"
+  ],
+  "prefix_alphas": [
+    0,
+    0.5,
+    1
+  ],
+  "target_alphas": [
+    0,
+    0.5,
+    1
+  ],
+  "seeds": [
+    101,
+    102,
+    103
+  ],
+  "terrains": [
+    "dense_corridor",
+    "single_10cm"
+  ],
+  "speeds": [
+    2.3,
+    2.6
+  ],
+  "scenes": 12,
+  "lanes": 132,
+  "episode_s": 10,
+  "max_physics_lane_steps": 6600000,
+  "optimizer_updates": 0,
+  "data_role": "familiar-layout mechanism DEV",
+  "interpretation": "Full 3x3 alpha0/.5/1 schedules from same start; each lane switches at original progress2.5m without restore. Fixed05 duplicate and Zero from start are additional controls.",
+  "stop_rule": "12 declared contexts or runtime error; retain native terminations; no extra training/retry",
+  "code_revision": "ae351d9c20ab3cc313e3015b9e6d9bc88eb44a10",
+  "initialization": "frozen H75+Local300; existing saved initial_state",
+  "primary_outcomes": [
+    "termination cause",
+    "full 10s observation",
+    "original goal arrival and final hold",
+    "path and speed errors",
+    "roll peak",
+    "contact impulses",
+    "steering rate and torque occupation"
+  ],
+  "tasks": {
+    "A": {
+      "W_m": 0.3,
+      "speed_rmse_m_s": 0.2
+    },
+    "B": {
+      "W_m": 0.6,
+      "speed_rmse_m_s": 0.1
+    },
+    "C": {
+      "W_m": 0.4,
+      "speed_rmse_m_s": 0.15
+    }
+  },
+  "natural_switch": true
+}
