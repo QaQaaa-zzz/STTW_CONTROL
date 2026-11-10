@@ -1,0 +1,42 @@
+[
+  {
+    "case": "left",
+    "entry_yaw_deg": -33.223452753488914,
+    "entry_world_vy_m_s": -1.0970981121063232,
+    "handoff_time_s": null,
+    "first_goal_entry_s": null,
+    "goal_completed": false,
+    "corridor_until_arrival": null,
+    "physical_failure_before_end_or_arrival": true,
+    "first_corridor_exit_s": 2.05,
+    "max_centerline_distance_m": 1.3509421868799731,
+    "actual_bend_max_abs_y_m": 1.411928653717041,
+    "end_code": 3,
+    "duration_s": 5.64,
+    "final_xyz": [
+      11.367049217224121,
+      -1.0115563869476318,
+      0.10818000882863998
+    ]
+  },
+  {
+    "case": "right",
+    "entry_yaw_deg": 13.018076320533472,
+    "entry_world_vy_m_s": 0.4013919234275818,
+    "handoff_time_s": null,
+    "first_goal_entry_s": null,
+    "goal_completed": false,
+    "corridor_until_arrival": null,
+    "physical_failure_before_end_or_arrival": true,
+    "first_corridor_exit_s": null,
+    "max_centerline_distance_m": 0.5720860362052917,
+    "actual_bend_max_abs_y_m": 0.6968429684638977,
+    "end_code": 12,
+    "duration_s": 4.62,
+    "final_xyz": [
+      10.309028625488281,
+      0.5710777640342712,
+      0.08318916708230972
+    ]
+  }
+]

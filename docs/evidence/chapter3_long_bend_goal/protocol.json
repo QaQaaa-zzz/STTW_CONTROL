@@ -1,0 +1,20 @@
+{
+  "cases": [
+    "left",
+    "right"
+  ],
+  "budget": "2x10s single-lane Isaac, 0training, expected under5min on idle GPU",
+  "role": "nominal DEV, common reset x1.5/vx2, fixed source skill and first_far_contact handoff",
+  "geometry": "fixed left/right +/-0.8m offset-return reference over6m fromx1.5..7.5; triggerx9;30cm gap10.3..10.6;roughness0.5..1mm x2..7 and12..22",
+  "goal": {
+    "x_min_m": 16.5,
+    "x_max_m": 18.5,
+    "abs_y_max_m": 0.5,
+    "min_vx_m_s": 0.5
+  },
+  "road_half_width_m": 0.6,
+  "acceptance": "Offline predeclared first entry into common goal after handoff, no physical failure or corridor exit up to arrival; shortest distance to fixed route centerline defines corridor. Continue to10s for diagnosis, separate post-goal failures. No hold requirement.",
+  "bend_evidence": "Report measured maximum lateral excursion and reference error; do not label nominal reference as executed bend.",
+  "resource_note": "Own flock wait cancelled before start; authorized single-lane light evaluation alongside another batch. Two episodes serial.",
+  "goal_sampling": "Solved physics root states at2.5ms; crossing and all prefix corridor distances evaluated offline."
+}
