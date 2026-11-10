@@ -1,0 +1,97 @@
+{
+  "experiment_id": "H75_CHANNEL_SCAN",
+  "title": "五档alpha：共同起点速度/转向通道消融",
+  "evaluation_role": "Fixed-parameter paired mechanism DEV; original H75+Local300; no training",
+  "case_labels": [
+    "full_0",
+    "speed_only_0",
+    "steer_only_0",
+    "full_0.25",
+    "speed_only_0.25",
+    "steer_only_0.25",
+    "full_0.5",
+    "speed_only_0.5",
+    "steer_only_0.5",
+    "full_0.75",
+    "speed_only_0.75",
+    "steer_only_0.75",
+    "full_1",
+    "speed_only_1",
+    "steer_only_1",
+    "Zero",
+    "full_0.5_duplicate",
+    "full_1_duplicate"
+  ],
+  "track_wheel_contacts": false,
+  "seeds": [
+    101,
+    102,
+    103
+  ],
+  "terrains": [
+    "dense10",
+    "single10"
+  ],
+  "speeds": [
+    2.3,
+    2.6
+  ],
+  "scenes": 12,
+  "lanes": 216,
+  "episode_s": 10,
+  "max_physics_lane_steps": 10800000,
+  "optimizer_updates": 0,
+  "data_role": "DEV",
+  "interpretation": "Full-episode channel ablation DEV, not a same-entry-state intervention",
+  "stop_rule": "12 contexts or engineering error; no replacement failures or extra training",
+  "code_revision": "0196fd44236bc663a8d0182b465ef9f164612e2a",
+  "initialization": "Original H75+Local300 and same frozen complete initial state; no mid-run restore",
+  "primary_outcomes": [
+    "termination cause",
+    "full 10s observation",
+    "original goal arrival and final hold",
+    "path and speed errors",
+    "roll peak",
+    "contact impulses",
+    "steering rate and torque occupation"
+  ],
+  "tasks": {
+    "A": {
+      "W_m": 0.3,
+      "speed_rmse_m_s": 0.2
+    },
+    "B": {
+      "W_m": 0.6,
+      "speed_rmse_m_s": 0.1
+    },
+    "C": {
+      "W_m": 0.4,
+      "speed_rmse_m_s": 0.15
+    }
+  },
+  "configured_lanes": true,
+  "duplicate_pairs": [
+    [
+      "full_0.5",
+      "full_0.5_duplicate"
+    ],
+    [
+      "full_1",
+      "full_1_duplicate"
+    ]
+  ],
+  "heights_mm": [
+    0,
+    5,
+    10,
+    20
+  ],
+  "primary_change": "Zero speed or steering reference correction from start; five alphas",
+  "fixed_alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ]
+}

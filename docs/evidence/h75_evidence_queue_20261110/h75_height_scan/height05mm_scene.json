@@ -1,0 +1,27 @@
+{
+  "route": "runs/h75_selected_local300_flat/bundle/route.npz",
+  "density_per_m2": 24,
+  "radius_range_m": [
+    0.055,
+    0.08
+  ],
+  "s_range_m": [
+    3.0,
+    7.0
+  ],
+  "half_width_m": 0.8,
+  "blend_length_m": 0.3,
+  "seed": 20261107,
+  "vertical_scale_m": 0.001,
+  "bounds_m": [
+    -2,
+    24
+  ],
+  "name": "height05mm",
+  "height_m": 0.005,
+  "horizontal_scale_m": 0.005,
+  "reference_layout_csv": "runs/h75_dense_corridor_ridge10/compressed_layout.csv",
+  "center_lateral_compression": 0.25,
+  "actual_center_half_width_m": 0.2,
+  "role": "Matched dense corridor height scan; original centers and radii fixed; zero height is flat mesh control"
+}

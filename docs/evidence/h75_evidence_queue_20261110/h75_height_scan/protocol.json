@@ -1,0 +1,89 @@
+{
+  "experiment_id": "H75_HEIGHT_SCAN",
+  "title": "五档alpha与Zero：同布局石子高度扫描",
+  "evaluation_role": "Fixed-parameter paired mechanism DEV; original H75+Local300; no training",
+  "case_labels": [
+    "fixed0",
+    "fixed0.25",
+    "fixed0.5",
+    "fixed0.75",
+    "fixed1",
+    "Zero",
+    "fixed0.5_duplicate",
+    "fixed1_duplicate"
+  ],
+  "track_wheel_contacts": false,
+  "seeds": [
+    101,
+    102,
+    103
+  ],
+  "terrains": [
+    "height00mm",
+    "height05mm",
+    "height10mm",
+    "height20mm"
+  ],
+  "speeds": [
+    2.3,
+    2.6
+  ],
+  "scenes": 24,
+  "lanes": 192,
+  "episode_s": 10,
+  "max_physics_lane_steps": 9600000,
+  "optimizer_updates": 0,
+  "data_role": "DEV",
+  "interpretation": "Fixed alpha height-response DEV; duplicates measure lane sensitivity, not independent samples",
+  "stop_rule": "24 contexts or engineering error; no replacement failures or extra training",
+  "code_revision": "0196fd44236bc663a8d0182b465ef9f164612e2a",
+  "initialization": "Original H75+Local300 and same frozen complete initial state; no mid-run restore",
+  "primary_outcomes": [
+    "termination cause",
+    "full 10s observation",
+    "original goal arrival and final hold",
+    "path and speed errors",
+    "roll peak",
+    "contact impulses",
+    "steering rate and torque occupation"
+  ],
+  "tasks": {
+    "A": {
+      "W_m": 0.3,
+      "speed_rmse_m_s": 0.2
+    },
+    "B": {
+      "W_m": 0.6,
+      "speed_rmse_m_s": 0.1
+    },
+    "C": {
+      "W_m": 0.4,
+      "speed_rmse_m_s": 0.15
+    }
+  },
+  "configured_lanes": true,
+  "duplicate_pairs": [
+    [
+      "fixed0.5",
+      "fixed0.5_duplicate"
+    ],
+    [
+      "fixed1",
+      "fixed1_duplicate"
+    ]
+  ],
+  "heights_mm": [
+    0,
+    5,
+    10,
+    20
+  ],
+  "primary_change": "height only at fixed centers/radii/grid; fixed alpha from common start; no external push",
+  "fixed_alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ]
+}

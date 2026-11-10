@@ -51,6 +51,15 @@ if s.get('fixed_randomization_groups'):
     apply_fixed_evaluation_groups(env,s['fixed_randomization_groups'])
 if intervention:env.policy.channel_intervention_mode=intervention.get('channel_mode',intervention.get('kind','hold'))
 if s.get('record_controller_terms'):env.controller.config['record_terms']=True
+if s.get('zero_reference_channels'):
+    mask=torch.tensor(s['zero_reference_channels'],device=env.device,dtype=torch.bool)
+    if mask.shape!=(env.n,2):raise ValueError('zero_reference_channels must be n by 2, speed then steer')
+    env.policy.hold_channels.copy_(mask);env.policy.channel_intervention_mode='zero'
+pulse=None
+if s.get('evaluation_pulse'):
+    from sttw_control.evaluation_pulse import EvaluationPulse
+    pulse=EvaluationPulse(env,s['evaluation_pulse']);env.training_pulse=pulse
+
 contract=dict(backend=a.backend,settings=s,bundle=str(a.bundle.resolve()),identity=identity,terrain=env.plant.terrain_identity,bodies=env.plant.bodies,origin=env.plant.origin.cpu().tolist(),role=s.get('evaluation_role','fixed preference DEV; Zero is frozen LOCAL300 plus ECBC/ESO, no H75 correction'),physics_dt=env.physics_dt,lower_dt=.005,policy_dt=.02)
 if lower is not None:
     contract['lower_identity']=lower.identity
@@ -117,6 +126,7 @@ for step in range(env.horizon):
     if (step+1)%50==0:print(json.dumps(dict(step=step+1,alive=int(env.alive.sum()),seconds=time.time()-started)),flush=True)
     if intervention and fork_step is not None and intervention.get('post_fork_seconds') is not None and (step+1-fork_step)*.02>=intervention['post_fork_seconds']:break
 if env.physics_recorder is not None:env.physics_recorder.close()
+if pulse is not None:pulse.save(a.output)
 if rows:
     row_chunks.append(transfer(rows));detail_chunks.append(transfer(detail))
 arrays={key:np.concatenate([chunk[key] for chunk in chunks]) for chunks in (row_chunks,detail_chunks) for key in chunks[0]}

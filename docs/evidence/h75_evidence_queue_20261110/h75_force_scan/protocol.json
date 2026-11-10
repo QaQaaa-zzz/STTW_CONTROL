@@ -1,0 +1,108 @@
+{
+  "experiment_id": "H75_FORCE_SCAN",
+  "title": "五档alpha：平地/石子正负侧推扫描",
+  "evaluation_role": "Fixed-parameter paired mechanism DEV; original H75+Local300; no training",
+  "case_labels": [
+    "fixed0",
+    "fixed0.25",
+    "fixed0.5",
+    "fixed0.75",
+    "fixed1",
+    "Zero",
+    "fixed0.5_duplicate",
+    "fixed1_duplicate"
+  ],
+  "track_wheel_contacts": false,
+  "seeds": [
+    101,
+    102,
+    103
+  ],
+  "terrains": [
+    "flat_force+0",
+    "flat_force-8",
+    "flat_force+8",
+    "flat_force-16",
+    "flat_force+16",
+    "flat_force-32",
+    "flat_force+32",
+    "dense10_force+0",
+    "dense10_force-8",
+    "dense10_force+8",
+    "dense10_force-16",
+    "dense10_force+16",
+    "dense10_force-32",
+    "dense10_force+32"
+  ],
+  "speeds": [
+    2.3,
+    2.6
+  ],
+  "scenes": 84,
+  "lanes": 672,
+  "episode_s": 10,
+  "max_physics_lane_steps": 33600000,
+  "optimizer_updates": 0,
+  "data_role": "DEV",
+  "interpretation": "Common-start force tolerance DEV; record actual impulse and early failures",
+  "stop_rule": "84 contexts or engineering error; no replacement failures or extra training",
+  "code_revision": "0196fd44236bc663a8d0182b465ef9f164612e2a",
+  "initialization": "Original H75+Local300 and same frozen complete initial state; no mid-run restore",
+  "primary_outcomes": [
+    "termination cause",
+    "full 10s observation",
+    "original goal arrival and final hold",
+    "path and speed errors",
+    "roll peak",
+    "contact impulses",
+    "steering rate and torque occupation"
+  ],
+  "tasks": {
+    "A": {
+      "W_m": 0.3,
+      "speed_rmse_m_s": 0.2
+    },
+    "B": {
+      "W_m": 0.6,
+      "speed_rmse_m_s": 0.1
+    },
+    "C": {
+      "W_m": 0.4,
+      "speed_rmse_m_s": 0.15
+    }
+  },
+  "configured_lanes": true,
+  "duplicate_pairs": [
+    [
+      "fixed0.5",
+      "fixed0.5_duplicate"
+    ],
+    [
+      "fixed1",
+      "fixed1_duplicate"
+    ]
+  ],
+  "heights_mm": [
+    0,
+    5,
+    10,
+    20
+  ],
+  "primary_change": "Known signed world-y chassis force at1.5s for0.1s on flat and10mm stones",
+  "fixed_alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "force_levels_N": [
+    0,
+    -8,
+    8,
+    -16,
+    16,
+    -32,
+    32
+  ]
+}

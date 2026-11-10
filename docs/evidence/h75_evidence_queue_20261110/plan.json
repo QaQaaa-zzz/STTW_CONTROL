@@ -1,0 +1,40 @@
+{
+  "stages": [
+    {
+      "name": "h75_height_scan",
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan",
+      "contexts": 24,
+      "episodes": 192,
+      "max_physics_lane_steps": 9600000
+    },
+    {
+      "name": "h75_force_scan",
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_force_scan",
+      "contexts": 84,
+      "episodes": 672,
+      "max_physics_lane_steps": 33600000
+    },
+    {
+      "name": "h75_channel_scan",
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_channel_scan",
+      "contexts": 12,
+      "episodes": 216,
+      "max_physics_lane_steps": 10800000
+    },
+    {
+      "name": "h75_selector_layout_test",
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_selector_layout_test",
+      "contexts": 32,
+      "episodes": 352,
+      "max_physics_lane_steps": 17600000
+    }
+  ],
+  "total_episodes": 1432,
+  "max_physics_lane_steps": 71600000,
+  "optimizer_updates": 0,
+  "stop_rule": "Each finite stage completes or global pipeline stops on engineering error; failed episodes remain; no unbounded retries",
+  "estimated_wall_hours": [
+    12,
+    24
+  ]
+}

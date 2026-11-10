@@ -11,6 +11,11 @@ if a.rescore_zero:
  write_zero_scores(a.run);a.baseline_run=a.run
 r,c=load_case(a.run,a.baseline_run);physics_dt=c['physics_dt'];user_speed=float(c["settings"].get("user_speed_m_s",2.3));palette_markers=['o','s','^','D','v','x'];route=np.load(Path(c['bundle'])/'route.npz');labels=['alpha 0','alpha .25','alpha .5','alpha .75','alpha 1','Zero'];colors=['#0072B2','#D55E00','#009E73','#CC79A7','#8A6500','#333333'];styles=['-']*5+['--'];summary=[]
 alpha_colors=colors[:5];count=r['reward'].shape[1];
+pulse=c['settings'].get('evaluation_pulse')
+role=c['settings'].get('evaluation_role','exploratory DEV')
+paired=c['settings'].get('paired_reward_diagnostics',False)
+if paired:write_zero_scores(a.run)
+
 if count>len(colors):
  colors+=list(plt.get_cmap('tab20').colors[:count-len(colors)]);styles+=['-']*(count-len(styles))
 labels=a.lane_labels or [label.replace('alpha',a.preference_label_prefix) for label in labels[:count]];colors=colors[:count]
@@ -29,7 +34,14 @@ if a.baseline_run:
  for lane,stem in enumerate(['alpha0','alpha025','alpha05','alpha075','alpha1']):
   zero=np.load(a.baseline_run/(stem+'_zero_rescored.npz'));pr=np.add.reduceat(zero['reward'],np.arange(0,len(zero['reward']),4));steps=np.arange(len(pr))+1
   per.plot(steps,pr,'--',color=colors[lane],alpha=.6);cumulative.plot(steps,np.cumsum(pr),'--',color=colors[lane],alpha=.6)
-fig.suptitle(a.title+' — exploratory DEV, one initial state\nZero = LOCAL300 + ECBC/ESO; weighted rewards are not cross-alpha performance ranks');fig.tight_layout();fig.savefig(out/'overview.png',dpi=170);plt.close(fig)
+if pulse:
+ start=pulse['start_s'];end=start+pulse['duration_s']
+ per.axvspan(start/.02,end/.02,color='gray',alpha=.2);cumulative.axvspan(start/.02,end/.02,color='gray',alpha=.2);speed.axvspan(start,end,color='gray',alpha=.2)
+if paired:
+ for lane,stem in enumerate(['alpha0','alpha025','alpha05','alpha075','alpha1']):
+  z=np.load(a.run/(stem+'_zero_rescored.npz'));values=np.add.reduceat(z['reward'],np.arange(0,len(z['reward']),4));steps=np.arange(len(values))+1
+  per.plot(steps,values,'--',color=alpha_colors[lane],alpha=.5);cumulative.plot(steps,np.cumsum(values),'--',color=alpha_colors[lane],alpha=.5)
+fig.suptitle(a.title+' — '+role+'\nZero = LOCAL300 + ECBC/ESO; weighted rewards are not cross-alpha performance ranks');fig.tight_layout();fig.savefig(out/'overview.png',dpi=170);plt.close(fig)
 fig,ax=plt.subplots(figsize=(8,6));ax.plot(*route['xy'][ref].T,':',color='gray',label='Original reference')
 for lane,(label,color) in enumerate(zip(labels,colors)):
  trace=r['lower_trace'][:,:,lane].reshape(-1,11);v=trace[trace[:,6].astype(bool)];ax.plot(v[:,0],v[:,1],color=color,label=label,linestyle=styles[lane],marker=palette_markers[lane%len(palette_markers)],markevery=400,markersize=3);ax.scatter(*v[-1,:2],marker='x',color=color)
@@ -49,7 +61,7 @@ for lane,(label,color,ax) in enumerate(zip(labels,colors,axs.flat)):
 fig.suptitle(a.title+' — true / wheel proxy / requested / governed speeds');fig.savefig(out/'speed_measurements.png',dpi=150);plt.close(fig)
 (out/'metrics.json').write_text(json.dumps(summary,indent=2));print(json.dumps(summary))
 
-(out/'figure_manifest.json').write_text(json.dumps(dict(source=str((a.run/'trajectory.npz').resolve()),outputs=['xy.png','overview.png','xy_all_alpha.png','speed_measurements.png'],role='exploratory DEV, one initial seed, no uncertainty estimate',filtering='active_lower mask only, no smoothing; each lane stops at observed failure',metric_window='individual observed duration; unequal durations do not support direct success rankings',reward='policy solid, same-alpha cached Zero dashed' if a.baseline_run else 'native alpha-weighted rewards; no Zero in this protocol' if count<=5 else 'native alpha-weighted rewards; Zero scored alpha0 only',checkpoint=c['identity']['files']['actor.npz'],baseline_reuse=c.get('baseline_reuse'),matplotlib=matplotlib.__version__),indent=2))
+(out/'figure_manifest.json').write_text(json.dumps(dict(source=str((a.run/'trajectory.npz').resolve()),outputs=['xy.png','overview.png','xy_all_alpha.png','speed_measurements.png'],role=role,filtering='active_lower mask only, no smoothing; each lane stops at observed failure',metric_window='individual observed duration; unequal durations do not support direct success rankings',reward='policy solid, same-alpha cached Zero dashed' if a.baseline_run else 'native alpha-weighted rewards; no Zero in this protocol' if count<=5 else 'native alpha-weighted rewards; Zero scored at configured alpha, five rescored baselines when paired_reward_diagnostics is enabled',checkpoint=c['identity']['files']['actor.npz'],baseline_reuse=c.get('baseline_reuse'),matplotlib=matplotlib.__version__),indent=2))
 
 if a.baseline_run:
  from sttw_control.isaac_path_reporting import replay_rewards
@@ -92,7 +104,7 @@ if a.baseline_run:
 
 (out/'condition_metrics.json').write_text(json.dumps(static_case_metrics(r,c),indent=2)+'\n')
 
-if count<=5 and a.baseline_run is None:
+if (count<=5 or c['settings'].get('reward_components',False)) and a.baseline_run is None:
  from sttw_control.isaac_path_reporting import replay_rewards
  cfg=json.loads((Path(c['bundle'])/'config.json').read_text());replayed,parts,closure=replay_rewards(r,cfg)
  np.savez_compressed(out/'reward_components.npz',reward=replayed,**parts)
@@ -101,6 +113,8 @@ if count<=5 and a.baseline_run is None:
   fig,axes=plt.subplots(2,1,figsize=(10,6),layout='constrained')
   for key,value in parts.items():
    axes[0].plot(time,value[ids,lane],label=key);axes[1].plot(time,np.cumsum(value[ids,lane]))
+  if pulse:
+   for ax in axes:ax.axvspan(pulse['start_s'],pulse['start_s']+pulse['duration_s'],color='gray',alpha=.2)
   axes[0].legend(fontsize=7,ncol=3);axes[0].set(ylabel='Reward per lower step');axes[1].set(xlabel='Time (s)',ylabel='Cumulative component reward');fig.suptitle(a.title+' | '+label+' | true failed endpoints retained')
   fig.savefig(out/('alpha'+str(lane)+'_components.png'),dpi=150);plt.close(fig)
  manifest=json.loads((out/'figure_manifest.json').read_text());manifest.update(reward_replay_error=closure);(out/'figure_manifest.json').write_text(json.dumps(manifest,indent=2))

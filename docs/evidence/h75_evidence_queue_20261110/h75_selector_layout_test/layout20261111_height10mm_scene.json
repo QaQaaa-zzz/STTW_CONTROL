@@ -1,0 +1,27 @@
+{
+  "route": "runs/h75_selected_local300_flat/bundle/route.npz",
+  "density_per_m2": 24,
+  "radius_range_m": [
+    0.055,
+    0.08
+  ],
+  "s_range_m": [
+    3.0,
+    7.0
+  ],
+  "half_width_m": 0.8,
+  "blend_length_m": 0.3,
+  "seed": 20261111,
+  "vertical_scale_m": 0.001,
+  "bounds_m": [
+    -2,
+    24
+  ],
+  "name": "layout20261111_height10mm",
+  "height_m": 0.01,
+  "horizontal_scale_m": 0.005,
+  "reference_layout_csv": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_selector_layout_test/layout20261111.csv",
+  "center_lateral_compression": 0.25,
+  "actual_center_half_width_m": 0.2,
+  "role": "Held-out stone arrangement; unchanged count/radii distribution/corridor width"
+}

@@ -1,0 +1,95 @@
+{
+  "experiment_id": "H75_SELECTOR_LAYOUT_TEST",
+  "title": "五固定档对比冻结任务选档：未见石子布局",
+  "evaluation_role": "Fixed-parameter paired mechanism DEV; original H75+Local300; no training",
+  "case_labels": [
+    "fixed0",
+    "fixed0.25",
+    "fixed0.5",
+    "fixed0.75",
+    "fixed1",
+    "Zero",
+    "rule_A",
+    "rule_B",
+    "rule_C",
+    "fixed0.5_duplicate",
+    "fixed1_duplicate"
+  ],
+  "track_wheel_contacts": false,
+  "seeds": [
+    101,
+    102,
+    103
+  ],
+  "terrains": [
+    "layout20261111_height10mm",
+    "layout20261111_height20mm",
+    "layout20261112_height10mm",
+    "layout20261112_height20mm",
+    "layout20261113_height10mm",
+    "layout20261113_height20mm",
+    "layout20261114_height10mm",
+    "layout20261114_height20mm"
+  ],
+  "speeds": [
+    2.3,
+    2.6
+  ],
+  "scenes": 32,
+  "lanes": 352,
+  "episode_s": 10,
+  "max_physics_lane_steps": 17600000,
+  "optimizer_updates": 0,
+  "data_role": "held-out geometry TEST; seen speeds/physical groups",
+  "interpretation": "Held-out geometry TEST only; no test-dependent rule updates",
+  "stop_rule": "32 contexts or engineering error; no replacement failures or extra training",
+  "code_revision": "0196fd44236bc663a8d0182b465ef9f164612e2a",
+  "initialization": "Original H75+Local300 and same frozen complete initial state; no mid-run restore",
+  "primary_outcomes": [
+    "termination cause",
+    "full 10s observation",
+    "original goal arrival and final hold",
+    "path and speed errors",
+    "roll peak",
+    "contact impulses",
+    "steering rate and torque occupation"
+  ],
+  "tasks": {
+    "A": {
+      "W_m": 0.3,
+      "speed_rmse_m_s": 0.2
+    },
+    "B": {
+      "W_m": 0.6,
+      "speed_rmse_m_s": 0.1
+    },
+    "C": {
+      "W_m": 0.4,
+      "speed_rmse_m_s": 0.15
+    }
+  },
+  "configured_lanes": true,
+  "duplicate_pairs": [
+    [
+      "fixed0.5",
+      "fixed0.5_duplicate"
+    ],
+    [
+      "fixed1",
+      "fixed1_duplicate"
+    ]
+  ],
+  "heights_mm": [
+    10,
+    20
+  ],
+  "primary_change": "New stone layouts; DEV-frozen task rule against all five fixed alphas",
+  "fixed_alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "selector_rule": "maximize DEV task passes; tie-break by mean failure penalty + normalized path/speed RMSE, then lower alpha"
+}

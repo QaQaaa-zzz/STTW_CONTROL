@@ -1,0 +1,7 @@
+{
+  "configs": 152,
+  "episodes": 1432,
+  "pulse_cpu_tests": "3 passed: signed force, timing, failure cutoff, integrated impulse and removal",
+  "plot_regression": "saved 11-lane natural-switch case: full plot, five-alpha Zero rescore and reward-component reconstruction completed in /tmp/sttw_queue_plot_check",
+  "physics_scope": "No new force or ablation physics result claimed before queued execution"
+}
