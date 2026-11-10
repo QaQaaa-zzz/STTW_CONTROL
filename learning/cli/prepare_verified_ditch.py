@@ -7,8 +7,14 @@ p = argparse.ArgumentParser(description=__doc__)
 p.add_argument('--base',type=Path,default=Path('learning/configs/isaac_rb_jump_ditch_goal150.json'))
 p.add_argument('--output',type=Path,required=True)
 p.add_argument('--support-mode',choices=('rough','strict'),default='rough')
+p.add_argument('--stone-height-mm',type=float,nargs=2,metavar=('MIN','MAX'),help='Override surface roughness amplitude in millimetres')
+p.add_argument('--far-bank-height-cm',type=float,help='Landing bank elevation relative to takeoff bank')
 a = p.parse_args()
 runner = json.loads(a.base.read_text())
+if a.stone_height_mm is not None:
+    runner['ditch_terrain']['stone_height_min_m'],runner['ditch_terrain']['stone_height_max_m'] = [v/1000 for v in a.stone_height_mm]
+if a.far_bank_height_cm is not None:
+    runner['ditch_terrain']['far_bank_height_m'] = a.far_bank_height_cm/100
 task = json.loads(Path(runner['task_spec']).read_text())
 runner['verified_ditch_reward'] = True
 runner['verified_ditch_support_mode'] = a.support_mode

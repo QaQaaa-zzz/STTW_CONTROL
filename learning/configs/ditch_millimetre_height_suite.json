@@ -1,0 +1,14 @@
+{
+  "description": "Prepared terrain variants, not yet trained or physically evaluated. Near bank z=0; far-bank offsets in metres.",
+  "stone_height_min_m": 0.001,
+  "stone_height_max_m": 0.004,
+  "far_bank_heights_m": [
+    -0.1,
+    -0.05,
+    0.0,
+    0.05,
+    0.1
+  ],
+  "front_x_m": 3.3,
+  "width_m": 0.3
+}

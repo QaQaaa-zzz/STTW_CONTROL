@@ -56,3 +56,19 @@ class WiringTests(unittest.TestCase):
 
 if __name__=='__main__':
     unittest.main()
+
+
+def test_lowered_and_raised_bank_mesh_and_clearance():
+    for h in [-.10, -.05, 0., .05, .10]:
+        spec=dict(front_x_m=3.3,width_m=.3,ground_end_x_m=25.,stones_per_m2=30,
+                  seed=20261109,stone_height_min_m=.001,stone_height_max_m=.004,far_bank_height_m=h)
+        vertices,triangles=build_ditch_terrain(spec)
+        near=vertices[vertices[:,0]<=3.3,2];far=vertices[vertices[:,0]>=3.6,2]
+        assert near.min()>=0 and near.max()<=.004001
+        assert abs(float(far.min())-h)<1e-6 and far.max()<=h+.004001
+        assert not ((vertices[triangles][...,0].min(1)<3.45)&(vertices[triangles][...,0].max(1)>3.45)).any()
+        bounds=BankEnvelope(vertices,spec,.07,.025,'cpu')
+        points=torch.tensor([[[4.,0.,h+.20],[3.,0.,.20]]])
+        q=torch.tensor([[[.5**.5,0.,0.,.5**.5]]*2])
+        assert (bounds.clearance_upper(points,q)>=bounds.clearance(points)).all()
+        assert abs(float(bounds.clearance(points)[0,0])-(.20-bounds.bound))<.0041

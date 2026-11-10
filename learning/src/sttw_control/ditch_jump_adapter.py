@@ -1,4 +1,4 @@
-"""Physics-step inputs for JumpReward on the committed, level rough-bank mesh.
+"""Physics-step inputs for JumpReward on the committed rough-bank mesh.
 
 The map has a single terrain contact filter, rough center |y| <= 1, and two
 separate banks. Shape boundaries and filtered solver contact points decide
@@ -15,6 +15,7 @@ class BankEnvelope:
 
     def __init__(self, vertices, spec, radius, half_width, device, slices=21):
         self.banks = []
+        self.minimum_height = min(0., spec.get("far_bank_height_m",0.))
         width = math.hypot(radius, half_width)
         self.bound = width
         # IsaacLabVectorPlant creates these cylinders along the wheel link's
@@ -29,7 +30,7 @@ class BankEnvelope:
         for left, right in ((2., spec['front_x_m']),
                             (spec['front_x_m'] + spec['width_m'], 8.)):
             # Build from the actual triangle vertices issued to the simulator.
-            # Ditch skirts are flat. Their duplicate seam vertices are at z=0.
+            # Ditch skirts are flat. Their duplicate seam vertices share the bank elevation.
             keep = ((vertices[:, 0] >= np.float32(left)) &
                     (vertices[:, 0] <= np.float32(right)) &
                     (np.abs(vertices[:, 1]) <= 1.))
@@ -38,7 +39,7 @@ class BankEnvelope:
             ys, iy = np.unique(xyz[:, 1], return_inverse=True)
             if len(xs) < 2 or len(ys) != 81 or len(np.unique(ix*len(ys)+iy)) != len(xs)*len(ys):
                 raise ValueError('Expected the pinned rectangular rough-bank meshes')
-            z = np.zeros((len(xs), len(ys)), dtype=np.float32)
+            z = np.full((len(xs), len(ys)), -np.inf, dtype=np.float32)
             np.maximum.at(z, (ix, iy), xyz[:, 2])
             dx, dy = (xs[-1]-xs[0])/(len(xs)-1), (ys[-1]-ys[0])/(len(ys)-1)
             if not np.allclose(np.diff(xs), dx, atol=1e-5) or not np.allclose(np.diff(ys), dy, atol=1e-5):
@@ -52,26 +53,26 @@ class BankEnvelope:
 
     def clearance(self, wheels):
         x, y, z = wheels.unbind(-1)
-        height = torch.zeros_like(z)
+        height = torch.full_like(z,self.minimum_height)
         for left, right, dx, dy, grid in self.banks:
             ix = ((x-left)/dx).round().long().clamp(0,grid.shape[0]-1)
             iy = ((y+1.)/dy).round().long().clamp(0,grid.shape[1]-1)
             reach = (x>=left-self.bound)&(x<=right+self.bound)&(y.abs()<=1.+self.bound)
-            height = torch.maximum(height,torch.where(reach,grid[ix,iy],0.))
+            height = torch.maximum(height,torch.where(reach,grid[ix,iy],self.minimum_height))
         # Bounding sphere encloses every slice of the pinned profiled cylinders
-        # at every camber. The open gap has a virtual envelope at the bank level.
+        # at every camber. The open gap uses the lower bank as virtual envelope.
         return z-self.bound-height
 
     def clearance_upper(self, wheels, wheel_quat):
         # q maps wheel-local axes to world, in plant.rigid's documented xyzw
         # order. A vertical line is resolved into cylinder axial and radial
-        # components. The level banks and the virtual gap envelope all have
-        # h >= 0. Thus lowest wheel point minus zero upper-bounds clearance.
+        # components. Subtracting the lowest bank elevation upper-bounds
+        # clearance for both raised and lowered landing banks.
         unit = torch.nn.functional.normalize(wheel_quat,dim=-1)
         axis_z = (1-2*unit[:,:,:2].square().sum(-1)).abs().clamp(max=1)[...,None]
         tangent = torch.sqrt((1-axis_z.square()).clamp_min(0))
         extent = ((self.slice_offset+self.slice_half)*axis_z+self.slice_radius*tangent).amax(-1)
-        return wheels[:,:,2]-extent
+        return wheels[:,:,2]-extent-self.minimum_height
 
 
 def classify_patches(raw, origin, wheel_z, near_lip, far_lip, target_end, lane_halfwidth, capacity):
