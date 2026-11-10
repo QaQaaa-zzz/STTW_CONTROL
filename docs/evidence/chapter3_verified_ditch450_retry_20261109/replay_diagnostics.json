@@ -1,0 +1,116 @@
+[
+  {
+    "model": "initial",
+    "duration_s": 1.98,
+    "terminal_code": 3,
+    "terminal_physics_s": 1.97,
+    "stage": 2,
+    "reward": -50.0,
+    "success": false,
+    "peak_root_z": 0.5302579402923584,
+    "final_xyz": [
+      4.457117557525635,
+      0.40266749262809753,
+      0.2268737107515335
+    ],
+    "stage_times_s": {
+      "1": 0.9675,
+      "2": 1.2175,
+      "3": null,
+      "4": null
+    },
+    "first_target_support_s": {
+      "front": 1.405,
+      "rear": null
+    },
+    "both_target_samples": 0,
+    "max_patch_count": [
+      239,
+      232
+    ],
+    "out_of_bounds_samples": [
+      0,
+      0
+    ],
+    "terminal_roll_deg": -35.43037033081055,
+    "terminal_pitch_deg": 52.302433013916016,
+    "terminal_vx": 0.14338383078575134,
+    "terminal_vz": 0.2418564110994339
+  },
+  {
+    "model": "mid225",
+    "duration_s": 1.54,
+    "terminal_code": 3,
+    "terminal_physics_s": 1.5225,
+    "stage": 2,
+    "reward": -50.0,
+    "success": false,
+    "peak_root_z": 0.5200400948524475,
+    "final_xyz": [
+      4.589649677276611,
+      0.2954674959182739,
+      0.1955399066209793
+    ],
+    "stage_times_s": {
+      "1": 0.9775,
+      "2": 1.19,
+      "3": null,
+      "4": null
+    },
+    "first_target_support_s": {
+      "front": 1.3675,
+      "rear": null
+    },
+    "both_target_samples": 0,
+    "max_patch_count": [
+      211,
+      224
+    ],
+    "out_of_bounds_samples": [
+      0,
+      0
+    ],
+    "terminal_roll_deg": -35.790122985839844,
+    "terminal_pitch_deg": 4.3372063636779785,
+    "terminal_vx": 2.17437481880188,
+    "terminal_vz": 0.40084707736968994
+  },
+  {
+    "model": "last450",
+    "duration_s": 1.18,
+    "terminal_code": 3,
+    "terminal_physics_s": 1.17,
+    "stage": 0,
+    "reward": -100.0,
+    "success": false,
+    "peak_root_z": 0.5949068069458008,
+    "final_xyz": [
+      2.7370364665985107,
+      0.16154849529266357,
+      0.5949068069458008
+    ],
+    "stage_times_s": {
+      "1": null,
+      "2": null,
+      "3": null,
+      "4": null
+    },
+    "first_target_support_s": {
+      "front": null,
+      "rear": null
+    },
+    "both_target_samples": 0,
+    "max_patch_count": [
+      234,
+      221
+    ],
+    "out_of_bounds_samples": [
+      0,
+      0
+    ],
+    "terminal_roll_deg": -35.060611724853516,
+    "terminal_pitch_deg": 8.595237731933594,
+    "terminal_vx": 0.9276556372642517,
+    "terminal_vz": 0.25734856724739075
+  }
+]

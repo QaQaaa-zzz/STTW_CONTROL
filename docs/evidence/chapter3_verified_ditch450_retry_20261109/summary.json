@@ -1,0 +1,80 @@
+{
+  "cases": [
+    {
+      "candidate": {
+        "name": "initial",
+        "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_verified_ditch450_retry_20261109/training_run/training/model_initial.pt"
+      },
+      "steps": 99,
+      "duration_s": 1.98,
+      "terminal_code": 3,
+      "final_xyz": [
+        4.457117557525635,
+        0.40266749262809753,
+        0.2268737107515335
+      ],
+      "peak_root_z": 0.5302579402923584,
+      "max_root_x": 4.457117557525635,
+      "ditch_cross_hold": false,
+      "reward_total": -50.0,
+      "reward_parts": {
+        "verified_jump": -50.0,
+        "episode_return_override": 0.0
+      },
+      "scope": "Single fixed-seed TRAIN-domain diagnostic with frozen sampled Go2 properties/noise and mean actor; no ground-controller handoff or complete-map success claim",
+      "verified_stage": 2,
+      "verified_success": false
+    },
+    {
+      "candidate": {
+        "name": "mid225",
+        "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_verified_ditch450_retry_20261109/training_run/training/model_update_00225.pt"
+      },
+      "steps": 77,
+      "duration_s": 1.54,
+      "terminal_code": 3,
+      "final_xyz": [
+        4.589649677276611,
+        0.2954674959182739,
+        0.1955399066209793
+      ],
+      "peak_root_z": 0.5200400948524475,
+      "max_root_x": 4.589649677276611,
+      "ditch_cross_hold": false,
+      "reward_total": -50.0,
+      "reward_parts": {
+        "verified_jump": -50.0,
+        "episode_return_override": 0.0
+      },
+      "scope": "Single fixed-seed TRAIN-domain diagnostic with frozen sampled Go2 properties/noise and mean actor; no ground-controller handoff or complete-map success claim",
+      "verified_stage": 2,
+      "verified_success": false
+    },
+    {
+      "candidate": {
+        "name": "last450",
+        "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_verified_ditch450_retry_20261109/training_run/training/model_update_00450.pt"
+      },
+      "steps": 59,
+      "duration_s": 1.18,
+      "terminal_code": 3,
+      "final_xyz": [
+        2.7370364665985107,
+        0.16154849529266357,
+        0.5949068069458008
+      ],
+      "peak_root_z": 0.5949068069458008,
+      "max_root_x": 2.7370364665985107,
+      "ditch_cross_hold": false,
+      "reward_total": -100.0,
+      "reward_parts": {
+        "verified_jump": -100.0,
+        "episode_return_override": 0.0
+      },
+      "scope": "Single fixed-seed TRAIN-domain diagnostic with frozen sampled Go2 properties/noise and mean actor; no ground-controller handoff or complete-map success claim",
+      "verified_stage": 0,
+      "verified_success": false
+    }
+  ],
+  "elapsed_s": 20.675849199295044
+}
