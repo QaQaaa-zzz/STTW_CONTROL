@@ -13,9 +13,21 @@ from torch.nn import functional as F
 class BankEnvelope:
     """Conservative mesh upper bound under the swept footprint of one wheel."""
 
-    def __init__(self, vertices, spec, radius, half_width, device, slices=21):
+    def __init__(self, vertices, spec, radius, half_width, device, slices=21, terrain_ids=None):
+        self.terrain_ids = terrain_ids
+        if isinstance(vertices,list):
+            entries=[BankEnvelope(v,s,radius,half_width,device,slices) for v,s in zip(vertices,spec)]
+            self.__dict__.update(entries[0].__dict__)
+            self.terrain_ids=terrain_ids
+            self.minimum_height=torch.tensor([e.minimum_height for e in entries],device=device)
+            self.far_height=torch.tensor([e.far_height for e in entries],device=device)
+            self.banks=[(*entries[0].banks[b][:4],torch.stack([e.banks[b][4] for e in entries])) for b in range(2)]
+            return
         self.banks = []
         self.minimum_height = min(0., spec.get("far_bank_height_m",0.))
+        self.far_height = spec.get("far_bank_height_m",0.)
+        self.near_lip = spec["front_x_m"]
+        self.far_lip = self.near_lip+spec["width_m"]
         width = math.hypot(radius, half_width)
         self.bound = width
         # IsaacLabVectorPlant creates these cylinders along the wheel link's
@@ -53,12 +65,14 @@ class BankEnvelope:
 
     def clearance(self, wheels):
         x, y, z = wheels.unbind(-1)
-        height = torch.full_like(z,self.minimum_height)
+        minimum = self.minimum_height if self.terrain_ids is None else self.minimum_height[self.terrain_ids,None]
+        height = torch.zeros_like(z)+minimum
         for left, right, dx, dy, grid in self.banks:
-            ix = ((x-left)/dx).round().long().clamp(0,grid.shape[0]-1)
-            iy = ((y+1.)/dy).round().long().clamp(0,grid.shape[1]-1)
+            ix = ((x-left)/dx).round().long().clamp(0,grid.shape[-2]-1)
+            iy = ((y+1.)/dy).round().long().clamp(0,grid.shape[-1]-1)
             reach = (x>=left-self.bound)&(x<=right+self.bound)&(y.abs()<=1.+self.bound)
-            height = torch.maximum(height,torch.where(reach,grid[ix,iy],self.minimum_height))
+            sample = grid[ix,iy] if self.terrain_ids is None else grid[self.terrain_ids[:,None],ix,iy]
+            height = torch.maximum(height,torch.where(reach,sample,minimum))
         # Bounding sphere encloses every slice of the pinned profiled cylinders
         # at every camber. The open gap uses the lower bank as virtual envelope.
         return z-self.bound-height
@@ -72,7 +86,12 @@ class BankEnvelope:
         axis_z = (1-2*unit[:,:,:2].square().sum(-1)).abs().clamp(max=1)[...,None]
         tangent = torch.sqrt((1-axis_z.square()).clamp_min(0))
         extent = ((self.slice_offset+self.slice_half)*axis_z+self.slice_radius*tangent).amax(-1)
-        return wheels[:,:,2]-extent-self.minimum_height
+        minimum = self.minimum_height if self.terrain_ids is None else self.minimum_height[self.terrain_ids,None]
+        far_height = self.far_height if self.terrain_ids is None else self.far_height[self.terrain_ids,None]
+        floor = torch.zeros_like(wheels[:,:,0])+minimum
+        floor = torch.where(wheels[:,:,0]+self.bound<=self.near_lip,0.,floor)
+        floor = torch.where(wheels[:,:,0]-self.bound>=self.far_lip,far_height,floor)
+        return wheels[:,:,2]-extent-floor
 
 
 def classify_patches(raw, origin, wheel_z, near_lip, far_lip, target_end, lane_halfwidth, capacity):
@@ -119,15 +138,17 @@ class DitchJumpAdapter:
         self.halfwidth = 1.
         # Saturation is a buffer-validity check, not a physical contact limit.
         self.contact_capacity = env.cfg['plant_options'].get('wheel_contact_buffer_capacity') or env.cfg['plant_options']['wheel_patch_capacity']
-        self.bounds = BankEnvelope(vertices,spec,plant.wheel_radius_m,
+        self.bounds = BankEnvelope(vertices,env.terrain_specs if isinstance(vertices,list) else spec,plant.wheel_radius_m,
                                    env.cfg['plant_options']['wheel_width_m']/2,env.device,
-                                   env.cfg['plant_options']['wheel_profile_slices'])
+                                   env.cfg['plant_options']['wheel_profile_slices'],
+                                   env.terrain_ids if isinstance(vertices,list) else None)
         mode = env.cfg['verified_ditch_support_mode']
         if mode not in ('rough','strict'):
             raise ValueError('Choose verified_ditch_support_mode rough or strict')
         self.scorer = JumpReward(env.num_envs,env.device,dt=plant.physics_dt,
                                  width=spec['width_m'],hold_s=1.,
-                                 approach_distance=self.near_lip-1.5,rough_support=(mode=='rough'))
+                                 approach_distance=self.near_lip-1.5,rough_support=(mode=='rough'),
+                                 landing_focus=env.cfg.get('ditch_landing_focus',False))
         self.record_diagnostics = env.cfg.get('record_verified_diagnostics',False)
         self.diagnostics = []
 

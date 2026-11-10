@@ -25,13 +25,15 @@ def native_step():
 class NativeTransitionTests(unittest.TestCase):
     def test_success_crash_timeout_three_native_wirings(self):
         torch.set_num_threads(1)
-        for case in ('success','crash','timeout','strict_success'):
+        for case in ('success','crash','timeout','strict_success','focused_success','focused_crash','focused_timeout'):
             with self.subTest(case=case):
                 self.check_episode(case)
 
     def check_episode(self,case):
         one=torch.arange(1)
         cfg=json.loads((LEARN/'configs/isaac_rb_jump_ditch_goal150.json').read_text())
+        cfg['ditch_landing_focus']=case.startswith('focused_')
+        case=case.removeprefix('focused_')
         cfg['plant_options']['wheel_patch_capacity']=64
         cfg['verified_ditch_support_mode']='strict' if case=='strict_success' else 'rough'
         case=case.removeprefix('strict_')

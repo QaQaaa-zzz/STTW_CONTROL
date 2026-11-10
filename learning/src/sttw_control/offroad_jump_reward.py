@@ -13,7 +13,7 @@ import torch
 
 
 class JumpReward:
-    def __init__(self, n, device, dt=.02, width=.30, hold_s=1., approach_distance=1.8, rough_support=False):
+    def __init__(self, n, device, dt=.02, width=.30, hold_s=1., approach_distance=1.8, rough_support=False, landing_focus=False):
         if min(dt, width, hold_s, approach_distance) <= 0:
             raise ValueError("Positive time and length scales required")
         self.dt, self.width = dt, width
@@ -22,15 +22,17 @@ class JumpReward:
         self.hold_samples = math.ceil(hold_s / dt - 1e-8) + 1
         self.hold_s = hold_s
         self.rough_support = rough_support
+        self.landing_focus = landing_focus
         self._state = {}
         for name in ('near_ticks', 'air_ticks', 'touch_ticks', 'hold_ticks', 'stage'):
             self._state[name] = torch.zeros(n, device=device, dtype=torch.long)
         for name in ('armed', 'attempt', 'cleared', 'landed', 'done', 'success', 'seen', 'hard_touch', 'restart_window'):
             self._state[name] = torch.zeros(n, device=device, dtype=torch.bool)
-        for name in ('phi', 'hold_start', 'quality_sum', 'lift_start', 'prev_vn'):
+        for name in ('phi', 'hold_start', 'quality_sum', 'lift_start', 'prev_vn', 'contact_credit'):
             self._state[name] = torch.zeros(n, device=device)
         self._state['prev_s'] = torch.zeros((n, 2), device=device)
         self._state['crossed_middle'] = torch.zeros((n, 2), device=device, dtype=torch.bool)
+        self._state['paid_contacts'] = torch.zeros((n,2),device=device,dtype=torch.bool)
         self._state['touched'] = torch.zeros((n, 2), device=device, dtype=torch.bool)
         if rough_support:
             for name in ('far_age', 'near_age', 'wheel_duty'):
@@ -39,7 +41,7 @@ class JumpReward:
                 self._state[name] = torch.zeros(n, device=device, dtype=torch.long)
             self._state['near_seen'] = torch.zeros((n,2), device=device, dtype=torch.bool)
         self.__dict__.update(self._state)
-        self.values = torch.tensor([0., 20., 50., 70., 100.], device=device)
+        self.values = torch.tensor([0., 10., 25., 70., 100.] if landing_focus else [0., 20., 50., 70., 100.], device=device)
 
     def reset(self, ids):
         for field in self._state.values():
@@ -172,13 +174,23 @@ class JumpReward:
         ended = live & (bad | arrived | timeout.bool())
         # Success replaces the stage balance; the terminal quality is in [0,10].
         balance = self.values[self.stage] - self.values[previous_stage]
+        if self.landing_focus:
+            # One-time measured touchdown credit bridges clear -> bilateral capture.
+            # It is absorbed into stage3/4, not added to the success maximum.
+            controlled = (valid & self.cleared & ~self.hard_touch & (v>=.5)
+                          & (roll.abs()<=.5) & (pitch.abs()<=.8) & (vn.abs()<=2.5))
+            self.paid_contacts |= target & controlled[:,None]
+            credit = torch.where(self.stage<3,10.*self.paid_contacts.sum(-1),0.)
+            balance += credit-self.contact_credit
+            self.contact_credit.copy_(credit)
         quality = 10*self.quality_sum / self.hold_ticks.clamp_min(1)
         outcome = torch.where(bad, -100., torch.where(arrived, quality,
                               torch.where(timeout.bool(), -95., 0.)))
         approach = ((s[:, 0]+self.approach_distance)/self.approach_distance).clamp(0., 1.)
         across = ((s.min(-1).values+1.2)/(1.2+self.width)).clamp(0., 1.)
+        flight_quality = torch.exp(-(roll/.35).square()-(roll_rate/3.).square()) if self.landing_focus else 1.
         phi_now = torch.where(self.cleared, 3*q_land+3*(self.hold_ticks/self.hold_samples).clamp(max=1),
-                    torch.where(self.attempt, 6*across, 6*approach*q_entry))
+                    torch.where(self.attempt, 6*across*flight_quality, 6*approach*q_entry))
         self.phi.copy_(torch.where(valid & ~ended, phi_now, 0.))
         reward = torch.where(live, balance+outcome+self.phi-previous_phi, 0.)
         self.done |= ended

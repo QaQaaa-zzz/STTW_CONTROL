@@ -1,14 +1,16 @@
 {
-  "description": "Prepared terrain variants, not yet trained or physically evaluated. Near bank z=0; far-bank offsets in metres.",
+  "description": "Single shared policy; generate seeded rough maps once per run, uniformly resample map on episode reset. No per-reset mesh recooking.",
   "stone_height_min_m": 0.001,
   "stone_height_max_m": 0.004,
-  "far_bank_heights_m": [
-    -0.1,
-    -0.05,
-    0.0,
-    0.05,
-    0.1
-  ],
+  "ditch_randomization": {
+    "num_maps": 32,
+    "far_bank_height_range_m": [
+      -0.1,
+      0.1
+    ],
+    "resample_map_on_reset": true
+  },
   "front_x_m": 3.3,
-  "width_m": 0.3
+  "width_m": 0.3,
+  "ditch_landing_focus": true
 }

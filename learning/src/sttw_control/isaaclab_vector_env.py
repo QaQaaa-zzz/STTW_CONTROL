@@ -15,7 +15,7 @@ from .torch_controller import TorchVelocityServos,TorchPositionServos
 from .torch_observation import TorchVehicleSignals
 
 class IsaacLabVectorPlant:
-    def __init__(self,asset,terrain_paths,terrain_ids,output,servo_mode="explicit",hull_vertices=None,mesh_collision_on_geometry=False,compliant_wheels=None,friction_correlation_distance=.025,external_forces_every_iteration=False,wheel_collision="convexHull",friction_offset_threshold=.04,env_spacing=None,track_wheel_contacts=False,terrain_layout="external",pendulum_rest=None,pendulum_locked=False,physics_dt=.0002,gpu_pair_capacities=None,actuator_force_limits=None,wheel_radius_m=.1,robot_contact_offset=.01,solver_position_iterations=4,solver_velocity_iterations=1,wheel_contact_slop=0.,wheel_width_m=None,wheel_profile_slices=1,terrain_base_plane=False,track_contact_wrench=False,gpu_contact_capacities=None,wheel_patch_capacity=16,wheel_raw_contacts_only=False,wheel_contact_buffer_capacity=None):
+    def __init__(self,asset,terrain_paths,terrain_ids,output,servo_mode="explicit",hull_vertices=None,mesh_collision_on_geometry=False,compliant_wheels=None,friction_correlation_distance=.025,external_forces_every_iteration=False,wheel_collision="convexHull",friction_offset_threshold=.04,env_spacing=None,track_wheel_contacts=False,terrain_layout="external",pendulum_rest=None,pendulum_locked=False,physics_dt=.0002,gpu_pair_capacities=None,actuator_force_limits=None,wheel_radius_m=.1,robot_contact_offset=.01,solver_position_iterations=4,solver_velocity_iterations=1,wheel_contact_slop=0.,wheel_width_m=None,wheel_profile_slices=1,terrain_base_plane=False,track_contact_wrench=False,gpu_contact_capacities=None,wheel_patch_capacity=16,wheel_raw_contacts_only=False,wheel_contact_buffer_capacity=None,terrain_tile_spacing=None):
         self.track_contact_wrench=track_contact_wrench;self.servo_mode=servo_mode;self.physics_dt=physics_dt;self.wheel_radius_m=wheel_radius_m
         pair_capacities=gpu_pair_capacities or [2**24,2**24,2**27]
         contact_capacity,patch_capacity=gpu_contact_capacities or [2**23,5*2**15]
@@ -51,7 +51,12 @@ class IsaacLabVectorPlant:
         replicated_terrain=terrain_layout=='replicated'
         terrain_offsets=np.zeros((len(terrain_paths),3),dtype=np.float32)
         if replicated_terrain:
-            terrain_offsets[:,0]=np.arange(len(terrain_paths))*(env_spacing/len(terrain_paths))
+            if terrain_tile_spacing is None:
+                terrain_offsets[:,0]=np.arange(len(terrain_paths))*(env_spacing/len(terrain_paths))
+            else:
+                columns=int(np.ceil(np.sqrt(len(terrain_paths))))
+                terrain_offsets[:,0]=(np.arange(len(terrain_paths))%columns)*terrain_tile_spacing[0]
+                terrain_offsets[:,1]=(np.arange(len(terrain_paths))//columns)*terrain_tile_spacing[1]
             origins=origins+terrain_offsets[np.asarray(terrain_ids)]
         self.origin=torch.as_tensor(origins,device=self.device);self.terrain_identity=[];terrain_sources={}
         sim_utils.create_prim(env_paths[0],'Xform')

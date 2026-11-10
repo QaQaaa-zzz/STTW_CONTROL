@@ -34,9 +34,29 @@ class PhaseUEnv:
             if cfg['plant_options'].get('terrain_base_plane',False) or cfg.get('reachable_entry_bank') or self.task['reset']['airborne_rsi_probability']:
                 raise ValueError('Ditch training requires open trench and ground-only resets; platform snapshots/RSI are not valid')
             vertices,triangles=build_ditch_terrain(self.ditch)
-        np.savez(terrain/'terrain.npz',vertices=vertices,triangles=triangles)
-        (terrain/'identity.json').write_text(json.dumps(dict(sha256=hashlib.sha256((terrain/'terrain.npz').read_bytes()).hexdigest(),platform_front_x=self.ditch['front_x_m'] if self.ditch else 3.6,platform_top_z=None if self.ditch else .16,ditch_terrain=self.ditch,ground_bounds_x_m=[-5,ground_end],ground_bounds_y_m=[-4,4])))
-        self.plant=IsaacLabVectorPlant(Path(cfg['asset']),[str(terrain)],[0]*self.num_envs,Path(output),**cfg['plant_options'])
+        random_terrain = cfg.get('ditch_randomization')
+        self.terrain_ids = torch.zeros(self.num_envs,device=self.device,dtype=torch.long)
+        terrain_specs, terrain_meshes, terrain_paths = [], [], []
+        count = random_terrain['num_maps'] if random_terrain else 1
+        if random_terrain and (not self.ditch or not cfg.get('verified_ditch_reward') or cfg['plant_options']['terrain_layout']!='replicated'):
+            raise ValueError('Random ditch maps require verified reward and replicated terrain')
+        rng = np.random.default_rng(cfg['seed'])
+        for i in range(count):
+            bank = dict(self.ditch) if self.ditch else None
+            if random_terrain:
+                bank['seed'] = int(rng.integers(0,2**31-1))
+                bank['far_bank_height_m'] = float(rng.uniform(*random_terrain['far_bank_height_range_m']))
+                vertices,triangles = build_ditch_terrain(bank)
+            directory = terrain/str(i) if random_terrain else terrain
+            directory.mkdir(exist_ok=True)
+            np.savez(directory/'terrain.npz',vertices=vertices,triangles=triangles)
+            (directory/'identity.json').write_text(json.dumps(dict(sha256=hashlib.sha256((directory/'terrain.npz').read_bytes()).hexdigest(),platform_front_x=bank['front_x_m'] if bank else 3.6,platform_top_z=None if bank else .16,ditch_terrain=bank,ground_bounds_x_m=[-5,ground_end],ground_bounds_y_m=[-4,4])))
+            terrain_specs.append(bank);terrain_meshes.append(vertices);terrain_paths.append(str(directory))
+        self.terrain_specs = terrain_specs
+        self.plant=IsaacLabVectorPlant(Path(cfg['asset']),terrain_paths,[0]*self.num_envs,Path(output),**cfg['plant_options'])
+        self.terrain_origins = self.plant.origin.clone()
+        self.terrain_offsets = torch.tensor(self.plant.metadata['terrain_layout']['template_offsets'],device=self.device,dtype=torch.float32)
+        (Path(output)/'terrain_sampling.json').write_text(json.dumps(dict(specs=terrain_specs,reset='Uniform random map each episode' if random_terrain else 'Fixed terrain',geometry='Seeded mesh pool generated at startup; not regenerated during contact'),indent=2))
         self.physics_substeps=round(self.dt/self.plant.physics_dt)
         self.sensor_substeps=round(self.rand['sensor_dt_s']/self.plant.physics_dt)
         if self.sensor_substeps<1 or abs(self.physics_substeps*self.plant.physics_dt-self.dt)>1e-9 or abs(self.sensor_substeps*self.plant.physics_dt-self.rand['sensor_dt_s'])>1e-9:
@@ -71,7 +91,7 @@ class PhaseUEnv:
             if self.landing_reward is None or self.task['ppo']['discounting'] != 1.:
                 raise ValueError('Verified scoring requires landing instrumentation and gamma=1')
             from .ditch_jump_adapter import DitchJumpAdapter
-            self.verified_jump = DitchJumpAdapter(self, vertices)
+            self.verified_jump = DitchJumpAdapter(self, terrain_meshes if random_terrain else vertices)
         self.entry_bank=None
         if cfg.get('reachable_entry_bank'):
             self.entry_probability=cfg['reachable_entry_probability']
@@ -89,6 +109,9 @@ class PhaseUEnv:
         return root,contact,critic
 
     def reset_idx(self,ids):
+        if self.cfg.get('ditch_randomization'):
+            self.terrain_ids[ids] = torch.randint(len(self.terrain_specs),(len(ids),),device=self.device)
+            self.plant.origin[ids] = self.terrain_origins[ids]+self.terrain_offsets[self.terrain_ids[ids]]
         n=len(ids);r=self.task['reset'];plant=self.plant
         pose=plant.robot.data.default_root_state[ids,:7].clone();pose[:,0]=1.5;pose[:,1]=0.
         velocity=torch.zeros(n,6,device=self.device);velocity[:,0]=r['initial_forward_velocity']

@@ -72,3 +72,19 @@ def test_lowered_and_raised_bank_mesh_and_clearance():
         q=torch.tensor([[[.5**.5,0.,0.,.5**.5]]*2])
         assert (bounds.clearance_upper(points,q)>=bounds.clearance(points)).all()
         assert abs(float(bounds.clearance(points)[0,0])-(.20-bounds.bound))<.0041
+
+
+def test_random_map_envelope_follows_reset_assignment():
+    specs=[dict(front_x_m=3.3,width_m=.3,ground_end_x_m=25.,stones_per_m2=30,
+                seed=100+i,stone_height_min_m=.001,stone_height_max_m=.004,far_bank_height_m=h)
+           for i,h in enumerate([-.1,.1])]
+    meshes=[build_ditch_terrain(s)[0] for s in specs]
+    ids=torch.tensor([0,1])
+    bounds=BankEnvelope(meshes,specs,.07,.025,'cpu',terrain_ids=ids)
+    q=torch.tensor([[[.5**.5,0.,0.,.5**.5]]]*2)
+    points=torch.tensor([[[4.,0.,.2]],[[4.,0.,.2]]])
+    first=bounds.clearance(points).clone()
+    upper=bounds.clearance_upper(points,q)
+    np.testing.assert_allclose(upper,[[.23],[.03]],atol=1e-6)
+    ids[:]=torch.tensor([1,0])
+    np.testing.assert_allclose(bounds.clearance(points),first.flip(0),atol=1e-6)
