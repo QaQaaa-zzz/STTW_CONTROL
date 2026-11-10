@@ -24,7 +24,7 @@
 
 增加真实near-support、物理腾空和四阶段达成日志。首个训练更新要求有效near-support比例至少0.5，低于该值立即停止（接线检查，不放宽物理成功标准）。64环境×24步×2更新检查已完成，支撑覆盖率1.0；不能当作技能成功证据。记录评测实际terrain_id/spec，避免多地图回放丢失地图身份。
 
-保持landing_focus奖励和1–4mm/±10cm随机地图池，从原初始checkpoint、全新优化器重训450轮；不使用退化的125轮权重。预算4096×24×450，任何运行异常停止，结束后另行物理回放。运行目录：`/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ditch_random_contactfix450`。
+保持landing_focus奖励；用户随后取消低岸和同高设计，待启动训练改为1–4mm起伏、远岸高1–10cm随机地图池，从原初始checkpoint、全新优化器重训450轮；不使用退化的125轮权重。预算4096×24×450，任何运行异常停止，结束后另行物理回放。运行目录：`/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ditch_random_contactfix450`。
 
 日志语义更正：上游`Policy/mean_noise_std=4.46`误读了观测归一化std，不能解释为动作噪声；本项目`Policy/latent_action_std`才是动作分布标准差，末点约0.434。此次没有改动网络/采样噪声。
 

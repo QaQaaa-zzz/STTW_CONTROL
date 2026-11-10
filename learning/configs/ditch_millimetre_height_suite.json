@@ -1,11 +1,11 @@
 {
-  "description": "Single shared policy; generate seeded rough maps once per run, uniformly resample map on episode reset. No per-reset mesh recooking.",
+  "description": "One policy, random map per episode, right landing bank always1-10cm higher; generated mesh pool, no per-reset recooking.",
   "stone_height_min_m": 0.001,
   "stone_height_max_m": 0.004,
   "ditch_randomization": {
     "num_maps": 32,
     "far_bank_height_range_m": [
-      -0.1,
+      0.01,
       0.1
     ],
     "resample_map_on_reset": true
