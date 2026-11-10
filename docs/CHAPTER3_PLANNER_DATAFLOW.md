@@ -1,6 +1,35 @@
-# 第三章任务接口与接近规划数据流
+# 第三章当前数据流与历史接口
 
-本文说明当前实现，不代表任意地图或自然语言任务均可执行。当前研究状态及结果只在 research-hub/CHAPTER3_PROJECT_STATE.md 维护。
+研究主线以[行驶与跳跃世界模型规划](CHAPTER3_EVENT_WORLD_MODEL.md)为准，事实见[第三章台账](/home/qy/STTW_CONTROL/research-hub/CHAPTER3_PROJECT_STATE.md)。
+
+## 已实际执行的跨沟回放
+
+`固定初态/地形 → update50跳跃 → stage3落地捕获 → H75 + ECBC/ESO续行 → 原判据评价`。
+
+入口为evaluate_ditch_skill.py，可选ground_handoff调用ditch_ground_handoff.py。1.46s回交、1.92s地面跟随器适用域退出，未完成稳定续行；切换前73步逐值一致，无物理重置。zero_lower=true，地面clean-state接口；并非完整世界模型规划，也没有在此回放中执行上游STTW接近。[实际XY及接口限制](evidence/chapter3_ditch_sttw_handback/RESULTS.md)。
+
+## 目标数据流（尚未完成）
+
+```mermaid
+flowchart TD
+ S[实测状态、控制历史、已知地图] --> C[候选路径、速度、α、触发位置]
+ C --> G[地面模型：接近或绕行]
+ G --> J[跳跃模型：离地、清障、落地至H75接管]
+ J --> R[地面模型：续行至共同终点]
+ G --> R
+ R --> V[硬约束、完成概率、通行时间]
+ V --> D[决策线前选路；过线后路线固定]
+ D --> E[已有H75与跳跃控制器执行]
+ E --> S
+```
+
+模型输出预测状态/事件/耗时；规划器输出可执行路线和指令安排；已有控制器输出电机/机构指令。规划期间车辆保持前进，计入计算与执行延迟，超时不冻结车辆。两个小模型及其能力评价尚无训练/校准结果。LLM不在当前主链，execute_scene只是历史语言回归工具。
+
+---
+
+# 历史：语言回归接口与旧接近规划数据流
+
+以下保留旧接口的实现说明，仅用于回归与结果追溯；不代表当前第三章主方法。
 
 ```mermaid
 flowchart TD
