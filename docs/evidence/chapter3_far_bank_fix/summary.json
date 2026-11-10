@@ -1,0 +1,106 @@
+[
+  {
+    "case": "baseline_left",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_far_bank_fix/baseline_left",
+    "route": "left",
+    "condition": {
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "jump_start_x_m": 9.0
+    },
+    "entry_yaw_deg": -33.223453521728516,
+    "entry_vy_m_s": -1.0970981121063232,
+    "entry_y_m": 0.06726376712322235,
+    "handoff_s": 5.14,
+    "arrival_s": null,
+    "goal_completed": false,
+    "corridor_until_end_or_arrival": false,
+    "first_corridor_exit_s": 2.05,
+    "max_centerline_distance_m": 1.3509421868799731,
+    "end_code": 15,
+    "duration_s": 5.88,
+    "final_xyz": [
+      11.760788917541504,
+      -1.333734154701233,
+      0.1189381405711174
+    ]
+  },
+  {
+    "case": "smooth_left",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_far_bank_fix/smooth_left",
+    "route": "left",
+    "condition": {
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "jump_start_x_m": 9.0
+    },
+    "entry_yaw_deg": -4.1845879554748535,
+    "entry_vy_m_s": -0.1006198599934578,
+    "entry_y_m": 0.03891691565513611,
+    "handoff_s": 4.76,
+    "arrival_s": null,
+    "goal_completed": false,
+    "corridor_until_end_or_arrival": false,
+    "first_corridor_exit_s": 7.015000000000001,
+    "max_centerline_distance_m": 0.983665406703949,
+    "end_code": 9,
+    "duration_s": 10.0,
+    "final_xyz": [
+      17.992307662963867,
+      -0.919775664806366,
+      0.11860474199056625
+    ]
+  },
+  {
+    "case": "baseline_right",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_far_bank_fix/baseline_right",
+    "route": "right",
+    "condition": {
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "jump_start_x_m": 9.0
+    },
+    "entry_yaw_deg": 13.018074989318848,
+    "entry_vy_m_s": 0.4013919234275818,
+    "entry_y_m": 0.5420879125595093,
+    "handoff_s": null,
+    "arrival_s": null,
+    "goal_completed": false,
+    "corridor_until_end_or_arrival": true,
+    "first_corridor_exit_s": null,
+    "max_centerline_distance_m": 0.5720860362052917,
+    "end_code": 12,
+    "duration_s": 4.62,
+    "final_xyz": [
+      10.309028625488281,
+      0.5710777640342712,
+      0.08318916708230972
+    ]
+  },
+  {
+    "case": "smooth_right",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_far_bank_fix/smooth_right",
+    "route": "right",
+    "condition": {
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "jump_start_x_m": 9.0
+    },
+    "entry_yaw_deg": -7.000532627105713,
+    "entry_vy_m_s": -0.16382554173469543,
+    "entry_y_m": 0.17092326283454895,
+    "handoff_s": 4.72,
+    "arrival_s": 8.515,
+    "goal_completed": true,
+    "corridor_until_end_or_arrival": true,
+    "first_corridor_exit_s": null,
+    "max_centerline_distance_m": 0.4881223883419562,
+    "end_code": 9,
+    "duration_s": 10.0,
+    "final_xyz": [
+      18.679847717285156,
+      0.19778598845005035,
+      0.11908428370952606
+    ]
+  }
+]
