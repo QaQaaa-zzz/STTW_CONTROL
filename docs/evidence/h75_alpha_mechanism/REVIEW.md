@@ -1,6 +1,6 @@
 # α机制证据与实验
 
-[原72条全部XY](../h75_dense_corridor_ridge10/evaluation/alpha_comparison/README.md) · [新实验结果入口](RESULTS.md) · [独立数值复核](evidence_audit/audit.json)
+[原72条全部XY](../h75_recent_20261109/results/dense_corridor_ridge10/alpha_comparison/README.md) · [新实验结果入口](/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_mechanism/RESULTS.md) · [独立数值复核](audit.json)
 
 ## 审查结论
 
