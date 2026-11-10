@@ -10,7 +10,11 @@ p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True);a=p.
 cfg=json.loads((a.run/'config.json').read_text());terrain=cfg['ditch_terrain'];front=terrain['front_x_m'];back=front+terrain['width_m'];width_cm=100*terrain['width_m']
 verified=cfg.get('verified_ditch_reward',False)
 cases=json.loads((a.run/'summary.json').read_text())['cases'];colors=['#0072B2','#D55E00','#009E73'];styles=['-','--','-.']
-mesh=np.load(a.run/'terrain/terrain.npz');verts=mesh['vertices'];profile=verts[np.abs(verts[:,1])<1e-6];profile=profile[np.argsort(profile[:,0])]
+mesh_path=a.run/'terrain/terrain.npz'
+if cfg.get('ditch_randomization'):
+ if len({c['terrain_id'] for c in cases})!=1:raise ValueError('Shared ground profile requires matched terrain IDs')
+ mesh_path=a.run/'terrain'/str(cases[0]['terrain_id'])/'terrain.npz'
+mesh=np.load(mesh_path);verts=mesh['vertices'];profile=verts[np.abs(verts[:,1])<1e-6];profile=profile[np.argsort(profile[:,0])]
 fig,axes=plt.subplots(2,3,figsize=(15,8),layout='constrained'); xy,xz,v,reward,cumulative,height=axes.ravel()
 for i,c in enumerate(cases):
  name=c['candidate']['name'];d=np.load(a.run/name/'trajectory.npz');r=d['root'][:,0];t=d['time'];color=colors[i];style=styles[i];label=f"{name} (end {t[-1]:.2f}s, code {c['terminal_code']})"
@@ -23,7 +27,7 @@ for i,c in enumerate(cases):
  else:height.plot(t,d['reward_height'][:,0],style,color=color,label=name)
 for ax in [xy,xz]:
  ax.axvspan(front,back,color='0.8',alpha=.6,label=f'open ditch {width_cm:g}cm');ax.set_xlabel('World x (m)');ax.set_xlim(1.2,max(4.8,max(c['max_root_x'] for c in cases)+.3));ax.set_aspect('equal',adjustable='box')
-xy.plot([1.2,4.8],[0,0],':',color='black',label='original route y=0');xy.set_ylim(-.4,.6);xy.set_ylabel('World y (m)');xy.set_title('Actual XY, all declared candidates');xy.legend(fontsize=7,loc='upper left')
+xy.plot([1.2,4.8],[0,0],':',color='black',label='original route y=0');ys=np.concatenate([line.get_ydata() for line in xy.lines]);xy.set_ylim(min(-.4,float(ys.min())-.1),max(.6,float(ys.max())+.1));xy.set_ylabel('World y (m)');xy.set_title('Actual XY, all declared candidates');xy.legend(fontsize=7,loc='upper left')
 
 for bank in [profile[profile[:,0]<=front],profile[profile[:,0]>=back]]:xz.plot(bank[:,0],bank[:,2],color='saddlebrown')
 xz.set_ylim(-.25,.7);xz.set_ylabel('Root z (m)');xz.set_title('Actual root XZ; x marks true episode end')
@@ -42,7 +46,7 @@ ax[-1].set_xlabel('Time (s), solved physics steps 0.0025s');fig.savefig(a.run/'w
 fig,axs=plt.subplots(3,1,figsize=(9,7),layout='constrained');datasets=[];artists=[]
 for i,c in enumerate(cases):
  name=c['candidate']['name'];d=np.load(a.run/name/'physics_contact.npz');datasets.append(d)
- axs[i].axvspan(front,back,color='0.85');axs[i].plot([1.2,front],[0,0],color='saddlebrown');axs[i].plot([back,4.8],[0,0],color='saddlebrown');axs[i].set(xlim=(1.2,max(4.8,max(c['max_root_x'] for c in cases)+.3)),ylim=(-.3,.85),ylabel='z (m)',title=name);axs[i].set_aspect('equal')
+ axs[i].axvspan(front,back,color='0.85');axs[i].plot(profile[profile[:,0]<=front,0],profile[profile[:,0]<=front,2],color='saddlebrown');axs[i].plot(profile[profile[:,0]>=back,0],profile[profile[:,0]>=back,2],color='saddlebrown');axs[i].set(xlim=(1.2,max(4.8,max(c['max_root_x'] for c in cases)+.3)),ylim=(-.3,.85),ylabel='z (m)',title=name);axs[i].set_aspect('equal')
  points,=axs[i].plot([],[],'o',color=colors[i],ms=5);wheels,=axs[i].plot([],[],'o',mfc='none',mec=colors[i],ms=13);text=axs[i].text(.02,.86,'',transform=axs[i].transAxes);artists.append((points,wheels,text))
 axs[-1].set_xlabel('x (m)');fig.suptitle('Measured motion schematic (body centers + wheels); stops at actual termination')
 frames=np.arange(0,max(d['time'][-1] for d in datasets)+.04,.04)

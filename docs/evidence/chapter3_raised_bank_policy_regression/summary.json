@@ -1,0 +1,116 @@
+{
+  "cases": [
+    {
+      "candidate": {
+        "name": "initial",
+        "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ditch_random_contactfix450/training_run/training/model_initial.pt"
+      },
+      "terrain_id": 26,
+      "terrain_spec": {
+        "front_x_m": 3.3,
+        "width_m": 0.3,
+        "ground_end_x_m": 25.0,
+        "stone_height_min_m": 0.001,
+        "stone_height_max_m": 0.004,
+        "stones_per_m2": 30,
+        "seed": 951730916,
+        "lateral_limit_m": 3.9,
+        "far_bank_height_m": 0.02191562370918548
+      },
+      "steps": 135,
+      "duration_s": 2.7,
+      "terminal_code": 3,
+      "final_xyz": [
+        4.558509826660156,
+        1.1811637878417969,
+        0.1282447874546051
+      ],
+      "peak_root_z": 0.5060904026031494,
+      "max_root_x": 4.763740539550781,
+      "ditch_cross_hold": false,
+      "reward_total": -55.000003814697266,
+      "reward_parts": {
+        "verified_jump": -55.000003814697266,
+        "episode_return_override": 0.0
+      },
+      "scope": "Single fixed-seed TRAIN-domain diagnostic with frozen sampled Go2 properties/noise and mean actor; no ground-controller handoff or complete-map success claim",
+      "verified_stage": 2,
+      "verified_success": false
+    },
+    {
+      "candidate": {
+        "name": "mid75",
+        "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ditch_random_contactfix450/training_run/training/model_update_00075.pt"
+      },
+      "terrain_id": 26,
+      "terrain_spec": {
+        "front_x_m": 3.3,
+        "width_m": 0.3,
+        "ground_end_x_m": 25.0,
+        "stone_height_min_m": 0.001,
+        "stone_height_max_m": 0.004,
+        "stones_per_m2": 30,
+        "seed": 951730916,
+        "lateral_limit_m": 3.9,
+        "far_bank_height_m": 0.02191562370918548
+      },
+      "steps": 69,
+      "duration_s": 1.3800000000000001,
+      "terminal_code": 12,
+      "final_xyz": [
+        3.4100723266601562,
+        0.2213287353515625,
+        0.02618490904569626
+      ],
+      "peak_root_z": 0.14784055948257446,
+      "max_root_x": 3.4100723266601562,
+      "ditch_cross_hold": false,
+      "reward_total": -100.0,
+      "reward_parts": {
+        "verified_jump": -100.0,
+        "episode_return_override": 0.0
+      },
+      "scope": "Single fixed-seed TRAIN-domain diagnostic with frozen sampled Go2 properties/noise and mean actor; no ground-controller handoff or complete-map success claim",
+      "verified_stage": 0,
+      "verified_success": false
+    },
+    {
+      "candidate": {
+        "name": "last175",
+        "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ditch_random_contactfix450/training_run/training/model_update_00175.pt"
+      },
+      "terrain_id": 26,
+      "terrain_spec": {
+        "front_x_m": 3.3,
+        "width_m": 0.3,
+        "ground_end_x_m": 25.0,
+        "stone_height_min_m": 0.001,
+        "stone_height_max_m": 0.004,
+        "stones_per_m2": 30,
+        "seed": 951730916,
+        "lateral_limit_m": 3.9,
+        "far_bank_height_m": 0.02191562370918548
+      },
+      "steps": 84,
+      "duration_s": 1.68,
+      "terminal_code": 12,
+      "final_xyz": [
+        3.4600296020507812,
+        0.18903732299804688,
+        -0.011785746552050114
+      ],
+      "peak_root_z": 0.14753732085227966,
+      "max_root_x": 3.4600296020507812,
+      "ditch_cross_hold": false,
+      "reward_total": -99.99999237060547,
+      "reward_parts": {
+        "verified_jump": -99.99999237060547,
+        "episode_return_override": 0.0
+      },
+      "scope": "Single fixed-seed TRAIN-domain diagnostic with frozen sampled Go2 properties/noise and mean actor; no ground-controller handoff or complete-map success claim",
+      "verified_stage": 0,
+      "verified_success": false
+    }
+  ],
+  "elapsed_s": 27.284657955169678
+}

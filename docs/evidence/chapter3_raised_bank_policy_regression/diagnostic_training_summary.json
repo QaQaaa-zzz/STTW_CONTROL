@@ -1,0 +1,74 @@
+{
+  "Policy/latent_action_std": {
+    "first20": 0.3421890437602997,
+    "last20": 0.40124793350696564,
+    "last": 0.3639298379421234,
+    "n": 177
+  },
+  "Episode/reward": {
+    "first20": -52.43764686584473,
+    "last20": -99.64522018432618,
+    "last": -98.95037841796875,
+    "n": 176
+  },
+  "Episode/length": {
+    "first20": 97.75875358581543,
+    "last20": 75.18599472045898,
+    "last": 78.29552459716797,
+    "n": 176
+  },
+  "Episode/apex_fraction": {
+    "first20": 0.5343056231737137,
+    "last20": 0.0029236769827548415,
+    "last": 0.007737639360129833,
+    "n": 176
+  },
+  "Episode/physical_failure": {
+    "first20": 0.9740409076213836,
+    "last20": 0.9998138934373856,
+    "last": 1.0,
+    "n": 176
+  },
+  "Episode/ditch_cross_hold_fraction": {
+    "first20": 0.0,
+    "last20": 0.0,
+    "last": 0.0,
+    "n": 176
+  },
+  "Episode/verified_near_support_fraction": {
+    "first20": 1.0,
+    "last20": 1.0,
+    "last": 1.0,
+    "n": 176
+  },
+  "Episode/physical_flight_fraction": {
+    "first20": 1.0,
+    "last20": 1.0,
+    "last": 1.0,
+    "n": 176
+  },
+  "Episode/verified_stage1_fraction": {
+    "first20": 0.9960949510335922,
+    "last20": 0.015378773282282054,
+    "last": 0.044571708887815475,
+    "n": 176
+  },
+  "Episode/verified_stage2_fraction": {
+    "first20": 0.8982147783041,
+    "last20": 0.007445796148385852,
+    "last": 0.026603754609823227,
+    "n": 176
+  },
+  "Episode/verified_stage3_fraction": {
+    "first20": 0.3710794150829315,
+    "last20": 0.0011295205127680673,
+    "last": 0.0031465976499021053,
+    "n": 176
+  },
+  "Episode/verified_stage4_fraction": {
+    "first20": 0.0,
+    "last20": 0.0,
+    "last": 0.0,
+    "n": 176
+  }
+}
