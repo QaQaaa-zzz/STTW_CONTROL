@@ -1,0 +1,34 @@
+{
+  "scope": "Actual XY in x1.5..3.5, interpolated fixed y(x); not nearest-path cross-track error",
+  "lookahead": "Existing follower 0.7s, min0.8m max1.8m; nominal at2m/s is1.4m versus2m bump length. Plausible smoothing mechanism, not isolated causal proof.",
+  "cases": [
+    {
+      "case": "left_v20",
+      "actual_y_near_reference_peak_m": 0.008945475332438946,
+      "reference_y_at_same_x_m": 0.14976708325474072,
+      "max_abs_actual_y_in_offset_segment_m": 0.03395622596144676,
+      "max_abs_reference_y_error_m": 0.1465725468615243
+    },
+    {
+      "case": "left_v18",
+      "actual_y_near_reference_peak_m": 0.0011714641004800797,
+      "reference_y_at_same_x_m": 0.14982143037774157,
+      "max_abs_actual_y_in_offset_segment_m": 0.012608679942786694,
+      "max_abs_reference_y_error_m": 0.1507608731829243
+    },
+    {
+      "case": "right_v20",
+      "actual_y_near_reference_peak_m": 0.005033569876104593,
+      "reference_y_at_same_x_m": -0.14979235590129691,
+      "max_abs_actual_y_in_offset_segment_m": 0.02477663941681385,
+      "max_abs_reference_y_error_m": 0.15661839786332024
+    },
+    {
+      "case": "right_v18",
+      "actual_y_near_reference_peak_m": 0.0027130511589348316,
+      "reference_y_at_same_x_m": -0.14983873963664537,
+      "max_abs_actual_y_in_offset_segment_m": 0.07136943936347961,
+      "max_abs_reference_y_error_m": 0.1536460300538366
+    }
+  ]
+}

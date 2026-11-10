@@ -68,7 +68,8 @@ for candidate in cfg['evaluation_checkpoints']:
   row['ground_handoff_executed']=handoff.active
   row['live_approach_executed']=handoff.approach_initialized
   row['approach_reached_jump']=handoff.approach_initialized and not handoff.approaching
-  row['handoff_stage_requested']=handoff.handoff_stage
+  row['handoff_stage_requested']=handoff.handoff_stage if handoff.handoff_event=='stage' else None
+  row['handoff_event_requested']=handoff.handoff_event
   row['verified_success_scope']='jump scorer only; inspect ground failure and final state separately'
   row['action_log_scope']='jump actor proposals; after handoff actual ground commands are in ground_commands.npz'
   row['ground_continued_to_horizon']=handoff.active and int(codes[-1][0])==9 and len(states)==env.max_episode_length
