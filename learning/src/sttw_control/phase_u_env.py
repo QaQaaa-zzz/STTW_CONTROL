@@ -191,7 +191,7 @@ class PhaseUEnv:
             root_acceleration=(root_velocity-previous_root_velocity)/plant.physics_dt;previous_root_velocity=root_velocity.clone()
             if (tick+1)%self.sensor_substeps==0:
                 plant.refresh();root=plant.roots.clone();root[:,:3]-=plant.origin
-                distance=(self.ditch['front_x_m'] if self.ditch else 3.6)-(self.geometry.frontmost_x(plant.rigid)-plant.origin[:,0])
+                distance=self.cfg.get('policy_obstacle_reference_x_m',self.ditch['front_x_m'] if self.ditch else 3.6)-(self.geometry.frontmost_x(plant.rigid)-plant.origin[:,0])
                 acceleration=root_acceleration if self.cfg.get('root_acceleration_difference',False) else plant.robot.data.body_com_acc_w[:,plant.bodies.index('chasis'),:3]
                 frame=self.history.make_frame(root,plant.dofs[:,:,0],plant.dofs[:,:,1],acceleration,distance,action)
                 measured=self.randomization.sensor_frame(frame)

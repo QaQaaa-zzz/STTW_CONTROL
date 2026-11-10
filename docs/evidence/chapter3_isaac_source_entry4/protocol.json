@@ -1,0 +1,11 @@
+{
+  "budget": "one8s episode,1GPU lane,0training",
+  "model": "original heading125, exact source export hash verified by loader",
+  "initial": "same entry4 physical state and76D history; measured heading4",
+  "task": "same-height flat30cm open ditch; nominal evaluation only",
+  "handoff": "original Isaac verified hold1s(stage4), finite servos, then keep ground execution to8s or failure",
+  "limits": "native contact engine, wheel approximation, task scoring and source observation updates remain different; no strict cross-backend equivalence",
+  "randomization": "nominal evaluator only; training Go2 randomization unchanged",
+  "additional_budget": "one8s nominal replay correcting source obstacle observation reference3.6 only; no further parameter sweep",
+  "capture_handoff_budget": "one8s same initial/policy/physics/reference, only existing stage3 handback instead of stage4; original success gate unchanged"
+}

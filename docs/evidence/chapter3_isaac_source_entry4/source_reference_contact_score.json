@@ -1,0 +1,20 @@
+[
+  {
+    "contact_filtered_20ms_first_support_completion_s": null,
+    "contact_filtered_20ms_hold_1s": false,
+    "contact_filtered_20ms_longest_hold_s": 0.16000000000000014,
+    "skill": "heading125",
+    "first_strict_support_completion_s": null,
+    "airborne_after_handoff": true,
+    "first_airborne_interval_s": [
+      0.445,
+      0.985
+    ],
+    "landing_hold_1s": false,
+    "longest_hold_s": 0.004999999999999893,
+    "interval_s": [
+      1.405,
+      1.41
+    ]
+  }
+]

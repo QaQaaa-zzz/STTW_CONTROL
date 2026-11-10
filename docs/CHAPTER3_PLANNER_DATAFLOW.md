@@ -1,5 +1,7 @@
 # 第三章当前数据流与历史接口
 
+> 最新交接合同：落地捕获后交回STTW，以后续任务能否继续执行评价；不要求先连续稳定支撑1秒。接触保持仅作诊断，物理失败、道路边界及控制域限制保留。Isaac原heading125/entry4已回交并续行至8秒，终点横偏约1.35cm；这是单初态名义工程实例，非完整来车/选路验证。[证据](evidence/chapter3_isaac_source_entry4/RESULTS.md)。
+
 > 最新执行约束：正式训练在Isaac中进行；同高平面或1mm地面，高岸暂停。MuJoCo仅用于所附程序运行及技能流程参考，不作为训练后端。沿用附件方法须核实来源并接入Isaac，成功回放本身没有新增PPO，不能从残留脚本推断原模型训练配方。
 
 研究主线以[行驶与跳跃世界模型规划](CHAPTER3_EVENT_WORLD_MODEL.md)为准，事实见[第三章台账](/home/qy/STTW_CONTROL/research-hub/CHAPTER3_PROJECT_STATE.md)。

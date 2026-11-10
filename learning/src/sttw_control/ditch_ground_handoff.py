@@ -14,6 +14,10 @@ class DitchGroundHandoff:
             raise ValueError('Ditch handback diagnostic requires one lane')
         self.env,self.spec,self.output=env,spec,Path(output)
         self.leg_hold=spec.get('leg_hold','joint_brake')
+        self.handoff_stage=spec.get('handoff_stage',3)
+        self.task_continuation=spec.get('continue_to_horizon',False)
+        if self.handoff_stage not in (3,4):
+            raise ValueError('Handoff stage must be capture3 or completed hold4')
         if self.leg_hold not in ('joint_brake','finite_motor'):
             raise ValueError('Unknown handoff leg hold mode')
         settings=json.loads(Path(spec['settings']).read_text())
@@ -37,7 +41,7 @@ class DitchGroundHandoff:
 
     def step(self, latent):
         e=self.env;g=self.ground
-        if not self.active and int(e.verified_jump.scorer.stage[0])>=3:
+        if not self.active and int(e.verified_jump.scorer.stage[0])>=self.handoff_stage:
             before=e.physical()[0].clone()
             if self.leg_hold=='joint_brake':
                 e.plant.set_pendulum_locked(True)
@@ -50,16 +54,23 @@ class DitchGroundHandoff:
             g.physical_tick.fill_(round(float(e.episode_length_buf[0])*e.dt/.005))
             self.active=True
             (self.output/'handoff.json').write_text(json.dumps(dict(time_s=float(e.episode_length_buf[0])*e.dt,
-                root=before.cpu().tolist(),stage=3,physical_reset=False,leg_hold=self.leg_hold,
+                root=before.cpu().tolist(),stage=self.handoff_stage,physical_reset=False,leg_hold=self.leg_hold,
                 leg_target=e.plant.pendulum_target.cpu().tolist(),
                 unchanged_root=bool(torch.equal(before,e.physical()[0]))),indent=2))
-        if not self.active:return e.step(latent)
+        if not self.active:
+            transition=e.step(latent)
+            if self.handoff_stage==4 and bool(transition[4]['jump_success'].all()) and int(e.episode_length_buf[0])<e.max_episode_length:
+                obs,priv,reward,done,info=transition
+                return obs,priv,reward,torch.zeros_like(done),info
+            return transition
         reward=torch.zeros(1,device=e.device);code=torch.zeros(1,device=e.device,dtype=torch.long);tick=0
         def physics(command):
             nonlocal reward,code,tick
             result=e.plant.step(command,refresh_diagnostics=True)
             inc,done,success,stage=e.verified_jump.sample(e,torch.zeros(1,4,device=e.device),tick==e.physics_substeps-1)
-            code=torch.where(done&(code==0),torch.where(success,13,e.verified_jump.end_code),code)
+            terminal=e.verified_jump.physical_failure if self.task_continuation or self.handoff_stage==4 else done
+            reason=e.verified_jump.end_code if self.task_continuation or self.handoff_stage==4 else torch.where(success,13,e.verified_jump.end_code)
+            code=torch.where(terminal&(code==0),reason,code)
             reward+=inc;tick+=1
             return result
         g.physics_step_override=physics
@@ -78,7 +89,11 @@ class DitchGroundHandoff:
                 ground_failure=result['failure'].cpu().tolist(),root=e.physical()[0].cpu().tolist(),
                 tracking_error=result['tracking_error'].cpu().tolist()),indent=2))
         e.platform_held.copy_(scorer.success);e.episode_length_buf+=1;e.episode_return+=reward
-        done=scorer.done.clone()|result['failure']
+        if self.task_continuation or self.handoff_stage==4:
+            done=(code!=0)|result['failure']|(e.episode_length_buf>=e.max_episode_length)
+            code=torch.where((e.episode_length_buf>=e.max_episode_length)&(code==0)&~result['failure'],9,code)
+        else:
+            done=scorer.done.clone()|result['failure']
         reason=torch.where(g.middle.domain_exit,15,torch.where(g.middle.fault,16,17))
         code=torch.where(result['failure']&(code==0),reason,code)
         info=dict(unscaled_reward=reward,end_code=code,reward_parts={'verified_jump':reward,'episode_return_override':torch.zeros_like(reward)},

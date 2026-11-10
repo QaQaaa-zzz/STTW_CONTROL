@@ -192,6 +192,7 @@ class DitchJumpAdapter:
                   (root[:,1].abs()>env.ditch['lateral_limit_m']) |
                   (root[:,0]<1.5-limit['max_backward_distance']) |
                   (roll.abs()>limit['max_abs_roll']) | (pitch.abs()>limit['max_abs_pitch']))
+        self.physical_failure=failed
         timeout = (env.episode_length_buf+1>=env.max_episode_length)&final_tick
         code = torch.full_like(env.episode_length_buf,14)  # core event rejection
         code = torch.where(timeout,9,code)

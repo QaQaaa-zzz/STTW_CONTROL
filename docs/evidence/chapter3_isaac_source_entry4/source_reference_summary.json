@@ -1,0 +1,43 @@
+{
+  "cases": [
+    {
+      "candidate": {
+        "name": "heading125",
+        "source_bundle": "learning/deployment/chapter3/policies/heading125"
+      },
+      "terrain_id": 0,
+      "terrain_spec": {
+        "front_x_m": 3.3,
+        "width_m": 0.3,
+        "ground_end_x_m": 25.0,
+        "stone_height_min_m": 0.0,
+        "stone_height_max_m": 0.0,
+        "stones_per_m2": 0,
+        "seed": 20261109,
+        "lateral_limit_m": 3.9,
+        "far_bank_height_m": 0.0
+      },
+      "steps": 400,
+      "duration_s": 8.0,
+      "terminal_code": 9,
+      "final_xyz": [
+        15.032903671264648,
+        -0.6795600056648254,
+        0.11897039413452148
+      ],
+      "peak_root_z": 0.5256781578063965,
+      "max_root_x": 15.032903671264648,
+      "ditch_cross_hold": false,
+      "reward_total": -24.99999237060547,
+      "reward_parts": {
+        "verified_jump": -24.99999237060547,
+        "episode_return_override": 0.0
+      },
+      "scope": "Single fixed-map DEV jump-to-H75 handback; no statistical reliability claim",
+      "ground_handoff_executed": false,
+      "verified_stage": 3,
+      "verified_success": false
+    }
+  ],
+  "elapsed_s": 34.599114656448364
+}

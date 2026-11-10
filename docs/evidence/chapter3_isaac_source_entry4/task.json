@@ -1,0 +1,274 @@
+{
+  "source_config": "/home/qy/DVGC/JIT/runs/phase_u/phase_u_v4_speed2_roll400_missed200_9977856_seed820701_20260826/resolved_config.json",
+  "source_sha256": "557e048980f90627b571f2bbbc554c5e66bfab2128ac8cbd799f36058eb7f7e3",
+  "status": "Single-policy random ditch training; verified event reward with landing focus",
+  "task": {
+    "action": {
+      "base_rear_speed": 12.0,
+      "joint_target_semantics": "keyframe_centered_absolute",
+      "rear_speed_delta": 12.0
+    },
+    "events": {
+      "apex_height": 0.5,
+      "jump_zone_x_max": 4.0,
+      "jump_zone_x_min": 2.5,
+      "min_ascent_velocity": 0.05,
+      "min_descent_velocity": 0.05,
+      "stuck_forward_velocity_threshold": null,
+      "stuck_window_steps": null
+    },
+    "formal": {
+      "checkpoint_transitions": [
+        0,
+        491520,
+        1990656,
+        4988928,
+        7987200,
+        9977856
+      ],
+      "fixed_evaluation_transitions": [
+        491520,
+        1990656,
+        4988928,
+        7987200,
+        9977856
+      ],
+      "resume_semantics": "fresh_only"
+    },
+    "model": {
+      "mjx_impl": "warp",
+      "naccdmax": 320,
+      "naconmax": 4096,
+      "njmax": 256,
+      "reference_path": "data/reference_jump.csv",
+      "reference_sha256": "612fe758eb1042481b9c7642cc9b92d3e9c14b4a75c9deaf5340183c928bc41f",
+      "xml_path": "assets/orange_bike_4kg_horizontal.xml",
+      "xml_sha256": "0b56d3672773ef05a2b5982117fa53a7fdffcaf2b7f3f04a7a7941233d6e9c8a"
+    },
+    "phase": "propulsion_ascent",
+    "physical_limits": {
+      "max_abs_pitch": 1.3089969389957472,
+      "max_abs_roll": 0.6108652381980153,
+      "max_abs_yaw": null,
+      "max_backward_distance": 1.0,
+      "terminate_on_prohibited_contact": false
+    },
+    "ppo": {
+      "batch_size": 16,
+      "clipping_epsilon": 0.2,
+      "discounting": 1.0,
+      "entropy_cost": 0.01,
+      "episode_horizon": 400,
+      "gae_lambda": 0.95,
+      "held_out_seeds": [
+        980001,
+        980002,
+        980003,
+        980004,
+        980005,
+        980006,
+        980007,
+        980008
+      ],
+      "learning_rate": 0.0001,
+      "max_grad_norm": 0.5,
+      "num_eval_envs": 8,
+      "num_evals": 407,
+      "num_minibatches": 24,
+      "num_parallel_envs": 384,
+      "num_updates_per_batch": 8,
+      "requested_transitions": 9977856,
+      "reward_scaling": 0.1,
+      "seed": 820701,
+      "unroll_length": 64
+    },
+    "reset": {
+      "airborne_rsi_probability": 0.0,
+      "airborne_rsi_vx_max": 2.2,
+      "airborne_rsi_vx_min": 1.8,
+      "airborne_rsi_vz_max": 3.6,
+      "airborne_rsi_vz_min": 3.0,
+      "airborne_rsi_x_max": 2.9,
+      "airborne_rsi_x_min": 2.7,
+      "airborne_rsi_z_max": 0.45,
+      "airborne_rsi_z_min": 0.38,
+      "initial_forward_velocity": 2.0,
+      "keyframe": "initial_state"
+    },
+    "reward": {
+      "action_coeff": 1.5,
+      "action_magnitude_scale": 0.1,
+      "action_smoothness_scale": 0.0001,
+      "apex_success_bonus": 0.0,
+      "desired_velocity": 2.0,
+      "failed_episode_return": null,
+      "height_coeff": 0.0,
+      "illegal_contact_penalty": 0.0,
+      "joint_energy_penalty_coeff": 0.1,
+      "jump_reward_min_height": 0.35,
+      "jump_zone_missed_penalty": 200.0,
+      "low_height_penalty": 0.0,
+      "low_height_penalty_full_at": 0.15,
+      "max_beneficial_height": 0.8,
+      "peak_reward_height": 0.5,
+      "physical_failure_penalty": 30.0,
+      "pitch_angular_velocity_coeff": 0.15,
+      "pitch_coeff": 1.0,
+      "rear_wheel_action_diff_penalty": 2.0,
+      "roll_coeff": 3.0,
+      "roll_pitch_failure_penalty": 400.0,
+      "speed_coeff": 0.0,
+      "speed_sigma": 0.5,
+      "steering_action_diff_penalty": 1.0,
+      "steering_magnitude_penalty": 0.25,
+      "stuck_penalty": 100.0,
+      "survival_reward": 0.0,
+      "timeout_penalty": 10.0,
+      "total_max": 1000.0,
+      "total_min": -1000.0,
+      "yaw_coeff": 0.0,
+      "yaw_limit_penalty": 100.0,
+      "platform_landing": {
+        "hold_s": 1.0,
+        "target_forward_m_s": 1.5,
+        "speed_sigma": 0.5,
+        "support_weight": 0.0,
+        "hold_bonus": 0.0
+      },
+      "ditch_events": {
+        "start_x_m": 1.5,
+        "goal_x_m": 5.6,
+        "progress_per_m": 20.0,
+        "takeoff_bonus": 10.0,
+        "clear_bonus": 60.0,
+        "recover_bonus": 150.0,
+        "failure_penalty": 400.0
+      }
+    },
+    "schema": "jit_phase_u_formal_v4",
+    "training_wrapper": {
+      "full_reset": true,
+      "preserve_episode_evidence": true
+    }
+  },
+  "implementation": {
+    "reward": "sttw_control.phase_u_reward.phase_u_reward",
+    "physics_dt_s": 0.0025,
+    "control_dt_s": 0.02,
+    "actor_hidden": [
+      256,
+      256,
+      256
+    ],
+    "actor_activation": "silu",
+    "actor_input": 80,
+    "actor_logits": 8,
+    "policy_initialization": "original Phase U actor, critic and frozen normalizer; optimizer fresh when training starts",
+    "training_backend": "existing native Go2 OnPolicyRunner through train_isaac_phase_u.py",
+    "randomization_reference": "learning/configs/go2_local_original_task.json:randomization",
+    "randomization_status": "PhaseUEnv calls property, control/sensor delay and push adapters; new run runtime evidence pending",
+    "actor_critic": "sttw_control.phase_u_actor_critic.PhaseUActorCritic",
+    "training_bundle": "runs/phase_u_training_bundle/source",
+    "critic_input": 106,
+    "critic_hidden": [
+      256,
+      256,
+      256
+    ],
+    "critic_output": 1,
+    "action_contract": "Go2 rollout stores latent Gaussian actions; environment tanh once then original four-actuator mapping",
+    "network_adapter_status": "reuse existing 80D heading actor and106D critic; same network weights interface",
+    "events": "sttw_control.phase_u_events",
+    "critic_observation": "TorchPendulumObservation.privileged",
+    "critic_extra_joint_policy": "preserve original 106D; additional passive suspension is physically simulated but omitted as an independent critic input",
+    "events_status": "existing Phase U events plus explicit terrain_failure code12"
+  },
+  "randomization": {
+    "base_body": "chasis",
+    "friction_range": [
+      0.8,
+      0.8
+    ],
+    "mass_scale": [
+      1.0,
+      1.0
+    ],
+    "base_com_m": [
+      0.0,
+      0.0
+    ],
+    "servo_gain_scale": [
+      1.0,
+      1.0
+    ],
+    "steer_zero_offset_rad": [
+      0.0,
+      0.0
+    ],
+    "latency_s": [
+      0.0,
+      0.0
+    ],
+    "push_interval_s": 4,
+    "push_velocity_range": {
+      "x": [
+        0.0,
+        0.0
+      ],
+      "y": [
+        0.0,
+        0.0
+      ],
+      "roll": [
+        0.0,
+        0.0
+      ],
+      "pitch": [
+        0.0,
+        0.0
+      ],
+      "yaw": [
+        0.0,
+        0.0
+      ]
+    },
+    "base_mass_add_kg": [
+      0.0,
+      0.0
+    ],
+    "mapping_note": "Source Go2-style property/latency/gain/push ranges retained; position and velocity channels mapped to three angle joints and two wheels. Acceleration noise 0.2 m/s2 is an explicit task-specific IMU mapping; relative obstacle distance and root height are nominal known-map measurements. Sensor delay uses 5ms clock; action delay uses 0.2ms clock. Motor offsets are sensed angle biases, not changes to physical joint position.",
+    "sensor_dt_s": 0.005,
+    "joint_zero_offset_rad": [
+      0.0,
+      0.0
+    ],
+    "frame_noise": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "reward_change_note": "Verified JumpReward replaces legacy reward when enabled. Stage totals 0/10/25/70/100, one-time controlled wheel touchdown credit absorbed into capture stage; terminal failure -100, timeout -95, success quality<=10. Gamma1 and terminal-zero potential retained."
+}
