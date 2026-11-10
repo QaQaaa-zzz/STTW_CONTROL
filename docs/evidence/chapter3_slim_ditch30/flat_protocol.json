@@ -1,0 +1,10 @@
+{
+  "role": "single-entry DEV capability probe, not comparative generalization",
+  "baseline": "unmodified supplied package physics20",
+  "candidate": "flat far bank: set convex mesh positive z to zero; same open ditch3.3..3.6",
+  "budget": "one additional8s episode,400000 physics steps,0 training",
+  "preserve": "entry4, weights, actuator limits, servo leg hold, contact/termination/handoff criteria, physics timestep",
+  "stop": "actual failure or8s; no geometry search",
+  "limits": "different backend, policy and terrain from prior Isaac update50; does not supersede that failure",
+  "authorization": "user explicitly accepts flat or1mm ground"
+}

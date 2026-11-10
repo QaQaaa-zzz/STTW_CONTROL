@@ -6,7 +6,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 base=Path('/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_slim_reproduction');out=Path(__file__).parent
 fig,axs=plt.subplots(2,2,figsize=(11,7),layout='constrained');data={}
-for name,label in [('physics20','Continuous ground'),('ditch30','Open ditch 3.3-3.6m')]:
+for name,label in [('physics20','Continuous ground'),('ditch30','Ditch + 1mm cap'),('ditch30_flat','Ditch + flat bank')]:
  d=np.load(base/name/'handoff_20us/trajectory.npz');q=d['qpos'];t=d['time_s'];v=d['qvel'];data[name]=dict(time=t,xy=q[:,:2],z=q[:,2],vx=v[:,0])
  axs[0,0].plot(q[:,0],q[:,1],label=label);axs[0,0].plot(*q[-1,:2],'x')
  axs[0,1].plot(q[:,0],q[:,2],label=label)

@@ -2,6 +2,7 @@
 import os,sys,runpy,json
 from pathlib import Path
 for k in ('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS','NUMEXPR_NUM_THREADS'):os.environ[k]='1'
+flat='--flat' in sys.argv
 root=Path('/home/qy/STTW_CONTROL/imports/sttw_landing_slim_20261110/STTW_Landing_Slim')
 sys.path.insert(0,str(root/'offroad_jump_20261109/method_experiments/motor_leg_hold'))
 import method as M
@@ -11,9 +12,14 @@ def model():
  _,xml=original();tree=C.ET.fromstring(xml)
  ground=tree.find("worldbody/geom[@name='ground']")
  ground.set('pos','-0.85 0 -.1');ground.set('size','4.15 4 .1')
+ if flat:
+  mesh=tree.find("asset/mesh[@name='ground_convex_solid']")
+  vertices=C.np.fromstring(mesh.get('vertex'),sep=' ').reshape(-1,3)
+  vertices[:,2]=C.np.minimum(vertices[:,2],0.)
+  mesh.set('vertex',' '.join(map(str,vertices.ravel())))
  xml=C.ET.tostring(tree,encoding='unicode');m=C.mj.MjModel.from_xml_string(xml)
  C.SURFACE=C.SurfaceQuery(m)
  return m,xml
 C.model=model
-sys.argv=[str(root/'reproduce.py'),'--mode','physics','--dt-us','20','--out',str(Path(__file__).parent/'ditch30')]
+sys.argv=[str(root/'reproduce.py'),'--mode','physics','--dt-us','20','--out',str(Path(__file__).parent/('ditch30_flat' if flat else 'ditch30'))]
 runpy.run_path(str(root/'reproduce.py'),run_name='__main__')
