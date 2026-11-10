@@ -39,8 +39,9 @@ class BankEnvelope:
         centers = torch.arange(slices,device=device)*step-((slices-1)/2)*step
         self.slice_offset = centers.abs()
         self.slice_radius = radius*torch.sqrt((1-(centers/half_width).square()).clamp_min(0))
-        for left, right in ((2., spec['front_x_m']),
-                            (spec['front_x_m'] + spec['width_m'], 8.)):
+        intervals=spec.get('rough_x_intervals_m',[[2.,8.]])
+        for left, right in ((min(2.,min(v[0] for v in intervals)), spec['front_x_m']),
+                            (spec['front_x_m'] + spec['width_m'], max(8.,max(v[1] for v in intervals)))):
             # Build from the actual triangle vertices issued to the simulator.
             # Ditch skirts are flat. Their duplicate seam vertices share the bank elevation.
             keep = ((vertices[:, 0] >= np.float32(left)) &
@@ -151,6 +152,7 @@ class DitchJumpAdapter:
                                  landing_focus=env.cfg.get('ditch_landing_focus',False))
         self.observed_support = torch.zeros(env.num_envs,device=env.device,dtype=torch.bool)
         self.observed_flight = self.observed_support.clone()
+        self.observed_far_contact = self.observed_support.clone()
         self.record_diagnostics = env.cfg.get('record_verified_diagnostics',False)
         self.diagnostics = []
 
@@ -158,6 +160,7 @@ class DitchJumpAdapter:
         self.scorer.reset(ids)
         self.observed_support[ids]=False
         self.observed_flight[ids]=False
+        self.observed_far_contact[ids]=False
         if self.record_diagnostics:
             self.diagnostics = []
 
@@ -212,6 +215,7 @@ class DitchJumpAdapter:
                                 v=safe(root[:,7]),vn=safe(root[:,9]),roll=safe(roll),
                                 pitch=safe(pitch),roll_rate=safe(roll_rate),pitch_rate=safe(pitch_rate),
                                 failed=failed,timeout=timeout)
+        self.observed_far_contact |= self.scorer.touched.any(-1)
         if self.record_diagnostics:
             self.diagnostics.append(dict(
                 wheel_x=wheels[:,:,0].clone(),near=near.clone(),target=target.clone(),loaded=loaded.clone(),

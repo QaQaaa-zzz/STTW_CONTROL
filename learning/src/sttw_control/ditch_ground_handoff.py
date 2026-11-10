@@ -15,6 +15,9 @@ class DitchGroundHandoff:
         self.env,self.spec,self.output=env,spec,Path(output)
         self.leg_hold=spec.get('leg_hold','joint_brake')
         self.handoff_stage=spec.get('handoff_stage',3)
+        self.handoff_event=spec.get('handoff_event','stage')
+        if self.handoff_event not in ('stage','first_far_contact'):
+            raise ValueError('Unknown landing handoff event')
         self.task_continuation=spec.get('continue_to_horizon',False)
         if self.handoff_stage not in (3,4):
             raise ValueError('Handoff stage must be capture3 or completed hold4')
@@ -58,7 +61,9 @@ class DitchGroundHandoff:
                 np.savez_compressed(self.output/'approach_entry.npz',root=e.physical()[0].cpu().numpy(),
                     observation=e.obs_buf.cpu().numpy(),joint_state=e.plant.dofs.cpu().numpy(),
                     time_s=float(e.episode_length_buf[0])*e.dt)
-        if not self.approaching and not self.active and int(e.verified_jump.scorer.stage[0])>=self.handoff_stage:
+        ready=(bool(e.verified_jump.observed_far_contact[0]) if self.handoff_event=='first_far_contact'
+               else int(e.verified_jump.scorer.stage[0])>=self.handoff_stage)
+        if not self.approaching and not self.active and ready:
             before=e.physical()[0].clone()
             if self.leg_hold=='joint_brake':
                 e.plant.set_pendulum_locked(True)
@@ -71,7 +76,7 @@ class DitchGroundHandoff:
             g.physical_tick.fill_(round(float(e.episode_length_buf[0])*e.dt/.005))
             self.active=True
             (self.output/'handoff.json').write_text(json.dumps(dict(time_s=float(e.episode_length_buf[0])*e.dt,
-                root=before.cpu().tolist(),stage=self.handoff_stage,physical_reset=False,leg_hold=self.leg_hold,
+                root=before.cpu().tolist(),stage=int(e.verified_jump.scorer.stage[0]),event=self.handoff_event,physical_reset=False,leg_hold=self.leg_hold,
                 leg_target=e.plant.pendulum_target.cpu().tolist(),
                 unchanged_root=bool(torch.equal(before,e.physical()[0]))),indent=2))
         if not self.active and not self.approaching:

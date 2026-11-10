@@ -6,6 +6,10 @@ def build_ditch_terrain(spec):
     front, width = spec['front_x_m'], spec['width_m']
     if width <= 0 or not 0 <= spec['stone_height_min_m'] <= spec['stone_height_max_m'] <= .15 or spec['stones_per_m2'] < 0:
         raise ValueError('Positive trench width, nonnegative density and ordered stone heights in [0, .15] required')
+    intervals=spec.get('rough_x_intervals_m',[[2.,8.]])
+    if not intervals or any(len(v)!=2 or v[0]>=v[1] for v in intervals):
+        raise ValueError('Rough intervals must have increasing endpoints')
+    rough_start=min(v[0] for v in intervals);rough_end=max(v[1] for v in intervals)
     rng = np.random.default_rng(spec['seed'])
     vertices, triangles = [], []
     def patch(xs, ys, rough, bank_height):
@@ -18,6 +22,11 @@ def build_ditch_terrain(spec):
                 radius = rng.uniform(.055,.09)
                 height = rng.uniform(spec['stone_height_min_m'],spec['stone_height_max_m'])
                 z = np.maximum(z, height*np.maximum(0,1-((x-cx)**2+(y-cy)**2)/radius**2)**2)
+            mask=np.zeros_like(x)
+            for lo,hi in intervals:
+                mask=np.maximum(mask,np.clip((x-lo)/.1,0,1)*np.clip((hi-x)/.1,0,1))
+            if "rough_x_intervals_m" in spec:
+                z *= mask
             # Match the surrounding flat mesh at its outer seams.
             z *= np.clip((y-ys[0])/.1,0,1)*np.clip((ys[-1]-y)/.1,0,1)
             z *= np.clip((x-xs[0])/.1,0,1)*np.clip((xs[-1]-x)/.1,0,1)
@@ -27,7 +36,12 @@ def build_ditch_terrain(spec):
         stride = len(ys)
         triangles.extend((np.stack((a,a+stride,a+1),-1),np.stack((a+1,a+stride,a+stride+1),-1)))
     for left,right,bank_height in ((-5.,front,0.),(front+width,spec['ground_end_x_m'],spec.get('far_bank_height_m',0.))):
-        rough_left,rough_right = max(left,2.),min(right,8.)
+        rough_left,rough_right = max(left,rough_start),min(right,rough_end)
+        if rough_left>=rough_right:
+            patch(np.array([left,right]),np.array([-1.,1.]),False,bank_height)
+            patch(np.array([left,right]),np.array([-4.,-1.]),False,bank_height)
+            patch(np.array([left,right]),np.array([1.,4.]),False,bank_height)
+            continue
         patch(np.linspace(rough_left,rough_right,int(np.ceil((rough_right-rough_left)/.025))+1),np.linspace(-1.,1.,81),True,bank_height)
         if left < rough_left: patch(np.array([left,rough_left]),np.array([-1.,1.]),False,bank_height)
         if rough_right < right: patch(np.array([rough_right,right]),np.array([-1.,1.]),False,bank_height)
