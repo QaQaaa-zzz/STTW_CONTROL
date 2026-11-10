@@ -1,3 +1,7 @@
+## STTW保留实验总索引（2026-11-10整理）
+
+用户要求保留积极结果并精简无用尝试。已将底层、H75训练、低速与推力、跨速度路径、越野、动态切换、任务选档及续训机制整理为28个实验主题；[保留清单及每项原始XY/报告入口](evidence/sttw_retained_experiments/README.md)，[机器目录](evidence/sttw_retained_experiments/catalog.json)。当前事实和活动任务在[唯一研究台账](/home/qy/STTW_CONTROL/research-hub/STTW_PROJECT_STATE.md)维护。本文件下方历史不删除，不再把旧失败/排错当待办；同组对照与失败仍随各积极证据保留。本次仅整理文档，未新增训练或仿真。
+
 ## 同出口连接候选的控制状态保存/恢复接口已实现
 
 IsaacPathRollout.capture_connection_state在50Hz边界导出单lane车体/关节位置速度、ECBC ESO/扰动/gains、Local300历史/前动作/偏航率、H75历史/mask、filtered/offsets/执行模式、原参考/命令、进度/跟随器及物理控制时钟。restore_connection_state把该出口广播给匹配原模型/网络/控制器的名义批次，不用重新预热替代真实出口。begin_connection只绑定下一路线/速度/alpha与新任务计时，保留历史、ESO、滤波和原参考slew。
