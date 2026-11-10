@@ -32,16 +32,17 @@ if a.baseline_run:
 fig.suptitle(a.title+' — exploratory DEV, one initial state\nZero = LOCAL300 + ECBC/ESO; weighted rewards are not cross-alpha performance ranks');fig.tight_layout();fig.savefig(out/'overview.png',dpi=170);plt.close(fig)
 fig,ax=plt.subplots(figsize=(8,6));ax.plot(*route['xy'][ref].T,':',color='gray',label='Original reference')
 for lane,(label,color) in enumerate(zip(labels,colors)):
- trace=r['lower_trace'][:,:,lane].reshape(-1,11);v=trace[trace[:,6].astype(bool)];ax.plot(v[:,0],v[:,1],color=color,label=label,linestyle=styles[lane],marker=palette_markers[lane],markevery=400,markersize=3);ax.scatter(*v[-1,:2],marker='x',color=color)
+ trace=r['lower_trace'][:,:,lane].reshape(-1,11);v=trace[trace[:,6].astype(bool)];ax.plot(v[:,0],v[:,1],color=color,label=label,linestyle=styles[lane],marker=palette_markers[lane%len(palette_markers)],markevery=400,markersize=3);ax.scatter(*v[-1,:2],marker='x',color=color)
 ax.set(xlabel='World x (m)',ylabel='World y (m)',title=a.title+': actual/reference XY');ax.axis('equal');ax.legend();fig.tight_layout();fig.savefig(out/'xy.png',dpi=170);plt.close(fig)
 fig,axs=plt.subplots(1,2,figsize=(12,8),layout='constrained',gridspec_kw={'width_ratios':[1,1.5]})
 for ax in axs:
  ax.plot(*route['xy'][ref].T,':',color='.55',label='Fixed original path')
  for lane,(label,color) in enumerate(zip(labels,colors)):
-  trace=r['lower_trace'][:,:,lane].reshape(-1,11);v=trace[trace[:,6].astype(bool)];ax.plot(v[:,0],v[:,1],color=color,label=label,linestyle=styles[lane],marker=palette_markers[lane],markevery=400,markersize=3);ax.plot(*v[-1,:2],marker='x',color=color)
+  trace=r['lower_trace'][:,:,lane].reshape(-1,11);v=trace[trace[:,6].astype(bool)];ax.plot(v[:,0],v[:,1],color=color,label=label,linestyle=styles[lane],marker=palette_markers[lane%len(palette_markers)],markevery=400,markersize=3);ax.plot(*v[-1,:2],marker='x',color=color)
  ax.set(xlabel='World x (m)',ylabel='World y (m)');ax.set_aspect('equal',adjustable='box')
 turn=np.flatnonzero(abs(route['curvature'])>1e-5);bend=route['xy'][turn] if len(turn) else route['xy'][ref];axs[1].set(xlim=(bend[:,0].min()-.5,bend[:,0].max()+.7),ylim=(bend[:,1].min()-.3,bend[:,1].max()+1),title='Bend detail' if len(turn) else 'Straight route detail');axs[0].set_title('Full trajectory; × actual endpoint');axs[1].legend(loc='upper left',bbox_to_anchor=(1.01,1),fontsize=9);fig.suptitle(a.title+(' | ECBC+ESO lower (zero residual)' if all(c['settings'].get('zero_lower',[False])) else ' | frozen residual lower'));fig.savefig(out/'xy_all_alpha.png',dpi=150);plt.close(fig)
-fig,axs=plt.subplots(2,3,figsize=(15,8),layout='constrained')
+fig,axs=plt.subplots(max(2,(count+2)//3),3,figsize=(15,4*max(2,(count+2)//3)),layout='constrained')
+for ax in list(axs.flat)[count:]:ax.set_visible(False)
 for lane,(label,color,ax) in enumerate(zip(labels,colors,axs.flat)):
  trace=r['lower_trace'][:,:,lane].reshape(-1,11);ids=np.flatnonzero(trace[:,6]);t=ids*.005+trace[ids,7]*physics_dt
  ax.plot(t,trace[ids,2],color=color,label='True forward speed');ax.plot(t,trace[ids,10],'--',color='.4',label='Rear axle × 0.1 m');ax.axhline(user_speed,color='black',linestyle=':',label='User request');ax.plot(t,trace[ids,8],'-.',color=color,label='Executed speed reference');ax.set(title=label,xlabel='Time (s)',ylabel='Speed (m/s)');ax.legend(fontsize=8);ax.grid(alpha=.2)

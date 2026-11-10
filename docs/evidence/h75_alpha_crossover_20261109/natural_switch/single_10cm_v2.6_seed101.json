@@ -75,7 +75,8 @@
     "record_window_s": [
       0.8,
       10.0
-    ]
+    ],
+    "compress": false
   },
   "episode_s": 10.0,
   "record_control_commands": true,

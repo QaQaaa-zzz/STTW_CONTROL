@@ -13,6 +13,7 @@ class PhysicsContactRecorder:
         self.copy_seconds=0.;self.compression_seconds=0.
         self.chunk_steps=int(config.get('chunk_steps',250))
         self.buffers=None;self.used=0;self.total=0;self.chunks=[];self.elapsed=0;self.last_recorded=0
+        self.compress=config.get('compress',True)
         self.window=config.get('record_window_s')
         self.window_steps=None if self.window is None else (math.ceil(self.window[0]/env.physics_dt-1e-9),math.floor(self.window[1]/env.physics_dt+1e-9))
         self.metadata=dict(physics_dt_s=env.physics_dt,body_order=env.plant.bodies,joint_order=env.plant.joints,
@@ -40,9 +41,9 @@ class PhysicsContactRecorder:
         self.copy_seconds+=time.perf_counter()-started
         arrays['physics_step']=np.arange(self.last_recorded-self.used+1,self.last_recorded+1,dtype=np.int64)
         started=time.perf_counter()
-        np.savez_compressed(self.output/name,**arrays)
+        (np.savez_compressed if self.compress else np.savez)(self.output/name,**arrays)
         self.compression_seconds+=time.perf_counter()-started
         self.chunks.append(dict(file=name,first_step=self.last_recorded-self.used+1,last_step=self.last_recorded));self.used=0
     def close(self):
-        self.flush();self.metadata.update(total_physics_steps=self.elapsed,recorded_physics_steps=self.total,chunks=self.chunks,copy_and_sync_s=self.copy_seconds,compression_write_s=self.compression_seconds)
+        self.flush();self.metadata.update(total_physics_steps=self.elapsed,recorded_physics_steps=self.total,chunks=self.chunks,copy_and_sync_s=self.copy_seconds,compression_write_s=self.compression_seconds,compressed=self.compress)
         (self.output/'index.json').write_text(json.dumps(self.metadata,indent=2)+'\n')
