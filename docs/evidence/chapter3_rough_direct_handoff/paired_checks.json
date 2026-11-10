@@ -1,0 +1,15 @@
+{
+  "pre_switch_identical_root_steps": 144,
+  "post_handoff": [
+    {
+      "case": "capture",
+      "post_handoff_max_abs_y_m": 0.1712826043367386,
+      "post_handoff_peak_vx_m_s": 2.048013925552368
+    },
+    {
+      "case": "first_contact",
+      "post_handoff_max_abs_y_m": 0.36558759212493896,
+      "post_handoff_peak_vx_m_s": 3.0185418128967285
+    }
+  ]
+}

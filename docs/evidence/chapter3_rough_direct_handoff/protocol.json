@@ -1,0 +1,12 @@
+{
+  "cases": [
+    "capture",
+    "first_contact"
+  ],
+  "budget": "2x8s single-lane Isaac,0training, expected under3min after GPU slot",
+  "terrain": "0.5..1mm static seeded microstones x2..4 and8..18, |y|<1; flat jump/landing x4..8; same-height30cm ditch6.3..6.6",
+  "comparison": "same reset/controller/seed: stage3 capture versus first measured far-bank contact, handoff at next20ms policy boundary; no physical reset; keep physical failure limits",
+  "acceptance": "bounded actual continuation, not task completion or terrain robustness certification",
+  "history_recording": "Enabled before launch: pre-ground-step ESO/filter/policy/lower histories and root/joints; time aligned to executed command batches. Read-only logging; not replay snapshots.",
+  "execution_resource_note": "Own waiting flock removed before evaluation started. Two serial single-lane evaluations run alongside existing batch under user authorization for lightweight evaluation; prelaunch free VRAM15895MiB. Other task untouched."
+}

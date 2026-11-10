@@ -1,0 +1,182 @@
+[
+  {
+    "case": "capture",
+    "handoff": {
+      "time_s": 2.94,
+      "root": [
+        [
+          6.888902187347412,
+          0.0003303264966234565,
+          0.12362626194953918,
+          0.7053185105323792,
+          0.009935651905834675,
+          -0.008269406855106354,
+          0.7087727785110474,
+          1.874117136001587,
+          0.04010232910513878,
+          -0.048421118408441544,
+          -0.001327719772234559,
+          -0.3215526044368744,
+          -0.26233336329460144
+        ]
+      ],
+      "stage": 3,
+      "event": "stage",
+      "physical_reset": false,
+      "leg_hold": "finite_motor",
+      "leg_target": [
+        [
+          -0.9197016954421997,
+          2.493091344833374
+        ]
+      ],
+      "unchanged_root": true
+    },
+    "summary": {
+      "candidate": {
+        "name": "heading125",
+        "source_bundle": "learning/deployment/chapter3/policies/heading125"
+      },
+      "terrain_id": 0,
+      "terrain_spec": {
+        "front_x_m": 6.3,
+        "width_m": 0.3,
+        "ground_end_x_m": 25.0,
+        "stone_height_min_m": 0.0005,
+        "stone_height_max_m": 0.001,
+        "stones_per_m2": 25,
+        "seed": 20261109,
+        "lateral_limit_m": 3.9,
+        "far_bank_height_m": 0.0,
+        "rough_x_intervals_m": [
+          [
+            2.0,
+            4.0
+          ],
+          [
+            8.0,
+            18.0
+          ]
+        ]
+      },
+      "steps": 400,
+      "duration_s": 8.0,
+      "terminal_code": 9,
+      "final_xyz": [
+        14.73773193359375,
+        -0.02706243470311165,
+        0.1192035973072052
+      ],
+      "peak_root_z": 0.5085372924804688,
+      "max_root_x": 14.73773193359375,
+      "ditch_cross_hold": false,
+      "reward_total": -25.0,
+      "reward_parts": {
+        "verified_jump": -25.0,
+        "episode_return_override": 0.0
+      },
+      "scope": "Single fixed-map DEV jump-to-H75 handback; no statistical reliability claim",
+      "ground_handoff_executed": true,
+      "live_approach_executed": true,
+      "approach_reached_jump": true,
+      "handoff_stage_requested": 3,
+      "handoff_event_requested": "stage",
+      "verified_success_scope": "jump scorer only; inspect ground failure and final state separately",
+      "action_log_scope": "jump actor proposals; after handoff actual ground commands are in ground_commands.npz",
+      "ground_continued_to_horizon": true,
+      "ground_continuation_scope": "bounded continuation demonstration; not a specified-map goal success rate",
+      "verified_stage": 3,
+      "verified_success": false
+    }
+  },
+  {
+    "case": "first_contact",
+    "handoff": {
+      "time_s": 2.88,
+      "root": [
+        [
+          6.770115375518799,
+          -0.0007822912884876132,
+          0.14192184805870056,
+          0.7056039571762085,
+          0.056326959282159805,
+          -0.04236043244600296,
+          0.7050927877426147,
+          2.751147747039795,
+          -0.063780777156353,
+          -2.197326183319092,
+          -0.2246440351009369,
+          -17.89638328552246,
+          -0.49480000138282776
+        ]
+      ],
+      "stage": 2,
+      "event": "first_far_contact",
+      "physical_reset": false,
+      "leg_hold": "finite_motor",
+      "leg_target": [
+        [
+          -0.9235934615135193,
+          2.4999992847442627
+        ]
+      ],
+      "unchanged_root": true
+    },
+    "summary": {
+      "candidate": {
+        "name": "heading125",
+        "source_bundle": "learning/deployment/chapter3/policies/heading125"
+      },
+      "terrain_id": 0,
+      "terrain_spec": {
+        "front_x_m": 6.3,
+        "width_m": 0.3,
+        "ground_end_x_m": 25.0,
+        "stone_height_min_m": 0.0005,
+        "stone_height_max_m": 0.001,
+        "stones_per_m2": 25,
+        "seed": 20261109,
+        "lateral_limit_m": 3.9,
+        "far_bank_height_m": 0.0,
+        "rough_x_intervals_m": [
+          [
+            2.0,
+            4.0
+          ],
+          [
+            8.0,
+            18.0
+          ]
+        ]
+      },
+      "steps": 400,
+      "duration_s": 8.0,
+      "terminal_code": 9,
+      "final_xyz": [
+        15.730992317199707,
+        0.030775684863328934,
+        0.11895768344402313
+      ],
+      "peak_root_z": 0.5085372924804688,
+      "max_root_x": 15.730992317199707,
+      "ditch_cross_hold": false,
+      "reward_total": -25.000015258789062,
+      "reward_parts": {
+        "verified_jump": -25.000015258789062,
+        "episode_return_override": 0.0
+      },
+      "scope": "Single fixed-map DEV jump-to-H75 handback; no statistical reliability claim",
+      "ground_handoff_executed": true,
+      "live_approach_executed": true,
+      "approach_reached_jump": true,
+      "handoff_stage_requested": null,
+      "handoff_event_requested": "first_far_contact",
+      "verified_success_scope": "jump scorer only; inspect ground failure and final state separately",
+      "action_log_scope": "jump actor proposals; after handoff actual ground commands are in ground_commands.npz",
+      "ground_continued_to_horizon": true,
+      "ground_continuation_scope": "bounded continuation demonstration; not a specified-map goal success rate",
+      "verified_stage": 3,
+      "verified_success": false
+    }
+  }
+]
