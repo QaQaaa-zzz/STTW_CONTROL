@@ -1,0 +1,36 @@
+{
+  "post_fork_failures": null,
+  "fork_policy_step": null,
+  "stage": "complete",
+  "policy_steps": 500,
+  "physics_steps": 550000,
+  "elapsed_s": 460.6928572654724,
+  "failures": [
+    0,
+    0,
+    0,
+    1,
+    1,
+    0,
+    1,
+    0,
+    0,
+    1,
+    1
+  ],
+  "valid_steps": [
+    500,
+    500,
+    500,
+    175,
+    129,
+    500,
+    119,
+    500,
+    500,
+    175,
+    154
+  ],
+  "push_events": 0,
+  "elapsed_with_output_s": 461.21137714385986
+}

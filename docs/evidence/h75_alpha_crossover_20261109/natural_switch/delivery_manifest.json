@@ -1,0 +1,312 @@
+{
+  "source_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch",
+  "contexts": 12,
+  "episodes": 132,
+  "files": [
+    {
+      "file": "dense_corridor_v2.3_seed101/xy.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.3_seed101/xy.png",
+      "sha256": "1380cce9a3780ade274f03c3b3a2c7fd7145b5a6bfeb1c3078e7828149ecbd36"
+    },
+    {
+      "file": "dense_corridor_v2.3_seed101/overview.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.3_seed101/overview.png",
+      "sha256": "46e0f320010c29f173ea4630e74694c81aee223b7bd4159bdec112da03426e15"
+    },
+    {
+      "file": "dense_corridor_v2.3_seed101/condition_metrics.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.3_seed101/condition_metrics.json",
+      "sha256": "c7c6b33a66a5e3a56849707f03cbbc1971368a1bae4fe681e96e8dd4aa7eb352"
+    },
+    {
+      "file": "dense_corridor_v2.3_seed101/contract.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.3_seed101/contract.json",
+      "sha256": "574d035f6d90c72270328490602d570ffd43b53f0ecc56c3961a4787f0e543a9"
+    },
+    {
+      "file": "dense_corridor_v2.3_seed101/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.3_seed101/status.json",
+      "sha256": "a83b638ebf60976625040785eeea663463cd582e9d90fba6365147d6929a3fbd"
+    },
+    {
+      "file": "dense_corridor_v2.3_seed102/xy.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.3_seed102/xy.png",
+      "sha256": "8ede45581a4230b089fe46ba32827b2a3e6569d2f830e9bed5012a3edf185a6e"
+    },
+    {
+      "file": "dense_corridor_v2.3_seed102/overview.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.3_seed102/overview.png",
+      "sha256": "a6f6a567fa27838e73c7e69adbe0343d8101f2ccdcc5f4ed460bb65432a8979c"
+    },
+    {
+      "file": "dense_corridor_v2.3_seed102/condition_metrics.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.3_seed102/condition_metrics.json",
+      "sha256": "be7bcfba925c8515a11699a49a7548ecca3950475238f8655616aa8bbf5fdcfc"
+    },
+    {
+      "file": "dense_corridor_v2.3_seed102/contract.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.3_seed102/contract.json",
+      "sha256": "5ad2b28beb7761bb558f2e7c9ea33b024dd1806daa01749ab47603f773d6298d"
+    },
+    {
+      "file": "dense_corridor_v2.3_seed102/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.3_seed102/status.json",
+      "sha256": "53dc37af4bbe8f6c67216498420f0894d4b81421620e666d7cdbd7c1455a86ed"
+    },
+    {
+      "file": "dense_corridor_v2.3_seed103/xy.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.3_seed103/xy.png",
+      "sha256": "7dd6771d7390d9533fb0885875a70daeb72277b8629fae43f6a4f4fe6ce5d944"
+    },
+    {
+      "file": "dense_corridor_v2.3_seed103/overview.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.3_seed103/overview.png",
+      "sha256": "7da40ff446fd29f852c4cb5b0bd542aa3e93c9ce252bb8202f8bbba63dc9290a"
+    },
+    {
+      "file": "dense_corridor_v2.3_seed103/condition_metrics.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.3_seed103/condition_metrics.json",
+      "sha256": "ee8bc68ff87998a61ad56b289fba8bd0dd2a643e78af25bf82b1ee5348fa748e"
+    },
+    {
+      "file": "dense_corridor_v2.3_seed103/contract.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.3_seed103/contract.json",
+      "sha256": "4d80c42f844d6da25005044f628a3bacc8b84852d413becfeb4aea3b33d7af46"
+    },
+    {
+      "file": "dense_corridor_v2.3_seed103/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.3_seed103/status.json",
+      "sha256": "04c0b36d47ee61a6cc0fa57caf5e048de6734ad06551229afb271ebd29b17ea1"
+    },
+    {
+      "file": "dense_corridor_v2.6_seed101/xy.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.6_seed101/xy.png",
+      "sha256": "88ceb0c7a2366f38d0e1bf2af3ab95f50260474fde9eaf095364bf9090621339"
+    },
+    {
+      "file": "dense_corridor_v2.6_seed101/overview.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.6_seed101/overview.png",
+      "sha256": "59ff3df3dff5687efc15b6231d2669fab0c8e8e5a119fc15a16e357825d0b520"
+    },
+    {
+      "file": "dense_corridor_v2.6_seed101/condition_metrics.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.6_seed101/condition_metrics.json",
+      "sha256": "aa766786fb1ebabf2e0636bc678d9be4cee8319319313c21ef137721caef0e36"
+    },
+    {
+      "file": "dense_corridor_v2.6_seed101/contract.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.6_seed101/contract.json",
+      "sha256": "7be71245a21feda3af6595a0c692684ff698d592147f7cd06acdacc367b7ad8c"
+    },
+    {
+      "file": "dense_corridor_v2.6_seed101/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.6_seed101/status.json",
+      "sha256": "f08f61969f9d698bc9cddd5e92396b34dfe8e16ad275c9fc9ee722bd5fb25028"
+    },
+    {
+      "file": "dense_corridor_v2.6_seed102/xy.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.6_seed102/xy.png",
+      "sha256": "2d4ac8262f908d21cef4c1da0bd7e82b39b22546c04e86e47526b91402eb0ca8"
+    },
+    {
+      "file": "dense_corridor_v2.6_seed102/overview.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.6_seed102/overview.png",
+      "sha256": "abfa0113e38ccb594caff0618412d033cf9cfba8b1bd02439ff06d18f5c0f7ca"
+    },
+    {
+      "file": "dense_corridor_v2.6_seed102/condition_metrics.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.6_seed102/condition_metrics.json",
+      "sha256": "0e0ee2735b3044fa06c860255b75e5918a68fd0638e990d7a3954dbbba771ea9"
+    },
+    {
+      "file": "dense_corridor_v2.6_seed102/contract.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.6_seed102/contract.json",
+      "sha256": "bf892438e22381baca2aefdba8fbb7872c3a54f98d92f3bd4c70c6183c830c66"
+    },
+    {
+      "file": "dense_corridor_v2.6_seed102/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.6_seed102/status.json",
+      "sha256": "2682796b3cbfc3afc4aa030b37773f3a4eb58b19cdcaaab3e2757370ddc84d7c"
+    },
+    {
+      "file": "dense_corridor_v2.6_seed103/xy.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.6_seed103/xy.png",
+      "sha256": "c87e292b0e755d63e6907a1877f07960cf97a07e2b52346cdae2359c3fce3618"
+    },
+    {
+      "file": "dense_corridor_v2.6_seed103/overview.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.6_seed103/overview.png",
+      "sha256": "e0b89ab63d738edce69ce2f2fbe542af84b9901c8871aebe731beb926eed77d7"
+    },
+    {
+      "file": "dense_corridor_v2.6_seed103/condition_metrics.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.6_seed103/condition_metrics.json",
+      "sha256": "64d8305b62668489581483b54ccbabc18301fda1bca9901f512cc357baf9cc8e"
+    },
+    {
+      "file": "dense_corridor_v2.6_seed103/contract.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.6_seed103/contract.json",
+      "sha256": "ff884ded6804e0dc75719b911654c693ae15b7cbea89b6952324cc66be2c58e1"
+    },
+    {
+      "file": "dense_corridor_v2.6_seed103/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/dense_corridor_v2.6_seed103/status.json",
+      "sha256": "533282da98a2fab52426bb6a2b5f2068009cab818cbfe164da93e7583c801eef"
+    },
+    {
+      "file": "single_10cm_v2.3_seed101/xy.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.3_seed101/xy.png",
+      "sha256": "d3cb6924389ef4a49c4a35cb27c9d59fa167735b90da7fe3ccbfdac15ec75c9a"
+    },
+    {
+      "file": "single_10cm_v2.3_seed101/overview.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.3_seed101/overview.png",
+      "sha256": "1074cfd665579e93c12bfe3c54e56079811b82459d801f0845924cc1b685adb5"
+    },
+    {
+      "file": "single_10cm_v2.3_seed101/condition_metrics.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.3_seed101/condition_metrics.json",
+      "sha256": "d9d75aea7cc9b55b5639495f99653b13cea7531ea8aa62210b021d3103a1f1d9"
+    },
+    {
+      "file": "single_10cm_v2.3_seed101/contract.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.3_seed101/contract.json",
+      "sha256": "59e6e841ede84af4de60f5bd948a03f5776090d7f38176a13a0e75a786b28b19"
+    },
+    {
+      "file": "single_10cm_v2.3_seed101/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.3_seed101/status.json",
+      "sha256": "aa643d5b3b31474c5b9a024b6ffbfe026a2ff4910822efc8cd5276475b3112a7"
+    },
+    {
+      "file": "single_10cm_v2.3_seed102/xy.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.3_seed102/xy.png",
+      "sha256": "d454095aedbdc231ae8c24ee604fb74c710755f9b7e0ad2ac29ff674f6da78d8"
+    },
+    {
+      "file": "single_10cm_v2.3_seed102/overview.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.3_seed102/overview.png",
+      "sha256": "f3a641040a0f134d1db9d098972f9f8c680abde7a592ec8a25a1ef45b578817c"
+    },
+    {
+      "file": "single_10cm_v2.3_seed102/condition_metrics.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.3_seed102/condition_metrics.json",
+      "sha256": "51f9ae7d18cb13762e994c3ac9def2f2b356a0c3c146a7acb960987d57665290"
+    },
+    {
+      "file": "single_10cm_v2.3_seed102/contract.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.3_seed102/contract.json",
+      "sha256": "e8b180039315703f038927c881f926d013a8857934637ca7d3dab2bc6a93a8dc"
+    },
+    {
+      "file": "single_10cm_v2.3_seed102/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.3_seed102/status.json",
+      "sha256": "bd4779944b1b88f2a0b05dfda2fe128ee527c6a576c5bb888d070bb96f3945cc"
+    },
+    {
+      "file": "single_10cm_v2.3_seed103/xy.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.3_seed103/xy.png",
+      "sha256": "7503e325b3aa20a5e7f9d14d6cd6bf28d19b2eca9dea1513ed2d8da818ce62dc"
+    },
+    {
+      "file": "single_10cm_v2.3_seed103/overview.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.3_seed103/overview.png",
+      "sha256": "d210634706615afc15cae46e2ab88e75fe7248ec60a065409df22a8f774ebdd4"
+    },
+    {
+      "file": "single_10cm_v2.3_seed103/condition_metrics.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.3_seed103/condition_metrics.json",
+      "sha256": "9a7a79fee72d781a592f21c4622cf4da3e08f4ad5d3b2661b91118a03d7c8eb1"
+    },
+    {
+      "file": "single_10cm_v2.3_seed103/contract.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.3_seed103/contract.json",
+      "sha256": "5450c3448564365a65bc901514bbcbf90ce4108d7029a74279081c8b88abf325"
+    },
+    {
+      "file": "single_10cm_v2.3_seed103/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.3_seed103/status.json",
+      "sha256": "bfd98bae7e4f0fb22cf2f96caca1b55525f7514da2d0b54c7cd4c093bdf8cd30"
+    },
+    {
+      "file": "single_10cm_v2.6_seed101/xy.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.6_seed101/xy.png",
+      "sha256": "f37606a71e4de8c5906aefc542b173a7f607c15ae5e87fe9653ec0c11bd8abc0"
+    },
+    {
+      "file": "single_10cm_v2.6_seed101/overview.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.6_seed101/overview.png",
+      "sha256": "af1da963163d984f0a8306113c27f403401ac43d8375e74d90d3b79e5f929180"
+    },
+    {
+      "file": "single_10cm_v2.6_seed101/condition_metrics.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.6_seed101/condition_metrics.json",
+      "sha256": "928a7ab032e12e3061c48e0e78b560424da8a4a6db15abc7006387cad0122940"
+    },
+    {
+      "file": "single_10cm_v2.6_seed101/contract.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.6_seed101/contract.json",
+      "sha256": "a62e5b5803e03ad1d1183c7c7cf1cbc4a98dab665f6d2ebb5f3f9d5e24a21817"
+    },
+    {
+      "file": "single_10cm_v2.6_seed101/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.6_seed101/status.json",
+      "sha256": "421c4de53652d96039402d785f8bef077e61db2327fb286c0530e95d9c0da0c0"
+    },
+    {
+      "file": "single_10cm_v2.6_seed102/xy.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.6_seed102/xy.png",
+      "sha256": "cfa90e08dcefee84beb179d414714400874bcd77180d6ed6881314babe4a6144"
+    },
+    {
+      "file": "single_10cm_v2.6_seed102/overview.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.6_seed102/overview.png",
+      "sha256": "56690556b34299f4ca4bb1418c4d8ab6f8205c79d43bae6ea107fed295b9bfb7"
+    },
+    {
+      "file": "single_10cm_v2.6_seed102/condition_metrics.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.6_seed102/condition_metrics.json",
+      "sha256": "98b43f675caee29d4420bfbdecabb2c331c1876f3b409523bd42bd6c715ef469"
+    },
+    {
+      "file": "single_10cm_v2.6_seed102/contract.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.6_seed102/contract.json",
+      "sha256": "ee3f7c959c7633b3ffe97983cd3d2cfc7949d525bc4d87859462e38451af3826"
+    },
+    {
+      "file": "single_10cm_v2.6_seed102/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.6_seed102/status.json",
+      "sha256": "7a6bf4466c17b105bf3b3434385ca64d78f928a20926b037433aaac629240e5f"
+    },
+    {
+      "file": "single_10cm_v2.6_seed103/xy.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.6_seed103/xy.png",
+      "sha256": "c91cf1bb8d0f387cd20e74b8590be82dbb3f8479d6f6780325d1638fd1c0bb25"
+    },
+    {
+      "file": "single_10cm_v2.6_seed103/overview.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.6_seed103/overview.png",
+      "sha256": "af894d66b3e03c095b3cbe02873688280c3f9d369a36b4cde53132d14e2b6355"
+    },
+    {
+      "file": "single_10cm_v2.6_seed103/condition_metrics.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.6_seed103/condition_metrics.json",
+      "sha256": "7b6a274ec8fb2f86fb5012ddc81ca4f1fc9ce4c65d1b240f9473af232fefe531"
+    },
+    {
+      "file": "single_10cm_v2.6_seed103/contract.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.6_seed103/contract.json",
+      "sha256": "0b324922b4793ce21e744997e72498499b24576273a5412ff8f95bd9e9c454bb"
+    },
+    {
+      "file": "single_10cm_v2.6_seed103/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_alpha_natural_switch/single_10cm_v2.6_seed103/status.json",
+      "sha256": "61913184606cf3934476ada989f0700a226ade50c9516a59edd475d6b678ccc8"
+    }
+  ],
+  "omitted_large_data": [
+    "*/trajectory.npz",
+    "*/physics_contacts/"
+  ],
+  "omitted_data_retained_at_source": true
+}
