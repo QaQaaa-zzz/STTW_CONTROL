@@ -1,7 +1,7 @@
 """Run a frozen finite evidence queue, release GPU between stages, notify completion."""
 import argparse,json,subprocess,sys,datetime
 from pathlib import Path
-p=argparse.ArgumentParser();p.add_argument('--queue',type=Path,required=True);a=p.parse_args();q=a.queue;plan=json.loads((q/'plan.json').read_text());python=sys.executable
+p=argparse.ArgumentParser();p.add_argument('--queue',type=Path,required=True);p.add_argument('--resume',action='store_true');a=p.parse_args();q=a.queue;plan=json.loads((q/'plan.json').read_text());python=sys.executable
 
 def command(args,log):
     with log.open('a') as f:subprocess.run(args,stdout=f,stderr=subprocess.STDOUT,check=True)
@@ -15,18 +15,23 @@ def notify(message,receipt):
 current='preparing';completed=[]
 try:
     for item in plan['stages']:
-        r=Path(item['path']);current=item['name'];status('preparing',current=current,completed=completed)
+        r=Path(item['path']);current=item['name']
+        if a.resume and (r/'analysis_summary.json').exists() and json.loads((r/'status.json').read_text())['stage']=='complete':
+            completed.append(current);continue
+        status('preparing',current=current,completed=completed)
         if current=='h75_height_scan':
             for scene in sorted(r.glob('*_scene.json')):
+                if a.resume and (r/'terrains'/scene.stem.removesuffix('_scene')/'terrain.npz').exists():continue
                 command([python,'learning/cli/build_route_pebbles.py','--scene-config',str(scene),'--output',str(r/'terrains'/scene.stem.removesuffix('_scene'))],r/'terrain_build.log')
             command([python,str(r/'check_geometry.py')],r/'terrain_build.log')
         if current=='h75_selector_layout_test':
             command([python,'learning/cli/freeze_height_selector.py','--development',plan['stages'][0]['path'],'--test-run',str(r)],r/'freeze.log')
             command([python,str(q/'prepare_test_layouts.py')],r/'terrain_build.log')
             for scene in sorted(r.glob('*_scene.json')):
+                if a.resume and (r/'terrains'/scene.stem.removesuffix('_scene')/'terrain.npz').exists():continue
                 command([python,'learning/cli/build_route_pebbles.py','--scene-config',str(scene),'--output',str(r/'terrains'/scene.stem.removesuffix('_scene'))],r/'terrain_build.log')
         status('queued_or_running',current=current,completed=completed)
-        command(['/bin/bash','learning/scripts/gpu_queue.sh',python,'-u','learning/cli/run_alpha_mechanism.py','--run',str(r)],r/'runtime.log')
+        command(['/bin/bash','learning/scripts/gpu_queue.sh',python,'-u','learning/cli/run_alpha_mechanism.py','--run',str(r)]+(['--resume'] if a.resume else []),r/'runtime.log')
         status('analyzing',current=current,completed=completed)
         command([python,'learning/cli/summarize_alpha_schedules.py','--run',str(r)],r/'analysis.log')
         completed.append(current)

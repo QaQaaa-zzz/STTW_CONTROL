@@ -1,0 +1,11 @@
+{
+  "removed_completed_contact_bytes": 10853221162,
+  "reason": "user requested compact necessary results; flat scan high-rate contacts omitted; original trajectories and failure outcomes retained",
+  "physics_dt": 0.0002,
+  "lower_dt": 0.005,
+  "policy_dt": 0.02,
+  "total_episodes": 1432,
+  "batch_contexts": 8,
+  "mechanism_contacts": "full 0.2ms compressed; 12 cases retained",
+  "cpu_plots": "one worker overlapping next GPU batch; 2 PNG per case"
+}

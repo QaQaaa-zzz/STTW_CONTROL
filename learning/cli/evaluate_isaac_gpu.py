@@ -1,5 +1,5 @@
 """Collect fixed-alpha H75 and Zero trajectories using the training GPU plant."""
-import argparse,json,time
+import argparse,json,time,subprocess
 from pathlib import Path
 import numpy as np
 p=argparse.ArgumentParser();p.add_argument('--case-manifest',type=Path);p.add_argument('--configured-lanes',action='store_true');p.add_argument('--channel-protocol',type=Path);p.add_argument('--fork-alpha',type=float,choices=(0,.25,.5,.75,1));p.add_argument('--protocol-alpha',type=float,choices=(0,.25,.5,.75,1),default=.5);p.add_argument('--protocol-phase',choices=('entry_projection','exit_projection'),default='entry_projection');p.add_argument('--lower-training-run',type=Path);p.add_argument('--lower-checkpoint',type=Path);p.add_argument('--backend',choices=['gym','lab'],default='gym');p.add_argument('--asset',type=Path);p.add_argument('--bundle',type=Path,required=True);p.add_argument('--config',type=Path,required=True);p.add_argument('--terrain',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--seconds',type=float,default=6);a=p.parse_args()
@@ -60,7 +60,7 @@ if s.get('evaluation_pulse'):
     from sttw_control.evaluation_pulse import EvaluationPulse
     pulse=EvaluationPulse(env,s['evaluation_pulse']);env.training_pulse=pulse
 
-contract=dict(backend=a.backend,settings=s,bundle=str(a.bundle.resolve()),identity=identity,terrain=env.plant.terrain_identity,bodies=env.plant.bodies,origin=env.plant.origin.cpu().tolist(),role=s.get('evaluation_role','fixed preference DEV; Zero is frozen LOCAL300 plus ECBC/ESO, no H75 correction'),physics_dt=env.physics_dt,lower_dt=.005,policy_dt=.02)
+contract=dict(code_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),backend=a.backend,settings=s,bundle=str(a.bundle.resolve()),identity=identity,terrain=env.plant.terrain_identity,bodies=env.plant.bodies,origin=env.plant.origin.cpu().tolist(),role=s.get('evaluation_role','fixed preference DEV; Zero is frozen LOCAL300 plus ECBC/ESO, no H75 correction'),physics_dt=env.physics_dt,lower_dt=.005,policy_dt=.02)
 if lower is not None:
     contract['lower_identity']=lower.identity
     contract['role']='fixed preference DEV; Zero uses the same selected frozen lower plus ECBC/ESO, with no H75 correction'
@@ -137,8 +137,12 @@ if cases:
         part,part_contract=split_case(arrays,contract,{**case,'batch_output':str(a.output.resolve())},index)
         np.savez_compressed(run/'trajectory.npz',**part)
         (run/'contract.json').write_text(json.dumps(part_contract,indent=2))
-        part_summary=dict(summary,physics_steps=len(part['reward'])*6*4*env.physics_substeps,failures=part['failure'].sum(0).tolist(),valid_steps=part['valid'].sum(0).tolist(),elapsed_scope='shared batch elapsed, not additive per case')
+        part_summary=dict(summary,physics_steps=len(part['reward'])*case['lane_count']*4*env.physics_substeps,failures=part['failure'].sum(0).tolist(),valid_steps=part['valid'].sum(0).tolist(),elapsed_scope='shared batch elapsed, not additive per case')
         (run/'status.json').write_text(json.dumps(part_summary,indent=2))
+        if pulse is not None:
+            force=np.load(a.output/'applied_pulse.npz');lo=case['lane_start'];hi=lo+case['lane_count']
+            np.savez_compressed(run/'applied_pulse.npz',time_s=force['time_s'],force_world_N=force['force_world_N'][:,lo:hi],impulse_Ns=force['impulse_Ns'][lo:hi],site_body_position_m=force['site_body_position_m'])
+
 else:
     np.savez_compressed(a.output/'trajectory.npz',**arrays)
 summary['elapsed_with_output_s']=time.time()-started

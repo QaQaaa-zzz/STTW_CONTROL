@@ -18,7 +18,7 @@
     },
     "env_spacing": 3.0,
     "track_wheel_contacts": false,
-    "track_contact_wrench": true,
+    "track_contact_wrench": false,
     "max_contact_data_count_per_prim": 128,
     "raw_contact_only": true
   },
@@ -61,17 +61,9 @@
   "user_speed_m_s": 2.3,
   "seed": 101,
   "trace_lanes": 8,
-  "physics_contact_recording": {
-    "chunk_steps": 250,
-    "record_window_s": [
-      0.8,
-      10.0
-    ],
-    "compress": false
-  },
   "episode_s": 10.0,
-  "record_control_commands": true,
-  "record_body_poses": true,
+  "record_control_commands": false,
+  "record_body_poses": false,
   "record_controller_terms": true,
   "randomization": {
     "base_body": "chasis",
@@ -136,5 +128,6 @@
     ]
   },
   "reward_components": true,
-  "paired_reward_diagnostics": true
+  "paired_reward_diagnostics": true,
+  "compact_results": true
 }

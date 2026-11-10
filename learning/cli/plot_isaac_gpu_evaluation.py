@@ -46,6 +46,16 @@ fig,ax=plt.subplots(figsize=(8,6));ax.plot(*route['xy'][ref].T,':',color='gray',
 for lane,(label,color) in enumerate(zip(labels,colors)):
  trace=r['lower_trace'][:,:,lane].reshape(-1,11);v=trace[trace[:,6].astype(bool)];ax.plot(v[:,0],v[:,1],color=color,label=label,linestyle=styles[lane],marker=palette_markers[lane%len(palette_markers)],markevery=400,markersize=3);ax.scatter(*v[-1,:2],marker='x',color=color)
 ax.set(xlabel='World x (m)',ylabel='World y (m)',title=a.title+': actual/reference XY');ax.axis('equal');ax.legend();fig.tight_layout();fig.savefig(out/'xy.png',dpi=170);plt.close(fig)
+if c['settings'].get('compact_results'):
+ from sttw_control.isaac_path_reporting import replay_rewards
+ cfg=json.loads((Path(c['bundle'])/'config.json').read_text());replayed,parts,closure=replay_rewards(r,cfg)
+ np.savez_compressed(out/'reward_components.npz',reward=replayed,**parts)
+ (out/'condition_metrics.json').write_text(json.dumps(static_case_metrics(r,c),indent=2)+'\n')
+ (out/'figure_manifest.json').write_text(json.dumps(dict(outputs=['xy.png','overview.png'],reward_replay_error=closure,role=role,source=str(a.run/'trajectory.npz')),indent=2))
+ # Old duplicate figures are reproducible from the retained trajectory and components.
+ for name in ['xy_all_alpha.png','speed_measurements.png']+[f'alpha{lane}_components.png' for lane in range(count)]:
+  (out/name).unlink(missing_ok=True)
+ raise SystemExit
 fig,axs=plt.subplots(1,2,figsize=(12,8),layout='constrained',gridspec_kw={'width_ratios':[1,1.5]})
 for ax in axs:
  ax.plot(*route['xy'][ref].T,':',color='.55',label='Fixed original path')

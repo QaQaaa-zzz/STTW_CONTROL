@@ -1,0 +1,114 @@
+[
+  {
+    "height_mm": 0,
+    "stones": 154,
+    "height_min_m": 0.0,
+    "height_max_m": 0.0,
+    "slope_abs_percentiles": [
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "raised_fraction_of_local_patch": 0.0,
+    "local_patch_bounds_xy_m": [
+      9.6,
+      -1.1,
+      14.1,
+      4.1
+    ],
+    "patch_boundary_max_abs_height_m": 0.0,
+    "upward_triangles": true,
+    "zero_area_triangles": 0,
+    "collision_mesh_sha256": "d15f714f2dcbe47b5f04b628a3ac2f5cf70b5c11f61c81e35df593f281b03b91",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "centers_sha256": "52a2b7934ffbaa8f94dc11b745972d111d9e29b3d37805495d61520d14b5a091",
+    "center_radius_sha256": "2aa4d13170a9239bf94983b14ab6ccfd17ac22c4fc64a2000387072e881c0162",
+    "duplicate_base_plane": false,
+    "scope": "geometry audit only; runtime contact and1cm/5mm comparison pending"
+  },
+  {
+    "height_mm": 5,
+    "stones": 154,
+    "height_min_m": 0.0,
+    "height_max_m": 0.004999999888241291,
+    "slope_abs_percentiles": [
+      0.0,
+      0.0,
+      0.0,
+      0.2
+    ],
+    "raised_fraction_of_local_patch": 0.03986071618577288,
+    "local_patch_bounds_xy_m": [
+      9.6,
+      -1.1,
+      14.1,
+      4.1
+    ],
+    "patch_boundary_max_abs_height_m": 0.0,
+    "upward_triangles": true,
+    "zero_area_triangles": 0,
+    "collision_mesh_sha256": "5ba2ec6899a54073a84b04ec968ac5b142df593f78d44c88dd8b888d5802db0b",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "centers_sha256": "39d86221a35bf9a36761e1ad28b16fe3a1130baa39cffbad557a85dfabe30731",
+    "center_radius_sha256": "2aa4d13170a9239bf94983b14ab6ccfd17ac22c4fc64a2000387072e881c0162",
+    "duplicate_base_plane": false,
+    "scope": "geometry audit only; runtime contact and1cm/5mm comparison pending"
+  },
+  {
+    "height_mm": 10,
+    "stones": 154,
+    "height_min_m": 0.0,
+    "height_max_m": 0.009999999776482582,
+    "slope_abs_percentiles": [
+      0.0,
+      0.0,
+      0.0,
+      0.4000000000000002
+    ],
+    "raised_fraction_of_local_patch": 0.043584831028817377,
+    "local_patch_bounds_xy_m": [
+      9.6,
+      -1.1,
+      14.1,
+      4.1
+    ],
+    "patch_boundary_max_abs_height_m": 0.0,
+    "upward_triangles": true,
+    "zero_area_triangles": 0,
+    "collision_mesh_sha256": "b7eef7ea1ef928ff38939db7e2156459c88805daacd05793c9b725e0bbdb2482",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "centers_sha256": "72cb31dfb86363a56a31292e7c67755652a4a06fba87e04243e6d4e8a741bb37",
+    "center_radius_sha256": "2aa4d13170a9239bf94983b14ab6ccfd17ac22c4fc64a2000387072e881c0162",
+    "duplicate_base_plane": false,
+    "scope": "geometry audit only; runtime contact and1cm/5mm comparison pending"
+  },
+  {
+    "height_mm": 20,
+    "stones": 154,
+    "height_min_m": 0.0,
+    "height_max_m": 0.019999999552965164,
+    "slope_abs_percentiles": [
+      0.0,
+      0.0,
+      0.0,
+      0.8000000000000002
+    ],
+    "raised_fraction_of_local_patch": 0.046042341682472565,
+    "local_patch_bounds_xy_m": [
+      9.6,
+      -1.1,
+      14.1,
+      4.1
+    ],
+    "patch_boundary_max_abs_height_m": 0.0,
+    "upward_triangles": true,
+    "zero_area_triangles": 0,
+    "collision_mesh_sha256": "eee7ee11e213eb755587286430e68490f077125898b0730f8c25597efe38b41f",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "centers_sha256": "0c9d8d568bd8ab2818189e3a56eebb8af03b9e899fa858556daf428ebb8265db",
+    "center_radius_sha256": "2aa4d13170a9239bf94983b14ab6ccfd17ac22c4fc64a2000387072e881c0162",
+    "duplicate_base_plane": false,
+    "scope": "geometry audit only; runtime contact and1cm/5mm comparison pending"
+  }
+]
