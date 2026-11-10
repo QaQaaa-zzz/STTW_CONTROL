@@ -135,6 +135,8 @@ if cases:
     for index,case in enumerate(cases):
         run=Path(case['output']);run.mkdir(parents=True,exist_ok=False)
         part,part_contract=split_case(arrays,contract,{**case,'batch_output':str(a.output.resolve())},index)
+        if s.get('physics_contact_recording'):
+            part_contract['shared_physics_contacts']=dict(path=str(a.output/'physics_contacts'),lane_start=case['lane_start'],lane_count=case['lane_count'],indexing='raw contact starts refer to the shared batch buffers; do not slice flat patch buffers by lane')
         np.savez_compressed(run/'trajectory.npz',**part)
         (run/'contract.json').write_text(json.dumps(part_contract,indent=2))
         part_summary=dict(summary,physics_steps=len(part['reward'])*case['lane_count']*4*env.physics_substeps,failures=part['failure'].sum(0).tolist(),valid_steps=part['valid'].sum(0).tolist(),elapsed_scope='shared batch elapsed, not additive per case')

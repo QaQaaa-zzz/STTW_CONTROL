@@ -5,11 +5,18 @@
   "lower_dt": 0.005,
   "policy_dt": 0.02,
   "total_episodes": 1432,
-  "batch_contexts": 8,
-  "mechanism_contacts": "full 0.2ms compressed; 12 cases retained",
+  "batch_contexts": "all remaining declared cases within 4096 environments",
+  "mechanism_contacts": "shared batch archive, per-case lane range in contract",
   "cpu_plots": "one worker overlapping next GPU batch; 2 PNG per case",
   "service": "sttw-h75-evidence-batched.service",
   "pid": 1594074,
   "execution_state": "queued behind chapter3_bend_approach; previous three physics cases completed and retained",
-  "code_revision": "ecb0a18b"
+  "code_revision": "ecb0a18b",
+  "max_batch_envs": 4096,
+  "stage_environments": [
+    168,
+    672,
+    216,
+    352
+  ]
 }

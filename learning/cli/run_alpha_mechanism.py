@@ -12,7 +12,7 @@ if spec.get('batch_cases'):
   with (r/(job['name']+'_plot.log')).open('w') as log:
    subprocess.run([cpu,'learning/cli/plot_isaac_gpu_evaluation.py','--run',str(out),'--lane-labels',json.dumps(spec['case_labels']),'--title',job['name']],stdout=log,stderr=subprocess.STDOUT,check=True)
   contacts=out/'physics_contacts'
-  if spec.get('compact_results') and contacts.exists():
+  if spec.get('compact_results') and not spec.get('retain_physics_contacts') and contacts.exists():
    index=contacts/'index.json'
    if index.exists():shutil.copy2(index,out/'omitted_contact_record_index.json')
    shutil.rmtree(contacts)
@@ -25,10 +25,10 @@ if spec.get('batch_cases'):
     futures.append(plots.submit(plot_job,job));status['completed']+=1
    else:pending.append(job)
   batch_index=0
-  for _,same_terrain in groupby(pending,key=lambda job:job['terrain']):
-   group=list(same_terrain)
-   for first in range(0,len(group),spec['batch_cases']):
-    batch=group[first:first+spec['batch_cases']];cases=[]
+  group=pending
+  batch_size=spec.get('max_batch_envs',4096)//len(spec['case_labels'])
+  for first in range(0,len(group),batch_size):
+    batch=group[first:first+batch_size];cases=[]
     for job in batch:
      cfg=json.loads(Path(job['config']).read_text())
      case={key:cfg[key] for key in ('alphas','zero_middle','user_speed_m_s','seed','randomization','case_labels')}

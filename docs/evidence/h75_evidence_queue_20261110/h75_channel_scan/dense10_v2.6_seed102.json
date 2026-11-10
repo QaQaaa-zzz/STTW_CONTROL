@@ -92,7 +92,7 @@
   "seed": 102,
   "trace_lanes": 18,
   "physics_contact_recording": {
-    "chunk_steps": 250,
+    "chunk_steps": 25,
     "record_window_s": [
       0.8,
       10.0

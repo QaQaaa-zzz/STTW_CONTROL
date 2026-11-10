@@ -95,7 +95,9 @@
     1
   ],
   "compact_results": true,
-  "batch_cases": 0,
+  "batch_cases": 227,
   "retention": "compressed full-rate contacts only for channel mechanism; other stages retain 200Hz state/control/rewards, XY and summary; no substep command/body duplicates",
-  "execution_revision": "batched fixed cases, physics unchanged; grouping changes lane arrangement and is recorded in batch_source"
+  "execution_revision": "batched fixed cases, physics unchanged; grouping changes lane arrangement and is recorded in batch_source",
+  "max_batch_envs": 4096,
+  "retain_physics_contacts": true
 }
