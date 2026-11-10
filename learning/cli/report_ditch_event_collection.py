@@ -23,8 +23,23 @@ for j,ax in enumerate(axes):
  ax.set(title=f"{names[j]}: {success[:,j].sum()}/{len(success)} complete (all data roles pooled for overview only)",xlabel='World x (m)',ylabel='World y (m)');ax.set_aspect('equal',adjustable='datalim');ax.grid(alpha=.2)
 axes[0].legend(loc='upper right');fig.suptitle('heading125 + frozen H75, v=2 m/s, alpha=0.5; markers are actual termination; no smoothing')
 fig.savefig(a.output/'xy_all_candidates.png',dpi=160,facecolor='white');plt.close(fig)
+if 'land_bridge_y_interval_m' in cfg['ditch_terrain']:
+ from matplotlib.patches import Rectangle
+ spec=cfg['ditch_terrain'];front=spec['front_x_m'];width=spec['width_m'];lo,hi=spec['land_bridge_y_interval_m']
+ fig,ax=plt.subplots(figsize=(14,5),layout='constrained')
+ ax.add_patch(Rectangle((-5,-4),30,8,facecolor='#eeeeee',edgecolor='.5'))
+ ax.add_patch(Rectangle((front,-4),width,8,facecolor='#777777',label='Open trench'))
+ ax.add_patch(Rectangle((front,lo),width,hi-lo,facecolor='#99cc99',label='Continuous side ground'))
+ goal=cfg['ground_handoff']['goal'];ax.add_patch(Rectangle((goal['x_min_m'],-goal['abs_y_max_m']),goal['x_max_m']-goal['x_min_m'],2*goal['abs_y_max_m'],fill=False,edgecolor='black',lw=2,label='Common goal'))
+ for rid in sorted(set(route_ids)):
+  k=route_ids.index(rid);name=protocol['cases'][k]['candidate'] if 'cases' in protocol else f'route {rid}';ax.plot(routes[rid,:,0],routes[rid,:,1],ls='--',lw=2,color=colors[k%n],label=name+' reference')
+ for k,case in enumerate(cases):
+  xy=root[valid[:,k],k,:2];ax.plot(xy[:,0],xy[:,1],color=colors[k%n],alpha=.45,lw=.8);ax.scatter(*xy[-1],color=colors[k%n],marker='o' if case['success'] else 'x',s=14)
+ ax.set(xlim=(-.5,20),ylim=(-4.2,4.2),xlabel='World x (m)',ylabel='World y (m)',title='One physical map / one goal; all measured trajectories; '+('online decisions' if planning.exists() else 'enumerated candidates'))
+ ax.set_aspect('equal');ax.legend(ncol=3,fontsize=8);ax.grid(alpha=.2);fig.savefig(a.output/'map_and_actual_xy.png',dpi=160,facecolor='white');plt.close(fig)
 index=[]
 for i in range(len(success)):
+
  fig,axes=plt.subplots(4,1,figsize=(12,10),layout='constrained')
  for j in range(n):
   k=i*n+j;m=valid[:,k];x=root[m,k];r=reward[m,k];steps=np.arange(1,len(x)+1);label=f"{names[j]} ({'goal' if cases[k]['success'] else 'end '+str(cases[k]['end_code'])})"

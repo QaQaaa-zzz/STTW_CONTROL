@@ -11,7 +11,10 @@ def main():
  a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False);torch.set_num_threads(2);torch.manual_seed(20261110);rng=np.random.default_rng(20261110);start=time.monotonic()
  cfg=json.loads((a.collection/'config.json').read_text());protocol=json.loads((a.collection/'protocol.json').read_text());summary=json.loads((a.collection/'evaluation/summary.json').read_text());data=dict(np.load(a.collection/'evaluation/trajectories.npz'));routes=np.load(cfg['ground_handoff']['reference_path'])['xy']
  roles=np.array([c['role'] for c in protocol['cases']]);terrain_file=a.collection/'evaluation/terrain/terrain.npz';terrain=KnownHeightMap(np.load(terrain_file)['vertices'],cfg['ditch_terrain'])
- params=np.stack([route_parameters(xy,cfg['ground_handoff']['approach']['speed_m_s'],cfg['ground_handoff']['approach']['alpha']) for xy in routes]);lane_params=params[np.array(cfg['ground_handoff']['reference_route_ids'])]
+ params=np.stack([route_parameters(xy,cfg['ground_handoff']['approach']['speed_m_s'],cfg['ground_handoff']['approach']['alpha']) for xy in routes])
+ ground_only=np.asarray(cfg['ground_handoff'].get('ground_only_lanes',[False]*len(roles)));route_ids=np.asarray(cfg['ground_handoff']['reference_route_ids'])
+ if ground_only.any():params=np.column_stack((params,[float(not ground_only[np.flatnonzero(route_ids==i)[0]]) for i in range(len(params))])).astype(np.float32)
+ lane_params=params[route_ids]
  hidden=np.concatenate((data['observation'],data['controller_history']),-1)
  # Compress only TRAIN histories, sampled at 10Hz; all data roles stay grouped.
  pool=hidden[::5,roles=='TRAIN'].reshape(-1,hidden.shape[-1]);mask=data['valid'][::5,roles=='TRAIN'].ravel();pool=pool[mask]
@@ -24,6 +27,10 @@ def main():
  for lane,case in enumerate(summary['cases']):
   terminal_ix=np.flatnonzero(data['physics_valid'][:,lane])[-1];end_t=float(data['physics_time'][terminal_ix]);end_root=data['physics_root_xyzw'][terminal_ix,lane]
   terminal=state(lane,end_t,end_root,data['road_violation'][lane]);first=state(lane,0.,data['initial_root_xyzw'][lane],False);initial.append(first)
+  if ground_only[lane]:
+   hit=float(case['success']);t=float(data['event_time'][lane,4]) if hit else end_t
+   target=state(lane,t,data['event_root_xyzw'][lane,4],False) if hit else terminal
+   records.append((lane,4,first,target,t,hit));continue
   points=[(0.,first)]
   t=case['entry_s']
   if t is None:points.append(None)
@@ -46,7 +53,7 @@ def main():
   spec=cfg['ditch_terrain'];x=states[:,0];return np.column_stack((parameters,spec['front_x_m']-x,spec['front_x_m']+spec['width_m']-x,cfg['ground_handoff']['goal']['x_min_m']-x)).astype(np.float32)
  plans=plan_features(s,lane_params[lanes]);crop=terrain.crop(s[:,:13]);train=roles[lanes]=='TRAIN';dev=roles[lanes]=='DEV'
  residual=ns-s;residual[:,:3]-=s[:,7:10]*dt[:,None]
- constructor=dict(conditional_event_targets=a.conditional_event_targets,dimension=s.shape[1],state_mean=s[train].mean(0),state_std=np.maximum(s[train].std(0),.02),plan_mean=plans[train].mean(0),plan_std=np.maximum(plans[train].std(0),.02),residual_mean=residual[train].mean(0),residual_std=np.maximum(residual[train].std(0),.02))
+ constructor=dict(plan_dimension=plans.shape[1],conditional_event_targets=a.conditional_event_targets,dimension=s.shape[1],state_mean=s[train].mean(0),state_std=np.maximum(s[train].std(0),.02),plan_mean=plans[train].mean(0),plan_std=np.maximum(plans[train].std(0),.02),residual_mean=residual[train].mean(0),residual_std=np.maximum(residual[train].std(0),.02))
  model=EventTransitionNetwork(**constructor);opt=torch.optim.Adam(model.parameters(),lr=.001);tensors=[torch.from_numpy(x) for x in (s,plans,crop,modes,ns,dt,hit)];train_ids=np.flatnonzero(train);dev_ids=np.flatnonzero(dev);best=float('inf');logs=[]
  for update in range(a.updates):
   idx=rng.choice(train_ids,256,replace=True);loss=model.loss(*(x[idx] for x in tensors));opt.zero_grad();loss.backward();torch.nn.utils.clip_grad_norm_(model.parameters(),5.);opt.step()
@@ -55,7 +62,7 @@ def main():
    logs.append(dict(update=update+1,train_loss=float(loss),dev_loss=validation));print(logs[-1],flush=True)
    if validation<best:best=validation;selected=update+1;weights=copy.deepcopy(model.state_dict())
  model.load_state_dict(weights);torch.save(dict(constructor=constructor,state_dict=weights),a.output/'model.pt')
- meta=dict(terrain_file=str(terrain_file),terrain_spec=cfg['ditch_terrain'],goal=cfg['ground_handoff']['goal'],candidate_parameters=params.tolist(),candidate_names=protocol['candidates'],selected_update=selected,training_logs=logs,collection=str(a.collection),scope='Exploratory same-map event model; grouped starts only; no map generalization or planning benefit claim',conditional_event_targets=a.conditional_event_targets,state='root xyzw13 + TRAIN-only PCA16 of causal80+352 history + prior road violation; history compression is not a Markov guarantee')
+ meta=dict(inference_common_random_numbers=True,plan_skill_feature='last candidate parameter:1jump,0ground' if ground_only.any() else None,terrain_file=str(terrain_file),terrain_spec=cfg['ditch_terrain'],goal=cfg['ground_handoff']['goal'],candidate_parameters=params.tolist(),candidate_names=protocol['candidates'],selected_update=selected,training_logs=logs,collection=str(a.collection),scope='Exploratory same-map event model; grouped starts only; no map generalization or planning benefit claim',conditional_event_targets=a.conditional_event_targets,state='root xyzw13 + TRAIN-only PCA16 of causal80+352 history + prior road violation; history compression is not a Markov guarantee')
  (a.output/'model.json').write_text(json.dumps(meta,indent=2));np.savez_compressed(a.output/'transitions.npz',lane=lanes,mode=modes,state=s,next_state=ns,time=dt,hit=hit,role=roles[lanes])
  metrics={}
  with torch.no_grad():

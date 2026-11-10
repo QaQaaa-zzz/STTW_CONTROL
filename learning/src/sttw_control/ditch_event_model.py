@@ -52,11 +52,11 @@ class KnownHeightMap:
 
 
 class EventTransitionNetwork(nn.Module):
-    def __init__(self,dimension,state_mean,state_std,plan_mean,plan_std,residual_mean,residual_std,conditional_event_targets=False):
+    def __init__(self,dimension,state_mean,state_std,plan_mean,plan_std,residual_mean,residual_std,conditional_event_targets=False,plan_dimension=10):
         super().__init__();self.dimension=dimension;self.conditional_event_targets=conditional_event_targets
         for name,value in dict(state_mean=state_mean,state_std=state_std,plan_mean=plan_mean,plan_std=plan_std,residual_mean=residual_mean,residual_std=residual_std).items():self.register_buffer(name,torch.as_tensor(value,dtype=torch.float32))
         self.terrain=nn.Sequential(nn.Linear(128,32),nn.SiLU(),nn.Linear(32,32),nn.SiLU())
-        self.shared=nn.Sequential(nn.Linear(dimension+10+6+32,128),nn.SiLU(),nn.Linear(128,64),nn.SiLU())
+        self.shared=nn.Sequential(nn.Linear(dimension+plan_dimension+6+32,128),nn.SiLU(),nn.Linear(128,64),nn.SiLU())
         self.heads=nn.ModuleList([nn.Linear(64,2*dimension+2) for _ in range(3)])
     def forward(self,state,plan,crop,mode):
         x=torch.cat(((state-self.state_mean)/self.state_std,(plan-self.plan_mean)/self.plan_std,nn.functional.one_hot(mode,6).float(),self.terrain(crop)),-1)
@@ -97,22 +97,28 @@ class EventPlanner:
         # All particles are model futures; no measured future is queried.
         rng=np.random.default_rng(seed);n=len(state);s=np.repeat(state,particles,0);params=np.repeat(parameters,particles,0)
         probability=np.ones(len(s));elapsed=np.zeros(len(s));events=[]
+        jump=np.ones(n,dtype=bool) if parameters.shape[1]==7 else parameters[:,-1]>.5
+        jump_particles=np.repeat(jump,particles)
         for mode in range(5):
+            active=jump_particles if mode<4 else np.ones(len(s),dtype=bool)
             inp=torch.from_numpy(s);plan=torch.from_numpy(self.plan_features(s,params));crop=torch.from_numpy(self.map.crop(s[:,:13]))
             mean,logvar,logtime,logit=self.model(inp,plan,crop,torch.full((len(s),),mode,dtype=torch.long))
             dt=torch.expm1(logtime.clamp(0,np.log(11.)))
-            noise=torch.from_numpy(rng.standard_normal(mean.shape).astype(np.float32))
+            noise_shape=(particles,mean.shape[1]) if self.meta.get('inference_common_random_numbers',False) else mean.shape
+            noise_np=rng.standard_normal(noise_shape).astype(np.float32)
+            noise=torch.from_numpy(np.tile(noise_np,(n,1)) if self.meta.get('inference_common_random_numbers',False) else noise_np)
             residual=(mean+noise*torch.exp(.5*logvar))*self.model.residual_std+self.model.residual_mean
             nxt=(self.model.physical_baseline(inp,dt)+residual).numpy()
             q=nxt[:,3:7];nxt[:,3:7]=q/np.maximum(np.linalg.norm(q,axis=-1,keepdims=True),1e-8)
             nxt[:,-1]=nxt[:,-1].clip(0,1)
             if self.model.conditional_event_targets:nxt[:,-1]=np.maximum(s[:,-1],nxt[:,-1])
-            probability*=torch.sigmoid(logit).numpy();elapsed+=dt.numpy()
-            events.append(dict(mode=mode,mean_root=nxt[:,:13].reshape(n,particles,13).mean(1).tolist(),mean_event_probability=torch.sigmoid(logit).numpy().reshape(n,particles).mean(1).tolist()))
+            nxt=np.where(active[:,None],nxt,s)
+            probability*=np.where(active,torch.sigmoid(logit).numpy(),1.);elapsed+=np.where(active,dt.numpy(),0.)
+            events.append(dict(mode=mode,active_candidates=(jump if mode<4 else np.ones(n,dtype=bool)).tolist(),mean_root=nxt[:,:13].reshape(n,particles,13).mean(1).tolist(),mean_event_probability=torch.sigmoid(logit).numpy().reshape(n,particles).mean(1).tolist()))
             s=nxt.astype(np.float32)
             if mode==0:entry=s.copy()
         mean,var,logtime,logit=self.model(torch.from_numpy(entry),torch.from_numpy(self.plan_features(entry,params)),torch.from_numpy(self.map.crop(entry[:,:13])),torch.full((len(entry),),5,dtype=torch.long))
-        events.append(dict(mode=5,name='source_scorer_clearance_auxiliary',mean_event_probability=torch.sigmoid(logit).numpy().reshape(n,particles).mean(1).tolist(),mean_delay_s=torch.expm1(logtime.clamp(0,np.log(11.))).numpy().reshape(n,particles).mean(1).tolist()))
+        events.append(dict(mode=5,active_candidates=jump.tolist(),name='source_scorer_clearance_auxiliary',mean_event_probability=torch.sigmoid(logit).numpy().reshape(n,particles).mean(1).tolist(),mean_delay_s=torch.expm1(logtime.clamp(0,np.log(11.))).numpy().reshape(n,particles).mean(1).tolist()))
         # Road history is an absorbing task condition, separate from survival.
         probability*=1-s[:,-1]
         q=probability.reshape(n,particles).mean(1)-.001*elapsed.reshape(n,particles).mean(1)

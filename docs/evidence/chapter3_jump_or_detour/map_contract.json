@@ -1,0 +1,80 @@
+{
+  "map": {
+    "front_x_m": 10.3,
+    "width_m": 0.3,
+    "ground_end_x_m": 25.0,
+    "stone_height_min_m": 0.0005,
+    "stone_height_max_m": 0.001,
+    "stones_per_m2": 25,
+    "seed": 20261109,
+    "lateral_limit_m": 3.9,
+    "far_bank_height_m": 0.0,
+    "rough_x_intervals_m": [
+      [
+        2.0,
+        7.0
+      ],
+      [
+        12.0,
+        22.0
+      ]
+    ],
+    "land_bridge_y_interval_m": [
+      1.4,
+      4.0
+    ]
+  },
+  "regions": {
+    "start": {
+      "x_m": 1.5
+    },
+    "crossing": {
+      "x_interval_m": [
+        10.3,
+        10.6
+      ]
+    },
+    "goal": {
+      "x_min_m": 16.5,
+      "x_max_m": 18.5,
+      "abs_y_max_m": 0.5,
+      "min_vx_m_s": 0.5
+    }
+  },
+  "routes": [
+    {
+      "name": "jump_left",
+      "path_index": 0,
+      "skills": [
+        "STTW",
+        "heading125",
+        "STTW"
+      ],
+      "handoff": "first_far_contact"
+    },
+    {
+      "name": "jump_right",
+      "path_index": 1,
+      "skills": [
+        "STTW",
+        "heading125",
+        "STTW"
+      ],
+      "handoff": "first_far_contact"
+    },
+    {
+      "name": "ground_detour",
+      "path_index": 2,
+      "skills": [
+        "STTW"
+      ],
+      "handoff": null
+    }
+  ],
+  "constraints": {
+    "original_road_half_width_m": 0.6,
+    "physical_limits": "unchanged task_spec",
+    "ground_detour_has_no_jump_handoff": true
+  },
+  "capability_status": "unmeasured; generation does not imply feasible"
+}

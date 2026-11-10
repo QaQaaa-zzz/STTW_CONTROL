@@ -30,7 +30,10 @@ if cfg.get('event_planner'):
  prediction=planner.score(np.repeat(state,nc,axis=0),np.tile(parameters,(env.num_envs,1)),particles=32)
  scores=np.asarray(prediction['score']).reshape(env.num_envs,nc);chosen=scores.argmax(1)
  selected=g.route.route_ids.cpu().numpy().copy();select_lanes=np.asarray(cfg['event_planner']['lanes'],int);selected[select_lanes]=chosen[select_lanes]
- g.route.route_ids.copy_(torch.as_tensor(selected,device=env.device));g.resume_ground_lanes(env.all_ids,task.approach['speed_m_s'],task.approach['alpha'])
+ g.route.route_ids.copy_(torch.as_tensor(selected,device=env.device))
+ if parameters.shape[1]==8:
+  task.ground_only.copy_(torch.as_tensor(parameters[selected,-1]<.5,device=env.device));task.phase.copy_(torch.where(task.ground_only,3,0))
+ g.resume_ground_lanes(env.all_ids,task.approach['speed_m_s'],task.approach['alpha'])
  (a.output/'planning.json').write_text(json.dumps(dict(selected=selected.tolist(),model_choice=chosen.tolist(),scores=scores.tolist(),query_s=time.monotonic()-query_start,prediction=prediction,scope='Online pre-motion candidate query from actual reset state and controller history; no measured futures supplied'),indent=2))
 
 with torch.no_grad():
@@ -56,7 +59,7 @@ if task.physics_roots:
 for name,values in dict(root_xyzw=rows,valid=valid,reward=rewards,stage=stages,phase=phases,observation=observations,action=actions,end_code=codes).items():
  arrays[name]=torch.stack(values).cpu().numpy()
 np.savez_compressed(a.output/'trajectories.npz',**arrays,event_time=task.event_time.cpu().numpy(),event_root_xyzw=task.event_root.cpu().numpy(),event_names=np.asarray(task.event_names),road_violation=task.road_violation.cpu().numpy(),event_road_violation=task.event_road_violation.cpu().numpy())
-summary=dict(cases=[dict(lane=i,success=bool(task.reached_goal[i]),end_code=int(task.terminal_code[i]),handoff_s=float(task.handoff_time[i]) if torch.isfinite(task.handoff_time[i]) else None,entry_s=float(task.entry_time[i]) if torch.isfinite(task.entry_time[i]) else None,steps=int(arrays['valid'][:,i].sum()),road_violation=bool(task.road_violation[i])) for i in range(env.num_envs)],elapsed_s=time.monotonic()-start,physics_lane_steps=env.total_physics_steps,scope=cfg.get('data_role','Declared evaluation batch')+'; original physical thresholds; success is task goal after measured far-bank contact and STTW handback with no prior original-road violation; not old support hold')
+summary=dict(cases=[dict(lane=i,success=bool(task.reached_goal[i]),skill='ground_only' if bool(task.ground_only[i]) else 'jump_then_ground',end_code=int(task.terminal_code[i]),handoff_s=float(task.handoff_time[i]) if torch.isfinite(task.handoff_time[i]) else None,entry_s=float(task.entry_time[i]) if torch.isfinite(task.entry_time[i]) else None,steps=int(arrays['valid'][:,i].sum()),road_violation=bool(task.road_violation[i])) for i in range(env.num_envs)],elapsed_s=time.monotonic()-start,physics_lane_steps=env.total_physics_steps,scope=cfg.get('data_role','Declared evaluation batch')+'; original physical thresholds; success is selected skill sequence plus task goal without prior original-road violation; jump routes require measured far-bank handback, ground-only routes do not; not old support hold')
 (a.output/'summary.json').write_text(json.dumps(summary,indent=2))
 (a.output/'status.json').write_text(json.dumps(dict(stage='completed',**summary),indent=2))
 os.sync();os._exit(0)

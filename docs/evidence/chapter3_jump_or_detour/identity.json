@@ -1,0 +1,7 @@
+{
+  "raw_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_jump_or_detour",
+  "model_sha256": "001f75f22c0aec5b583d44df3e3d160bda3f282602a6fc7768e4afdf7db9812a",
+  "config_sha256": "37d88e5bd97d386d15c131f9bf1cc4fded945058ad5ca510667a19f64fcf35a4",
+  "parent_map": "chapter3_event_collection/extension",
+  "map_change": "Explicit new side land strip only; original center trench and bank mesh preserved"
+}
