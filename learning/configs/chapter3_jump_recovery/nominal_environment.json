@@ -1,0 +1,125 @@
+{
+  "task_spec": "learning/configs/chapter3_jump_recovery/nominal_task.json",
+  "device": "cuda:0",
+  "num_envs": 32,
+  "updates": 450,
+  "save_interval": 25,
+  "asset": "runs/rb_sttw_platform/isaac_asset/vehicle.urdf",
+  "asset_spec": "learning/configs/rb_sttw_platform.json",
+  "geometry": "runs/rb_sttw_platform/jump_input/geometry.json",
+  "bundle": "learning/deployment/chapter3/policies/heading125",
+  "plant_options": {
+    "physics_dt": 0.0025,
+    "wheel_radius_m": 0.07,
+    "gpu_pair_capacities": [
+      4194304,
+      4194304,
+      16777216
+    ],
+    "servo_mode": "hybrid",
+    "compliant_wheels": null,
+    "wheel_collision": "cylinder",
+    "hull_vertices": 64,
+    "robot_contact_offset": 0.001,
+    "mesh_collision_on_geometry": true,
+    "solver_position_iterations": 16,
+    "solver_velocity_iterations": 4,
+    "wheel_width_m": 0.05,
+    "wheel_profile_slices": 21,
+    "env_spacing": 40.0,
+    "pendulum_rest": [
+      -1.2,
+      2.499999
+    ],
+    "pendulum_locked": false,
+    "terrain_layout": "replicated",
+    "terrain_base_plane": false,
+    "gpu_contact_capacities": [
+      8388608,
+      2097152
+    ],
+    "track_wheel_contacts": true,
+    "wheel_patch_capacity": 64,
+    "wheel_raw_contacts_only": true,
+    "wheel_contact_buffer_capacity": 256,
+    "terrain_tile_spacing": [
+      32.0,
+      9.0
+    ]
+  },
+  "go2_checkout": "/home/qy/projects/My_unitree_go2_gym",
+  "seed": 28,
+  "status": "Frozen nominal teacher/DEV environment; no randomized-training claim",
+  "reset_note": "100% ground start x1.5 vx2; no platform entry bank or airborne RSI",
+  "optimizer_initialization": "heading125 bundle actor/critic/frozen normalizers; fresh Adam for student",
+  "jump_steering_gains": [
+    2.5,
+    0.4
+  ],
+  "root_acceleration_difference": true,
+  "ppo_overrides": {
+    "learning_rate": 5e-05,
+    "schedule": "fixed",
+    "gamma": 1.0
+  },
+  "evaluation_checkpoint_every": 25,
+  "heading_observation": true,
+  "heading_observation_noise": [
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "ground_end_x_m": 25.0,
+  "ditch_terrain": {
+    "front_x_m": 3.3,
+    "width_m": 0.3,
+    "ground_end_x_m": 25.0,
+    "stone_height_min_m": 0.0005,
+    "stone_height_max_m": 0.001,
+    "stones_per_m2": 25,
+    "seed": 20261109,
+    "lateral_limit_m": 3.9,
+    "far_bank_height_m": 0.0,
+    "rough_x_intervals_m": [
+      [
+        2.0,
+        2.4
+      ],
+      [
+        5.0,
+        18.0
+      ]
+    ]
+  },
+  "verified_ditch_reward": true,
+  "verified_ditch_support_mode": "rough",
+  "ditch_landing_focus": true,
+  "minimum_initial_support_fraction": 0.5,
+  "evaluation_seed": 20261109,
+  "record_verified_diagnostics": false,
+  "ground_handoff": {
+    "bundle": "runs/rb_h75_ecbc_ground/left90_R2/bundle",
+    "settings": "runs/rb_h75_ecbc_ground/left90_R2/config.json",
+    "speed_m_s": 1.5,
+    "alpha": 0.5,
+    "leg_hold": "finite_motor",
+    "handoff_stage": 3,
+    "continue_to_horizon": true,
+    "approach": {
+      "speed_m_s": 2.0,
+      "alpha": 0.5,
+      "jump_start_x_m": 2.0
+    },
+    "handoff_event": "first_far_contact",
+    "record_controller_history": false,
+    "goal": {
+      "x_min_m": 10.0,
+      "x_max_m": 12.0,
+      "abs_y_max_m": 0.5,
+      "min_vx_m_s": 0.5
+    }
+  },
+  "policy_obstacle_reference_x_m": 3.6,
+  "candidate_label": "smooth curve"
+}

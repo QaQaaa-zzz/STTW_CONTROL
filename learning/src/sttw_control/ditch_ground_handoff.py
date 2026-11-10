@@ -10,8 +10,7 @@ class DitchGroundHandoff:
         from .isaac_path_rollout import IsaacPathRollout
         from .torch_path_policy import TorchPathPolicy
         from .torch_path_reference import TorchPathReference
-        if env.num_envs != 1:
-            raise ValueError('Ditch handback diagnostic requires one lane')
+        n=env.num_envs
         self.env,self.spec,self.output=env,spec,Path(output)
         self.leg_hold=spec.get('leg_hold','joint_brake')
         self.handoff_stage=spec.get('handoff_stage',3)
@@ -24,13 +23,13 @@ class DitchGroundHandoff:
         if self.leg_hold not in ('joint_brake','finite_motor'):
             raise ValueError('Unknown handoff leg hold mode')
         settings=json.loads(Path(spec['settings']).read_text())
-        settings.update(num_envs=1,alphas=[spec['alpha']],zero_middle=[False],zero_lower=[True],
+        settings.update(num_envs=n,alphas=[spec['alpha']],zero_middle=[False]*n,zero_lower=[True]*n,
                         terrains={'ditch':'shared'},episode_s=env.max_episode_length*env.dt,
                         initial_state=None,user_speed_m_s=spec['speed_m_s'],auto_reset_horizon=False,
                         record_control_commands=True)
         bundle=Path(spec['bundle']);identity=json.loads((bundle/'identity.json').read_text())
         config=json.loads((bundle/'config.json').read_text())
-        actor=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],config,1,env.device)
+        actor=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],config,n,env.device)
         self.ground=IsaacPathRollout(bundle,settings,actor,plant=env.plant)
         reference_path=spec.get("reference_path")
         if reference_path:
@@ -39,7 +38,7 @@ class DitchGroundHandoff:
         else:
             ss=np.arange(0,30.01,.02)
             route=dict(s=ss,xy=np.column_stack((ss-5.,np.zeros_like(ss))),heading=np.zeros_like(ss),curvature=np.zeros_like(ss))
-        self.ground.begin_connection(TorchPathReference(route,config,env.device),self.ground.speed.clone(),self.ground.alpha.clone())
+        self.ground.begin_connection(TorchPathReference(route,config,env.device,route_ids=spec.get('reference_route_ids')),self.ground.speed.clone(),self.ground.alpha.clone())
         self.active=False;self.commands=[];self.command_times=[];self.command_phases=[]
         self.history=[];self.record_history=spec.get("record_controller_history",False)
         self.approach=spec.get('approach')
@@ -52,6 +51,8 @@ class DitchGroundHandoff:
             pendulum=self.leg_hold),indent=2))
 
     def step(self, latent):
+        if self.env.num_envs != 1:
+            raise ValueError('Use VectorDitchHandoff for batched stepping')
         e=self.env;g=self.ground
         if self.approaching:
             if not self.approach_initialized:
@@ -150,4 +151,172 @@ class DitchGroundHandoff:
         code=torch.where(result['failure']&(code==0),reason,code)
         info=dict(unscaled_reward=reward,end_code=code,reward_parts={'verified_jump':reward,'episode_return_override':torch.zeros_like(reward)},
                   jump_stage=scorer.stage.clone(),jump_success=scorer.success.clone())
+        return e.obs_buf,e.privileged_obs_buf,reward*e.task['ppo']['reward_scaling'],done,info
+
+
+class VectorDitchHandoff(DitchGroundHandoff):
+    """Batched physical jump/ground execution for collection and recovery training.
+
+    All lanes share one PhysX scene. Phase switches only select existing motor
+    interfaces; neither touchdown nor switching resets the physical robot.
+    The inherited single-lane evaluator remains the historical reference.
+    """
+    def __init__(self, env, spec, output, *, auto_reset=False):
+        super().__init__(env,spec,output)
+        if self.leg_hold!='finite_motor' or self.handoff_event!='first_far_contact':
+            raise ValueError('Vector continuation uses finite motors and first far contact')
+        self.auto_reset=auto_reset
+        self.phase=torch.ones(env.num_envs,device=env.device,dtype=torch.long)
+        self.finished=torch.zeros_like(self.phase,dtype=torch.bool)
+        self.reached_goal=self.finished.clone();self.push_seen=self.finished.clone()
+        self.nonzero_push=any(lo!=0 or hi!=0 for lo,hi in env.rand['push_velocity_range'].values())
+        self.potential=torch.zeros(env.num_envs,device=env.device)
+        self.handoff_time=torch.full_like(self.potential,float('nan'))
+        self.entry_time=torch.full_like(self.potential,float('nan'))
+        self.terminal_code=torch.zeros_like(self.phase)
+        self.ground.record_control_commands=False
+        self.goal=spec['goal']
+        self.road_half_width=spec.get('road_half_width_m',.6)
+        self.road_violation=self.finished.clone()
+        reference=env.cfg.get('task_reference_path',spec.get('reference_path'))
+        self.road=None
+        if reference:
+            with np.load(reference) as data:self.road=torch.as_tensor(data['xy'],device=env.device,dtype=torch.float32)
+        self.record_events=env.cfg.get('record_event_states',False)
+        self.physics_contact_modes=[];self.physics_roots=[];self.physics_valid=[]
+        self.event_names=('flight_confirmed','clearance_confirmed','far_contact','sttw_handoff','goal')
+        self.event_time=torch.full((env.num_envs,5),float('nan'),device=env.device)
+        self.event_root=torch.full((env.num_envs,5,13),float('nan'),device=env.device)
+        self.event_road_violation=torch.zeros(env.num_envs,5,device=env.device,dtype=torch.bool)
+        self.reset()
+
+    def reset(self):
+        self.reset_idx(self.env.all_ids)
+        return self.env.obs_buf,self.env.privileged_obs_buf
+
+    def reset_idx(self,ids):
+        e=self.env;g=self.ground
+        e.reset_idx(ids)
+        self.phase[ids]=0 if self.approach else 1
+        self.finished[ids]=False;self.reached_goal[ids]=False;self.road_violation[ids]=False;self.push_seen[ids]=False
+        self.event_time[ids]=float('nan');self.event_root[ids]=float('nan');self.event_road_violation[ids]=False
+        self.potential[ids]=0.;self.terminal_code[ids]=0
+        self.handoff_time[ids]=float('nan');self.entry_time[ids]=float('nan')
+        self.entry_time[ids]=0. if not self.approach else float('nan')
+        speed=self.approach['speed_m_s'] if self.approach else self.spec['speed_m_s']
+        alpha=self.approach['alpha'] if self.approach else self.spec['alpha']
+        g.resume_ground_lanes(ids,speed,alpha)
+        g.physical_tick[ids]=0
+        e.plant.set_steering_position_modes(self.phase==1)
+
+    @torch.no_grad()
+    def step(self,latent):
+        from .phase_u_events import advance_events
+        from .jump_heading import heading_features
+        from isaaclab.envs.mdp.events import push_by_setting_velocity
+        from types import SimpleNamespace
+        e=self.env;g=self.ground;p=e.plant;alive=~self.finished
+        root=e.physical()[0]
+        if self.approach:
+            enter=alive&(self.phase==0)&(root[:,0]>=self.approach['jump_start_x_m'])
+            self.phase[enter]=1;self.entry_time[enter]=e.episode_length_buf[enter]*e.dt
+        handing=alive&(self.phase==1)&e.verified_jump.observed_far_contact
+        ids=handing.nonzero().flatten()
+        if len(ids):
+            indices=p.pendulum_servos.indices
+            hold=p.dofs[:,indices,0].clamp(min=e.lo[2:],max=e.hi[2:])
+            p.pendulum_target[ids]=hold[ids]
+            g.resume_ground_lanes(ids,self.spec['speed_m_s'],self.spec['alpha'])
+            g.physical_tick[ids]=e.episode_length_buf[ids]*4
+            self.phase[ids]=2;self.handoff_time[ids]=e.episode_length_buf[ids]*e.dt
+            self.event_time[ids,3]=self.handoff_time[ids];self.event_root[ids,3]=root[ids];self.event_road_violation[ids,3]=self.road_violation[ids]
+        jumping=(self.phase==1)&alive;grounding=alive&~jumping
+        p.set_steering_position_modes(jumping)
+        action=torch.tanh(latent);target=e.targets(action)
+        push_ticks=round(e.rand['push_interval_s']/e.dt)
+        ids=(alive&(e.episode_length_buf>0)&(e.episode_length_buf%push_ticks==0)).nonzero().flatten()
+        if len(ids):
+            push_by_setting_velocity(SimpleNamespace(scene={'robot':p.robot}),ids,e.rand['push_velocity_range'])
+            self.push_seen[ids]=self.nonzero_push
+        tick=0;failed=torch.zeros_like(alive);code=torch.zeros_like(self.phase)
+        measured=None
+        def physics(command):
+            nonlocal tick,failed,code,measured
+            valid_before=alive&~failed
+            before=p.robot.data.root_link_lin_vel_w.clone()
+            delivered=e.randomization.command(target)
+            actual=torch.where(jumping[:,None],torch.stack((torch.zeros_like(delivered[:,0]),delivered[:,1]),-1),command)
+            actual=torch.where(alive[:,None],actual,0.)
+            leg=torch.where(jumping[:,None],delivered[:,2:],p.pendulum_target)
+            result=p.step(actual,pendulum_target=leg,steering_position_target=delivered[:,:1],refresh_diagnostics=True)
+            e.verified_jump.sample(e,torch.where(jumping[:,None],action,0.),tick==e.physics_substeps-1)
+            now=e.verified_jump.physical_failure&~failed
+            code=torch.where(now,e.verified_jump.end_code,code);failed|=now
+            tick+=1
+            state=e.verified_jump.last_root
+            if self.road is None:distance=state[:,1].abs()
+            else:
+                road=self.road[g.route.route_ids] if self.road.ndim==3 else self.road
+                delta=state[:,None,:2]-road[...,:-1,:];segment=road[...,1:,:]-road[...,:-1,:]
+                fraction=((delta*segment).sum(-1)/segment.square().sum(-1)).clamp(0,1)
+                distance=(delta-fraction[:,:,None]*segment).square().sum(-1).amin(-1).sqrt()
+            self.road_violation|=alive&(distance>self.road_half_width)
+            if self.record_events:
+                self.physics_contact_modes.append(e.verified_jump.last_contact_mode.clone())
+                self.physics_roots.append(state.clone());self.physics_valid.append(valid_before.clone())
+                scorer=e.verified_jump.scorer
+                for j,occurred in enumerate((scorer.stage>=1,scorer.stage>=2,e.verified_jump.observed_far_contact)):
+                    take=alive&~failed&occurred&torch.isnan(self.event_time[:,j])
+                    self.event_time[take,j]=(e.episode_length_buf[take]+tick/e.physics_substeps)*e.dt
+                    self.event_root[take,j]=state[take]
+                    self.event_road_violation[take,j]=self.road_violation[take]
+            if tick%e.sensor_substeps==0:
+                state=e.physical()[0]
+                distance=e.cfg.get('policy_obstacle_reference_x_m',e.ditch['front_x_m'])-(e.geometry.frontmost_x(p.rigid)-p.origin[:,0])
+                acceleration=(p.robot.data.root_link_lin_vel_w-before)/p.physics_dt
+                frame=e.history.make_frame(state,p.dofs[:,:,0],p.dofs[:,:,1],acceleration,distance,torch.where(jumping[:,None],action,e.last_action))
+                measured=e.randomization.sensor_frame(frame)
+            return result
+        g.physics_step_override=physics
+        result=g.step()
+        failed|=grounding&result['failure']
+        ground_reason=torch.where(g.middle.domain_exit,15,torch.where(g.middle.fault,16,17))
+        code=torch.where(grounding&result['failure']&(code==0),ground_reason,code)
+        root,contact,_=e.physical()
+        e.events=advance_events(e.events,dict(x=root[:,0],z=root[:,2],vertical_velocity=root[:,9],forward_velocity=root[:,7],physical_failure=failed),e.task)
+        e.last_action.copy_(torch.where(jumping[:,None],action,e.last_action))
+        e.obs_buf=e.history.advance_frame(measured,e.events['jump_signal'].float())
+        if e.num_obs==80:
+            features=heading_features(root)
+            noise=torch.as_tensor(e.cfg['heading_observation_noise'],device=e.device)
+            e.obs_buf=torch.cat((e.obs_buf,features+(2*torch.rand_like(features)-1)*noise),-1)
+        e.privileged_obs_buf=e.history.privileged(e.obs_buf[:,:76],root,p.dofs[:,:,0],p.dofs[:,:,1],contact)
+        e.episode_length_buf+=1
+        goal=(self.phase==2)&(root[:,0]>=self.goal['x_min_m'])&(root[:,0]<=self.goal['x_max_m'])&(root[:,1].abs()<=self.goal['abs_y_max_m'])&(root[:,7]>=self.goal['min_vx_m_s'])
+        timeout=e.episode_length_buf>=e.max_episode_length
+        done=alive&(failed|goal|timeout)
+        success=done&goal&~failed&~self.road_violation
+        self.event_time[success,4]=e.episode_length_buf[success]*e.dt;self.event_root[success,4]=root[success]
+        self.reached_goal|=success
+        # Telescoping shaping; completed episodic return is exactly +100/-100.
+        # Timeout cannot earn a better return by avoiding a difficult jump.
+        stage=e.verified_jump.scorer.stage
+        phi=50.*((root[:,0]-1.5)/(self.goal['x_min_m']-1.5)).clamp(0,1)+10.*(stage>=1)+10.*(stage>=2)+10.*(self.phase==2)
+        reward=torch.where(alive,phi-self.potential,0.)
+        reward=torch.where(done,torch.where(success,100.,-100.)-self.potential,reward)
+        self.potential=torch.where(alive,phi,self.potential)
+        e.episode_return+=reward
+        code=torch.where(success,13,code)
+        code=torch.where(done&goal&self.road_violation&~failed,18,code)
+        code=torch.where(done&(code==0),9,code)
+        self.terminal_code=torch.where(done,code,self.terminal_code)
+        self.finished|=done
+        info=dict(time_outs=torch.zeros_like(reward),unscaled_reward=reward,end_code=code,
+                  task_success=success,jump_stage=stage.clone(),jump_success=success,
+                  handoff=(self.phase==2),jump_active=jumping,road_violation=self.road_violation.clone(),reward_parts={'task':reward})
+        ids=done.nonzero().flatten()
+        if len(ids):
+            info['episode']=dict(reward=e.episode_return[ids].mean(),length=e.episode_length_buf[ids].float().mean(),task_success=success[ids].float().mean(),physical_failure=failed[ids].float().mean(),handoff=(self.phase[ids]==2).float().mean(),push_seen=self.push_seen[ids].float().mean())
+            if self.auto_reset:self.reset_idx(ids)
+        e.total_physics_steps+=e.physics_substeps*e.num_envs
         return e.obs_buf,e.privileged_obs_buf,reward*e.task['ppo']['reward_scaling'],done,info

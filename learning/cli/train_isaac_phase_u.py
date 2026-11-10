@@ -25,6 +25,9 @@ if cfg.get('verified_ditch_reward') and train['algorithm'].get('gamma') != 1.:
 torch.manual_seed(cfg['seed']);torch.set_num_threads(2);start=time.time()
 status=dict(stage='initializing',pid=os.getpid(),completed_updates=0,started=start)
 (a.output/'config.json').write_text(json.dumps(dict(task=cfg,go2_recipe=recipe),indent=2));(a.output/'status.json').write_text(json.dumps(status,indent=2))
+class TrainingWallBudgetReached(Exception):
+    pass
+
 class RecordedRunner(module.OnPolicyRunner):
     def log(self,locs,width=80,pad=35):
         super().log(locs,width,pad)
@@ -36,8 +39,25 @@ class RecordedRunner(module.OnPolicyRunner):
             if locs['it']==0 and support<cfg.get('minimum_initial_support_fraction',0.):
                 raise RuntimeError('Initial terrain contact coverage below configured minimum; stopping before further training')
         status.update(stage='training',completed_updates=locs['it']+1,stage_completed_updates=locs['it']+1-status.get('start_update',0),sample_seconds=locs['collection_time'],optimize_seconds=locs['learn_time'],elapsed_s=time.time()-start)
+        if cfg.get('tensorboard_url') and locs['it']==2:
+            import urllib.request
+            self.writer.flush()
+            with urllib.request.urlopen(cfg['tensorboard_url']+'/data/plugin/scalars/tags',timeout=2) as response:
+                tags=json.load(response)
+            (a.output/'tensorboard_status.json').write_text(json.dumps(dict(url=cfg['tensorboard_url'],http_accessible=True,loaded_runs=list(tags),scalar_tag_count=sum(len(v) for v in tags.values()),checked_update=3),indent=2))
+        if hasattr(self.alg,'recovery_metrics'):
+            for name,value in self.alg.recovery_metrics.items():
+                self.writer.add_scalar('Recovery/'+name,float(value),locs['it'])
         (a.output/'status.json').write_text(json.dumps(status,indent=2))
+        if cfg.get('maximum_training_wall_s') and time.time()-start>=cfg['maximum_training_wall_s']:
+            self.save(str(a.output/f"training/model_{locs['it']+1}.pt"))
+            raise TrainingWallBudgetReached()
 env=PhaseUEnv(cfg,a.output)
+if cfg.get('vector_ditch_task'):
+    from sttw_control.ditch_ground_handoff import VectorDitchHandoff
+    task=VectorDitchHandoff(env,cfg['ground_handoff'],a.output,auto_reset=True)
+    env.step=task.step;env.reset=task.reset
+
 (a.output/'randomized_properties.json').write_text(json.dumps(env.properties));(a.output/'plant.json').write_text(json.dumps(env.plant.metadata))
 runner=RecordedRunner(env,train,log_dir=str(a.output/'training'),device=cfg['device']);(a.output/'training').mkdir(exist_ok=True)
 initialization={'initialization':'bundle actor/critic/frozen normalizer; fresh optimizer','bundle':cfg['bundle'],'bundle_identity':runner.alg.actor_critic.identity}
@@ -75,7 +95,19 @@ def recorded_update():
             infos=dict(completed_updates=completed,scope='post-update checkpoint; fixed-panel score pending')),
             a.output/f'training/model_update_{completed:05d}.pt')
     return result
+if cfg.get('recovery_teaching'):
+    import numpy as np
+    from sttw_control.jump_recovery_learning import install_recovery_loss
+    contract=cfg['recovery_teaching']
+    with np.load(contract['demo']) as demo,np.load(contract['keep']) as keep:
+        install_recovery_loss(runner.alg,dict(demo),dict(keep),contract)
+    upstream_update=runner.alg.update
+    (a.output/'recovery_contract.json').write_text(json.dumps(contract,indent=2))
 runner.alg.update=recorded_update
-runner.learn(cfg['updates'],init_at_random_ep_len=False)
+try:
+    runner.learn(cfg['updates'],init_at_random_ep_len=False)
+except TrainingWallBudgetReached:
+    status['stop_reason']='predeclared_training_wall_budget'
+
 status.update(stage='training_complete',elapsed_s=time.time()-start,total_physics_steps=env.total_physics_steps)
 (a.output/'status.json').write_text(json.dumps(status,indent=2));runner.writer.close();os.sync();os._exit(0)

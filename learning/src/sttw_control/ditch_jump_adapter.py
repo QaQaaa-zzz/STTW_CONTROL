@@ -167,6 +167,8 @@ class DitchJumpAdapter:
     def sample(self, env, action, final_tick):
         p = env.plant
         root, body_contact, critic = env.physical()
+        self.last_root=root
+        self.last_critic=critic
         body = p.rigid[:,env.wheel_ids,:7]
         wheels = body[:,:,:3]-p.origin[:,None,:]
         wheel_quat = body[:,:,3:7]
@@ -181,6 +183,7 @@ class DitchJumpAdapter:
                   torch.isfinite(force).all(dim=(1,2))&
                   torch.isfinite(action).all(1))
         loaded = force.norm(dim=-1)>1.
+        self.last_contact_mode=loaded[:,0].to(torch.int8)+2*loaded[:,1].to(torch.int8)
         near, target = (torch.stack(q,dim=1)&(force[:,:,2]>1.) for q in zip(*material))
         self.observed_support |= near.any(-1)
         self.observed_flight |= ~loaded.any(-1) & (self.bounds.clearance(wheels)>.015).all(-1)

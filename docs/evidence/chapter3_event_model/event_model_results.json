@@ -1,0 +1,236 @@
+{
+  "metrics": {
+    "TRAIN": {
+      "0": {
+        "n": 160,
+        "events": 151,
+        "event_brier": 0.04967780411243439,
+        "time_mae_s": 0.14653855562210083,
+        "xy_error_m": 0.4892716109752655
+      },
+      "1": {
+        "n": 151,
+        "events": 137,
+        "event_brier": 0.030350293964147568,
+        "time_mae_s": 0.12475787848234177,
+        "xy_error_m": 0.25039011240005493
+      },
+      "2": {
+        "n": 137,
+        "events": 123,
+        "event_brier": 0.03771207109093666,
+        "time_mae_s": 0.06889694184064865,
+        "xy_error_m": 0.1499379575252533
+      },
+      "3": {
+        "n": 123,
+        "events": 123,
+        "event_brier": 0.002527992008253932,
+        "time_mae_s": 0.03141871467232704,
+        "xy_error_m": 0.09901522845029831
+      },
+      "4": {
+        "n": 123,
+        "events": 14,
+        "event_brier": 0.08285082876682281,
+        "time_mae_s": 1.6810966730117798,
+        "xy_error_m": 3.1352365016937256
+      },
+      "5": {
+        "n": 151,
+        "events": 98,
+        "event_brier": 0.11485688388347626,
+        "time_mae_s": 0.2812921106815338,
+        "xy_error_m": 0.5334688425064087
+      }
+    },
+    "DEV": {
+      "0": {
+        "n": 32,
+        "events": 31,
+        "event_brier": 0.0288391076028347,
+        "time_mae_s": 0.11409658938646317,
+        "xy_error_m": 0.42935484647750854
+      },
+      "1": {
+        "n": 31,
+        "events": 28,
+        "event_brier": 0.028478989377617836,
+        "time_mae_s": 0.1546609103679657,
+        "xy_error_m": 0.2925415635108948
+      },
+      "2": {
+        "n": 28,
+        "events": 21,
+        "event_brier": 0.12863850593566895,
+        "time_mae_s": 0.0567309744656086,
+        "xy_error_m": 0.14084705710411072
+      },
+      "3": {
+        "n": 21,
+        "events": 21,
+        "event_brier": 6.912310345796868e-05,
+        "time_mae_s": 0.031640175729990005,
+        "xy_error_m": 0.08913370221853256
+      },
+      "4": {
+        "n": 21,
+        "events": 4,
+        "event_brier": 0.14407013356685638,
+        "time_mae_s": 1.8219215869903564,
+        "xy_error_m": 3.288377523422241
+      },
+      "5": {
+        "n": 31,
+        "events": 21,
+        "event_brier": 0.06838033348321915,
+        "time_mae_s": 0.31150421500205994,
+        "xy_error_m": 0.5820101499557495
+      }
+    },
+    "TEST": {
+      "0": {
+        "n": 64,
+        "events": 60,
+        "event_brier": 0.053991083055734634,
+        "time_mae_s": 0.1557876616716385,
+        "xy_error_m": 0.4669991135597229
+      },
+      "1": {
+        "n": 60,
+        "events": 51,
+        "event_brier": 0.0548877939581871,
+        "time_mae_s": 0.12875968217849731,
+        "xy_error_m": 0.23545832931995392
+      },
+      "2": {
+        "n": 51,
+        "events": 47,
+        "event_brier": 0.027882127091288567,
+        "time_mae_s": 0.047886818647384644,
+        "xy_error_m": 0.11043571680784225
+      },
+      "3": {
+        "n": 47,
+        "events": 47,
+        "event_brier": 0.0001044177042786032,
+        "time_mae_s": 0.028708765283226967,
+        "xy_error_m": 0.09636051207780838
+      },
+      "4": {
+        "n": 47,
+        "events": 3,
+        "event_brier": 0.05517446622252464,
+        "time_mae_s": 1.52255117893219,
+        "xy_error_m": 2.8032724857330322
+      },
+      "5": {
+        "n": 60,
+        "events": 40,
+        "event_brier": 0.08310800045728683,
+        "time_mae_s": 0.24383528530597687,
+        "xy_error_m": 0.4485659599304199
+      }
+    }
+  },
+  "offline_selection": {
+    "TRAIN": {
+      "roots": 40,
+      "event_selected": 6,
+      "fixed_train_best": 8,
+      "oracle_coverage": 12,
+      "gains": 0,
+      "losses": 2,
+      "selection": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        1,
+        3,
+        3,
+        1,
+        3,
+        3,
+        3,
+        1,
+        3,
+        1,
+        1,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        1,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        1
+      ]
+    },
+    "DEV": {
+      "roots": 8,
+      "event_selected": 2,
+      "fixed_train_best": 2,
+      "oracle_coverage": 4,
+      "gains": 0,
+      "losses": 0,
+      "selection": [
+        3,
+        1,
+        3,
+        3,
+        3,
+        3,
+        3,
+        1
+      ]
+    },
+    "TEST": {
+      "roots": 16,
+      "event_selected": 1,
+      "fixed_train_best": 1,
+      "oracle_coverage": 2,
+      "gains": 0,
+      "losses": 0,
+      "selection": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        1,
+        3,
+        3,
+        3,
+        1,
+        3
+      ]
+    }
+  },
+  "fixed_train_best": 3,
+  "selected_update": 200,
+  "elapsed_s": 4.429605976009043,
+  "scope": "Offline selection from stored physics outcomes, not online execution. TEST roots never used in fitting/checkpoint selection; same map only."
+}

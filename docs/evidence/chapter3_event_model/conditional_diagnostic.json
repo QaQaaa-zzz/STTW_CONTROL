@@ -1,0 +1,236 @@
+{
+  "metrics": {
+    "TRAIN": {
+      "0": {
+        "n": 160,
+        "events": 151,
+        "event_brier": 0.04629300907254219,
+        "time_mae_s": 0.09053953737020493,
+        "xy_error_m": 0.26586586236953735
+      },
+      "1": {
+        "n": 151,
+        "events": 137,
+        "event_brier": 0.01319664716720581,
+        "time_mae_s": 0.04469910264015198,
+        "xy_error_m": 0.09715788811445236
+      },
+      "2": {
+        "n": 137,
+        "events": 123,
+        "event_brier": 0.01798534020781517,
+        "time_mae_s": 0.03147796541452408,
+        "xy_error_m": 0.07576481997966766
+      },
+      "3": {
+        "n": 123,
+        "events": 123,
+        "event_brier": 8.931929187383503e-05,
+        "time_mae_s": 0.022404059767723083,
+        "xy_error_m": 0.0645717978477478
+      },
+      "4": {
+        "n": 123,
+        "events": 14,
+        "event_brier": 0.06768215447664261,
+        "time_mae_s": 0.1937105506658554,
+        "xy_error_m": 0.5836559534072876
+      },
+      "5": {
+        "n": 151,
+        "events": 98,
+        "event_brier": 0.08460865914821625,
+        "time_mae_s": 0.05966584384441376,
+        "xy_error_m": 0.12922197580337524
+      }
+    },
+    "DEV": {
+      "0": {
+        "n": 32,
+        "events": 31,
+        "event_brier": 0.028655819594860077,
+        "time_mae_s": 0.06860394030809402,
+        "xy_error_m": 0.27683231234550476
+      },
+      "1": {
+        "n": 31,
+        "events": 28,
+        "event_brier": 0.055221688002347946,
+        "time_mae_s": 0.05189592018723488,
+        "xy_error_m": 0.11753527820110321
+      },
+      "2": {
+        "n": 28,
+        "events": 21,
+        "event_brier": 0.12332046031951904,
+        "time_mae_s": 0.03784345090389252,
+        "xy_error_m": 0.09680700302124023
+      },
+      "3": {
+        "n": 21,
+        "events": 21,
+        "event_brier": 3.572013883967884e-05,
+        "time_mae_s": 0.023318039253354073,
+        "xy_error_m": 0.0787673369050026
+      },
+      "4": {
+        "n": 21,
+        "events": 4,
+        "event_brier": 0.11753613501787186,
+        "time_mae_s": 0.1900923252105713,
+        "xy_error_m": 1.004752278327942
+      },
+      "5": {
+        "n": 31,
+        "events": 21,
+        "event_brier": 0.08215544372797012,
+        "time_mae_s": 0.057848215103149414,
+        "xy_error_m": 0.13734976947307587
+      }
+    },
+    "TEST": {
+      "0": {
+        "n": 64,
+        "events": 60,
+        "event_brier": 0.04701545089483261,
+        "time_mae_s": 0.11329463124275208,
+        "xy_error_m": 0.3069865107536316
+      },
+      "1": {
+        "n": 60,
+        "events": 51,
+        "event_brier": 0.04444663226604462,
+        "time_mae_s": 0.052121128886938095,
+        "xy_error_m": 0.11460747569799423
+      },
+      "2": {
+        "n": 51,
+        "events": 47,
+        "event_brier": 0.019041094928979874,
+        "time_mae_s": 0.026844745501875877,
+        "xy_error_m": 0.07071167975664139
+      },
+      "3": {
+        "n": 47,
+        "events": 47,
+        "event_brier": 7.71208306105109e-06,
+        "time_mae_s": 0.02388843148946762,
+        "xy_error_m": 0.07830522954463959
+      },
+      "4": {
+        "n": 47,
+        "events": 3,
+        "event_brier": 0.0582214780151844,
+        "time_mae_s": 0.4327016770839691,
+        "xy_error_m": 0.9943737387657166
+      },
+      "5": {
+        "n": 60,
+        "events": 40,
+        "event_brier": 0.08643054217100143,
+        "time_mae_s": 0.06684587150812149,
+        "xy_error_m": 0.13074824213981628
+      }
+    }
+  },
+  "offline_selection": {
+    "TRAIN": {
+      "roots": 40,
+      "event_selected": 7,
+      "fixed_train_best": 8,
+      "oracle_coverage": 12,
+      "gains": 0,
+      "losses": 1,
+      "selection": [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        1,
+        3,
+        3,
+        3,
+        3,
+        3,
+        1,
+        3,
+        3,
+        3,
+        1,
+        1,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        1
+      ]
+    },
+    "DEV": {
+      "roots": 8,
+      "event_selected": 2,
+      "fixed_train_best": 2,
+      "oracle_coverage": 4,
+      "gains": 0,
+      "losses": 0,
+      "selection": [
+        3,
+        1,
+        3,
+        3,
+        3,
+        3,
+        3,
+        1
+      ]
+    },
+    "TEST": {
+      "roots": 16,
+      "event_selected": 1,
+      "fixed_train_best": 1,
+      "oracle_coverage": 2,
+      "gains": 0,
+      "losses": 0,
+      "selection": [
+        3,
+        3,
+        1,
+        3,
+        3,
+        3,
+        3,
+        1,
+        1,
+        3,
+        3,
+        3,
+        3,
+        1,
+        3,
+        3
+      ]
+    }
+  },
+  "fixed_train_best": 3,
+  "selected_update": 500,
+  "elapsed_s": 3.8495992469834164,
+  "scope": "Diagnostic revision after first model TEST results were inspected; not a fresh independent test. Event state/time conditioned on actual event occurrence; failure examples remain in event probability loss."
+}

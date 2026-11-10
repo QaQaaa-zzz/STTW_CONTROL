@@ -1,0 +1,38 @@
+{
+  "git_parent": "432f1b193965ca822946b686106359b3a25c6885",
+  "files": {
+    "extension/config.json": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_event_collection/extension/config.json",
+      "sha256": "9bfb2f26a3909162f431b2709ecbec2ca183134496f25fa115447d901baa7e23"
+    },
+    "extension/protocol.json": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_event_collection/extension/protocol.json",
+      "sha256": "7582f7ead31fc8d2ef207af639d50c4a453dd8cf7c791885d0fe930c6bd4ad62"
+    },
+    "event_model/model.pt": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_event_collection/event_model/model.pt",
+      "sha256": "cf6cd1993d133138e908b94a2ded70b72a56286dacf29fd1cd5dca291033512e"
+    },
+    "event_model/codec.npz": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_event_collection/event_model/codec.npz",
+      "sha256": "d2e44ffe4d3ddbed93b81ef72a8b22cef9bbe1257c3e8689ee565b6f188cc830"
+    },
+    "conditional_event_model/model.pt": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_event_collection/conditional_event_model/model.pt",
+      "sha256": "d55199f75d37796fefdbb3d9d82e4d6395ff7c37d03449759f9ead8c480d217e"
+    },
+    "success_baseline/model.pt": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_event_collection/success_baseline/model.pt",
+      "sha256": "14122f57897ff50e7ca0a8f1271f458cceebcb5ad2fca5e92d172d525ca27494"
+    },
+    "online_selection/config.json": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_event_collection/online_selection/config.json",
+      "sha256": "246c61094b4e4441ca3a4d40f9981e294c8198fd0e7ad096c6e1d384bd756792"
+    },
+    "online_selection/evaluation/planning.json": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_event_collection/online_selection/evaluation/planning.json",
+      "sha256": "d51e1e941c7e3b75d73ba655c19b54412075e0e327452e8ce5daf3d85b199c34"
+    }
+  },
+  "scope": "Necessary frozen configuration/model identities; large raw physics arrays remain on data drive"
+}

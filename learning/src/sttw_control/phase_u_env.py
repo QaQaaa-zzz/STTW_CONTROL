@@ -92,6 +92,11 @@ class PhaseUEnv:
                 raise ValueError('Verified scoring requires landing instrumentation and gamma=1')
             from .ditch_jump_adapter import DitchJumpAdapter
             self.verified_jump = DitchJumpAdapter(self, terrain_meshes if random_terrain else vertices)
+        self.ground_initial=None
+        if cfg.get('ground_initial_conditions'):
+            rows=cfg['ground_initial_conditions']
+            if len(rows)!=self.num_envs:raise ValueError('One fixed ground initial condition per lane required')
+            self.ground_initial={key:torch.tensor([r[key] for r in rows],device=self.device) for key in ('y_m','roll_rad','yaw_rad','speed_m_s')}
         self.entry_bank=None
         if cfg.get('reachable_entry_bank'):
             self.entry_probability=cfg['reachable_entry_probability']
@@ -125,6 +130,15 @@ class PhaseUEnv:
         for tensor,column,label in ((pose,0,'x'),(pose,2,'z'),(velocity,0,'vx'),(velocity,2,'vz')):
             lo,hi=r[f'airborne_rsi_{label}_min'],r[f'airborne_rsi_{label}_max']
             tensor[:,column]=torch.where(self.airborne[ids],lo+(hi-lo)*torch.rand(n,device=self.device),tensor[:,column])
+        distribution=self.cfg.get('ground_reset_distribution')
+        if distribution or self.ground_initial is not None:
+            if self.entry_bank is not None or r['airborne_rsi_probability']:
+                raise ValueError('Ground reset distribution cannot mix snapshot or airborne resets')
+            from isaaclab.utils.math import quat_from_euler_xyz,quat_mul
+            sample=lambda key: self.ground_initial[key][ids] if self.ground_initial is not None else distribution[key][0]+(distribution[key][1]-distribution[key][0])*torch.rand(n,device=self.device)
+            roll,yaw=sample('roll_rad'),sample('yaw_rad')
+            pose[:,1]=sample('y_m');pose[:,3:7]=quat_mul(quat_from_euler_xyz(roll,torch.zeros_like(roll),yaw),pose[:,3:7])
+            speed=sample('speed_m_s');velocity[:,0]=speed*yaw.cos();velocity[:,1]=speed*yaw.sin()
         position=plant.robot.data.default_joint_pos[ids].clone();joint_velocity=torch.zeros_like(position)
         if self.entry_bank is not None:
             entry=self.entry_bank.sample(int(entry_mask.sum()))

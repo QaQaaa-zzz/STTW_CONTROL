@@ -1,0 +1,470 @@
+{
+  "seed": 20261110,
+  "nominal_environment": "learning/configs/chapter3_jump_recovery/nominal_environment.json",
+  "training_environment": "learning/configs/chapter3_jump_recovery/training_environment.json",
+  "training_roots": [
+    {
+      "pulse_start_step": 25,
+      "normalized_action_delta": [
+        -0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 25,
+      "normalized_action_delta": [
+        -0.15,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 25,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 25,
+      "normalized_action_delta": [
+        0.15,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 25,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        -0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 25,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        -0.15,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 25,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 25,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        0.15,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 35,
+      "normalized_action_delta": [
+        -0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 35,
+      "normalized_action_delta": [
+        -0.15,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 35,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 35,
+      "normalized_action_delta": [
+        0.15,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 35,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        -0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 35,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        -0.15,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 35,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 35,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        0.15,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 45,
+      "normalized_action_delta": [
+        -0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 45,
+      "normalized_action_delta": [
+        -0.15,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 45,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 45,
+      "normalized_action_delta": [
+        0.15,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 45,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        -0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 45,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        -0.15,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 45,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 45,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        0.15,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 55,
+      "normalized_action_delta": [
+        -0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 55,
+      "normalized_action_delta": [
+        -0.15,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 55,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 55,
+      "normalized_action_delta": [
+        0.15,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 55,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        -0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 55,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        -0.15,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 55,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 55,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        0.15,
+        0.0
+      ]
+    }
+  ],
+  "development_roots": [
+    {
+      "pulse_start_step": 30,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 30,
+      "normalized_action_delta": [
+        -0.1,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 30,
+      "normalized_action_delta": [
+        0.1,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 30,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        -0.1,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 30,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        0.1,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 40,
+      "normalized_action_delta": [
+        -0.1,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 40,
+      "normalized_action_delta": [
+        0.1,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 40,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        -0.1,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 40,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        0.1,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 50,
+      "normalized_action_delta": [
+        -0.1,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 50,
+      "normalized_action_delta": [
+        0.1,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 50,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        -0.1,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 50,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        0.1,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 60,
+      "normalized_action_delta": [
+        -0.1,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 60,
+      "normalized_action_delta": [
+        0.1,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 60,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        -0.1,
+        0.0
+      ]
+    },
+    {
+      "pulse_start_step": 60,
+      "normalized_action_delta": [
+        0.0,
+        0.0,
+        0.1,
+        0.0
+      ]
+    }
+  ],
+  "pulse_steps": 5,
+  "teacher_candidates": 16,
+  "teacher_updates": 2000,
+  "evaluated_updates": [
+    100,
+    200,
+    300,
+    400,
+    500,
+    600
+  ],
+  "student_loss": {
+    "ppo_coefficient": 0.4,
+    "demo_coefficient": 1.0,
+    "retention_coefficient": 1.0,
+    "demo_batch_size": 256,
+    "retention_batch_size": 512
+  },
+  "source_repeats": 3,
+  "teacher_reviews": 2
+}
