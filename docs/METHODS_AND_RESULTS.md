@@ -1988,3 +1988,10 @@ train/test独立种子各12随机布局+平地；有限库内每回合随机选�
 瞬时纯跟踪请求与实际governed转向参考有明显差异；尚不能从现存数据单独拆分H75修正、参考限速、延迟和底层动态的贡献，不能断言转向符号接反。先补同工况无起步脉冲对照以隔离原因，再决定改控制/奖励，尚未启动。细节见[tracking_diagnosis.json](plots/tracking_diagnosis.json)。
 
 无外部推扰续训模型评测已启动：common_start/evaluation_no_push，固定共同起点150轮模型，13原工况×五alpha共65回合/325万物理lane steps/0优化。起步推力概率0、周期速度冲击增量0，保留原地形、车辆参数随机化、噪声、延迟及相同seed；不称完全名义测试。单模型五alpha图复用plot_random_terrain_alphas --models after，原双模型默认行为保留。完成/异常Bark配置；结果未出前不宣称改进。
+
+
+## 无外部推扰结果及原H75配对补测（2026-11-10）
+
+source_type=repo_artifact；artifact_checked。共同起点150轮模型无外部推扰65条件已完成：56/65完整10秒，domain6、侧倾阈值3，无未知信号；五alpha完整数13/12/12/10/9。60个非平地条件均记录接触并越过初始障碍带。与同150模型有推扰25/65相比新增完整31、丢失0；共同窗口路径RMSE0.5494→0.2336m，速度0.3640→0.3858m/s。无推扰各自实际窗口平均速度偏差-0.3811m/s，减速问题保留。平地case5五alpha均完整，纠正不能跟踪无扰动平地的解释。结果入口common_start/evaluation_no_push/RESULTS.md，完成Bark回执已保存。完整观察不等于任务约束全合格，侧倾阈值不称确认摔倒。
+
+用户新授权：原H75和续训150轮无外部推扰配对比较，并要求能看清石子大小/位置的视频。新目录common_start/evaluation_no_push_paired；复用after65条，仅补before65条（13原工况×五alpha）；另固定after alpha.5、13环境补录全身姿态10秒，预算新增78回合/390万物理lane steps、0优化、不改奖励。相同seed/起点/地形/随机化，起步及周期外扰保持0。补录必须核对原after轨迹再发布视频；预选首个石子case1/pebbles10（1183凸起、半径55–80mm、配置最大高度11.78mm），使用原碰撞三角网格、原XML视觉mesh、保存Isaac姿态的离屏回放，附实际地形俯视图与1m比例尺；不新增MuJoCo物理、不夸大几何。五alpha图/配对指标自动生成；视频阶段及最终Bark独立回执。任务服务sttw-h75-no-push-paired使用共享GPU锁，启动时第三章chapter3_ditch_random_height450训练PID4065799占用，排队不终止它。此时原H75无推扰结果未知，不能先声称续训改善。

@@ -25,3 +25,11 @@ print('rescued',[k for k in b if b[k]['failed'] and not a[k]['failed']]);print('
 for lane in range(13):
  print('case',lane,'terrain',b[lane,0]['terrain'],[(al,round(b[lane,al]['path_rmse'],2),round(a[lane,al]['path_rmse'],2),b[lane,al]['failure_s'],a[lane,al]['failure_s']) for al in [0,.5,1]])
 (r/'plots/paired_outcomes.json').write_text(json.dumps(rows,indent=2))
+summary=['# H75同工况配对评测','', '[全部工况XY、五alpha及奖励曲线](plots/README.md)','', 'before为原H75，after身份见config.json。完整观察为10秒无提前终止，不等于最终跟踪保持合格。误差采用每一对轨迹共同有效窗口，先逐条件计算RMSE再求均值；五alpha共用13工况，不是65独立地形。','', '| alpha | 原H75完整/13 | 续训完整/13 | 路径RMSE 原→续训(m) | 速度RMSE 原→续训(m/s) |','|---|---:|---:|---:|---:|']
+for al in [0,.25,.5,.75,1]:
+ groups={m:[x for x in rows if x['model']==m and x['alpha']==al] for m in ['before','after']}
+ summary.append(f"| {al:g} | {sum(not x['failed'] for x in groups['before'])} | {sum(not x['failed'] for x in groups['after'])} | "+' | '.join(' → '.join(f"{np.mean([x[k] for x in groups[m]]):.4f}" for m in ['before','after']) for k in ['path_rmse','speed_rmse'])+' |')
+summary+=['','提前终止逐条信号（侧倾阈值不直接等同摔倒；domain是控制器运行域，不是地形边缘）：','', '| 模型 | case | alpha | 时刻(s) | 信号 |','|---|---:|---:|---:|---|']
+summary += [f"| {x['model']} | {x['lane']} | {x['alpha']} | {x['failure_s']:.2f} | {','.join(x['signals'])} |" for x in rows if x['failed']]
+summary+=['','[逐条件数据](plots/paired_outcomes.json) · [初态配对核验](plots/identity_check.json)','']
+(r/'RESULTS.md').write_text('\n'.join(summary))

@@ -41,12 +41,15 @@ def save(update,name):
  torch.save(dict(policy=algo.policy.state_dict(),optimizer=algo.optimizer.state_dict(),update=update,config=cfg),a.output/name)
 save(start_update,'model_initial.pt');history=[];rejections=0
 if a.evaluate:
- frames=[];flags=[];rewards=[];domains=[];faults=[];poses=[];progresses=[]
+ frames=[];flags=[];rewards=[];domains=[];faults=[];poses=[];progresses=[];body_frames=[]
+ if s.get("record_body_poses",False):
+  (a.output/"contract.json").write_text(json.dumps(dict(bodies=env.plant.bodies,origin=env.plant.origin.cpu().tolist(),physics_dt=env.plant.physics_dt,settings=dict(s,alphas=env.rollout.alpha.cpu().tolist()),quaternion_order="xyzw",reference_routes="reference_routes.npz"),indent=2))
  with torch.no_grad():
   for step in range(500):
    action=algo.policy.act_inference(obs);_,_,reward,done,_=env.step(action);out=env.last_out
+   if s.get("record_body_poses",False):body_frames.append(out["body_poses"].cpu().numpy())
    poses.append(env.plant.observe()[1].cpu().numpy());progresses.append(env.rollout.middle.projection['progress'].cpu().numpy());domains.append(env.last_terminal['domain'].cpu().numpy());faults.append(env.last_terminal['fault'].cpu().numpy());frames.append(out['lower_trace'].cpu().numpy());rewards.append(reward.cpu().numpy());flags.append(out['failure'].cpu().numpy());obs=observation()
- np.savez_compressed(a.output/'trajectory.npz',lower_trace=np.stack(frames),reward=np.stack(rewards),failure=np.stack(flags),pose=np.stack(poses),progress=np.stack(progresses),domain_exit=np.stack(domains),policy_fault=np.stack(faults),alpha=env.rollout.alpha.cpu().numpy(),route_ids=env.route.route_ids.cpu().numpy(),terrain=env.terrain_kind_id.cpu().numpy(),terrain_entered=env.terrain_entered.cpu().numpy(),terrain_contacted=env.terrain_contacted.cpu().numpy(),terrain_cleared=env.terrain_cleared.cpu().numpy())
+ np.savez_compressed(a.output/'trajectory.npz',**({"body_poses":np.stack(body_frames)} if body_frames else {}),lower_trace=np.stack(frames),reward=np.stack(rewards),failure=np.stack(flags),pose=np.stack(poses),progress=np.stack(progresses),domain_exit=np.stack(domains),policy_fault=np.stack(faults),alpha=env.rollout.alpha.cpu().numpy(),route_ids=env.route.route_ids.cpu().numpy(),terrain=env.terrain_kind_id.cpu().numpy(),terrain_entered=env.terrain_entered.cpu().numpy(),terrain_contacted=env.terrain_contacted.cpu().numpy(),terrain_cleared=env.terrain_cleared.cpu().numpy())
  status.update(stage='evaluation_complete',failed_lanes=int(np.stack(flags).any(0).sum()),conditions=s['num_envs'],elapsed_s=time.time()-started);status_path.write_text(json.dumps(status,indent=2,default=lambda x:float(x)))
 else:
  for update in range(start_update,s['updates']):
