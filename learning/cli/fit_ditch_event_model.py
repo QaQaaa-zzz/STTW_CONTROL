@@ -13,7 +13,8 @@ def main():
  roles=np.array([c['role'] for c in protocol['cases']]);terrain_file=a.collection/'evaluation/terrain/terrain.npz';terrain=KnownHeightMap(np.load(terrain_file)['vertices'],cfg['ditch_terrain'])
  params=np.stack([route_parameters(xy,cfg['ground_handoff']['approach']['speed_m_s'],cfg['ground_handoff']['approach']['alpha']) for xy in routes])
  ground_only=np.asarray(cfg['ground_handoff'].get('ground_only_lanes',[False]*len(roles)));route_ids=np.asarray(cfg['ground_handoff']['reference_route_ids'])
- if ground_only.any():params=np.column_stack((params,[float(not ground_only[np.flatnonzero(route_ids==i)[0]]) for i in range(len(params))])).astype(np.float32)
+ if 'event_candidate_parameters' in cfg:params=np.asarray(cfg['event_candidate_parameters'],np.float32)
+ elif ground_only.any():params=np.column_stack((params,[float(not ground_only[np.flatnonzero(route_ids==i)[0]]) for i in range(len(params))])).astype(np.float32)
  lane_params=params[route_ids]
  hidden=np.concatenate((data['observation'],data['controller_history']),-1)
  # Compress only TRAIN histories, sampled at 10Hz; all data roles stay grouped.

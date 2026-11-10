@@ -17,11 +17,13 @@ def test_route_admission_uses_segment_distance_and_jump_deadline():
 
 def test_same_route_publication_does_not_reinitialize_ground_controller():
     # No plant/project interface: reinitializing an unchanged route would fail.
-    planner=object.__new__(MovingDitchPlanner);planner.parameters=np.array([[0.,0.],[0.,1.]])
+    planner=object.__new__(MovingDitchPlanner);planner.parameters=np.array([[0.,0.,0.,0.,0.,2.,.5,0.],[0.,0.,0.,0.,0.,1.8,0.,1.]])
     memory=torch.tensor([3.,4.]);route=SimpleNamespace(route_ids=torch.tensor([1,0]))
-    planner.task=SimpleNamespace(ground=SimpleNamespace(route=route,controller=memory),env=SimpleNamespace(device='cpu'),ground_only=torch.tensor([False,True]),phase=torch.tensor([0,3]))
+    planner.task=SimpleNamespace(ground=SimpleNamespace(route=route,controller=memory,speed=torch.tensor([2.,2.]),alpha=torch.tensor([.5,.5])),env=SimpleNamespace(device='cpu'),ground_only=torch.tensor([False,True]),phase=torch.tensor([0,3]))
     planner.publish([0],[1])
     assert planner.task.ground.controller is memory
+    torch.testing.assert_close(planner.task.ground.speed,torch.tensor([1.8,2.]))
+    torch.testing.assert_close(planner.task.ground.alpha,torch.tensor([0.,.5]))
     assert planner.task.phase.tolist()==[0,3]
     assert planner.task.ground_only.tolist()==[False,True]
 

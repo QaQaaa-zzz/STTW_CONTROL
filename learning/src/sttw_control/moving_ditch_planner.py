@@ -37,7 +37,9 @@ class MovingDitchPlanner:
     def publish(self,ids,selected):
         task=self.task;g=task.ground;device=task.env.device;ids=torch.as_tensor(ids,device=device)
         selected=torch.as_tensor(selected,device=device);changed=g.route.route_ids[ids]!=selected;g.route.route_ids[ids]=selected
-        ground=torch.as_tensor(self.parameters[:,-1]<.5,device=device)[selected]
+        parameters=torch.as_tensor(self.parameters,device=device,dtype=g.speed.dtype)
+        g.speed[ids]=parameters[selected,5];g.alpha[ids]=parameters[selected,6]
+        ground=parameters[selected,-1]<.5
         task.ground_only[ids]=ground;task.phase[ids]=torch.where(ground,3,0)
         ids=ids[changed]
         if not len(ids):return
