@@ -1,0 +1,7 @@
+{
+  "budget": "one8s episode,1GPU lane,0training",
+  "purpose": "Isaac finite motor hold integration on level30cm ditch",
+  "policy": "existing update50; not imported heading125, not cross-backend comparison",
+  "preserved": "existing randomization, physical timing, stage3 gate, scoring",
+  "limits": "does not yet reproduce delayed1s handback of imported package"
+}

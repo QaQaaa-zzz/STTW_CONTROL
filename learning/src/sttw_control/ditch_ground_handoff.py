@@ -13,6 +13,9 @@ class DitchGroundHandoff:
         if env.num_envs != 1:
             raise ValueError('Ditch handback diagnostic requires one lane')
         self.env,self.spec,self.output=env,spec,Path(output)
+        self.leg_hold=spec.get('leg_hold','joint_brake')
+        if self.leg_hold not in ('joint_brake','finite_motor'):
+            raise ValueError('Unknown handoff leg hold mode')
         settings=json.loads(Path(spec['settings']).read_text())
         settings.update(num_envs=1,alphas=[spec['alpha']],zero_middle=[False],zero_lower=[True],
                         terrains={'ditch':'shared'},episode_s=env.max_episode_length*env.dt,
@@ -30,18 +33,25 @@ class DitchGroundHandoff:
             lower_sha256=self.ground.lower_sha256,zero_lower=True,controller='H75 + ECBC/ESO; lower residual zero',
             reference='Original world-local y=0, no reanchoring at landing',control_dt_s=.005,policy_dt_s=.02,
             feedback='Existing ground clean-state interface; frozen randomized physical properties retained; jump noise/delay only before handback',
-            pendulum='Existing joint-brake model at current posture'),indent=2))
+            pendulum=self.leg_hold),indent=2))
 
     def step(self, latent):
         e=self.env;g=self.ground
         if not self.active and int(e.verified_jump.scorer.stage[0])>=3:
             before=e.physical()[0].clone()
-            e.plant.set_pendulum_locked(True)
+            if self.leg_hold=='joint_brake':
+                e.plant.set_pendulum_locked(True)
+            else:
+                # Preserve native limits and use existing finite-torque position servos.
+                indices=e.plant.pendulum_servos.indices
+                e.plant.pendulum_target=e.plant.dofs[:,indices,0].clone()
+                e.plant.pendulum_target=torch.maximum(e.lo[2:],torch.minimum(e.hi[2:],e.plant.pendulum_target))
             g.resume_ground_lanes(e.all_ids,self.spec['speed_m_s'],self.spec['alpha'])
             g.physical_tick.fill_(round(float(e.episode_length_buf[0])*e.dt/.005))
             self.active=True
             (self.output/'handoff.json').write_text(json.dumps(dict(time_s=float(e.episode_length_buf[0])*e.dt,
-                root=before.cpu().tolist(),stage=3,physical_reset=False,
+                root=before.cpu().tolist(),stage=3,physical_reset=False,leg_hold=self.leg_hold,
+                leg_target=e.plant.pendulum_target.cpu().tolist(),
                 unchanged_root=bool(torch.equal(before,e.physical()[0]))),indent=2))
         if not self.active:return e.step(latent)
         reward=torch.zeros(1,device=e.device);code=torch.zeros(1,device=e.device,dtype=torch.long);tick=0

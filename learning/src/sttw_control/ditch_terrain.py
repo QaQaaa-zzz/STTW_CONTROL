@@ -4,8 +4,8 @@ import numpy as np
 
 def build_ditch_terrain(spec):
     front, width = spec['front_x_m'], spec['width_m']
-    if width <= 0 or not 0 < spec['stone_height_max_m'] <= .15:
-        raise ValueError('Positive trench width and stone height in (0, .15] required')
+    if width <= 0 or not 0 <= spec['stone_height_min_m'] <= spec['stone_height_max_m'] <= .15 or spec['stones_per_m2'] < 0:
+        raise ValueError('Positive trench width, nonnegative density and ordered stone heights in [0, .15] required')
     rng = np.random.default_rng(spec['seed'])
     vertices, triangles = [], []
     def patch(xs, ys, rough, bank_height):
