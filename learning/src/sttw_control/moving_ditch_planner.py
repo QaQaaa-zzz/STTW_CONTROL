@@ -23,6 +23,10 @@ class MovingDitchPlanner:
         self.parameters=np.asarray(config.get('candidate_parameters',self.planner.meta['candidate_parameters']),np.float32)
         self.roads=np.load(task.env.cfg['task_reference_path'])['xy'][:len(self.parameters)]
         self.threshold=np.broadcast_to(np.asarray(config['decision_x_m']),task.env.num_envs)
+        self.completion=None
+        if 'direct_model' in config:
+            from .ditch_completion_model import CompletionPlanner
+            self.completion=CompletionPlanner(config['direct_model'])
         self.methods=config['methods'];self.queried=np.zeros(task.env.num_envs,bool);self.pending={};self.records=[]
     def admission(self,roots):
         distance=route_distances(roots,self.roads);allowed=distance<=self.task.road_half_width
@@ -64,13 +68,16 @@ class MovingDitchPlanner:
             if self.methods[lane]=='forced':
                 eligible[:]=False;eligible[self.config['forced_candidates'][lane]]=True;allowed&=eligible[None]
                 prediction=None;scores=eligible.astype(float)
-            elif self.methods[lane]=='event_model':
+            elif self.methods[lane] in ('event_model','direct_success'):
                 history=torch.cat([v.flatten(1) for v in (g.controller.eso,g.controller.disturbance[:,None],g.controller.gains,g.previous_reference,g.previous_command,g.policy.filtered,g.policy.offsets,g.middle.frames,g.middle.mask)],-1)[lane:lane+1].cpu().numpy()
-                state=self.planner.encode(roots[lane:lane+1],observation[lane:lane+1].cpu().numpy(),history,task.road_violation[lane:lane+1].cpu().numpy())
-                prediction=self.planner.score(np.repeat(state,len(self.parameters),0),self.parameters,particles=32)
+                predictor=self.completion if self.methods[lane]=='direct_success' else self.planner
+                state=predictor.encode(roots[lane:lane+1],observation[lane:lane+1].cpu().numpy(),history,task.road_violation[lane:lane+1].cpu().numpy())
+                prediction=predictor.score(np.repeat(state,len(self.parameters),0),self.parameters,particles=32)
                 scores=np.asarray(prediction['score'])
             else:
                 prediction=None;scores=np.zeros(len(self.parameters));scores[self.config['fixed_jump_candidate']]=.5;scores[self.parameters[:,-1]<.5]=1.
+            if self.methods[lane]=='state_rule' and roots[lane,0]>=self.config['detour_commit_x_m']:
+                scores[self.parameters[:,-1]<.5]=-1.
             masked=np.where(allowed[0],scores,-np.inf);proposed=int(masked.argmax()) if allowed.any() else None
             elapsed=time.monotonic()-started;delay=max(1,int(np.ceil(elapsed/env.dt)))
             record=dict(lane=int(lane),method=self.methods[lane],query_step=step,query_root=roots[lane].tolist(),query_seconds=elapsed,apply_at_step=step+delay,proposed=proposed,eligible_candidates=eligible.tolist(),scores=scores.tolist(),admissible_at_query=allowed[0].tolist(),distance_at_query_m=distance[0].tolist(),prediction=prediction,status='pending',scope='Inference wall latency is rounded up to policy steps; old control executes these physical steps before publication; corridor admission is geometric, outcome estimates are not guarantees')
