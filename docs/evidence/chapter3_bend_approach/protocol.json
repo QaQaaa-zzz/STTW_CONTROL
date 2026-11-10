@@ -1,0 +1,14 @@
+{
+  "cases": [
+    "straight_v20",
+    "straight_v18",
+    "left_v20",
+    "left_v18",
+    "right_v20",
+    "right_v18"
+  ],
+  "budget": "6 episodes x8s, single GPU lane, zero optimizer updates; under 10min excluding queue",
+  "role": "nominal DEV, common reset, fixed original paths; no snapshot restore",
+  "geometry": "same-height flat ditch6.3..6.6, sin^4 lateral offset +/-0.15m between x1.5..3.5; source policy distance/events shifted +3m",
+  "acceptance": "stage3 handback then bounded continuation; retain every physical/domain failure; not goal or reliability certification"
+}
