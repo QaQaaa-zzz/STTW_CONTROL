@@ -1,7 +1,10 @@
 {
   "configs": 152,
   "episodes": 1432,
-  "pulse_cpu_tests": "3 passed: signed force, timing, failure cutoff, integrated impulse and removal",
+  "pulse_cpu_tests": "3 passed",
   "plot_regression": "saved 11-lane natural-switch case: full plot, five-alpha Zero rescore and reward-component reconstruction completed in /tmp/sttw_queue_plot_check",
-  "physics_scope": "No new force or ablation physics result claimed before queued execution"
+  "physics_scope": "No new force or ablation physics result claimed before queued execution",
+  "batch_lane_tests": "2 passed: variable lane counts, force signs, Zero masks, split identity, legacy 6-lane compatibility",
+  "compact_plot_regression": "11 lanes; only XY and overview retained; reward reconstruction maximum absolute error 1.191763223218345e-06",
+  "integration_scope": "new batched physical run queued; no measured speedup claimed"
 }
