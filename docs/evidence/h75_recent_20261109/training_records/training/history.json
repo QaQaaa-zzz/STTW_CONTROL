@@ -1,0 +1,1294 @@
+[
+  {
+    "update": 1,
+    "sampling_model_update": 0,
+    "mean_reward": -18.474671098558854,
+    "early_terminations": 423,
+    "tracking_domain_signals": 96,
+    "policy_fault_signals": 0,
+    "episodes": 423,
+    "contacted_episodes": 0,
+    "cleared_episodes": 0,
+    "sample_seconds": 78.05577993392944,
+    "optimize_seconds": 0.27733898162841797,
+    "optimizer": {
+      "parent_kl": 0.0,
+      "temporal": 0.0,
+      "value": 763000.7265625,
+      "surrogate": -0.0005952751866971084,
+      "entropy": -1.046930506825447,
+      "actor_grad_norm": 1.202673301100731,
+      "critic_grad_norm": 188983.869140625,
+      "mean_kl": 0.001882021101967742,
+      "exact_kl": 0.001882021101967742,
+      "kl_by_alpha": {
+        "0": 0.0018189436775921082,
+        "1": 0.0019548647680017544
+      },
+      "kl_alpha0": 0.0018189436775921082,
+      "kl_alpha1": 0.0019548647680017544,
+      "actor_grad_norm_preclip": 1.202673301100731,
+      "critic_grad_norm_preclip": 188983.869140625,
+      "attempted_actor_grad_norm": 1.202673301100731,
+      "attempted_critic_grad_norm": 188983.869140625,
+      "projected_std": [
+        0.22774988412857056,
+        0.09024058282375336
+      ],
+      "attempted_epochs": 4,
+      "accepted_epochs": 4,
+      "attempted_minibatches": 16,
+      "accepted_minibatches": 16,
+      "completed_epochs": 4,
+      "completed_minibatches": 16,
+      "hard_kl_stop": false,
+      "nonfinite_stop": false,
+      "stop_reason": null,
+      "actor_lr": 3e-05,
+      "critic_lr": 0.0003
+    },
+    "alpha_groups": {
+      "0": {
+        "samples": 40544,
+        "reward_sum": -665544.006904602,
+        "early_terminations": 154
+      },
+      "0.25": {
+        "samples": 6575,
+        "reward_sum": -124421.40948295593,
+        "early_terminations": 29
+      },
+      "0.5": {
+        "samples": 7019,
+        "reward_sum": -100212.10173797607,
+        "early_terminations": 23
+      },
+      "0.75": {
+        "samples": 6026,
+        "reward_sum": -107638.88894462585,
+        "early_terminations": 25
+      },
+      "1": {
+        "samples": 38140,
+        "reward_sum": -818317.641834259,
+        "early_terminations": 192
+      }
+    }
+  },
+  {
+    "update": 2,
+    "sampling_model_update": 1,
+    "mean_reward": -10.184303204218546,
+    "early_terminations": 233,
+    "tracking_domain_signals": 117,
+    "policy_fault_signals": 0,
+    "episodes": 233,
+    "contacted_episodes": 0,
+    "cleared_episodes": 41,
+    "sample_seconds": 83.27932953834534,
+    "optimize_seconds": 0.10790395736694336,
+    "optimizer": {
+      "parent_kl": 0.0,
+      "temporal": 0.0,
+      "value": 362207.4765625,
+      "surrogate": -0.00013073904119664803,
+      "entropy": -1.0468578562140465,
+      "actor_grad_norm": 1.3701863661408424,
+      "critic_grad_norm": 163714.193359375,
+      "mean_kl": 0.001696495261664192,
+      "exact_kl": 0.001696495261664192,
+      "kl_by_alpha": {
+        "0": 0.0020206488412002036,
+        "1": 0.0014529327625305013
+      },
+      "kl_alpha0": 0.0020206488412002036,
+      "kl_alpha1": 0.0014529327625305013,
+      "actor_grad_norm_preclip": 1.3701863661408424,
+      "critic_grad_norm_preclip": 163714.193359375,
+      "attempted_actor_grad_norm": 1.3701863661408424,
+      "attempted_critic_grad_norm": 163714.193359375,
+      "projected_std": [
+        0.22778867185115814,
+        0.0902339369058609
+      ],
+      "attempted_epochs": 4,
+      "accepted_epochs": 4,
+      "attempted_minibatches": 16,
+      "accepted_minibatches": 16,
+      "completed_epochs": 4,
+      "completed_minibatches": 16,
+      "hard_kl_stop": false,
+      "nonfinite_stop": false,
+      "stop_reason": null,
+      "actor_lr": 3e-05,
+      "critic_lr": 0.0003
+    },
+    "alpha_groups": {
+      "0": {
+        "samples": 40832,
+        "reward_sum": -324277.78125,
+        "early_terminations": 73
+      },
+      "0.25": {
+        "samples": 6329,
+        "reward_sum": -69256.45414733887,
+        "early_terminations": 16
+      },
+      "0.5": {
+        "samples": 7208,
+        "reward_sum": -43399.46161651611,
+        "early_terminations": 10
+      },
+      "0.75": {
+        "samples": 6235,
+        "reward_sum": -48016.49745178223,
+        "early_terminations": 11
+      },
+      "1": {
+        "samples": 37700,
+        "reward_sum": -516207.5419921875,
+        "early_terminations": 123
+      }
+    }
+  },
+  {
+    "update": 3,
+    "sampling_model_update": 2,
+    "mean_reward": -12.50488700469335,
+    "early_terminations": 322,
+    "tracking_domain_signals": 169,
+    "policy_fault_signals": 0,
+    "episodes": 322,
+    "contacted_episodes": 0,
+    "cleared_episodes": 184,
+    "sample_seconds": 89.1982729434967,
+    "optimize_seconds": 0.11884188652038574,
+    "optimizer": {
+      "parent_kl": 0.0,
+      "temporal": 0.0,
+      "value": 372402.90625,
+      "surrogate": -0.0006055826997908298,
+      "entropy": -1.0467917323112488,
+      "actor_grad_norm": 1.330354044213891,
+      "critic_grad_norm": 213833.62841796875,
+      "mean_kl": 0.0034539535408839583,
+      "exact_kl": 0.0034539535408839583,
+      "kl_by_alpha": {
+        "0": 0.002802427598193454,
+        "1": 0.004241777402290397
+      },
+      "kl_alpha0": 0.002802427598193454,
+      "kl_alpha1": 0.004241777402290397,
+      "actor_grad_norm_preclip": 1.330354044213891,
+      "critic_grad_norm_preclip": 213833.62841796875,
+      "attempted_actor_grad_norm": 1.330354044213891,
+      "attempted_critic_grad_norm": 213833.62841796875,
+      "projected_std": [
+        0.2278089076280594,
+        0.09022143483161926
+      ],
+      "attempted_epochs": 4,
+      "accepted_epochs": 4,
+      "attempted_minibatches": 16,
+      "accepted_minibatches": 16,
+      "completed_epochs": 4,
+      "completed_minibatches": 16,
+      "hard_kl_stop": false,
+      "nonfinite_stop": false,
+      "stop_reason": null,
+      "actor_lr": 3e-05,
+      "critic_lr": 0.0003
+    },
+    "alpha_groups": {
+      "0": {
+        "samples": 41220,
+        "reward_sum": -422556.98693847656,
+        "early_terminations": 110
+      },
+      "0.25": {
+        "samples": 6291,
+        "reward_sum": -69857.92742156982,
+        "early_terminations": 18
+      },
+      "0.5": {
+        "samples": 7404,
+        "reward_sum": -72929.82190704346,
+        "early_terminations": 19
+      },
+      "0.75": {
+        "samples": 6324,
+        "reward_sum": -61580.090560913086,
+        "early_terminations": 16
+      },
+      "1": {
+        "samples": 37065,
+        "reward_sum": -602355.572265625,
+        "early_terminations": 159
+      }
+    }
+  },
+  {
+    "update": 4,
+    "sampling_model_update": 3,
+    "mean_reward": -17.343675136566162,
+    "early_terminations": 453,
+    "tracking_domain_signals": 214,
+    "policy_fault_signals": 0,
+    "episodes": 453,
+    "contacted_episodes": 0,
+    "cleared_episodes": 332,
+    "sample_seconds": 88.42338418960571,
+    "optimize_seconds": 0.11566758155822754,
+    "optimizer": {
+      "parent_kl": 0.0,
+      "temporal": 0.0,
+      "value": 390722.84765625,
+      "surrogate": -0.0003785796361626126,
+      "entropy": -1.0469225868582726,
+      "actor_grad_norm": 0.8053219355642796,
+      "critic_grad_norm": 179437.84912109375,
+      "mean_kl": 0.0014109640032984316,
+      "exact_kl": 0.0014109640032984316,
+      "kl_by_alpha": {
+        "0": 0.001772716426414936,
+        "1": 0.0010757378623586537
+      },
+      "kl_alpha0": 0.001772716426414936,
+      "kl_alpha1": 0.0010757378623586537,
+      "actor_grad_norm_preclip": 0.8053219355642796,
+      "critic_grad_norm_preclip": 179437.84912109375,
+      "attempted_actor_grad_norm": 0.8053219355642796,
+      "attempted_critic_grad_norm": 179437.84912109375,
+      "projected_std": [
+        0.22777575254440308,
+        0.09022416919469833
+      ],
+      "attempted_epochs": 4,
+      "accepted_epochs": 4,
+      "attempted_minibatches": 16,
+      "accepted_minibatches": 16,
+      "completed_epochs": 4,
+      "completed_minibatches": 16,
+      "hard_kl_stop": false,
+      "nonfinite_stop": false,
+      "stop_reason": null,
+      "actor_lr": 3e-05,
+      "critic_lr": 0.0003
+    },
+    "alpha_groups": {
+      "0": {
+        "samples": 41929,
+        "reward_sum": -603811.4013671875,
+        "early_terminations": 160
+      },
+      "0.25": {
+        "samples": 6157,
+        "reward_sum": -139341.5066833496,
+        "early_terminations": 37
+      },
+      "0.5": {
+        "samples": 7706,
+        "reward_sum": -99334.41799926758,
+        "early_terminations": 27
+      },
+      "0.75": {
+        "samples": 6361,
+        "reward_sum": -74726.61190795898,
+        "early_terminations": 20
+      },
+      "1": {
+        "samples": 36151,
+        "reward_sum": -787738.6796875,
+        "early_terminations": 209
+      }
+    }
+  },
+  {
+    "update": 5,
+    "sampling_model_update": 4,
+    "mean_reward": -17.420173088709515,
+    "early_terminations": 464,
+    "tracking_domain_signals": 182,
+    "policy_fault_signals": 0,
+    "episodes": 464,
+    "contacted_episodes": 0,
+    "cleared_episodes": 362,
+    "sample_seconds": 82.59610986709595,
+    "optimize_seconds": 0.10981893539428711,
+    "optimizer": {
+      "parent_kl": 0.0,
+      "temporal": 0.0,
+      "value": 294648.63671875,
+      "surrogate": -0.0005967643955955282,
+      "entropy": -1.0471066609025002,
+      "actor_grad_norm": 1.0246277377009392,
+      "critic_grad_norm": 131861.40673828125,
+      "mean_kl": 0.00259615535226961,
+      "exact_kl": 0.00259615535226961,
+      "kl_by_alpha": {
+        "0": 0.0030637596191049024,
+        "1": 0.0021600306210946708
+      },
+      "kl_alpha0": 0.0030637596191049024,
+      "kl_alpha1": 0.0021600306210946708,
+      "actor_grad_norm_preclip": 1.0246277377009392,
+      "critic_grad_norm_preclip": 131861.40673828125,
+      "attempted_actor_grad_norm": 1.0246277377009392,
+      "attempted_critic_grad_norm": 131861.40673828125,
+      "projected_std": [
+        0.22774186730384827,
+        0.09020085632801056
+      ],
+      "attempted_epochs": 4,
+      "accepted_epochs": 4,
+      "attempted_minibatches": 16,
+      "accepted_minibatches": 16,
+      "completed_epochs": 4,
+      "completed_minibatches": 16,
+      "hard_kl_stop": false,
+      "nonfinite_stop": false,
+      "stop_reason": null,
+      "actor_lr": 3e-05,
+      "critic_lr": 0.0003
+    },
+    "alpha_groups": {
+      "0": {
+        "samples": 42373,
+        "reward_sum": -683312.57421875,
+        "early_terminations": 185
+      },
+      "0.25": {
+        "samples": 5982,
+        "reward_sum": -132355.61100769043,
+        "early_terminations": 36
+      },
+      "0.5": {
+        "samples": 7682,
+        "reward_sum": -126265.47375488281,
+        "early_terminations": 34
+      },
+      "0.75": {
+        "samples": 6206,
+        "reward_sum": -125917.76232910156,
+        "early_terminations": 34
+      },
+      "1": {
+        "samples": 36061,
+        "reward_sum": -644621.2734375,
+        "early_terminations": 175
+      }
+    }
+  },
+  {
+    "update": 6,
+    "sampling_model_update": 5,
+    "mean_reward": -12.38816330830256,
+    "early_terminations": 336,
+    "tracking_domain_signals": 144,
+    "policy_fault_signals": 0,
+    "episodes": 336,
+    "contacted_episodes": 0,
+    "cleared_episodes": 266,
+    "sample_seconds": 74.00361490249634,
+    "optimize_seconds": 0.10995864868164062,
+    "optimizer": {
+      "parent_kl": 0.0,
+      "temporal": 0.0,
+      "value": 205597.5166015625,
+      "surrogate": -0.0004893085206276737,
+      "entropy": -1.0477051138877869,
+      "actor_grad_norm": 1.0531096514314413,
+      "critic_grad_norm": 75570.75146484375,
+      "mean_kl": 0.0015688762844850619,
+      "exact_kl": 0.0015688762844850619,
+      "kl_by_alpha": {
+        "0": 0.0016971301446430168,
+        "1": 0.001430278404169203
+      },
+      "kl_alpha0": 0.0016971301446430168,
+      "kl_alpha1": 0.001430278404169203,
+      "actor_grad_norm_preclip": 1.0531096514314413,
+      "critic_grad_norm_preclip": 75570.75146484375,
+      "attempted_actor_grad_norm": 1.0531096514314413,
+      "attempted_critic_grad_norm": 75570.75146484375,
+      "projected_std": [
+        0.22766801714897156,
+        0.09016750752925873
+      ],
+      "attempted_epochs": 4,
+      "accepted_epochs": 4,
+      "attempted_minibatches": 16,
+      "accepted_minibatches": 16,
+      "completed_epochs": 4,
+      "completed_minibatches": 16,
+      "hard_kl_stop": false,
+      "nonfinite_stop": false,
+      "stop_reason": null,
+      "actor_lr": 3e-05,
+      "critic_lr": 0.0003
+    },
+    "alpha_groups": {
+      "0": {
+        "samples": 42473,
+        "reward_sum": -476639.6552734375,
+        "early_terminations": 132
+      },
+      "0.25": {
+        "samples": 6099,
+        "reward_sum": -68889.09702301025,
+        "early_terminations": 19
+      },
+      "0.5": {
+        "samples": 7716,
+        "reward_sum": -90931.63352203369,
+        "early_terminations": 25
+      },
+      "0.75": {
+        "samples": 5951,
+        "reward_sum": -76735.75360870361,
+        "early_terminations": 22
+      },
+      "1": {
+        "samples": 36065,
+        "reward_sum": -504609.87451171875,
+        "early_terminations": 138
+      }
+    }
+  },
+  {
+    "update": 7,
+    "sampling_model_update": 6,
+    "mean_reward": -10.911788205305735,
+    "early_terminations": 300,
+    "tracking_domain_signals": 135,
+    "policy_fault_signals": 0,
+    "episodes": 300,
+    "contacted_episodes": 0,
+    "cleared_episodes": 215,
+    "sample_seconds": 68.97900533676147,
+    "optimize_seconds": 0.14394855499267578,
+    "optimizer": {
+      "parent_kl": 0.0,
+      "temporal": 0.0,
+      "value": 183905.3232421875,
+      "surrogate": -0.00039398142689606175,
+      "entropy": -1.0482531413435936,
+      "actor_grad_norm": 1.1607651859521866,
+      "critic_grad_norm": 51441.50671386719,
+      "mean_kl": 0.0024283382032687464,
+      "exact_kl": 0.0024283382032687464,
+      "kl_by_alpha": {
+        "0": 0.002877043742104352,
+        "1": 0.00199673848069626
+      },
+      "kl_alpha0": 0.002877043742104352,
+      "kl_alpha1": 0.00199673848069626,
+      "actor_grad_norm_preclip": 1.1607651859521866,
+      "critic_grad_norm_preclip": 51441.50671386719,
+      "attempted_actor_grad_norm": 1.1607651859521866,
+      "attempted_critic_grad_norm": 51441.50671386719,
+      "projected_std": [
+        0.22762420773506165,
+        0.09015277773141861
+      ],
+      "attempted_epochs": 4,
+      "accepted_epochs": 4,
+      "attempted_minibatches": 16,
+      "accepted_minibatches": 16,
+      "completed_epochs": 4,
+      "completed_minibatches": 16,
+      "hard_kl_stop": false,
+      "nonfinite_stop": false,
+      "stop_reason": null,
+      "actor_lr": 3e-05,
+      "critic_lr": 0.0003
+    },
+    "alpha_groups": {
+      "0": {
+        "samples": 42810,
+        "reward_sum": -431996.99951171875,
+        "early_terminations": 120
+      },
+      "0.25": {
+        "samples": 6280,
+        "reward_sum": -60548.6086730957,
+        "early_terminations": 16
+      },
+      "0.5": {
+        "samples": 7583,
+        "reward_sum": -75592.17517089844,
+        "early_terminations": 21
+      },
+      "0.75": {
+        "samples": 5811,
+        "reward_sum": -80419.37554168701,
+        "early_terminations": 23
+      },
+      "1": {
+        "samples": 35820,
+        "reward_sum": -424115.265625,
+        "early_terminations": 120
+      }
+    }
+  },
+  {
+    "update": 8,
+    "sampling_model_update": 7,
+    "mean_reward": -9.373999694983164,
+    "early_terminations": 264,
+    "tracking_domain_signals": 108,
+    "policy_fault_signals": 0,
+    "episodes": 264,
+    "contacted_episodes": 0,
+    "cleared_episodes": 208,
+    "sample_seconds": 63.794224977493286,
+    "optimize_seconds": 0.1067349910736084,
+    "optimizer": {
+      "parent_kl": 0.0,
+      "temporal": 0.0,
+      "value": 152880.3154296875,
+      "surrogate": -0.0005492754389706533,
+      "entropy": -1.0485924109816551,
+      "actor_grad_norm": 0.9544670768082142,
+      "critic_grad_norm": 41489.10986328125,
+      "mean_kl": 0.003682839839408795,
+      "exact_kl": 0.003682839839408795,
+      "kl_by_alpha": {
+        "0": 0.0038157958627861237,
+        "1": 0.003538154378497533
+      },
+      "kl_alpha0": 0.0038157958627861237,
+      "kl_alpha1": 0.003538154378497533,
+      "actor_grad_norm_preclip": 0.9544670768082142,
+      "critic_grad_norm_preclip": 41489.10986328125,
+      "attempted_actor_grad_norm": 0.9544670768082142,
+      "attempted_critic_grad_norm": 41489.10986328125,
+      "projected_std": [
+        0.22762072086334229,
+        0.09012110531330109
+      ],
+      "attempted_epochs": 4,
+      "accepted_epochs": 4,
+      "attempted_minibatches": 16,
+      "accepted_minibatches": 16,
+      "completed_epochs": 4,
+      "completed_minibatches": 16,
+      "hard_kl_stop": false,
+      "nonfinite_stop": false,
+      "stop_reason": null,
+      "actor_lr": 3e-05,
+      "critic_lr": 0.0003
+    },
+    "alpha_groups": {
+      "0": {
+        "samples": 42800,
+        "reward_sum": -386698.16552734375,
+        "early_terminations": 110
+      },
+      "0.25": {
+        "samples": 6475,
+        "reward_sum": -26009.58514404297,
+        "early_terminations": 7
+      },
+      "0.5": {
+        "samples": 7610,
+        "reward_sum": -70246.73420715332,
+        "early_terminations": 21
+      },
+      "0.75": {
+        "samples": 5653,
+        "reward_sum": -61644.20980453491,
+        "early_terminations": 19
+      },
+      "1": {
+        "samples": 35766,
+        "reward_sum": -376902.9655761719,
+        "early_terminations": 107
+      }
+    }
+  },
+  {
+    "update": 9,
+    "sampling_model_update": 8,
+    "mean_reward": -8.774068574110666,
+    "early_terminations": 249,
+    "tracking_domain_signals": 91,
+    "policy_fault_signals": 0,
+    "episodes": 249,
+    "contacted_episodes": 0,
+    "cleared_episodes": 188,
+    "sample_seconds": 61.45383071899414,
+    "optimize_seconds": 0.10740804672241211,
+    "optimizer": {
+      "parent_kl": 0.0,
+      "temporal": 0.0,
+      "value": 158749.0498046875,
+      "surrogate": -0.00048711081626606756,
+      "entropy": -1.048986755311489,
+      "actor_grad_norm": 1.252242024987936,
+      "critic_grad_norm": 140206.2042236328,
+      "mean_kl": 0.00189763893528531,
+      "exact_kl": 0.00189763893528531,
+      "kl_by_alpha": {
+        "0": 0.001935961174977254,
+        "1": 0.0018455097461708766
+      },
+      "kl_alpha0": 0.001935961174977254,
+      "kl_alpha1": 0.0018455097461708766,
+      "actor_grad_norm_preclip": 1.252242024987936,
+      "critic_grad_norm_preclip": 140206.2042236328,
+      "attempted_actor_grad_norm": 1.252242024987936,
+      "attempted_critic_grad_norm": 140206.2042236328,
+      "projected_std": [
+        0.22763700783252716,
+        0.09007693827152252
+      ],
+      "attempted_epochs": 4,
+      "accepted_epochs": 4,
+      "attempted_minibatches": 16,
+      "accepted_minibatches": 16,
+      "completed_epochs": 4,
+      "completed_minibatches": 16,
+      "hard_kl_stop": false,
+      "nonfinite_stop": false,
+      "stop_reason": null,
+      "actor_lr": 3e-05,
+      "critic_lr": 0.0003
+    },
+    "alpha_groups": {
+      "0": {
+        "samples": 42474,
+        "reward_sum": -375026.06787109375,
+        "early_terminations": 110
+      },
+      "0.25": {
+        "samples": 6719,
+        "reward_sum": -56139.483139038086,
+        "early_terminations": 16
+      },
+      "0.5": {
+        "samples": 7665,
+        "reward_sum": -62407.318771362305,
+        "early_terminations": 18
+      },
+      "0.75": {
+        "samples": 5708,
+        "reward_sum": -45902.78010940552,
+        "early_terminations": 14
+      },
+      "1": {
+        "samples": 35738,
+        "reward_sum": -323050.40704345703,
+        "early_terminations": 91
+      }
+    }
+  },
+  {
+    "update": 10,
+    "sampling_model_update": 9,
+    "mean_reward": -8.177409092585245,
+    "early_terminations": 241,
+    "tracking_domain_signals": 91,
+    "policy_fault_signals": 0,
+    "episodes": 241,
+    "contacted_episodes": 0,
+    "cleared_episodes": 187,
+    "sample_seconds": 57.6626718044281,
+    "optimize_seconds": 0.10753226280212402,
+    "optimizer": {
+      "parent_kl": 0.0,
+      "temporal": 0.0,
+      "value": 116656.67626953125,
+      "surrogate": -0.0002865988303710765,
+      "entropy": -1.049411915242672,
+      "actor_grad_norm": 1.1382720619440079,
+      "critic_grad_norm": 78310.02905273438,
+      "mean_kl": 0.0016023910332781572,
+      "exact_kl": 0.0016023910332781572,
+      "kl_by_alpha": {
+        "0": 0.0015398403999143451,
+        "1": 0.0017460935497106806
+      },
+      "kl_alpha0": 0.0015398403999143451,
+      "kl_alpha1": 0.0017460935497106806,
+      "actor_grad_norm_preclip": 1.1382720619440079,
+      "critic_grad_norm_preclip": 78310.02905273438,
+      "attempted_actor_grad_norm": 1.1382720619440079,
+      "attempted_critic_grad_norm": 78310.02905273438,
+      "projected_std": [
+        0.22765572369098663,
+        0.090035580098629
+      ],
+      "attempted_epochs": 4,
+      "accepted_epochs": 4,
+      "attempted_minibatches": 16,
+      "accepted_minibatches": 16,
+      "completed_epochs": 4,
+      "completed_minibatches": 16,
+      "hard_kl_stop": false,
+      "nonfinite_stop": false,
+      "stop_reason": null,
+      "actor_lr": 3e-05,
+      "critic_lr": 0.0003
+    },
+    "alpha_groups": {
+      "0": {
+        "samples": 42069,
+        "reward_sum": -341254.9130859375,
+        "early_terminations": 102
+      },
+      "0.25": {
+        "samples": 6746,
+        "reward_sum": -66421.69522094727,
+        "early_terminations": 21
+      },
+      "0.5": {
+        "samples": 7618,
+        "reward_sum": -62635.37065887451,
+        "early_terminations": 18
+      },
+      "0.75": {
+        "samples": 5798,
+        "reward_sum": -53227.9612121582,
+        "early_terminations": 16
+      },
+      "1": {
+        "samples": 36073,
+        "reward_sum": -280332.0721435547,
+        "early_terminations": 84
+      }
+    }
+  },
+  {
+    "update": 11,
+    "sampling_model_update": 10,
+    "mean_reward": -6.463160405556361,
+    "early_terminations": 184,
+    "tracking_domain_signals": 73,
+    "policy_fault_signals": 0,
+    "episodes": 184,
+    "contacted_episodes": 0,
+    "cleared_episodes": 125,
+    "sample_seconds": 54.052096128463745,
+    "optimize_seconds": 0.10611104965209961,
+    "optimizer": {
+      "parent_kl": 0.0,
+      "temporal": 0.0,
+      "value": 95556.9482421875,
+      "surrogate": -0.0004194461407678318,
+      "entropy": -1.0496932342648506,
+      "actor_grad_norm": 1.0420872382819653,
+      "critic_grad_norm": 27576.564331054688,
+      "mean_kl": 0.00162821887837102,
+      "exact_kl": 0.00162821887837102,
+      "kl_by_alpha": {
+        "0": 0.0015921212686299797,
+        "1": 0.001655621515243468
+      },
+      "kl_alpha0": 0.0015921212686299797,
+      "kl_alpha1": 0.001655621515243468,
+      "actor_grad_norm_preclip": 1.0420872382819653,
+      "critic_grad_norm_preclip": 27576.564331054688,
+      "attempted_actor_grad_norm": 1.0420872382819653,
+      "attempted_critic_grad_norm": 27576.564331054688,
+      "projected_std": [
+        0.2276734858751297,
+        0.0900111198425293
+      ],
+      "attempted_epochs": 4,
+      "accepted_epochs": 4,
+      "attempted_minibatches": 16,
+      "accepted_minibatches": 16,
+      "completed_epochs": 4,
+      "completed_minibatches": 16,
+      "hard_kl_stop": false,
+      "nonfinite_stop": false,
+      "stop_reason": null,
+      "actor_lr": 3e-05,
+      "critic_lr": 0.0003
+    },
+    "alpha_groups": {
+      "0": {
+        "samples": 42147,
+        "reward_sum": -263489.0689086914,
+        "early_terminations": 76
+      },
+      "0.25": {
+        "samples": 6751,
+        "reward_sum": -34210.18130493164,
+        "early_terminations": 10
+      },
+      "0.5": {
+        "samples": 7696,
+        "reward_sum": -38723.54140472412,
+        "early_terminations": 11
+      },
+      "0.75": {
+        "samples": 5721,
+        "reward_sum": -54080.34936904907,
+        "early_terminations": 15
+      },
+      "1": {
+        "samples": 35989,
+        "reward_sum": -244851.36460876465,
+        "early_terminations": 72
+      }
+    }
+  },
+  {
+    "update": 12,
+    "sampling_model_update": 11,
+    "mean_reward": -5.462383955717087,
+    "early_terminations": 161,
+    "tracking_domain_signals": 61,
+    "policy_fault_signals": 0,
+    "episodes": 161,
+    "contacted_episodes": 0,
+    "cleared_episodes": 125,
+    "sample_seconds": 52.131022930145264,
+    "optimize_seconds": 0.10848045349121094,
+    "optimizer": {
+      "parent_kl": 0.0,
+      "temporal": 0.0,
+      "value": 81235.2939453125,
+      "surrogate": -0.0008172844791261014,
+      "entropy": -1.049870416522026,
+      "actor_grad_norm": 0.9949911348521709,
+      "critic_grad_norm": 19482.708618164062,
+      "mean_kl": 0.004155503818765283,
+      "exact_kl": 0.004155503818765283,
+      "kl_by_alpha": {
+        "0": 0.004315642283681059,
+        "1": 0.004057755900684957
+      },
+      "kl_alpha0": 0.004315642283681059,
+      "kl_alpha1": 0.004057755900684957,
+      "actor_grad_norm_preclip": 0.9949911348521709,
+      "critic_grad_norm_preclip": 19482.708618164062,
+      "attempted_actor_grad_norm": 0.9949911348521709,
+      "attempted_critic_grad_norm": 19482.708618164062,
+      "projected_std": [
+        0.22763590514659882,
+        0.09000502526760101
+      ],
+      "attempted_epochs": 4,
+      "accepted_epochs": 4,
+      "attempted_minibatches": 16,
+      "accepted_minibatches": 16,
+      "completed_epochs": 4,
+      "completed_minibatches": 16,
+      "hard_kl_stop": false,
+      "nonfinite_stop": false,
+      "stop_reason": null,
+      "actor_lr": 3e-05,
+      "critic_lr": 0.0003
+    },
+    "alpha_groups": {
+      "0": {
+        "samples": 41904,
+        "reward_sum": -202107.76953125,
+        "early_terminations": 59
+      },
+      "0.25": {
+        "samples": 6839,
+        "reward_sum": -51567.83890533447,
+        "early_terminations": 15
+      },
+      "0.5": {
+        "samples": 7817,
+        "reward_sum": -38305.095779418945,
+        "early_terminations": 13
+      },
+      "0.75": {
+        "samples": 5705,
+        "reward_sum": -25601.932552337646,
+        "early_terminations": 9
+      },
+      "1": {
+        "samples": 36039,
+        "reward_sum": -219391.55130004883,
+        "early_terminations": 65
+      }
+    }
+  },
+  {
+    "update": 13,
+    "sampling_model_update": 12,
+    "mean_reward": -5.415087163448334,
+    "early_terminations": 161,
+    "tracking_domain_signals": 59,
+    "policy_fault_signals": 0,
+    "episodes": 161,
+    "contacted_episodes": 0,
+    "cleared_episodes": 122,
+    "sample_seconds": 49.627737045288086,
+    "optimize_seconds": 0.10672307014465332,
+    "optimizer": {
+      "parent_kl": 0.0,
+      "temporal": 0.0,
+      "value": 64349.872802734375,
+      "surrogate": -0.0010823125267052092,
+      "entropy": -1.0501974523067474,
+      "actor_grad_norm": 1.0069140885025263,
+      "critic_grad_norm": 18371.101013183594,
+      "mean_kl": 0.0019199989813690384,
+      "exact_kl": 0.0019199989813690384,
+      "kl_by_alpha": {
+        "0": 0.0015031169292166037,
+        "1": 0.0023246476385328503
+      },
+      "kl_alpha0": 0.0015031169292166037,
+      "kl_alpha1": 0.0023246476385328503,
+      "actor_grad_norm_preclip": 1.0069140885025263,
+      "critic_grad_norm_preclip": 18371.101013183594,
+      "attempted_actor_grad_norm": 1.0069140885025263,
+      "attempted_critic_grad_norm": 18371.101013183594,
+      "projected_std": [
+        0.22761023044586182,
+        0.08997940272092819
+      ],
+      "attempted_epochs": 4,
+      "accepted_epochs": 4,
+      "attempted_minibatches": 16,
+      "accepted_minibatches": 16,
+      "completed_epochs": 4,
+      "completed_minibatches": 16,
+      "hard_kl_stop": false,
+      "nonfinite_stop": false,
+      "stop_reason": null,
+      "actor_lr": 3e-05,
+      "critic_lr": 0.0003
+    },
+    "alpha_groups": {
+      "0": {
+        "samples": 41961,
+        "reward_sum": -153139.09155273438,
+        "early_terminations": 49
+      },
+      "0.25": {
+        "samples": 6808,
+        "reward_sum": -33557.11162567139,
+        "early_terminations": 12
+      },
+      "0.5": {
+        "samples": 7773,
+        "reward_sum": -60136.96717834473,
+        "early_terminations": 17
+      },
+      "0.75": {
+        "samples": 5762,
+        "reward_sum": -32992.93854904175,
+        "early_terminations": 10
+      },
+      "1": {
+        "samples": 36000,
+        "reward_sum": -252498.611328125,
+        "early_terminations": 73
+      }
+    }
+  },
+  {
+    "update": 14,
+    "sampling_model_update": 13,
+    "mean_reward": -4.857538844148318,
+    "early_terminations": 141,
+    "tracking_domain_signals": 50,
+    "policy_fault_signals": 0,
+    "episodes": 316,
+    "contacted_episodes": 0,
+    "cleared_episodes": 245,
+    "sample_seconds": 49.66222596168518,
+    "optimize_seconds": 0.11002039909362793,
+    "optimizer": {
+      "parent_kl": 0.0,
+      "temporal": 0.0,
+      "value": 68265.4169921875,
+      "surrogate": -0.0007565354565599591,
+      "entropy": -1.0505483001470566,
+      "actor_grad_norm": 1.0436778701841831,
+      "critic_grad_norm": 33968.252380371094,
+      "mean_kl": 0.0033882734132930636,
+      "exact_kl": 0.0033882734132930636,
+      "kl_by_alpha": {
+        "0": 0.004029839714318242,
+        "1": 0.00270093137238952
+      },
+      "kl_alpha0": 0.004029839714318242,
+      "kl_alpha1": 0.00270093137238952,
+      "actor_grad_norm_preclip": 1.0436778701841831,
+      "critic_grad_norm_preclip": 33968.252380371094,
+      "attempted_actor_grad_norm": 1.0436778701841831,
+      "attempted_critic_grad_norm": 33968.252380371094,
+      "projected_std": [
+        0.2276112139225006,
+        0.08995130658149719
+      ],
+      "attempted_epochs": 4,
+      "accepted_epochs": 4,
+      "attempted_minibatches": 16,
+      "accepted_minibatches": 16,
+      "completed_epochs": 4,
+      "completed_minibatches": 16,
+      "hard_kl_stop": false,
+      "nonfinite_stop": false,
+      "stop_reason": null,
+      "actor_lr": 3e-05,
+      "critic_lr": 0.0003
+    },
+    "alpha_groups": {
+      "0": {
+        "samples": 42169,
+        "reward_sum": -172222.90698242188,
+        "early_terminations": 52
+      },
+      "0.25": {
+        "samples": 6926,
+        "reward_sum": -31528.94010925293,
+        "early_terminations": 9
+      },
+      "0.5": {
+        "samples": 7656,
+        "reward_sum": -29092.730010986328,
+        "early_terminations": 8
+      },
+      "0.75": {
+        "samples": 5950,
+        "reward_sum": -31712.578956604004,
+        "early_terminations": 9
+      },
+      "1": {
+        "samples": 35603,
+        "reward_sum": -212958.3408203125,
+        "early_terminations": 63
+      }
+    }
+  },
+  {
+    "update": 15,
+    "sampling_model_update": 14,
+    "mean_reward": -4.8675710906585055,
+    "early_terminations": 137,
+    "tracking_domain_signals": 39,
+    "policy_fault_signals": 0,
+    "episodes": 433,
+    "contacted_episodes": 0,
+    "cleared_episodes": 299,
+    "sample_seconds": 50.28809881210327,
+    "optimize_seconds": 0.10890769958496094,
+    "optimizer": {
+      "parent_kl": 0.0,
+      "temporal": 0.0,
+      "value": 86142.74072265625,
+      "surrogate": -0.000519836399689666,
+      "entropy": -1.0509188771247864,
+      "actor_grad_norm": 0.88879119977355,
+      "critic_grad_norm": 35974.165283203125,
+      "mean_kl": 0.0023087102454155684,
+      "exact_kl": 0.0023087102454155684,
+      "kl_by_alpha": {
+        "0": 0.002179242742767367,
+        "1": 0.0024467152124237057
+      },
+      "kl_alpha0": 0.002179242742767367,
+      "kl_alpha1": 0.0024467152124237057,
+      "actor_grad_norm_preclip": 0.88879119977355,
+      "critic_grad_norm_preclip": 35974.165283203125,
+      "attempted_actor_grad_norm": 0.88879119977355,
+      "attempted_critic_grad_norm": 35974.165283203125,
+      "projected_std": [
+        0.2275436669588089,
+        0.08994077891111374
+      ],
+      "attempted_epochs": 4,
+      "accepted_epochs": 4,
+      "attempted_minibatches": 16,
+      "accepted_minibatches": 16,
+      "completed_epochs": 4,
+      "completed_minibatches": 16,
+      "hard_kl_stop": false,
+      "nonfinite_stop": false,
+      "stop_reason": null,
+      "actor_lr": 3e-05,
+      "critic_lr": 0.0003
+    },
+    "alpha_groups": {
+      "0": {
+        "samples": 41569,
+        "reward_sum": -198907.23638916016,
+        "early_terminations": 59
+      },
+      "0.25": {
+        "samples": 7228,
+        "reward_sum": -45090.67794799805,
+        "early_terminations": 13
+      },
+      "0.5": {
+        "samples": 7277,
+        "reward_sum": -36830.91007232666,
+        "early_terminations": 12
+      },
+      "0.75": {
+        "samples": 6344,
+        "reward_sum": -30133.476974487305,
+        "early_terminations": 8
+      },
+      "1": {
+        "samples": 35886,
+        "reward_sum": -167539.4161529541,
+        "early_terminations": 45
+      }
+    }
+  },
+  {
+    "update": 16,
+    "sampling_model_update": 15,
+    "mean_reward": -5.868981301784515,
+    "early_terminations": 163,
+    "tracking_domain_signals": 48,
+    "policy_fault_signals": 0,
+    "episodes": 601,
+    "contacted_episodes": 0,
+    "cleared_episodes": 450,
+    "sample_seconds": 51.94579315185547,
+    "optimize_seconds": 0.11151313781738281,
+    "optimizer": {
+      "parent_kl": 0.0,
+      "temporal": 0.0,
+      "value": 95211.2861328125,
+      "surrogate": -0.0005449360396596603,
+      "entropy": -1.0511451661586761,
+      "actor_grad_norm": 0.9156371280550957,
+      "critic_grad_norm": 45981.685546875,
+      "mean_kl": 0.002961887939212223,
+      "exact_kl": 0.002961887939212223,
+      "kl_by_alpha": {
+        "0": 0.003351325525777873,
+        "1": 0.0025271006465541566
+      },
+      "kl_alpha0": 0.003351325525777873,
+      "kl_alpha1": 0.0025271006465541566,
+      "actor_grad_norm_preclip": 0.9156371280550957,
+      "critic_grad_norm_preclip": 45981.685546875,
+      "attempted_actor_grad_norm": 0.9156371280550957,
+      "attempted_critic_grad_norm": 45981.685546875,
+      "projected_std": [
+        0.22753207385540009,
+        0.08994840830564499
+      ],
+      "attempted_epochs": 4,
+      "accepted_epochs": 4,
+      "attempted_minibatches": 16,
+      "accepted_minibatches": 16,
+      "completed_epochs": 4,
+      "completed_minibatches": 16,
+      "hard_kl_stop": false,
+      "nonfinite_stop": false,
+      "stop_reason": null,
+      "actor_lr": 3e-05,
+      "critic_lr": 0.0003
+    },
+    "alpha_groups": {
+      "0": {
+        "samples": 40949,
+        "reward_sum": -222698.98834228516,
+        "early_terminations": 63
+      },
+      "0.25": {
+        "samples": 7390,
+        "reward_sum": -45785.09256744385,
+        "early_terminations": 14
+      },
+      "0.5": {
+        "samples": 7176,
+        "reward_sum": -36489.7395324707,
+        "early_terminations": 10
+      },
+      "0.75": {
+        "samples": 6620,
+        "reward_sum": -41488.84312057495,
+        "early_terminations": 12
+      },
+      "1": {
+        "samples": 36169,
+        "reward_sum": -230481.6719970703,
+        "early_terminations": 64
+      }
+    }
+  },
+  {
+    "update": 17,
+    "sampling_model_update": 16,
+    "mean_reward": -5.722155839204788,
+    "early_terminations": 154,
+    "tracking_domain_signals": 48,
+    "policy_fault_signals": 0,
+    "episodes": 572,
+    "contacted_episodes": 0,
+    "cleared_episodes": 433,
+    "sample_seconds": 58.30842113494873,
+    "optimize_seconds": 0.10877752304077148,
+    "optimizer": {
+      "parent_kl": 0.0,
+      "temporal": 0.0,
+      "value": 112704.24951171875,
+      "surrogate": -0.0004730121063403203,
+      "entropy": -1.0510398522019386,
+      "actor_grad_norm": 0.8474312499165535,
+      "critic_grad_norm": 28875.017944335938,
+      "mean_kl": 0.003312729337873558,
+      "exact_kl": 0.003312729337873558,
+      "kl_by_alpha": {
+        "0": 0.003122421677371466,
+        "1": 0.0035434454569155567
+      },
+      "kl_alpha0": 0.003122421677371466,
+      "kl_alpha1": 0.0035434454569155567,
+      "actor_grad_norm_preclip": 0.8474312499165535,
+      "critic_grad_norm_preclip": 28875.017944335938,
+      "attempted_actor_grad_norm": 0.8474312499165535,
+      "attempted_critic_grad_norm": 28875.017944335938,
+      "projected_std": [
+        0.2275717556476593,
+        0.08994630724191666
+      ],
+      "attempted_epochs": 4,
+      "accepted_epochs": 4,
+      "attempted_minibatches": 16,
+      "accepted_minibatches": 16,
+      "completed_epochs": 4,
+      "completed_minibatches": 16,
+      "hard_kl_stop": false,
+      "nonfinite_stop": false,
+      "stop_reason": null,
+      "actor_lr": 3e-05,
+      "critic_lr": 0.0003
+    },
+    "alpha_groups": {
+      "0": {
+        "samples": 40816,
+        "reward_sum": -198476.0841064453,
+        "early_terminations": 56
+      },
+      "0.25": {
+        "samples": 7150,
+        "reward_sum": -34206.25591278076,
+        "early_terminations": 10
+      },
+      "0.5": {
+        "samples": 7563,
+        "reward_sum": -17758.98444366455,
+        "early_terminations": 5
+      },
+      "0.75": {
+        "samples": 6310,
+        "reward_sum": -45341.214500427246,
+        "early_terminations": 13
+      },
+      "1": {
+        "samples": 36465,
+        "reward_sum": -266728.26791381836,
+        "early_terminations": 70
+      }
+    }
+  }
+]

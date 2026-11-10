@@ -1,0 +1,17 @@
+{
+  "explicit_physics_steps": 25000,
+  "observed_seconds": 4.999999873689376,
+  "termination": "budget_end",
+  "finite": true,
+  "final_xy_m": [
+    11.060606956481934,
+    0.02044290117919445
+  ],
+  "max_abs_roll_rad": 0.0016984939575195312,
+  "speed_min_m_s": 2.140188694000244,
+  "speed_max_m_s": 2.3290109634399414,
+  "max_abs_original_cross_m": 0.02044309175709306,
+  "source_npz": "runs/isaac_urdf_drive/local300_plane_5s.npz",
+  "smoothing": "none",
+  "scope": "One short engineering rollout, not offroad recovery or task success"
+}

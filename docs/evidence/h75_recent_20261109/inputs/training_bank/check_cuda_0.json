@@ -1,0 +1,34 @@
+{
+  "schema": "h75_training_port_forward_v1",
+  "cases": 320,
+  "device": "cuda:0",
+  "max_abs_errors": {
+    "route_xy": 2.9802322387695312e-08,
+    "route_heading": 1.1920928955078125e-07,
+    "route_curvature": 3.725290298461914e-09,
+    "projection_progress": 0.0,
+    "projection_unclamped": 0.0,
+    "projection_point": 4.656612873077393e-10,
+    "projection_cross_track": 0.0,
+    "projection_heading": 1.1641532182693481e-10,
+    "observation": 2.384185791015625e-07,
+    "actor_mean": 2.384185791015625e-07,
+    "original_checkpoint_actor": 2.384185791015625e-07,
+    "permuted_xy": 2.9802322387695312e-08,
+    "permuted_heading": 1.1920928955078125e-07,
+    "permuted_curvature": 3.725290298461914e-09
+  },
+  "original_checkpoint_import": {
+    "checkpoint": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_original_training_portable/original_policy.pt",
+    "actor_critic_logstd_restored": true,
+    "std": [
+      0.22772818803787231,
+      0.09024570137262344
+    ],
+    "optimizer_restored": false,
+    "mean_value": -55.3283805847168
+  },
+  "physics_steps": 0,
+  "optimizer_updates": 0,
+  "scope": "authentic saved route interpolation/projection/observation/H75 forward plus lane permutation; no physics continuation or training claim"
+}

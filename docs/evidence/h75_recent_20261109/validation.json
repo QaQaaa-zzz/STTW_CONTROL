@@ -1,0 +1,20 @@
+{
+  "hash_files": 382,
+  "inputs_exist": true,
+  "models": {
+    "common_start_update150.pt": {
+      "update": 150,
+      "policy_tensors": 25
+    },
+    "deprecated_midroute_update76.pt": {
+      "update": 76,
+      "policy_tensors": 25
+    },
+    "original_policy.pt": {
+      "update": null,
+      "policy_tensors": 25
+    }
+  },
+  "trajectory_npz_readable": true,
+  "new_machine_gpu_reproduction": false
+}

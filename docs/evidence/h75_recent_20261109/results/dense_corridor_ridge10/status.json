@@ -1,0 +1,10 @@
+{
+  "stage": "complete",
+  "pid": 784210,
+  "completed_conditions": 12,
+  "physics_lane_steps": 3600000,
+  "started": 1794201421.5876741,
+  "bundle": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_selected_local300_flat/bundle",
+  "finished": 1794202493.8076673,
+  "optimizer_updates": 0
+}

@@ -1,0 +1,31 @@
+{
+  "role": "Dense reference-corridor pebbles and10cm ridge DEV; frozen original H75+Local300; no training",
+  "by_terrain": [
+    {
+      "terrain": "dense_corridor",
+      "n": 36,
+      "survived": 21,
+      "arrived": 24,
+      "final_hold": 18,
+      "A": 3,
+      "B": 5,
+      "C": 3
+    },
+    {
+      "terrain": "single_10cm",
+      "n": 36,
+      "survived": 18,
+      "arrived": 18,
+      "final_hold": 14,
+      "A": 2,
+      "B": 0,
+      "C": 6
+    }
+  ],
+  "conditions": 72,
+  "physical_parameter_seeds": [
+    101,
+    102,
+    103
+  ]
+}

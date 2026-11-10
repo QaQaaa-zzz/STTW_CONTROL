@@ -1,0 +1,161 @@
+{
+  "role": "Retrospective observed fixed-candidate union, not a deployable selector or bound on switching policies",
+  "contexts": [
+    {
+      "terrain": "dense_corridor",
+      "speed": 2.3,
+      "seed": 101,
+      "qualified": {
+        "A": [],
+        "B": [
+          "alpha1"
+        ],
+        "C": [
+          "alpha1"
+        ]
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed": 2.3,
+      "seed": 102,
+      "qualified": {
+        "A": [
+          "alpha05"
+        ],
+        "B": [
+          "alpha05"
+        ],
+        "C": [
+          "alpha05"
+        ]
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed": 2.3,
+      "seed": 103,
+      "qualified": {
+        "A": [],
+        "B": [],
+        "C": []
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed": 2.6,
+      "seed": 101,
+      "qualified": {
+        "A": [],
+        "B": [
+          "alpha1"
+        ],
+        "C": []
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed": 2.6,
+      "seed": 102,
+      "qualified": {
+        "A": [
+          "alpha0"
+        ],
+        "B": [
+          "alpha1"
+        ],
+        "C": []
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed": 2.6,
+      "seed": 103,
+      "qualified": {
+        "A": [
+          "alpha05"
+        ],
+        "B": [
+          "alpha05"
+        ],
+        "C": [
+          "alpha05"
+        ]
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed": 2.3,
+      "seed": 101,
+      "qualified": {
+        "A": [
+          "alpha0"
+        ],
+        "B": [],
+        "C": [
+          "alpha0"
+        ]
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed": 2.3,
+      "seed": 102,
+      "qualified": {
+        "A": [],
+        "B": [],
+        "C": []
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed": 2.3,
+      "seed": 103,
+      "qualified": {
+        "A": [],
+        "B": [],
+        "C": []
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed": 2.6,
+      "seed": 101,
+      "qualified": {
+        "A": [],
+        "B": [],
+        "C": [
+          "alpha025",
+          "alpha05"
+        ]
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed": 2.6,
+      "seed": 102,
+      "qualified": {
+        "A": [],
+        "B": [],
+        "C": [
+          "alpha05"
+        ]
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed": 2.6,
+      "seed": 103,
+      "qualified": {
+        "A": [
+          "alpha0"
+        ],
+        "B": [],
+        "C": [
+          "alpha025",
+          "alpha05"
+        ]
+      }
+    }
+  ]
+}

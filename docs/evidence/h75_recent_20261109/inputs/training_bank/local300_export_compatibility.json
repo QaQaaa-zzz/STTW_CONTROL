@@ -1,0 +1,17 @@
+{
+  "max_abs_errors": {
+    "root_pose": 0.0,
+    "root_velocity": 0.0,
+    "joint_position": 0.0,
+    "joint_velocity": 0.0,
+    "eso": 0.0,
+    "disturbance": 0.0,
+    "gains": 0.0,
+    "previous_command": 0.0,
+    "previous_reference": 0.0,
+    "physical_tick": 0.0,
+    "raw": 0.0
+  },
+  "physics_steps": 0,
+  "optimizer_updates": 0
+}

@@ -1,0 +1,45 @@
+{
+  "terrain_kind": "ridges",
+  "seed": 96131,
+  "index": 8,
+  "parameters": {
+    "ridges_angle_center_width_height": [
+      [
+        0.5860145750746201,
+        -5.853317658842018,
+        0.8660077913143105,
+        0.05500980772859475
+      ],
+      [
+        2.6891662030749317,
+        -7.0224444813541655,
+        0.9671581244750806,
+        0.0851188117513073
+      ],
+      [
+        2.756835943600536,
+        4.572391006370694,
+        1.160851762788782,
+        0.05826143733754892
+      ],
+      [
+        0.7912500050531861,
+        0.8162455555650325,
+        0.9202801725654348,
+        0.09806315720366546
+      ]
+    ]
+  },
+  "spawn_clear_radius_m": 2,
+  "mandatory_crossing_band_m": [
+    2.6,
+    3.4
+  ],
+  "crossing_design": "continuous annular ridge, or480 overlapping pebble caps at radius3m; no planar bypass from inner disc to outside",
+  "terrain_extent_m": [
+    -12,
+    12
+  ],
+  "sha256": "bb7130f4b0ddc25a9fb8270a6f2d8dd2fe3772129b5a8b70ea660107c5c61fdb",
+  "role": "random procedural mesh; base plane supplied by environment; new explicit geometry, not old frozen mesh"
+}

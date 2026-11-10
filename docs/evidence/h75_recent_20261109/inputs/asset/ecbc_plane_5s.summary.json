@@ -1,0 +1,17 @@
+{
+  "explicit_physics_steps": 25000,
+  "observed_seconds": 4.999999873689376,
+  "termination": "budget_end",
+  "finite": true,
+  "final_xy_m": [
+    10.931229591369629,
+    -0.0008947868482209742
+  ],
+  "max_abs_roll_rad": 0.0020313262939453125,
+  "speed_min_m_s": 2.0927677154541016,
+  "speed_max_m_s": 2.3113582134246826,
+  "max_abs_original_cross_m": 0.0028547647729071928,
+  "source_npz": "runs/isaac_urdf_drive/ecbc_plane_5s.npz",
+  "smoothing": "none",
+  "scope": "One short engineering rollout, not offroad recovery or task success"
+}

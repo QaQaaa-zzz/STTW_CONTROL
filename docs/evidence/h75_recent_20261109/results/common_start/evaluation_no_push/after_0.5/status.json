@@ -1,0 +1,9 @@
+{
+  "stage": "evaluation_complete",
+  "pid": 4032197,
+  "completed_updates": 0,
+  "updates": 0,
+  "failed_lanes": 1,
+  "conditions": 13,
+  "elapsed_s": 223.4121494293213
+}

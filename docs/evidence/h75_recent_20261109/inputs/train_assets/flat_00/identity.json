@@ -1,0 +1,18 @@
+{
+  "terrain_kind": "flat",
+  "seed": 85121,
+  "index": 0,
+  "parameters": {},
+  "spawn_clear_radius_m": 2,
+  "mandatory_crossing_band_m": [
+    2.6,
+    3.4
+  ],
+  "crossing_design": "continuous annular ridge, or480 overlapping pebble caps at radius3m; no planar bypass from inner disc to outside",
+  "terrain_extent_m": [
+    -12,
+    12
+  ],
+  "sha256": "db282a2128a4e7515e67f157040e6515295a64c5bdc4db2871e91d3f20bbd079",
+  "role": "random procedural mesh; base plane supplied by environment; new explicit geometry, not old frozen mesh"
+}

@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "environments": 13,
+  "position_xy_max_m": 0.0,
+  "reference_start_xy_max_m": 0.0,
+  "start_speed_range_m_s": [
+    2.254321813583374,
+    2.254321813583374
+  ],
+  "task_tick": 0,
+  "lower_history": "cleared",
+  "middle_history": "one common-start frame",
+  "prefix_states_restored": false
+}

@@ -1,0 +1,2333 @@
+{
+  "source_revision": "9c7f63dc918482be37102f3371709bf611f4bb47",
+  "files": [
+    {
+      "path": "inputs/bundle/actor.npz",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_selected_local300_flat/bundle/actor.npz",
+      "bytes": 284418,
+      "sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b"
+    },
+    {
+      "path": "inputs/bundle/config.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_selected_local300_flat/bundle/config.json",
+      "bytes": 13844,
+      "sha256": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364"
+    },
+    {
+      "path": "inputs/bundle/identity.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_selected_local300_flat/bundle/identity.json",
+      "bytes": 1054,
+      "sha256": "cbe279f3d731fe63bd3bb81297a96a9f72d813c39e456d0ecb3cfaaba64935c6"
+    },
+    {
+      "path": "inputs/bundle/route.npz",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_selected_local300_flat/bundle/route.npz",
+      "bytes": 77844,
+      "sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1"
+    },
+    {
+      "path": "inputs/training_bank/check_cuda_0.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_original_training_portable/check_cuda_0.json",
+      "bytes": 1264,
+      "sha256": "c1dfd7523f9d71de48e85aa44f080f5515ace61350b7892747a06a015dd22eb5"
+    },
+    {
+      "path": "inputs/training_bank/identity.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_original_training_portable/identity.json",
+      "bytes": 30755,
+      "sha256": "2dfa6c344d0f889dc506eed8c89dc808490fdbc89939101b269b4fb64a9cc3ed"
+    },
+    {
+      "path": "inputs/training_bank/local300_export_compatibility.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_original_training_portable/local300_export_compatibility.json",
+      "bytes": 338,
+      "sha256": "506969423fe602ef3e40c7d51717baccab47e6dc0964f10fb5eefac1aad92bc2"
+    },
+    {
+      "path": "inputs/training_bank/local300_reset.npz",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_original_training_portable/local300_reset.npz",
+      "bytes": 3614,
+      "sha256": "7c2849dc467f5d9c03a11675b59d88abfac7e92e6545cfc228fa621456c024b1"
+    },
+    {
+      "path": "inputs/training_bank/original_policy.pt",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_original_training_portable/original_policy.pt",
+      "bytes": 571408,
+      "sha256": "0ab22dcc9366f571d025ad9170c341f2430ac28f66ae414e5ac6b479671123af"
+    },
+    {
+      "path": "inputs/training_bank/route_oracle.npz",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_original_training_portable/route_oracle.npz",
+      "bytes": 18112,
+      "sha256": "7ded2db7449f87d77ff286ccd201f52afe54af3481cd107c41951f5851f092ea"
+    },
+    {
+      "path": "inputs/training_bank/routes.npz",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_original_training_portable/routes.npz",
+      "bytes": 10308612,
+      "sha256": "5ccfd7277d734c1bd806fab0fdb8a3d5433de3d0925e8d95c6cf219ee617ad0e"
+    },
+    {
+      "path": "inputs/training_bank/states.npz",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_original_training_portable/states.npz",
+      "bytes": 1403721,
+      "sha256": "3aa7f18f10fb55c55cf801dd6ba0288a5fdf195f27f62912d0f9de0429ac73d5"
+    },
+    {
+      "path": "inputs/initial_state/initial_state.npz",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_selected_local300_flat/initial_state.npz",
+      "bytes": 3614,
+      "sha256": "7c2849dc467f5d9c03a11675b59d88abfac7e92e6545cfc228fa621456c024b1"
+    },
+    {
+      "path": "inputs/controller_config/dynamic.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/isaac_signals_parity/dynamic.json",
+      "bytes": 302,
+      "sha256": "418a55486c863f5efb249c22987bc43017aee95ff0913582f59508230b18e00c"
+    },
+    {
+      "path": "inputs/lower_actor/actor.npz",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/local300_torch_portable_parity/actor.npz",
+      "bytes": 350250,
+      "sha256": "517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125"
+    },
+    {
+      "path": "inputs/asset/contract.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/isaac_urdf_drive/contract.json",
+      "bytes": 13123,
+      "sha256": "c73414878f2bd49ed8cfa12c5737c83919206a273716306c791d5dce6175cb03"
+    },
+    {
+      "path": "inputs/asset/ecbc_plane_5s.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/isaac_urdf_drive/ecbc_plane_5s.json",
+      "bytes": 14111,
+      "sha256": "ea5f8c36767f3c62e16213854b5beb1dbc5c1db30e3cc7b5514a3cb5e03e1bc2"
+    },
+    {
+      "path": "inputs/asset/ecbc_plane_5s.summary.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/isaac_urdf_drive/ecbc_plane_5s.summary.json",
+      "bytes": 541,
+      "sha256": "49ddd63ab1830bff7f1fdf2f5e7786e64bd728dffbd4caa20ed8c5e0606a7f22"
+    },
+    {
+      "path": "inputs/asset/ellipsoid_0.1_0.1_0.025.obj",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/isaac_urdf_drive/ellipsoid_0.1_0.1_0.025.obj",
+      "bytes": 20558,
+      "sha256": "5b8ac347bf98373f285f5da56a7cbb6f3355c3a6364638ab4f2164406b515c1f"
+    },
+    {
+      "path": "inputs/asset/local300_plane_5s.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/isaac_urdf_drive/local300_plane_5s.json",
+      "bytes": 14347,
+      "sha256": "ccf4f48395b163e74940ce96203a3a5791ce9f74832db7e7ce1a5b0e3396f517"
+    },
+    {
+      "path": "inputs/asset/local300_plane_5s.summary.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/isaac_urdf_drive/local300_plane_5s.summary.json",
+      "bytes": 539,
+      "sha256": "99f67efa4770acbe9fa92cd96a43c7d7064d385b07a080fa66738154a5e20022"
+    },
+    {
+      "path": "inputs/asset/local300_plane_5s.wiring_check.json",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/isaac_urdf_drive/local300_plane_5s.wiring_check.json",
+      "bytes": 383,
+      "sha256": "e31e771ce654c4b829487f2e7266f64837871a27e5e45ab07761b105416278ab"
+    },
+    {
+      "path": "inputs/asset/vehicle.urdf",
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/isaac_urdf_drive/vehicle.urdf",
+      "bytes": 4684,
+      "sha256": "226c0681d8ae55b2ac579eb7d06d94b9306847d06158551ff737ca13f07e0b35"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/__init__.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/__init__.py",
+      "bytes": 169,
+      "sha256": "eca880a726873a075dc37aba1c4da3bfa8f7a19df45ed963964e864b48c6bfcc"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/algorithms/__init__.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/algorithms/__init__.py",
+      "bytes": 278,
+      "sha256": "b94298d358d2442b61b3fbc23c22b786ea8299bd5398eef95ff381705672797e"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/algorithms/distillation.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/algorithms/distillation.py",
+      "bytes": 6616,
+      "sha256": "7ff0b5f76d9323ff35ef8b5ca420b77a9829449c98136e0ea9e591831e249f1d"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/algorithms/ppo.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/algorithms/ppo.py",
+      "bytes": 20905,
+      "sha256": "243e453ff240229f7b3ce1c485ea84b15b65296165082b526787370c5cd6bdb6"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/env/__init__.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/env/__init__.py",
+      "bytes": 232,
+      "sha256": "8b187dca6d7ca5f9f4ab6a8c30218ca7bd6d3f952706526cad4ae156d1541870"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/env/vec_env.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/env/vec_env.py",
+      "bytes": 3727,
+      "sha256": "bd6c436fa7cd68720e3fe0df936809a2a813c4ce31e018498d2e3a20ce99e831"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/modules/__init__.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/modules/__init__.py",
+      "bytes": 774,
+      "sha256": "03cd88a5be2b61975f41aca157e509cefdfb1da99ebf68662c8ee4331c13850e"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/modules/actor_critic.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/modules/actor_critic.py",
+      "bytes": 7998,
+      "sha256": "d4831e34a10da9840db78c0c4a91ab3548b88dd1f0435c8d52c043f22ddc0a8e"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/modules/actor_critic_cnn.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/modules/actor_critic_cnn.py",
+      "bytes": 12371,
+      "sha256": "c0d6e18f0a022dd2bfdbd57fbd9a6147dd4da16d3601b340159106ea9e0316ba"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/modules/actor_critic_recurrent.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/modules/actor_critic_recurrent.py",
+      "bytes": 9363,
+      "sha256": "d0cc9a70d016bdb7161c35c9474c02f410708d5c59a305260b6824b5fc73552f"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/modules/rnd.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/modules/rnd.py",
+      "bytes": 8990,
+      "sha256": "23c58f770a84df36668b811a086bf14fcdd403bcffb709ce27432136d97430b0"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/modules/student_teacher.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/modules/student_teacher.py",
+      "bytes": 8250,
+      "sha256": "ca812e2d39a209f26bccb33dc50d8ee0474564938a0734a6def77ce2c92e7c1d"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/modules/student_teacher_recurrent.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/modules/student_teacher_recurrent.py",
+      "bytes": 10435,
+      "sha256": "6f7df733161febc9101c6a770a5858854ef2335a553b4a132361a7d6ac21bf72"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/modules/symmetry.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/modules/symmetry.py",
+      "bytes": 822,
+      "sha256": "20fe1e82f28a81b3c0d43aa9e0f9334ccfa32bd26823eb74cc1b3b7a55027b9c"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/networks/__init__.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/networks/__init__.py",
+      "bytes": 497,
+      "sha256": "34d18ad0dff6d1667480af3c98d3db6d6b8efa425c2cb9d0aa4ebbec1d19bc53"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/networks/cnn.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/networks/cnn.py",
+      "bytes": 7476,
+      "sha256": "b4c10862374c2d8a93301489e1073cdc620f9509b077363eef3b9b0da5203c35"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/networks/memory.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/networks/memory.py",
+      "bytes": 3499,
+      "sha256": "4c6208f2f36b98ad345ff729f11819cbc164c9fad819e1a1a31442e506a8e1be"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/networks/mlp.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/networks/mlp.py",
+      "bytes": 3602,
+      "sha256": "e160149a30b1213a0cf19626fd12aa9a7bf48354770fc225ec255de9ce2fbd1c"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/networks/normalization.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/networks/normalization.py",
+      "bytes": 4174,
+      "sha256": "3028c732ca55a813dcf05405cdce7332f514840836a558be96de6a30f7b3dc6c"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/runners/__init__.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/runners/__init__.py",
+      "bytes": 358,
+      "sha256": "c808385b7bc85650f097708f4ac478d0aea517d90ec5712fcf4298007a3ebc86"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/runners/distillation_runner.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/runners/distillation_runner.py",
+      "bytes": 2181,
+      "sha256": "3c9bc03468f70130e0a2bf908a8d344102c06c9b89bf456c2a83a872c06f7976"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/runners/on_policy_runner.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/runners/on_policy_runner.py",
+      "bytes": 11614,
+      "sha256": "45b626a13a5d2225ee23a37366f235e29740a5716840a63de4282820195b187c"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/storage/__init__.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/storage/__init__.py",
+      "bytes": 260,
+      "sha256": "599a712105321c64423e65777d709ace050ef46d5f98b8791d697b9c4e55106e"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/storage/rollout_storage.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/storage/rollout_storage.py",
+      "bytes": 12217,
+      "sha256": "f34f5e525fbcaa280450b9dc1827abef33bb2ac45c1c98990f7b60bf6561a87e"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/utils/__init__.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/utils/__init__.py",
+      "bytes": 542,
+      "sha256": "3fc4d20ddf25bd40b21f26187fe175d7fdb620942c17bb41a360d7194e3a40ab"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/utils/logger.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/utils/logger.py",
+      "bytes": 13026,
+      "sha256": "156feee7dd06630407d9822fec92a53adac413152511d71f7517c38c4633bafb"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/utils/neptune_utils.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/utils/neptune_utils.py",
+      "bytes": 3177,
+      "sha256": "858e5ed9f42c7647009a2da079804a4533f627b97ed7ea7562e224146368fe3d"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/utils/utils.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/utils/utils.py",
+      "bytes": 12228,
+      "sha256": "77885085ae92aff22ed28fc1335e98b8ff7696dad62241883195714a7c653274"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl/utils/wandb_utils.py",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl/utils/wandb_utils.py",
+      "bytes": 2340,
+      "sha256": "819540772c01e497960c3f6b2ab510db434facd9fa94f6578586d2e3b81de942"
+    },
+    {
+      "path": "inputs/runtime/rsl_rl_lib-3.2.0.dist-info/top_level.txt",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/runtime/rsl_rl_lib-3.2.0.dist-info/top_level.txt",
+      "bytes": 7,
+      "sha256": "5a8481ac564411e416e6b2fdb8c6bf19c0ba86e0c299e8a3a82da1e67d27c67a"
+    },
+    {
+      "path": "inputs/train_assets/assets.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/assets.json",
+      "bytes": 1376,
+      "sha256": "3b54899dde9b5ea5066236f90e92c6cf690d1549dd2357e86682cf16f80cbf9b"
+    },
+    {
+      "path": "inputs/train_assets/flat_00/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/flat_00/identity.json",
+      "bytes": 541,
+      "sha256": "b8ba394ac076b81978c478eed330ef4d0e134c2c4b8c7aaf4635b7637eb8705f"
+    },
+    {
+      "path": "inputs/train_assets/flat_00/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/flat_00/terrain.npz",
+      "bytes": 612680,
+      "sha256": "db282a2128a4e7515e67f157040e6515295a64c5bdc4db2871e91d3f20bbd079"
+    },
+    {
+      "path": "inputs/train_assets/pebbles_01/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/pebbles_01/identity.json",
+      "bytes": 661,
+      "sha256": "67e7ce6d3ab17c548fbed779957f34757995d71833c163636ab755c0e61298f3"
+    },
+    {
+      "path": "inputs/train_assets/pebbles_01/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/pebbles_01/terrain.npz",
+      "bytes": 1602737,
+      "sha256": "2c7a6a07b883f6cbebc7c0f7ddebc2ed29896304a376d02cd0550a6747a9ab6c"
+    },
+    {
+      "path": "inputs/train_assets/pebbles_04/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/pebbles_04/identity.json",
+      "bytes": 662,
+      "sha256": "aabd2e48bf18e30422ca6b0e197f4653358c46f34d1384f84183f043c82f2794"
+    },
+    {
+      "path": "inputs/train_assets/pebbles_04/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/pebbles_04/terrain.npz",
+      "bytes": 2126971,
+      "sha256": "4bf0b61b97e0440cf24aec177998c412b5dd4c8b73da158a3c4cce56560c3176"
+    },
+    {
+      "path": "inputs/train_assets/pebbles_07/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/pebbles_07/identity.json",
+      "bytes": 661,
+      "sha256": "f4a8e2531f1ac00b4532206812aaada11dca2afe3cbeeb2a22ebbd51e28add40"
+    },
+    {
+      "path": "inputs/train_assets/pebbles_07/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/pebbles_07/terrain.npz",
+      "bytes": 1454249,
+      "sha256": "9d5934931d341623648442ed23fa5cb050b0e258f1a431160cf9d08886bd3705"
+    },
+    {
+      "path": "inputs/train_assets/pebbles_10/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/pebbles_10/identity.json",
+      "bytes": 663,
+      "sha256": "9ff77c265b1685b39a5dd7210d92826a988a9cd4d3af3aa1992aa5e21c10ca52"
+    },
+    {
+      "path": "inputs/train_assets/pebbles_10/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/pebbles_10/terrain.npz",
+      "bytes": 2467671,
+      "sha256": "c4a329ead33e4b1fb42277559c3687fb71e5a380d9a64f38f16cdd18a96cdf3b"
+    },
+    {
+      "path": "inputs/train_assets/ridges_02/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/ridges_02/identity.json",
+      "bytes": 1108,
+      "sha256": "6a062c0b8f3bf2aaf0dceae9e36a1a379a8b1c4d16486e8ecddb534245de1b90"
+    },
+    {
+      "path": "inputs/train_assets/ridges_02/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/ridges_02/terrain.npz",
+      "bytes": 651915,
+      "sha256": "bb2c453cd206ab4c9d7c33870ea8d99b4858fa27a722e65aad1dab68e1e87b09"
+    },
+    {
+      "path": "inputs/train_assets/ridges_05/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/ridges_05/identity.json",
+      "bytes": 977,
+      "sha256": "23187d37d5496215a62e33d58e7debbbeae69cc903a0e1dbfc55c1c9908cc3d8"
+    },
+    {
+      "path": "inputs/train_assets/ridges_05/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/ridges_05/terrain.npz",
+      "bytes": 645834,
+      "sha256": "33a470d9f08dc5ea2392fa1eee18b296c6dd2bb15d5e6864f9a7aa4174a13e32"
+    },
+    {
+      "path": "inputs/train_assets/ridges_08/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/ridges_08/identity.json",
+      "bytes": 983,
+      "sha256": "86b0ef97a9d42b986a9bf13f3174acb47db1b67a134dbc651ed833976851760f"
+    },
+    {
+      "path": "inputs/train_assets/ridges_08/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/ridges_08/terrain.npz",
+      "bytes": 641380,
+      "sha256": "fe60679a1721807ebdfea37b2e336b5c858a51e3485542dd439234383a023a16"
+    },
+    {
+      "path": "inputs/train_assets/ridges_11/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/ridges_11/identity.json",
+      "bytes": 1108,
+      "sha256": "b2908ccff59c8068f900427fd131c5e5a00a377b4a6f963cae282d33ca29eed6"
+    },
+    {
+      "path": "inputs/train_assets/ridges_11/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/ridges_11/terrain.npz",
+      "bytes": 652236,
+      "sha256": "9ae3c356ade03a8e4e437fd87a2ad5740e668f2403f5addc65f9ecab872835d3"
+    },
+    {
+      "path": "inputs/train_assets/waves_03/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/waves_03/identity.json",
+      "bytes": 658,
+      "sha256": "34dad579df94a0284baf8c3174ceaafebcd74d60cff16c56ec59f1c3584bd743"
+    },
+    {
+      "path": "inputs/train_assets/waves_03/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/waves_03/terrain.npz",
+      "bytes": 775725,
+      "sha256": "ec24e944677e4fc80f10afbe533be6f4344e117d89b12f393777acb89ac34d06"
+    },
+    {
+      "path": "inputs/train_assets/waves_06/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/waves_06/identity.json",
+      "bytes": 659,
+      "sha256": "b0a083e1d49c201a25a3b10d7f0fde6c2f8df1a127dd9a82ef0a13561bbc5d53"
+    },
+    {
+      "path": "inputs/train_assets/waves_06/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/waves_06/terrain.npz",
+      "bytes": 776420,
+      "sha256": "1170720c8e9cdfb318818e91bbe3418488a52286727cf99f480c95f7b6267b36"
+    },
+    {
+      "path": "inputs/train_assets/waves_09/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/waves_09/identity.json",
+      "bytes": 659,
+      "sha256": "60f03d6ad415752765138abb29bc6c530bf63fe3cd6549d4433d0e00012c9d08"
+    },
+    {
+      "path": "inputs/train_assets/waves_09/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/waves_09/terrain.npz",
+      "bytes": 774214,
+      "sha256": "f895e9792646041df414d1e8793469bb862a6c3871aec1f4cc879444f1740459"
+    },
+    {
+      "path": "inputs/train_assets/waves_12/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/waves_12/identity.json",
+      "bytes": 658,
+      "sha256": "88f13755a1e527d495f28f058f0f8117cfb52324023ed3c260b89dab1d0f6992"
+    },
+    {
+      "path": "inputs/train_assets/waves_12/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/train_assets/waves_12/terrain.npz",
+      "bytes": 775984,
+      "sha256": "2343b0f490267d98ce5b537fbb888e045a52f71646eacfc01fda25570faba532"
+    },
+    {
+      "path": "inputs/test_assets/assets.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/assets.json",
+      "bytes": 1363,
+      "sha256": "2a6b192bb3f40a1aca67c54fd336c11bc232fc405ca08d1a1ce456f1d081ebda"
+    },
+    {
+      "path": "inputs/test_assets/flat_00/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/flat_00/identity.json",
+      "bytes": 541,
+      "sha256": "431ce1ff2acbe401c803a32c175ba8059bebca323574986045a5a16dda224783"
+    },
+    {
+      "path": "inputs/test_assets/flat_00/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/flat_00/terrain.npz",
+      "bytes": 612680,
+      "sha256": "db282a2128a4e7515e67f157040e6515295a64c5bdc4db2871e91d3f20bbd079",
+      "deduplicated_to": "inputs/train_assets/flat_00/terrain.npz"
+    },
+    {
+      "path": "inputs/test_assets/pebbles_01/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/pebbles_01/identity.json",
+      "bytes": 660,
+      "sha256": "ec8d82c9448f4c3e0114cdde096a3e560afebf178960aea259d913fe2e32a740"
+    },
+    {
+      "path": "inputs/test_assets/pebbles_01/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/pebbles_01/terrain.npz",
+      "bytes": 1578737,
+      "sha256": "fffbf7b1bd8fac15366f9c97dd276c39d8d6992b37b231d4de62d36bd27ee48c"
+    },
+    {
+      "path": "inputs/test_assets/pebbles_04/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/pebbles_04/identity.json",
+      "bytes": 662,
+      "sha256": "bcf20e1f919fe28aada9fbec2c3a347cad97ae86e7f39c130a31cbb2832663f3"
+    },
+    {
+      "path": "inputs/test_assets/pebbles_04/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/pebbles_04/terrain.npz",
+      "bytes": 1932777,
+      "sha256": "1e10fb34f3c769ef9be5bc8516a30fce1353b0ca3bf1171a5425510a2004b1a2"
+    },
+    {
+      "path": "inputs/test_assets/pebbles_07/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/pebbles_07/identity.json",
+      "bytes": 661,
+      "sha256": "0ebeaef218bb0c2e3c5e7c6c59a5a7b70add406c914792a05e3dd1520d99e2b9"
+    },
+    {
+      "path": "inputs/test_assets/pebbles_07/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/pebbles_07/terrain.npz",
+      "bytes": 2345724,
+      "sha256": "78bbcc8c8505e9aca3d399a4a99f6e837015073c6f2d51dcd04ec1f8f75b730c"
+    },
+    {
+      "path": "inputs/test_assets/pebbles_10/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/pebbles_10/identity.json",
+      "bytes": 663,
+      "sha256": "b70b0980c809ae80a0836c04004d58becf2b011c6b6707f7e1da5ed0c9622a1e"
+    },
+    {
+      "path": "inputs/test_assets/pebbles_10/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/pebbles_10/terrain.npz",
+      "bytes": 2043443,
+      "sha256": "56839f4f776c86eb53e167b0c828db3b17799adca4e97aabbdfffc67d07553f2"
+    },
+    {
+      "path": "inputs/test_assets/ridges_02/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/ridges_02/identity.json",
+      "bytes": 980,
+      "sha256": "125dfd6355d708c7c79f6e78d42f212d38e0d23d1d46c27212fd2837e61c5141"
+    },
+    {
+      "path": "inputs/test_assets/ridges_02/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/ridges_02/terrain.npz",
+      "bytes": 645408,
+      "sha256": "afc966c7778573a2035ac62aedf94430071d84c5d4548f35002384ea8dff4aa0"
+    },
+    {
+      "path": "inputs/test_assets/ridges_05/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/ridges_05/identity.json",
+      "bytes": 857,
+      "sha256": "f935e1b98d7cd81067fff2df4778581736ba8af8b4117072979e682dd677f290"
+    },
+    {
+      "path": "inputs/test_assets/ridges_05/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/ridges_05/terrain.npz",
+      "bytes": 635946,
+      "sha256": "778850fb72d3e7dc5c4dc2e2372af108aceb533a575bde6425c2969b7bd63a17"
+    },
+    {
+      "path": "inputs/test_assets/ridges_08/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/ridges_08/identity.json",
+      "bytes": 1106,
+      "sha256": "57678af9453e76d6f3711931f795addc3a657213f97ec8f3980484299527a90e"
+    },
+    {
+      "path": "inputs/test_assets/ridges_08/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/ridges_08/terrain.npz",
+      "bytes": 656440,
+      "sha256": "bb7130f4b0ddc25a9fb8270a6f2d8dd2fe3772129b5a8b70ea660107c5c61fdb"
+    },
+    {
+      "path": "inputs/test_assets/ridges_11/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/ridges_11/identity.json",
+      "bytes": 982,
+      "sha256": "2f5d447780b53c693ccb87842f36a6f32bc5447a7dbc078c497ffc70d060931b"
+    },
+    {
+      "path": "inputs/test_assets/ridges_11/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/ridges_11/terrain.npz",
+      "bytes": 648045,
+      "sha256": "afd55417d4811c97dfe811b2415e12c0368a89d344b38ae91c71092a747bc97d"
+    },
+    {
+      "path": "inputs/test_assets/waves_03/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/waves_03/identity.json",
+      "bytes": 658,
+      "sha256": "360fd563baa82c09b638269363db8b103719b0ef0524b2c6076cabab34b595bc"
+    },
+    {
+      "path": "inputs/test_assets/waves_03/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/waves_03/terrain.npz",
+      "bytes": 773167,
+      "sha256": "b3b04ace2a6a30aa7ecae7aee9afa80727862c03a15d3300a949b7fe5205aa8d"
+    },
+    {
+      "path": "inputs/test_assets/waves_06/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/waves_06/identity.json",
+      "bytes": 659,
+      "sha256": "1c191354ff0897288a610da02a3cf2749ec8afb6642c6c382680ba3c277992b4"
+    },
+    {
+      "path": "inputs/test_assets/waves_06/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/waves_06/terrain.npz",
+      "bytes": 775983,
+      "sha256": "0d9e93824b0114b44ce6bd60e0153b82ed18e7ae5e2255277eb95c834f774a6e"
+    },
+    {
+      "path": "inputs/test_assets/waves_09/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/waves_09/identity.json",
+      "bytes": 659,
+      "sha256": "9b0e0c0239917725f0f99931d1b1730a436572833d5d454cfddfd742e6366bcb"
+    },
+    {
+      "path": "inputs/test_assets/waves_09/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/waves_09/terrain.npz",
+      "bytes": 774801,
+      "sha256": "cf8543a23b844aa585efe76ee82d58c3f10b6f07a07a9a9b5d9881759604ac88"
+    },
+    {
+      "path": "inputs/test_assets/waves_12/identity.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/waves_12/identity.json",
+      "bytes": 660,
+      "sha256": "d801e57d397f38e8080f9e1b8c9214e3178e71b08ca730cea1ced4cb6924e678"
+    },
+    {
+      "path": "inputs/test_assets/waves_12/terrain.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/test_assets/waves_12/terrain.npz",
+      "bytes": 774987,
+      "sha256": "81aa5c4dafaffd4fc9b102b7c8d0115cab8bf979819e41861526d14a6d8267f4"
+    },
+    {
+      "path": "models/common_start_update150.pt",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/training_resume/checkpoint.pt",
+      "bytes": 1733109,
+      "sha256": "a823bf8174e614d1fe3154d3338c7e63e0736306319f7670020485a923dd8e27"
+    },
+    {
+      "path": "models/deprecated_midroute_update76.pt",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/training_resume/checkpoint.pt",
+      "bytes": 1733109,
+      "sha256": "b72983de5165c5d3542e2d52d26422beecc75a885e42391b537a7f43f0ae3152"
+    },
+    {
+      "path": "training_records/training/config.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/training/config.json",
+      "bytes": 6305,
+      "sha256": "981aa7665fc56ef205f54afe841b4dbc11357a08a1699187aad80da4bbbf3ae2"
+    },
+    {
+      "path": "training_records/training/history.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/training/history.json",
+      "bytes": 37132,
+      "sha256": "cd2d4579e0fac49ce7d0c6e772296992ecde02433a4461d46ee5696a12700933"
+    },
+    {
+      "path": "training_records/training/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/training/status.json",
+      "bytes": 2327,
+      "sha256": "aa87efc852d27d917aca391c9bed993aac57e56493c208250787c3f623af4cda"
+    },
+    {
+      "path": "training_records/training_resume/config.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/training_resume/config.json",
+      "bytes": 6280,
+      "sha256": "e88936e06f00218c084a7529d9149ace426330f2e064537c517e394620e7484a"
+    },
+    {
+      "path": "training_records/training_resume/history.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/training_resume/history.json",
+      "bytes": 129006,
+      "sha256": "4bcc8ddc5063ca544314becbf0b7288b884524728a3b312231b053f0800b9117"
+    },
+    {
+      "path": "training_records/training_resume/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/training_resume/status.json",
+      "bytes": 2325,
+      "sha256": "c3611df4c33d7d685efd4b6cf25232ed7df6bc9486645c7444adc3051d607b0f"
+    },
+    {
+      "path": "training_records/common_start/training/config.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/training/config.json",
+      "bytes": 6247,
+      "sha256": "79d158eefff730d07b47e96ed352b80e321b58f5b065178812426e4cda0bbe47"
+    },
+    {
+      "path": "training_records/common_start/training/history.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/training/history.json",
+      "bytes": 4372,
+      "sha256": "e4b6bb3a969dfd8bcadcb04ec4d70811a19b2a0e8bfd35888c73d7b9cbf95ada"
+    },
+    {
+      "path": "training_records/common_start/training/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/training/status.json",
+      "bytes": 2317,
+      "sha256": "dec4243cb563d719e01479d81f5bc14dbade1c9d49d05f71f50038f7964d26c1"
+    },
+    {
+      "path": "training_records/common_start/training_resume/config.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/training_resume/config.json",
+      "bytes": 6250,
+      "sha256": "c41ffc73601a13958feb61966c3b8bee75d574498f308363f0000b1a568a398e"
+    },
+    {
+      "path": "training_records/common_start/training_resume/history.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/training_resume/history.json",
+      "bytes": 324470,
+      "sha256": "2f00f80b7e2497ede464a10f989d39addf2573f34507681bbc291b064168e605"
+    },
+    {
+      "path": "training_records/common_start/training_resume/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/training_resume/status.json",
+      "bytes": 2338,
+      "sha256": "f80facb8a131b201c57e1cba6b3314d7c8200677c52a8201e66667c3e1e47c79"
+    },
+    {
+      "path": "results/analysis/RESULTS.md",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/RESULTS.md",
+      "bytes": 4353,
+      "sha256": "5480f2c7a453125713bad56d88b8ac99f5e58649675b9ea8fc45fb031db67c28"
+    },
+    {
+      "path": "results/analysis/common_window.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/common_window.json",
+      "bytes": 23509,
+      "sha256": "5023d6bcbd7bafc7a341db5613ad065f1c267fa0ec2f3653e16a136b792dee3c"
+    },
+    {
+      "path": "results/analysis/lane_000.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_000.png",
+      "bytes": 125604,
+      "sha256": "972decbeb566d1c4b64757f2e96b10991a657f394050ce2bd473d6ab6fe03ffe"
+    },
+    {
+      "path": "results/analysis/lane_001.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_001.png",
+      "bytes": 113171,
+      "sha256": "6f45f70109b2aafa2d1750aa75ac6b7a3fff264efdd5831430141c1e1964a52c"
+    },
+    {
+      "path": "results/analysis/lane_002.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_002.png",
+      "bytes": 118520,
+      "sha256": "7d83ee1bade5517422cfd48ddfa1dcc6b87161cac26328522675667ce116e0cc"
+    },
+    {
+      "path": "results/analysis/lane_003.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_003.png",
+      "bytes": 91053,
+      "sha256": "a0e8265b748cf73fb9a9bc37f5b6db8d553e9076013bd350133a80b67611104d"
+    },
+    {
+      "path": "results/analysis/lane_004.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_004.png",
+      "bytes": 102450,
+      "sha256": "2a4aa1c11fe6ce4c36701f14b4ba829256901a703d89beedaad70c6000ecd013"
+    },
+    {
+      "path": "results/analysis/lane_005.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_005.png",
+      "bytes": 111316,
+      "sha256": "750f0e031f05ce6fd5fcc0408ea778f5230144c6ea8ee2953ee28561f8b1f934"
+    },
+    {
+      "path": "results/analysis/lane_006.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_006.png",
+      "bytes": 118725,
+      "sha256": "9e3d4d1f242b3b360b67b3c16a22b76735f9d07ed027312e84a035153d54262d"
+    },
+    {
+      "path": "results/analysis/lane_007.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_007.png",
+      "bytes": 112606,
+      "sha256": "2f7ed9e279c54b59366cb3c6afa34e7b43aeb4ff0809aeffba621e902840d102"
+    },
+    {
+      "path": "results/analysis/lane_008.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_008.png",
+      "bytes": 109383,
+      "sha256": "d6843cf6fdc0247adcc4a2e4e9a1298e9bea3c4f32236a76341c3f44206dcb73"
+    },
+    {
+      "path": "results/analysis/lane_009.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_009.png",
+      "bytes": 125672,
+      "sha256": "0467cf4b3101525928ed1c9b96d213634751ca960558d912b15f3d967bbf6d22"
+    },
+    {
+      "path": "results/analysis/lane_010.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_010.png",
+      "bytes": 88785,
+      "sha256": "9035566ea3314e84ea7615045985caafbaf67f8d4b9c9ddf3d0719572f4936d6"
+    },
+    {
+      "path": "results/analysis/lane_011.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_011.png",
+      "bytes": 104609,
+      "sha256": "96ebf9f164cc9fa2af656f05c4561682f4d84e641be9ad4a6da672ec37783066"
+    },
+    {
+      "path": "results/analysis/lane_012.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_012.png",
+      "bytes": 94653,
+      "sha256": "3fb6c1132be8bf85f0b8f15cdb321f1d89d510838ee8a7391b28aeaf563b7d34"
+    },
+    {
+      "path": "results/analysis/lane_013.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_013.png",
+      "bytes": 129891,
+      "sha256": "a754a27d61181732d0875f0175e674f1fc6a641a1541e4bd4a66a84e1e7a7bd7"
+    },
+    {
+      "path": "results/analysis/lane_014.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_014.png",
+      "bytes": 91602,
+      "sha256": "f58ef970c371e6465009ef349c72492e76e97ba18920cc8a3746505921970929"
+    },
+    {
+      "path": "results/analysis/lane_015.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_015.png",
+      "bytes": 93247,
+      "sha256": "9de3a6768197a8b577c0f812b74f3940427693c24191a02db55eeeceef719f4e"
+    },
+    {
+      "path": "results/analysis/lane_016.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_016.png",
+      "bytes": 127700,
+      "sha256": "f7220808828fc222ffef08c443f174f4086b8a3d9a2cb7d5974286fe9861cd54"
+    },
+    {
+      "path": "results/analysis/lane_017.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_017.png",
+      "bytes": 114401,
+      "sha256": "ff9cea6c81c03987e1dcb3da02219f26435908c80a9060f23a5e55bcf67cea5e"
+    },
+    {
+      "path": "results/analysis/lane_018.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_018.png",
+      "bytes": 124336,
+      "sha256": "4c36897935e38079e9cd3c2bac0df75dc89d2ee042dc91e9c8b4e953c1e56f60"
+    },
+    {
+      "path": "results/analysis/lane_019.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_019.png",
+      "bytes": 92955,
+      "sha256": "4a2425a26985f7e13ebf329787f1aef024d5689e3f7fc2ea00024fc142a4bff5"
+    },
+    {
+      "path": "results/analysis/lane_020.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_020.png",
+      "bytes": 91304,
+      "sha256": "4720f92f576f52f170dbedf3a4bb417968e3e6f91ea4dd4ed26fd903fcc9c1cd"
+    },
+    {
+      "path": "results/analysis/lane_021.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_021.png",
+      "bytes": 127825,
+      "sha256": "e08083511185d56deba100452d5e31e77de8132687bac6641cf8d7b03d6e9ded"
+    },
+    {
+      "path": "results/analysis/lane_022.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_022.png",
+      "bytes": 130111,
+      "sha256": "e983e80b894bde8cdc5ac403acaa78d353fb77c84c9b69e79516d240aaf5c4ae"
+    },
+    {
+      "path": "results/analysis/lane_023.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_023.png",
+      "bytes": 124954,
+      "sha256": "99984bec47095f740685391e7238d4dfc00c88929eaa887e5c19f23c995ad4ba"
+    },
+    {
+      "path": "results/analysis/lane_024.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_024.png",
+      "bytes": 113200,
+      "sha256": "53bb9d5c95b310259ccf6144e41737ae50e076a3391d1f822b60847a2321b3be"
+    },
+    {
+      "path": "results/analysis/lane_025.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_025.png",
+      "bytes": 134912,
+      "sha256": "0994a15bf20b49def2ac4a051574bc20ef4095dd87a2f91e6667df976d095fe9"
+    },
+    {
+      "path": "results/analysis/lane_026.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_026.png",
+      "bytes": 125375,
+      "sha256": "332044258855f37b23ca46ee57e6d5da8d28c82dd4e69df94e8f6df1ddea7dd3"
+    },
+    {
+      "path": "results/analysis/lane_027.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_027.png",
+      "bytes": 88815,
+      "sha256": "e8b79ec56ab3742cea7958c04468be62514d6eeef1a18cedbef6a68016b08af9"
+    },
+    {
+      "path": "results/analysis/lane_028.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_028.png",
+      "bytes": 104088,
+      "sha256": "157048aa4f479adccbe2cc1d62bbe72afcb1c37e09fa36fcf490d60e01bcb0db"
+    },
+    {
+      "path": "results/analysis/lane_029.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_029.png",
+      "bytes": 106864,
+      "sha256": "c4baff15ce49591e5e382a829af9207225047017e3a363d10463231b02e4552d"
+    },
+    {
+      "path": "results/analysis/lane_030.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_030.png",
+      "bytes": 91805,
+      "sha256": "a59ad8a2fc649ffaa6c67951459776d50898ea5b61288eb1a59e5519602aea26"
+    },
+    {
+      "path": "results/analysis/lane_031.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_031.png",
+      "bytes": 119430,
+      "sha256": "3f9dbcca53812b664beb462603b51351a80595b375f62381824519efef2aadd1"
+    },
+    {
+      "path": "results/analysis/lane_032.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_032.png",
+      "bytes": 113568,
+      "sha256": "265cba29b8f3d396bc98e68c2225920add701945e16eaa2666bd77954c46cc0f"
+    },
+    {
+      "path": "results/analysis/lane_033.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_033.png",
+      "bytes": 85882,
+      "sha256": "98a9b198500e85f573ca027435d4c082f09c0d9badb63d378f47a7d8b85fe1fe"
+    },
+    {
+      "path": "results/analysis/lane_034.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_034.png",
+      "bytes": 109953,
+      "sha256": "40af9decceadb61d5bb0265003e2f1ac7b927bf6fda8129f6d9cdbe9ce4ad26a"
+    },
+    {
+      "path": "results/analysis/lane_035.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_035.png",
+      "bytes": 108955,
+      "sha256": "e372098050174e02faf458ba92dc9e58abe844359a7b7e819a7da4642846e829"
+    },
+    {
+      "path": "results/analysis/lane_036.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_036.png",
+      "bytes": 108194,
+      "sha256": "2b4c04e929c05fc13d9f2af177c61cf6459af3b7ea4e1ab4d9da44d44bff4368"
+    },
+    {
+      "path": "results/analysis/lane_037.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_037.png",
+      "bytes": 121493,
+      "sha256": "e305de7e59c745cde0d405491394568a76638ef5492be32cb1078cdb897d99ee"
+    },
+    {
+      "path": "results/analysis/lane_038.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_038.png",
+      "bytes": 125012,
+      "sha256": "6ad1dea725a84d8dce7fe064110e8abc155de4cce6a358a01e2d8187d1dd5f87"
+    },
+    {
+      "path": "results/analysis/lane_039.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_039.png",
+      "bytes": 97222,
+      "sha256": "f6af0c18c4b764ab017e5a578cc60caa1563e556dabcf9a92f298efc4d6cfd85"
+    },
+    {
+      "path": "results/analysis/lane_040.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_040.png",
+      "bytes": 100170,
+      "sha256": "d7be122b65ae6f19edd6e0b47fbe1347c2a49d23be1697d16569a5fdbf8bce9f"
+    },
+    {
+      "path": "results/analysis/lane_041.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_041.png",
+      "bytes": 114454,
+      "sha256": "c7e758701182208aaf65c9451e8ddf1fc910c9364091444e2a8fb9859fdd41bd"
+    },
+    {
+      "path": "results/analysis/lane_042.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_042.png",
+      "bytes": 113723,
+      "sha256": "f9d56482736e41c5fa37f16b7a22920bdc4710894cb54d3860668bbe7380c640"
+    },
+    {
+      "path": "results/analysis/lane_043.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_043.png",
+      "bytes": 86372,
+      "sha256": "2a80a560f1292c196b701fe7dbf48ef644b506ea10b599cdece193f8479a807a"
+    },
+    {
+      "path": "results/analysis/lane_044.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_044.png",
+      "bytes": 90004,
+      "sha256": "ee681e35caa8284a3d3e7388379564bdcaf83ace382fbdf3282ead7a9225a9ae"
+    },
+    {
+      "path": "results/analysis/lane_045.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_045.png",
+      "bytes": 119395,
+      "sha256": "f5c1c3a48eefdbe83544a78a0d18be3b2621ade46d03082d29c5fbfee7bccee2"
+    },
+    {
+      "path": "results/analysis/lane_046.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_046.png",
+      "bytes": 127060,
+      "sha256": "6cd1ca2e69ad3bbfe591920cbceb047402fe3598b05da5b6fca6d61a1d808db7"
+    },
+    {
+      "path": "results/analysis/lane_047.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_047.png",
+      "bytes": 122077,
+      "sha256": "d89055a88628756235b3a1bf2346afe9b1351081e46e4306be0e392884303dc2"
+    },
+    {
+      "path": "results/analysis/lane_048.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_048.png",
+      "bytes": 137568,
+      "sha256": "7c3f6c514574637bafda7ba3188e3ac7c43e1b81818a3eb793aa67a13a64b057"
+    },
+    {
+      "path": "results/analysis/lane_049.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_049.png",
+      "bytes": 87300,
+      "sha256": "2d7c6a8174835ffe5b33d4d0e0ea77214f44f46fccc1c384e1dde44e86fcb305"
+    },
+    {
+      "path": "results/analysis/lane_050.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_050.png",
+      "bytes": 108598,
+      "sha256": "947653ecf3d984e2688fe11a599803e75ed6d2ea2eebba3af07f1a1abb52d58b"
+    },
+    {
+      "path": "results/analysis/lane_051.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_051.png",
+      "bytes": 91666,
+      "sha256": "1f34c8561de1222e2ec127029f28cf5f369a2f7f2a98750c65bd18916c97370d"
+    },
+    {
+      "path": "results/analysis/lane_052.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_052.png",
+      "bytes": 125564,
+      "sha256": "f32eade4089b5fd8c0608886b08c7420a6a5ebaff448eacb60ff0bfa788aaeb9"
+    },
+    {
+      "path": "results/analysis/lane_053.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_053.png",
+      "bytes": 98737,
+      "sha256": "f97fe8559a26b2fd866dc4242d3d472698759394efee79aea5b8de0b5af40390"
+    },
+    {
+      "path": "results/analysis/lane_054.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_054.png",
+      "bytes": 114032,
+      "sha256": "c23f675ffa03c45809443a07228daccfbd0f8552d4ba6df6a4115bd5d259da81"
+    },
+    {
+      "path": "results/analysis/lane_055.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_055.png",
+      "bytes": 116022,
+      "sha256": "5b4aaa3ba578518c0b902129add1c7f718b8f2a260ab94599aa216da6bec9020"
+    },
+    {
+      "path": "results/analysis/lane_056.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_056.png",
+      "bytes": 125724,
+      "sha256": "c7cf807738098f05c99f8f073d8091290e14c67300186c9d307f0452186788cd"
+    },
+    {
+      "path": "results/analysis/lane_057.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_057.png",
+      "bytes": 112007,
+      "sha256": "9d8bf7cd0bf5c83678ad35011572d5f34ac5351193fce3b05066cafe1e5ee2ee"
+    },
+    {
+      "path": "results/analysis/lane_058.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_058.png",
+      "bytes": 102542,
+      "sha256": "959d65599379bb19cd903a0c16d61ad69df325d7bc1b1df7d6a61b8790861493"
+    },
+    {
+      "path": "results/analysis/lane_059.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_059.png",
+      "bytes": 90634,
+      "sha256": "99e220e0f65d69d8783121fad73d8ca92e82ad5fbf7f6b382ce831b2f603df24"
+    },
+    {
+      "path": "results/analysis/lane_060.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_060.png",
+      "bytes": 115276,
+      "sha256": "422634bc24e75411342a9ad2aef796cab81de1c78b5bd89af08b511163e627b7"
+    },
+    {
+      "path": "results/analysis/lane_061.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_061.png",
+      "bytes": 94483,
+      "sha256": "699836eac45ba0a333ccdf34aa7a1d65a130bd0ea1c150af26cc49b9a5825c27"
+    },
+    {
+      "path": "results/analysis/lane_062.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_062.png",
+      "bytes": 112171,
+      "sha256": "4848e7e66779406e5664498e250a7e6c886468ebae39a76f3bef95f4fa792304"
+    },
+    {
+      "path": "results/analysis/lane_063.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_063.png",
+      "bytes": 130524,
+      "sha256": "a43017c8f04fa28f5af21273e0d295df9955abb6f9454a4840d6f31b8d517d05"
+    },
+    {
+      "path": "results/analysis/lane_064.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/lane_064.png",
+      "bytes": 118270,
+      "sha256": "81f54fc4a990a816c87b0188f3ece16489e3184e5bb4f93d95fb46022844a22a"
+    },
+    {
+      "path": "results/analysis/metrics.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/analysis/metrics.json",
+      "bytes": 54860,
+      "sha256": "c849d08e88b44c647f54d38d065968ae183353b514b03789c2585c53fc1f8d7c"
+    },
+    {
+      "path": "results/common_start/evaluation/RESULTS.md",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/RESULTS.md",
+      "bytes": 4515,
+      "sha256": "f1c3949f8bbec11cb7807aaab2ea64400b88180abaf2bfceddbc7200e6a74ec3"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0/common_start_check.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0/common_start_check.json",
+      "bytes": 313,
+      "sha256": "b087e9755a0aeb34f8328a3ae38242f4cabf4a46414a23e6d6fc96f6e8650467"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0/config.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0/config.json",
+      "bytes": 6326,
+      "sha256": "fe5028195f784cb67e1f5d6eae4bca10ad3c426c4c44604fbc1273191682b191"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0/initial_cases.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0/initial_cases.json",
+      "bytes": 1709,
+      "sha256": "7e9b83cadfdd8f45bbac8ae6c99f4fcb803bb2ea8280db44e2d0258eb9acfbc8"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0/randomization.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0/randomization.json",
+      "bytes": 12448,
+      "sha256": "f6c57c7ad8d335c0e7cb93d61d6ff8dd4c0b1f22e24abc22d8beb8a5c89e687c"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0/status.json",
+      "bytes": 171,
+      "sha256": "09c27161eec6eedef616019c5cfd6b61fed40752c21f40c641bba087147cd79a"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0.25/common_start_check.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0.25/common_start_check.json",
+      "bytes": 313,
+      "sha256": "b087e9755a0aeb34f8328a3ae38242f4cabf4a46414a23e6d6fc96f6e8650467"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0.25/config.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0.25/config.json",
+      "bytes": 6326,
+      "sha256": "fe5028195f784cb67e1f5d6eae4bca10ad3c426c4c44604fbc1273191682b191"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0.25/initial_cases.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0.25/initial_cases.json",
+      "bytes": 1722,
+      "sha256": "fec9387d8b35e1efe8b56df6c3c4a50df6072ffd2669f631f240873589e075e3"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0.25/randomization.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0.25/randomization.json",
+      "bytes": 12448,
+      "sha256": "f6c57c7ad8d335c0e7cb93d61d6ff8dd4c0b1f22e24abc22d8beb8a5c89e687c",
+      "deduplicated_to": "results/common_start/evaluation/after_0/randomization.json"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0.25/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0.25/status.json",
+      "bytes": 172,
+      "sha256": "9e9878c6f59a5ab368e685a91aaf9021dee1276520453072b8141de019f3e222"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0.5/common_start_check.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0.5/common_start_check.json",
+      "bytes": 313,
+      "sha256": "b087e9755a0aeb34f8328a3ae38242f4cabf4a46414a23e6d6fc96f6e8650467"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0.5/config.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0.5/config.json",
+      "bytes": 6326,
+      "sha256": "fe5028195f784cb67e1f5d6eae4bca10ad3c426c4c44604fbc1273191682b191"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0.5/initial_cases.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0.5/initial_cases.json",
+      "bytes": 1709,
+      "sha256": "c221c9d079edf79c28c910e8e318d1c7ae3f48484a3e798a5190f013ac5aa38e"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0.5/randomization.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0.5/randomization.json",
+      "bytes": 12448,
+      "sha256": "f6c57c7ad8d335c0e7cb93d61d6ff8dd4c0b1f22e24abc22d8beb8a5c89e687c",
+      "deduplicated_to": "results/common_start/evaluation/after_0/randomization.json"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0.5/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0.5/status.json",
+      "bytes": 172,
+      "sha256": "04b23ffbdd537fefe22721b695f8e00299b30167450edccfa6c099f85ee015cb"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0.75/common_start_check.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0.75/common_start_check.json",
+      "bytes": 313,
+      "sha256": "b087e9755a0aeb34f8328a3ae38242f4cabf4a46414a23e6d6fc96f6e8650467"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0.75/config.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0.75/config.json",
+      "bytes": 6326,
+      "sha256": "fe5028195f784cb67e1f5d6eae4bca10ad3c426c4c44604fbc1273191682b191"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0.75/initial_cases.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0.75/initial_cases.json",
+      "bytes": 1722,
+      "sha256": "e7b4c0027f330d6cfd74b3770eacdcb8ead49a31295a39ef0401c67a52aaa949"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0.75/randomization.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0.75/randomization.json",
+      "bytes": 12448,
+      "sha256": "f6c57c7ad8d335c0e7cb93d61d6ff8dd4c0b1f22e24abc22d8beb8a5c89e687c",
+      "deduplicated_to": "results/common_start/evaluation/after_0/randomization.json"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0.75/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0.75/status.json",
+      "bytes": 172,
+      "sha256": "ab5a767e16da72c7b0a5b15573d122517d64be9442f13f5bf07d859caf09836c"
+    },
+    {
+      "path": "results/common_start/evaluation/after_1/common_start_check.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_1/common_start_check.json",
+      "bytes": 313,
+      "sha256": "b087e9755a0aeb34f8328a3ae38242f4cabf4a46414a23e6d6fc96f6e8650467"
+    },
+    {
+      "path": "results/common_start/evaluation/after_1/config.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_1/config.json",
+      "bytes": 6326,
+      "sha256": "fe5028195f784cb67e1f5d6eae4bca10ad3c426c4c44604fbc1273191682b191"
+    },
+    {
+      "path": "results/common_start/evaluation/after_1/initial_cases.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_1/initial_cases.json",
+      "bytes": 1709,
+      "sha256": "f926ec437e66d82bb1ab51d20c9552dfc8e262faa64eaea936e4a2ca7f3a61d0"
+    },
+    {
+      "path": "results/common_start/evaluation/after_1/randomization.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_1/randomization.json",
+      "bytes": 12448,
+      "sha256": "f6c57c7ad8d335c0e7cb93d61d6ff8dd4c0b1f22e24abc22d8beb8a5c89e687c",
+      "deduplicated_to": "results/common_start/evaluation/after_0/randomization.json"
+    },
+    {
+      "path": "results/common_start/evaluation/after_1/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_1/status.json",
+      "bytes": 172,
+      "sha256": "50762d360387ec6e126b578caad78d3a22495594d8c6db734433c6c791fa3eb4"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0/common_start_check.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0/common_start_check.json",
+      "bytes": 313,
+      "sha256": "b087e9755a0aeb34f8328a3ae38242f4cabf4a46414a23e6d6fc96f6e8650467"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0/config.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0/config.json",
+      "bytes": 6326,
+      "sha256": "fe5028195f784cb67e1f5d6eae4bca10ad3c426c4c44604fbc1273191682b191"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0/initial_cases.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0/initial_cases.json",
+      "bytes": 1709,
+      "sha256": "7e9b83cadfdd8f45bbac8ae6c99f4fcb803bb2ea8280db44e2d0258eb9acfbc8"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0/randomization.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0/randomization.json",
+      "bytes": 12448,
+      "sha256": "f6c57c7ad8d335c0e7cb93d61d6ff8dd4c0b1f22e24abc22d8beb8a5c89e687c",
+      "deduplicated_to": "results/common_start/evaluation/after_0/randomization.json"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0/status.json",
+      "bytes": 172,
+      "sha256": "a959536e3282ed0f89c05e1dbacee1990c68b1cb34c13d420a744c87e2d6cdce"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0.25/common_start_check.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0.25/common_start_check.json",
+      "bytes": 313,
+      "sha256": "b087e9755a0aeb34f8328a3ae38242f4cabf4a46414a23e6d6fc96f6e8650467"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0.25/config.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0.25/config.json",
+      "bytes": 6326,
+      "sha256": "fe5028195f784cb67e1f5d6eae4bca10ad3c426c4c44604fbc1273191682b191"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0.25/initial_cases.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0.25/initial_cases.json",
+      "bytes": 1722,
+      "sha256": "fec9387d8b35e1efe8b56df6c3c4a50df6072ffd2669f631f240873589e075e3"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0.25/randomization.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0.25/randomization.json",
+      "bytes": 12448,
+      "sha256": "f6c57c7ad8d335c0e7cb93d61d6ff8dd4c0b1f22e24abc22d8beb8a5c89e687c",
+      "deduplicated_to": "results/common_start/evaluation/after_0/randomization.json"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0.25/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0.25/status.json",
+      "bytes": 171,
+      "sha256": "94e5c816d2556fdae6be7ec19f7b834c5aabb3c6bbf978f3669db195dad56c82"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0.5/common_start_check.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0.5/common_start_check.json",
+      "bytes": 313,
+      "sha256": "b087e9755a0aeb34f8328a3ae38242f4cabf4a46414a23e6d6fc96f6e8650467"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0.5/config.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0.5/config.json",
+      "bytes": 6326,
+      "sha256": "fe5028195f784cb67e1f5d6eae4bca10ad3c426c4c44604fbc1273191682b191"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0.5/initial_cases.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0.5/initial_cases.json",
+      "bytes": 1709,
+      "sha256": "c221c9d079edf79c28c910e8e318d1c7ae3f48484a3e798a5190f013ac5aa38e"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0.5/randomization.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0.5/randomization.json",
+      "bytes": 12448,
+      "sha256": "f6c57c7ad8d335c0e7cb93d61d6ff8dd4c0b1f22e24abc22d8beb8a5c89e687c",
+      "deduplicated_to": "results/common_start/evaluation/after_0/randomization.json"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0.5/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0.5/status.json",
+      "bytes": 172,
+      "sha256": "2ac9c65d87989706fc1b54ad3d5698d934e51fefee0330e678cfc6b784d54ceb"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0.75/common_start_check.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0.75/common_start_check.json",
+      "bytes": 313,
+      "sha256": "b087e9755a0aeb34f8328a3ae38242f4cabf4a46414a23e6d6fc96f6e8650467"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0.75/config.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0.75/config.json",
+      "bytes": 6326,
+      "sha256": "fe5028195f784cb67e1f5d6eae4bca10ad3c426c4c44604fbc1273191682b191"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0.75/initial_cases.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0.75/initial_cases.json",
+      "bytes": 1722,
+      "sha256": "e7b4c0027f330d6cfd74b3770eacdcb8ead49a31295a39ef0401c67a52aaa949"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0.75/randomization.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0.75/randomization.json",
+      "bytes": 12448,
+      "sha256": "f6c57c7ad8d335c0e7cb93d61d6ff8dd4c0b1f22e24abc22d8beb8a5c89e687c",
+      "deduplicated_to": "results/common_start/evaluation/after_0/randomization.json"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0.75/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0.75/status.json",
+      "bytes": 171,
+      "sha256": "7e93f2a2db28022ac0b6e3b04ad935699623b07b5e0af4de278dc1a83803798f"
+    },
+    {
+      "path": "results/common_start/evaluation/before_1/common_start_check.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_1/common_start_check.json",
+      "bytes": 313,
+      "sha256": "b087e9755a0aeb34f8328a3ae38242f4cabf4a46414a23e6d6fc96f6e8650467"
+    },
+    {
+      "path": "results/common_start/evaluation/before_1/config.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_1/config.json",
+      "bytes": 6326,
+      "sha256": "fe5028195f784cb67e1f5d6eae4bca10ad3c426c4c44604fbc1273191682b191"
+    },
+    {
+      "path": "results/common_start/evaluation/before_1/initial_cases.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_1/initial_cases.json",
+      "bytes": 1709,
+      "sha256": "f926ec437e66d82bb1ab51d20c9552dfc8e262faa64eaea936e4a2ca7f3a61d0"
+    },
+    {
+      "path": "results/common_start/evaluation/before_1/randomization.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_1/randomization.json",
+      "bytes": 12448,
+      "sha256": "f6c57c7ad8d335c0e7cb93d61d6ff8dd4c0b1f22e24abc22d8beb8a5c89e687c",
+      "deduplicated_to": "results/common_start/evaluation/after_0/randomization.json"
+    },
+    {
+      "path": "results/common_start/evaluation/before_1/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_1/status.json",
+      "bytes": 172,
+      "sha256": "88f6b4b037f4fcb8e48a1c2bf902fbe2edf7a8ce8b7770379b2b397696386818"
+    },
+    {
+      "path": "results/common_start/evaluation/completion_notice.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/completion_notice.json",
+      "bytes": 226,
+      "sha256": "4751bd2e00352027ad4722038def476691361bb8d7d2bd0686534d83222efd37"
+    },
+    {
+      "path": "results/common_start/evaluation/config.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/config.json",
+      "bytes": 4430,
+      "sha256": "d14d2742e6a85e8ebac834e757094db87b1060acd2c68789d102cd99e09ca3e1"
+    },
+    {
+      "path": "results/common_start/evaluation/plots/README.md",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/plots/README.md",
+      "bytes": 864,
+      "sha256": "b42881095c3796510baf72cc96082608b1116305c29fa211733a2e86edb72de9"
+    },
+    {
+      "path": "results/common_start/evaluation/plots/case_00.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/plots/case_00.png",
+      "bytes": 587293,
+      "sha256": "2ff0f41bcb8e38382998479f21c1cccf7609e8efc27fc6437ae9d7416dc81e06"
+    },
+    {
+      "path": "results/common_start/evaluation/plots/case_01.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/plots/case_01.png",
+      "bytes": 494052,
+      "sha256": "08193f06d0b3bdd18841064b69c978e0408628a4861ffca975db3e0a2d1a54ed"
+    },
+    {
+      "path": "results/common_start/evaluation/plots/case_02.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/plots/case_02.png",
+      "bytes": 596012,
+      "sha256": "febac76fbc552e3ee246a2cb892ed69233a9bd8b03b77308d358f6f5741af2a5"
+    },
+    {
+      "path": "results/common_start/evaluation/plots/case_03.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/plots/case_03.png",
+      "bytes": 472158,
+      "sha256": "6d2986bc134e98105fcbb8197a1f30a64a228acffb0a64a0edc895ffd4199343"
+    },
+    {
+      "path": "results/common_start/evaluation/plots/case_04.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/plots/case_04.png",
+      "bytes": 383395,
+      "sha256": "14f05251dcb0137aebc6b03bb1c3b373172dfd3175a205b2fcbebfd176f13091"
+    },
+    {
+      "path": "results/common_start/evaluation/plots/case_05.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/plots/case_05.png",
+      "bytes": 430559,
+      "sha256": "86bed54c722e344beecb288d741f1506f4aa060a29b6b9a683fdb946e474b180"
+    },
+    {
+      "path": "results/common_start/evaluation/plots/case_06.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/plots/case_06.png",
+      "bytes": 485423,
+      "sha256": "f0ef6d6bb4371699c7df7c11047273933bfb6721d5f6479582c39078f22eda9c"
+    },
+    {
+      "path": "results/common_start/evaluation/plots/case_07.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/plots/case_07.png",
+      "bytes": 486395,
+      "sha256": "114e03d9f35162ad1c7bac89b92243759f71cde3312e7765fba754b7ea187833"
+    },
+    {
+      "path": "results/common_start/evaluation/plots/case_08.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/plots/case_08.png",
+      "bytes": 545978,
+      "sha256": "92f6503ad672fe0a04b3e6930fde64b1bbf0e06acd0957ec5c5799b54b74c54b"
+    },
+    {
+      "path": "results/common_start/evaluation/plots/case_09.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/plots/case_09.png",
+      "bytes": 416380,
+      "sha256": "f9ebc85ff6aeca93f762f010347a8c26bd9efb5131e49bca4eb7d0f0399a0cf0"
+    },
+    {
+      "path": "results/common_start/evaluation/plots/case_10.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/plots/case_10.png",
+      "bytes": 462511,
+      "sha256": "3e4d3e7c5ada1a0540e0642c31f47fefda9b7142fafbc4846fe2e717f4546e1b"
+    },
+    {
+      "path": "results/common_start/evaluation/plots/case_11.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/plots/case_11.png",
+      "bytes": 585277,
+      "sha256": "c8f2606626a63d2a93e410005782d0741fdea6a8298ac43f0d12f929c69e1d96"
+    },
+    {
+      "path": "results/common_start/evaluation/plots/case_12.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/plots/case_12.png",
+      "bytes": 431567,
+      "sha256": "1191b1bdb5c73846c731bbf6eeb618b8acd91ef22a786e72c3f6aea67ce55f77"
+    },
+    {
+      "path": "results/common_start/evaluation/plots/identity_check.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/plots/identity_check.json",
+      "bytes": 301,
+      "sha256": "08355261adf802de7237c76170d39f98496d9e728be2270a31a5df818899c216"
+    },
+    {
+      "path": "results/common_start/evaluation/plots/metrics.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/plots/metrics.json",
+      "bytes": 35588,
+      "sha256": "21dfccebb4f294ca6319dfaf2f9d25ad72a25d4389f592b07efbabf7df8121a0"
+    },
+    {
+      "path": "results/common_start/evaluation/plots/paired_outcomes.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/plots/paired_outcomes.json",
+      "bytes": 57600,
+      "sha256": "693e51c085777793485b1fb1123128fc2e2b632ab4aab7c1750bee2a79d0be1c"
+    },
+    {
+      "path": "results/common_start/evaluation/plots/tracking_diagnosis.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/plots/tracking_diagnosis.json",
+      "bytes": 22796,
+      "sha256": "13e9aaa938b50063e8e5f45a1fdb6f22b4a0d60600c9615402d82c2673a0605f"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0/trajectory.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0/trajectory.npz",
+      "bytes": 861757,
+      "sha256": "8236a268081c9d424835993108e52e66e6897db5592e56e4c515939a195d5084"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0.25/trajectory.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0.25/trajectory.npz",
+      "bytes": 848953,
+      "sha256": "500790e63bd85a7568dd0289a769d918c3088e47d3099dbb96b60f9c870b7ab0"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0.5/trajectory.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0.5/trajectory.npz",
+      "bytes": 860274,
+      "sha256": "fc9f6dfcb93add40c5eaccd5bac0b32301a0eebcb87e9998d4af5c356fb970bb"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0.75/trajectory.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0.75/trajectory.npz",
+      "bytes": 841832,
+      "sha256": "50c6f720f9c5f1929f26fb76094c8d46c0e5c4ceb368ff179545f7834872725f"
+    },
+    {
+      "path": "results/common_start/evaluation/after_1/trajectory.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_1/trajectory.npz",
+      "bytes": 851797,
+      "sha256": "8ed7b9e677bb6092c3fd6e8fca8913726fef6cde8d0849db69f4ef7a37d53e42"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0/trajectory.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0/trajectory.npz",
+      "bytes": 844359,
+      "sha256": "6939ecec8190aa8755fbc3c897276d6d8de7d8caa9272b64802719ca5cd12cac"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0.25/trajectory.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0.25/trajectory.npz",
+      "bytes": 828647,
+      "sha256": "1fa632abc733ed34a2b725078338b11f7bd2ac9659475b98760062be513ff28b"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0.5/trajectory.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0.5/trajectory.npz",
+      "bytes": 854334,
+      "sha256": "028dc62a36d45558ac2c8f0274b86fbcd1331972c14e606f5588662f06cba33b"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0.75/trajectory.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0.75/trajectory.npz",
+      "bytes": 836311,
+      "sha256": "2b75d3ab4681301f5f764c753118925bf98008dc5c0927f683c22eed7c3f2a51"
+    },
+    {
+      "path": "results/common_start/evaluation/before_1/trajectory.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_1/trajectory.npz",
+      "bytes": 812364,
+      "sha256": "2ef2b310a76bd843515cc7a8722cd790438a58c13ef97ec6ffa58793c2ec29a7"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0/reference_routes.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0/reference_routes.npz",
+      "bytes": 8863181,
+      "sha256": "edb6fdb7be35155f2786eaab93ca96d8ef0212862062a8a913ed78b797e039e7"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0.25/reference_routes.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0.25/reference_routes.npz",
+      "bytes": 8863181,
+      "sha256": "edb6fdb7be35155f2786eaab93ca96d8ef0212862062a8a913ed78b797e039e7",
+      "deduplicated_to": "results/common_start/evaluation/after_0/reference_routes.npz"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0.5/reference_routes.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0.5/reference_routes.npz",
+      "bytes": 8863181,
+      "sha256": "edb6fdb7be35155f2786eaab93ca96d8ef0212862062a8a913ed78b797e039e7",
+      "deduplicated_to": "results/common_start/evaluation/after_0/reference_routes.npz"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0.75/reference_routes.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0.75/reference_routes.npz",
+      "bytes": 8863181,
+      "sha256": "edb6fdb7be35155f2786eaab93ca96d8ef0212862062a8a913ed78b797e039e7",
+      "deduplicated_to": "results/common_start/evaluation/after_0/reference_routes.npz"
+    },
+    {
+      "path": "results/common_start/evaluation/after_1/reference_routes.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_1/reference_routes.npz",
+      "bytes": 8863181,
+      "sha256": "edb6fdb7be35155f2786eaab93ca96d8ef0212862062a8a913ed78b797e039e7",
+      "deduplicated_to": "results/common_start/evaluation/after_0/reference_routes.npz"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0/reference_routes.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0/reference_routes.npz",
+      "bytes": 8863181,
+      "sha256": "edb6fdb7be35155f2786eaab93ca96d8ef0212862062a8a913ed78b797e039e7",
+      "deduplicated_to": "results/common_start/evaluation/after_0/reference_routes.npz"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0.25/reference_routes.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0.25/reference_routes.npz",
+      "bytes": 8863181,
+      "sha256": "edb6fdb7be35155f2786eaab93ca96d8ef0212862062a8a913ed78b797e039e7",
+      "deduplicated_to": "results/common_start/evaluation/after_0/reference_routes.npz"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0.5/reference_routes.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0.5/reference_routes.npz",
+      "bytes": 8863181,
+      "sha256": "edb6fdb7be35155f2786eaab93ca96d8ef0212862062a8a913ed78b797e039e7",
+      "deduplicated_to": "results/common_start/evaluation/after_0/reference_routes.npz"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0.75/reference_routes.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0.75/reference_routes.npz",
+      "bytes": 8863181,
+      "sha256": "edb6fdb7be35155f2786eaab93ca96d8ef0212862062a8a913ed78b797e039e7",
+      "deduplicated_to": "results/common_start/evaluation/after_0/reference_routes.npz"
+    },
+    {
+      "path": "results/common_start/evaluation/before_1/reference_routes.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_1/reference_routes.npz",
+      "bytes": 8863181,
+      "sha256": "edb6fdb7be35155f2786eaab93ca96d8ef0212862062a8a913ed78b797e039e7",
+      "deduplicated_to": "results/common_start/evaluation/after_0/reference_routes.npz"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0/initial_state.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0/initial_state.npz",
+      "bytes": 1355,
+      "sha256": "1296dbd921b550008e0a06a003ca0632922ad657557b15b8eda7019b2d4e3956"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0.25/initial_state.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0.25/initial_state.npz",
+      "bytes": 1355,
+      "sha256": "1296dbd921b550008e0a06a003ca0632922ad657557b15b8eda7019b2d4e3956"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0.5/initial_state.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0.5/initial_state.npz",
+      "bytes": 1355,
+      "sha256": "1296dbd921b550008e0a06a003ca0632922ad657557b15b8eda7019b2d4e3956"
+    },
+    {
+      "path": "results/common_start/evaluation/after_0.75/initial_state.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_0.75/initial_state.npz",
+      "bytes": 1355,
+      "sha256": "1296dbd921b550008e0a06a003ca0632922ad657557b15b8eda7019b2d4e3956"
+    },
+    {
+      "path": "results/common_start/evaluation/after_1/initial_state.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/after_1/initial_state.npz",
+      "bytes": 1355,
+      "sha256": "1296dbd921b550008e0a06a003ca0632922ad657557b15b8eda7019b2d4e3956"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0/initial_state.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0/initial_state.npz",
+      "bytes": 1355,
+      "sha256": "1296dbd921b550008e0a06a003ca0632922ad657557b15b8eda7019b2d4e3956"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0.25/initial_state.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0.25/initial_state.npz",
+      "bytes": 1355,
+      "sha256": "1296dbd921b550008e0a06a003ca0632922ad657557b15b8eda7019b2d4e3956"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0.5/initial_state.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0.5/initial_state.npz",
+      "bytes": 1355,
+      "sha256": "1296dbd921b550008e0a06a003ca0632922ad657557b15b8eda7019b2d4e3956"
+    },
+    {
+      "path": "results/common_start/evaluation/before_0.75/initial_state.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_0.75/initial_state.npz",
+      "bytes": 1355,
+      "sha256": "1296dbd921b550008e0a06a003ca0632922ad657557b15b8eda7019b2d4e3956"
+    },
+    {
+      "path": "results/common_start/evaluation/before_1/initial_state.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation/before_1/initial_state.npz",
+      "bytes": 1355,
+      "sha256": "1296dbd921b550008e0a06a003ca0632922ad657557b15b8eda7019b2d4e3956"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/RESULTS.md",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/RESULTS.md",
+      "bytes": 1451,
+      "sha256": "4aa22dd6c5eb40e86d9a09d8edd26a1bde8c49a522c7ac11378f0cdf0af5a85f"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0/common_start_check.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0/common_start_check.json",
+      "bytes": 313,
+      "sha256": "b087e9755a0aeb34f8328a3ae38242f4cabf4a46414a23e6d6fc96f6e8650467"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0/config.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0/config.json",
+      "bytes": 6363,
+      "sha256": "ae5e1210c64cf4f12869a11d2910e9317c0b47e00ea34687d44e82c6547436c6"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0/initial_cases.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0/initial_cases.json",
+      "bytes": 1709,
+      "sha256": "7e9b83cadfdd8f45bbac8ae6c99f4fcb803bb2ea8280db44e2d0258eb9acfbc8"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0/randomization.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0/randomization.json",
+      "bytes": 12448,
+      "sha256": "f6c57c7ad8d335c0e7cb93d61d6ff8dd4c0b1f22e24abc22d8beb8a5c89e687c",
+      "deduplicated_to": "results/common_start/evaluation/after_0/randomization.json"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0/status.json",
+      "bytes": 171,
+      "sha256": "74f4d40a21386df9e252494c53a7c6e60af045eca1ed32384110f28f9b4c3581"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0.25/common_start_check.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0.25/common_start_check.json",
+      "bytes": 313,
+      "sha256": "b087e9755a0aeb34f8328a3ae38242f4cabf4a46414a23e6d6fc96f6e8650467"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0.25/config.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0.25/config.json",
+      "bytes": 6363,
+      "sha256": "ae5e1210c64cf4f12869a11d2910e9317c0b47e00ea34687d44e82c6547436c6"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0.25/initial_cases.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0.25/initial_cases.json",
+      "bytes": 1722,
+      "sha256": "fec9387d8b35e1efe8b56df6c3c4a50df6072ffd2669f631f240873589e075e3"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0.25/randomization.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0.25/randomization.json",
+      "bytes": 12448,
+      "sha256": "f6c57c7ad8d335c0e7cb93d61d6ff8dd4c0b1f22e24abc22d8beb8a5c89e687c",
+      "deduplicated_to": "results/common_start/evaluation/after_0/randomization.json"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0.25/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0.25/status.json",
+      "bytes": 172,
+      "sha256": "dc97120884898c00a415baaf1c8c9cb206296de7dab1271ba49369e80ea08ad8"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0.5/common_start_check.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0.5/common_start_check.json",
+      "bytes": 313,
+      "sha256": "b087e9755a0aeb34f8328a3ae38242f4cabf4a46414a23e6d6fc96f6e8650467"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0.5/config.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0.5/config.json",
+      "bytes": 6363,
+      "sha256": "ae5e1210c64cf4f12869a11d2910e9317c0b47e00ea34687d44e82c6547436c6"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0.5/initial_cases.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0.5/initial_cases.json",
+      "bytes": 1709,
+      "sha256": "c221c9d079edf79c28c910e8e318d1c7ae3f48484a3e798a5190f013ac5aa38e"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0.5/randomization.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0.5/randomization.json",
+      "bytes": 12448,
+      "sha256": "f6c57c7ad8d335c0e7cb93d61d6ff8dd4c0b1f22e24abc22d8beb8a5c89e687c",
+      "deduplicated_to": "results/common_start/evaluation/after_0/randomization.json"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0.5/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0.5/status.json",
+      "bytes": 171,
+      "sha256": "e65f9bf3856a1e206aac0ce545db237bd28f9d1ce14a822cbe4d58d1f4279885"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0.75/common_start_check.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0.75/common_start_check.json",
+      "bytes": 313,
+      "sha256": "b087e9755a0aeb34f8328a3ae38242f4cabf4a46414a23e6d6fc96f6e8650467"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0.75/config.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0.75/config.json",
+      "bytes": 6363,
+      "sha256": "ae5e1210c64cf4f12869a11d2910e9317c0b47e00ea34687d44e82c6547436c6"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0.75/initial_cases.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0.75/initial_cases.json",
+      "bytes": 1722,
+      "sha256": "e7b4c0027f330d6cfd74b3770eacdcb8ead49a31295a39ef0401c67a52aaa949"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0.75/randomization.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0.75/randomization.json",
+      "bytes": 12448,
+      "sha256": "f6c57c7ad8d335c0e7cb93d61d6ff8dd4c0b1f22e24abc22d8beb8a5c89e687c",
+      "deduplicated_to": "results/common_start/evaluation/after_0/randomization.json"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0.75/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0.75/status.json",
+      "bytes": 171,
+      "sha256": "9f5800375bf7df9e8b6d19408bf4396cc85f4cf314962bf8574cf1f54dd8d126"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_1/common_start_check.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_1/common_start_check.json",
+      "bytes": 313,
+      "sha256": "b087e9755a0aeb34f8328a3ae38242f4cabf4a46414a23e6d6fc96f6e8650467"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_1/config.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_1/config.json",
+      "bytes": 6363,
+      "sha256": "ae5e1210c64cf4f12869a11d2910e9317c0b47e00ea34687d44e82c6547436c6"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_1/initial_cases.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_1/initial_cases.json",
+      "bytes": 1709,
+      "sha256": "f926ec437e66d82bb1ab51d20c9552dfc8e262faa64eaea936e4a2ca7f3a61d0"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_1/randomization.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_1/randomization.json",
+      "bytes": 12448,
+      "sha256": "f6c57c7ad8d335c0e7cb93d61d6ff8dd4c0b1f22e24abc22d8beb8a5c89e687c",
+      "deduplicated_to": "results/common_start/evaluation/after_0/randomization.json"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_1/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_1/status.json",
+      "bytes": 171,
+      "sha256": "e12a65e48863687e5602f7d619a07dcc1f4c8ae5aa04b055170cbeb505e58c1a"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/completion_notice.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/completion_notice.json",
+      "bytes": 227,
+      "sha256": "e77312019eea5cada5088e2cb1786a984fae1690d0fbe2eee256063dfaa8d4c0"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/config.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/config.json",
+      "bytes": 4467,
+      "sha256": "7975ad0a473cd31335d501e6b1e1423c5296442e0f05c1ab28acf4e22498c74c"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/plots/README.md",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/plots/README.md",
+      "bytes": 893,
+      "sha256": "a0b814c253acbe0a74ecc3981393012827eacd69c15d3e1b6d745a32d7807e17"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/plots/case_00.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/plots/case_00.png",
+      "bytes": 374293,
+      "sha256": "f399377fa716f828f1330031abf87de0910aee578cf99406ba18fef71c9097bf"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/plots/case_01.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/plots/case_01.png",
+      "bytes": 266699,
+      "sha256": "eb70a6f6c0216c94595a6502f16732458108ede19aa3cd54c667930ea7149573"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/plots/case_02.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/plots/case_02.png",
+      "bytes": 389019,
+      "sha256": "1efb41e21f17544952761d6cd5a0197e3a5cb797a3e4a41acafffd66256b2fc2"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/plots/case_03.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/plots/case_03.png",
+      "bytes": 294046,
+      "sha256": "05b0da298c12230bd670caca2610f806c9bc6e8c281ee0114c6ecaa83f5a772a"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/plots/case_04.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/plots/case_04.png",
+      "bytes": 285789,
+      "sha256": "eb56b5d3e000a489d5b6e28e3e680749b95b79d9d99837b43999a0631e35b83b"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/plots/case_05.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/plots/case_05.png",
+      "bytes": 433015,
+      "sha256": "ceb27edd15c38369f4844f9976fc0dea4ca9a0eba6a6d67bd02c4443d345a90c"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/plots/case_06.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/plots/case_06.png",
+      "bytes": 382158,
+      "sha256": "ff1d5a49ccb1e4fd5a7b4b30a4bb0ee6c700c3983fe6fe54bb7669c81510ef55"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/plots/case_07.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/plots/case_07.png",
+      "bytes": 384461,
+      "sha256": "1f785986a6af9b0b1beca9e98e9a5b2148d44ad26bb5723b8c3dd72e103273c3"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/plots/case_08.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/plots/case_08.png",
+      "bytes": 395633,
+      "sha256": "aeca6d77310a176805e5fe0092e6e90eb73f225248e6169468349cd695817e8e"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/plots/case_09.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/plots/case_09.png",
+      "bytes": 362540,
+      "sha256": "22f72cf12b33af58b3e0db6eac77fe78220a85037963fd1c57b79806b9faf8ef"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/plots/case_10.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/plots/case_10.png",
+      "bytes": 266720,
+      "sha256": "eeaf3467c09041d33d54e20df4245b25a1259c56dce7e666cf1276e890b2b04c"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/plots/case_11.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/plots/case_11.png",
+      "bytes": 378711,
+      "sha256": "3380801d2ade9a02f6400d75f524aa60b3b57229a7a46360af02b31069ae578c"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/plots/case_12.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/plots/case_12.png",
+      "bytes": 277369,
+      "sha256": "cbb0d8712df7c439861c1b59b819626c82adb3bd52c55b0ca784811aa225ecc6"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/plots/identity_check.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/plots/identity_check.json",
+      "bytes": 287,
+      "sha256": "8adc7a24dbc9ab9658d10663597d5f8478bd3acc9af5cf55d9729a05279ad40e"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/plots/metrics.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/plots/metrics.json",
+      "bytes": 17756,
+      "sha256": "602a20cf2243e91a6d56d7e0519fbebbded37486ada3bbc0382a4128cc7bf810"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/plots/push_comparison.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/plots/push_comparison.json",
+      "bytes": 54959,
+      "sha256": "103610dfc8fbd1342587ab55772b6b0186001f686fbb70acfd6a1c5c85fd6067"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0/trajectory.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0/trajectory.npz",
+      "bytes": 959458,
+      "sha256": "72c4bde139de6bed710216479618c55a6f4fad78dddb0a8dd859f72eabb4f1b2"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0.25/trajectory.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0.25/trajectory.npz",
+      "bytes": 954550,
+      "sha256": "f5b7ea1347a7203489982886983d8d31e200701d2833dc04420db734d2ab1599"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0.5/trajectory.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0.5/trajectory.npz",
+      "bytes": 959044,
+      "sha256": "8babe3a42eb911f4248f92edb3ea18a6f2bea0f81a39586dc2f801e0bb97be2b"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0.75/trajectory.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0.75/trajectory.npz",
+      "bytes": 947718,
+      "sha256": "018300009419cf26530af2dd42a82046365e79c43c8cd1ab8e4d3c41d5611dbc"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_1/trajectory.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_1/trajectory.npz",
+      "bytes": 938613,
+      "sha256": "158bcf54dce710b5a09215f6c16309ca7af2aad0f55abdc6a8a75ba0fc44a631"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0/reference_routes.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0/reference_routes.npz",
+      "bytes": 8863181,
+      "sha256": "edb6fdb7be35155f2786eaab93ca96d8ef0212862062a8a913ed78b797e039e7",
+      "deduplicated_to": "results/common_start/evaluation/after_0/reference_routes.npz"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0.25/reference_routes.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0.25/reference_routes.npz",
+      "bytes": 8863181,
+      "sha256": "edb6fdb7be35155f2786eaab93ca96d8ef0212862062a8a913ed78b797e039e7",
+      "deduplicated_to": "results/common_start/evaluation/after_0/reference_routes.npz"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0.5/reference_routes.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0.5/reference_routes.npz",
+      "bytes": 8863181,
+      "sha256": "edb6fdb7be35155f2786eaab93ca96d8ef0212862062a8a913ed78b797e039e7",
+      "deduplicated_to": "results/common_start/evaluation/after_0/reference_routes.npz"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0.75/reference_routes.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0.75/reference_routes.npz",
+      "bytes": 8863181,
+      "sha256": "edb6fdb7be35155f2786eaab93ca96d8ef0212862062a8a913ed78b797e039e7",
+      "deduplicated_to": "results/common_start/evaluation/after_0/reference_routes.npz"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_1/reference_routes.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_1/reference_routes.npz",
+      "bytes": 8863181,
+      "sha256": "edb6fdb7be35155f2786eaab93ca96d8ef0212862062a8a913ed78b797e039e7",
+      "deduplicated_to": "results/common_start/evaluation/after_0/reference_routes.npz"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0/initial_state.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0/initial_state.npz",
+      "bytes": 1290,
+      "sha256": "a0ba985e873250662e8b3d0708e00d75f7c42bf24030cfff7815da82ac4b4118"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0.25/initial_state.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0.25/initial_state.npz",
+      "bytes": 1290,
+      "sha256": "a0ba985e873250662e8b3d0708e00d75f7c42bf24030cfff7815da82ac4b4118"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0.5/initial_state.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0.5/initial_state.npz",
+      "bytes": 1290,
+      "sha256": "a0ba985e873250662e8b3d0708e00d75f7c42bf24030cfff7815da82ac4b4118"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_0.75/initial_state.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_0.75/initial_state.npz",
+      "bytes": 1290,
+      "sha256": "a0ba985e873250662e8b3d0708e00d75f7c42bf24030cfff7815da82ac4b4118"
+    },
+    {
+      "path": "results/common_start/evaluation_no_push/after_1/initial_state.npz",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_random_terrain_continue/common_start/evaluation_no_push/after_1/initial_state.npz",
+      "bytes": 1290,
+      "sha256": "a0ba985e873250662e8b3d0708e00d75f7c42bf24030cfff7815da82ac4b4118"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/RESULTS.md",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/RESULTS.md",
+      "bytes": 31940,
+      "sha256": "b193ceccd1bd47cf096637755fca9657d5a70cb7fd2e78115992debd49f5959c"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/candidate_coverage.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/candidate_coverage.json",
+      "bytes": 2642,
+      "sha256": "7e5505586ce419011e5bf35c3cede112fba28ade67533730cdeb4077d69f5af2"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/gravel_events.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/gravel_events.json",
+      "bytes": 268134,
+      "sha256": "d493645579ee53b435aee16e4961ca02befc29c97b4defb8280e646899b6fdf4"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/gravel_phase_metrics.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/gravel_phase_metrics.json",
+      "bytes": 255628,
+      "sha256": "4931ffa5cf6f3901573e03701f46754e08b09d2e3175264268e1e2450476651d"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/gravel_screening_summary.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/gravel_screening_summary.json",
+      "bytes": 554,
+      "sha256": "d0aa0e07ac7ab33cd05bda9556db9f56ddfe643cd2f90f0496be0d9d2e83dfe6"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/gravel_task_metrics.csv",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/gravel_task_metrics.csv",
+      "bytes": 12562,
+      "sha256": "0fef01f821811379860b06226359e55a8fd9decb006c5dbbf0cba43d064043d0"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/gravel_task_metrics.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/gravel_task_metrics.json",
+      "bytes": 38989,
+      "sha256": "da82b126fc39f3c8ddb1805e66c2301256340e8491cd81ca8a7ed9f186a55b6e"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/index.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/index.json",
+      "bytes": 3542,
+      "sha256": "6580ebc7559133daf5201c01fdf0ec7a14633f6bc441ac0a1636fce1b827b212"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/outcome_reasons.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/outcome_reasons.json",
+      "bytes": 104950,
+      "sha256": "b642d30df3c433f23a86fb5410d261d4f9dacbb8c66a9f985bed738c1dd30f2b"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/status.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/status.json",
+      "bytes": 302,
+      "sha256": "813bebb65824447e6ac6d8ea41c6327619761ff09fdaa3f20054b0dd231ac9fe"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/tradeoff_marginal_exchange.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/tradeoff_marginal_exchange.json",
+      "bytes": 8453,
+      "sha256": "52e3958d81ad0ea61cf58c317f90f81abeb202ffb4bd729ae90d33ebe66c98c2"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/tradeoff_marginal_exchange_global_window.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/tradeoff_marginal_exchange_global_window.json",
+      "bytes": 8442,
+      "sha256": "88a6c256d2fb9d00558aae8c829abe95f1e8b9a9110181beee69f1fc9a798b74"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/tradeoff_repeated_mean.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/tradeoff_repeated_mean.png",
+      "bytes": 205489,
+      "sha256": "45ad47208716f516e9c0ca0fbeb5cacd3f4f2601f8a903feb854c6185a7246df"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/tradeoff_repeated_mean_global_window.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/tradeoff_repeated_mean_global_window.png",
+      "bytes": 206954,
+      "sha256": "914f1babc2181c82fd28db5f718d8bdc164b80658d66cd3fd23f084386af9475"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/tradeoff_repeated_raw.csv",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/tradeoff_repeated_raw.csv",
+      "bytes": 14109,
+      "sha256": "d9b736754aa2be02c83f7b0d4aaf242e22e994ce4aff1abeb59beabd4d60dcf2"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/tradeoff_repeated_raw_global_window.csv",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/tradeoff_repeated_raw_global_window.csv",
+      "bytes": 14104,
+      "sha256": "04d52dab93fb2c3d373b1c505b6f91d80f7a7d1cc4c943a2f030ce9ead2d561e"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/tradeoff_repeated_summary.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/tradeoff_repeated_summary.json",
+      "bytes": 5023,
+      "sha256": "0830a1e65455ed269d4d3200d2f6fb2becf85623c2b93b48b2f41856e4223785"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/tradeoff_repeated_summary_global_window.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/tradeoff_repeated_summary_global_window.json",
+      "bytes": 5040,
+      "sha256": "b81332737f16c667b2a084cfb6701925d0183ebbecb3b5beaae91cfa5ad682db"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/alpha_comparison/README.md",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/alpha_comparison/README.md",
+      "bytes": 1001,
+      "sha256": "ca82b9b02499b7b05063f17da7128db2f3a7f1982886f4d6e0a829db76566695"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/alpha_comparison/dense_corridor_2.3_seed101.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/alpha_comparison/dense_corridor_2.3_seed101.png",
+      "bytes": 261654,
+      "sha256": "aa621a30075e33df898a8ab7b7ca66d8ee94540edbfb6b3c0758af26916201b7"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/alpha_comparison/dense_corridor_2.3_seed102.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/alpha_comparison/dense_corridor_2.3_seed102.png",
+      "bytes": 284339,
+      "sha256": "f213974516e2ebea7ee7e3c5491be1a3fc609d65f0d5640b8209e3eee4431a5a"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/alpha_comparison/dense_corridor_2.3_seed103.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/alpha_comparison/dense_corridor_2.3_seed103.png",
+      "bytes": 283348,
+      "sha256": "e2027b8c75beafe0a9780c2aea3207bd80008a25a719d203a0a6d27360008e78"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/alpha_comparison/dense_corridor_2.6_seed101.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/alpha_comparison/dense_corridor_2.6_seed101.png",
+      "bytes": 216359,
+      "sha256": "648d6c595603ac42ffc40f3c23fcda5a236eebef32117e1502fc6c63a94c4adb"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/alpha_comparison/dense_corridor_2.6_seed102.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/alpha_comparison/dense_corridor_2.6_seed102.png",
+      "bytes": 236224,
+      "sha256": "c9a0d37b1e06b82589557aaf2bd36d61d8e90c3c9d19a90b740775b8fdab57fb"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/alpha_comparison/dense_corridor_2.6_seed103.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/alpha_comparison/dense_corridor_2.6_seed103.png",
+      "bytes": 202473,
+      "sha256": "53d29d7bf157303677ba81a00b577d871907c00f7bff701bb37354f99f9300e8"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/alpha_comparison/manifest.json",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/alpha_comparison/manifest.json",
+      "bytes": 6458,
+      "sha256": "2eddc20e89be24d82b73afbb737808a2b2b3e4b052f5a7207486629c34aeac68"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/alpha_comparison/single_10cm_2.3_seed101.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/alpha_comparison/single_10cm_2.3_seed101.png",
+      "bytes": 220433,
+      "sha256": "ec0eef4a6b52b5bec418bf284a50d0cfb0c73d1dc945640362519eafeea20659"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/alpha_comparison/single_10cm_2.3_seed102.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/alpha_comparison/single_10cm_2.3_seed102.png",
+      "bytes": 255011,
+      "sha256": "b338a5caeade899685dd8b5b7cf1bc02950f8267ff71f90b97b8b311c48c348f"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/alpha_comparison/single_10cm_2.3_seed103.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/alpha_comparison/single_10cm_2.3_seed103.png",
+      "bytes": 260742,
+      "sha256": "8716e70f35f5b98876fac36b732759fa12629d6149144c1844daa0470cd558c7"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/alpha_comparison/single_10cm_2.6_seed101.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/alpha_comparison/single_10cm_2.6_seed101.png",
+      "bytes": 202136,
+      "sha256": "2f0bbfa5c6a6e0f2d01fa968b640346b824084c0cb253d81c9594b87f540c5f1"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/alpha_comparison/single_10cm_2.6_seed102.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/alpha_comparison/single_10cm_2.6_seed102.png",
+      "bytes": 202328,
+      "sha256": "66b744b46d12c5e1af809c769678920e54e7d1e76097f1738322f1d1c4e22adf"
+    },
+    {
+      "path": "results/dense_corridor_ridge10/alpha_comparison/single_10cm_2.6_seed103.png",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/alpha_comparison/single_10cm_2.6_seed103.png",
+      "bytes": 208150,
+      "sha256": "18926ce8661cefaca46668edc403abb6d3695af4a071c4b55ef0419b76a1ad29"
+    }
+  ],
+  "total_bytes": 214320354,
+  "external_dependencies": [
+    "Isaac Sim 5.1 / compatible Isaac Lab",
+    "CUDA GPU and driver",
+    "PyTorch, tensordict, tensorboard, numpy",
+    "MuJoCo and ffmpeg only for saved-pose video rendering"
+  ]
+}

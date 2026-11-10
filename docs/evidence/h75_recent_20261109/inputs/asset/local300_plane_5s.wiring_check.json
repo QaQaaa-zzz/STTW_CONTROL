@@ -1,0 +1,11 @@
+{
+  "control_ticks": 1000,
+  "physics_steps": 25000,
+  "command_and_causal_history_checks": "passed",
+  "residual_permission_clip_events": 0,
+  "lower_actor": {
+    "path": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/local300_torch_portable_parity/actor.npz",
+    "sha256": "517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125",
+    "frequency_hz": 200
+  }
+}

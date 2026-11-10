@@ -1,0 +1,146 @@
+[
+  {
+    "image": "dense_corridor_2.3_seed101.png",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/dense_corridor_v2p3_seed101/evaluation",
+    "checkpoint": "original H75 u77",
+    "case": {
+      "terrain": "dense_corridor",
+      "user_speed_m_s": 2.3,
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/dense_corridor_v2p3_seed101/evaluation",
+      "role": "batched six-lane case; frozen parameters per seed in shared GPU scene",
+      "seed": 101
+    }
+  },
+  {
+    "image": "single_10cm_2.3_seed101.png",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/single_10cm_v2p3_seed101/evaluation",
+    "checkpoint": "original H75 u77",
+    "case": {
+      "terrain": "single_10cm",
+      "user_speed_m_s": 2.3,
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/single_10cm_v2p3_seed101/evaluation",
+      "role": "batched six-lane case; frozen parameters per seed in shared GPU scene",
+      "seed": 101
+    }
+  },
+  {
+    "image": "dense_corridor_2.6_seed101.png",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/dense_corridor_v2p6_seed101/evaluation",
+    "checkpoint": "original H75 u77",
+    "case": {
+      "terrain": "dense_corridor",
+      "user_speed_m_s": 2.6,
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/dense_corridor_v2p6_seed101/evaluation",
+      "role": "batched six-lane case; frozen parameters per seed in shared GPU scene",
+      "seed": 101
+    }
+  },
+  {
+    "image": "single_10cm_2.6_seed101.png",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/single_10cm_v2p6_seed101/evaluation",
+    "checkpoint": "original H75 u77",
+    "case": {
+      "terrain": "single_10cm",
+      "user_speed_m_s": 2.6,
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/single_10cm_v2p6_seed101/evaluation",
+      "role": "batched six-lane case; frozen parameters per seed in shared GPU scene",
+      "seed": 101
+    }
+  },
+  {
+    "image": "dense_corridor_2.3_seed102.png",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/dense_corridor_v2p3_seed102/evaluation",
+    "checkpoint": "original H75 u77",
+    "case": {
+      "terrain": "dense_corridor",
+      "user_speed_m_s": 2.3,
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/dense_corridor_v2p3_seed102/evaluation",
+      "role": "batched six-lane case; frozen parameters per seed in shared GPU scene",
+      "seed": 102
+    }
+  },
+  {
+    "image": "single_10cm_2.3_seed102.png",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/single_10cm_v2p3_seed102/evaluation",
+    "checkpoint": "original H75 u77",
+    "case": {
+      "terrain": "single_10cm",
+      "user_speed_m_s": 2.3,
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/single_10cm_v2p3_seed102/evaluation",
+      "role": "batched six-lane case; frozen parameters per seed in shared GPU scene",
+      "seed": 102
+    }
+  },
+  {
+    "image": "dense_corridor_2.6_seed102.png",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/dense_corridor_v2p6_seed102/evaluation",
+    "checkpoint": "original H75 u77",
+    "case": {
+      "terrain": "dense_corridor",
+      "user_speed_m_s": 2.6,
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/dense_corridor_v2p6_seed102/evaluation",
+      "role": "batched six-lane case; frozen parameters per seed in shared GPU scene",
+      "seed": 102
+    }
+  },
+  {
+    "image": "single_10cm_2.6_seed102.png",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/single_10cm_v2p6_seed102/evaluation",
+    "checkpoint": "original H75 u77",
+    "case": {
+      "terrain": "single_10cm",
+      "user_speed_m_s": 2.6,
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/single_10cm_v2p6_seed102/evaluation",
+      "role": "batched six-lane case; frozen parameters per seed in shared GPU scene",
+      "seed": 102
+    }
+  },
+  {
+    "image": "dense_corridor_2.3_seed103.png",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/dense_corridor_v2p3_seed103/evaluation",
+    "checkpoint": "original H75 u77",
+    "case": {
+      "terrain": "dense_corridor",
+      "user_speed_m_s": 2.3,
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/dense_corridor_v2p3_seed103/evaluation",
+      "role": "batched six-lane case; frozen parameters per seed in shared GPU scene",
+      "seed": 103
+    }
+  },
+  {
+    "image": "single_10cm_2.3_seed103.png",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/single_10cm_v2p3_seed103/evaluation",
+    "checkpoint": "original H75 u77",
+    "case": {
+      "terrain": "single_10cm",
+      "user_speed_m_s": 2.3,
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/single_10cm_v2p3_seed103/evaluation",
+      "role": "batched six-lane case; frozen parameters per seed in shared GPU scene",
+      "seed": 103
+    }
+  },
+  {
+    "image": "dense_corridor_2.6_seed103.png",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/dense_corridor_v2p6_seed103/evaluation",
+    "checkpoint": "original H75 u77",
+    "case": {
+      "terrain": "dense_corridor",
+      "user_speed_m_s": 2.6,
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/dense_corridor_v2p6_seed103/evaluation",
+      "role": "batched six-lane case; frozen parameters per seed in shared GPU scene",
+      "seed": 103
+    }
+  },
+  {
+    "image": "single_10cm_2.6_seed103.png",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/single_10cm_v2p6_seed103/evaluation",
+    "checkpoint": "original H75 u77",
+    "case": {
+      "terrain": "single_10cm",
+      "user_speed_m_s": 2.6,
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_dense_corridor_ridge10/evaluation/single_10cm_v2p6_seed103/evaluation",
+      "role": "batched six-lane case; frozen parameters per seed in shared GPU scene",
+      "seed": 103
+    }
+  }
+]

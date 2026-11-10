@@ -1,0 +1,83 @@
+{
+  "stage": "training",
+  "pid": 1078888,
+  "completed_updates": 17,
+  "updates": 150,
+  "elapsed_s": 1127.8705558776855,
+  "last_update": {
+    "update": 17,
+    "sampling_model_update": 16,
+    "mean_reward": -5.722155839204788,
+    "early_terminations": 154,
+    "tracking_domain_signals": 48,
+    "policy_fault_signals": 0,
+    "episodes": 572,
+    "contacted_episodes": 0,
+    "cleared_episodes": 433,
+    "sample_seconds": 58.30842113494873,
+    "optimize_seconds": 0.10877752304077148,
+    "optimizer": {
+      "parent_kl": 0.0,
+      "temporal": 0.0,
+      "value": 112704.24951171875,
+      "surrogate": -0.0004730121063403203,
+      "entropy": -1.0510398522019386,
+      "actor_grad_norm": 0.8474312499165535,
+      "critic_grad_norm": 28875.017944335938,
+      "mean_kl": 0.003312729337873558,
+      "exact_kl": 0.003312729337873558,
+      "kl_by_alpha": {
+        "0": 0.003122421677371466,
+        "1": 0.0035434454569155567
+      },
+      "kl_alpha0": 0.003122421677371466,
+      "kl_alpha1": 0.0035434454569155567,
+      "actor_grad_norm_preclip": 0.8474312499165535,
+      "critic_grad_norm_preclip": 28875.017944335938,
+      "attempted_actor_grad_norm": 0.8474312499165535,
+      "attempted_critic_grad_norm": 28875.017944335938,
+      "projected_std": [
+        0.2275717556476593,
+        0.08994630724191666
+      ],
+      "attempted_epochs": 4,
+      "accepted_epochs": 4,
+      "attempted_minibatches": 16,
+      "accepted_minibatches": 16,
+      "completed_epochs": 4,
+      "completed_minibatches": 16,
+      "hard_kl_stop": false,
+      "nonfinite_stop": false,
+      "stop_reason": null,
+      "actor_lr": 3e-05,
+      "critic_lr": 0.0003
+    },
+    "alpha_groups": {
+      "0": {
+        "samples": 40816,
+        "reward_sum": -198476.0841064453,
+        "early_terminations": 56
+      },
+      "0.25": {
+        "samples": 7150,
+        "reward_sum": -34206.25591278076,
+        "early_terminations": 10
+      },
+      "0.5": {
+        "samples": 7563,
+        "reward_sum": -17758.98444366455,
+        "early_terminations": 5
+      },
+      "0.75": {
+        "samples": 6310,
+        "reward_sum": -45341.214500427246,
+        "early_terminations": 13
+      },
+      "1": {
+        "samples": 36465,
+        "reward_sum": -266728.26791381836,
+        "early_terminations": 70
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "terrain_kind": "pebbles",
+  "seed": 85121,
+  "index": 1,
+  "parameters": {
+    "count": 928,
+    "height_max_m": 0.015902480857705976,
+    "radius_range_m": [
+      0.055,
+      0.08
+    ]
+  },
+  "spawn_clear_radius_m": 2,
+  "mandatory_crossing_band_m": [
+    2.6,
+    3.4
+  ],
+  "crossing_design": "continuous annular ridge, or480 overlapping pebble caps at radius3m; no planar bypass from inner disc to outside",
+  "terrain_extent_m": [
+    -12,
+    12
+  ],
+  "sha256": "2c7a6a07b883f6cbebc7c0f7ddebc2ed29896304a376d02cd0550a6747a9ab6c",
+  "role": "random procedural mesh; base plane supplied by environment; new explicit geometry, not old frozen mesh"
+}

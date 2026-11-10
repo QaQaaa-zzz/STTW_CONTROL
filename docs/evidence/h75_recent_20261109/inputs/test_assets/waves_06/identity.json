@@ -1,0 +1,22 @@
+{
+  "terrain_kind": "waves",
+  "seed": 96131,
+  "index": 6,
+  "parameters": {
+    "height_m": 0.056241755992111106,
+    "wavelength_m": 0.9842753193142486,
+    "angle_rad": 1.9344975477931632
+  },
+  "spawn_clear_radius_m": 2,
+  "mandatory_crossing_band_m": [
+    2.6,
+    3.4
+  ],
+  "crossing_design": "continuous annular ridge, or480 overlapping pebble caps at radius3m; no planar bypass from inner disc to outside",
+  "terrain_extent_m": [
+    -12,
+    12
+  ],
+  "sha256": "0d9e93824b0114b44ce6bd60e0153b82ed18e7ae5e2255277eb95c834f774a6e",
+  "role": "random procedural mesh; base plane supplied by environment; new explicit geometry, not old frozen mesh"
+}

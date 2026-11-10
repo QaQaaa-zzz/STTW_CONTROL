@@ -1,0 +1,3704 @@
+{
+  "scope": "Signals in first failed20ms policy interval; co-occurrence retained, not unique causal attribution. Roll threshold is0.7rad, not proof of ground impact. Unresolved may include contact/numerical failure. Task path duration uses5ms samples. Task nonachievement after early termination is not an independent physical cause.",
+  "summary": {
+    "conditions": 72,
+    "completed_horizon": 39,
+    "early_terminations": 33,
+    "nonexclusive_terminal_signals": {
+      "unresolved_from_recorded_flags": 2,
+      "domain_exit": 15,
+      "roll_threshold_exceeded": 16
+    },
+    "completed_horizon_no_ABC": 26
+  },
+  "conditions": [
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.3,
+      "parameter_seed": 101,
+      "method": "alpha0",
+      "lane": 0,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": false,
+      "working_roll_exceeded": false,
+      "path_rmse_m": 0.39923086762428284,
+      "speed_rmse_m_s": 0.16780509054660797,
+      "peak_roll_rad": 0.26908445358276367,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 0.8307838439941406,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "final_hold_not_met",
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.4749999998882415,
+          "path_exceed_sampled_s": 4.8100000000000005
+        },
+        "B": {
+          "reasons": [
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 5.739999999888242,
+          "path_exceed_sampled_s": 1.625
+        },
+        "C": {
+          "reasons": [
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.6399999998882415,
+          "path_exceed_sampled_s": 3.995
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.3,
+      "parameter_seed": 101,
+      "method": "alpha025",
+      "lane": 1,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.5347548127174377,
+      "speed_rmse_m_s": 0.12389989197254181,
+      "peak_roll_rad": 0.3133201599121094,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 1.3794031143188477,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.4599999998882414,
+          "path_exceed_sampled_s": 3.0100000000000002
+        },
+        "B": {
+          "reasons": [
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.7499999998882414,
+          "path_exceed_sampled_s": 2.16
+        },
+        "C": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.5549999998882416,
+          "path_exceed_sampled_s": 2.665
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.3,
+      "parameter_seed": 101,
+      "method": "alpha05",
+      "lane": 2,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": false,
+      "path_rmse_m": 0.2183196246623993,
+      "speed_rmse_m_s": 0.0916556566953659,
+      "peak_roll_rad": 0.2940547466278076,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 0.6416444778442383,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.759999999888241,
+          "path_exceed_sampled_s": 1.5350000000000001
+        },
+        "B": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 4.269999999888241,
+          "path_exceed_sampled_s": 0.465
+        },
+        "C": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.8999999998882413,
+          "path_exceed_sampled_s": 1.23
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.3,
+      "parameter_seed": 101,
+      "method": "alpha075",
+      "lane": 3,
+      "failed": true,
+      "observed_seconds": 2.816399999950081,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.048122603446245193,
+      "speed_rmse_m_s": 0.23732854425907135,
+      "peak_roll_rad": 0.6537195444107056,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 0.10727192461490631,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "unresolved_from_recorded_flags"
+      ],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.3,
+      "parameter_seed": 101,
+      "method": "alpha1",
+      "lane": 4,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": false,
+      "path_rmse_m": 0.10211195051670074,
+      "speed_rmse_m_s": 0.047890860587358475,
+      "peak_roll_rad": 0.25060200691223145,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 0.33292579650878906,
+      "task_A": false,
+      "task_B": true,
+      "task_C": true,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.7899999998882414,
+          "path_exceed_sampled_s": 0.425
+        },
+        "B": {
+          "reasons": [],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.3,
+      "parameter_seed": 101,
+      "method": "Zero",
+      "lane": 5,
+      "failed": true,
+      "observed_seconds": 3.8399999998882413,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.4316922724246979,
+      "speed_rmse_m_s": 0.15953592956066132,
+      "peak_roll_rad": 0.39795982837677,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 1.4700031280517578,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "domain_exit"
+      ],
+      "first_signal_observed_s": {
+        "domain_exit": 3.8400001525878906
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.0149999998882415,
+          "path_exceed_sampled_s": 0.8300000000000001
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.2699999998882414,
+          "path_exceed_sampled_s": 0.5750000000000001
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.1099999998882413,
+          "path_exceed_sampled_s": 0.735
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.3,
+      "parameter_seed": 101,
+      "method": "alpha0",
+      "lane": 0,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": false,
+      "path_rmse_m": 0.08581316471099854,
+      "speed_rmse_m_s": 0.14524967968463898,
+      "peak_roll_rad": 0.2207280397415161,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 0.22458553314208984,
+      "task_A": true,
+      "task_B": false,
+      "task_C": true,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "B": {
+          "reasons": [
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.3,
+      "parameter_seed": 101,
+      "method": "alpha025",
+      "lane": 1,
+      "failed": true,
+      "observed_seconds": 4.879999999888241,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.4345706105232239,
+      "speed_rmse_m_s": 0.17846226692199707,
+      "peak_roll_rad": 0.3187720775604248,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 1.449563980102539,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "domain_exit"
+      ],
+      "first_signal_observed_s": {
+        "domain_exit": 4.880000114440918
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.8099999998882415,
+          "path_exceed_sampled_s": 1.67
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.114999999888241,
+          "path_exceed_sampled_s": 0.865
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.8949999998882414,
+          "path_exceed_sampled_s": 1.44
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.3,
+      "parameter_seed": 101,
+      "method": "alpha05",
+      "lane": 2,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": false,
+      "path_rmse_m": 0.43173250555992126,
+      "speed_rmse_m_s": 0.10208819806575775,
+      "peak_roll_rad": 0.28210461139678955,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 1.1221179962158203,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.6949999998882412,
+          "path_exceed_sampled_s": 2.785
+        },
+        "B": {
+          "reasons": [
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.9799999998882414,
+          "path_exceed_sampled_s": 1.795
+        },
+        "C": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.7899999998882414,
+          "path_exceed_sampled_s": 2.35
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.3,
+      "parameter_seed": 101,
+      "method": "alpha075",
+      "lane": 3,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.7513129115104675,
+      "speed_rmse_m_s": 0.09687314927577972,
+      "peak_roll_rad": 0.31380903720855713,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 1.7222652435302734,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "final_hold_not_met",
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.6099999998882413,
+          "path_exceed_sampled_s": 4.92
+        },
+        "B": {
+          "reasons": [
+            "final_hold_not_met",
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 4.254999999888241,
+          "path_exceed_sampled_s": 3.045
+        },
+        "C": {
+          "reasons": [
+            "final_hold_not_met",
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.7049999998882415,
+          "path_exceed_sampled_s": 4.37
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.3,
+      "parameter_seed": 101,
+      "method": "alpha1",
+      "lane": 4,
+      "failed": true,
+      "observed_seconds": 2.6249999998882414,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.10003113746643066,
+      "speed_rmse_m_s": 0.17200683057308197,
+      "peak_roll_rad": 0.7207286953926086,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 0.4179108738899231,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "roll_threshold_exceeded"
+      ],
+      "first_signal_observed_s": {
+        "roll_threshold_exceeded": 2.625
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.5549999998882416,
+          "path_exceed_sampled_s": 0.075
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.614999999888241,
+          "path_exceed_sampled_s": 0.015
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.3,
+      "parameter_seed": 101,
+      "method": "Zero",
+      "lane": 5,
+      "failed": true,
+      "observed_seconds": 2.4799999998882414,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.08475671708583832,
+      "speed_rmse_m_s": 0.1607765555381775,
+      "peak_roll_rad": 0.3415740728378296,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 0.18445038795471191,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "domain_exit"
+      ],
+      "first_signal_observed_s": {
+        "domain_exit": 2.4800000190734863
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.6,
+      "parameter_seed": 101,
+      "method": "alpha0",
+      "lane": 0,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.7265370488166809,
+      "speed_rmse_m_s": 0.22498883306980133,
+      "peak_roll_rad": 0.41803574562072754,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 1.8077316284179688,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.0899999998882413,
+          "path_exceed_sampled_s": 3.69
+        },
+        "B": {
+          "reasons": [
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.2949999998882413,
+          "path_exceed_sampled_s": 2.745
+        },
+        "C": {
+          "reasons": [
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.1599999998882415,
+          "path_exceed_sampled_s": 3.345
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.6,
+      "parameter_seed": 101,
+      "method": "alpha025",
+      "lane": 1,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.44693055748939514,
+      "speed_rmse_m_s": 0.14937658607959747,
+      "peak_roll_rad": 0.3758147954940796,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 1.210148811340332,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.3549999998882414,
+          "path_exceed_sampled_s": 2.665
+        },
+        "B": {
+          "reasons": [
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.6399999998882415,
+          "path_exceed_sampled_s": 1.7550000000000001
+        },
+        "C": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.4549999998882415,
+          "path_exceed_sampled_s": 2.2600000000000002
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.6,
+      "parameter_seed": 101,
+      "method": "alpha05",
+      "lane": 2,
+      "failed": true,
+      "observed_seconds": 2.4749999998882415,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.0650513619184494,
+      "speed_rmse_m_s": 0.6482770442962646,
+      "peak_roll_rad": 0.7026559114456177,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.13722220063209534,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "roll_threshold_exceeded"
+      ],
+      "first_signal_observed_s": {
+        "roll_threshold_exceeded": 2.4750001430511475
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.6,
+      "parameter_seed": 101,
+      "method": "alpha075",
+      "lane": 3,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 1.2603976726531982,
+      "speed_rmse_m_s": 0.10046281665563583,
+      "peak_roll_rad": 0.5048177242279053,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 2.613389015197754,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "final_hold_not_met",
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.094999999888241,
+          "path_exceed_sampled_s": 5.41
+        },
+        "B": {
+          "reasons": [
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.3099999998882415,
+          "path_exceed_sampled_s": 4.415
+        },
+        "C": {
+          "reasons": [
+            "final_hold_not_met",
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.1699999998882413,
+          "path_exceed_sampled_s": 5.0200000000000005
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.6,
+      "parameter_seed": 101,
+      "method": "alpha1",
+      "lane": 4,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": false,
+      "path_rmse_m": 0.2050214558839798,
+      "speed_rmse_m_s": 0.06388112157583237,
+      "peak_roll_rad": 0.29983770847320557,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.5658245086669922,
+      "task_A": false,
+      "task_B": true,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.3399999998882413,
+          "path_exceed_sampled_s": 1.595
+        },
+        "B": {
+          "reasons": [],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.4549999998882415,
+          "path_exceed_sampled_s": 1.105
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.6,
+      "parameter_seed": 101,
+      "method": "Zero",
+      "lane": 5,
+      "failed": true,
+      "observed_seconds": 6.979999999888242,
+      "goal_crossed": true,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.8594857454299927,
+      "speed_rmse_m_s": 0.17322470247745514,
+      "peak_roll_rad": 0.49478328227996826,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 1.6366872787475586,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "domain_exit"
+      ],
+      "first_signal_observed_s": {
+        "domain_exit": 6.980000019073486
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.4799999998882414,
+          "path_exceed_sampled_s": 3.985
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.759999999888241,
+          "path_exceed_sampled_s": 3.19
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.5849999998882414,
+          "path_exceed_sampled_s": 3.7
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.6,
+      "parameter_seed": 101,
+      "method": "alpha0",
+      "lane": 0,
+      "failed": true,
+      "observed_seconds": 2.4099999998882415,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.10727166384458542,
+      "speed_rmse_m_s": 0.3363841772079468,
+      "peak_roll_rad": 0.7291125059127808,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.21973773837089539,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "roll_threshold_exceeded"
+      ],
+      "first_signal_observed_s": {
+        "roll_threshold_exceeded": 2.4100000858306885
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.6,
+      "parameter_seed": 101,
+      "method": "alpha025",
+      "lane": 1,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": false,
+      "path_rmse_m": 0.14672696590423584,
+      "speed_rmse_m_s": 0.1462215930223465,
+      "peak_roll_rad": 0.29527294635772705,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.3914775848388672,
+      "task_A": false,
+      "task_B": false,
+      "task_C": true,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.634999999888241,
+          "path_exceed_sampled_s": 0.58
+        },
+        "B": {
+          "reasons": [
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.6,
+      "parameter_seed": 101,
+      "method": "alpha05",
+      "lane": 2,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": false,
+      "path_rmse_m": 0.1055695191025734,
+      "speed_rmse_m_s": 0.12379013746976852,
+      "peak_roll_rad": 0.29169762134552,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.3507966995239258,
+      "task_A": false,
+      "task_B": false,
+      "task_C": true,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.6199999998882415,
+          "path_exceed_sampled_s": 0.455
+        },
+        "B": {
+          "reasons": [
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.6,
+      "parameter_seed": 101,
+      "method": "alpha075",
+      "lane": 3,
+      "failed": true,
+      "observed_seconds": 2.049999999888241,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.08060018718242645,
+      "speed_rmse_m_s": 0.2676074206829071,
+      "peak_roll_rad": 0.7166429758071899,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.16341853141784668,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "roll_threshold_exceeded"
+      ],
+      "first_signal_observed_s": {
+        "roll_threshold_exceeded": 2.0500001907348633
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.6,
+      "parameter_seed": 101,
+      "method": "alpha1",
+      "lane": 4,
+      "failed": true,
+      "observed_seconds": 1.9799999998882414,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.07412183284759521,
+      "speed_rmse_m_s": 0.2632826864719391,
+      "peak_roll_rad": 0.7304388284683228,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.1459033489227295,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "roll_threshold_exceeded"
+      ],
+      "first_signal_observed_s": {
+        "roll_threshold_exceeded": 1.9800000190734863
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.6,
+      "parameter_seed": 101,
+      "method": "Zero",
+      "lane": 5,
+      "failed": true,
+      "observed_seconds": 2.029999999888241,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.08870936930179596,
+      "speed_rmse_m_s": 0.21346025168895721,
+      "peak_roll_rad": 0.7115179300308228,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.1818697601556778,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "roll_threshold_exceeded"
+      ],
+      "first_signal_observed_s": {
+        "roll_threshold_exceeded": 2.0300002098083496
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.3,
+      "parameter_seed": 102,
+      "method": "alpha0",
+      "lane": 0,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.43232443928718567,
+      "speed_rmse_m_s": 0.1958036720752716,
+      "peak_roll_rad": 0.3265291452407837,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 1.1204004287719727,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "final_hold_not_met",
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.239999999888241,
+          "path_exceed_sampled_s": 3.42
+        },
+        "B": {
+          "reasons": [
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.6199999998882415,
+          "path_exceed_sampled_s": 1.645
+        },
+        "C": {
+          "reasons": [
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.3799999998882413,
+          "path_exceed_sampled_s": 2.07
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.3,
+      "parameter_seed": 102,
+      "method": "alpha025",
+      "lane": 1,
+      "failed": true,
+      "observed_seconds": 3.9599999998882414,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.39790552854537964,
+      "speed_rmse_m_s": 0.2410961389541626,
+      "peak_roll_rad": 0.32266247272491455,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 1.442744255065918,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "domain_exit"
+      ],
+      "first_signal_observed_s": {
+        "domain_exit": 3.9600000381469727
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.2299999998882414,
+          "path_exceed_sampled_s": 0.735
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.4499999998882416,
+          "path_exceed_sampled_s": 0.515
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.3099999998882415,
+          "path_exceed_sampled_s": 0.655
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.3,
+      "parameter_seed": 102,
+      "method": "alpha05",
+      "lane": 2,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.07733645290136337,
+      "speed_rmse_m_s": 0.08608120679855347,
+      "peak_roll_rad": 0.3029623031616211,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 0.19481468200683594,
+      "task_A": true,
+      "task_B": true,
+      "task_C": true,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "B": {
+          "reasons": [],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.3,
+      "parameter_seed": 102,
+      "method": "alpha075",
+      "lane": 3,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.8128939867019653,
+      "speed_rmse_m_s": 0.07676315307617188,
+      "peak_roll_rad": 0.3454388380050659,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 1.8717107772827148,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.5599999998882415,
+          "path_exceed_sampled_s": 4.1450000000000005
+        },
+        "B": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.7899999998882414,
+          "path_exceed_sampled_s": 3.24
+        },
+        "C": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.6399999998882415,
+          "path_exceed_sampled_s": 3.8000000000000003
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.3,
+      "parameter_seed": 102,
+      "method": "alpha1",
+      "lane": 4,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": false,
+      "path_rmse_m": 0.30254197120666504,
+      "speed_rmse_m_s": 0.06537297368049622,
+      "peak_roll_rad": 0.2758084535598755,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 0.7676448822021484,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.799999999888241,
+          "path_exceed_sampled_s": 2.61
+        },
+        "B": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 4.274999999888242,
+          "path_exceed_sampled_s": 1.025
+        },
+        "C": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 4.009999999888241,
+          "path_exceed_sampled_s": 1.77
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.3,
+      "parameter_seed": 102,
+      "method": "Zero",
+      "lane": 5,
+      "failed": true,
+      "observed_seconds": 9.379999999888241,
+      "goal_crossed": true,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.7531887292861938,
+      "speed_rmse_m_s": 0.1213330328464508,
+      "peak_roll_rad": 0.40966928005218506,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 1.5982170104980469,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "domain_exit"
+      ],
+      "first_signal_observed_s": {
+        "domain_exit": 9.380000114440918
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.7549999998882413,
+          "path_exceed_sampled_s": 4.505
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 4.844999999888241,
+          "path_exceed_sampled_s": 3.35
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 4.709999999888241,
+          "path_exceed_sampled_s": 3.89
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.3,
+      "parameter_seed": 102,
+      "method": "alpha0",
+      "lane": 0,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": false,
+      "working_roll_exceeded": false,
+      "path_rmse_m": 0.38581421971321106,
+      "speed_rmse_m_s": 0.1712256222963333,
+      "peak_roll_rad": 0.22809183597564697,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 0.8727550506591797,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "final_hold_not_met",
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.6699999998882413,
+          "path_exceed_sampled_s": 4.405
+        },
+        "B": {
+          "reasons": [
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 7.309999999888241,
+          "path_exceed_sampled_s": 1.495
+        },
+        "C": {
+          "reasons": [
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.864999999888241,
+          "path_exceed_sampled_s": 3.37
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.3,
+      "parameter_seed": 102,
+      "method": "alpha025",
+      "lane": 1,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": false,
+      "working_roll_exceeded": false,
+      "path_rmse_m": 0.2931912839412689,
+      "speed_rmse_m_s": 0.1315566897392273,
+      "peak_roll_rad": 0.2648223638534546,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 0.8175296783447266,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "final_hold_not_met",
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.489999999888241,
+          "path_exceed_sampled_s": 1.795
+        },
+        "B": {
+          "reasons": [
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.8799999998882413,
+          "path_exceed_sampled_s": 1.06
+        },
+        "C": {
+          "reasons": [
+            "final_hold_not_met",
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.614999999888241,
+          "path_exceed_sampled_s": 1.56
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.3,
+      "parameter_seed": 102,
+      "method": "alpha05",
+      "lane": 2,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": false,
+      "path_rmse_m": 0.20603381097316742,
+      "speed_rmse_m_s": 0.10183802992105484,
+      "peak_roll_rad": 0.2566481828689575,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 0.586369514465332,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.8999999998882413,
+          "path_exceed_sampled_s": 1.41
+        },
+        "B": {
+          "reasons": [
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 4.044999999888241,
+          "path_exceed_sampled_s": 1.08
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.3,
+      "parameter_seed": 102,
+      "method": "alpha075",
+      "lane": 3,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": false,
+      "path_rmse_m": 0.3223229944705963,
+      "speed_rmse_m_s": 0.09144803136587143,
+      "peak_roll_rad": 0.27685654163360596,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 0.8254814147949219,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.7449999998882415,
+          "path_exceed_sampled_s": 2.745
+        },
+        "B": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 4.379999999888241,
+          "path_exceed_sampled_s": 1.16
+        },
+        "C": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 4.139999999888241,
+          "path_exceed_sampled_s": 1.7650000000000001
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.3,
+      "parameter_seed": 102,
+      "method": "alpha1",
+      "lane": 4,
+      "failed": true,
+      "observed_seconds": 2.7099999998882414,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.12878702580928802,
+      "speed_rmse_m_s": 0.17838211357593536,
+      "peak_roll_rad": 0.714611828327179,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 0.5390983819961548,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "roll_threshold_exceeded"
+      ],
+      "first_signal_observed_s": {
+        "roll_threshold_exceeded": 2.7100000381469727
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.5599999998882415,
+          "path_exceed_sampled_s": 0.155
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.6199999998882415,
+          "path_exceed_sampled_s": 0.095
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.3,
+      "parameter_seed": 102,
+      "method": "Zero",
+      "lane": 5,
+      "failed": true,
+      "observed_seconds": 2.5399999998882414,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.08844036608934402,
+      "speed_rmse_m_s": 0.15152479708194733,
+      "peak_roll_rad": 0.3311314582824707,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 0.2359142154455185,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "domain_exit"
+      ],
+      "first_signal_observed_s": {
+        "domain_exit": 2.5400002002716064
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.6,
+      "parameter_seed": 102,
+      "method": "alpha0",
+      "lane": 0,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.10250480473041534,
+      "speed_rmse_m_s": 0.17880383133888245,
+      "peak_roll_rad": 0.3480299711227417,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.22638320922851562,
+      "task_A": true,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "B": {
+          "reasons": [
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.6,
+      "parameter_seed": 102,
+      "method": "alpha025",
+      "lane": 1,
+      "failed": true,
+      "observed_seconds": 3.6199999998882415,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.20429256558418274,
+      "speed_rmse_m_s": 0.26579511165618896,
+      "peak_roll_rad": 0.4468487501144409,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.8123865127563477,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "domain_exit"
+      ],
+      "first_signal_observed_s": {
+        "domain_exit": 3.620000123977661
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.674999999888241,
+          "path_exceed_sampled_s": 0.515
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.529999999888241,
+          "path_exceed_sampled_s": 0.095
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.4349999998882415,
+          "path_exceed_sampled_s": 0.19
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.6,
+      "parameter_seed": 102,
+      "method": "alpha05",
+      "lane": 2,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.2588379681110382,
+      "speed_rmse_m_s": 0.10343208909034729,
+      "peak_roll_rad": 0.31668412685394287,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.6542491912841797,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.5799999998882415,
+          "path_exceed_sampled_s": 2.45
+        },
+        "B": {
+          "reasons": [
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 4.174999999888241,
+          "path_exceed_sampled_s": 0.55
+        },
+        "C": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.8699999998882415,
+          "path_exceed_sampled_s": 1.415
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.6,
+      "parameter_seed": 102,
+      "method": "alpha075",
+      "lane": 3,
+      "failed": true,
+      "observed_seconds": 2.5899999998882413,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.06527580320835114,
+      "speed_rmse_m_s": 0.2885526418685913,
+      "peak_roll_rad": 0.7104395627975464,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.14403629302978516,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "roll_threshold_exceeded"
+      ],
+      "first_signal_observed_s": {
+        "roll_threshold_exceeded": 2.5900001525878906
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.6,
+      "parameter_seed": 102,
+      "method": "alpha1",
+      "lane": 4,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.18134354054927826,
+      "speed_rmse_m_s": 0.06843618303537369,
+      "peak_roll_rad": 0.356067419052124,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.4837331771850586,
+      "task_A": false,
+      "task_B": true,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.3999999998882413,
+          "path_exceed_sampled_s": 0.895
+        },
+        "B": {
+          "reasons": [],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.549999999888241,
+          "path_exceed_sampled_s": 0.58
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.6,
+      "parameter_seed": 102,
+      "method": "Zero",
+      "lane": 5,
+      "failed": true,
+      "observed_seconds": 2.1699999998882413,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.06966929882764816,
+      "speed_rmse_m_s": 0.16436420381069183,
+      "peak_roll_rad": 0.7043505311012268,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.14772364497184753,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "roll_threshold_exceeded"
+      ],
+      "first_signal_observed_s": {
+        "roll_threshold_exceeded": 2.1700000762939453
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.6,
+      "parameter_seed": 102,
+      "method": "alpha0",
+      "lane": 0,
+      "failed": true,
+      "observed_seconds": 2.424999999888241,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.10835256427526474,
+      "speed_rmse_m_s": 0.3408065140247345,
+      "peak_roll_rad": 0.7030531167984009,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.2216494083404541,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "roll_threshold_exceeded"
+      ],
+      "first_signal_observed_s": {
+        "roll_threshold_exceeded": 2.4250001907348633
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.6,
+      "parameter_seed": 102,
+      "method": "alpha025",
+      "lane": 1,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.3131440579891205,
+      "speed_rmse_m_s": 0.15367361903190613,
+      "peak_roll_rad": 0.31811296939849854,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.8373355865478516,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.5549999998882416,
+          "path_exceed_sampled_s": 2.52
+        },
+        "B": {
+          "reasons": [
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 4.189999999888242,
+          "path_exceed_sampled_s": 1.055
+        },
+        "C": {
+          "reasons": [
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.6799999998882416,
+          "path_exceed_sampled_s": 1.995
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.6,
+      "parameter_seed": 102,
+      "method": "alpha05",
+      "lane": 2,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": false,
+      "path_rmse_m": 0.1070215031504631,
+      "speed_rmse_m_s": 0.12583710253238678,
+      "peak_roll_rad": 0.2861062288284302,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.36066722869873047,
+      "task_A": false,
+      "task_B": false,
+      "task_C": true,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.6249999998882414,
+          "path_exceed_sampled_s": 0.52
+        },
+        "B": {
+          "reasons": [
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.6,
+      "parameter_seed": 102,
+      "method": "alpha075",
+      "lane": 3,
+      "failed": true,
+      "observed_seconds": 2.3199999998882412,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.08839672058820724,
+      "speed_rmse_m_s": 0.23861289024353027,
+      "peak_roll_rad": 0.7197195887565613,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.2696874737739563,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "roll_threshold_exceeded"
+      ],
+      "first_signal_observed_s": {
+        "roll_threshold_exceeded": 2.320000171661377
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.6,
+      "parameter_seed": 102,
+      "method": "alpha1",
+      "lane": 4,
+      "failed": true,
+      "observed_seconds": 1.9699999998882414,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.0770847350358963,
+      "speed_rmse_m_s": 0.26362907886505127,
+      "peak_roll_rad": 0.7303496599197388,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.1509307324886322,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "roll_threshold_exceeded"
+      ],
+      "first_signal_observed_s": {
+        "roll_threshold_exceeded": 1.9700000286102295
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.6,
+      "parameter_seed": 102,
+      "method": "Zero",
+      "lane": 5,
+      "failed": true,
+      "observed_seconds": 3.719999999888241,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.4025886058807373,
+      "speed_rmse_m_s": 0.1751406341791153,
+      "peak_roll_rad": 0.5262435674667358,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.9278116226196289,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "domain_exit"
+      ],
+      "first_signal_observed_s": {
+        "domain_exit": 3.7200000286102295
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.3199999998882412,
+          "path_exceed_sampled_s": 1.1400000000000001
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.4949999998882415,
+          "path_exceed_sampled_s": 0.72
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.3749999998882414,
+          "path_exceed_sampled_s": 1.0
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.3,
+      "parameter_seed": 103,
+      "method": "alpha0",
+      "lane": 0,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": false,
+      "path_rmse_m": 0.8418694734573364,
+      "speed_rmse_m_s": 0.16755330562591553,
+      "peak_roll_rad": 0.2839723825454712,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 1.9858102798461914,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.2099999998882414,
+          "path_exceed_sampled_s": 4.045
+        },
+        "B": {
+          "reasons": [
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.4749999998882415,
+          "path_exceed_sampled_s": 3.165
+        },
+        "C": {
+          "reasons": [
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.3099999998882415,
+          "path_exceed_sampled_s": 3.7
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.3,
+      "parameter_seed": 103,
+      "method": "alpha025",
+      "lane": 1,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": false,
+      "path_rmse_m": 0.46722665429115295,
+      "speed_rmse_m_s": 0.10522928833961487,
+      "peak_roll_rad": 0.2996593713760376,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 1.251204490661621,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.7649999998882415,
+          "path_exceed_sampled_s": 2.575
+        },
+        "B": {
+          "reasons": [
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 4.014999999888241,
+          "path_exceed_sampled_s": 1.865
+        },
+        "C": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.8499999998882415,
+          "path_exceed_sampled_s": 2.3000000000000003
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.3,
+      "parameter_seed": 103,
+      "method": "alpha05",
+      "lane": 2,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.35618752241134644,
+      "speed_rmse_m_s": 0.08166313916444778,
+      "peak_roll_rad": 0.3126657009124756,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 0.9741115570068359,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.759999999888241,
+          "path_exceed_sampled_s": 2.205
+        },
+        "B": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 4.064999999888242,
+          "path_exceed_sampled_s": 1.43
+        },
+        "C": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.8599999998882413,
+          "path_exceed_sampled_s": 1.92
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.3,
+      "parameter_seed": 103,
+      "method": "alpha075",
+      "lane": 3,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.3476239740848541,
+      "speed_rmse_m_s": 0.10054560005664825,
+      "peak_roll_rad": 0.31949925422668457,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 0.9334602355957031,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.654999999888241,
+          "path_exceed_sampled_s": 2.36
+        },
+        "B": {
+          "reasons": [
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 4.009999999888241,
+          "path_exceed_sampled_s": 1.385
+        },
+        "C": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.7749999998882413,
+          "path_exceed_sampled_s": 1.96
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.3,
+      "parameter_seed": 103,
+      "method": "alpha1",
+      "lane": 4,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.4075861871242523,
+      "speed_rmse_m_s": 0.06056710705161095,
+      "peak_roll_rad": 0.3761864900588989,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 1.0128259658813477,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.7099999998882414,
+          "path_exceed_sampled_s": 3.4
+        },
+        "B": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 4.089999999888241,
+          "path_exceed_sampled_s": 1.69
+        },
+        "C": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.8899999998882415,
+          "path_exceed_sampled_s": 2.495
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.3,
+      "parameter_seed": 103,
+      "method": "Zero",
+      "lane": 5,
+      "failed": true,
+      "observed_seconds": 7.139999999888241,
+      "goal_crossed": true,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.4269305169582367,
+      "speed_rmse_m_s": 0.13893355429172516,
+      "peak_roll_rad": 0.3438042402267456,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 1.0418148040771484,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "domain_exit"
+      ],
+      "first_signal_observed_s": {
+        "domain_exit": 7.140000343322754
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.7149999998882413,
+          "path_exceed_sampled_s": 2.6550000000000002
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 5.319999999888242,
+          "path_exceed_sampled_s": 1.195
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.8549999998882414,
+          "path_exceed_sampled_s": 2.23
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.3,
+      "parameter_seed": 103,
+      "method": "alpha0",
+      "lane": 0,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": false,
+      "working_roll_exceeded": false,
+      "path_rmse_m": 0.438583642244339,
+      "speed_rmse_m_s": 0.17978699505329132,
+      "peak_roll_rad": 0.25192999839782715,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 1.0529003143310547,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "final_hold_not_met",
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.4999999998882414,
+          "path_exceed_sampled_s": 4.405
+        },
+        "B": {
+          "reasons": [
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.8199999998882412,
+          "path_exceed_sampled_s": 1.6600000000000001
+        },
+        "C": {
+          "reasons": [
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.6099999998882413,
+          "path_exceed_sampled_s": 3.21
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.3,
+      "parameter_seed": 103,
+      "method": "alpha025",
+      "lane": 1,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": false,
+      "path_rmse_m": 0.35396647453308105,
+      "speed_rmse_m_s": 0.12452790886163712,
+      "peak_roll_rad": 0.2523094415664673,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 0.9952726364135742,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.7149999998882413,
+          "path_exceed_sampled_s": 2.005
+        },
+        "B": {
+          "reasons": [
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 4.004999999888241,
+          "path_exceed_sampled_s": 1.3900000000000001
+        },
+        "C": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.8099999998882415,
+          "path_exceed_sampled_s": 1.8
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.3,
+      "parameter_seed": 103,
+      "method": "alpha05",
+      "lane": 2,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": false,
+      "path_rmse_m": 0.23096896708011627,
+      "speed_rmse_m_s": 0.1011476218700409,
+      "peak_roll_rad": 0.2659419775009155,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 0.6655740737915039,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.7849999998882415,
+          "path_exceed_sampled_s": 1.575
+        },
+        "B": {
+          "reasons": [
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 4.249999999888241,
+          "path_exceed_sampled_s": 0.585
+        },
+        "C": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.9149999998882414,
+          "path_exceed_sampled_s": 1.285
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.3,
+      "parameter_seed": 103,
+      "method": "alpha075",
+      "lane": 3,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": false,
+      "path_rmse_m": 0.3577570915222168,
+      "speed_rmse_m_s": 0.09179960191249847,
+      "peak_roll_rad": 0.2849510908126831,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 0.9104757308959961,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.7049999998882415,
+          "path_exceed_sampled_s": 3.0500000000000003
+        },
+        "B": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 4.314999999888242,
+          "path_exceed_sampled_s": 1.375
+        },
+        "C": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 4.089999999888241,
+          "path_exceed_sampled_s": 1.985
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.3,
+      "parameter_seed": 103,
+      "method": "alpha1",
+      "lane": 4,
+      "failed": true,
+      "observed_seconds": 2.7749999998882413,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.15720713138580322,
+      "speed_rmse_m_s": 0.17046399414539337,
+      "peak_roll_rad": 0.708504855632782,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 0.5678304433822632,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "roll_threshold_exceeded"
+      ],
+      "first_signal_observed_s": {
+        "roll_threshold_exceeded": 2.7750000953674316
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.5349999998882415,
+          "path_exceed_sampled_s": 0.245
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.6049999998882414,
+          "path_exceed_sampled_s": 0.17500000000000002
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.3,
+      "parameter_seed": 103,
+      "method": "Zero",
+      "lane": 5,
+      "failed": true,
+      "observed_seconds": 2.5399999998882414,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.08974015712738037,
+      "speed_rmse_m_s": 0.15427671372890472,
+      "peak_roll_rad": 0.37219154834747314,
+      "requested_speed_m_s": 2.3,
+      "peak_path_error_m": 0.21165955066680908,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "domain_exit"
+      ],
+      "first_signal_observed_s": {
+        "domain_exit": 2.5400002002716064
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.6,
+      "parameter_seed": 103,
+      "method": "alpha0",
+      "lane": 0,
+      "failed": true,
+      "observed_seconds": 3.239999999888241,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.2828214764595032,
+      "speed_rmse_m_s": 0.43149349093437195,
+      "peak_roll_rad": 0.551552414894104,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 1.0756683349609375,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "domain_exit"
+      ],
+      "first_signal_observed_s": {
+        "domain_exit": 3.240000009536743
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.7549999998882413,
+          "path_exceed_sampled_s": 0.49
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.9799999998882414,
+          "path_exceed_sampled_s": 0.265
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.8399999998882413,
+          "path_exceed_sampled_s": 0.405
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.6,
+      "parameter_seed": 103,
+      "method": "alpha025",
+      "lane": 1,
+      "failed": true,
+      "observed_seconds": 4.059999999888241,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.4991113841533661,
+      "speed_rmse_m_s": 0.20690953731536865,
+      "peak_roll_rad": 0.4216557741165161,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 1.7506790161132812,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "domain_exit"
+      ],
+      "first_signal_observed_s": {
+        "domain_exit": 4.059999942779541
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.259999999888241,
+          "path_exceed_sampled_s": 0.805
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.4399999998882413,
+          "path_exceed_sampled_s": 0.625
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.3249999998882416,
+          "path_exceed_sampled_s": 0.74
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.6,
+      "parameter_seed": 103,
+      "method": "alpha05",
+      "lane": 2,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.11026154458522797,
+      "speed_rmse_m_s": 0.08947613835334778,
+      "peak_roll_rad": 0.3134493827819824,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.2799873352050781,
+      "task_A": true,
+      "task_B": true,
+      "task_C": true,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "B": {
+          "reasons": [],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.6,
+      "parameter_seed": 103,
+      "method": "alpha075",
+      "lane": 3,
+      "failed": true,
+      "observed_seconds": 3.1999999998882416,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.1940322369337082,
+      "speed_rmse_m_s": 0.23914724588394165,
+      "peak_roll_rad": 0.5864789485931396,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.4849109649658203,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "domain_exit"
+      ],
+      "first_signal_observed_s": {
+        "domain_exit": 3.200000047683716
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.3399999998882413,
+          "path_exceed_sampled_s": 0.55
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.424999999888241,
+          "path_exceed_sampled_s": 0.335
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.6,
+      "parameter_seed": 103,
+      "method": "alpha1",
+      "lane": 4,
+      "failed": true,
+      "observed_seconds": 4.019999999888241,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.4780460596084595,
+      "speed_rmse_m_s": 0.17242057621479034,
+      "peak_roll_rad": 0.4834095239639282,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 1.6328630447387695,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "domain_exit"
+      ],
+      "first_signal_observed_s": {
+        "domain_exit": 4.019999980926514
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.2049999998882415,
+          "path_exceed_sampled_s": 1.3900000000000001
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 3.469999999888241,
+          "path_exceed_sampled_s": 0.555
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "peak_path_limit_exceeded",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.3199999998882412,
+          "path_exceed_sampled_s": 1.11
+        }
+      }
+    },
+    {
+      "terrain": "dense_corridor",
+      "speed_m_s": 2.6,
+      "parameter_seed": 103,
+      "method": "Zero",
+      "lane": 5,
+      "failed": true,
+      "observed_seconds": 2.053199999919161,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.07443348318338394,
+      "speed_rmse_m_s": 0.15235939621925354,
+      "peak_roll_rad": 0.5872910618782043,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.14524558186531067,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "unresolved_from_recorded_flags"
+      ],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.6,
+      "parameter_seed": 103,
+      "method": "alpha0",
+      "lane": 0,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": false,
+      "path_rmse_m": 0.08324667066335678,
+      "speed_rmse_m_s": 0.16774672269821167,
+      "peak_roll_rad": 0.25392353534698486,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.22052285075187683,
+      "task_A": true,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "B": {
+          "reasons": [
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.6,
+      "parameter_seed": 103,
+      "method": "alpha025",
+      "lane": 1,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": false,
+      "path_rmse_m": 0.12164898961782455,
+      "speed_rmse_m_s": 0.14389865100383759,
+      "peak_roll_rad": 0.27658283710479736,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.36718177795410156,
+      "task_A": false,
+      "task_B": false,
+      "task_C": true,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.6849999998882415,
+          "path_exceed_sampled_s": 0.59
+        },
+        "B": {
+          "reasons": [
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.6,
+      "parameter_seed": 103,
+      "method": "alpha05",
+      "lane": 2,
+      "failed": false,
+      "observed_seconds": 9.999999999888242,
+      "goal_crossed": true,
+      "final_hold": true,
+      "working_roll_exceeded": false,
+      "path_rmse_m": 0.09403777122497559,
+      "speed_rmse_m_s": 0.12592987716197968,
+      "peak_roll_rad": 0.2900129556655884,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.3121452331542969,
+      "task_A": false,
+      "task_B": false,
+      "task_C": true,
+      "termination_signals": [],
+      "first_signal_observed_s": {},
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "peak_path_limit_exceeded"
+          ],
+          "first_path_exceed_s": 2.7299999998882414,
+          "path_exceed_sampled_s": 0.23
+        },
+        "B": {
+          "reasons": [
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.6,
+      "parameter_seed": 103,
+      "method": "alpha075",
+      "lane": 3,
+      "failed": true,
+      "observed_seconds": 2.1099999998882413,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.07876802980899811,
+      "speed_rmse_m_s": 0.2678462862968445,
+      "peak_roll_rad": 0.7047072649002075,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.16017670929431915,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "roll_threshold_exceeded"
+      ],
+      "first_signal_observed_s": {
+        "roll_threshold_exceeded": 2.1100001335144043
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.6,
+      "parameter_seed": 103,
+      "method": "alpha1",
+      "lane": 4,
+      "failed": true,
+      "observed_seconds": 2.0149999998882415,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.07384900748729706,
+      "speed_rmse_m_s": 0.25112223625183105,
+      "peak_roll_rad": 0.714741587638855,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.145555779337883,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "roll_threshold_exceeded"
+      ],
+      "first_signal_observed_s": {
+        "roll_threshold_exceeded": 2.015000104904175
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    },
+    {
+      "terrain": "single_10cm",
+      "speed_m_s": 2.6,
+      "parameter_seed": 103,
+      "method": "Zero",
+      "lane": 5,
+      "failed": true,
+      "observed_seconds": 1.9799999998882414,
+      "goal_crossed": false,
+      "final_hold": false,
+      "working_roll_exceeded": true,
+      "path_rmse_m": 0.0876360535621643,
+      "speed_rmse_m_s": 0.21666841208934784,
+      "peak_roll_rad": 0.7044271230697632,
+      "requested_speed_m_s": 2.6,
+      "peak_path_error_m": 0.1800013780593872,
+      "task_A": false,
+      "task_B": false,
+      "task_C": false,
+      "termination_signals": [
+        "roll_threshold_exceeded"
+      ],
+      "first_signal_observed_s": {
+        "roll_threshold_exceeded": 1.9800000190734863
+      },
+      "task_reasons": {
+        "A": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "B": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        },
+        "C": {
+          "reasons": [
+            "early_termination",
+            "goal_not_reached",
+            "final_hold_not_met",
+            "speed_rmse_limit_exceeded"
+          ],
+          "first_path_exceed_s": null,
+          "path_exceed_sampled_s": 0.0
+        }
+      }
+    }
+  ]
+}
