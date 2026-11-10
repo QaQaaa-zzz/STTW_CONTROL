@@ -1,0 +1,37 @@
+{
+  "candidate": {
+    "name": "update50",
+    "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ditch_random_contactfix450/training_run/training/model_update_00050.pt"
+  },
+  "terrain_id": 26,
+  "terrain_spec": {
+    "front_x_m": 3.3,
+    "width_m": 0.3,
+    "ground_end_x_m": 25.0,
+    "stone_height_min_m": 0.001,
+    "stone_height_max_m": 0.004,
+    "stones_per_m2": 30,
+    "seed": 951730916,
+    "lateral_limit_m": 3.9,
+    "far_bank_height_m": 0.02191562370918548
+  },
+  "steps": 140,
+  "duration_s": 2.8000000000000003,
+  "terminal_code": 3,
+  "final_xyz": [
+    5.82940673828125,
+    0.7520294189453125,
+    0.12168911099433899
+  ],
+  "peak_root_z": 0.5103721022605896,
+  "max_root_x": 5.82940673828125,
+  "ditch_cross_hold": false,
+  "reward_total": -29.999996185302734,
+  "reward_parts": {
+    "verified_jump": -29.999996185302734,
+    "episode_return_override": 0.0
+  },
+  "scope": "Single fixed-seed TRAIN-domain diagnostic with frozen sampled Go2 properties/noise and mean actor; no ground-controller handoff or complete-map success claim",
+  "verified_stage": 3,
+  "verified_success": false
+}

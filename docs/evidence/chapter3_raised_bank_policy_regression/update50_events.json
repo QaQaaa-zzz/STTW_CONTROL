@@ -1,0 +1,12 @@
+{
+  "stage1_time_s": 0.975,
+  "stage2_time_s": 1.2375,
+  "stage3_time_s": 1.46,
+  "terminal_roll_deg": 35.59800720214844,
+  "max_patch_count": [
+    [
+      201,
+      219
+    ]
+  ]
+}
