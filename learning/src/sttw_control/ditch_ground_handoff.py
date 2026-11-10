@@ -29,8 +29,13 @@ class DitchGroundHandoff:
         config=json.loads((bundle/'config.json').read_text())
         actor=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],config,1,env.device)
         self.ground=IsaacPathRollout(bundle,settings,actor,plant=env.plant)
-        ss=np.arange(0,30.01,.02)
-        route=dict(s=ss,xy=np.column_stack((ss-5.,np.zeros_like(ss))),heading=np.zeros_like(ss),curvature=np.zeros_like(ss))
+        reference_path=spec.get("reference_path")
+        if reference_path:
+            with np.load(reference_path) as saved:
+                route={key:saved[key] for key in ("s","xy","heading","curvature")}
+        else:
+            ss=np.arange(0,30.01,.02)
+            route=dict(s=ss,xy=np.column_stack((ss-5.,np.zeros_like(ss))),heading=np.zeros_like(ss),curvature=np.zeros_like(ss))
         self.ground.begin_connection(TorchPathReference(route,config,env.device),self.ground.speed.clone(),self.ground.alpha.clone())
         self.active=False;self.commands=[];self.command_times=[];self.command_phases=[]
         self.approach=spec.get('approach')
@@ -38,7 +43,7 @@ class DitchGroundHandoff:
         self.approach_initialized=False
         (self.output/'ground_identity.json').write_text(json.dumps(dict(upper_sha256=self.ground.upper_sha256,
             lower_sha256=self.ground.lower_sha256,zero_lower=True,controller='H75 + ECBC/ESO; lower residual zero',
-            reference='Original world-local y=0, no reanchoring at landing',control_dt_s=.005,policy_dt_s=.02,
+            reference=reference_path or 'Original world-local y=0, no reanchoring at landing',control_dt_s=.005,policy_dt_s=.02,
             feedback='Existing ground clean-state interface; frozen randomized physical properties retained; jump noise/delay only before handback',
             pendulum=self.leg_hold),indent=2))
 
