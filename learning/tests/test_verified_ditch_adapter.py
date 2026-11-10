@@ -7,6 +7,23 @@ from sttw_control.ditch_terrain import build_ditch_terrain
 
 
 class WiringTests(unittest.TestCase):
+    def test_side_land_bridge_keeps_center_trench_open(self):
+        spec=dict(front_x_m=10.3,width_m=.3,ground_end_x_m=25.,
+                  rough_x_intervals_m=[[2.,7.],[12.,22.]],stones_per_m2=0,
+                  seed=1,stone_height_min_m=0.,stone_height_max_m=0.)
+        old_v,old_t=build_ditch_terrain(spec)
+        v,t=build_ditch_terrain(dict(spec,land_bridge_y_interval_m=[1.4,4.]))
+        np.testing.assert_array_equal(v[:len(old_v)],old_v)
+        np.testing.assert_array_equal(t[:len(old_t)],old_t)
+        triangles=v[t,:2]
+        def supported(point):
+            edges=np.roll(triangles,-1,axis=1)-triangles
+            delta=np.asarray(point)-triangles
+            cross=edges[:,:,0]*delta[:,:,1]-edges[:,:,1]*delta[:,:,0]
+            return ((cross>=-1e-6).all(1)|(cross<=1e-6).all(1)).any()
+        self.assertTrue(supported([10.45,2.2]))
+        self.assertFalse(supported([10.45,0.]))
+
     def test_shifted_ditch_far_bank_uses_map_extent(self):
         from types import SimpleNamespace as NS
         from sttw_control.ditch_jump_adapter import DitchJumpAdapter

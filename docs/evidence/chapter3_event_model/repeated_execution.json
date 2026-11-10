@@ -1,0 +1,117 @@
+{
+  "fixed_completed": 11,
+  "model_completed": 7,
+  "per_method_trials": 64,
+  "independent_initial_conditions": 16,
+  "repeats": 4,
+  "changed_route_roots": [
+    2,
+    3,
+    7,
+    14
+  ],
+  "changed_route_fixed": 2,
+  "changed_route_model": 1,
+  "same_route_fixed": 9,
+  "same_route_model": 6,
+  "per_root": [
+    {
+      "root": 0,
+      "fixed": 0,
+      "model": 1,
+      "selected": 3
+    },
+    {
+      "root": 1,
+      "fixed": 1,
+      "model": 0,
+      "selected": 3
+    },
+    {
+      "root": 2,
+      "fixed": 0,
+      "model": 0,
+      "selected": 1
+    },
+    {
+      "root": 3,
+      "fixed": 1,
+      "model": 0,
+      "selected": 1
+    },
+    {
+      "root": 4,
+      "fixed": 0,
+      "model": 2,
+      "selected": 3
+    },
+    {
+      "root": 5,
+      "fixed": 1,
+      "model": 1,
+      "selected": 3
+    },
+    {
+      "root": 6,
+      "fixed": 1,
+      "model": 1,
+      "selected": 3
+    },
+    {
+      "root": 7,
+      "fixed": 1,
+      "model": 1,
+      "selected": 1
+    },
+    {
+      "root": 8,
+      "fixed": 2,
+      "model": 0,
+      "selected": 3
+    },
+    {
+      "root": 9,
+      "fixed": 1,
+      "model": 0,
+      "selected": 3
+    },
+    {
+      "root": 10,
+      "fixed": 1,
+      "model": 0,
+      "selected": 3
+    },
+    {
+      "root": 11,
+      "fixed": 0,
+      "model": 1,
+      "selected": 3
+    },
+    {
+      "root": 12,
+      "fixed": 1,
+      "model": 0,
+      "selected": 3
+    },
+    {
+      "root": 13,
+      "fixed": 0,
+      "model": 0,
+      "selected": 3
+    },
+    {
+      "root": 14,
+      "fixed": 0,
+      "model": 0,
+      "selected": 1
+    },
+    {
+      "root": 15,
+      "fixed": 1,
+      "model": 0,
+      "selected": 3
+    }
+  ],
+  "elapsed_s": 409.4859106540098,
+  "scope": "Negative repeated execution result; same-route variation remains, no causal or statistical benefit claim"
+}

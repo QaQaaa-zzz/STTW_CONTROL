@@ -37,6 +37,8 @@ class KnownHeightMap:
         qy=root[:,1,None]+sn*self.local[None,:,0]+cs*self.local[None,:,1]
         near=self.spec['front_x_m'];far=near+self.spec['width_m']
         valid=(((qx>=-5)&(qx<=near))|((qx>=far)&(qx<=self.spec['ground_end_x_m'])))&(np.abs(qy)<=4)
+        if 'land_bridge_y_interval_m' in self.spec:
+            lo,hi=self.spec['land_bridge_y_interval_m'];valid|=(qx>=near)&(qx<=far)&(qy>=lo)&(qy<=hi)
         height=np.where(qx>=far,self.spec.get('far_bank_height_m',0.),0.)
         for xs,ys,grid in self.banks:
             ux=(qx-xs[0])/(xs[1]-xs[0]);uy=(qy-ys[0])/(ys[1]-ys[0])

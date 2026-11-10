@@ -34,3 +34,9 @@ CPU600梯度步，DEV每100步选模，选update200；拟合及报告约4.4秒�
 [在线逐组XY与奖励](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_event_collection/online_selection/plots/README.md)；[真实查询记录](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_event_collection/online_selection/evaluation/planning.json)。后续以冻结选择的重复物理执行区分选路作用与克隆环境差异，不宣称当前已证明世界模型优于成功率预测器。
 
 当前决策发生在首次运动之前，模型查询期间仿真不前推；尚未实现持续运动中的中途反馈重规划，也未验证推理延迟补偿。模型输入未包含完整关节物理状态，使用已有跳跃观测/控制历史压缩；接触模式带已保存，任意模式跳转预测仍待接入。
+
+## 四重复执行：未显示收益
+
+冻结上面的16个初态和真实在线选择，每个方法4次重复，环境位置按固定/模型/模型/固定的顺序交换，共128条、409.5秒。固定路线11/64完成、模型路线7/64完成。4个改变路线的初态合计固定2/16、模型1/16；12个仍选相同路线的初态固定9/48、模型6/48，说明重复执行差异仍不可忽略。不继续为本组调参，当前不采用模型为更优规划器。
+
+[16组全部八条轨迹与奖励](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_event_collection/online_repeated/plots/README.md)；[逐初态记录](repeated_execution.json)。重复轨迹不是128个独立初态，也不是训练种子。

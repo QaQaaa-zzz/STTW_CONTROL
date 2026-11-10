@@ -178,6 +178,7 @@ class VectorDitchHandoff(DitchGroundHandoff):
         self.goal=spec['goal']
         self.road_half_width=spec.get('road_half_width_m',.6)
         self.road_violation=self.finished.clone()
+        self.ground_only=torch.as_tensor(spec.get('ground_only_lanes',[False]*env.num_envs),device=env.device,dtype=torch.bool)
         reference=env.cfg.get('task_reference_path',spec.get('reference_path'))
         self.road=None
         if reference:
@@ -197,7 +198,7 @@ class VectorDitchHandoff(DitchGroundHandoff):
     def reset_idx(self,ids):
         e=self.env;g=self.ground
         e.reset_idx(ids)
-        self.phase[ids]=0 if self.approach else 1
+        self.phase[ids]=torch.where(self.ground_only[ids],3,0 if self.approach else 1)
         self.finished[ids]=False;self.reached_goal[ids]=False;self.road_violation[ids]=False;self.push_seen[ids]=False
         self.event_time[ids]=float('nan');self.event_root[ids]=float('nan');self.event_road_violation[ids]=False
         self.potential[ids]=0.;self.terminal_code[ids]=0
@@ -292,7 +293,7 @@ class VectorDitchHandoff(DitchGroundHandoff):
             e.obs_buf=torch.cat((e.obs_buf,features+(2*torch.rand_like(features)-1)*noise),-1)
         e.privileged_obs_buf=e.history.privileged(e.obs_buf[:,:76],root,p.dofs[:,:,0],p.dofs[:,:,1],contact)
         e.episode_length_buf+=1
-        goal=(self.phase==2)&(root[:,0]>=self.goal['x_min_m'])&(root[:,0]<=self.goal['x_max_m'])&(root[:,1].abs()<=self.goal['abs_y_max_m'])&(root[:,7]>=self.goal['min_vx_m_s'])
+        goal=((self.phase==2)|(self.phase==3))&(root[:,0]>=self.goal['x_min_m'])&(root[:,0]<=self.goal['x_max_m'])&(root[:,1].abs()<=self.goal['abs_y_max_m'])&(root[:,7]>=self.goal['min_vx_m_s'])
         timeout=e.episode_length_buf>=e.max_episode_length
         done=alive&(failed|goal|timeout)
         success=done&goal&~failed&~self.road_violation

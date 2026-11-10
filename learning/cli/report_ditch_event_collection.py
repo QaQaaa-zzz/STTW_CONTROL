@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('--collection',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();a.output.mkdir(parents=True,exist_ok=True)
 cfg=json.loads((a.collection/'config.json').read_text());protocol=json.loads((a.collection/'protocol.json').read_text());summary=json.loads((a.collection/'evaluation/summary.json').read_text());data=np.load(a.collection/'evaluation/trajectories.npz');root=data['root_xyzw'];valid=data['valid'];reward=data['reward'];routes=np.load(cfg['ground_handoff']['reference_path'])['xy'];roads=np.load(cfg['task_reference_path'])['xy'];names=protocol['candidates'] if 'candidates' in protocol else protocol['roles'];colors=['#0072B2','#E69F00','#009E73','#CC79A7'];styles=['-','--','-.',':'];cases=summary['cases'];n=len(names);success=np.array([c['success'] for c in cases]).reshape(-1,n)
+if 'method_assignment' in protocol:
+ colors=[colors[m] for m in protocol['method_assignment']];styles=[styles[j//2%4] for j in range(n)]
 planning=a.collection/'evaluation/planning.json'
 route_ids=json.loads(planning.read_text())['selected'] if planning.exists() else cfg['ground_handoff']['reference_route_ids']
 fig,axes=plt.subplots(n,1,figsize=(14,2.5*n),layout='constrained')

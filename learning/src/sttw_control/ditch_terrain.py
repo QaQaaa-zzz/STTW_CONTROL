@@ -47,6 +47,11 @@ def build_ditch_terrain(spec):
         if rough_right < right: patch(np.array([rough_right,right]),np.array([-1.,1.]),False,bank_height)
         for bottom,top in ((-4.,-1.),(1.,4.)):
             patch(np.array([left,right]),np.array([bottom,top]),False,bank_height)
+    if 'land_bridge_y_interval_m' in spec:
+        lo,hi=spec['land_bridge_y_interval_m']
+        if not 1.<lo<hi<=4. or spec.get('far_bank_height_m',0.)!=0.:
+            raise ValueError('The lateral land bridge requires same-height banks and 1 < y_min < y_max <= 4')
+        patch(np.array([front,front+width]),np.array([lo,hi]),False,0.)
     return np.concatenate(vertices).astype(np.float32),np.concatenate(triangles).astype(np.int32)
 
 
