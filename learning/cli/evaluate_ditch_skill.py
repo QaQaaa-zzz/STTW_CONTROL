@@ -12,6 +12,11 @@ from sttw_control.phase_u_actor_critic import PhaseUActorCritic
 from sttw_control.jump_contact_recording import PhysicsContactRecorder
 torch.manual_seed(cfg['evaluation_seed']);torch.set_num_threads(2)
 env=PhaseUEnv(cfg,a.output)
+handoff=None
+if cfg.get('ground_handoff'):
+ from sttw_control.ditch_ground_handoff import DitchGroundHandoff
+ if len(cfg['evaluation_checkpoints'])!=1:raise ValueError('Handback diagnostic uses one checkpoint per run')
+ handoff=DitchGroundHandoff(env,cfg['ground_handoff'],a.output)
 policy=PhaseUActorCritic(env.num_obs,106,4,cfg['bundle']).to(cfg['device']).eval()
 (a.output/'config.json').write_text(json.dumps(cfg,indent=2))
 (a.output/'randomized_properties.json').write_text(json.dumps(env.properties))
@@ -28,10 +33,12 @@ for candidate in cfg['evaluation_checkpoints']:
  with torch.no_grad():
   for step in range(env.max_episode_length):
    observations.append(obs.cpu().numpy().copy());latent=policy.act_inference(obs);actions.append(torch.tanh(latent).cpu().numpy())
-   obs,_,reward,done,info=env.step(latent)
+   obs,_,reward,done,info=(handoff.step(latent) if handoff is not None else env.step(latent))
    states.append(env.physical()[0].cpu().numpy());rewards.append(info['unscaled_reward'].cpu().numpy())
    parts.append({k:v.cpu().numpy() for k,v in info['reward_parts'].items()});codes.append(info['end_code'].cpu().numpy());support.append(env.platform_held.cpu().numpy().copy())
    if bool(done.all()):break
+ if handoff is not None:
+  np.savez_compressed(out/'ground_commands.npz',commands=np.asarray(handoff.commands))
  env.plant.step=recorder.original_step;recorder.save(out/'physics_contact.npz')
  if cfg.get('record_verified_diagnostics'):
   diagnostic=env.verified_jump.diagnostics
@@ -40,6 +47,9 @@ for candidate in cfg['evaluation_checkpoints']:
  np.savez_compressed(out/'trajectory.npz',time=(np.arange(len(states))+1)*env.dt,root=np.stack(states),observation=np.stack(observations),action=np.stack(actions),reward=np.stack(rewards),end_code=np.stack(codes),held=np.stack(support),**{'reward_'+k:np.stack([row[k] for row in parts]) for k in parts[0]})
  tr=np.stack(states)[:,0]
  row=dict(candidate=candidate,terrain_id=terrain_id,terrain_spec=env.terrain_specs[terrain_id],steps=len(states),duration_s=len(states)*env.dt,terminal_code=int(codes[-1][0]),final_xyz=tr[-1,:3].tolist(),peak_root_z=float(tr[:,2].max()),max_root_x=float(tr[:,0].max()),ditch_cross_hold=bool(env.platform_held[0]),reward_total=float(np.stack(rewards).sum()),reward_parts={k:float(np.stack([x[k] for x in parts]).sum()) for k in parts[0]},scope='Single fixed-seed TRAIN-domain diagnostic with frozen sampled Go2 properties/noise and mean actor; no ground-controller handoff or complete-map success claim')
+ if handoff is not None:
+  row['ground_handoff_executed']=handoff.active
+  row['scope']='Single fixed-map DEV jump-to-H75 handback; no statistical reliability claim'
  if cfg.get('verified_ditch_reward'):
   row['verified_stage']=int(info['jump_stage'][0]);row['verified_success']=bool(info['jump_success'][0])
  (out/'summary.json').write_text(json.dumps(row,indent=2));report.append(row)
