@@ -1,0 +1,362 @@
+{
+  "schema": "ditch_measured_events_v1",
+  "cases": [
+    {
+      "case": "straight_v20",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_bend_approach/straight_v20",
+      "group": "same_reset_seed_20261109",
+      "events": [
+        {
+          "event": "jump_control_entry",
+          "physics_index": 695,
+          "time_s": 1.74
+        },
+        {
+          "event": "flight_attempt_confirmed",
+          "physics_index": 880,
+          "time_s": 2.2025
+        },
+        {
+          "event": "first_far_bank_contact",
+          "physics_index": 1089,
+          "time_s": 2.725
+        },
+        {
+          "event": "clearance_confirmed",
+          "physics_index": 1095,
+          "time_s": 2.74
+        },
+        {
+          "event": "landing_capture",
+          "physics_index": 1112,
+          "time_s": 2.7825
+        },
+        {
+          "event": "sttw_handoff",
+          "physics_index": 1119,
+          "time_s": 2.8000000000000003
+        },
+        {
+          "event": "window_end",
+          "physics_index": 3199,
+          "time_s": 8.0
+        }
+      ],
+      "missing_events": [],
+      "terminated_code": 9,
+      "bounded_continuation": true,
+      "approach": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5,
+        "jump_start_x_m": 5.0
+      },
+      "terrain": {
+        "front_x_m": 6.3,
+        "width_m": 0.3,
+        "ground_end_x_m": 25.0,
+        "stone_height_min_m": 0.0,
+        "stone_height_max_m": 0.0,
+        "stones_per_m2": 0,
+        "seed": 20261109,
+        "lateral_limit_m": 3.9,
+        "far_bank_height_m": 0.0
+      }
+    },
+    {
+      "case": "straight_v18",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_bend_approach/straight_v18",
+      "group": "same_reset_seed_20261109",
+      "events": [
+        {
+          "event": "jump_control_entry",
+          "physics_index": 751,
+          "time_s": 1.8800000000000001
+        },
+        {
+          "event": "flight_attempt_confirmed",
+          "physics_index": 967,
+          "time_s": 2.42
+        },
+        {
+          "event": "first_far_bank_contact",
+          "physics_index": 1142,
+          "time_s": 2.8575
+        },
+        {
+          "event": "clearance_confirmed",
+          "physics_index": 1147,
+          "time_s": 2.87
+        },
+        {
+          "event": "landing_capture",
+          "physics_index": 1227,
+          "time_s": 3.0700000000000003
+        },
+        {
+          "event": "sttw_handoff",
+          "physics_index": 1231,
+          "time_s": 3.08
+        },
+        {
+          "event": "window_end",
+          "physics_index": 3199,
+          "time_s": 8.0
+        }
+      ],
+      "missing_events": [],
+      "terminated_code": 9,
+      "bounded_continuation": true,
+      "approach": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5,
+        "jump_start_x_m": 5.0
+      },
+      "terrain": {
+        "front_x_m": 6.3,
+        "width_m": 0.3,
+        "ground_end_x_m": 25.0,
+        "stone_height_min_m": 0.0,
+        "stone_height_max_m": 0.0,
+        "stones_per_m2": 0,
+        "seed": 20261109,
+        "lateral_limit_m": 3.9,
+        "far_bank_height_m": 0.0
+      }
+    },
+    {
+      "case": "left_v20",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_bend_approach/left_v20",
+      "group": "same_reset_seed_20261109",
+      "events": [
+        {
+          "event": "jump_control_entry",
+          "physics_index": 687,
+          "time_s": 1.72
+        },
+        {
+          "event": "flight_attempt_confirmed",
+          "physics_index": 896,
+          "time_s": 2.2425
+        },
+        {
+          "event": "clearance_confirmed",
+          "physics_index": 1072,
+          "time_s": 2.6825
+        },
+        {
+          "event": "first_far_bank_contact",
+          "physics_index": 1086,
+          "time_s": 2.7175000000000002
+        },
+        {
+          "event": "landing_capture",
+          "physics_index": 1231,
+          "time_s": 3.08
+        },
+        {
+          "event": "sttw_handoff",
+          "physics_index": 1231,
+          "time_s": 3.08
+        },
+        {
+          "event": "window_end",
+          "physics_index": 3199,
+          "time_s": 8.0
+        }
+      ],
+      "missing_events": [],
+      "terminated_code": 9,
+      "bounded_continuation": true,
+      "approach": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5,
+        "jump_start_x_m": 5.0
+      },
+      "terrain": {
+        "front_x_m": 6.3,
+        "width_m": 0.3,
+        "ground_end_x_m": 25.0,
+        "stone_height_min_m": 0.0,
+        "stone_height_max_m": 0.0,
+        "stones_per_m2": 0,
+        "seed": 20261109,
+        "lateral_limit_m": 3.9,
+        "far_bank_height_m": 0.0
+      }
+    },
+    {
+      "case": "left_v18",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_bend_approach/left_v18",
+      "group": "same_reset_seed_20261109",
+      "events": [
+        {
+          "event": "jump_control_entry",
+          "physics_index": 759,
+          "time_s": 1.9000000000000001
+        },
+        {
+          "event": "flight_attempt_confirmed",
+          "physics_index": 960,
+          "time_s": 2.4025
+        },
+        {
+          "event": "first_far_bank_contact",
+          "physics_index": 1154,
+          "time_s": 2.8875
+        },
+        {
+          "event": "clearance_confirmed",
+          "physics_index": 1166,
+          "time_s": 2.9175
+        },
+        {
+          "event": "termination",
+          "physics_index": 1343,
+          "time_s": 3.36
+        }
+      ],
+      "missing_events": [
+        "landing_capture",
+        "sttw_handoff"
+      ],
+      "terminated_code": 3,
+      "bounded_continuation": false,
+      "approach": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5,
+        "jump_start_x_m": 5.0
+      },
+      "terrain": {
+        "front_x_m": 6.3,
+        "width_m": 0.3,
+        "ground_end_x_m": 25.0,
+        "stone_height_min_m": 0.0,
+        "stone_height_max_m": 0.0,
+        "stones_per_m2": 0,
+        "seed": 20261109,
+        "lateral_limit_m": 3.9,
+        "far_bank_height_m": 0.0
+      }
+    },
+    {
+      "case": "right_v20",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_bend_approach/right_v20",
+      "group": "same_reset_seed_20261109",
+      "events": [
+        {
+          "event": "jump_control_entry",
+          "physics_index": 695,
+          "time_s": 1.74
+        },
+        {
+          "event": "flight_attempt_confirmed",
+          "physics_index": 880,
+          "time_s": 2.2025
+        },
+        {
+          "event": "clearance_confirmed",
+          "physics_index": 1084,
+          "time_s": 2.7125
+        },
+        {
+          "event": "first_far_bank_contact",
+          "physics_index": 1089,
+          "time_s": 2.725
+        },
+        {
+          "event": "landing_capture",
+          "physics_index": 1124,
+          "time_s": 2.8125
+        },
+        {
+          "event": "sttw_handoff",
+          "physics_index": 1127,
+          "time_s": 2.82
+        },
+        {
+          "event": "window_end",
+          "physics_index": 3199,
+          "time_s": 8.0
+        }
+      ],
+      "missing_events": [],
+      "terminated_code": 9,
+      "bounded_continuation": true,
+      "approach": {
+        "speed_m_s": 2.0,
+        "alpha": 0.5,
+        "jump_start_x_m": 5.0
+      },
+      "terrain": {
+        "front_x_m": 6.3,
+        "width_m": 0.3,
+        "ground_end_x_m": 25.0,
+        "stone_height_min_m": 0.0,
+        "stone_height_max_m": 0.0,
+        "stones_per_m2": 0,
+        "seed": 20261109,
+        "lateral_limit_m": 3.9,
+        "far_bank_height_m": 0.0
+      }
+    },
+    {
+      "case": "right_v18",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_bend_approach/right_v18",
+      "group": "same_reset_seed_20261109",
+      "events": [
+        {
+          "event": "jump_control_entry",
+          "physics_index": 759,
+          "time_s": 1.9000000000000001
+        },
+        {
+          "event": "flight_attempt_confirmed",
+          "physics_index": 961,
+          "time_s": 2.4050000000000002
+        },
+        {
+          "event": "first_far_bank_contact",
+          "physics_index": 1155,
+          "time_s": 2.89
+        },
+        {
+          "event": "clearance_confirmed",
+          "physics_index": 1177,
+          "time_s": 2.945
+        },
+        {
+          "event": "termination",
+          "physics_index": 1231,
+          "time_s": 3.08
+        }
+      ],
+      "missing_events": [
+        "landing_capture",
+        "sttw_handoff"
+      ],
+      "terminated_code": 4,
+      "bounded_continuation": false,
+      "approach": {
+        "speed_m_s": 1.8,
+        "alpha": 0.5,
+        "jump_start_x_m": 5.0
+      },
+      "terrain": {
+        "front_x_m": 6.3,
+        "width_m": 0.3,
+        "ground_end_x_m": 25.0,
+        "stone_height_min_m": 0.0,
+        "stone_height_max_m": 0.0,
+        "stones_per_m2": 0,
+        "seed": 20261109,
+        "lateral_limit_m": 3.9,
+        "far_bank_height_m": 0.0
+      }
+    }
+  ],
+  "scope": "Nominal DEV interface dataset, no fit/test split or generalization claim. All same-reset candidates share one group.",
+  "contact_mode": "Bit0 wheel0 loaded, bit1 wheel1 loaded; no-load is not by itself an active jump.",
+  "event_semantics": "Attempt/stage labels reuse existing physical scorer; confirmed flight is debounced, not exact first loss of support. First far-bank contact uses collider-filtered target flag after confirmed attempt. Capture is not one-second stable support.",
+  "timing": "Event root quaternions are wxyz; jump_entry_root_xyzw follows the plant physical() xyzw convention. Events and states aligned at solved physics step. Policy observations are PRE-step at time-0.02. Entry/handoff align with preceding solved step.",
+  "limitations": "Controller ESO/filter hidden states not serialized; actor observations retain existing history. Commands remain in source ground_commands.npz; policy action array is proposals, not ground executed actions. Local height crops and planned action features not yet exported; not a complete Markov training dataset."
+}
