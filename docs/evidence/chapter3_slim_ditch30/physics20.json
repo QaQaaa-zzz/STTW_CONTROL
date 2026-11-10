@@ -1,0 +1,245 @@
+{
+  "mode": "physics",
+  "versions": {
+    "python": "3.12.13",
+    "mujoco": "3.6.0",
+    "numpy": "2.5.4",
+    "torch": "2.9.0+cpu"
+  },
+  "weights": {
+    "heading125": "5cb43fa8f3dcddce647c5e869085deaf2a3794a5e2c06fb0bf67973f27e10240",
+    "h75": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b"
+  },
+  "new_ppo_updates": 0,
+  "source_inference_samples": 8,
+  "source_action_max_abs_error": 0.0,
+  "h75_inference_samples": 8,
+  "h75_latent_max_abs_error": 1.1920928955078125e-07,
+  "compiled_model_dimensions": [
+    12,
+    11,
+    4
+  ],
+  "new_physics_steps": 400000,
+  "result": {
+    "method": "handoff",
+    "dt_s": 1.9999999999999998e-05,
+    "wall_s": 11.088834142996348,
+    "fine_steps": 400000,
+    "fine_samples": 400000,
+    "macro_samples": 3200,
+    "duration_s": 8.000000000035474,
+    "physical_failure": null,
+    "alive8": true,
+    "strict_jump": {
+      "contact_filtered_20ms_first_support_completion_s": 2.3449999999999998,
+      "contact_filtered_20ms_hold_1s": true,
+      "contact_filtered_20ms_longest_hold_s": 1.9400000000000002,
+      "skill": "heading125",
+      "first_strict_support_completion_s": 2.3449999999999998,
+      "airborne_after_handoff": true,
+      "first_airborne_interval_s": [
+        0.425,
+        0.9550000000000001
+      ],
+      "landing_hold_1s": true,
+      "longest_hold_s": 1.9400000000000002,
+      "interval_s": [
+        1.345,
+        3.285
+      ]
+    },
+    "gate_events": {
+      "ground_loaded_20ms": {
+        "time_s": 0.10990000000001231,
+        "interval_start_s": 0.08992000000001231
+      },
+      "natural_flight_20ms": {
+        "time_s": 0.4440200000001625,
+        "interval_start_s": 0.4240400000001625
+      },
+      "first_ground_touchdown": {
+        "time_s": 0.9626600000006812,
+        "loaded": [
+          true,
+          false
+        ]
+      },
+      "fine_ground_hold_1s": {
+        "time_s": 2.343959999998421,
+        "interval_start_s": 1.343979999998421
+      },
+      "strict_jump_hold_1s": {
+        "time_s": 2.345,
+        "interval_start_s": 1.345
+      },
+      "landing_ready": {
+        "time_s": 2.345,
+        "speed_m_s": 1.601920729033735
+      },
+      "landing_handoff": {
+        "time_s": 2.359999999998526,
+        "qpos_before": [
+          6.0107899964251805,
+          0.19557405890891544,
+          0.11909791069372852,
+          0.7006975910738206,
+          0.7134529156690746,
+          0.00239338741826316,
+          0.0014473020785516796,
+          -48.624708823480894,
+          -0.018205267076655287,
+          -43.55030950056318,
+          -1.2474099338042886,
+          2.509148854721334
+        ],
+        "qvel_before": [
+          1.6017806870488813,
+          0.0001240898547591608,
+          -0.0007790208679541557,
+          -0.008453451030899398,
+          -0.10680952870097293,
+          0.0023076570727169057,
+          -23.00338138103719,
+          0.02554026648846536,
+          -23.004484641972102,
+          -0.011892017933062956,
+          5.711774494204648e-05
+        ],
+        "qpos_after": [
+          6.0107899964251805,
+          0.19557405890891544,
+          0.11909791069372852,
+          0.7006975910738206,
+          0.7134529156690746,
+          0.00239338741826316,
+          0.0014473020785516796,
+          -48.624708823480894,
+          -0.018205267076655287,
+          -43.55030950056318,
+          -1.2474099338042886,
+          2.509148854721334
+        ],
+        "qvel_after": [
+          1.6017806870488813,
+          0.0001240898547591608,
+          -0.0007790208679541557,
+          -0.008453451030899398,
+          -0.10680952870097293,
+          0.0023076570727169057,
+          -23.00338138103719,
+          0.02554026648846536,
+          -23.004484641972102,
+          -0.011892017933062956,
+          5.711774494204648e-05
+        ],
+        "method": "original_finite_motor_leg_hold",
+        "physical_state_unchanged": true,
+        "requested_actual_leg_pose_rad": [
+          -1.2474099338042886,
+          2.509148854721334
+        ],
+        "clipped_fixed_leg_target_rad": [
+          -1.2474099338042886,
+          2.5
+        ],
+        "clipping_delta_target_minus_requested_rad": [
+          0.0,
+          -0.009148854721333866
+        ],
+        "initial_position_error_target_minus_actual_rad": [
+          0.0,
+          -0.009148854721333866
+        ],
+        "original_leg_ctrlrange": [
+          [
+            -1.3,
+            0.5
+          ],
+          [
+            -1.5,
+            2.5
+          ]
+        ],
+        "original_leg_joint_range": [
+          [
+            -1.3,
+            0.5
+          ],
+          [
+            -1.5,
+            2.5
+          ]
+        ],
+        "original_leg_joint_solref": [
+          [
+            0.02,
+            1.0
+          ],
+          [
+            0.02,
+            1.0
+          ]
+        ],
+        "original_leg_joint_solimp": [
+          [
+            0.9,
+            0.95,
+            0.001,
+            0.5,
+            2.0
+          ],
+          [
+            0.9,
+            0.95,
+            0.001,
+            0.5,
+            2.0
+          ]
+        ],
+        "existing_native_limit_excess_rad": [
+          0.0,
+          0.009148854721333866
+        ],
+        "initial_progress": 11.020000457763672,
+        "history_mask": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "zero_lower_means": "Zero learned lower residual; physical leg position-servo torque remains real",
+        "rigid_lock": false
+      },
+      "first_intervention": {
+        "time_s": 2.359999999998526,
+        "kind": "direct_h75"
+      }
+    },
+    "archived_prefix_exact": null,
+    "ppo_updates": 0,
+    "ground_started": true,
+    "ground_seconds": 5.640000000036948,
+    "low_speed_is_physical_failure": false,
+    "ground_policy_fault": false,
+    "ground_domain_exit": false
+  },
+  "portability_changes": [
+    "install/interpreter path validation relocated; version3.6.0 and original ABI/callback/wheel hash checks retained",
+    "native build and results written exclusively to fresh output",
+    "new run invokes existing run_case/Recorder; original sealed execute not invoked",
+    "historical trajectory comparison omitted and explicitly marked not_run"
+  ]
+}
