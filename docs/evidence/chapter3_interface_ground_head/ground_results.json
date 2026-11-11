@@ -1,0 +1,160 @@
+{
+  "contract": {
+    "change": "Independent ground-only BCE fitting and DEV Brier selection; frozen upstream/downstream/direct models",
+    "budget": "3 seeds x250 CPU epochs;0 physics/0 PPO;30-minute stop threshold",
+    "roles": "Original TRAIN/DEV splits only; historical transfer is reported, not selected; previous online30 roots not used",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_interface_all_routes/upstream_distance",
+    "seeds": [
+      71201,
+      71202,
+      71203
+    ],
+    "architecture": "582-128-64-1 SiLU;Adam lr.001 weight_decay.0001",
+    "selection": "Ground-only grouped DEV Brier; no search over architectures or budgets"
+  },
+  "selection": {
+    "71201": {
+      "epoch": 101,
+      "dev_brier": 0.16308757662773132
+    },
+    "71202": {
+      "epoch": 61,
+      "dev_brier": 0.16172200441360474
+    },
+    "71203": {
+      "epoch": 60,
+      "dev_brier": 0.16295579075813293
+    }
+  },
+  "groups": [
+    {
+      "role": "TRAIN",
+      "n": 300,
+      "goals": 77,
+      "shared_brier": 0.1643704681021433,
+      "independent_brier": 0.13272598385810852
+    },
+    {
+      "role": "DEV",
+      "n": 120,
+      "goals": 29,
+      "shared_brier": 0.1643896698525337,
+      "independent_brier": 0.15915577113628387
+    },
+    {
+      "role": "historical_source240",
+      "n": 60,
+      "goals": 18,
+      "shared_brier": 0.20611350678522175,
+      "independent_brier": 0.20728269219398499
+    }
+  ],
+  "train_actions": [
+    {
+      "candidate": "ground_detour_v1.5_a0.0",
+      "n": 20,
+      "goals": 0,
+      "shared_mean": 0.23784770364873112,
+      "independent_mean": 0.34431999921798706
+    },
+    {
+      "candidate": "ground_detour_v1.5_a0.5",
+      "n": 20,
+      "goals": 0,
+      "shared_mean": 0.22983375519979746,
+      "independent_mean": 0.29460445046424866
+    },
+    {
+      "candidate": "ground_detour_v1.5_a1.0",
+      "n": 20,
+      "goals": 0,
+      "shared_mean": 0.22329124975949527,
+      "independent_mean": 0.2441692054271698
+    },
+    {
+      "candidate": "ground_detour_v1.8_a0.0",
+      "n": 20,
+      "goals": 16,
+      "shared_mean": 0.2873433821834624,
+      "independent_mean": 0.4340268075466156
+    },
+    {
+      "candidate": "ground_detour_v1.8_a0.5",
+      "n": 20,
+      "goals": 15,
+      "shared_mean": 0.23506493864115327,
+      "independent_mean": 0.33314448595046997
+    },
+    {
+      "candidate": "ground_detour_v1.8_a1.0",
+      "n": 20,
+      "goals": 16,
+      "shared_mean": 0.24762787430081518,
+      "independent_mean": 0.3502312898635864
+    },
+    {
+      "candidate": "ground_detour_v2.0_a0.0",
+      "n": 20,
+      "goals": 11,
+      "shared_mean": 0.22461308529018426,
+      "independent_mean": 0.2884151339530945
+    },
+    {
+      "candidate": "ground_detour_v2.0_a0.5",
+      "n": 20,
+      "goals": 10,
+      "shared_mean": 0.22608265429735183,
+      "independent_mean": 0.2527264952659607
+    },
+    {
+      "candidate": "ground_detour_v2.0_a1.0",
+      "n": 20,
+      "goals": 4,
+      "shared_mean": 0.24003808757988737,
+      "independent_mean": 0.22734418511390686
+    },
+    {
+      "candidate": "ground_detour_v2.3_a0.0",
+      "n": 20,
+      "goals": 3,
+      "shared_mean": 0.22397037023620214,
+      "independent_mean": 0.23221364617347717
+    },
+    {
+      "candidate": "ground_detour_v2.3_a0.5",
+      "n": 20,
+      "goals": 1,
+      "shared_mean": 0.23121521915309132,
+      "independent_mean": 0.1942698061466217
+    },
+    {
+      "candidate": "ground_detour_v2.3_a1.0",
+      "n": 20,
+      "goals": 1,
+      "shared_mean": 0.21460104414727538,
+      "independent_mean": 0.13294914364814758
+    },
+    {
+      "candidate": "ground_detour_v2.6_a0.0",
+      "n": 20,
+      "goals": 0,
+      "shared_mean": 0.22537272330373526,
+      "independent_mean": 0.18985432386398315
+    },
+    {
+      "candidate": "ground_detour_v2.6_a0.5",
+      "n": 20,
+      "goals": 0,
+      "shared_mean": 0.2182253789389506,
+      "independent_mean": 0.16199152171611786
+    },
+    {
+      "candidate": "ground_detour_v2.6_a1.0",
+      "n": 20,
+      "goals": 0,
+      "shared_mean": 0.2137049089418724,
+      "independent_mean": 0.13763336837291718
+    }
+  ],
+  "elapsed_s": 2.6869313989882357
+}

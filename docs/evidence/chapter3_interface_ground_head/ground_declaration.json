@@ -1,0 +1,13 @@
+{
+  "change": "Independent ground-only BCE fitting and DEV Brier selection; frozen upstream/downstream/direct models",
+  "budget": "3 seeds x250 CPU epochs;0 physics/0 PPO;30-minute stop threshold",
+  "roles": "Original TRAIN/DEV splits only; historical transfer is reported, not selected; previous online30 roots not used",
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_interface_all_routes/upstream_distance",
+  "seeds": [
+    71201,
+    71202,
+    71203
+  ],
+  "architecture": "582-128-64-1 SiLU;Adam lr.001 weight_decay.0001",
+  "selection": "Ground-only grouped DEV Brier; no search over architectures or budgets"
+}

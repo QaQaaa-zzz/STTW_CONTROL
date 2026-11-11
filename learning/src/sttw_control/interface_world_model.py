@@ -23,6 +23,14 @@ class InterfaceWorldModel:
         self.map=KnownHeightMap(np.load(self.meta['terrain_npz'])['vertices'],self.meta['terrain_spec'])
         self.downstream=HandoffContinuationModel(self.meta['downstream_directory'])
         if self.downstream.target!='goal':raise ValueError('Full-task composition requires conditional goal predictor')
+        self.ground=[]
+        if 'ground_directory' in self.meta:
+            for path in sorted(Path(self.meta['ground_directory']).glob('ground_*.pt')):
+                checkpoint=torch.load(path,map_location='cpu',weights_only=False)
+                member=network(len(checkpoint['input_mean']),1)
+                member.load_state_dict(checkpoint['state_dict']);member.eval()
+                self.ground.append((member,checkpoint['input_mean'],checkpoint['input_std']))
+            if len(self.ground)!=3:raise ValueError('Expected three independent ground members')
         self.members=[]
         for path in sorted(self.directory.glob('upstream_*.pt')):
             c=torch.load(path,map_location='cpu',weights_only=False);m=network(len(c['input_mean']),80)
@@ -59,6 +67,10 @@ class InterfaceWorldModel:
             ph=1/(1+np.exp(-out[:,78].clip(-30,30)));pg=1/(1+np.exp(-out[:,79].clip(-30,30)))
             values.append(np.where(jump,ph*downstream,pg));handoffs.append(ph);within.append(downstream)
             means.append(mu*self.c['target_std']+self.c['target_mean'])
+        if self.ground:
+            ground_probability=np.mean([torch.sigmoid(member(torch.tensor((raw-mean)/std))[:,0]).numpy()
+                                        for member,mean,std in self.ground],axis=0)
+            values=[np.where(jump,value,ground_probability) for value in values]
         return dict(score=np.mean(values,axis=0).tolist(),predicted_completion=np.mean(values,axis=0).tolist(),
                     valid_handoff_probability=np.mean(handoffs,axis=0).tolist(),
                     conditional_goal_probability=np.mean(within,axis=0).tolist(),
