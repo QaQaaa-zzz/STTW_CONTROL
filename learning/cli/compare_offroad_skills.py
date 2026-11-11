@@ -21,7 +21,7 @@ for run,protocol,summary,trace,config,contract,per in loaded:
   subset=[c for c in rows if c['model']==run.name and c['route']==route]
   groups.append(dict(model=run.name,route=route,n=len(subset),completed=sum(c['success'] for c in subset),gained=sum(c['gained'] for c in subset),lost=sum(c['lost'] for c in subset),entry=sum(c['entry_s'] is not None for c in subset),handoff=sum(c['handoff_s'] is not None for c in subset),prejump_violation=sum(c['violation_phase']=='approach' for c in subset),max_prefix_delta_m=max(c['pre_jump_max_position_delta_m'] or 0 for c in subset)))
 (a.output/'comparison.json').write_text(json.dumps(dict(groups=groups,cases=rows),indent=2))
-text='# 新越野任务中的RB技能替换对照\n\n固定同地图、路线、速度、α和来车初态；仅替换跳跃权重。原模型120条已完成数据复用，RB400/RB500各120条重新执行；是开发条件，不是独立测试。不同进程的物理重复差异单独列出，不能把所有得失归因于跳跃技能。\n\n'
+text='# 新越野任务中的RB技能替换对照\n\n固定同地图、路线、速度、α和来车初态；仅替换跳跃权重。原模型已完成数据复用，列出的候选均使用已完成物理轨迹；各组分母见表。是开发条件，不是独立测试。不同进程的物理重复差异单独列出，不能把所有得失归因于跳跃技能。\n\n'
 for run,_,_,_,config,_,_ in loaded:
  report='chapter3_offroad_task_map_gentle' if run==a.source else 'chapter3_offroad_'+run.name
  text+=f'- [{run.name}全部实际/参考XY与奖励](../{report}/RESULTS.md)，权重 `{config.get("evaluation_checkpoint",config["bundle"])}`\n'
