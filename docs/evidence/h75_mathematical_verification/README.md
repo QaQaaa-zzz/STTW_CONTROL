@@ -6,6 +6,8 @@
 
 ![最有利名义恢复](optimal_recovery.png)
 
+论文主线及跨工况对照见[精简结论](../h75_theory_atlas/README.md#当前结论行动模式有适用范围)。
+
 ## 1. 可以证明什么
 
 使用原ECBC参数，固定v时：
