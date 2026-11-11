@@ -1,7 +1,7 @@
 {
   "submission_ready": false,
   "author_verification": "pending",
-  "generated_utc": "2026-11-11T06:44:19.888303+00:00",
+  "generated_utc": "2026-11-11T08:33:21.882999+00:00",
   "canonical": "docs/chapter3_paper/MANUSCRIPT.tex",
   "sources": [
     {
@@ -88,7 +88,7 @@
       "id": "M3",
       "title": "Actual latency and route publication",
       "path": "learning/src/sttw_control/moving_ditch_planner.py",
-      "sha256": "adf649834b999576107884342716a998493d81ba043f5f2befea5aef0c6a23e8",
+      "sha256": "8fa04063bd955deba10c18e42eae1fd5bc8867b2fd2beb34077a3d6c8b86fab0",
       "verification": "agent_source_inspected",
       "human_verification": "pending"
     },
@@ -112,7 +112,7 @@
       "id": "M6",
       "title": "Actual handoff and task success",
       "path": "learning/src/sttw_control/ditch_ground_handoff.py",
-      "sha256": "2a45968e3d054105d1d87fc96f39b4b0c5d517efa4882dfbc42901911fbdbd83",
+      "sha256": "df946c4b8d8d7ac6517301c5f4f76f9cc776c4bfa39ffa74fcbbdae066ff3144",
       "verification": "agent_source_inspected",
       "human_verification": "pending"
     },
@@ -184,7 +184,7 @@
       "id": "IM1",
       "title": "Actual interface model",
       "path": "learning/src/sttw_control/interface_world_model.py",
-      "sha256": "4951305efa0302204444677e31373fdff2772cc0dde165064bc4c9fdfa9ddbc8",
+      "sha256": "ebac2da1b2957f8517edb3fec538cc3dc06881ebdd7beded48cb174b08f4cbe2",
       "verification": "agent_source_inspected",
       "human_verification": "pending"
     },
@@ -258,6 +258,38 @@
       "path": "docs/evidence/chapter3_joint_handoff_online/results.json",
       "sha256": "fa220b31f1d028beb2aec89ec7e4e4fae7444c1e716691a1c14f6222ccbfd245",
       "verification": "agent_source_inspected",
+      "human_verification": "pending"
+    },
+    {
+      "id": "I13",
+      "title": "chapter3_review_repairs",
+      "path": "docs/evidence/chapter3_review_repairs/RESULTS.md",
+      "sha256": "690155fd4734baed9fb73857929e7bc12dfffcd28740c89b484ec4f3c9696d9d",
+      "verification": "agent_executed_and_inspected",
+      "human_verification": "pending"
+    },
+    {
+      "id": "I14",
+      "title": "chapter3_horizon_screen",
+      "path": "docs/evidence/chapter3_horizon_screen/RESULTS.md",
+      "sha256": "44740078abe0935639f2c6c54bce507214455f3b381fcba5d74cca18abc2b199",
+      "verification": "agent_executed_and_inspected",
+      "human_verification": "pending"
+    },
+    {
+      "id": "I15",
+      "title": "chapter3_repaired_joint_fast",
+      "path": "docs/evidence/chapter3_repaired_joint_fast/RESULTS.md",
+      "sha256": "df09b4646986b36a4f1769427d42699924c059230b21ad4f661950626e887f7d",
+      "verification": "agent_executed_and_inspected",
+      "human_verification": "pending"
+    },
+    {
+      "id": "I16",
+      "title": "Saved RB candidate integration screen",
+      "path": "docs/evidence/chapter3_rb_candidate_handoff/RESULTS.md",
+      "sha256": "2700eb3619d116c85ea7f0acbe6b2809ce21485679ca58ae9a982e092a60d2f6",
+      "verification": "agent_executed_and_inspected",
       "human_verification": "pending"
     }
   ],

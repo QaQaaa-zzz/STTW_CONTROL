@@ -1,10 +1,10 @@
 claim_id,section,claim_summary,evidence_ids,human_verification
-C1,Abstract;IV,582D input;39D conditional target;80 outputs,"IM1,IM2",pending
+C1,Original model;IV,582D input;39D conditional target;80 outputs,"IM1,IM2",pending
 C2,IV,Gaussian plus two BCE objectives;250epochs;groupedDEV selection,IM2,pending
 C3,IV,Downstream39-64-32-1;200epochs;conditional full-goal target,"IM3,I5",pending
 C4,V,32samples per upstream member;valid-handoff times conditional goal,IM1,pending
 C5,VI;VII,1379TRAIN/540DEV;Brier and state prediction errors,I1,pending
-C6,Abstract;VII,"30roots;270episodes;15/90,33/90,41/90",I2,pending
+C6,Historical unscreened panel;VII,"30roots;270episodes;15/90,33/90,41/90",I2,pending
 C7,VII,13gains39losses;root bootstrap;recorded query equality,I2,pending
 C8,VII,33detour timeouts;TRAIN0/20 with forecast.238,"I2,I4",pending
 C9,VII,Approach and posthandoff failures both present,I3,pending
@@ -15,4 +15,8 @@ C13,VII,Adding handoff dynamics improves all6DEV roots and both historical group
 C14,VII,24route interventions;4sources exact recorded prefix;task-dependent outcomes,I9,pending
 C15,VII,540task-conditioned collection;DEV.10827vs.10290,I10,pending
 C16,VII,Measured-handoff panel13/90vs15/90vs14/90;one successful left selection;query mismatch limits attribution,I11,pending
-C17,VII,Joint feedback30/90vs28/90vs28/90;44revisions11goals;no superiority;all approach choices same,I12,pending
+C17,Original joint panel;VII,Joint feedback30/90vs28/90vs28/90;44revisions11goals;no superiority;all approach choices same,I12,pending
+C_REPAIR,Methods;Results,Compact residual and Frenet physical prediction results; historical RB legal-entry audit,I13,pending
+C_HORIZON,Abstract;Results,Shared-screen development retest43/90 vs35/90 and36/90,I14,pending
+C_JOINT_RETEST,Results,Repaired joint26/30/27;41revisions7goals;no superiority,I15,pending
+C_RB_SCREEN,Discussion,Source11 RB30119 RB40013 RB50016 of90;DEV screening;no automatic adoption,I16,pending

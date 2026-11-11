@@ -19,7 +19,7 @@ The paper separates abstract, motivation, prior work, task, mathematical model, 
 python3 docs/chapter3_paper/build.py
 ```
 
-The local IEEE two-column template is retained from the earlier draft; current venue submission requirements must be rechecked at submission. The build receipt records actual page count and layout checks. Figures are versioned; no simulation or weights are needed to compile. Source and claim manifests distinguish current evidence from historical evidence and keep human verification pending. No new physics or policy training was performed for this manuscript revision.
+The local IEEE two-column template is retained from the earlier draft; current venue submission requirements must be rechecked at submission. The build receipt records actual page count and layout checks. Figures are versioned; no simulation or weights are needed to compile. Source and claim manifests distinguish current evidence from historical evidence and keep human verification pending. The review-directed revision includes new physical development retests and supervised model refits; no new policy training.
 
 ## Author-review and tooling notes
 
@@ -30,6 +30,10 @@ Scientific-writing and scientific-visualization skills guided the revision, and 
 Current measured-state extension: 270 frozen executions, task-conditioned 13/90, state-only 15/90, fixed straight 14/90; one successful selected left continuation. Evidence I11 preserves unmatched incoming states and all failures. This isolated panel is downstream-only feedback; the joint panel below evaluates both interfaces.
 
 
-## Final minimum-loop result
+## Review-directed revision
 
-[Joint panel and all XY trajectories](../evidence/chapter3_joint_handoff_online/RESULTS.md): frozen 30 new roots × three repetitions × three methods, 270 executions. Joint feedback completes 30/90; open plan and fixed each complete 28/90. Feedback changes 44 downstream plans, with eleven subsequent goals. All approach selections remain 1.5 m/s, alpha 0. Prediction-to-action execution is verified; neither superiority nor causal rescue is established. This final extension covers 15 straight approaches and three downstream routes; the earlier 60-candidate failures remain separate evidence. No new experiments are required for this minimum-loop draft handoff.
+[Four requested corrections and prediction plots](../evidence/chapter3_review_repairs/RESULTS.md) · [shared timing-screen XY/results](../evidence/chapter3_horizon_screen/RESULTS.md) · [repaired joint XY/results](../evidence/chapter3_repaired_joint_fast/RESULTS.md).
+
+Shared timing screening yields43/90 versus35/90 direct and36/90 distance. Compact residual prediction improves time/y errors but worsens velocity errors; Frenet Brier.10650 remains worse than state-only.10290. The repaired joint feedback completes26/90, open30/90, fixed27/90; 41revisions with7subsequent goals. All are development retests. The original30/28/28 panel remains archived and is not pooled. No new jump-policy training was performed. RB candidate evaluation is separate and does not change these source-skill results.
+
+[Saved RB candidate integration screen](../evidence/chapter3_rb_candidate_handoff/RESULTS.md): Source11/90, RB30119/90, RB40013/90, RB50016/90. RB301 gains13/loses5; conditional exact-entry subset gains11/loses3. This is a separate preassigned-approach development screen, not a new joint-planner result. No model was deleted. Training did not save separate updates2–15; that requested sweep was canceled after identity clarification.

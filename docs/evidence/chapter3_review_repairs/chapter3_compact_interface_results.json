@@ -1,0 +1,109 @@
+{
+  "contract": {
+    "change": "TRAIN-only16D observed-history PCA;13root+16history+entrydistance+16terrain+time+8action=55inputs;action concatenated to final64D hidden;vx/time physical baseline residual39D;no autoregressive PCA prediction",
+    "budget": "3members x250CPUepochs;0physics/PPO;stop within25min",
+    "split": "Unchanged1379TRAIN/540DEV;valid-handoff regression463TRAIN/168DEV;historical240 never selected",
+    "limits": "Reference speed/time baseline is an approximation;full-goal masks unchanged;not guaranteed cure or action diversity"
+  },
+  "selection": {
+    "71101": {
+      "epoch": 59,
+      "dev_objective": 1.3616414070129395
+    },
+    "71102": {
+      "epoch": 64,
+      "dev_objective": 1.3679908514022827
+    },
+    "71103": {
+      "epoch": 58,
+      "dev_objective": 1.3425841331481934
+    }
+  },
+  "groups": [
+    {
+      "role": "TRAIN",
+      "n": 463,
+      "fields": [
+        {
+          "field": "x",
+          "rmse": 0.07747558504343033,
+          "pred_std": 0.013167839497327805,
+          "observed_std": 0.08019988983869553
+        },
+        {
+          "field": "y",
+          "rmse": 0.16564226150512695,
+          "pred_std": 0.09017907828092575,
+          "observed_std": 0.19853605329990387
+        },
+        {
+          "field": "vx",
+          "rmse": 0.44395098090171814,
+          "pred_std": 0.168553426861763,
+          "observed_std": 0.4132513999938965
+        },
+        {
+          "field": "vy",
+          "rmse": 0.4395873546600342,
+          "pred_std": 0.15941785275936127,
+          "observed_std": 0.4802873432636261
+        },
+        {
+          "field": "wx",
+          "rmse": 2.2335526943206787,
+          "pred_std": 0.6849219799041748,
+          "observed_std": 2.4128642082214355
+        },
+        {
+          "field": "time",
+          "rmse": 0.11399417370557785,
+          "pred_std": 0.5123071074485779,
+          "observed_std": 0.45700395107269287
+        }
+      ]
+    },
+    {
+      "role": "DEV",
+      "n": 168,
+      "fields": [
+        {
+          "field": "x",
+          "rmse": 0.08949264883995056,
+          "pred_std": 0.012843948788940907,
+          "observed_std": 0.08912128210067749
+        },
+        {
+          "field": "y",
+          "rmse": 0.17235492169857025,
+          "pred_std": 0.08939211815595627,
+          "observed_std": 0.20676498115062714
+        },
+        {
+          "field": "vx",
+          "rmse": 0.5111649036407471,
+          "pred_std": 0.17496222257614136,
+          "observed_std": 0.43774858117103577
+        },
+        {
+          "field": "vy",
+          "rmse": 0.5246740579605103,
+          "pred_std": 0.15892274677753448,
+          "observed_std": 0.5193291902542114
+        },
+        {
+          "field": "wx",
+          "rmse": 2.6232306957244873,
+          "pred_std": 0.6787869930267334,
+          "observed_std": 2.6056387424468994
+        },
+        {
+          "field": "time",
+          "rmse": 0.12788578867912292,
+          "pred_std": 0.5152019262313843,
+          "observed_std": 0.4659211039543152
+        }
+      ]
+    }
+  ],
+  "elapsed_s": 30.90840464498615
+}

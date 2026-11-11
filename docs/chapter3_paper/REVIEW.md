@@ -1,3 +1,5 @@
+Current revision: see [implemented review corrections](../evidence/chapter3_review_repairs/RESULTS.md). New models use55D compact upstream and19D Frenet context; original582D/world-x implementations and evidence remain supported. Joint retest26/30/27; shared horizon43/35/36. Earlier assessments below are historical where superseded.
+
 # Minimum-loop draft completion audit
 
 This audit covers the requested simulation-based minimum loop and English research draft. It does not approve journal submission or claim a superior planner. No further experiment is scheduled for this deliverable.

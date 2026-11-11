@@ -1,3 +1,5 @@
+Current revision: see [implemented review corrections](../evidence/chapter3_review_repairs/RESULTS.md). New models use55D compact upstream and19D Frenet context; original582D/world-x implementations and evidence remain supported. Joint retest26/30/27; shared horizon43/35/36. Earlier assessments below are historical where superseded.
+
 # Two-interface model reproduction entry
 
 Current model: `learning/src/sttw_control/interface_world_model.py`; training: `learning/cli/fit_interface_world_model.py` and `fit_handoff_continuation.py`; online panel: `prepare_interface_online.py` and `analyze_interface_online.py`. Frozen configuration and weights are under `/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_interface_all_routes/upstream_distance` and `downstream_goal_distance`; online raw data are under `chapter3_interface_online/repeat0`, `repeat1`, `repeat2`.

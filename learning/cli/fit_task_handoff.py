@@ -9,10 +9,11 @@ from sttw_control.handoff_task_context import route_context,OFFSETS_M
 p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('--collection',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
 p.add_argument('--mount-config',type=Path,default=Path('learning/configs/rb_sttw_platform.json'))
+p.add_argument('--context-representation',choices=['world_x','frenet'],default='world_x')
 a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False);torch.set_num_threads(2);start=time.monotonic()
 mount=json.loads(a.mount_config.read_text())['mount_rotation_wxyz']
-contract=dict(question='Can downstream geometry distinguish full-goal continuation at a measured handoff?',budget='2feature sets x3seeds x200CPUepochs;0PPO/0newphysics;stop before30min',
- inputs='39D measured root/latest frame/time plus19D known downstream route context; no task ID input',context='6 forward world-x offsets: lateral displacement from root,heading error,curvature; corridor half-width',offsets_m=OFFSETS_M.tolist(),mount_wxyz=mount,
+contract=dict(context_representation=a.context_representation,question='Can downstream geometry distinguish full-goal continuation at a measured handoff?',budget='2feature sets x3seeds x200CPUepochs;0PPO/0newphysics;stop before30min',
+ inputs='39D measured root/latest frame/time plus19D known downstream route context; no task ID input',context='Legacy world-x preview or19D Frenet: lateral/heading error,tangent/normal velocity,0.4s ballistic left/right margins,6heading/6curvature previews,width; ballistic margins not safety certificates',offsets_m=OFFSETS_M.tolist(),mount_wxyz=mount,
  target='Original full-goal outcome,conditional on handoff without prior road violation; missing/invalid handoffs excluded only from downstream conditional fit',split='Original source720 root split8TRAIN/4DEV; all3task variants of a root kept together; no independent TEST',
  model='64/32SiLU;BCE Adam lr.001 wd.0001;3seeds7101/7102/7103;200epochs;TRAIN normalization;DEV Brier selects epoch',source=str(a.collection),limitations='Fixed physical map,H75/jump/cold initialization/speed1.5/alpha.5;only downstream route changes;not a general viability margin')
 (a.output/'declaration.json').write_text(json.dumps(contract,indent=2))
@@ -27,7 +28,7 @@ for variant in ['straight','left','right']:
   if t is None:continue
   if event_road[lane,3]:prior+=1;continue
   k=round(t/.02);root=event_roots[lane,3];assert np.array_equal(root,physical[k-1,lane])
-  context=route_context(root[None],route,cfg['ground_handoff']['road_half_width_m'],mount)[0]
+  context=route_context(root[None],route,cfg['ground_handoff']['road_half_width_m'],mount,representation=a.context_representation)[0]
   inputs.append(np.r_[root,observations[k,lane,50:75],t,context]);targets.append(case['success']);row=pr['cases'][lane]
   rows.append(dict(variant=variant,lane=lane,root=row['root'],role=row['role'],candidate=row['candidate'],success=case['success'],handoff_s=t,end_code=case['end_code']));count+=1
  coverage.append(dict(variant=variant,total=len(summary['cases']),goals=sum(c['success'] for c in summary['cases']),valid_handoffs=count,prior_road_handoffs=prior,physics_lane_steps=summary['physics_lane_steps'],elapsed_s=summary['elapsed_s']))

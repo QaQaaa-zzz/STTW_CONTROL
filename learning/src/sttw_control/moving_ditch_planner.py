@@ -34,9 +34,15 @@ class MovingDitchPlanner:
             from .interface_world_model import InterfaceWorldModel
             self.interface=InterfaceWorldModel(config['interface_model'],config.get('task_condition'))
         self.methods=config['methods'];self.queried=np.zeros(task.env.num_envs,bool);self.pending={};self.records=[]
-    def admission(self,roots):
+    def admission(self,roots,time_s=None):
         distance=route_distances(roots,self.roads);allowed=distance<=self.task.road_half_width
         allowed[:,self.parameters[:,-1]>.5]&=roots[:,0,None]<self.task.approach['jump_start_x_m']
+        if self.config.get('nominal_horizon_screen') and time_s is not None:
+            from .route_horizon import nominal_horizon
+            permitted,_=nominal_horizon(roots,self.roads,self.parameters,self.task.spec['goal'],time_s,
+                                       self.task.env.max_episode_length*self.task.env.dt,
+                                       self.config.get('horizon_margin_s',0.))
+            allowed &= permitted
         return allowed,distance
     def publish(self,ids,selected):
         task=self.task;g=task.ground;device=task.env.device;ids=torch.as_tensor(ids,device=device)
@@ -62,7 +68,7 @@ class MovingDitchPlanner:
         for lane in list(self.pending):
             record=self.pending[lane]
             if step<record['apply_at_step']:continue
-            allowed,distance=self.admission(roots[lane:lane+1]);allowed&=np.asarray(record['eligible_candidates'])[None];scores=np.asarray(record['scores']);scores=np.where(allowed[0],scores,-np.inf)
+            allowed,distance=self.admission(roots[lane:lane+1],step*env.dt);allowed&=np.asarray(record['eligible_candidates'])[None];scores=np.asarray(record['scores']);scores=np.where(allowed[0],scores,-np.inf)
             if finished[lane] or phase[lane]!=0:status='decision_window_closed';selected=None
             elif not allowed.any():status='no_admissible_connection_keep_current';selected=None
             else:
@@ -73,7 +79,7 @@ class MovingDitchPlanner:
             del self.pending[lane]
         ids=np.flatnonzero(~self.queried&~finished&(phase==0)&(roots[:,0]>=self.threshold))
         for lane in ids:
-            started=time.monotonic();allowed,distance=self.admission(roots[lane:lane+1])
+            started=time.monotonic();allowed,distance=self.admission(roots[lane:lane+1],step*env.dt)
             eligible=np.ones(len(self.parameters),bool)
             if self.methods[lane]=='forced':
                 eligible[:]=False;eligible[self.config['forced_candidates'][lane]]=True;allowed&=eligible[None]

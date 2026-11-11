@@ -1,0 +1,26 @@
+{
+  "seed": 2026111223,
+  "methods": [
+    "joint_feedback",
+    "joint_open",
+    "fixed_straight"
+  ],
+  "independent_roots": 30,
+  "repetitions": 3,
+  "total_episodes": 270,
+  "candidates": "15straight approaches x3downstream roads;S/90degree upstream and bypass outside this extension",
+  "query": "x3m, then first measured handoff for feedback; old controls execute during rounded inference latency",
+  "budget": "270episodes/1080000maxphysicalsteps;300s/batch;no further tuning",
+  "primary": "All episodes including upstream failures;root-bootstrap differences;query-state mismatch reported",
+  "models": {
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_compact_interface/upstream_71101.pt": "77763bcfc1e89e521b988e79bd40523698056200698193a06ebd2b3163308faf",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_compact_interface/upstream_71102.pt": "d6c4f16b3cb41d5f27a033e1dcf41bb68cf62d7a4e6c69d51064e49183339318",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_compact_interface/upstream_71103.pt": "6046061d39305e3643eca088c6a43b4bffad4451d729595261f3734bf18386cf",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_frenet_condition_model/task_context_7101.pt": "a0744bc67f092f9c9e4eefc654a56ed22a3694d3d0cc7081d63c07c95a3c3a7c",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_frenet_condition_model/task_context_7102.pt": "4c636d96a864ac01a6c9ef5a83838ed268b08912cdba23078ae465498404724b",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_frenet_condition_model/task_context_7103.pt": "b95bd38b35d3aaf19fad94733b747a3ed373b5c45f2e44de878c52e76aa75986"
+  },
+  "stop": "Keep model,thresholds,seeds fixed after launch;no outcome retuning",
+  "role": "DEVELOPMENT_RETEST",
+  "change": "Exact endpoint-radius search replaces exhaustive projection;180score vectors replayed bit-exact;weights/conditions unchanged"
+}

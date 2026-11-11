@@ -43,7 +43,7 @@ def test_task_route_is_chosen_after_ensemble_average(monkeypatch):
             member=self.calls//2;self.calls+=1
             score=([.1,.9],[.8,.2],[.8,.2])[member][int(context[0,0])]
             return {'conditional_goal_probability':np.full(len(root),score)}
-    monkeypatch.setattr(geometry,'route_context',lambda root,route,width,mount:np.full((len(root),19),route))
+    monkeypatch.setattr(geometry,'route_context',lambda root,route,width,mount,representation:np.full((len(root),19),route))
     model=InterfaceWorldModel.__new__(InterfaceWorldModel);model.ground=[];model.map=Map();model.members=[Member()]*3
     model.task_config=dict(half_width_m=.6,route_ids=[60,61]);model.task_routes=[0,1];model.task_mount=None;model.task_downstream=Downstream()
     mean=np.zeros(39,np.float32);mean[6]=1

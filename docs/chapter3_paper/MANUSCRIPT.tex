@@ -16,7 +16,7 @@
 \maketitle
 \thispagestyle{plain}\pagestyle{plain}
 \begin{abstract}
-Crossing a gap does not complete a single-track traversal task if the landing state prevents the ground controller from continuing within the road corridor. We study this handoff through two learned interfaces while keeping the driving and jumping controllers frozen. An action-conditioned model predicts whether a valid handoff occurs and the distribution of the state delivered to the ground controller. A conditional outcome model evaluates whether that controller can complete the remaining task from the predicted state. The planner integrates these predictions over finite route, approach-speed, and preference candidates, with a separate outcome branch for ground-only routes. Supervised fitting uses 1,919 published executions partitioned by starting condition. On 540 development executions, the composed model achieves a completion Brier score of 0.1152 and conditional handoff-position RMSE of 0.132~m. In a subsequent Isaac simulation panel of 30 new starting conditions and three crossed-slot repetitions, however, it completes 15/90 tasks, compared with 33/90 for a direct classifier and 41/90 for a distance rule. All 33 selected detours time out. The results establish a working state-prediction and skill-composition interface, but also show that accurate average prediction does not ensure useful candidate rankings. A task-conditioned extension jointly selects approach and downstream road, then revises the road at measured handoff. In a separate 30-condition panel it completes 30/90 tasks, versus 28/90 without revision and 28/90 with fixed commands. Forty-four handoff decisions change, with eleven resulting completions. The intervals include no difference and incoming states differ across many pairs, so these outcomes demonstrate executable feedback rather than superior planning.
+Crossing a gap with a single-track robot requires a landing state from which the ground controller can continue along the available road. We formulate this requirement through two learned interfaces that compose frozen driving and jumping controllers. An upstream model predicts valid handoff occurrence and the delivered state distribution; a task-conditioned downstream model evaluates goal completion along candidate continuation roads. The planner selects approach commands and can revise the road at measured handoff. In grouped development data, including handoff dynamics reduces continuation Brier error from 0.1969 to 0.1445 compared with geometric and speed features. A shared nominal route-time screen corrects a systematic timeout failure: a 30-condition, three-repeat development retest completes 43/90 tasks, versus 35/90 for direct prediction and 36/90 for a distance rule. We additionally evaluate compact action-conditioned residual prediction and route-relative continuation features. Compact prediction reduces handoff-time RMSE from 0.462 to 0.128~s, while velocity prediction and feedback selection remain less reliable. The experiments demonstrate physically executed preparation and continuation decisions, identify useful interface information, and distinguish improvements in prediction, timing admission, and whole-task execution.
 \end{abstract}
 \noindent\textbf{Index terms:} Model learning for control; motion planning; skill composition; single-track robots.
 
@@ -27,7 +27,7 @@ This problem differs from evaluating each skill at its own nominal initial state
 
 The research question is whether predicting the distribution of handoff states and their downstream consequences can guide approach decisions. Our method separates the upstream distribution from a conditional full-task outcome predictor. It retains failed approaches as negative handoff examples and does not equate contact, controller switching, or short survival with goal completion. The term world model denotes this restricted predictor of action-conditioned physical outcomes; no visual generation or new low-level reinforcement learning is involved.
 
-The implemented contribution is a two-interface prediction and planning system with explicit state outputs, grouped supervised training, and execution while the vehicle remains in motion. We evaluate prediction separately from online decisions and preserve a direct-success comparator and a distance rule. The evidence supports physical handoff prediction, task-dependent continuation, and executed feedback, while exposing candidate-ranking failures. It does not establish superior planning, a certified recoverability boundary, or generalization to new maps or corridor widths.
+The implemented contribution is a two-interface prediction and planning system with explicit state outputs, grouped supervised training, and execution while the vehicle remains in motion. We evaluate prediction separately from online decisions and preserve a direct-success comparator and a distance rule. We evaluate the information in handoff dynamics, the effect of nominal timing admission, and measured-state continuation decisions separately, using recorded physical outcomes. It does not establish superior planning, a certified recoverability boundary, or generalization to new maps or corridor widths.
 
 \section{Related Work}
 \textbf{Composing locomotion behaviors.} Sequential behavior composition organizes dynamical controllers into larger tasks~\cite{burridge1999}. For wheeled bipeds, Xin and Vijayakumar combine rolling and contact-changing template models with online planning and whole-body control~\cite{xin2020}. Lee \emph{et al.} integrate learned locomotion and navigation for wheeled-legged robots~\cite{lee2024}. Our setting differs in morphology and interface: a single-track vehicle uses an existing ground controller and fixed jumping policy, while the upper layer evaluates their predicted event-level consequences. These precedents motivate composition, rather than establishing a claim to first introducing it.
@@ -86,6 +86,16 @@ A second three-member ensemble, with 64 and 32 SiLU hidden units, estimates
 \end{equation}
 where $I$ is the fixed cold-start initialization rule. H75, its postlanding speed and preference, and the downstream straight-road context are fixed. Thus $R_\phi$ estimates continuation to the original goal within this context, not a general recovery domain over arbitrary corridor widths, curves, or controller versions. A separate two-second continuation pilot is retained as diagnostic evidence and is not substituted for this full-goal target.
 
+\subsection{Compact action-conditioned residual alternative}
+The original 582-input model provides the reference for the timing-screen experiment. Its valid-handoff predictions vary much less than observed states. We therefore also fit a compact model on the same grouped data: 13 root fields, 16 TRAIN-fitted PCA components of the 432 observed history/observation fields, distance to jump entry, 16 pooled height/support features, time, and eight action fields (55 inputs). PCA compresses measured history only; no predicted history is recursively propagated. The action is concatenated again after the 128--64 SiLU encoder.
+
+For approach length $L_{\rm app}$ measured along the candidate road to jump entry, two output coordinates use reference baselines:
+\begin{equation}
+ \hat v_{x,h}=v^\star+\Delta\hat v_x,\qquad
+ \hat t_h=t+L_{\rm app}/v^\star+\Delta\hat t_h.
+\end{equation}
+Flight and preparation effects remain in the learned residual; these baselines are approximations, not physical bounds. The other handoff coordinates retain learned conditional means. Training uses three members and 250 epochs, with the original grouped split and event/outcome masks. Residual normalization changes the numerical NLL scale, so physical-unit errors, rather than loss magnitudes across representations, determine prediction improvements.
+
 \subsection{Masked supervised training}
 Let $J$ mark jump candidates and $G$ ground-only candidates. For normalized handoff targets, the upstream objective is
 \begin{equation}
@@ -112,7 +122,12 @@ The implementation averages this estimate over the three upstream members and 32
 
 Ground-only candidates are scored with $p_g$. No additional contact probability is multiplied into Eq.~\eqref{eq:composition}: the full-goal target already requires the relevant preceding physical events. The decomposition defines an estimator, not automatic probability calibration.
 
-The planner evaluates 60 candidates: four route types, five speeds, and three preferences. The routes are straight crossing, S-bend crossing, right-angle crossing, and ground detour. Available speeds are 1.5, 1.8, 2.0, 2.3, and 2.6~m/s, with $\alpha\in\{0,0.5,1\}$. Route geometry and geometric admission are shared across methods. The highest-scoring admitted candidate is selected. Actual computation time is rounded up to a control interval while existing control continues, followed by a publication-time admission recheck. No physical state is restored to the query state.
+The planner evaluates 60 candidates: four route types, five speeds, and three preferences. The routes are straight crossing, S-bend crossing, right-angle crossing, and ground detour. Available speeds are 1.5, 1.8, 2.0, 2.3, and 2.6~m/s, with $\alpha\in\{0,0.5,1\}$. Route geometry and geometric admission are shared across methods. The highest-scoring admitted candidate is selected. In the timing-screen variant, ground-only candidates additionally satisfy
+\begin{equation}
+ L_{\rm rem}(r,x_t)/v^\star\le T_{\max}-t,
+\label{eq:horizon}
+\end{equation}
+where remaining arc length ends at first route entry into the goal region. This zero-margin screen is shared by all methods and rechecked at publication. Since requested speed is not a bound on realized speed and a vehicle can depart from the centerline, Eq.~\eqref{eq:horizon} is a nominal scheduling heuristic, not a proof of physical impossibility. It is not applied to jump candidates with different postlanding commands. Actual computation time is rounded up to a control interval while existing control continues, followed by a publication-time admission recheck. No physical state is restored to the query state.
 
 The original panel performs one moving query and a publication recheck. A task-conditioned extension introduces a downstream road $g$ and evaluates
 \begin{equation}
@@ -155,14 +170,19 @@ Constant prior & .12490 & .12165\\\bottomrule
 The interface estimator has lower DEV Brier score than the direct comparator, but the route prior is competitive and has the lowest historical-transfer score (Table~\ref{tab:prediction}). Conditional handoff-position RMSE is 0.1317~m on DEV and 0.1299~m on historical transfer, computed over Cartesian components of valid handoffs. Handoff-time MAE is 0.3711 and 0.4588~s, respectively. These conditional errors exclude absent handoffs; they cannot replace occurrence evaluation or full-task outcomes.
 
 \begin{figure*}[t]
-\centering\includegraphics[width=.94\textwidth]{handoff_outputs.png}
-\caption{Predicted and observed handoff outputs on 168 valid DEV handoffs. State regression is conditional on valid handoff; the event classifier also includes failed and missing handoffs. The plots expose physical prediction errors rather than only a final completion score.}
+\centering\includegraphics[width=.94\textwidth]{../evidence/chapter3_review_repairs/handoff_predictions.png}
+\caption{Original and compact residual predictions on the same 168 valid DEV handoffs. State regression is conditional on valid handoff; the event classifier also includes failed and missing handoffs. The plots expose physical prediction errors rather than only a final completion score.}
 \label{fig:outputs}
 \end{figure*}
 \begin{figure}[t]
-\centering\includegraphics[width=.98\columnwidth]{training.png}
-\caption{Recorded upstream/direct training and development curves. Upstream selection uses the masked joint objective; the direct comparator uses DEV Brier. Their numerical scales are not interchangeable.}
+\centering\includegraphics[width=.98\columnwidth]{../evidence/chapter3_review_repairs/training.png}
+\caption{Original and compact upstream training and development curves. Each ensemble uses its own masked selection objective. Residual-target normalization differs, so loss magnitudes cannot be compared across representations.}
 \end{figure}
+
+\subsection{Diagnosing upstream prediction shrinkage}
+The original selected checkpoints are epochs 19--23. Their predicted DEV standard deviations for forward velocity, lateral velocity, and handoff time are 0.039~m/s, 0.045~m/s, and 0.089~s, compared with observed 0.438~m/s, 0.519~m/s, and 0.466~s. This is strong shrinkage toward typical outcomes, though not an exactly constant prediction. Input dimension alone does not prove the cause.
+
+The compact residual alternative selects epochs 58--64. Handoff-time RMSE falls from 0.462 to 0.128~s and lateral-position RMSE from 0.209 to 0.172~m. Predicted forward-speed standard deviation rises to 0.175~m/s, but its RMSE worsens from 0.450 to 0.511~m/s; lateral-speed RMSE changes from 0.518 to 0.525~m/s. Restored output variation therefore does not establish accurate dynamics. No epochs or features are selected using online outcomes.
 
 \subsection{Information in the handoff state}
 To test whether the continuation model uses more than elapsed time and nominal progress, we fitted three feature subsets on the same 463 TRAIN and 168 DEV valid handoffs. Each uses three 64--32 SiLU networks, 200 epochs, and the same grouped DEV checkpoint criterion. The geometric subset contains world $x,y$, mount-corrected yaw, forward velocity, and time. The dynamics extension adds roll, pitch, lateral and vertical velocity, and three world angular velocities. Existing root-only and latest-frame models are reused unchanged.
@@ -184,27 +204,26 @@ Adding dynamics lowers Brier relative to geometry/speed/time in all six DEV root
 
 \subsection{Executed decisions}
 \begin{figure*}[t]
-\centering\includegraphics[width=.96\textwidth]{xy_all.png}
-\caption{All 270 actual XY executions and selected reference routes, grouped by query position and method. Successful and failed trajectories are retained and terminate at their recorded endpoints. Each method has 30 episodes per position from ten independent conditions with three slot-crossed repetitions.}
+\centering\includegraphics[width=.96\textwidth]{../evidence/chapter3_horizon_screen/xy_all.png}
+\caption{All 270 timing-screen development-retest XY executions and selected references, grouped by query position and method. Successful and failed trajectories are retained and terminate at their recorded endpoints. Each method has 30 episodes per position from ten independent conditions with three slot-crossed repetitions.}
 \label{fig:xy}
 \end{figure*}
 \begin{table}[t]
-\centering\small
-\caption{Actual complete tasks. Each cell at a query position contains ten independent roots with three repetitions.}
-\begin{tabular}{lrrr}\toprule
-Query $x$ (m)&Interface&Direct&Distance\\\midrule
-1.8&0/30&11/30&30/30\\
-3.0&10/30&13/30&9/30\\
-5.0&5/30&9/30&2/30\\\midrule
-Total&15/90&33/90&41/90\\
-Road violations&9/90&13/90&22/90\\
-Mean query (ms)&6.402&3.506&2.653\\\bottomrule
+\centering\footnotesize
+\caption{Complete tasks with shared nominal timing screening. Raw I: original unscreened interface. Screened columns are one development retest, not new independent conditions.}
+\begin{tabular}{lrrrr}\toprule
+Query $x$&Raw I&Screen I&Direct&Rule\\\midrule
+1.8&0/30&29/30&13/30&30/30\\
+3.0&10/30&9/30&14/30&2/30\\
+5.0&5/30&5/30&8/30&4/30\\\midrule
+Total&15/90&43/90&35/90&36/90\\
+Road violations&9/90&13/90&15/90&23/90\\\bottomrule
 \end{tabular}
 \label{tab:online}
 \end{table}
-Table~\ref{tab:online} shows a clear overall deficit. The interface model gains 13 and loses 39 matched episodes relative to the rule. Its mean condition-level completion difference is $-0.289$, with a root-bootstrap 95\% interval of $[-0.400,-0.178]$. Against direct success, it gains five and loses 23; the difference is $-0.200$, with interval $[-0.344,-0.067]$. All 90 paired query root states are exactly equal in each comparison. The deficit therefore cannot be dismissed as a mismatch in the recorded query states.
+The original unscreened interface completes 15/90, versus 33/90 direct and 41/90 rule. All 33 chosen detours time out. Applying Eq.~\eqref{eq:horizon} without changing weights yields Table~\ref{tab:online}: the early-query result becomes 29/30 and overall completion 43/90. The shared-screen comparators complete 35/90 and 36/90. Their variation between batches means the correction cannot be quantified by adding hypothetical successes to the old table.
 
-The interface completes 5/30, 3/30, and 7/30 across the three slot rotations; the rule completes 13/30, 14/30, and 14/30. The full panel uses 1,080,000 physical environment steps and 268.06~s summed simulation wall time. Mean query times are below one control period, but a 20-ms physical publication delay is still propagated. This measured result does not establish an architecture-independent latency bound.
+All 90 paired query roots match exactly within the retest. Against the screened rule, the interface gains 13 and loses six episodes; the mean root difference is 0.0778 with stratified-bootstrap 95\% interval $[-0.0111,0.1667]$. Against direct it gains 21 and loses 13, with difference 0.0889 and interval $[-0.0222,0.1889]$. Mean query times are 9.571/6.505/5.696~ms for interface/direct/rule. The retest uses 1,080,000 physical environment steps and 271.18~s summed simulation wall time. This positive development result supports timing-aware candidate screening; its uncertainty does not establish a general superiority claim.
 
 \subsection{Why prediction quality did not yield useful ranking}
 The interface selects 33 detours, all at 1.5~m/s and $\alpha=0$, and all time out. The other 57 selections are straight crossings. In TRAIN alone, this detour candidate has zero goals in 20 executions yet a mean predicted completion probability of 0.238. A 1.8~m/s, $\alpha=0$ detour has 16/20 goals and mean predicted probability 0.287. The ground head therefore poorly separates useful actions even before online evaluation.
@@ -236,46 +255,47 @@ We subsequently collected 540 full-prefix executions: the original 12 roots, 15 
 
 The extended downstream input appends 19 known-road features to the 39-dimensional handoff descriptor. Six forward world-$x$ offsets (0, 0.5, 1, 2, 3, and 4~m) provide lateral displacement, heading error, and curvature; the final feature is corridor half-width. No task identifier is supplied. The interface assumes downstream paths monotone in world $x$; width remains fixed in these experiments. Three 64--32 networks are fitted for 200 epochs with the same grouped selection as a state-only ablation on the new data.
 
-The task-conditioned model has DEV Brier 0.10827 versus 0.10290 for the state-only fit and 0.14072 for a constant prior. Straight/left predictions improve slightly, but right-task error increases. On the four previously inspected matched sources in Table~\ref{tab:tasks}, predicted probabilities vary across tasks but straight is ranked first in every case. Source 7 receives 0.107, 0.076, and 0.044 for straight, left, and right, missing its observed left-only success. Thus the geometric input is functional, but improved prediction or task selection has not been established. Online selection is evaluated separately below.
+A second representation projects the handoff onto the candidate polyline and rotates velocity into road tangent/normal components. Its 19 fields comprise lateral and one-meter-preview heading errors, tangent/normal velocity, two margins from constant-velocity 0.4-s extrapolation, six heading and six curvature previews, and corridor half-width. The extrapolated margins are descriptive features, not certified safety margins. The same 234/132 TRAIN/DEV labels, three seeds and 200 epochs give DEV Brier 0.10650, compared with 0.10827 for world-$x$ preview and 0.10290 state-only. Thus relative coordinates modestly improve the geometry-conditioned fit without beating the state-only baseline.
+
+The world-$x$ model assigns historical source 7 straight/left/right probabilities 0.107/0.076/0.044, missing its left-only success. Relative features change these to 0.115/0.102/0.064 but do not fix the ranking. The measured source has negative world lateral position and velocity, and both 0.4-s straight margins are positive; a simple imminent-left-boundary interpretation is not supported by its record.
 
 \subsection{Measured-state selection and joint feedback}
-An isolated downstream panel assigns 15 straight-approach commands across 30 new roots, with three crossed-slot repetitions per method. Task-conditioned selection completes 13/90, state-only 15/90, and fixed straight 14/90. Among 60 task-conditioned handoffs, straight/left/right are selected 34/19/7 times and complete 12/1/0 tasks. All 180 route publications match their declared 20-ms delay and logged route. Only 6/60 feedback/fixed incoming descriptors match exactly, preventing causal attribution of the one gained and two lost episodes. This panel tests downstream selection with preassigned approach, not joint optimization.
+An isolated downstream panel with preassigned approach completes 13/90 with task geometry, 15/90 state-only, and 14/90 fixed straight. Its 30 roots and all failures remain in the evidence archive; it is distinct from joint selection below.
 
-The final panel evaluates Eq.~\eqref{eq:joint} on a separately frozen set of 30 roots drawn from the same ranges, with three crossed-slot repetitions. At $x=3$~m, joint-open selects among 15 straight-crossing approach commands and three downstream roads. Joint-feedback performs the same query and revises the downstream road at measured handoff. The fixed comparator uses 2.0~m/s, $\alpha=0.5$, and straight continuation. All controllers, physical conditions, goal criteria, and the ten-second horizon are unchanged. Models are frozen; this panel is not compared numerically as a matched improvement over the earlier cohorts.
+The joint panel evaluates Eq.~\eqref{eq:joint} on 30 roots with three crossed-slot repetitions. At $x=3$~m, both joint methods select among 15 straight-crossing approach commands and three downstream roads. Feedback revises the road at measured handoff; open plan retains its initial choice. The fixed comparator uses 2.0~m/s, $\alpha=0.5$, and straight continuation. The original model completes 30/90, 28/90, and 28/90, respectively, but chooses 1.5~m/s and $\alpha=0$ throughout. Its evidence remains separate from the development retest with compact residual prediction and relative geometry in Table~\ref{tab:joint}.
 
-\begin{figure*}[t]
-\centering\includegraphics[width=.96\textwidth]{../evidence/chapter3_joint_handoff_online/xy_all.png}
-\caption{All 270 joint-panel actual XY trajectories, with downstream references dashed. Top: full task; bottom: handoff vicinity. Blue denotes goal completion and red failure; trajectories end at their true endpoints. All upstream failures remain in the task denominator.}
-\label{fig:joint}
-\end{figure*}
 \begin{table}[t]
 \centering\small
-\caption{Frozen joint-panel execution: 30 roots and three repetitions per method. Road violations include earlier approach violations.}
+\caption{Repaired joint-panel development retest: the same 30 roots and three repetitions. All upstream failures are retained.}
 \begin{tabular}{lrrr}\toprule
 &Feedback&Open plan&Fixed\\\midrule
-Goal&30/90&28/90&28/90\\
+Goal&26/90&30/90&27/90\\
 Valid handoffs&88/90&88/90&77/90\\
-Road violations&10/90&9/90&14/90\\
-Handoff revisions&44&0&0\\
-Goals after revision&11&0&0\\\bottomrule
+Road violations&15/90&17/90&15/90\\
+Handoff revisions&41&0&0\\
+Goals after revision&7&0&0\\\bottomrule
 \end{tabular}
 \label{tab:joint}
 \end{table}
-Both joint methods choose 1.5~m/s and $\alpha=0$ in all 90 episodes. Their advance downstream plans are 72 straight and 18 left. Thus the offered approach grid does not imply demonstrated state-dependent speed/preference selection. Feedback changes 44 plans at actual handoff; eleven revised executions reach the goal. Of the final 52/35/2 straight/left/right choices, 26/3/1 complete. Figure~\ref{fig:joint} and Table~\ref{tab:joint} demonstrate physical execution, including non-straight continuations, rather than counterfactual rescue.
+The repaired joint methods choose 1.5, 1.8, and 2.0~m/s in 51, 38, and one execution, respectively; 89 choices use $\alpha=1$ and one uses $\alpha=0$. Thus action selection is no longer constant but remains concentrated. Feedback revises 41 plans; seven revised executions reach the goal. Final straight/left/right choices complete 21/48, 3/37, and 2/5 tasks. These are executed outcomes, not counterfactual rescue estimates.
 
-Feedback gains 16 and loses 14 episodes against either comparator. The mean root-level difference is 0.0222; 5,000 root-bootstrap samples give 95\% intervals of $[-0.1111,0.1556]$ against open plan and $[-0.0889,0.1333]$ against fixed. Only 1/89 paired handoff descriptors match exactly against open plan and 0/80 against fixed. Accordingly, neither superiority, equivalence, nor causal rescue is established. Mean upstream queries take 7.899/7.775/0.670~ms and handoff queries 0.434/0.255/0.261~ms for feedback/open/fixed, respectively. All 259 handoff publications match the recorded route and 20-ms delay. Recorded-input replay reproduces all 180 joint score vectors and planned routes exactly. The panel uses 1,066,320 physical environment steps and 275.77~s summed simulation wall time, without fitting or policy training. Per-lane timing is not a serial-batch real-time guarantee; online delay also differs from immediate-switch downstream training.
+Feedback gains 13 and loses 17 episodes against open plan, and gains 22 and loses 23 against fixed. Root-bootstrap 95\% intervals for completion differences are $[-0.1889,0.1000]$ and $[-0.1667,0.1444]$. No paired handoff descriptors match exactly. Consequently, the retest establishes neither superiority nor equivalence. Mean upstream queries take 61.463/61.583/0.812~ms and handoff queries 1.011/0.817/0.790~ms for feedback/open/fixed; measured delay is propagated physically. All 261 handoff publications match the recorded route and delay. The panel uses 1,078,560 physical environment steps and 267.10~s simulation wall time.
+
+An earlier implementation of the same repaired predictor exhaustively projected every road segment and completed 23/90, 25/90, and 34/90. Exact spatial candidate pruning reduced query cost; replay of all 180 stored upstream score vectors gives zero difference. Both batches remain archived. Their different latencies and varying fixed-comparator outcomes preclude attributing the change in completion solely to prediction or acceleration.
 
 \section{Discussion}
 The two-interface formulation exposes what the planner predicts: whether a lawful handoff will occur, the state and time delivered at that handoff, and the conditional outcome under a specified downstream controller. It removes the need to treat a nearly deterministic controller-switch event as a learned intermediate hazard. It also avoids multiplying marginal contact and goal probabilities whose failure events overlap. These structural choices improve the definition of the estimator, but the online results show that they do not establish a planning advantage.
 
 Several boundaries remain. The initial conditional model uses fixed cold initialization and a straight downstream road; the extension includes three road geometries at one width. It does not measure a recoverability margin or distinguish states that can be rescued by a short correction. A nominal ground-motion envelope was examined separately, but many successful two-second continuations did not enter it; envelope membership is therefore not adopted as a necessary capture condition. Measured initialization also failed to improve an eight-source same-slot diagnostic, which does not rule out useful initialization from genuine controller histories.
 
-The relationship to skill repair remains a hypothesis requiring matched interface evidence. Earlier whole-task substitution yielded 34/240 completions with the original jump skill and 35/240 with RB400. This denominator correctly measures system-level utility, including failures before the skill is activated. Conditional skill comparisons at matched legal entrances answer a different question and should supplement, rather than replace, the whole-task result.
+RecoveryBridge connects to the interface through the states delivered by the jump skill. The historical Source/RB comparison retains whole-task outcomes 34/240 and 35/240. Among 78 legal straight/S-bend entries per skill, goals are 16 and 17; 71 entry descriptors match exactly, with ten gains and ten losses. Valid-handoff samples number 65 and 70. Mean absolute world lateral speed decreases from 0.400 to 0.228~m/s and absolute world roll rate from 1.863 to 1.179~rad/s, but mean fixed downstream score decreases from 0.313 to 0.271. These observations connect skill substitution to handoff dynamics without establishing concentration in a higher-success domain or a net benefit from combining RB with route revision.
 
-The immediate methodological gap is candidate ranking, especially the ground branch. The independent ground-head fit and development retest leave the dominant failure unresolved without changing task deadlines or retraining the jump skill. If the present 30 roots inform that correction, they become development evidence for the repaired model. The route intervention and measured-state selection demonstrate task dependence and executable feedback. Joint selection and measured-state revision now execute physically, but the small completion difference is uncertain and speed/preference choices collapse to one setting. The fixed-width, three-road extension does not validate new-map or unseen-width transfer. No hardware or new-map generalization is established.
+A subsequent development screen substitutes saved RB301, RB400, and RB500 actors under the same 30 roots, 15 preassigned approach commands, and three downstream roads. Whole-task completions are 11/90 for Source and 19/90, 13/90, and 16/90 for the candidates. RB301 gains 13 and loses five cases; among 60 exactly matched recorded entry descriptors, it gains eleven and loses three. This identifies a more promising handoff candidate than RB400 in this screen, without independent-test or model-based replanning claims.
+
+Nominal timing screening addresses the observed low-speed detour failure without changing deadlines or retraining skills. The independently refitted ground head alone did not solve it. All revisited roots are development evidence. The route intervention and measured-state selection demonstrate task dependence and executable feedback. Joint selection and measured-state revision now execute physically, but the repaired feedback selector does not outperform its comparators and preference choices remain concentrated at an endpoint. The fixed-width, three-road extension does not validate new-map or unseen-width transfer. No hardware or new-map generalization is established.
 
 \section{Conclusion}
-We implemented a handoff-conditioned world model for composing frozen driving and jumping controllers on a known off-road map. The model predicts a physical handoff distribution and evaluates its downstream consequences, with explicit training targets and a finite-candidate execution interface. The new online panel confirms completed jump--ground tasks but shows lower completion than both a direct classifier and a distance rule. A poorly discriminating ground-route head accounts for a substantial observed failure mode. A task-conditioned extension additionally chooses downstream roads at measured handoff, including a successful non-straight continuation, without establishing improved aggregate completion. Joint approach--road selection with measured-state revision completes 30/90 tasks against 28/90 for both open-plan and fixed controls, without establishing superiority. The study separates executable feedback from improved selection; recoverability margins and reliable state-dependent approach selection remain open.
+We formulate driving--jumping composition through a predicted handoff distribution and a task-conditioned continuation model. Handoff dynamics provides predictive information beyond position, heading, speed and time, while measured-state feedback permits physical execution of alternative continuation roads. A shared nominal timing screen corrects a systematic detour timeout failure and yields 43/90 development completions against 35/90 direct and 36/90 rule. Compact residual prediction substantially improves event-time accuracy, but not all velocity errors; relative geometry likewise does not by itself establish better task selection. The method and experiments separate preparation, skill-delivered state, and downstream task requirements, while retaining the limits of the available grouped simulation evidence.
 
 \begin{thebibliography}{99}
 \bibitem{burridge1999}R. R. Burridge, A. A. Rizzi, and D. E. Koditschek, ``Sequential composition of dynamically dexterous robot behaviors,'' \emph{Int. J. Robotics Research}, vol. 18, no. 6, 1999, doi:10.1177/02783649922066385.

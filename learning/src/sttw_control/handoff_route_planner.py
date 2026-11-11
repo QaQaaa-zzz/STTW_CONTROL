@@ -20,7 +20,7 @@ class HandoffRoutePlanner:
         if any(i<0 or i>=len(route.xy) for i in self.route_ids):raise ValueError('Invalid downstream candidate route')
         self.routes=[dict(xy=route.xy[i].cpu().numpy(),heading=route.heading[i].cpu().numpy(),curvature=route.curvature[i].cpu().numpy()) for i in self.route_ids]
         self.models={name:HandoffContinuationModel(config['model'],feature_set=name) for name in ('task_context','state_only')}
-        self.mount=json.loads((Path(config['model'])/'declaration.json').read_text())['mount_wxyz']
+        declaration=json.loads((Path(config['model'])/'declaration.json').read_text());self.mount=declaration['mount_wxyz'];self.representation=declaration.get('context_representation','world_x')
         self.pending={}
         self.records=[]
 
@@ -31,7 +31,7 @@ class HandoffRoutePlanner:
             physical=root[lane:lane+1].detach().cpu().numpy()
             obs=observation[lane:lane+1].detach().cpu().numpy()
             now=float(e.episode_length_buf[lane])*e.dt
-            context=np.concatenate([route_context(physical,route,self.task.road_half_width,self.mount) for route in self.routes])
+            context=np.concatenate([route_context(physical,route,self.task.road_half_width,self.mount,self.representation) for route in self.routes])
             if method in ('fixed_straight','planned'):
                 desired=self.route_ids[0] if method=='fixed_straight' else int(self.task.handoff_route_ids[lane])
                 scores=np.asarray([float(r==desired) for r in self.route_ids])

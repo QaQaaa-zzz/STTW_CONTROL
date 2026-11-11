@@ -1,0 +1,7 @@
+{
+  "change": "Only shared nominal remaining-route/request-speed horizon screening for ground candidates; margin0;query and publication recheck",
+  "budget": "270episodes,30roots,3repeats,1080000physical lane steps;300s cap per batch;0training",
+  "role": "Historical roots now development retest",
+  "stop": "No outcome-based margin adjustment;preserve all failures",
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_interface_online"
+}

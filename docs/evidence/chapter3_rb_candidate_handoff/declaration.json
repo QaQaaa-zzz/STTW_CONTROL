@@ -1,0 +1,842 @@
+{
+  "models": [
+    {
+      "name": "source",
+      "checkpoint": null,
+      "completed": 6,
+      "gained": 0,
+      "lost": 0,
+      "labels": [
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        true,
+        false
+      ],
+      "sha256": "source bundle unchanged"
+    },
+    {
+      "name": "update301",
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rb_jump_scheduled/pipeline/train/training/model_300.pt",
+      "completed": 8,
+      "gained": 4,
+      "lost": 2,
+      "labels": [
+        true,
+        false,
+        true,
+        false,
+        false,
+        true,
+        true,
+        true,
+        false,
+        true,
+        false,
+        false,
+        false,
+        true,
+        false,
+        true,
+        false
+      ],
+      "sha256": "71ba8835be4a0a145ba49fe818d8806ac7da108454af4fb642436e1718ad7f3b"
+    },
+    {
+      "name": "update400",
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rb_jump_scheduled/pipeline/train/training/model_update_00400.pt",
+      "completed": 8,
+      "gained": 5,
+      "lost": 3,
+      "labels": [
+        true,
+        false,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        true,
+        true,
+        false,
+        false,
+        true,
+        true
+      ],
+      "sha256": "fbe72cebbce08d4dfc6f401d79ab2e09f03ae179e13bb130d6d3c56cecbddac5"
+    },
+    {
+      "name": "update500",
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rb_jump_scheduled/pipeline/train/training/model_update_00500.pt",
+      "completed": 9,
+      "gained": 6,
+      "lost": 3,
+      "labels": [
+        true,
+        true,
+        true,
+        false,
+        false,
+        true,
+        true,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        true,
+        true
+      ],
+      "sha256": "411ad74bf7fb2551ceefc6166bb0b3158040972f2f9442d621c51fa922621d85"
+    }
+  ],
+  "cases": [
+    {
+      "lane": 0,
+      "root": 0,
+      "route": 60,
+      "approach": 0
+    },
+    {
+      "lane": 1,
+      "root": 0,
+      "route": 61,
+      "approach": 0
+    },
+    {
+      "lane": 2,
+      "root": 0,
+      "route": 62,
+      "approach": 0
+    },
+    {
+      "lane": 3,
+      "root": 1,
+      "route": 60,
+      "approach": 1
+    },
+    {
+      "lane": 4,
+      "root": 1,
+      "route": 61,
+      "approach": 1
+    },
+    {
+      "lane": 5,
+      "root": 1,
+      "route": 62,
+      "approach": 1
+    },
+    {
+      "lane": 6,
+      "root": 2,
+      "route": 60,
+      "approach": 2
+    },
+    {
+      "lane": 7,
+      "root": 2,
+      "route": 61,
+      "approach": 2
+    },
+    {
+      "lane": 8,
+      "root": 2,
+      "route": 62,
+      "approach": 2
+    },
+    {
+      "lane": 9,
+      "root": 3,
+      "route": 60,
+      "approach": 3
+    },
+    {
+      "lane": 10,
+      "root": 3,
+      "route": 61,
+      "approach": 3
+    },
+    {
+      "lane": 11,
+      "root": 3,
+      "route": 62,
+      "approach": 3
+    },
+    {
+      "lane": 12,
+      "root": 4,
+      "route": 60,
+      "approach": 4
+    },
+    {
+      "lane": 13,
+      "root": 4,
+      "route": 61,
+      "approach": 4
+    },
+    {
+      "lane": 14,
+      "root": 4,
+      "route": 62,
+      "approach": 4
+    },
+    {
+      "lane": 15,
+      "root": 5,
+      "route": 60,
+      "approach": 5
+    },
+    {
+      "lane": 16,
+      "root": 5,
+      "route": 61,
+      "approach": 5
+    },
+    {
+      "lane": 17,
+      "root": 5,
+      "route": 62,
+      "approach": 5
+    },
+    {
+      "lane": 18,
+      "root": 6,
+      "route": 60,
+      "approach": 6
+    },
+    {
+      "lane": 19,
+      "root": 6,
+      "route": 61,
+      "approach": 6
+    },
+    {
+      "lane": 20,
+      "root": 6,
+      "route": 62,
+      "approach": 6
+    },
+    {
+      "lane": 21,
+      "root": 7,
+      "route": 60,
+      "approach": 7
+    },
+    {
+      "lane": 22,
+      "root": 7,
+      "route": 61,
+      "approach": 7
+    },
+    {
+      "lane": 23,
+      "root": 7,
+      "route": 62,
+      "approach": 7
+    },
+    {
+      "lane": 24,
+      "root": 8,
+      "route": 60,
+      "approach": 8
+    },
+    {
+      "lane": 25,
+      "root": 8,
+      "route": 61,
+      "approach": 8
+    },
+    {
+      "lane": 26,
+      "root": 8,
+      "route": 62,
+      "approach": 8
+    },
+    {
+      "lane": 27,
+      "root": 9,
+      "route": 60,
+      "approach": 9
+    },
+    {
+      "lane": 28,
+      "root": 9,
+      "route": 61,
+      "approach": 9
+    },
+    {
+      "lane": 29,
+      "root": 9,
+      "route": 62,
+      "approach": 9
+    },
+    {
+      "lane": 30,
+      "root": 10,
+      "route": 60,
+      "approach": 10
+    },
+    {
+      "lane": 31,
+      "root": 10,
+      "route": 61,
+      "approach": 10
+    },
+    {
+      "lane": 32,
+      "root": 10,
+      "route": 62,
+      "approach": 10
+    },
+    {
+      "lane": 33,
+      "root": 11,
+      "route": 60,
+      "approach": 11
+    },
+    {
+      "lane": 34,
+      "root": 11,
+      "route": 61,
+      "approach": 11
+    },
+    {
+      "lane": 35,
+      "root": 11,
+      "route": 62,
+      "approach": 11
+    },
+    {
+      "lane": 36,
+      "root": 12,
+      "route": 60,
+      "approach": 12
+    },
+    {
+      "lane": 37,
+      "root": 12,
+      "route": 61,
+      "approach": 12
+    },
+    {
+      "lane": 38,
+      "root": 12,
+      "route": 62,
+      "approach": 12
+    },
+    {
+      "lane": 39,
+      "root": 13,
+      "route": 60,
+      "approach": 13
+    },
+    {
+      "lane": 40,
+      "root": 13,
+      "route": 61,
+      "approach": 13
+    },
+    {
+      "lane": 41,
+      "root": 13,
+      "route": 62,
+      "approach": 13
+    },
+    {
+      "lane": 42,
+      "root": 14,
+      "route": 60,
+      "approach": 14
+    },
+    {
+      "lane": 43,
+      "root": 14,
+      "route": 61,
+      "approach": 14
+    },
+    {
+      "lane": 44,
+      "root": 14,
+      "route": 62,
+      "approach": 14
+    },
+    {
+      "lane": 45,
+      "root": 15,
+      "route": 60,
+      "approach": 0
+    },
+    {
+      "lane": 46,
+      "root": 15,
+      "route": 61,
+      "approach": 0
+    },
+    {
+      "lane": 47,
+      "root": 15,
+      "route": 62,
+      "approach": 0
+    },
+    {
+      "lane": 48,
+      "root": 16,
+      "route": 60,
+      "approach": 1
+    },
+    {
+      "lane": 49,
+      "root": 16,
+      "route": 61,
+      "approach": 1
+    },
+    {
+      "lane": 50,
+      "root": 16,
+      "route": 62,
+      "approach": 1
+    },
+    {
+      "lane": 51,
+      "root": 17,
+      "route": 60,
+      "approach": 2
+    },
+    {
+      "lane": 52,
+      "root": 17,
+      "route": 61,
+      "approach": 2
+    },
+    {
+      "lane": 53,
+      "root": 17,
+      "route": 62,
+      "approach": 2
+    },
+    {
+      "lane": 54,
+      "root": 18,
+      "route": 60,
+      "approach": 3
+    },
+    {
+      "lane": 55,
+      "root": 18,
+      "route": 61,
+      "approach": 3
+    },
+    {
+      "lane": 56,
+      "root": 18,
+      "route": 62,
+      "approach": 3
+    },
+    {
+      "lane": 57,
+      "root": 19,
+      "route": 60,
+      "approach": 4
+    },
+    {
+      "lane": 58,
+      "root": 19,
+      "route": 61,
+      "approach": 4
+    },
+    {
+      "lane": 59,
+      "root": 19,
+      "route": 62,
+      "approach": 4
+    },
+    {
+      "lane": 60,
+      "root": 20,
+      "route": 60,
+      "approach": 5
+    },
+    {
+      "lane": 61,
+      "root": 20,
+      "route": 61,
+      "approach": 5
+    },
+    {
+      "lane": 62,
+      "root": 20,
+      "route": 62,
+      "approach": 5
+    },
+    {
+      "lane": 63,
+      "root": 21,
+      "route": 60,
+      "approach": 6
+    },
+    {
+      "lane": 64,
+      "root": 21,
+      "route": 61,
+      "approach": 6
+    },
+    {
+      "lane": 65,
+      "root": 21,
+      "route": 62,
+      "approach": 6
+    },
+    {
+      "lane": 66,
+      "root": 22,
+      "route": 60,
+      "approach": 7
+    },
+    {
+      "lane": 67,
+      "root": 22,
+      "route": 61,
+      "approach": 7
+    },
+    {
+      "lane": 68,
+      "root": 22,
+      "route": 62,
+      "approach": 7
+    },
+    {
+      "lane": 69,
+      "root": 23,
+      "route": 60,
+      "approach": 8
+    },
+    {
+      "lane": 70,
+      "root": 23,
+      "route": 61,
+      "approach": 8
+    },
+    {
+      "lane": 71,
+      "root": 23,
+      "route": 62,
+      "approach": 8
+    },
+    {
+      "lane": 72,
+      "root": 24,
+      "route": 60,
+      "approach": 9
+    },
+    {
+      "lane": 73,
+      "root": 24,
+      "route": 61,
+      "approach": 9
+    },
+    {
+      "lane": 74,
+      "root": 24,
+      "route": 62,
+      "approach": 9
+    },
+    {
+      "lane": 75,
+      "root": 25,
+      "route": 60,
+      "approach": 10
+    },
+    {
+      "lane": 76,
+      "root": 25,
+      "route": 61,
+      "approach": 10
+    },
+    {
+      "lane": 77,
+      "root": 25,
+      "route": 62,
+      "approach": 10
+    },
+    {
+      "lane": 78,
+      "root": 26,
+      "route": 60,
+      "approach": 11
+    },
+    {
+      "lane": 79,
+      "root": 26,
+      "route": 61,
+      "approach": 11
+    },
+    {
+      "lane": 80,
+      "root": 26,
+      "route": 62,
+      "approach": 11
+    },
+    {
+      "lane": 81,
+      "root": 27,
+      "route": 60,
+      "approach": 12
+    },
+    {
+      "lane": 82,
+      "root": 27,
+      "route": 61,
+      "approach": 12
+    },
+    {
+      "lane": 83,
+      "root": 27,
+      "route": 62,
+      "approach": 12
+    },
+    {
+      "lane": 84,
+      "root": 28,
+      "route": 60,
+      "approach": 13
+    },
+    {
+      "lane": 85,
+      "root": 28,
+      "route": 61,
+      "approach": 13
+    },
+    {
+      "lane": 86,
+      "root": 28,
+      "route": 62,
+      "approach": 13
+    },
+    {
+      "lane": 87,
+      "root": 29,
+      "route": 60,
+      "approach": 14
+    },
+    {
+      "lane": 88,
+      "root": 29,
+      "route": 61,
+      "approach": 14
+    },
+    {
+      "lane": 89,
+      "root": 29,
+      "route": 62,
+      "approach": 14
+    }
+  ],
+  "roots": [
+    {
+      "y_m": -0.0006338350555761298,
+      "yaw_rad": -0.009343729486417474,
+      "roll_rad": -0.0005467027177970471,
+      "speed_m_s": 1.9567287491854368
+    },
+    {
+      "y_m": 0.007785010807703462,
+      "yaw_rad": -0.02790597594851251,
+      "roll_rad": -0.013798062245620035,
+      "speed_m_s": 2.0441391534515994
+    },
+    {
+      "y_m": -0.02524413837547211,
+      "yaw_rad": -0.012515252095878688,
+      "roll_rad": -0.0007269219439023956,
+      "speed_m_s": 2.022882432919179
+    },
+    {
+      "y_m": 0.002446935715329182,
+      "yaw_rad": 0.027790234242200243,
+      "roll_rad": -0.012375771180434682,
+      "speed_m_s": 2.079077484894852
+    },
+    {
+      "y_m": -0.008099453271768073,
+      "yaw_rad": -0.019801141285527783,
+      "roll_rad": 0.007378150166870313,
+      "speed_m_s": 1.9393623682507322
+    },
+    {
+      "y_m": 0.011039659145098912,
+      "yaw_rad": 0.027834952522394124,
+      "roll_rad": 0.0006923712192154034,
+      "speed_m_s": 1.951159766417543
+    },
+    {
+      "y_m": -0.02807967797235064,
+      "yaw_rad": -0.03004392130780154,
+      "roll_rad": -0.003735758167223647,
+      "speed_m_s": 1.9118240405911897
+    },
+    {
+      "y_m": 0.007022586393198797,
+      "yaw_rad": 0.030722205310239045,
+      "roll_rad": 0.019912831104165623,
+      "speed_m_s": 1.9622590690267174
+    },
+    {
+      "y_m": -0.025186674884920067,
+      "yaw_rad": 0.010089523730950983,
+      "roll_rad": 0.006341917529562847,
+      "speed_m_s": 2.0310160656435605
+    },
+    {
+      "y_m": 0.009131843455225393,
+      "yaw_rad": 0.030763529471821385,
+      "roll_rad": -0.018934658348107657,
+      "speed_m_s": 2.0567573327779023
+    },
+    {
+      "y_m": -0.013242589969977951,
+      "yaw_rad": 0.00033225702306594745,
+      "roll_rad": -0.012209801560716257,
+      "speed_m_s": 1.9551651608196081
+    },
+    {
+      "y_m": 0.026114970132164524,
+      "yaw_rad": -0.023791600829175884,
+      "roll_rad": 0.010358831705509143,
+      "speed_m_s": 2.0853868960843513
+    },
+    {
+      "y_m": -0.011396106383912929,
+      "yaw_rad": -0.0276059735318004,
+      "roll_rad": -0.006636635503388102,
+      "speed_m_s": 2.004985621981114
+    },
+    {
+      "y_m": 2.8906062882340378e-05,
+      "yaw_rad": 0.03445791631248375,
+      "roll_rad": -0.012699845823533097,
+      "speed_m_s": 2.061441670055087
+    },
+    {
+      "y_m": -0.026385606494125594,
+      "yaw_rad": -0.03457420987306604,
+      "roll_rad": 0.015602885467095321,
+      "speed_m_s": 1.9456990435861081
+    },
+    {
+      "y_m": -0.019516036177897135,
+      "yaw_rad": -0.009958942572447425,
+      "roll_rad": 0.004581032502233198,
+      "speed_m_s": 1.9151569150375112
+    },
+    {
+      "y_m": -0.002322751999820058,
+      "yaw_rad": -0.03498946056476091,
+      "roll_rad": -0.019226582898194837,
+      "speed_m_s": 2.0680603210221205
+    },
+    {
+      "y_m": 0.0018375024142546562,
+      "yaw_rad": 0.025445183808638146,
+      "roll_rad": -0.0009650267028768408,
+      "speed_m_s": 1.98688981492767
+    },
+    {
+      "y_m": 0.02107033642032992,
+      "yaw_rad": -0.015558759373053049,
+      "roll_rad": 0.012695223714193005,
+      "speed_m_s": 2.057041953963071
+    },
+    {
+      "y_m": -0.0104099116574888,
+      "yaw_rad": 0.024546006059122508,
+      "roll_rad": 0.006722123793346361,
+      "speed_m_s": 1.9654786264149047
+    },
+    {
+      "y_m": -0.004626088520106746,
+      "yaw_rad": -0.004875347950185856,
+      "roll_rad": -0.0007805412953510692,
+      "speed_m_s": 2.0404349459435105
+    },
+    {
+      "y_m": 0.02477228793125314,
+      "yaw_rad": -0.020539599946952952,
+      "roll_rad": -0.016218278991613676,
+      "speed_m_s": 2.0020393725825354
+    },
+    {
+      "y_m": -0.0029275429315768348,
+      "yaw_rad": -0.010059776558145116,
+      "roll_rad": 0.018702639620481378,
+      "speed_m_s": 1.962051248930985
+    },
+    {
+      "y_m": 0.00838209332106822,
+      "yaw_rad": 0.019277063488969834,
+      "roll_rad": -0.019759645924614766,
+      "speed_m_s": 1.9489688310811915
+    },
+    {
+      "y_m": 0.02419615691232148,
+      "yaw_rad": -0.03013104539305314,
+      "roll_rad": 0.012009048854252895,
+      "speed_m_s": 2.047991096438334
+    },
+    {
+      "y_m": 0.012371641532133423,
+      "yaw_rad": 0.022427264664681965,
+      "roll_rad": 0.01733558536639127,
+      "speed_m_s": 2.038596004452158
+    },
+    {
+      "y_m": 0.025817326661357574,
+      "yaw_rad": 0.014803387954167031,
+      "roll_rad": 0.0062199495034245475,
+      "speed_m_s": 2.0743150207358507
+    },
+    {
+      "y_m": 0.023860842361487382,
+      "yaw_rad": -0.022387837227151895,
+      "roll_rad": -0.004081447475737927,
+      "speed_m_s": 2.015945654629644
+    },
+    {
+      "y_m": 0.00818916643560922,
+      "yaw_rad": -0.003145179715199127,
+      "roll_rad": -0.019547274542703483,
+      "speed_m_s": 1.9766743218881193
+    },
+    {
+      "y_m": -0.001860693216079748,
+      "yaw_rad": 0.010044360570578587,
+      "roll_rad": 0.005478542486647885,
+      "speed_m_s": 2.021156939886048
+    }
+  ],
+  "role": "DEVELOPMENT_SCREEN",
+  "question": "Which saved RB candidate delivers states that H75 can continue from on straight/left/right roads?",
+  "budget": "4x90 lanes x10s; maximum1440000 physics lane steps;300s wall cap per model;0training",
+  "selection": "Report whole task goals and paired gains/losses; valid handoff state distributions secondary; no automatic adoption; no condition retuning",
+  "unchanged": "Same physics,H75,initialization,15approach pairs,three downstream corridors,goal and10s deadline; source reexecuted in same campaign",
+  "repetition": "Three roads per root are different tasks, not three independent repetitions"
+}
