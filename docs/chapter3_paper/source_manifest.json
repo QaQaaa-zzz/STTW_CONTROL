@@ -227,6 +227,14 @@
       "sha256": "80f389d085e990640c17d270ba6455e303b3d8592f9a2d2eb9d3eace762190c7",
       "verification": "agent_source_inspected",
       "human_verification": "pending"
+    },
+    {
+      "id": "I9",
+      "title": "Posthandoff route intervention and prefix audit",
+      "path": "docs/evidence/chapter3_handoff_routes/results.json",
+      "sha256": "94b533b888c90c08ecee7d8b403d3f5db894b63782511b7c4b7c870193c8f9a4",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending"
     }
   ],
   "references": [
@@ -270,6 +278,6 @@
   "scope": "English robotics research draft; no claim of journal acceptance",
   "new_physics_steps": 0,
   "new_policy_training_updates": 0,
-  "paper_sha256": "1eb685fac7af0ceaca16e2b9d8a7879f5818d0385c5a4a9946ac4dcd197781cc",
+  "paper_sha256": "51574facea4e30c6a53e831ef3be780a0bc67a883526b607cb9472fe0d2c4473",
   "revision_scope": "Two-interface manuscript; earlier evidence retained as historical provenance"
 }

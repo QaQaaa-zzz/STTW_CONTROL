@@ -1,0 +1,16 @@
+{
+  "question": "Does changing only the commanded posthandoff route change continuation from a matched incoming state?",
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_handoff_same_lane/cold_a",
+  "selection": "Reuse all8 historical same-slot branches;4 original roots;no new success-based selection",
+  "variants": {
+    "straight": 0.0,
+    "left": 0.6,
+    "right": -0.6
+  },
+  "geometry": "Straight until x12;sin-squared lateral excursion over12..16m returning to original goal;fixed0.6m corridor half-width,goal,speed1.5/alpha.5;same terrain",
+  "intervention": "At actual handoff only,choose prebuilt route-bank index;no physical state reset;all prehandoff routes/commands unchanged",
+  "budget": "3runs x8lanes x10s;96000physical lane steps;each300s wall cap;0training",
+  "comparison": "Verify all recorded prefixes and handoff roots/times before causal interpretation;report nohandoff and prior-road cases separately",
+  "stop": "No tuning amplitudes or thresholds after outcomes;retain failures",
+  "source_role": "Retrospective mechanism diagnostic,not population success or recoverability boundary"
+}

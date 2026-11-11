@@ -1,0 +1,113 @@
+{
+  "scope": "Diagnostic frozen straight-context predictor applied to identical incoming descriptors; changed task is out of model context,not recalibrated forecast",
+  "cases": [
+    {
+      "lane": 1,
+      "variant": "straight",
+      "predicted_goal": 0.16369615495204926,
+      "actual_goal": true,
+      "prior_road": false,
+      "end_code": 13,
+      "post_route_id": 60
+    },
+    {
+      "lane": 3,
+      "variant": "straight",
+      "predicted_goal": 0.4034245014190674,
+      "actual_goal": true,
+      "prior_road": false,
+      "end_code": 13,
+      "post_route_id": 60
+    },
+    {
+      "lane": 5,
+      "variant": "straight",
+      "predicted_goal": 0.09409394860267639,
+      "actual_goal": false,
+      "prior_road": false,
+      "end_code": 3,
+      "post_route_id": 60
+    },
+    {
+      "lane": 7,
+      "variant": "straight",
+      "predicted_goal": 0.37004658579826355,
+      "actual_goal": false,
+      "prior_road": false,
+      "end_code": 18,
+      "post_route_id": 60
+    },
+    {
+      "lane": 1,
+      "variant": "left",
+      "predicted_goal": 0.16369615495204926,
+      "actual_goal": false,
+      "prior_road": false,
+      "end_code": 9,
+      "post_route_id": 61
+    },
+    {
+      "lane": 3,
+      "variant": "left",
+      "predicted_goal": 0.4034245014190674,
+      "actual_goal": true,
+      "prior_road": false,
+      "end_code": 13,
+      "post_route_id": 61
+    },
+    {
+      "lane": 5,
+      "variant": "left",
+      "predicted_goal": 0.09409394860267639,
+      "actual_goal": false,
+      "prior_road": false,
+      "end_code": 4,
+      "post_route_id": 61
+    },
+    {
+      "lane": 7,
+      "variant": "left",
+      "predicted_goal": 0.37004658579826355,
+      "actual_goal": true,
+      "prior_road": false,
+      "end_code": 13,
+      "post_route_id": 61
+    },
+    {
+      "lane": 1,
+      "variant": "right",
+      "predicted_goal": 0.16369615495204926,
+      "actual_goal": true,
+      "prior_road": false,
+      "end_code": 13,
+      "post_route_id": 62
+    },
+    {
+      "lane": 3,
+      "variant": "right",
+      "predicted_goal": 0.4034245014190674,
+      "actual_goal": false,
+      "prior_road": false,
+      "end_code": 9,
+      "post_route_id": 62
+    },
+    {
+      "lane": 5,
+      "variant": "right",
+      "predicted_goal": 0.09409394860267639,
+      "actual_goal": false,
+      "prior_road": false,
+      "end_code": 15,
+      "post_route_id": 62
+    },
+    {
+      "lane": 7,
+      "variant": "right",
+      "predicted_goal": 0.37004658579826355,
+      "actual_goal": false,
+      "prior_road": false,
+      "end_code": 9,
+      "post_route_id": 62
+    }
+  ]
+}

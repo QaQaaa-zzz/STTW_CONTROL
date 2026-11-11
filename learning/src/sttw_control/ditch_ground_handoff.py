@@ -173,6 +173,14 @@ class VectorDitchHandoff(DitchGroundHandoff):
         if len(initialization)!=env.num_envs or any(v not in ('cold','measured') for v in initialization):
             raise ValueError('Observer initialization requires one cold/measured mode per lane')
         self.measured_observer=torch.tensor([v=='measured' for v in initialization],device=env.device)
+        route_ids=spec.get('handoff_route_ids')
+        self.handoff_route_ids=None
+        if route_ids is not None:
+            if (not self.ground.route.batched or len(route_ids)!=env.num_envs
+                    or any(i<0 or i>=len(self.ground.route.xy) for i in route_ids)):
+                raise ValueError('Handoff routes require one valid route-bank index per lane')
+            self.handoff_route_ids=torch.as_tensor(route_ids,device=env.device,dtype=torch.long)
+            self.initial_route_ids=self.ground.route.route_ids.clone()
         self.phase=torch.ones(env.num_envs,device=env.device,dtype=torch.long)
         self.finished=torch.zeros_like(self.phase,dtype=torch.bool)
         self.reached_goal=self.finished.clone();self.push_seen=self.finished.clone()
@@ -205,6 +213,8 @@ class VectorDitchHandoff(DitchGroundHandoff):
     def reset_idx(self,ids):
         e=self.env;g=self.ground
         e.reset_idx(ids)
+        if self.handoff_route_ids is not None:
+            g.route.route_ids[ids]=self.initial_route_ids[ids]
         self.phase[ids]=torch.where(self.ground_only[ids],3,0 if self.approach else 1)
         self.finished[ids]=False;self.reached_goal[ids]=False;self.road_violation[ids]=False;self.push_seen[ids]=False
         self.event_time[ids]=float('nan');self.event_root[ids]=float('nan');self.event_road_violation[ids]=False
@@ -234,6 +244,8 @@ class VectorDitchHandoff(DitchGroundHandoff):
             indices=p.pendulum_servos.indices
             hold=p.dofs[:,indices,0].clamp(min=e.lo[2:],max=e.hi[2:])
             p.pendulum_target[ids]=hold[ids]
+            if self.handoff_route_ids is not None:
+                g.route.route_ids[ids]=self.handoff_route_ids[ids]
             g.resume_ground_lanes(ids,self.spec['speed_m_s'],self.spec['alpha'],observer_init_mask=self.measured_observer[ids])
             g.physical_tick[ids]=e.episode_length_buf[ids]*4
             self.phase[ids]=2;self.handoff_time[ids]=e.episode_length_buf[ids]*e.dt
