@@ -1,0 +1,15 @@
+{
+  "event_update": 600,
+  "direct_update": 500,
+  "fixed_candidate": 48,
+  "objective": "max predicted completion for both; no time penalty in scores; actual inference latency remains physical",
+  "candidate_count": 60,
+  "seed": 20261114,
+  "roots": 4,
+  "methods": [
+    "event_model",
+    "direct_success",
+    "TRAIN best fixed48"
+  ],
+  "termination": "same physical/road/goal conditions"
+}

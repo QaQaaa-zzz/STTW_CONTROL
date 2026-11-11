@@ -1,0 +1,195 @@
+{
+  "roots": [
+    {
+      "y_m": 0.026991129288511988,
+      "yaw_rad": -0.023360471438511183,
+      "roll_rad": -0.004257650589451642,
+      "speed_m_s": 1.9392155489543976
+    },
+    {
+      "y_m": 0.014186998776020053,
+      "yaw_rad": 0.03065903066748403,
+      "roll_rad": 0.016786133768960137,
+      "speed_m_s": 1.902178645297214
+    },
+    {
+      "y_m": 0.023071357106102364,
+      "yaw_rad": -0.013340936981043928,
+      "roll_rad": -0.014038242530861469,
+      "speed_m_s": 2.0752127100227815
+    },
+    {
+      "y_m": -0.0024204929552560164,
+      "yaw_rad": -0.011709328215502947,
+      "roll_rad": -0.01992467433493343,
+      "speed_m_s": 2.039620009408591
+    }
+  ],
+  "cases": [
+    {
+      "root": 3,
+      "method": "direct_success",
+      "role": "TEST_ONLINE",
+      "x": 1.8,
+      "lane": 0,
+      "logical_case": 10
+    },
+    {
+      "root": 1,
+      "method": "forced",
+      "role": "TEST_ONLINE",
+      "x": 1.8,
+      "lane": 1,
+      "logical_case": 5
+    },
+    {
+      "root": 0,
+      "method": "direct_success",
+      "role": "TEST_ONLINE",
+      "x": 1.8,
+      "lane": 2,
+      "logical_case": 1
+    },
+    {
+      "root": 0,
+      "method": "event_model",
+      "role": "TEST_ONLINE",
+      "x": 1.8,
+      "lane": 3,
+      "logical_case": 0
+    },
+    {
+      "root": 0,
+      "method": "forced",
+      "role": "TEST_ONLINE",
+      "x": 1.8,
+      "lane": 4,
+      "logical_case": 2
+    },
+    {
+      "root": 2,
+      "method": "event_model",
+      "role": "TEST_ONLINE",
+      "x": 1.8,
+      "lane": 5,
+      "logical_case": 6
+    },
+    {
+      "root": 1,
+      "method": "direct_success",
+      "role": "TEST_ONLINE",
+      "x": 1.8,
+      "lane": 6,
+      "logical_case": 4
+    },
+    {
+      "root": 2,
+      "method": "direct_success",
+      "role": "TEST_ONLINE",
+      "x": 1.8,
+      "lane": 7,
+      "logical_case": 7
+    },
+    {
+      "root": 2,
+      "method": "forced",
+      "role": "TEST_ONLINE",
+      "x": 1.8,
+      "lane": 8,
+      "logical_case": 8
+    },
+    {
+      "root": 1,
+      "method": "event_model",
+      "role": "TEST_ONLINE",
+      "x": 1.8,
+      "lane": 9,
+      "logical_case": 3
+    },
+    {
+      "root": 3,
+      "method": "event_model",
+      "role": "TEST_ONLINE",
+      "x": 1.8,
+      "lane": 10,
+      "logical_case": 9
+    },
+    {
+      "root": 3,
+      "method": "forced",
+      "role": "TEST_ONLINE",
+      "x": 1.8,
+      "lane": 11,
+      "logical_case": 11
+    }
+  ],
+  "candidates": [
+    "event_model",
+    "direct_success",
+    "forced"
+  ],
+  "route_names": [
+    "straight_jump_v1.5_a0.0",
+    "straight_jump_v1.5_a0.5",
+    "straight_jump_v1.5_a1.0",
+    "straight_jump_v1.8_a0.0",
+    "straight_jump_v1.8_a0.5",
+    "straight_jump_v1.8_a1.0",
+    "straight_jump_v2.0_a0.0",
+    "straight_jump_v2.0_a0.5",
+    "straight_jump_v2.0_a1.0",
+    "straight_jump_v2.3_a0.0",
+    "straight_jump_v2.3_a0.5",
+    "straight_jump_v2.3_a1.0",
+    "straight_jump_v2.6_a0.0",
+    "straight_jump_v2.6_a0.5",
+    "straight_jump_v2.6_a1.0",
+    "s_bend_jump_v1.5_a0.0",
+    "s_bend_jump_v1.5_a0.5",
+    "s_bend_jump_v1.5_a1.0",
+    "s_bend_jump_v1.8_a0.0",
+    "s_bend_jump_v1.8_a0.5",
+    "s_bend_jump_v1.8_a1.0",
+    "s_bend_jump_v2.0_a0.0",
+    "s_bend_jump_v2.0_a0.5",
+    "s_bend_jump_v2.0_a1.0",
+    "s_bend_jump_v2.3_a0.0",
+    "s_bend_jump_v2.3_a0.5",
+    "s_bend_jump_v2.3_a1.0",
+    "s_bend_jump_v2.6_a0.0",
+    "s_bend_jump_v2.6_a0.5",
+    "s_bend_jump_v2.6_a1.0",
+    "right_angle_jump_v1.5_a0.0",
+    "right_angle_jump_v1.5_a0.5",
+    "right_angle_jump_v1.5_a1.0",
+    "right_angle_jump_v1.8_a0.0",
+    "right_angle_jump_v1.8_a0.5",
+    "right_angle_jump_v1.8_a1.0",
+    "right_angle_jump_v2.0_a0.0",
+    "right_angle_jump_v2.0_a0.5",
+    "right_angle_jump_v2.0_a1.0",
+    "right_angle_jump_v2.3_a0.0",
+    "right_angle_jump_v2.3_a0.5",
+    "right_angle_jump_v2.3_a1.0",
+    "right_angle_jump_v2.6_a0.0",
+    "right_angle_jump_v2.6_a0.5",
+    "right_angle_jump_v2.6_a1.0",
+    "ground_detour_v1.5_a0.0",
+    "ground_detour_v1.5_a0.5",
+    "ground_detour_v1.5_a1.0",
+    "ground_detour_v1.8_a0.0",
+    "ground_detour_v1.8_a0.5",
+    "ground_detour_v1.8_a1.0",
+    "ground_detour_v2.0_a0.0",
+    "ground_detour_v2.0_a0.5",
+    "ground_detour_v2.0_a1.0",
+    "ground_detour_v2.3_a0.0",
+    "ground_detour_v2.3_a0.5",
+    "ground_detour_v2.3_a1.0",
+    "ground_detour_v2.6_a0.0",
+    "ground_detour_v2.6_a0.5",
+    "ground_detour_v2.6_a1.0"
+  ],
+  "scope": "New4roots,3frozen methods, actual moving inference; TEST_ONLINE not tuning",
+  "budget": "12episodes\u00d710s=48000physics lane steps,0training; estimated2-4min; stop once or error"
+}

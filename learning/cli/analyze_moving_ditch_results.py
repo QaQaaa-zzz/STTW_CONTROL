@@ -2,7 +2,7 @@
 import argparse,collections,json
 from pathlib import Path
 import numpy as np
-p=argparse.ArgumentParser(description=__doc__);p.add_argument('--run',type=Path,required=True);a=p.parse_args()
+p=argparse.ArgumentParser(description=__doc__);p.add_argument('--run',type=Path,required=True);p.add_argument('--reference');a=p.parse_args()
 cfg=json.loads((a.run/'config.json').read_text());parameters=np.asarray(cfg.get('event_candidate_parameters') or json.loads((Path(cfg['moving_event_planner']['model'])/'model.json').read_text())['candidate_parameters'])
 protocol=json.loads((a.run/'protocol.json').read_text());summary=json.loads((a.run/'evaluation/summary.json').read_text());planning=json.loads((a.run/'evaluation/moving_planning.json').read_text());records={r['lane']:r for r in planning['records']};groups=[];rows=[]
 for case in protocol['cases']:
@@ -12,7 +12,7 @@ for x,method in sorted(set((c['x'],c['method']) for c in rows)):
  group=[r for r in rows if r['x']==x and r['method']==method];queries=[r['query_ms'] for r in group if r['query_ms'] is not None]
  groups.append(dict(x=x,method=method,n=len(group),completed=sum(c['success'] for c in group),road_violations=sum(c['road_violation'] for c in group),choices=dict(collections.Counter(str(c['selected']) for c in group)),ground_choices=int(sum(c['selected'] is not None and parameters[c['selected'],-1]<.5 for c in group)),jump_choices=int(sum(c['selected'] is not None and parameters[c['selected'],-1]>.5 for c in group)),mean_query_ms=float(np.mean(queries)),max_query_ms=float(np.max(queries))))
 paired={}
-methods=sorted(set(c['method'] for c in rows));reference='state_rule' if 'state_rule' in methods else 'geometry_rule'
+methods=sorted(set(c['method'] for c in rows));reference=a.reference or ('state_rule' if 'state_rule' in methods else 'geometry_rule')
 for method in methods:
  wins=losses=same_choice_different_result=0
  for r in [c for c in rows if c['method']==method]:

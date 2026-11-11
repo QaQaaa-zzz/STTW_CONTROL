@@ -77,7 +77,7 @@ class MovingDitchPlanner:
                 predictor=self.predictors[self.methods[lane]]
                 state=predictor.encode(roots[lane:lane+1],observation[lane:lane+1].cpu().numpy(),history,task.road_violation[lane:lane+1].cpu().numpy())
                 prediction=predictor.score(np.repeat(state,len(self.parameters),0),self.parameters,particles=32)
-                scores=np.asarray(prediction['score'])
+                scores=np.asarray(prediction[self.config.get('score_key','score')])
             else:
                 prediction=None;scores=np.zeros(len(self.parameters));scores[self.config['fixed_jump_candidate']]=.5;scores[self.parameters[:,-1]<.5]=1.
                 if 'fixed_ground_candidate' in self.config:scores[self.config['fixed_ground_candidate']]=1.1

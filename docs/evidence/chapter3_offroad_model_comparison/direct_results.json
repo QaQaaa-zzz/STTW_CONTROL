@@ -1,0 +1,54 @@
+{
+  "comparison": {
+    "TRAIN": {
+      "segments": 480,
+      "positive": 78,
+      "brier": 0.10611879825592041
+    },
+    "DEV": {
+      "segments": 240,
+      "positive": 44,
+      "brier": 0.12995177507400513
+    },
+    "TEST": {
+      "segments": 0,
+      "positive": 0,
+      "brier": null
+    }
+  },
+  "selected_update": 500,
+  "logs": [
+    {
+      "update": 100,
+      "train_loss": 0.4649007022380829,
+      "dev_loss": 0.5126805305480957
+    },
+    {
+      "update": 200,
+      "train_loss": 0.3584272265434265,
+      "dev_loss": 0.4233261048793793
+    },
+    {
+      "update": 300,
+      "train_loss": 0.24981795251369476,
+      "dev_loss": 0.3686842918395996
+    },
+    {
+      "update": 400,
+      "train_loss": 0.2550543248653412,
+      "dev_loss": 0.37006622552871704
+    },
+    {
+      "update": 500,
+      "train_loss": 0.2549089789390564,
+      "dev_loss": 0.3685557544231415
+    },
+    {
+      "update": 600,
+      "train_loss": 0.24617290496826172,
+      "dev_loss": 0.3703266680240631
+    }
+  ],
+  "elapsed_s": 5.514533256995492,
+  "scope": "Direct completion baseline; same root groups and codec, BCE objective,600updates/100interval; reported Brier on initial segment states; no candidate-grid selection when skip-offline-selection; roles inherited from collection; empty groups reported as null"
+}
