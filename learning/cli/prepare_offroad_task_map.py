@@ -33,7 +33,7 @@ height_map.local=np.zeros((1,2));sample=height_map.crop(root);height=sample[:,0]
 np.savez_compressed(a.output/'height_map.npz',x=xx,y=yy,height_m=np.where(support,height,np.nan),support=support)
 params=[np.r_[route_parameters(route[i],v,alpha),float(i!=3)].tolist() for i,v,alpha in choices];names=[f'{spec["routes"][i]}_v{v}_a{alpha}' for i,v,alpha in choices]
 rng=np.random.default_rng(spec['seed']);roots=[dict(y_m=float(rng.uniform(-.03,.03)),yaw_rad=float(rng.uniform(-.035,.035)),roll_rad=float(rng.uniform(-.02,.02)),speed_m_s=float(rng.uniform(1.9,2.1))) for _ in range(spec['roots'])]
-logical=[dict(root=k,candidate=names[j],candidate_id=j,logical_case=k*len(choices)+j,role='DEV',x=1.8,method='forced') for k in range(len(roots)) for j in range(len(choices))];cases=[dict(logical[i],lane=lane) for lane,i in enumerate(rng.permutation(len(logical)))];n=len(cases)
+logical=[dict(root=k,candidate=names[j],candidate_id=j,logical_case=k*len(choices)+j,role=spec.get('data_split','DEV'),x=1.8,method='forced') for k in range(len(roots)) for j in range(len(choices))];cases=[dict(logical[i],lane=lane) for lane,i in enumerate(rng.permutation(len(logical)))];n=len(cases)
 cfg.update(num_envs=n,ground_initial_conditions=[roots[c['root']] for c in cases],task_reference_path=str(a.output/'roads.npz'),event_candidate_parameters=params,data_role=spec['role'])
 cfg['ground_handoff'].update(reference_path=str(a.output/'issued.npz'),reference_route_ids=[7]*n,ground_only_lanes=[False]*n)
 cfg['moving_event_planner']=dict(model=cfg['moving_event_planner']['model'],candidate_parameters=params,decision_x_m=1.8,methods=['forced']*n,forced_candidates=[c['candidate_id'] for c in cases],fixed_jump_candidate=7)
