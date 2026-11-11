@@ -1,0 +1,21 @@
+{
+  "numerical_tests": [
+    "exact_linear_replay",
+    "constant_forcing_equilibrium",
+    "true_endpoint_mask",
+    "Euler_roll_derivative_with_pitch"
+  ],
+  "raw_bin_check": {
+    "physics_steps": [
+      4001,
+      4025
+    ],
+    "batch_lane": 114,
+    "front_normal_mean_N": 20.409451522827148,
+    "matched": true
+  },
+  "cases": 12,
+  "lanes": 216,
+  "case_panels": 48,
+  "positive_panels": 5
+}

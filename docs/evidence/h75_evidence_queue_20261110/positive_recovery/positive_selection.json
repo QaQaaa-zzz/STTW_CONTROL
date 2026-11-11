@@ -1,0 +1,26 @@
+[
+  {
+    "case": "single10_v2.6_seed101",
+    "positive": "full_0.5",
+    "lanes": [
+      6,
+      12,
+      7,
+      8
+    ],
+    "title": "10cm ridge | 2.6m/s | seed101",
+    "reason": "First declared physical group at2.6m/s; full alpha.5 passes task C in all3 groups and final hold in6/6 contexts."
+  },
+  {
+    "case": "dense10_v2.3_seed101",
+    "positive": "full_0.75",
+    "lanes": [
+      9,
+      10,
+      11,
+      15
+    ],
+    "title": "10mm stones | 2.3m/s | seed101",
+    "reason": "First declared physical group at2.3m/s; full alpha.75 passes A/B/C here; final hold6/6 overall, not ABC6/6."
+  }
+]
