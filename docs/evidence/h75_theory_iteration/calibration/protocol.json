@@ -1,0 +1,96 @@
+{
+  "experiment_id": "H75_THEORY_HEIGHT_CALIBRATION",
+  "title": "S2单脊高度—速度—恢复标定",
+  "evaluation_role": "Fixed-parameter paired mechanism DEV; original H75+Local300; no training",
+  "case_labels": [
+    "full_0",
+    "full_0.25",
+    "full_0.5",
+    "full_0.75",
+    "full_1",
+    "Zero"
+  ],
+  "track_wheel_contacts": false,
+  "seeds": [
+    101,
+    102,
+    103
+  ],
+  "terrains": [
+    "single04",
+    "single06",
+    "single08",
+    "single10"
+  ],
+  "speeds": [
+    1.8,
+    2.1,
+    2.3,
+    2.6
+  ],
+  "scenes": 48,
+  "lanes": 288,
+  "episode_s": 10,
+  "max_physics_lane_steps": 14400000,
+  "optimizer_updates": 0,
+  "data_role": "DEV calibration; physical groups101/102 fit,103 held-out assessment",
+  "interpretation": "Full-episode channel ablation DEV, not a same-entry-state intervention",
+  "stop_rule": "One 288-episode bank or engineering error; no automatic repetition/training",
+  "code_revision": "0122e7d58a0b6ed8c27ac82e88d666b652f2b971",
+  "initialization": "Original H75+Local300 and same frozen complete initial state; no mid-run restore",
+  "primary_outcomes": [
+    "termination cause",
+    "full 10s observation",
+    "original goal arrival and final hold",
+    "path and speed errors",
+    "roll peak",
+    "contact impulses",
+    "steering rate and torque occupation"
+  ],
+  "tasks": {
+    "A": {
+      "W_m": 0.3,
+      "speed_rmse_m_s": 0.2
+    },
+    "B": {
+      "W_m": 0.6,
+      "speed_rmse_m_s": 0.1
+    },
+    "C": {
+      "W_m": 0.4,
+      "speed_rmse_m_s": 0.15
+    }
+  },
+  "configured_lanes": true,
+  "duplicate_pairs": [],
+  "primary_change": "Four ridge heights and four speeds with frozen five alpha and paired Zero",
+  "fixed_alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "compact_results": true,
+  "batch_cases": 48,
+  "retention": "200Hz state/reward/control; 5kHz contact only1–4s, compressed100-step chunks; no videos",
+  "execution_revision": "batched fixed cases, physics unchanged; grouping changes lane arrangement and is recorded in batch_source",
+  "max_batch_envs": 4096,
+  "retain_physics_contacts": true,
+  "purpose": "Identify height dependence absent from prior single10cm high-rate bank; calibrate before committing S3 forecasts",
+  "fit_protocol": {
+    "fit_physical_groups": [
+      101,
+      102
+    ],
+    "assessment_physical_groups": [
+      103
+    ],
+    "future_test": "S3 fine alpha and physical groups separated from this DEV bank",
+    "labels": "complete run, roll limit, tracking domain, tasks A/B/C separately"
+  },
+  "estimated_wall_time_minutes": [
+    45,
+    120
+  ]
+}

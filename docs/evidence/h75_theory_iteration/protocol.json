@@ -23,7 +23,17 @@
       "status": "partial",
       "budget": "reuse archived CPU records; no training",
       "completed": "216条×3窗口，12工况五档/Zero时序图；名义p1、J_sat和参考零点；alpha0末窗命令限速现象",
-      "remaining": "事件对齐的alpha运行点/冲量映射、独立组检验及冻结预测"
+      "remaining": "事件对齐的alpha运行点/冲量映射、独立组检验及冻结预测",
+      "calibration": {
+        "episodes": 288,
+        "contexts": 48,
+        "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration",
+        "reason": "Only10cm ridge high-rate source; add four heights for J(v,h) before fine-alpha prediction",
+        "wall_minutes": [
+          45,
+          120
+        ]
+      }
     },
     {
       "id": "S3",
