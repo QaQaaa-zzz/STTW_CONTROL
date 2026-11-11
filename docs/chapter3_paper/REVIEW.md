@@ -1,3 +1,7 @@
+## Full two-interface execution now measured
+
+Training/output evidence: ../evidence/chapter3_interface_model/RESULTS.md. Frozen30-root,three-repeat execution: ../evidence/chapter3_interface_online/RESULTS.md. Completion15/90(interface),33/90(direct),41/90(rule). All33 interface detours time out; the ground head assigns substantial probability to a0/20 TRAIN action. Do not claim a winning planner or treat13 gains without39 losses as net benefit. The paper can now describe actual upstream distribution learning,downstream conditional goal learning,and composed physical execution. Ground-head correction,if attempted,must be bounded and retain this failed version;these roots become development for any subsequent modification. No changed downstream geometry or recovery-margin evidence exists.
+
 ## Downstream model pilot now available
 
 See ../evidence/chapter3_continuation_model/RESULTS.md. Three compact MLP members predict observed2s continuation from measured handoff state under a fixed cold initialization.82 TRAIN cases/8 roots and36 DEV cases/4 roots;DEV selects epochs. Brier0.12376 versus constant0.23242 on DEV, but source historical transfer0.22978 versus0.22700 is negative. Historical RB transfer is better than constant but is neither RB training nor same-state recovery improvement. Upstream modeling, complete controller-state logging, new downstream layouts and composed physical decisions remain missing. Do not present this conditional classifier alone as the completed world model.

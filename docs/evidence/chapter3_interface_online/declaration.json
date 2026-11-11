@@ -1,0 +1,38 @@
+{
+  "question": "Can the trained two-interface scorer execute complete known-map tasks?",
+  "n_independent_conditions": 30,
+  "methods": [
+    "interface_world_model",
+    "interface_direct",
+    "distance_rule"
+  ],
+  "repetitions": 3,
+  "total_episodes": 270,
+  "query_positions": [
+    1.8,
+    3.0,
+    5.0
+  ],
+  "allocation": "10 independent roots per query position; same root copied to3slots; Latin method rotation over3runs so each method uses each slot once per root",
+  "primary": "Full-task completion and original constraint violations; all30conditions retained. Method-disagreement subgroup secondary only. Report paired condition-average differences;3repeats not90independent roots.",
+  "limitations": "Same known map and controller context; no new downstream-width/curvature generalization or continuous replanning claim. Comparison includes actual inference latency.",
+  "budget": "3batched90lane Isaac runs x10s;1,080,000physical lane steps maximum;each run5min wall cap;0training",
+  "resources": "Small evaluation allowed parallel by explicit user instruction; no stopping other GPU job",
+  "models": {
+    "direct_71101.pt": "841a3265c994d794f0142e5d53a4d0f6fa0b062b1cddb04cb148119172d8c21b",
+    "direct_71102.pt": "f7c494c7b3eeebc30fc64ba5d1a6b3892583af75c741e4733d99d722f6e5c0d2",
+    "direct_71103.pt": "315dfaf7b44cc34287983d0fe8be8389b152f8151e3f9d6fdb8af72febc98847",
+    "upstream_71101.pt": "fc12fbc7741cecfb900be69255fe056be19e262fa660e59730b1fd007b8df462",
+    "upstream_71102.pt": "45fc418b8c059629c96b926db6e58c7549352883751691897269b26135242242",
+    "upstream_71103.pt": "786343f94847a7ea773c418e6e37b0178dbb27aa3e21cf161959a47fbdeaa646"
+  },
+  "downstream_directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_interface_all_routes/downstream_goal_distance",
+  "rule": {
+    "1.8": 48,
+    "3.0": 22,
+    "5.0": 4
+  },
+  "rule_source": "Previously frozen TRAIN distance rule from original online comparison",
+  "seed": 2026111207,
+  "stop": "Do not retune frozen model or seeds after results. Runtime errors may be fixed with failed launches retained."
+}

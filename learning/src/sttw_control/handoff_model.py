@@ -20,7 +20,7 @@ class HandoffContinuationModel:
             model=nn.Sequential(nn.Linear(len(columns),64),nn.SiLU(),nn.Linear(64,32),nn.SiLU(),nn.Linear(32,1))
             model.load_state_dict(checkpoint['state_dict']);model.eval()
             self.models.append((model,columns))
-            self.mean=checkpoint['mean'];self.std=checkpoint['std']
+            self.mean=checkpoint['mean'];self.std=checkpoint['std'];self.target=checkpoint.get('target','continuation')
         if len(self.models)!=3:raise ValueError('Expected three frozen ensemble members')
 
     @torch.no_grad()
@@ -28,4 +28,5 @@ class HandoffContinuationModel:
         features=np.concatenate((root,current_observation[:,50:75],np.asarray(physical_time_s).reshape(-1,1)),axis=1).astype(np.float32)
         normalized=torch.from_numpy((features-self.mean)/self.std)
         samples=np.stack([torch.sigmoid(model(normalized[:,columns]).squeeze(-1)).numpy() for model,columns in self.models])
-        return dict(continuation_probability=samples.mean(0),ensemble_std=samples.std(0))
+        key='continuation_probability' if self.target=='continuation' else 'conditional_goal_probability'
+        return {key:samples.mean(0),'ensemble_std':samples.std(0)}

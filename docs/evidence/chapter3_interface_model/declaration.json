@@ -1,0 +1,12 @@
+{
+  "scope": "Fixed known map,original jump,cold H751.5m/s alpha0.5; all four candidate routes; no RL or new physics",
+  "inputs": "query root13,observation80,recorded ground history352,global time1,candidate8,known terrain crop128",
+  "outputs": "valid handoff probability; conditional39D handoff Gaussian; separate direct-ground goal head; frozen downstream39D goal ensemble",
+  "labels": "Invalid/missing handoffs included in Bernoulli training; state NLL only valid handoffs; full-goal labels unchanged",
+  "include_distance_training": true,
+  "split": "Original grouped TRAIN/DEV roles;source1440 optionally included for query-distance coverage;source240 historical transfer never selected",
+  "budget": "CPU3seeds x250epochs for upstream and direct classifier;25min wall cap;0physics/0PPO",
+  "loss": "BCE valid-handoff on jump lanes+BCE ground-goal on ground lanes+conditional diagonal Gaussian NLL; DEV same loss selects epoch. Direct goal BCE baseline same architecture/budget.",
+  "latency": "Training forced candidates have measured query-to-publication latency recorded; online latency must be propagated and rechecked.",
+  "uncertainty": "Diagonal Gaussian is an approximation; state/event errors and composed calibration reported, no safety claim"
+}

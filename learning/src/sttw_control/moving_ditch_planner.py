@@ -29,6 +29,10 @@ class MovingDitchPlanner:
         if 'direct_model' in config:
             from .ditch_completion_model import CompletionPlanner
             self.completion=CompletionPlanner(config['direct_model']);self.predictors['direct_success']=self.completion
+        self.interface=None
+        if 'interface_model' in config:
+            from .interface_world_model import InterfaceWorldModel
+            self.interface=InterfaceWorldModel(config['interface_model'])
         self.methods=config['methods'];self.queried=np.zeros(task.env.num_envs,bool);self.pending={};self.records=[]
     def admission(self,roots):
         distance=route_distances(roots,self.roads);allowed=distance<=self.task.road_half_width
@@ -72,6 +76,13 @@ class MovingDitchPlanner:
             if self.methods[lane]=='forced':
                 eligible[:]=False;eligible[self.config['forced_candidates'][lane]]=True;allowed&=eligible[None]
                 prediction=None;scores=eligible.astype(float)
+            elif self.methods[lane] in ('interface_world_model','interface_direct'):
+                if self.interface is None:raise ValueError('interface_model directory required')
+                history=torch.cat([v.flatten(1) for v in (g.controller.eso,g.controller.disturbance[:,None],g.controller.gains,g.previous_reference,g.previous_command,g.policy.filtered,g.policy.offsets,g.middle.frames,g.middle.mask)],-1)[lane:lane+1].cpu().numpy()
+                n=len(self.parameters)
+                score=self.interface.score if self.methods[lane]=='interface_world_model' else self.interface.score_direct
+                prediction=score(np.repeat(roots[lane:lane+1],n,0),np.repeat(observation[lane:lane+1].cpu().numpy(),n,0),np.repeat(history,n,0),np.full(n,step*env.dt),self.parameters,particles=32)
+                scores=np.asarray(prediction['score'])
             elif self.methods[lane] in self.predictors:
                 history=torch.cat([v.flatten(1) for v in (g.controller.eso,g.controller.disturbance[:,None],g.controller.gains,g.previous_reference,g.previous_command,g.policy.filtered,g.policy.offsets,g.middle.frames,g.middle.mask)],-1)[lane:lane+1].cpu().numpy()
                 predictor=self.predictors[self.methods[lane]]
