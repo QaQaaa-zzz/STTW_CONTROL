@@ -1,0 +1,21 @@
+{
+  "actual_roll_monitor_rad": 0.7,
+  "actual_roll_monitor_deg": 40.10704565915762,
+  "threshold_source": "isaac_path_rollout.py: bad=(post_m[:,0].abs()>.7), checked every5ms; not geometric chassis-contact angle",
+  "example_B_deg_s2": 500,
+  "example_limit_deg": 45,
+  "empirical_B_deg_s2": 38286.764728366354,
+  "calibration_physical_seeds": [
+    101,
+    102
+  ],
+  "test_physical_seeds": [
+    103
+  ],
+  "calibration_method": "maximum absolute5ms Euler-rate finite difference over calibration groups; exclude terminal interval and endpoints outside0.7rad; no outcome-based tuning; not a certified acceleration upper bound",
+  "calibration_peak_case": "single10_v2.6_seed101",
+  "calibration_peak_label": "full_1_duplicate",
+  "focus": "single10_v2.6_seed101",
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_channel_scan/roll_contact_analysis",
+  "attachment_identity": "historical U17024N one-sided; current H75 ridge analyzed separately"
+}
