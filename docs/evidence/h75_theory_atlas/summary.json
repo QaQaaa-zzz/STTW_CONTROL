@@ -1,0 +1,13 @@
+{
+  "historical_reports": 28,
+  "historical_reports_accessible": 28,
+  "recent_episodes": 1432,
+  "recent_contexts": 152,
+  "mechanism_trajectories": 216,
+  "domain_logged": 78,
+  "domain_preview_trigger": 78,
+  "domain_heading_trigger": 0,
+  "domain_neither": 0,
+  "new_simulation": 0,
+  "new_training": 0
+}
