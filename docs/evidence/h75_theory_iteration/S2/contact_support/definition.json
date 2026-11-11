@@ -1,0 +1,8 @@
+{
+  "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_channel_scan",
+  "contact_source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_channel_scan/roll_contact_analysis/contact_bins.npz",
+  "windows": 510,
+  "normal_force_zero": "exact zero in original nonnegative 5kHz normal-force means; no learned threshold",
+  "paired_windows": "For each case, last100ms of full_0/full_1 applied to all original lanes, truncated/missing data not filled",
+  "new_simulations": 0
+}

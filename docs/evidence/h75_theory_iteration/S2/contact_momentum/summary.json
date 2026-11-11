@@ -1,0 +1,256 @@
+{
+  "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration",
+  "contacts": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/contact_analysis/contact_bins.npz",
+  "windows": 2046,
+  "complete_windows": 2042,
+  "closure_MAE_Nms": 0.00046759581332607935,
+  "closure_median_Nms": 0.00022388819546350107,
+  "closure_p95_Nms": 0.0009558003016022752,
+  "sum_absolute_residual_over_sum_absolute_terms": 0.01031859609719769,
+  "property_checks": [
+    {
+      "case": "single04_v1.8_seed101",
+      "max_mass_ratio_spread": 7.69585927207217e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single04_v1.8_seed102",
+      "max_mass_ratio_spread": 8.888159142017571e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single04_v1.8_seed103",
+      "max_mass_ratio_spread": 7.291232773098955e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single04_v2.1_seed101",
+      "max_mass_ratio_spread": 7.69585927207217e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single04_v2.1_seed102",
+      "max_mass_ratio_spread": 8.888159142017571e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single04_v2.1_seed103",
+      "max_mass_ratio_spread": 7.291232773098955e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single04_v2.3_seed101",
+      "max_mass_ratio_spread": 7.69585927207217e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single04_v2.3_seed102",
+      "max_mass_ratio_spread": 8.888159142017571e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single04_v2.3_seed103",
+      "max_mass_ratio_spread": 7.291232773098955e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single04_v2.6_seed101",
+      "max_mass_ratio_spread": 7.69585927207217e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single04_v2.6_seed102",
+      "max_mass_ratio_spread": 8.888159142017571e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single04_v2.6_seed103",
+      "max_mass_ratio_spread": 7.291232773098955e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single06_v1.8_seed101",
+      "max_mass_ratio_spread": 7.69585927207217e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single06_v1.8_seed102",
+      "max_mass_ratio_spread": 8.888159142017571e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single06_v1.8_seed103",
+      "max_mass_ratio_spread": 7.291232773098955e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single06_v2.1_seed101",
+      "max_mass_ratio_spread": 7.69585927207217e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single06_v2.1_seed102",
+      "max_mass_ratio_spread": 8.888159142017571e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single06_v2.1_seed103",
+      "max_mass_ratio_spread": 7.291232773098955e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single06_v2.3_seed101",
+      "max_mass_ratio_spread": 7.69585927207217e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single06_v2.3_seed102",
+      "max_mass_ratio_spread": 8.888159142017571e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single06_v2.3_seed103",
+      "max_mass_ratio_spread": 7.291232773098955e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single06_v2.6_seed101",
+      "max_mass_ratio_spread": 7.69585927207217e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single06_v2.6_seed102",
+      "max_mass_ratio_spread": 8.888159142017571e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single06_v2.6_seed103",
+      "max_mass_ratio_spread": 7.291232773098955e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single08_v1.8_seed101",
+      "max_mass_ratio_spread": 7.69585927207217e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single08_v1.8_seed102",
+      "max_mass_ratio_spread": 8.888159142017571e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single08_v1.8_seed103",
+      "max_mass_ratio_spread": 7.291232773098955e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single08_v2.1_seed101",
+      "max_mass_ratio_spread": 7.69585927207217e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single08_v2.1_seed102",
+      "max_mass_ratio_spread": 8.888159142017571e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single08_v2.1_seed103",
+      "max_mass_ratio_spread": 7.291232773098955e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single08_v2.3_seed101",
+      "max_mass_ratio_spread": 7.69585927207217e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single08_v2.3_seed102",
+      "max_mass_ratio_spread": 8.888159142017571e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single08_v2.3_seed103",
+      "max_mass_ratio_spread": 7.291232773098955e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single08_v2.6_seed101",
+      "max_mass_ratio_spread": 7.69585927207217e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single08_v2.6_seed102",
+      "max_mass_ratio_spread": 8.888159142017571e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single08_v2.6_seed103",
+      "max_mass_ratio_spread": 7.291232773098955e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single10_v1.8_seed101",
+      "max_mass_ratio_spread": 7.69585927207217e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single10_v1.8_seed102",
+      "max_mass_ratio_spread": 8.888159142017571e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single10_v1.8_seed103",
+      "max_mass_ratio_spread": 7.291232773098955e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single10_v2.1_seed101",
+      "max_mass_ratio_spread": 7.69585927207217e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single10_v2.1_seed102",
+      "max_mass_ratio_spread": 8.888159142017571e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single10_v2.1_seed103",
+      "max_mass_ratio_spread": 7.291232773098955e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single10_v2.3_seed101",
+      "max_mass_ratio_spread": 7.69585927207217e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single10_v2.3_seed102",
+      "max_mass_ratio_spread": 8.888159142017571e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single10_v2.3_seed103",
+      "max_mass_ratio_spread": 7.291232773098955e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single10_v2.6_seed101",
+      "max_mass_ratio_spread": 7.69585927207217e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single10_v2.6_seed102",
+      "max_mass_ratio_spread": 8.888159142017571e-08,
+      "max_com_offset_change_m": 0.0
+    },
+    {
+      "case": "single10_v2.6_seed103",
+      "max_mass_ratio_spread": 7.291232773098955e-08,
+      "max_com_offset_change_m": 0.0
+    }
+  ],
+  "formula": "Delta(e dot L_COM) = integral e dot (tau_front+tau_rear) dt + integral (omega_chassis cross e) dot L_COM dt",
+  "inertia_rule": "runtime nominal tensor in link coordinates times actual/nominal body mass; Isaac Lab randomize_rigid_body_mass(recompute_inertia=True)",
+  "sampling": "Body states at 5ms endpoints; original 5kHz contact mean right bins. Axis transport trapezoid; no fitting.",
+  "new_simulations": 0
+}
