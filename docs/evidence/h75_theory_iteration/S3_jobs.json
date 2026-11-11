@@ -1,0 +1,1762 @@
+[
+  {
+    "name": "ridge040_v1.8_seed201_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v1.8_seed201_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 201,
+    "repeat": 0,
+    "speed_m_s": 1.8,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v1.8_seed201_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v1.8_seed201_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 201,
+    "repeat": 1,
+    "speed_m_s": 1.8,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v1.8_seed202_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v1.8_seed202_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 202,
+    "repeat": 0,
+    "speed_m_s": 1.8,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v1.8_seed202_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v1.8_seed202_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 202,
+    "repeat": 1,
+    "speed_m_s": 1.8,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v1.8_seed203_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v1.8_seed203_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 203,
+    "repeat": 0,
+    "speed_m_s": 1.8,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v1.8_seed203_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v1.8_seed203_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 203,
+    "repeat": 1,
+    "speed_m_s": 1.8,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v1.8_seed204_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v1.8_seed204_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 204,
+    "repeat": 0,
+    "speed_m_s": 1.8,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v1.8_seed204_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v1.8_seed204_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 204,
+    "repeat": 1,
+    "speed_m_s": 1.8,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v2.1_seed201_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v2.1_seed201_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 201,
+    "repeat": 0,
+    "speed_m_s": 2.1,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v2.1_seed201_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v2.1_seed201_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 201,
+    "repeat": 1,
+    "speed_m_s": 2.1,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v2.1_seed202_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v2.1_seed202_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 202,
+    "repeat": 0,
+    "speed_m_s": 2.1,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v2.1_seed202_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v2.1_seed202_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 202,
+    "repeat": 1,
+    "speed_m_s": 2.1,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v2.1_seed203_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v2.1_seed203_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 203,
+    "repeat": 0,
+    "speed_m_s": 2.1,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v2.1_seed203_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v2.1_seed203_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 203,
+    "repeat": 1,
+    "speed_m_s": 2.1,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v2.1_seed204_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v2.1_seed204_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 204,
+    "repeat": 0,
+    "speed_m_s": 2.1,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v2.1_seed204_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v2.1_seed204_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 204,
+    "repeat": 1,
+    "speed_m_s": 2.1,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v2.3_seed201_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v2.3_seed201_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 201,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v2.3_seed201_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v2.3_seed201_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 201,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v2.3_seed202_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v2.3_seed202_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 202,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v2.3_seed202_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v2.3_seed202_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 202,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v2.3_seed203_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v2.3_seed203_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 203,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v2.3_seed203_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v2.3_seed203_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 203,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v2.3_seed204_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v2.3_seed204_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 204,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v2.3_seed204_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v2.3_seed204_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 204,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v2.6_seed201_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v2.6_seed201_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 201,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v2.6_seed201_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v2.6_seed201_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 201,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v2.6_seed202_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v2.6_seed202_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 202,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v2.6_seed202_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v2.6_seed202_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 202,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v2.6_seed203_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v2.6_seed203_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 203,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v2.6_seed203_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v2.6_seed203_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 203,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v2.6_seed204_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v2.6_seed204_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 204,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge040_v2.6_seed204_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge040_v2.6_seed204_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single04",
+    "physical_seed": 204,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.04,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v1.8_seed201_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v1.8_seed201_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 201,
+    "repeat": 0,
+    "speed_m_s": 1.8,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v1.8_seed201_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v1.8_seed201_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 201,
+    "repeat": 1,
+    "speed_m_s": 1.8,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v1.8_seed202_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v1.8_seed202_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 202,
+    "repeat": 0,
+    "speed_m_s": 1.8,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v1.8_seed202_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v1.8_seed202_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 202,
+    "repeat": 1,
+    "speed_m_s": 1.8,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v1.8_seed203_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v1.8_seed203_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 203,
+    "repeat": 0,
+    "speed_m_s": 1.8,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v1.8_seed203_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v1.8_seed203_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 203,
+    "repeat": 1,
+    "speed_m_s": 1.8,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v1.8_seed204_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v1.8_seed204_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 204,
+    "repeat": 0,
+    "speed_m_s": 1.8,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v1.8_seed204_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v1.8_seed204_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 204,
+    "repeat": 1,
+    "speed_m_s": 1.8,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v2.1_seed201_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v2.1_seed201_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 201,
+    "repeat": 0,
+    "speed_m_s": 2.1,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v2.1_seed201_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v2.1_seed201_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 201,
+    "repeat": 1,
+    "speed_m_s": 2.1,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v2.1_seed202_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v2.1_seed202_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 202,
+    "repeat": 0,
+    "speed_m_s": 2.1,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v2.1_seed202_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v2.1_seed202_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 202,
+    "repeat": 1,
+    "speed_m_s": 2.1,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v2.1_seed203_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v2.1_seed203_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 203,
+    "repeat": 0,
+    "speed_m_s": 2.1,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v2.1_seed203_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v2.1_seed203_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 203,
+    "repeat": 1,
+    "speed_m_s": 2.1,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v2.1_seed204_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v2.1_seed204_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 204,
+    "repeat": 0,
+    "speed_m_s": 2.1,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v2.1_seed204_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v2.1_seed204_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 204,
+    "repeat": 1,
+    "speed_m_s": 2.1,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v2.3_seed201_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v2.3_seed201_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 201,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v2.3_seed201_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v2.3_seed201_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 201,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v2.3_seed202_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v2.3_seed202_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 202,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v2.3_seed202_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v2.3_seed202_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 202,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v2.3_seed203_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v2.3_seed203_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 203,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v2.3_seed203_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v2.3_seed203_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 203,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v2.3_seed204_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v2.3_seed204_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 204,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v2.3_seed204_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v2.3_seed204_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 204,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v2.6_seed201_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v2.6_seed201_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 201,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v2.6_seed201_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v2.6_seed201_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 201,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v2.6_seed202_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v2.6_seed202_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 202,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v2.6_seed202_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v2.6_seed202_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 202,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v2.6_seed203_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v2.6_seed203_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 203,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v2.6_seed203_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v2.6_seed203_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 203,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v2.6_seed204_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v2.6_seed204_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 204,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge060_v2.6_seed204_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge060_v2.6_seed204_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single06",
+    "physical_seed": 204,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.06,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v1.8_seed201_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v1.8_seed201_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 201,
+    "repeat": 0,
+    "speed_m_s": 1.8,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v1.8_seed201_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v1.8_seed201_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 201,
+    "repeat": 1,
+    "speed_m_s": 1.8,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v1.8_seed202_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v1.8_seed202_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 202,
+    "repeat": 0,
+    "speed_m_s": 1.8,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v1.8_seed202_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v1.8_seed202_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 202,
+    "repeat": 1,
+    "speed_m_s": 1.8,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v1.8_seed203_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v1.8_seed203_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 203,
+    "repeat": 0,
+    "speed_m_s": 1.8,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v1.8_seed203_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v1.8_seed203_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 203,
+    "repeat": 1,
+    "speed_m_s": 1.8,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v1.8_seed204_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v1.8_seed204_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 204,
+    "repeat": 0,
+    "speed_m_s": 1.8,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v1.8_seed204_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v1.8_seed204_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 204,
+    "repeat": 1,
+    "speed_m_s": 1.8,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v2.1_seed201_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v2.1_seed201_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 201,
+    "repeat": 0,
+    "speed_m_s": 2.1,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v2.1_seed201_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v2.1_seed201_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 201,
+    "repeat": 1,
+    "speed_m_s": 2.1,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v2.1_seed202_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v2.1_seed202_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 202,
+    "repeat": 0,
+    "speed_m_s": 2.1,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v2.1_seed202_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v2.1_seed202_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 202,
+    "repeat": 1,
+    "speed_m_s": 2.1,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v2.1_seed203_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v2.1_seed203_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 203,
+    "repeat": 0,
+    "speed_m_s": 2.1,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v2.1_seed203_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v2.1_seed203_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 203,
+    "repeat": 1,
+    "speed_m_s": 2.1,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v2.1_seed204_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v2.1_seed204_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 204,
+    "repeat": 0,
+    "speed_m_s": 2.1,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v2.1_seed204_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v2.1_seed204_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 204,
+    "repeat": 1,
+    "speed_m_s": 2.1,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v2.3_seed201_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v2.3_seed201_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 201,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v2.3_seed201_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v2.3_seed201_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 201,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v2.3_seed202_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v2.3_seed202_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 202,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v2.3_seed202_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v2.3_seed202_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 202,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v2.3_seed203_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v2.3_seed203_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 203,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v2.3_seed203_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v2.3_seed203_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 203,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v2.3_seed204_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v2.3_seed204_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 204,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v2.3_seed204_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v2.3_seed204_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 204,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v2.6_seed201_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v2.6_seed201_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 201,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v2.6_seed201_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v2.6_seed201_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 201,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v2.6_seed202_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v2.6_seed202_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 202,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v2.6_seed202_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v2.6_seed202_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 202,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v2.6_seed203_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v2.6_seed203_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 203,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v2.6_seed203_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v2.6_seed203_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 203,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v2.6_seed204_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v2.6_seed204_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 204,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge080_v2.6_seed204_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge080_v2.6_seed204_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single08",
+    "physical_seed": 204,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.08,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v1.8_seed201_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v1.8_seed201_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 201,
+    "repeat": 0,
+    "speed_m_s": 1.8,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v1.8_seed201_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v1.8_seed201_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 201,
+    "repeat": 1,
+    "speed_m_s": 1.8,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v1.8_seed202_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v1.8_seed202_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 202,
+    "repeat": 0,
+    "speed_m_s": 1.8,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v1.8_seed202_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v1.8_seed202_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 202,
+    "repeat": 1,
+    "speed_m_s": 1.8,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v1.8_seed203_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v1.8_seed203_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 203,
+    "repeat": 0,
+    "speed_m_s": 1.8,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v1.8_seed203_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v1.8_seed203_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 203,
+    "repeat": 1,
+    "speed_m_s": 1.8,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v1.8_seed204_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v1.8_seed204_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 204,
+    "repeat": 0,
+    "speed_m_s": 1.8,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v1.8_seed204_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v1.8_seed204_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 204,
+    "repeat": 1,
+    "speed_m_s": 1.8,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v2.1_seed201_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v2.1_seed201_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 201,
+    "repeat": 0,
+    "speed_m_s": 2.1,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v2.1_seed201_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v2.1_seed201_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 201,
+    "repeat": 1,
+    "speed_m_s": 2.1,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v2.1_seed202_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v2.1_seed202_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 202,
+    "repeat": 0,
+    "speed_m_s": 2.1,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v2.1_seed202_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v2.1_seed202_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 202,
+    "repeat": 1,
+    "speed_m_s": 2.1,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v2.1_seed203_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v2.1_seed203_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 203,
+    "repeat": 0,
+    "speed_m_s": 2.1,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v2.1_seed203_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v2.1_seed203_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 203,
+    "repeat": 1,
+    "speed_m_s": 2.1,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v2.1_seed204_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v2.1_seed204_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 204,
+    "repeat": 0,
+    "speed_m_s": 2.1,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v2.1_seed204_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v2.1_seed204_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 204,
+    "repeat": 1,
+    "speed_m_s": 2.1,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v2.3_seed201_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v2.3_seed201_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 201,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v2.3_seed201_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v2.3_seed201_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 201,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v2.3_seed202_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v2.3_seed202_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 202,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v2.3_seed202_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v2.3_seed202_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 202,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v2.3_seed203_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v2.3_seed203_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 203,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v2.3_seed203_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v2.3_seed203_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 203,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v2.3_seed204_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v2.3_seed204_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 204,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v2.3_seed204_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v2.3_seed204_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 204,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v2.6_seed201_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v2.6_seed201_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 201,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v2.6_seed201_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v2.6_seed201_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 201,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v2.6_seed202_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v2.6_seed202_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 202,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v2.6_seed202_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v2.6_seed202_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 202,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v2.6_seed203_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v2.6_seed203_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 203,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v2.6_seed203_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v2.6_seed203_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 203,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v2.6_seed204_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v2.6_seed204_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 204,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "ridge100_v2.6_seed204_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/ridge100_v2.6_seed204_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/calibration/terrains/single10",
+    "physical_seed": 204,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.1,
+    "family": "ridge"
+  },
+  {
+    "name": "gravel005_v2.3_seed201_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel005_v2.3_seed201_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height05mm",
+    "physical_seed": 201,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.005,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel005_v2.3_seed201_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel005_v2.3_seed201_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height05mm",
+    "physical_seed": 201,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.005,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel005_v2.3_seed202_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel005_v2.3_seed202_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height05mm",
+    "physical_seed": 202,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.005,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel005_v2.3_seed202_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel005_v2.3_seed202_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height05mm",
+    "physical_seed": 202,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.005,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel005_v2.3_seed203_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel005_v2.3_seed203_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height05mm",
+    "physical_seed": 203,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.005,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel005_v2.3_seed203_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel005_v2.3_seed203_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height05mm",
+    "physical_seed": 203,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.005,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel005_v2.3_seed204_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel005_v2.3_seed204_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height05mm",
+    "physical_seed": 204,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.005,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel005_v2.3_seed204_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel005_v2.3_seed204_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height05mm",
+    "physical_seed": 204,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.005,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel005_v2.6_seed201_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel005_v2.6_seed201_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height05mm",
+    "physical_seed": 201,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.005,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel005_v2.6_seed201_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel005_v2.6_seed201_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height05mm",
+    "physical_seed": 201,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.005,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel005_v2.6_seed202_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel005_v2.6_seed202_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height05mm",
+    "physical_seed": 202,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.005,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel005_v2.6_seed202_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel005_v2.6_seed202_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height05mm",
+    "physical_seed": 202,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.005,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel005_v2.6_seed203_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel005_v2.6_seed203_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height05mm",
+    "physical_seed": 203,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.005,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel005_v2.6_seed203_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel005_v2.6_seed203_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height05mm",
+    "physical_seed": 203,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.005,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel005_v2.6_seed204_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel005_v2.6_seed204_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height05mm",
+    "physical_seed": 204,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.005,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel005_v2.6_seed204_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel005_v2.6_seed204_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height05mm",
+    "physical_seed": 204,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.005,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel010_v2.3_seed201_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel010_v2.3_seed201_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height10mm",
+    "physical_seed": 201,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.01,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel010_v2.3_seed201_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel010_v2.3_seed201_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height10mm",
+    "physical_seed": 201,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.01,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel010_v2.3_seed202_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel010_v2.3_seed202_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height10mm",
+    "physical_seed": 202,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.01,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel010_v2.3_seed202_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel010_v2.3_seed202_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height10mm",
+    "physical_seed": 202,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.01,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel010_v2.3_seed203_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel010_v2.3_seed203_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height10mm",
+    "physical_seed": 203,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.01,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel010_v2.3_seed203_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel010_v2.3_seed203_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height10mm",
+    "physical_seed": 203,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.01,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel010_v2.3_seed204_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel010_v2.3_seed204_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height10mm",
+    "physical_seed": 204,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.01,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel010_v2.3_seed204_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel010_v2.3_seed204_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height10mm",
+    "physical_seed": 204,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.01,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel010_v2.6_seed201_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel010_v2.6_seed201_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height10mm",
+    "physical_seed": 201,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.01,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel010_v2.6_seed201_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel010_v2.6_seed201_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height10mm",
+    "physical_seed": 201,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.01,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel010_v2.6_seed202_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel010_v2.6_seed202_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height10mm",
+    "physical_seed": 202,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.01,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel010_v2.6_seed202_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel010_v2.6_seed202_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height10mm",
+    "physical_seed": 202,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.01,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel010_v2.6_seed203_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel010_v2.6_seed203_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height10mm",
+    "physical_seed": 203,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.01,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel010_v2.6_seed203_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel010_v2.6_seed203_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height10mm",
+    "physical_seed": 203,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.01,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel010_v2.6_seed204_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel010_v2.6_seed204_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height10mm",
+    "physical_seed": 204,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.01,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel010_v2.6_seed204_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel010_v2.6_seed204_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height10mm",
+    "physical_seed": 204,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.01,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel020_v2.3_seed201_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel020_v2.3_seed201_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height20mm",
+    "physical_seed": 201,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.02,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel020_v2.3_seed201_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel020_v2.3_seed201_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height20mm",
+    "physical_seed": 201,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.02,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel020_v2.3_seed202_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel020_v2.3_seed202_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height20mm",
+    "physical_seed": 202,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.02,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel020_v2.3_seed202_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel020_v2.3_seed202_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height20mm",
+    "physical_seed": 202,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.02,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel020_v2.3_seed203_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel020_v2.3_seed203_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height20mm",
+    "physical_seed": 203,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.02,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel020_v2.3_seed203_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel020_v2.3_seed203_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height20mm",
+    "physical_seed": 203,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.02,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel020_v2.3_seed204_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel020_v2.3_seed204_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height20mm",
+    "physical_seed": 204,
+    "repeat": 0,
+    "speed_m_s": 2.3,
+    "height_m": 0.02,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel020_v2.3_seed204_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel020_v2.3_seed204_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height20mm",
+    "physical_seed": 204,
+    "repeat": 1,
+    "speed_m_s": 2.3,
+    "height_m": 0.02,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel020_v2.6_seed201_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel020_v2.6_seed201_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height20mm",
+    "physical_seed": 201,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.02,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel020_v2.6_seed201_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel020_v2.6_seed201_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height20mm",
+    "physical_seed": 201,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.02,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel020_v2.6_seed202_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel020_v2.6_seed202_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height20mm",
+    "physical_seed": 202,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.02,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel020_v2.6_seed202_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel020_v2.6_seed202_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height20mm",
+    "physical_seed": 202,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.02,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel020_v2.6_seed203_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel020_v2.6_seed203_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height20mm",
+    "physical_seed": 203,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.02,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel020_v2.6_seed203_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel020_v2.6_seed203_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height20mm",
+    "physical_seed": 203,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.02,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel020_v2.6_seed204_rep0",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel020_v2.6_seed204_rep0.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height20mm",
+    "physical_seed": 204,
+    "repeat": 0,
+    "speed_m_s": 2.6,
+    "height_m": 0.02,
+    "family": "gravel"
+  },
+  {
+    "name": "gravel020_v2.6_seed204_rep1",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan/gravel020_v2.6_seed204_rep1.json",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/terrains/height20mm",
+    "physical_seed": 204,
+    "repeat": 1,
+    "speed_m_s": 2.6,
+    "height_m": 0.02,
+    "family": "gravel"
+  }
+]

@@ -120,7 +120,8 @@ for step in range(env.horizon):
     keys=['reward','valid','done','failure','lower_trace']
     keys.extend(key for key in ('executed_commands','body_poses') if key in result)
     rows.append({key:result[key] for key in keys})
-    detail.extend(result['diagnostics'])
+    omitted=s.get('omit_diagnostic_fields',[])
+    detail.extend({key:value for key,value in frame.items() if key not in omitted} for frame in result['diagnostics'])
     if (step+1)%50==0:
         row_chunks.append(transfer(rows));detail_chunks.append(transfer(detail));rows.clear();detail.clear()
     if (step+1)%50==0:print(json.dumps(dict(step=step+1,alive=int(env.alive.sum()),seconds=time.time()-started)),flush=True)
