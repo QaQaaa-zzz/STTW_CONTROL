@@ -1,5 +1,7 @@
 # Chapter 3 English manuscript
 
+**Current-stage scope:** the minimal predictive-planning execution loop is complete. Baseline superiority is not an acceptance condition; further optimization experiments are deferred. This does not imply journal acceptance or broad robustness.
+
 **Current paper:** [PDF](MANUSCRIPT.pdf) · [editable LaTeX](MANUSCRIPT.tex). This is the authoritative English research draft; `docs/CHAPTER3_MANUSCRIPT.md/.docx` retain the earlier Chinese working report.
 
 The manuscript follows the official RA-L initial-submission two-column US Letter template. The downloaded `ieeeconf.cls` comes from the [template linked by IEEE RAS](https://ras.papercept.net/conferences/support/files/ieeeconf.zip); current guidance was opened on 2026-11-11 UTC at [RA-L Information for Authors](https://www.ieee-ras.org/publications/ra-l/ra-l-information-for-authors/). Formatting is a drafting choice, not a claim of acceptance or submission readiness. The current eight-page draft uses the published maximum rather than the six-page standard length; final venue choice and author approval remain outstanding.
