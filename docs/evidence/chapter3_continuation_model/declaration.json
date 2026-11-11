@@ -1,0 +1,8 @@
+{
+  "input": "39 values: physical root13 + latest measured observation frame25 + handoff time1. All available before switching. Fixed cold initialization,1.5m/s,alpha0.5,straight downstream. Not a complete simulator state.",
+  "target": "Previously frozen observed2s continuation; no censored negatives",
+  "split": "source720 original TRAIN roots fit; DEV roots select epochs; other batches historical transfer only",
+  "budget": "CPU,3 seeds x2 feature sets x200 epochs;0PPO/0physics;25min wall cap",
+  "model": "MLP39-64-32-1SiLU; BCE Adam lr.001 weight_decay.0001; TRAIN normalization; DEV Brier selection",
+  "scope": "Exploratory downstream interface only; no independent TEST/planning benefit or disturbance margin"
+}

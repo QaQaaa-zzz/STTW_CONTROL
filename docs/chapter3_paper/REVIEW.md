@@ -1,3 +1,7 @@
+## Downstream model pilot now available
+
+See ../evidence/chapter3_continuation_model/RESULTS.md. Three compact MLP members predict observed2s continuation from measured handoff state under a fixed cold initialization.82 TRAIN cases/8 roots and36 DEV cases/4 roots;DEV selects epochs. Brier0.12376 versus constant0.23242 on DEV, but source historical transfer0.22978 versus0.22700 is negative. Historical RB transfer is better than constant but is neither RB training nor same-state recovery improvement. Upstream modeling, complete controller-state logging, new downstream layouts and composed physical decisions remain missing. Do not present this conditional classifier alone as the completed world model.
+
 ## Current interface evidence update
 
 The research direction is now effective skill handoff and downstream continuation, with the existing event-chain paper retained as a historical baseline. New retrospective labels are in `../evidence/chapter3_continuation_labels/RESULTS.md`. The nominal straight-ground envelope is not a valid necessary condition for capture: only11/46 and20/79 observed2s continuations entered and held it within1s in the two source collections. Use measured2s continuation as the initial downstream outcome; retain envelope entry as an auxiliary descriptor and report full-goal results separately. Do not rename absence of envelope entry as capture failure.
