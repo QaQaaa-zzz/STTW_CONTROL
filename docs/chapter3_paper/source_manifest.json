@@ -291,6 +291,14 @@
       "sha256": "2700eb3619d116c85ea7f0acbe6b2809ce21485679ca58ae9a982e092a60d2f6",
       "verification": "agent_executed_and_inspected",
       "human_verification": "pending"
+    },
+    {
+      "id": "I17",
+      "title": "RB301 measured-handoff feedback transfer",
+      "path": "docs/evidence/chapter3_rb_feedback/RESULTS.md",
+      "sha256": "34322561bab47b47479ec5adf9b004151cc96a2e5c7896af173d75cc15b06d67",
+      "verification": "agent_executed_and_inspected",
+      "human_verification": "pending"
     }
   ],
   "references": [

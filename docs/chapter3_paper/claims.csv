@@ -20,3 +20,4 @@ C_REPAIR,Methods;Results,Compact residual and Frenet physical prediction results
 C_HORIZON,Abstract;Results,Shared-screen development retest43/90 vs35/90 and36/90,I14,pending
 C_JOINT_RETEST,Results,Repaired joint26/30/27;41revisions7goals;no superiority,I15,pending
 C_RB_SCREEN,Discussion,Source11 RB30119 RB40013 RB50016 of90;DEV screening;no automatic adoption,I16,pending
+C_RB_FEEDBACK,Discussion,Source-fixed15 RB-fixed20 RB-feedback16 of90;frozen predictor transfer,I17,pending
