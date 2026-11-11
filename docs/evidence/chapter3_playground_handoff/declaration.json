@@ -1,0 +1,375 @@
+{
+  "role": "bounded native Playground transfer DEV, no training",
+  "skills": {
+    "source": {
+      "action_order": [
+        "steer",
+        "rear_wheel_drive",
+        "hip",
+        "knee"
+      ],
+      "actor_frame_fields": [
+        "gravity_x",
+        "gravity_y",
+        "gravity_z",
+        "angular_velocity_x",
+        "angular_velocity_y",
+        "angular_velocity_z",
+        "acceleration_x",
+        "acceleration_y",
+        "acceleration_z",
+        "steering_position",
+        "hip_position",
+        "knee_position",
+        "steering_velocity",
+        "hip_velocity",
+        "knee_velocity",
+        "front_wheel_velocity",
+        "rear_wheel_velocity",
+        "last_action_steer",
+        "last_action_rear_wheel_drive",
+        "last_action_hip",
+        "last_action_knee",
+        "estimated_forward_velocity",
+        "obstacle_relative_x",
+        "root_height",
+        "history_valid"
+      ],
+      "actor_sha256": "a06acbc81aead7120a291cf82359189bff36ccfecde132615ae0f264ee3126e8",
+      "actor_task_fields": [
+        "jump_signal"
+      ],
+      "checkpoint": "/home/qy/DVGC/JIT/runs/experiments/generative_bridge_v1_2_20260928/audit/binding/bridge_baseline/checkpoints/transition_0",
+      "checkpoint_identity_sha256": "0307799fa5059cd55d81eedec9f33e89a53b75d1f718e29c919b74e01d1445e8",
+      "critic_sha256": "5b8641318c99dffab036ffe1999c2278059d4ac0513be3843393d3122b9302f1",
+      "data_role": "train",
+      "formal_config": "/home/qy/DVGC/JIT/runs/experiments/generative_bridge_v1_2_20260928/audit/runtime_config.json",
+      "formal_config_file_sha256": "c135ef71f5d5907274c08ef1692705bcf3ffe0f3695674f1ef11b5f2d3bcc51f",
+      "formal_config_sha256": "82872dd8ed1de87eee67f9b63fa3a3636fd00118ad4c0fcd88ba48b2dfac69ce",
+      "initialization_receipt": "/home/qy/DVGC/JIT/runs/experiments/generative_bridge_v1_2_20260928/audit/binding/initialization_receipt.json",
+      "initialization_receipt_sha256": "f86103a249983fb058240d85dd13c259c75a054ade6398c9518ec3b494aef953",
+      "iteration": 0,
+      "name": "bridge_baseline",
+      "normalizer_sha256": "db84aad7750991d6b720e9f065ed7e49f862893c7753f9839c593d7951b6ea86",
+      "payload_sha256": "dc74f572683e873dcf7661e454a53f259171efd82ec33edcf7afb071acfdad31",
+      "policy_role": "initialization_only",
+      "source_frozen_policy": "/home/qy/DVGC/JIT/runs/experiments/generative_bridge_v1_2_20260928/audit/phase_source.json",
+      "source_frozen_policy_sha256": "09ac7d40e15d0c6a2a3a42803bc359f7ea371bbc0543c05663b7cf2c3484052e",
+      "source_reset_mixture": {
+        "natural_reset_probability": 0.2,
+        "selection": "fixed_jump_start_20pct_exact_snapshot_80pct",
+        "soft_tube_probability": 0.8
+      },
+      "source_training_run_id": "bridge_baseline",
+      "source_training_transitions": 0,
+      "xml_sha256": "0b56d3672773ef05a2b5982117fa53a7fdffcaf2b7f3f04a7a7941233d6e9c8a"
+    },
+    "rb_run1": {
+      "action_order": [
+        "steer",
+        "rear_wheel_drive",
+        "hip",
+        "knee"
+      ],
+      "actor_frame_fields": [
+        "gravity_x",
+        "gravity_y",
+        "gravity_z",
+        "angular_velocity_x",
+        "angular_velocity_y",
+        "angular_velocity_z",
+        "acceleration_x",
+        "acceleration_y",
+        "acceleration_z",
+        "steering_position",
+        "hip_position",
+        "knee_position",
+        "steering_velocity",
+        "hip_velocity",
+        "knee_velocity",
+        "front_wheel_velocity",
+        "rear_wheel_velocity",
+        "last_action_steer",
+        "last_action_rear_wheel_drive",
+        "last_action_hip",
+        "last_action_knee",
+        "estimated_forward_velocity",
+        "obstacle_relative_x",
+        "root_height",
+        "history_valid"
+      ],
+      "actor_sha256": "c3eae39c7c116d5db56122d5aff4f29a6f95b8971a51c4c46864754ecb58b040",
+      "actor_task_fields": [
+        "jump_signal"
+      ],
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_pi0_scratchG_100_candidates12_20261019/training_initial_source_policy_recovery/round_0009/students/student/training/round_0009_student/checkpoints/transition_128000",
+      "checkpoint_identity_sha256": "f6c42676539c66e06d4703b744577243e5b0f99d5df7c8431e3cc40e929036db",
+      "critic_sha256": "ef6f698d2dc016183a1bd2a83ec147338e47fdb539dff0f97b91df3b6563eeb9",
+      "data_role": "train",
+      "formal_config": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_pi0_scratchG_100_candidates12_20261019/training_initial_source_policy_recovery/round_0009/students/student/config.json",
+      "formal_config_file_sha256": "caf486f6f0587a9acc8a86061999272309cb1df0dfb4b666b00c17780efd3e51",
+      "formal_config_sha256": "06bcc68c2245bb8853b5933b826add551b2408c10c8b3656c630c74466e47584",
+      "iteration": 1,
+      "name": "round_0009_student",
+      "normalizer_sha256": "db84aad7750991d6b720e9f065ed7e49f862893c7753f9839c593d7951b6ea86",
+      "payload_sha256": "c11052e726ccbc3970fe272037a9b52b95161d4b7a48ec958caa3b75b306e4df",
+      "policy_role": "development_checkpoint",
+      "source_formal_report": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_pi0_scratchG_100_candidates12_20261019/training_initial_source_policy_recovery/round_0009/students/student/training/round_0009_student/formal_report.json",
+      "source_formal_report_sha256": "6b4c25707dd7ce4abf967d3f83c25b7c65c5aaefae999285feb39c76dadcdc79",
+      "source_requested_training_transitions": 128000,
+      "source_reset_mixture": {
+        "natural_reset_probability": 0.6,
+        "selection": "complete_start_60pct_current_teacher_30pct_historical_success_10pct",
+        "soft_tube_probability": 0.4
+      },
+      "source_training_run_id": "round_0009_student",
+      "source_training_transitions": 128000,
+      "xml_sha256": "0b56d3672773ef05a2b5982117fa53a7fdffcaf2b7f3f04a7a7941233d6e9c8a"
+    },
+    "rb_run2": {
+      "action_order": [
+        "steer",
+        "rear_wheel_drive",
+        "hip",
+        "knee"
+      ],
+      "actor_frame_fields": [
+        "gravity_x",
+        "gravity_y",
+        "gravity_z",
+        "angular_velocity_x",
+        "angular_velocity_y",
+        "angular_velocity_z",
+        "acceleration_x",
+        "acceleration_y",
+        "acceleration_z",
+        "steering_position",
+        "hip_position",
+        "knee_position",
+        "steering_velocity",
+        "hip_velocity",
+        "knee_velocity",
+        "front_wheel_velocity",
+        "rear_wheel_velocity",
+        "last_action_steer",
+        "last_action_rear_wheel_drive",
+        "last_action_hip",
+        "last_action_knee",
+        "estimated_forward_velocity",
+        "obstacle_relative_x",
+        "root_height",
+        "history_valid"
+      ],
+      "actor_sha256": "0704230af3c91adbb4c2881c5a138b100c83dc56a5e855ca7c15cc9069a41abb",
+      "actor_task_fields": [
+        "jump_signal"
+      ],
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_optimized_ablation_queue_20261020/seed_8114001/full/round_0009/students/student/training/round_0009_student/checkpoints/transition_128000",
+      "checkpoint_identity_sha256": "b6f84f69ec8ac1bdd33b47b3af80c4a8d586fddd7707bdab33bbf1e6cd7a648a",
+      "critic_sha256": "96c2570f14aea1e4b725ce868969a9a922c33f753f2060c571f5d26707dac162",
+      "data_role": "train",
+      "formal_config": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_optimized_ablation_queue_20261020/seed_8114001/full/round_0009/students/student/config.json",
+      "formal_config_file_sha256": "972f0e9063af3b05885267b6aeb22b05a35d8b1b8718d4bdd0f5679b7790d284",
+      "formal_config_sha256": "fdc91f986dee680c651542f0feafe64a749db00c392e022ea2cee16811131835",
+      "iteration": 1,
+      "name": "round_0009_student",
+      "normalizer_sha256": "db84aad7750991d6b720e9f065ed7e49f862893c7753f9839c593d7951b6ea86",
+      "payload_sha256": "d97366da60662d1583f37c97093694636f9a9904a32c6a35eb62cf4e2fcec7d7",
+      "policy_role": "development_checkpoint",
+      "source_formal_report": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_optimized_ablation_queue_20261020/seed_8114001/full/round_0009/students/student/training/round_0009_student/formal_report.json",
+      "source_formal_report_sha256": "445a1760421bee8f6adafc4d11f118e6feb71821cc7d3a3c2e42f3a9bbcf603a",
+      "source_requested_training_transitions": 128000,
+      "source_reset_mixture": {
+        "natural_reset_probability": 0.6,
+        "selection": "complete_start_60pct_current_teacher_30pct_historical_success_10pct",
+        "soft_tube_probability": 0.4
+      },
+      "source_training_run_id": "round_0009_student",
+      "source_training_transitions": 128000,
+      "xml_sha256": "0b56d3672773ef05a2b5982117fa53a7fdffcaf2b7f3f04a7a7941233d6e9c8a"
+    },
+    "rb_run3": {
+      "action_order": [
+        "steer",
+        "rear_wheel_drive",
+        "hip",
+        "knee"
+      ],
+      "actor_frame_fields": [
+        "gravity_x",
+        "gravity_y",
+        "gravity_z",
+        "angular_velocity_x",
+        "angular_velocity_y",
+        "angular_velocity_z",
+        "acceleration_x",
+        "acceleration_y",
+        "acceleration_z",
+        "steering_position",
+        "hip_position",
+        "knee_position",
+        "steering_velocity",
+        "hip_velocity",
+        "knee_velocity",
+        "front_wheel_velocity",
+        "rear_wheel_velocity",
+        "last_action_steer",
+        "last_action_rear_wheel_drive",
+        "last_action_hip",
+        "last_action_knee",
+        "estimated_forward_velocity",
+        "obstacle_relative_x",
+        "root_height",
+        "history_valid"
+      ],
+      "actor_sha256": "ffe98cc0c497d820b15500d89589bafac9f1a4b92979ac790f753304760c8487",
+      "actor_task_fields": [
+        "jump_signal"
+      ],
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_optimized_ablation_queue_20261020/seed_8115001/ppo_only/round_0009/students/student/training/round_0009_student/checkpoints/transition_128000",
+      "checkpoint_identity_sha256": "f2c1b73f8ff19217334e96912ad9e96bdb6c07e4566ccec24266f90967ee5eab",
+      "critic_sha256": "66bcc34399026f836fbcc054d9555a41ae01359140c383a92c2d8007083e02d7",
+      "data_role": "train",
+      "formal_config": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_optimized_ablation_queue_20261020/seed_8115001/ppo_only/round_0009/students/student/config.json",
+      "formal_config_file_sha256": "9f06a3141a06828892ad5b531be512bea093a870f1aa2f5de3b898aecaaf4a76",
+      "formal_config_sha256": "5e31be4dc1636a41ad5713b7079794783ef07a5afc49e53e3e0769f6016b2eee",
+      "iteration": 1,
+      "name": "round_0009_student",
+      "normalizer_sha256": "db84aad7750991d6b720e9f065ed7e49f862893c7753f9839c593d7951b6ea86",
+      "payload_sha256": "40177faae581466330b49f7376e86a5ded78b104a6f5ac8b2d9049a922549897",
+      "policy_role": "development_checkpoint",
+      "source_formal_report": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_optimized_ablation_queue_20261020/seed_8115001/ppo_only/round_0009/students/student/training/round_0009_student/formal_report.json",
+      "source_formal_report_sha256": "a614ef84a085210a107c3a3688dbf88ef750525fc0a65fefb672674b954427ab",
+      "source_requested_training_transitions": 128000,
+      "source_reset_mixture": {
+        "natural_reset_probability": 0.6,
+        "selection": "complete_start_60pct_current_teacher_30pct_historical_success_10pct",
+        "soft_tube_probability": 0.4
+      },
+      "source_training_run_id": "round_0009_student",
+      "source_training_transitions": 128000,
+      "xml_sha256": "0b56d3672773ef05a2b5982117fa53a7fdffcaf2b7f3f04a7a7941233d6e9c8a"
+    }
+  },
+  "terrain": {
+    "front_x_m": 10.3,
+    "width_m": 0.3,
+    "ground_end_x_m": 25.0,
+    "stone_height_min_m": 0.001,
+    "stone_height_max_m": 0.004,
+    "stones_per_m2": 10,
+    "seed": 20261111,
+    "lateral_limit_m": 3.9,
+    "far_bank_height_m": 0.0,
+    "rough_x_intervals_m": [
+      [
+        2.5,
+        8.5
+      ],
+      [
+        12.0,
+        20.0
+      ]
+    ],
+    "land_bridge_y_interval_m": [
+      1.4,
+      4.0
+    ],
+    "full_width_rough": true,
+    "ridges": [
+      {
+        "x_interval_m": [
+          4.5,
+          5.5
+        ],
+        "y_interval_m": [
+          -4.0,
+          4.0
+        ],
+        "height_m": 0.02
+      },
+      {
+        "x_interval_m": [
+          13.0,
+          15.0
+        ],
+        "y_interval_m": [
+          -4.0,
+          4.0
+        ],
+        "height_m": 0.08
+      }
+    ]
+  },
+  "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rb_candidate_handoff/source/config.json",
+  "routes": [
+    60,
+    61,
+    62
+  ],
+  "episode_s": 10,
+  "episodes": 24,
+  "physics_steps_max": 48000,
+  "backend": "MuJoCo Playground mjx_env.step, MJX-Warp",
+  "heightfield_contact_workspace": 512,
+  "physics_dt": 0.005,
+  "lower_dt": 0.005,
+  "upper_dt": 0.02,
+  "ground_model": {
+    "source_actor": {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+      "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+      "artifact": "actor.npz",
+      "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+      "conversion": "exact arrays, no optimization or architecture change"
+    },
+    "route_name": "left90_R2",
+    "world_anchor": [
+      8.045238494873047,
+      -0.001819610595703125,
+      -0.00033139364677481353
+    ],
+    "frame_scales": [
+      0.3,
+      1.5,
+      0.35,
+      3.0,
+      3.0,
+      2.0,
+      3.0,
+      3.0,
+      3.0,
+      0.35,
+      0.8,
+      0.45,
+      3.0,
+      0.35,
+      3.0,
+      60.0,
+      1.5,
+      10.0,
+      0.3,
+      0.3
+    ],
+    "files": {
+      "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+      "config.json": "582274a63d6cb24c396b1d4d6020337c61f92dc56e72ed1ba285f1bdd5ff6c54",
+      "route.npz": "5fe434f692345998c556bdf870cc496132b0b87ca814520c2c3a06e8ecbd8af4"
+    },
+    "adaptation": "Same frozen H75; current RB follower geometry; route rigidly anchored once at warmup state"
+  },
+  "goal": {
+    "x_min_m": 16.5,
+    "x_max_m": 18.5,
+    "abs_y_max_m": 0.5,
+    "min_vx_m_s": 0.5
+  },
+  "road_half_width_m": 0.6,
+  "start_x_m": 1.5,
+  "start_vx_m_s": 2.0,
+  "handoff": "first wheel contact on far bank after genuine airborne interval; next 5ms lower-control boundary",
+  "scope": "Native RB controls approach and jump; H75 or zero-middle STTW takes over after landing. No planning or new training.",
+  "terrain_conversion": "Existing seeded terrain vertices resampled to 25mm heightfields, open trench and bridge retained; native vehicle and contacts retained, not a controlled simulator-only comparison.",
+  "pendulum": "finite native position servos hold measured landing joint angles; no joint lock",
+  "observer": "measured ESO initialization, empty H75 history at handoff"
+}
