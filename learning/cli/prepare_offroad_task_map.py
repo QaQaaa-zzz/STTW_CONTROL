@@ -35,10 +35,11 @@ params=[np.r_[route_parameters(route[i],v,alpha),float(i!=3)].tolist() for i,v,a
 rng=np.random.default_rng(spec['seed']);roots=[dict(y_m=float(rng.uniform(-.03,.03)),yaw_rad=float(rng.uniform(-.035,.035)),roll_rad=float(rng.uniform(-.02,.02)),speed_m_s=float(rng.uniform(1.9,2.1))) for _ in range(spec['roots'])]
 roles=spec.get('root_splits',[spec.get('data_split','DEV')]*len(roots))
 if len(roles)!=len(roots) or not set(roles)<= {'TRAIN','DEV','TEST'}:raise ValueError('root_splits must assign TRAIN/DEV/TEST to each entire root')
-logical=[dict(root=k,candidate=names[j],candidate_id=j,logical_case=k*len(choices)+j,role=roles[k],x=1.8,method='forced') for k in range(len(roots)) for j in range(len(choices))];cases=[dict(logical[i],lane=lane) for lane,i in enumerate(rng.permutation(len(logical)))];n=len(cases)
+positions=spec.get('decision_positions_m',[1.8])
+logical=[dict(root=k,candidate=names[j],candidate_id=j,logical_case=(k*len(positions)+ix)*len(choices)+j,role=roles[k],x=x,method='forced') for k in range(len(roots)) for ix,x in enumerate(positions) for j in range(len(choices))];cases=[dict(logical[i],lane=lane) for lane,i in enumerate(rng.permutation(len(logical)))];n=len(cases)
 cfg.update(num_envs=n,ground_initial_conditions=[roots[c['root']] for c in cases],task_reference_path=str(a.output/'roads.npz'),event_candidate_parameters=params,data_role=spec['role'])
 cfg['ground_handoff'].update(reference_path=str(a.output/'issued.npz'),reference_route_ids=[7]*n,ground_only_lanes=[False]*n)
-cfg['moving_event_planner']=dict(model=cfg['moving_event_planner']['model'],candidate_parameters=params,decision_x_m=1.8,methods=['forced']*n,forced_candidates=[c['candidate_id'] for c in cases],fixed_jump_candidate=7)
+cfg['moving_event_planner']=dict(model=cfg['moving_event_planner']['model'],candidate_parameters=params,decision_x_m=[c['x'] for c in cases],methods=['forced']*n,forced_candidates=[c['candidate_id'] for c in cases],fixed_jump_candidate=7)
 cfg.pop('evaluation_checkpoint',None)
 (a.output/'config.json').write_text(json.dumps(cfg,indent=2));(a.output/'protocol.json').write_text(json.dumps(dict(roots=roots,cases=cases,candidates=names,route_names=names,parameters=params,budget=spec['budget'],scope=spec['role']),indent=2))
 contract=dict(map_spec=cfg['ditch_terrain'],goal=cfg['ground_handoff']['goal'],road_half_width_m=.6,routes=spec['routes'],speeds_m_s=spec['speeds_m_s'],alphas=spec['alphas'],candidate_count=len(choices),flat_jump_interval_m=[8.5,12],height_grid_spacing_m=.05,height_source='piecewise-linear actual collision mesh, missing trench cells NaN with support=false',corner_radius_m=radius,physics_status='prepared, not yet executed',predictor_status='requires new data and calibration; old two-route score not used')

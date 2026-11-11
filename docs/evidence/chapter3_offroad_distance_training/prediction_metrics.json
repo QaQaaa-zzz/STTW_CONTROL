@@ -1,0 +1,175 @@
+{
+  "metrics": {
+    "TRAIN": {
+      "0": {
+        "train_event_rate": 0.774744987487793,
+        "constant_rate_brier": 0.17451517283916473,
+        "n": 3627,
+        "events": 2810,
+        "event_brier": 0.0454796627163887,
+        "time_mae_s": 0.13961169123649597,
+        "xy_error_m": 0.3752914369106293
+      },
+      "1": {
+        "train_event_rate": 0.9494252800941467,
+        "constant_rate_brier": 0.04801691323518753,
+        "n": 435,
+        "events": 413,
+        "event_brier": 0.02723073773086071,
+        "time_mae_s": 0.05819185823202133,
+        "xy_error_m": 0.12817226350307465
+      },
+      "2": {
+        "train_event_rate": 0.9031476974487305,
+        "constant_rate_brier": 0.08747192472219467,
+        "n": 413,
+        "events": 373,
+        "event_brier": 0.018347242847085,
+        "time_mae_s": 0.03599757328629494,
+        "xy_error_m": 0.09638345241546631
+      },
+      "3": {
+        "train_event_rate": 0.9973190426826477,
+        "constant_rate_brier": 0.0026737782172858715,
+        "n": 373,
+        "events": 372,
+        "event_brier": 0.009759055450558662,
+        "time_mae_s": 0.01745305396616459,
+        "xy_error_m": 0.09492293745279312
+      },
+      "4": {
+        "train_event_rate": 0.27217236161231995,
+        "constant_rate_brier": 0.19809460639953613,
+        "n": 2785,
+        "events": 758,
+        "event_brier": 0.05665126070380211,
+        "time_mae_s": 0.30596816539764404,
+        "xy_error_m": 0.8082677721977234
+      },
+      "5": {
+        "train_event_rate": 0.7632184028625488,
+        "constant_rate_brier": 0.18071608245372772,
+        "n": 435,
+        "events": 332,
+        "event_brier": 0.13832485675811768,
+        "time_mae_s": 0.07053005695343018,
+        "xy_error_m": 0.16428853571414948
+      }
+    },
+    "DEV": {
+      "0": {
+        "train_event_rate": 0.774744987487793,
+        "constant_rate_brier": 0.18307530879974365,
+        "n": 1200,
+        "events": 911,
+        "event_brier": 0.051972683519124985,
+        "time_mae_s": 0.1451181024312973,
+        "xy_error_m": 0.3912258744239807
+      },
+      "1": {
+        "train_event_rate": 0.9494252800941467,
+        "constant_rate_brier": 0.040806762874126434,
+        "n": 141,
+        "events": 135,
+        "event_brier": 0.018520327284932137,
+        "time_mae_s": 0.06395053118467331,
+        "xy_error_m": 0.1311420500278473
+      },
+      "2": {
+        "train_event_rate": 0.9031476974487305,
+        "constant_rate_brier": 0.09299617260694504,
+        "n": 135,
+        "events": 121,
+        "event_brier": 0.004960018675774336,
+        "time_mae_s": 0.03494337201118469,
+        "xy_error_m": 0.10022410750389099
+      },
+      "3": {
+        "train_event_rate": 0.9973190426826477,
+        "constant_rate_brier": 7.187532446550904e-06,
+        "n": 121,
+        "events": 121,
+        "event_brier": 0.02011195570230484,
+        "time_mae_s": 0.01658019796013832,
+        "xy_error_m": 0.10447299480438232
+      },
+      "4": {
+        "train_event_rate": 0.27217236161231995,
+        "constant_rate_brier": 0.16245922446250916,
+        "n": 928,
+        "events": 180,
+        "event_brier": 0.07311442494392395,
+        "time_mae_s": 0.3115399181842804,
+        "xy_error_m": 0.8824779987335205
+      },
+      "5": {
+        "train_event_rate": 0.7632184028625488,
+        "constant_rate_brier": 0.18674132227897644,
+        "n": 141,
+        "events": 106,
+        "event_brier": 0.13747964799404144,
+        "time_mae_s": 0.07230506092309952,
+        "xy_error_m": 0.16678325831890106
+      }
+    },
+    "TEST": {
+      "0": {
+        "train_event_rate": 0.774744987487793,
+        "constant_rate_brier": null,
+        "n": 0,
+        "events": 0,
+        "event_brier": null,
+        "time_mae_s": null,
+        "xy_error_m": null
+      },
+      "1": {
+        "train_event_rate": 0.9494252800941467,
+        "constant_rate_brier": null,
+        "n": 0,
+        "events": 0,
+        "event_brier": null,
+        "time_mae_s": null,
+        "xy_error_m": null
+      },
+      "2": {
+        "train_event_rate": 0.9031476974487305,
+        "constant_rate_brier": null,
+        "n": 0,
+        "events": 0,
+        "event_brier": null,
+        "time_mae_s": null,
+        "xy_error_m": null
+      },
+      "3": {
+        "train_event_rate": 0.9973190426826477,
+        "constant_rate_brier": null,
+        "n": 0,
+        "events": 0,
+        "event_brier": null,
+        "time_mae_s": null,
+        "xy_error_m": null
+      },
+      "4": {
+        "train_event_rate": 0.27217236161231995,
+        "constant_rate_brier": null,
+        "n": 0,
+        "events": 0,
+        "event_brier": null,
+        "time_mae_s": null,
+        "xy_error_m": null
+      },
+      "5": {
+        "train_event_rate": 0.7632184028625488,
+        "constant_rate_brier": null,
+        "n": 0,
+        "events": 0,
+        "event_brier": null,
+        "time_mae_s": null,
+        "xy_error_m": null
+      }
+    }
+  },
+  "selected_update": 600,
+  "elapsed_s": 21.336635140003636,
+  "scope": "Prediction on actual published-state segments; no complete counterfactual panel, so no offline route-selection score"
+}
