@@ -1,0 +1,82 @@
+{
+  "objective": "完成偏好几何、接触恢复与选档实验后，再组织论文",
+  "source_plan": "/home/qy/.claude/plans/steady-puzzling-corbato.md",
+  "physics": "frozen original H75 + Local300; unchanged timing and physical limits",
+  "stages": [
+    {
+      "id": "S0",
+      "scope": "系数/极点/冲量/参考通道零点/包络/仿射奖励",
+      "status": "partial",
+      "remaining": "参考通道零点与冲量容量独立检查"
+    },
+    {
+      "id": "S1",
+      "scope": "全部20面板完整端点目标、eta区间、弯道分配",
+      "status": "partial",
+      "completed": "100原始轨迹、20面板误差前沿及精确候选区间",
+      "remaining": "完整端点重评分、共同代价/终止/折扣、分配律"
+    },
+    {
+      "id": "S2",
+      "scope": "216条接触时序、前后轮级联、饱和容量、alpha0失败机制、余量图",
+      "status": "planned",
+      "budget": "reuse archived CPU records; no training"
+    },
+    {
+      "id": "S3",
+      "scope": "先提交冻结预测，再细alpha扫描",
+      "status": "planned",
+      "alpha": [
+        0,
+        0.1,
+        0.2,
+        0.25,
+        0.3,
+        0.4,
+        0.5,
+        0.6,
+        0.7,
+        0.75,
+        0.8,
+        0.9,
+        1
+      ],
+      "ridge_heights_m": [
+        0.04,
+        0.06,
+        0.08,
+        0.1
+      ],
+      "requested_speeds_m_s": [
+        1.8,
+        2.1,
+        2.3,
+        2.6
+      ],
+      "gravel_contexts": 6,
+      "repeats_per_context": 8,
+      "physical_groups": 4,
+      "episodes": 2288,
+      "horizon_s": 10,
+      "max_environment_capacity": 4096,
+      "runtime": "resolve six gravel contexts and held physical groups after S2; commit exact manifest before execution",
+      "prerequisite": "S1/S2 analysis complete; prediction frozen in Git",
+      "storage": "200Hz required states/control/termination; no bulk video or full-body high-rate logs; selected contact windows only"
+    },
+    {
+      "id": "S4",
+      "scope": "冻结选择器对全部五固定档及已有简单规则，新布局/新物理组配对",
+      "status": "planned",
+      "budget": "exact independent scenarios and scoring frozen before run, after S3 model choice",
+      "inputs": "pre-obstacle observable state and terrain; no outcome or future-contact leakage"
+    },
+    {
+      "id": "S5",
+      "scope": "实验完成后写论文",
+      "status": "deferred"
+    }
+  ],
+  "stop_rule": "每阶段完成后按数据迭代；不无上限训练；超过半小时等待时暂停目标，等待用户恢复",
+  "notifications": "GPU stage completion/error Bark with receipts; shared gpu lock",
+  "new_gpu_jobs_started": 0
+}

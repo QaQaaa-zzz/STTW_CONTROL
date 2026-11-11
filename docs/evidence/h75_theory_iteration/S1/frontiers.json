@@ -1,0 +1,1254 @@
+{
+  "panels": 20,
+  "runs": 100,
+  "alpha": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "raw_archive_rmse_max_difference": 6.284500040643071e-07,
+  "adjacent_tradeoff_edges": 41,
+  "total_edges": 80,
+  "panels_with_all_four_tradeoff_edges": 4,
+  "source": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_tradeoff_repeats/alpha_selection.json",
+  "new_simulations": 0,
+  "panels_data": [
+    {
+      "terrain": "flat",
+      "speed_m_s": 1.5,
+      "common_window_s": 10.0,
+      "seeds": [
+        101,
+        102,
+        103,
+        104,
+        105
+      ],
+      "speed_mse": [
+        0.03264004080915105,
+        0.03326128328776159,
+        0.03364270166999441,
+        0.03384015588348356,
+        0.03395061514596951
+      ],
+      "path_mse": [
+        0.0020832157392042814,
+        0.0018882768308467576,
+        0.0016662957178205505,
+        0.0015835143734774868,
+        0.0018152448827464221
+      ],
+      "optimal_eta_intervals": [
+        [
+          0.0,
+          1.549730488627652
+        ],
+        null,
+        null,
+        [
+          1.549730488627652,
+          null
+        ],
+        null
+      ],
+      "adjacent_tradeoff": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "all_seed_feasible_alpha": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "source_runs": [
+        "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/sttw_offroad_completed_20261106/h75_tradeoff_repeats/flat_v1p5_seed101/evaluation",
+        "runs/h75_tradeoff_repeats/flat_v1p5_seed102/evaluation",
+        "runs/h75_tradeoff_repeats/flat_v1p5_seed103/evaluation",
+        "runs/h75_tradeoff_repeats/flat_v1p5_seed104/evaluation",
+        "runs/h75_tradeoff_repeats/flat_v1p5_seed105/evaluation"
+      ]
+    },
+    {
+      "terrain": "flat",
+      "speed_m_s": 1.8,
+      "common_window_s": 10.0,
+      "seeds": [
+        101,
+        102,
+        103,
+        104,
+        105
+      ],
+      "speed_mse": [
+        0.015100022147577965,
+        0.013017275031481873,
+        0.01122589285616141,
+        0.009722725358515719,
+        0.008901267600017937
+      ],
+      "path_mse": [
+        0.002220270125266118,
+        0.001837138461944797,
+        0.0012928398653862044,
+        0.0014449097691586576,
+        0.0027678017264521062
+      ],
+      "optimal_eta_intervals": [
+        null,
+        null,
+        [
+          3.1439964916986893,
+          null
+        ],
+        [
+          0.7880076430817455,
+          3.1439964916986893
+        ],
+        [
+          0.0,
+          0.7880076430817455
+        ]
+      ],
+      "adjacent_tradeoff": [
+        false,
+        false,
+        true,
+        true
+      ],
+      "all_seed_feasible_alpha": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "source_runs": [
+        "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/sttw_offroad_completed_20261106/h75_tradeoff_repeats/flat_v1p8_seed101/evaluation",
+        "runs/h75_tradeoff_repeats/flat_v1p8_seed102/evaluation",
+        "runs/h75_tradeoff_repeats/flat_v1p8_seed103/evaluation",
+        "runs/h75_tradeoff_repeats/flat_v1p8_seed104/evaluation",
+        "runs/h75_tradeoff_repeats/flat_v1p8_seed105/evaluation"
+      ]
+    },
+    {
+      "terrain": "flat",
+      "speed_m_s": 2.0,
+      "common_window_s": 10.0,
+      "seeds": [
+        101,
+        102,
+        103,
+        104,
+        105
+      ],
+      "speed_mse": [
+        0.012235685263341903,
+        0.009267881454316867,
+        0.0063539209766284395,
+        0.004015284910402848,
+        0.002856948937789326
+      ],
+      "path_mse": [
+        0.002935697463184108,
+        0.0021281100747933125,
+        0.0014767199095312364,
+        0.0014465805245342724,
+        0.0023602828003186755
+      ],
+      "optimal_eta_intervals": [
+        null,
+        null,
+        null,
+        [
+          1.125939145663918,
+          null
+        ],
+        [
+          0.0,
+          1.125939145663918
+        ]
+      ],
+      "adjacent_tradeoff": [
+        false,
+        false,
+        false,
+        true
+      ],
+      "all_seed_feasible_alpha": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "source_runs": [
+        "runs/h75_tradeoff_repeats/flat_v2p0_seed101/evaluation",
+        "runs/h75_tradeoff_repeats/flat_v2p0_seed102/evaluation",
+        "runs/h75_tradeoff_repeats/flat_v2p0_seed103/evaluation",
+        "runs/h75_tradeoff_repeats/flat_v2p0_seed104/evaluation",
+        "runs/h75_tradeoff_repeats/flat_v2p0_seed105/evaluation"
+      ]
+    },
+    {
+      "terrain": "flat",
+      "speed_m_s": 2.3,
+      "common_window_s": 10.0,
+      "seeds": [
+        101,
+        102,
+        103,
+        104,
+        105
+      ],
+      "speed_mse": [
+        0.015440020151504256,
+        0.01061010592280458,
+        0.005879979726270371,
+        0.0029913013816620848,
+        0.0014839328883599443
+      ],
+      "path_mse": [
+        0.0039435664073335115,
+        0.002888165925657985,
+        0.0028015267018924516,
+        0.004652566869764034,
+        0.009861245035984314
+      ],
+      "optimal_eta_intervals": [
+        null,
+        null,
+        [
+          1.2492278889976198,
+          null
+        ],
+        [
+          0.5379550078171617,
+          1.2492278889976198
+        ],
+        [
+          0.0,
+          0.5379550078171617
+        ]
+      ],
+      "adjacent_tradeoff": [
+        false,
+        false,
+        true,
+        true
+      ],
+      "all_seed_feasible_alpha": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "source_runs": [
+        "runs/h75_tradeoff_repeats/flat_v2p3_seed101/evaluation",
+        "runs/h75_tradeoff_repeats/flat_v2p3_seed102/evaluation",
+        "runs/h75_tradeoff_repeats/flat_v2p3_seed103/evaluation",
+        "runs/h75_tradeoff_repeats/flat_v2p3_seed104/evaluation",
+        "runs/h75_tradeoff_repeats/flat_v2p3_seed105/evaluation"
+      ]
+    },
+    {
+      "terrain": "flat",
+      "speed_m_s": 2.6,
+      "common_window_s": 10.0,
+      "seeds": [
+        101,
+        102,
+        103,
+        104,
+        105
+      ],
+      "speed_mse": [
+        0.020172221239109958,
+        0.013836555091400676,
+        0.007722295251470303,
+        0.004485951284876621,
+        0.002695687325324554
+      ],
+      "path_mse": [
+        0.005207660617959372,
+        0.0054734974553670955,
+        0.01000982095691965,
+        0.018399685688484137,
+        0.030673128181704083
+      ],
+      "optimal_eta_intervals": [
+        [
+          4.8818964281399015,
+          null
+        ],
+        [
+          1.1609671637493058,
+          4.8818964281399015
+        ],
+        [
+          0.6210833076545522,
+          1.1609671637493058
+        ],
+        [
+          0.3819225825582273,
+          0.6210833076545522
+        ],
+        [
+          0.0,
+          0.3819225825582273
+        ]
+      ],
+      "adjacent_tradeoff": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "all_seed_feasible_alpha": [
+        0.0,
+        0.25,
+        0.5,
+        0.75
+      ],
+      "source_runs": [
+        "runs/h75_tradeoff_repeats/flat_v2p6_seed101/evaluation",
+        "runs/h75_tradeoff_repeats/flat_v2p6_seed102/evaluation",
+        "runs/h75_tradeoff_repeats/flat_v2p6_seed103/evaluation",
+        "runs/h75_tradeoff_repeats/flat_v2p6_seed104/evaluation",
+        "runs/h75_tradeoff_repeats/flat_v2p6_seed105/evaluation"
+      ]
+    },
+    {
+      "terrain": "oblique_2cm",
+      "speed_m_s": 1.5,
+      "common_window_s": 10.0,
+      "seeds": [
+        101,
+        102,
+        103,
+        104,
+        105
+      ],
+      "speed_mse": [
+        0.032999875751149724,
+        0.03364501647272651,
+        0.034018264000303666,
+        0.03421543291378002,
+        0.034324611332646915
+      ],
+      "path_mse": [
+        0.0022371702939831687,
+        0.0019217167889276584,
+        0.001690250666405934,
+        0.0017015658288446638,
+        0.001902539118578832
+      ],
+      "optimal_eta_intervals": [
+        [
+          0.0,
+          1.364567222255597
+        ],
+        null,
+        [
+          1.364567222255597,
+          null
+        ],
+        null,
+        null
+      ],
+      "adjacent_tradeoff": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "all_seed_feasible_alpha": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "source_runs": [
+        "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/sttw_offroad_completed_20261106/h75_tradeoff_repeats/oblique_2cm_v1p5_seed101/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_2cm_v1p5_seed102/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_2cm_v1p5_seed103/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_2cm_v1p5_seed104/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_2cm_v1p5_seed105/evaluation"
+      ]
+    },
+    {
+      "terrain": "oblique_2cm",
+      "speed_m_s": 1.8,
+      "common_window_s": 10.0,
+      "seeds": [
+        101,
+        102,
+        103,
+        104,
+        105
+      ],
+      "speed_mse": [
+        0.015559943593487235,
+        0.013362141310702857,
+        0.011508089663572021,
+        0.01020010622481416,
+        0.009416703489884454
+      ],
+      "path_mse": [
+        0.002366562330248113,
+        0.001817561484080524,
+        0.0013381995049840116,
+        0.0013166779405768428,
+        0.0023546584343660036
+      ],
+      "optimal_eta_intervals": [
+        null,
+        null,
+        null,
+        [
+          0.8687562572360189,
+          null
+        ],
+        [
+          0.0,
+          0.8687562572360189
+        ]
+      ],
+      "adjacent_tradeoff": [
+        false,
+        false,
+        false,
+        true
+      ],
+      "all_seed_feasible_alpha": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "source_runs": [
+        "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/sttw_offroad_completed_20261106/h75_tradeoff_repeats/oblique_2cm_v1p8_seed101/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_2cm_v1p8_seed102/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_2cm_v1p8_seed103/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_2cm_v1p8_seed104/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_2cm_v1p8_seed105/evaluation"
+      ]
+    },
+    {
+      "terrain": "oblique_2cm",
+      "speed_m_s": 2.0,
+      "common_window_s": 10.0,
+      "seeds": [
+        101,
+        102,
+        103,
+        104,
+        105
+      ],
+      "speed_mse": [
+        0.012476299015173622,
+        0.00923466422623981,
+        0.006432778752078731,
+        0.004296207216611183,
+        0.0033900653325631457
+      ],
+      "path_mse": [
+        0.0029099925091433847,
+        0.0020052298820829304,
+        0.0014413898985960224,
+        0.0020545227094208277,
+        0.00297323933043512
+      ],
+      "optimal_eta_intervals": [
+        null,
+        null,
+        [
+          1.8667297137644412,
+          null
+        ],
+        [
+          0.9931327777262794,
+          1.8667297137644412
+        ],
+        [
+          0.0,
+          0.9931327777262794
+        ]
+      ],
+      "adjacent_tradeoff": [
+        false,
+        false,
+        true,
+        true
+      ],
+      "all_seed_feasible_alpha": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "source_runs": [
+        "runs/h75_tradeoff_repeats/oblique_2cm_v2p0_seed101/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_2cm_v2p0_seed102/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_2cm_v2p0_seed103/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_2cm_v2p0_seed104/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_2cm_v2p0_seed105/evaluation"
+      ]
+    },
+    {
+      "terrain": "oblique_2cm",
+      "speed_m_s": 2.3,
+      "common_window_s": 10.0,
+      "seeds": [
+        101,
+        102,
+        103,
+        104,
+        105
+      ],
+      "speed_mse": [
+        0.01512830957581801,
+        0.010012810488634474,
+        0.00595530441733816,
+        0.00346736637048736,
+        0.002035286646690935
+      ],
+      "path_mse": [
+        0.0035647299783146693,
+        0.0025505868385717104,
+        0.0025684059904375104,
+        0.004906649255995923,
+        0.01020251991997486
+      ],
+      "optimal_eta_intervals": [
+        null,
+        [
+          15.089890022552613,
+          null
+        ],
+        [
+          1.0315135439506506,
+          15.089890022552613
+        ],
+        [
+          0.5200138524546064,
+          1.0315135439506506
+        ],
+        [
+          0.0,
+          0.5200138524546064
+        ]
+      ],
+      "adjacent_tradeoff": [
+        false,
+        true,
+        true,
+        true
+      ],
+      "all_seed_feasible_alpha": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "source_runs": [
+        "runs/h75_tradeoff_repeats/oblique_2cm_v2p3_seed101/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_2cm_v2p3_seed102/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_2cm_v2p3_seed103/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_2cm_v2p3_seed104/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_2cm_v2p3_seed105/evaluation"
+      ]
+    },
+    {
+      "terrain": "oblique_2cm",
+      "speed_m_s": 2.6,
+      "common_window_s": 10.0,
+      "seeds": [
+        101,
+        102,
+        103,
+        104,
+        105
+      ],
+      "speed_mse": [
+        0.019257758054824225,
+        0.013208631304388305,
+        0.00815593561522542,
+        0.005114247821592929,
+        0.003250560493360315
+      ],
+      "path_mse": [
+        0.004799358141301078,
+        0.0053520949196941845,
+        0.010413265686506622,
+        0.01882284276678455,
+        0.03106226520233052
+      ],
+      "optimal_eta_intervals": [
+        [
+          3.30816498689039,
+          null
+        ],
+        [
+          0.9991623846581278,
+          3.30816498689039
+        ],
+        [
+          0.6014094385908313,
+          0.9991623846581278
+        ],
+        [
+          0.39021689057883596,
+          0.6014094385908313
+        ],
+        [
+          0.0,
+          0.39021689057883596
+        ]
+      ],
+      "adjacent_tradeoff": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "all_seed_feasible_alpha": [
+        0.0,
+        0.25,
+        0.5,
+        0.75
+      ],
+      "source_runs": [
+        "runs/h75_tradeoff_repeats/oblique_2cm_v2p6_seed101/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_2cm_v2p6_seed102/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_2cm_v2p6_seed103/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_2cm_v2p6_seed104/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_2cm_v2p6_seed105/evaluation"
+      ]
+    },
+    {
+      "terrain": "oblique_4cm",
+      "speed_m_s": 1.5,
+      "common_window_s": 10.0,
+      "seeds": [
+        101,
+        102,
+        103,
+        104,
+        105
+      ],
+      "speed_mse": [
+        0.033940974771122775,
+        0.0345430037419882,
+        0.03486973125008745,
+        0.03504653244718951,
+        0.035260182438410434
+      ],
+      "path_mse": [
+        0.029480351270920902,
+        0.015165027448694857,
+        0.03024498864121792,
+        0.03474950291278654,
+        0.008535278772878994
+      ],
+      "optimal_eta_intervals": [
+        [
+          0.0,
+          0.20507282172952185
+        ],
+        [
+          0.20507282172952185,
+          0.3289009725097495
+        ],
+        null,
+        null,
+        [
+          0.3289009725097495,
+          null
+        ]
+      ],
+      "adjacent_tradeoff": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "all_seed_feasible_alpha": [
+        1.0
+      ],
+      "source_runs": [
+        "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/sttw_offroad_completed_20261106/h75_tradeoff_repeats/oblique_4cm_v1p5_seed101/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_4cm_v1p5_seed102/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_4cm_v1p5_seed103/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_4cm_v1p5_seed104/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_4cm_v1p5_seed105/evaluation"
+      ]
+    },
+    {
+      "terrain": "oblique_4cm",
+      "speed_m_s": 1.8,
+      "common_window_s": 9.1,
+      "seeds": [
+        101,
+        102,
+        103,
+        104,
+        105
+      ],
+      "speed_mse": [
+        0.018418385526687286,
+        0.015308873256451961,
+        0.013207832253785171,
+        0.01156155414644221,
+        0.011222317700887961
+      ],
+      "path_mse": [
+        0.0026405743527216806,
+        0.0019519601798788089,
+        0.0018376693188436161,
+        0.007529865595931641,
+        0.01423678181486444
+      ],
+      "optimal_eta_intervals": [
+        null,
+        null,
+        [
+          0.5377886942651556,
+          null
+        ],
+        [
+          0.22490018434652612,
+          0.5377886942651556
+        ],
+        [
+          0.0,
+          0.22490018434652612
+        ]
+      ],
+      "adjacent_tradeoff": [
+        false,
+        false,
+        true,
+        true
+      ],
+      "all_seed_feasible_alpha": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "source_runs": [
+        "runs/h75_tradeoff_repeats/oblique_4cm_v1p8_seed101/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_4cm_v1p8_seed102/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_4cm_v1p8_seed103/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_4cm_v1p8_seed104/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_4cm_v1p8_seed105/evaluation"
+      ]
+    },
+    {
+      "terrain": "oblique_4cm",
+      "speed_m_s": 2.0,
+      "common_window_s": 7.0600000000000005,
+      "seeds": [
+        101,
+        102,
+        103,
+        104,
+        105
+      ],
+      "speed_mse": [
+        0.018874290676024447,
+        0.013700222296062825,
+        0.009199965517585392,
+        0.006677268996600353,
+        0.0054572755653175915
+      ],
+      "path_mse": [
+        0.0037017223126250046,
+        0.002718196127334551,
+        0.003565858094591519,
+        0.008833559340975194,
+        0.013965205828734404
+      ],
+      "optimal_eta_intervals": [
+        null,
+        [
+          2.3041316975748636,
+          null
+        ],
+        [
+          0.6920252421668739,
+          2.3041316975748636
+        ],
+        [
+          0.4875850496375104,
+          0.6920252421668739
+        ],
+        [
+          0.0,
+          0.4875850496375104
+        ]
+      ],
+      "adjacent_tradeoff": [
+        false,
+        true,
+        true,
+        true
+      ],
+      "all_seed_feasible_alpha": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "source_runs": [
+        "runs/h75_tradeoff_repeats/oblique_4cm_v2p0_seed101/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_4cm_v2p0_seed102/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_4cm_v2p0_seed103/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_4cm_v2p0_seed104/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_4cm_v2p0_seed105/evaluation"
+      ]
+    },
+    {
+      "terrain": "oblique_4cm",
+      "speed_m_s": 2.3,
+      "common_window_s": 6.76,
+      "seeds": [
+        101,
+        102,
+        103,
+        104,
+        105
+      ],
+      "speed_mse": [
+        0.022773183684824682,
+        0.015149998217147626,
+        0.00910212808100584,
+        0.005954016667597236,
+        0.003817856805837137
+      ],
+      "path_mse": [
+        0.0038783232518637507,
+        0.003145127366885251,
+        0.005065690615739466,
+        0.007995127062289359,
+        0.01861677530894517
+      ],
+      "optimal_eta_intervals": [
+        null,
+        [
+          1.774544610108784,
+          null
+        ],
+        [
+          1.0366520400365342,
+          1.774544610108784
+        ],
+        [
+          0.448457114015463,
+          1.0366520400365342
+        ],
+        [
+          0.0,
+          0.448457114015463
+        ]
+      ],
+      "adjacent_tradeoff": [
+        false,
+        true,
+        true,
+        true
+      ],
+      "all_seed_feasible_alpha": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0
+      ],
+      "source_runs": [
+        "runs/h75_tradeoff_repeats/oblique_4cm_v2p3_seed101/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_4cm_v2p3_seed102/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_4cm_v2p3_seed103/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_4cm_v2p3_seed104/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_4cm_v2p3_seed105/evaluation"
+      ]
+    },
+    {
+      "terrain": "oblique_4cm",
+      "speed_m_s": 2.6,
+      "common_window_s": 10.0,
+      "seeds": [
+        101,
+        102,
+        103,
+        104,
+        105
+      ],
+      "speed_mse": [
+        0.020066640138765558,
+        0.014021012994551458,
+        0.00873142460908555,
+        0.005664252395282237,
+        0.0041161359723122974
+      ],
+      "path_mse": [
+        0.004002943957744509,
+        0.0047677517276867466,
+        0.009601030324389363,
+        0.020597963900614125,
+        0.037100011257788786
+      ],
+      "optimal_eta_intervals": [
+        [
+          2.811541729969836,
+          null
+        ],
+        [
+          1.0461405216266424,
+          2.811541729969836
+        ],
+        [
+          0.5281208087454884,
+          1.0461405216266424
+        ],
+        [
+          0.3062900539574477,
+          0.5281208087454884
+        ],
+        [
+          0.0,
+          0.3062900539574477
+        ]
+      ],
+      "adjacent_tradeoff": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "all_seed_feasible_alpha": [
+        0.0,
+        0.25,
+        0.5
+      ],
+      "source_runs": [
+        "runs/h75_tradeoff_repeats/oblique_4cm_v2p6_seed101/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_4cm_v2p6_seed102/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_4cm_v2p6_seed103/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_4cm_v2p6_seed104/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_4cm_v2p6_seed105/evaluation"
+      ]
+    },
+    {
+      "terrain": "oblique_6cm",
+      "speed_m_s": 1.5,
+      "common_window_s": 10.0,
+      "seeds": [
+        101,
+        102,
+        103,
+        104,
+        105
+      ],
+      "speed_mse": [
+        0.035017552932126696,
+        0.035601047500159924,
+        0.03576966397414165,
+        0.036153855919375436,
+        0.036302505073870624
+      ],
+      "path_mse": [
+        0.22543163197870317,
+        0.14932021761777994,
+        0.18099778834912744,
+        0.14962770381170992,
+        0.12141373181326957
+      ],
+      "optimal_eta_intervals": [
+        [
+          0.0,
+          0.08755753219342001
+        ],
+        [
+          0.08755753219342001,
+          0.1585433860200353
+        ],
+        null,
+        null,
+        [
+          0.1585433860200353,
+          null
+        ]
+      ],
+      "adjacent_tradeoff": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "all_seed_feasible_alpha": [],
+      "source_runs": [
+        "/media/qy/6A7E3DB07E3D75C3/STTW_CONTROL_archives/sttw_offroad_completed_20261106/h75_tradeoff_repeats/oblique_6cm_v1p5_seed101/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_6cm_v1p5_seed102/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_6cm_v1p5_seed103/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_6cm_v1p5_seed104/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_6cm_v1p5_seed105/evaluation"
+      ]
+    },
+    {
+      "terrain": "oblique_6cm",
+      "speed_m_s": 1.8,
+      "common_window_s": 6.22,
+      "seeds": [
+        101,
+        102,
+        103,
+        104,
+        105
+      ],
+      "speed_mse": [
+        0.02826865955151613,
+        0.02357487504075459,
+        0.020395204963184706,
+        0.018427119516205466,
+        0.01730812867893153
+      ],
+      "path_mse": [
+        0.004327966022733381,
+        0.005248004584311604,
+        0.012304295718676065,
+        0.026355570855441317,
+        0.06845119085089854
+      ],
+      "optimal_eta_intervals": [
+        [
+          2.258700034976155,
+          null
+        ],
+        [
+          0.6712785724125188,
+          2.258700034976155
+        ],
+        [
+          0.3742519795081895,
+          0.6712785724125188
+        ],
+        [
+          0.16304024153023988,
+          0.3742519795081895
+        ],
+        [
+          0.0,
+          0.16304024153023988
+        ]
+      ],
+      "adjacent_tradeoff": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "all_seed_feasible_alpha": [
+        0.5
+      ],
+      "source_runs": [
+        "runs/h75_tradeoff_repeats/oblique_6cm_v1p8_seed101/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_6cm_v1p8_seed102/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_6cm_v1p8_seed103/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_6cm_v1p8_seed104/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_6cm_v1p8_seed105/evaluation"
+      ]
+    },
+    {
+      "terrain": "oblique_6cm",
+      "speed_m_s": 2.0,
+      "common_window_s": 6.140000000000001,
+      "seeds": [
+        101,
+        102,
+        103,
+        104,
+        105
+      ],
+      "speed_mse": [
+        0.0230865019162171,
+        0.01665012914910989,
+        0.012264370184954708,
+        0.008736412486210494,
+        0.007555757524224325
+      ],
+      "path_mse": [
+        0.0061978029699157385,
+        0.0056314538906516425,
+        0.00963966849698327,
+        0.07139272081959279,
+        0.1789784335107572
+      ],
+      "optimal_eta_intervals": [
+        null,
+        [
+          1.0460366392100937,
+          null
+        ],
+        [
+          0.2390190248476544,
+          1.0460366392100937
+        ],
+        [
+          0.10475727619568882,
+          0.2390190248476544
+        ],
+        [
+          0.0,
+          0.10475727619568882
+        ]
+      ],
+      "adjacent_tradeoff": [
+        false,
+        true,
+        true,
+        true
+      ],
+      "all_seed_feasible_alpha": [
+        0.0,
+        0.25,
+        0.5
+      ],
+      "source_runs": [
+        "runs/h75_tradeoff_repeats/oblique_6cm_v2p0_seed101/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_6cm_v2p0_seed102/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_6cm_v2p0_seed103/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_6cm_v2p0_seed104/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_6cm_v2p0_seed105/evaluation"
+      ]
+    },
+    {
+      "terrain": "oblique_6cm",
+      "speed_m_s": 2.3,
+      "common_window_s": 3.68,
+      "seeds": [
+        101,
+        102,
+        103,
+        104,
+        105
+      ],
+      "speed_mse": [
+        0.04175213856912799,
+        0.031717645226211164,
+        0.021079956443809215,
+        0.012384169037232756,
+        0.010791969972960362
+      ],
+      "path_mse": [
+        0.008006196271931254,
+        0.0054902161596005914,
+        0.00762029926783032,
+        0.024613623133244146,
+        0.05735654313561487
+      ],
+      "optimal_eta_intervals": [
+        null,
+        [
+          2.234731578739799,
+          null
+        ],
+        [
+          0.7153445777637896,
+          2.234731578739799
+        ],
+        [
+          0.2205159352939734,
+          0.7153445777637896
+        ],
+        [
+          0.0,
+          0.2205159352939734
+        ]
+      ],
+      "adjacent_tradeoff": [
+        false,
+        true,
+        true,
+        true
+      ],
+      "all_seed_feasible_alpha": [
+        0.0,
+        0.25,
+        0.5
+      ],
+      "source_runs": [
+        "runs/h75_tradeoff_repeats/oblique_6cm_v2p3_seed101/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_6cm_v2p3_seed102/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_6cm_v2p3_seed103/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_6cm_v2p3_seed104/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_6cm_v2p3_seed105/evaluation"
+      ]
+    },
+    {
+      "terrain": "oblique_6cm",
+      "speed_m_s": 2.6,
+      "common_window_s": 2.185,
+      "seeds": [
+        101,
+        102,
+        103,
+        104,
+        105
+      ],
+      "speed_mse": [
+        0.0768535720123151,
+        0.06009162484442412,
+        0.04407563140878288,
+        0.03381104634442798,
+        0.02338702082209364
+      ],
+      "path_mse": [
+        0.01017957749803101,
+        0.00830810724653593,
+        0.006280935173116791,
+        0.004955146197282712,
+        0.0047198359229049846
+      ],
+      "optimal_eta_intervals": [
+        null,
+        null,
+        null,
+        null,
+        [
+          0.0,
+          null
+        ]
+      ],
+      "adjacent_tradeoff": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "all_seed_feasible_alpha": [
+        0.5
+      ],
+      "source_runs": [
+        "runs/h75_tradeoff_repeats/oblique_6cm_v2p6_seed101/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_6cm_v2p6_seed102/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_6cm_v2p6_seed103/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_6cm_v2p6_seed104/evaluation",
+        "runs/h75_tradeoff_repeats/oblique_6cm_v2p6_seed105/evaluation"
+      ]
+    }
+  ]
+}
