@@ -5,7 +5,7 @@ import numpy as np
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('--source',type=Path,required=True);p.add_argument('--candidates',type=Path,nargs='+',required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();a.output.mkdir(parents=True,exist_ok=True)
 runs=[a.source]+a.candidates;loaded=[]
 for run in runs:
- protocol=json.loads((run/'protocol.json').read_text());summary=json.loads((run/'evaluation/summary.json').read_text());trace=np.load(run/'evaluation/trajectories.npz');config=json.loads((run/'config.json').read_text());contract=json.loads((run/'map_contract.json').read_text());per=len(contract['speeds_m_s'])*len(contract['alphas'])
+ protocol=json.loads((run/'protocol.json').read_text());summary=json.loads((run/'evaluation/summary.json').read_text());archive=np.load(run/'evaluation/trajectories.npz');trace={key:archive[key] for key in ('valid','time','root_xyzw','road_violation_history')};archive.close();config=json.loads((run/'config.json').read_text());contract=json.loads((run/'map_contract.json').read_text());per=len(contract['speeds_m_s'])*len(contract['alphas'])
  loaded.append((run,protocol,summary,trace,config,contract,per))
 base=loaded[0];lookup={(c['root'],c['candidate_id']):c['lane'] for c in base[1]['cases']};rows=[];groups=[]
 for run,protocol,summary,trace,config,contract,per in loaded:

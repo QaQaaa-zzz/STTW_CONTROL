@@ -7,7 +7,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('--run',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();a.output.mkdir(parents=True,exist_ok=True)
 shutil.copy2(a.run/'map_overview.png',a.output/'map_overview.png')
-protocol=json.loads((a.run/'protocol.json').read_text());contract=json.loads((a.run/'map_contract.json').read_text());summary=json.loads((a.run/'evaluation/summary.json').read_text());d=np.load(a.run/'evaluation/trajectories.npz');routes=np.load(a.run/'roads.npz')['xy'];cases=protocol['cases'];speeds=contract['speeds_m_s'];alphas=contract['alphas'];names=contract['routes'];per=len(speeds)*len(alphas)
+protocol=json.loads((a.run/'protocol.json').read_text());contract=json.loads((a.run/'map_contract.json').read_text());summary=json.loads((a.run/'evaluation/summary.json').read_text());archive=np.load(a.run/'evaluation/trajectories.npz');d={key:archive[key] for key in ('root_xyzw','valid','reward','time')};archive.close();routes=np.load(a.run/'roads.npz')['xy'];cases=protocol['cases'];speeds=contract['speeds_m_s'];alphas=contract['alphas'];names=contract['routes'];per=len(speeds)*len(alphas)
 root_count=len(protocol['roots'])
 points=d['root_xyzw'][d['valid']][:,:2];xlimits=(min(0.,float(points[:,0].min())-.2),max(19.,float(points[:,0].max())+.2));ylimits=(min(-4.,float(points[:,1].min())-.2),max(4.,float(points[:,1].max())+.2))
 for kind in ('xy','reward','cumulative_reward','speed'):

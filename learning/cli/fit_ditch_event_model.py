@@ -3,6 +3,7 @@ import argparse,copy,json,time
 from pathlib import Path
 import numpy as np
 import torch
+from torch.utils.tensorboard import SummaryWriter
 from sttw_control.ditch_event_model import EventTransitionNetwork,KnownHeightMap,EventPlanner,route_parameters
 
 
@@ -68,12 +69,15 @@ def main():
   ground=(modes==0)|(modes==4);residual[ground,2]=ns[ground,2]-s[ground,2]
  constructor=dict(ground_height_hold=a.ground_height_hold,plan_dimension=plans.shape[1],conditional_event_targets=a.conditional_event_targets,dimension=s.shape[1],state_mean=s[train].mean(0),state_std=np.maximum(s[train].std(0),.02),plan_mean=plans[train].mean(0),plan_std=np.maximum(plans[train].std(0),.02),residual_mean=residual[train].mean(0),residual_std=np.maximum(residual[train].std(0),.02))
  model=EventTransitionNetwork(**constructor);opt=torch.optim.Adam(model.parameters(),lr=.001);tensors=[torch.from_numpy(x) for x in (s,plans,crop,modes,ns,dt,hit)];train_ids=np.flatnonzero(train);dev_ids=np.flatnonzero(dev);best=float('inf');logs=[]
+ writer=SummaryWriter(str(a.output/'tensorboard'))
  for update in range(a.updates):
   idx=rng.choice(train_ids,256,replace=True);loss=model.loss(*(x[idx] for x in tensors));opt.zero_grad();loss.backward();torch.nn.utils.clip_grad_norm_(model.parameters(),5.);opt.step()
   if (update+1)%100==0 or update==a.updates-1:
    with torch.no_grad():validation=float(model.loss(*(x[dev_ids] for x in tensors)))
+   writer.add_scalar('loss/train',float(loss),update+1);writer.add_scalar('loss/dev',validation,update+1);writer.flush()
    logs.append(dict(update=update+1,train_loss=float(loss),dev_loss=validation));print(logs[-1],flush=True)
    if validation<best:best=validation;selected=update+1;weights=copy.deepcopy(model.state_dict())
+ writer.close()
  model.load_state_dict(weights);torch.save(dict(constructor=constructor,state_dict=weights),a.output/'model.pt')
  meta=dict(ground_height_hold=a.ground_height_hold,prefix_stride_policy_steps=a.prefix_stride,inference_common_random_numbers=True,plan_skill_feature='last candidate parameter:1jump,0ground' if ground_only.any() else None,terrain_file=str(terrain_file),terrain_spec=cfg['ditch_terrain'],goal=cfg['ground_handoff']['goal'],candidate_parameters=params.tolist(),candidate_names=protocol['candidates'],selected_update=selected,training_logs=logs,collection=str(a.collection),scope='Exploratory same-map event model; grouped starts only; no map generalization or planning benefit claim',conditional_event_targets=a.conditional_event_targets,state='root xyzw13 + TRAIN-only PCA16 of causal80+352 history + prior road violation; history compression is not a Markov guarantee')
  (a.output/'model.json').write_text(json.dumps(meta,indent=2));np.savez_compressed(a.output/'transitions.npz',lane=lanes,mode=modes,state=s,next_state=ns,time=dt,hit=hit,role=roles[lanes])
@@ -84,7 +88,8 @@ def main():
   metrics[role]={}
   for mode in range(6):
    keep=(roles[lanes]==role)&(modes==mode);positive=keep&(hit>0)
-   metrics[role][str(mode)]=dict(n=int(keep.sum()),events=int(positive.sum()),event_brier=float(np.mean((prob[keep]-hit[keep])**2)),time_mae_s=float(np.mean(abs(pred_t.numpy()[positive]-dt[positive]))) if positive.any() else None,xy_error_m=float(np.linalg.norm(pred[positive,:2]-ns[positive,:2],axis=1).mean()) if positive.any() else None)
+   reference=hit[train&(modes==mode)].mean() if (train&(modes==mode)).any() else None
+   metrics[role][str(mode)]=dict(train_event_rate=None if reference is None else float(reference),constant_rate_brier=float(np.mean((reference-hit[keep])**2)) if reference is not None and keep.any() else None,n=int(keep.sum()),events=int(positive.sum()),event_brier=float(np.mean((prob[keep]-hit[keep])**2)) if keep.any() else None,time_mae_s=float(np.mean(abs(pred_t.numpy()[positive]-dt[positive]))) if positive.any() else None,xy_error_m=float(np.linalg.norm(pred[positive,:2]-ns[positive,:2],axis=1).mean()) if positive.any() else None)
  if a.skip_offline_selection:
   result=dict(metrics=metrics,selected_update=selected,elapsed_s=time.monotonic()-start,scope='Prediction on actual published-state segments; no complete counterfactual panel, so no offline route-selection score')
   (a.output/'results.json').write_text(json.dumps(result,indent=2));print(json.dumps(result,indent=2));return
