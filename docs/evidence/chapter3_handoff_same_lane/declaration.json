@@ -1,0 +1,18 @@
+{
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_handoff_initialization",
+  "selection": "First complete root-route round in preceding fixed selection; no success-based reselection",
+  "stages": [
+    "cold_a",
+    "cold_b",
+    "measured"
+  ],
+  "budget": "3 sequential runs x8 lanes x10s maximum;96000 total physics lane steps;0training;25minute wall limit",
+  "invariants": "Same lane identity, initial root conditions, seed, geometry, code, candidate and command; cold_a/cold_b no treatment change; measured only at actual handoff",
+  "scope": "Test fresh-process same-lane repeatability first; not a hidden-solver snapshot or guaranteed identical handoff. Retain every failure; no adoption based on unmatched branches",
+  "git_revision": "36895c2b9cc6f14c612e03c33973be4d05c622f6",
+  "config_sha256": {
+    "cold_a": "1787bb2a6e84519760a8493c6e08f519a5a2c24e4346507c81e0c7db4c3b57a4",
+    "cold_b": "af625888592a56a1ce6d5f88128e4bb67bdbf6747ef625b147fbbf4a2f57bce8",
+    "measured": "135d9c1311c66e6cd30a5ab9435db9455aa77f58f16c94dafa7d6ef84babe85b"
+  }
+}

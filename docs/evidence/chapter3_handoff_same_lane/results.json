@@ -1,0 +1,720 @@
+{
+  "groups": {
+    "cold_a": {
+      "n": 8,
+      "handoffs": 6,
+      "success": 2,
+      "elapsed_s": 66.73466319200816,
+      "physics_lane_steps": 30400
+    },
+    "cold_b": {
+      "n": 8,
+      "handoffs": 6,
+      "success": 2,
+      "elapsed_s": 72.19493332199636,
+      "physics_lane_steps": 30400
+    },
+    "measured": {
+      "n": 8,
+      "handoffs": 6,
+      "success": 1,
+      "elapsed_s": 68.34235666398308,
+      "physics_lane_steps": 31232
+    }
+  },
+  "cases": [
+    {
+      "lane": 0,
+      "source_root": 0,
+      "candidate": "s_bend_jump_v1.5_a0.0",
+      "cases": {
+        "cold_a": {
+          "lane": 0,
+          "success": false,
+          "skill": "jump_then_ground",
+          "end_code": 3,
+          "handoff_s": null,
+          "entry_s": 5.299999713897705,
+          "steps": 305,
+          "road_violation": true
+        },
+        "cold_b": {
+          "lane": 0,
+          "success": false,
+          "skill": "jump_then_ground",
+          "end_code": 3,
+          "handoff_s": null,
+          "entry_s": 5.299999713897705,
+          "steps": 305,
+          "road_violation": true
+        },
+        "measured": {
+          "lane": 0,
+          "success": false,
+          "skill": "jump_then_ground",
+          "end_code": 3,
+          "handoff_s": null,
+          "entry_s": 5.299999713897705,
+          "steps": 305,
+          "road_violation": true
+        }
+      },
+      "comparisons": {
+        "cold_b": {
+          "both_handoff": false,
+          "same_handoff_time": false,
+          "success_changed": false
+        },
+        "measured": {
+          "both_handoff": false,
+          "same_handoff_time": false,
+          "success_changed": false
+        }
+      }
+    },
+    {
+      "lane": 1,
+      "source_root": 0,
+      "candidate": "straight_jump_v1.5_a0.0",
+      "cases": {
+        "cold_a": {
+          "lane": 1,
+          "success": true,
+          "skill": "jump_then_ground",
+          "end_code": 13,
+          "handoff_s": 5.699999809265137,
+          "entry_s": 4.659999847412109,
+          "steps": 469,
+          "road_violation": false
+        },
+        "cold_b": {
+          "lane": 1,
+          "success": true,
+          "skill": "jump_then_ground",
+          "end_code": 13,
+          "handoff_s": 5.699999809265137,
+          "entry_s": 4.659999847412109,
+          "steps": 469,
+          "road_violation": false
+        },
+        "measured": {
+          "lane": 1,
+          "success": true,
+          "skill": "jump_then_ground",
+          "end_code": 13,
+          "handoff_s": 5.699999809265137,
+          "entry_s": 4.659999847412109,
+          "steps": 476,
+          "road_violation": false
+        }
+      },
+      "comparisons": {
+        "cold_b": {
+          "both_handoff": true,
+          "same_handoff_time": true,
+          "success_changed": false,
+          "handoff_position_distance_m": 0.0,
+          "handoff_root_equal": true,
+          "prefix_fields": {
+            "root_xyzw": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "observation": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "action": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "controller_history": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "road_violation_history": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            }
+          },
+          "recorded_prefix_equal": true
+        },
+        "measured": {
+          "both_handoff": true,
+          "same_handoff_time": true,
+          "success_changed": false,
+          "handoff_position_distance_m": 0.0,
+          "handoff_root_equal": true,
+          "prefix_fields": {
+            "root_xyzw": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "observation": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "action": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "controller_history": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "road_violation_history": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            }
+          },
+          "recorded_prefix_equal": true
+        }
+      }
+    },
+    {
+      "lane": 2,
+      "source_root": 1,
+      "candidate": "s_bend_jump_v1.5_a0.0",
+      "cases": {
+        "cold_a": {
+          "lane": 2,
+          "success": false,
+          "skill": "jump_then_ground",
+          "end_code": 12,
+          "handoff_s": null,
+          "entry_s": 5.21999979019165,
+          "steps": 301,
+          "road_violation": false
+        },
+        "cold_b": {
+          "lane": 2,
+          "success": false,
+          "skill": "jump_then_ground",
+          "end_code": 12,
+          "handoff_s": null,
+          "entry_s": 5.21999979019165,
+          "steps": 301,
+          "road_violation": false
+        },
+        "measured": {
+          "lane": 2,
+          "success": false,
+          "skill": "jump_then_ground",
+          "end_code": 12,
+          "handoff_s": null,
+          "entry_s": 5.21999979019165,
+          "steps": 301,
+          "road_violation": false
+        }
+      },
+      "comparisons": {
+        "cold_b": {
+          "both_handoff": false,
+          "same_handoff_time": false,
+          "success_changed": false
+        },
+        "measured": {
+          "both_handoff": false,
+          "same_handoff_time": false,
+          "success_changed": false
+        }
+      }
+    },
+    {
+      "lane": 3,
+      "source_root": 1,
+      "candidate": "straight_jump_v1.5_a0.0",
+      "cases": {
+        "cold_a": {
+          "lane": 3,
+          "success": true,
+          "skill": "jump_then_ground",
+          "end_code": 13,
+          "handoff_s": 5.619999885559082,
+          "entry_s": 4.639999866485596,
+          "steps": 474,
+          "road_violation": false
+        },
+        "cold_b": {
+          "lane": 3,
+          "success": true,
+          "skill": "jump_then_ground",
+          "end_code": 13,
+          "handoff_s": 5.619999885559082,
+          "entry_s": 4.639999866485596,
+          "steps": 474,
+          "road_violation": false
+        },
+        "measured": {
+          "lane": 3,
+          "success": false,
+          "skill": "jump_then_ground",
+          "end_code": 18,
+          "handoff_s": 5.619999885559082,
+          "entry_s": 4.639999866485596,
+          "steps": 488,
+          "road_violation": true
+        }
+      },
+      "comparisons": {
+        "cold_b": {
+          "both_handoff": true,
+          "same_handoff_time": true,
+          "success_changed": false,
+          "handoff_position_distance_m": 0.0,
+          "handoff_root_equal": true,
+          "prefix_fields": {
+            "root_xyzw": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "observation": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "action": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "controller_history": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "road_violation_history": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            }
+          },
+          "recorded_prefix_equal": true
+        },
+        "measured": {
+          "both_handoff": true,
+          "same_handoff_time": true,
+          "success_changed": true,
+          "handoff_position_distance_m": 0.0,
+          "handoff_root_equal": true,
+          "prefix_fields": {
+            "root_xyzw": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "observation": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "action": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "controller_history": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "road_violation_history": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            }
+          },
+          "recorded_prefix_equal": true
+        }
+      }
+    },
+    {
+      "lane": 4,
+      "source_root": 2,
+      "candidate": "s_bend_jump_v1.5_a0.5",
+      "cases": {
+        "cold_a": {
+          "lane": 4,
+          "success": false,
+          "skill": "jump_then_ground",
+          "end_code": 3,
+          "handoff_s": 6.159999847412109,
+          "entry_s": 5.119999885559082,
+          "steps": 331,
+          "road_violation": true
+        },
+        "cold_b": {
+          "lane": 4,
+          "success": false,
+          "skill": "jump_then_ground",
+          "end_code": 3,
+          "handoff_s": 6.159999847412109,
+          "entry_s": 5.119999885559082,
+          "steps": 331,
+          "road_violation": true
+        },
+        "measured": {
+          "lane": 4,
+          "success": false,
+          "skill": "jump_then_ground",
+          "end_code": 3,
+          "handoff_s": 6.159999847412109,
+          "entry_s": 5.119999885559082,
+          "steps": 325,
+          "road_violation": true
+        }
+      },
+      "comparisons": {
+        "cold_b": {
+          "both_handoff": true,
+          "same_handoff_time": true,
+          "success_changed": false,
+          "handoff_position_distance_m": 0.0,
+          "handoff_root_equal": true,
+          "prefix_fields": {
+            "root_xyzw": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "observation": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "action": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "controller_history": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "road_violation_history": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            }
+          },
+          "recorded_prefix_equal": true
+        },
+        "measured": {
+          "both_handoff": true,
+          "same_handoff_time": true,
+          "success_changed": false,
+          "handoff_position_distance_m": 4.470348358154297e-08,
+          "handoff_root_equal": false,
+          "prefix_fields": {
+            "root_xyzw": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "observation": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "action": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "controller_history": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "road_violation_history": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            }
+          },
+          "recorded_prefix_equal": false
+        }
+      }
+    },
+    {
+      "lane": 5,
+      "source_root": 2,
+      "candidate": "straight_jump_v1.5_a0.0",
+      "cases": {
+        "cold_a": {
+          "lane": 5,
+          "success": false,
+          "skill": "jump_then_ground",
+          "end_code": 3,
+          "handoff_s": 5.679999828338623,
+          "entry_s": 4.659999847412109,
+          "steps": 321,
+          "road_violation": false
+        },
+        "cold_b": {
+          "lane": 5,
+          "success": false,
+          "skill": "jump_then_ground",
+          "end_code": 3,
+          "handoff_s": 5.679999828338623,
+          "entry_s": 4.659999847412109,
+          "steps": 321,
+          "road_violation": false
+        },
+        "measured": {
+          "lane": 5,
+          "success": false,
+          "skill": "jump_then_ground",
+          "end_code": 3,
+          "handoff_s": 5.679999828338623,
+          "entry_s": 4.659999847412109,
+          "steps": 322,
+          "road_violation": false
+        }
+      },
+      "comparisons": {
+        "cold_b": {
+          "both_handoff": true,
+          "same_handoff_time": true,
+          "success_changed": false,
+          "handoff_position_distance_m": 0.0,
+          "handoff_root_equal": true,
+          "prefix_fields": {
+            "root_xyzw": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "observation": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "action": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "controller_history": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "road_violation_history": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            }
+          },
+          "recorded_prefix_equal": true
+        },
+        "measured": {
+          "both_handoff": true,
+          "same_handoff_time": true,
+          "success_changed": false,
+          "handoff_position_distance_m": 0.0,
+          "handoff_root_equal": true,
+          "prefix_fields": {
+            "root_xyzw": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "observation": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "action": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "controller_history": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "road_violation_history": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            }
+          },
+          "recorded_prefix_equal": true
+        }
+      }
+    },
+    {
+      "lane": 6,
+      "source_root": 3,
+      "candidate": "s_bend_jump_v1.5_a0.5",
+      "cases": {
+        "cold_a": {
+          "lane": 6,
+          "success": false,
+          "skill": "jump_then_ground",
+          "end_code": 3,
+          "handoff_s": 6.139999866485596,
+          "entry_s": 5.039999961853027,
+          "steps": 328,
+          "road_violation": true
+        },
+        "cold_b": {
+          "lane": 6,
+          "success": false,
+          "skill": "jump_then_ground",
+          "end_code": 3,
+          "handoff_s": 6.139999866485596,
+          "entry_s": 5.039999961853027,
+          "steps": 328,
+          "road_violation": true
+        },
+        "measured": {
+          "lane": 6,
+          "success": false,
+          "skill": "jump_then_ground",
+          "end_code": 3,
+          "handoff_s": 6.139999866485596,
+          "entry_s": 5.039999961853027,
+          "steps": 325,
+          "road_violation": true
+        }
+      },
+      "comparisons": {
+        "cold_b": {
+          "both_handoff": true,
+          "same_handoff_time": true,
+          "success_changed": false,
+          "handoff_position_distance_m": 0.0,
+          "handoff_root_equal": true,
+          "prefix_fields": {
+            "root_xyzw": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "observation": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "action": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "controller_history": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "road_violation_history": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            }
+          },
+          "recorded_prefix_equal": true
+        },
+        "measured": {
+          "both_handoff": true,
+          "same_handoff_time": true,
+          "success_changed": false,
+          "handoff_position_distance_m": 0.000976199225988239,
+          "handoff_root_equal": false,
+          "prefix_fields": {
+            "root_xyzw": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "observation": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "action": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "controller_history": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "road_violation_history": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            }
+          },
+          "recorded_prefix_equal": false
+        }
+      }
+    },
+    {
+      "lane": 7,
+      "source_root": 3,
+      "candidate": "straight_jump_v1.5_a0.0",
+      "cases": {
+        "cold_a": {
+          "lane": 7,
+          "success": false,
+          "skill": "jump_then_ground",
+          "end_code": 18,
+          "handoff_s": 5.619999885559082,
+          "entry_s": 4.639999866485596,
+          "steps": 475,
+          "road_violation": true
+        },
+        "cold_b": {
+          "lane": 7,
+          "success": false,
+          "skill": "jump_then_ground",
+          "end_code": 18,
+          "handoff_s": 5.619999885559082,
+          "entry_s": 4.639999866485596,
+          "steps": 475,
+          "road_violation": true
+        },
+        "measured": {
+          "lane": 7,
+          "success": false,
+          "skill": "jump_then_ground",
+          "end_code": 15,
+          "handoff_s": 5.619999885559082,
+          "entry_s": 4.639999866485596,
+          "steps": 357,
+          "road_violation": false
+        }
+      },
+      "comparisons": {
+        "cold_b": {
+          "both_handoff": true,
+          "same_handoff_time": true,
+          "success_changed": false,
+          "handoff_position_distance_m": 0.0,
+          "handoff_root_equal": true,
+          "prefix_fields": {
+            "root_xyzw": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "observation": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "action": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "controller_history": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "road_violation_history": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            }
+          },
+          "recorded_prefix_equal": true
+        },
+        "measured": {
+          "both_handoff": true,
+          "same_handoff_time": true,
+          "success_changed": false,
+          "handoff_position_distance_m": 0.0,
+          "handoff_root_equal": true,
+          "prefix_fields": {
+            "root_xyzw": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "observation": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "action": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "controller_history": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            },
+            "road_violation_history": {
+              "equal": true,
+              "max_abs_difference": 0.0
+            }
+          },
+          "recorded_prefix_equal": true
+        }
+      }
+    }
+  ],
+  "scope": "Fresh-process same-lane replay diagnostic. Exact recorded prefix comparisons do not serialize hidden solver state. Historical handoff-conditioned DEV cohort;4 original roots."
+}

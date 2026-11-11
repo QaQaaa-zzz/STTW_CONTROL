@@ -1,0 +1,8 @@
+## Interpretation
+
+Both cold executions complete the same two tasks (2/8); measured initialization completes one (1/8), with zero newly successful tasks and one lost success. The lost success is source3 (original root1, straight approach1.5m/s, α0): cold completes, while measured records road violation (code18). Its recorded approach states/actions/history and handoff root/time match exactly. This case argues against adopting measurement initialization as a general fix. The result does not prove that cold initialization is universally preferable, nor does it evaluate real temporal prewarming or H75 history initialization.
+
+All six paired handoffs match between cold A/B. Between cold A/measured, the recorded sampled prefixes match on those six, while four handoff root vectors are exact and two differ (position distances approximately4.47e-8m and0.000976m). These small differences are disclosed, not used to exclude failures or to demand perfect solver serialization before progressing. Two sources never hand off and remain upstream failures. Total actual physics steps:30400+30400+31232=92032. No training.
+
+Adoption: retain cold as default; reject the previous unpaired3/24→6/24 difference as evidence of an initialization benefit. Same-lane prefix replay is usable for the next bounded interface study, with actual measured handoff state and explicit initialization version recorded. Next focus is freezing the normal-ground continuation envelope and labeling handoff-state/road-condition outcomes. Do not retrain the jump policy or undertake repeated numerical alignment campaigns on this result.
+
