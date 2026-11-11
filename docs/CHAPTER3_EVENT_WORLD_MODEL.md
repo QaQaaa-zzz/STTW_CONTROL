@@ -107,3 +107,5 @@
 地面控制消融已完成：关闭H75修正后2/120，对照8/120；S弯跳跃入口17→1、绕行5→0，故保留H75，不将地面瓶颈简单归因于学习修正。后续检查名义转向请求与实际响应的衔接。[逐阶段对照](evidence/chapter3_offroad_ground_ablation/GEOMETRY_COMPARISON.md)。
 
 名义转向参考速率0.3→0.6rad/s对照已完成：8→10/120，S弯入口17→28、首次完整1/30，但直线3→2且直角弯仍0。保留为开发候选，未改变默认配置或物理限幅；下一步用该候选检验地面接近与技能替换的组合，不宣称世界模型收益。[全条件XY与阶段结果](evidence/chapter3_offroad_steer_slew/RESULTS.md)。
+
+RB400接入0.6rad/s名义转向参考的组合评测：同120条开发条件，原技能10→RB400 19；直线2→8、S弯1→3、90°0→0、绕行7→8。仅保留开发候选，未证独立泛化或无损增强；下一阶段冻结该组合与原技能，在新来车初态采集完整事件数据，不再筛同一开发集checkpoint。[配对得失与全部轨迹](evidence/chapter3_offroad_slew_skill_comparison/RESULTS.md)。

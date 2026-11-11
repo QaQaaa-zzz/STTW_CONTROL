@@ -23,7 +23,7 @@ for run,protocol,summary,trace,config,contract,per in loaded:
 (a.output/'comparison.json').write_text(json.dumps(dict(groups=groups,cases=rows),indent=2))
 text='# 新越野任务中的RB技能替换对照\n\n固定同地图、路线、速度、α和来车初态；仅替换跳跃权重。原模型已完成数据复用，列出的候选均使用已完成物理轨迹；各组分母见表。是开发条件，不是独立测试。不同进程的物理重复差异单独列出，不能把所有得失归因于跳跃技能。\n\n'
 for run,_,_,_,config,_,_ in loaded:
- report='chapter3_offroad_task_map_gentle' if run==a.source else 'chapter3_offroad_'+run.name
+ report=run.name if run.name.startswith('chapter3_') else 'chapter3_offroad_'+run.name
  text+=f'- [{run.name}全部实际/参考XY与奖励](../{report}/RESULTS.md)，权重 `{config.get("evaluation_checkpoint",config["bundle"])}`\n'
 text+='\n|模型|路线|完成|新增/丢失|进入跳跃|交回STTW|首次越廊在接近|接管前最大位置差/m|\n|---|---|---:|---:|---:|---:|---:|---:|\n'
 for g in groups:text+=f"|{g['model']}|{g['route']}|{g['completed']}/{g['n']}|{g['gained']}/{g['lost']}|{g['entry']}|{g['handoff']}|{g['prejump_violation']}|{g['max_prefix_delta_m']:.6g}|\n"
