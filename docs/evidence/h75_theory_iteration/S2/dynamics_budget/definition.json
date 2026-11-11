@@ -1,0 +1,10 @@
+{
+  "formula": "Delta Euler omega = integral(a4 phi + a2(v) delta + a1(v) actual_delta_dot)dt + unmodeled residual",
+  "integration": "trapezoid over actual saved timestamps; no smoothing or fitted coefficients",
+  "residual": "model discrepancy including contact, variable-speed/coupling/nonlinear effects and sampling; NOT identified pure terrain impulse",
+  "windows": "first front/rear raised contact+100ms; fixed1.5/1.8/1.9/2.1/2.3+100ms; last100ms. Truncated windows retained and flagged.",
+  "sources": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_channel_scan/roll_contact_analysis",
+  "controller": "runs/isaac_signals_parity/dynamic.json",
+  "rows": 1688,
+  "new_simulations": 0
+}
