@@ -1,0 +1,22 @@
+{
+  "speeds_m_s": [1.5, 1.8, 2.0, 2.3, 2.6],
+  "speed_source": "learning/configs/isaac_h75_tradeoff_repeats.json:user_speed_m_s; candidates, not certified feasible",
+  "alphas": [0.0, 0.5, 1.0],
+  "routes": ["straight_jump", "s_bend_jump", "right_angle_jump", "ground_detour"],
+  "terrain": {
+    "full_width_rough": true,
+    "rough_x_intervals_m": [[2.5, 8.5], [12.0, 20.0]],
+    "stone_height_min_m": 0.001,
+    "stone_height_max_m": 0.004,
+    "stones_per_m2": 10,
+    "ridges": [
+      {"x_interval_m": [4.5, 5.5], "y_interval_m": [-4.0, 4.0], "height_m": 0.02},
+      {"x_interval_m": [13.0, 15.0], "y_interval_m": [-4.0, 4.0], "height_m": 0.08}
+    ],
+    "seed": 20261111
+  },
+  "roots": 2,
+  "seed": 20261111,
+  "role": "Exploratory fixed-map capability collection; old predictors must not score new geometry before calibration",
+  "budget": "120 episodes, existing 10s maximum each, no PPO; failures retained"
+}

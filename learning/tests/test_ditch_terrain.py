@@ -45,3 +45,14 @@ def test_crossing_skill_can_land_off_center_with_declared_bank_boundary():
  z=torch.zeros(1);v=torch.ones(1)*1.5
  assert not ditch_support_mask(p,f,z,z,v,SPEC).item()
  assert ditch_support_mask(p,f,z,z,v,{**SPEC,'lateral_limit_m':3.9}).item()
+
+
+def test_full_width_ridges_share_collision_height_and_leave_gap_open():
+ from sttw_control.ditch_event_model import KnownHeightMap
+ spec={**SPEC,'front_x_m':10.3,'width_m':.3,'full_width_rough':True,'rough_x_intervals_m':[[2.5,8.5],[12.,20.]],'stone_height_min_m':.001,'stone_height_max_m':.004,'stones_per_m2':0,'land_bridge_y_interval_m':[1.4,4.], 'ridges':[{'x_interval_m':[13.,15.],'height_m':.08}]}
+ v,f=build_ditch_terrain(spec)
+ assert not ((v[:,0]>10.30001)&(v[:,0]<10.59999)&(abs(v[:,1])<1.4)).any()
+ h=KnownHeightMap(v,spec);h.local=np.zeros((1,2));r=np.zeros((4,13));r[:,6]=1;r[:,:2]=[[14.,2.2],[10.45,0],[10.45,2.2],[9.5,0]]
+ crop=h.crop(r)
+ np.testing.assert_allclose(crop[:,0],[80,0,0,0],atol=.001)
+ assert crop[:,1].tolist()==[1,0,1,1]

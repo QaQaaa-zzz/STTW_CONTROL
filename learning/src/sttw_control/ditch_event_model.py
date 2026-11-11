@@ -22,10 +22,10 @@ class KnownHeightMap:
         intervals=spec.get('rough_x_intervals_m',[[2.,8.]])
         start=min(x[0] for x in intervals);end=max(x[1] for x in intervals)
         for lo,hi in ((max(-5.,start),min(spec['front_x_m'],end)),(max(start,spec['front_x_m']+spec['width_m']),min(end,spec['ground_end_x_m']))):
-            keep=(vertices[:,0]>=np.float32(lo))&(vertices[:,0]<=np.float32(hi))&(np.abs(vertices[:,1])<=1.)
+            keep=(vertices[:,0]>=np.float32(lo))&(vertices[:,0]<=np.float32(hi))&(np.abs(vertices[:,1])<=(4. if spec.get("full_width_rough",False) else 1.))
             points=vertices[keep];xs,ix=np.unique(points[:,0],return_inverse=True);ys,iy=np.unique(points[:,1],return_inverse=True)
             z=np.full((len(xs),len(ys)),-np.inf,np.float32);np.maximum.at(z,(ix,iy),points[:,2])
-            if len(xs)<2 or len(ys)!=81 or not np.isfinite(z).all():raise ValueError('Expected the committed regular bank mesh')
+            if len(xs)<2 or len(ys)!=(321 if spec.get("full_width_rough",False) else 81) or not np.isfinite(z).all():raise ValueError('Expected the committed regular bank mesh')
             self.banks.append((xs,ys,z))
         xx,yy=np.meshgrid(np.linspace(-.2,1.8,8),np.linspace(-.5,.5,8),indexing='ij')
         self.local=np.stack((xx.ravel(),yy.ravel()),-1)

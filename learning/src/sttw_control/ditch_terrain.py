@@ -22,6 +22,11 @@ def build_ditch_terrain(spec):
                 radius = rng.uniform(.055,.09)
                 height = rng.uniform(spec['stone_height_min_m'],spec['stone_height_max_m'])
                 z = np.maximum(z, height*np.maximum(0,1-((x-cx)**2+(y-cy)**2)/radius**2)**2)
+            for ridge in spec.get("ridges",[]):
+                lo,hi=ridge["x_interval_m"];bottom,top=ridge.get("y_interval_m",[-4.,4.])
+                ramp=np.sin(np.pi*np.clip((x-lo)/(hi-lo),0,1))**2
+                across=np.clip((y-bottom)/.2,0,1)*np.clip((top-y)/.2,0,1)
+                z += ridge["height_m"]*ramp*across
             mask=np.zeros_like(x)
             for lo,hi in intervals:
                 mask=np.maximum(mask,np.clip((x-lo)/.1,0,1)*np.clip((hi-x)/.1,0,1))
@@ -41,6 +46,11 @@ def build_ditch_terrain(spec):
             patch(np.array([left,right]),np.array([-1.,1.]),False,bank_height)
             patch(np.array([left,right]),np.array([-4.,-1.]),False,bank_height)
             patch(np.array([left,right]),np.array([1.,4.]),False,bank_height)
+            continue
+        if spec.get("full_width_rough",False):
+            patch(np.linspace(rough_left,rough_right,int(np.ceil((rough_right-rough_left)/.025))+1),np.linspace(-4.,4.,321),True,bank_height)
+            if left < rough_left:patch(np.array([left,rough_left]),np.array([-4.,4.]),False,bank_height)
+            if rough_right < right:patch(np.array([rough_right,right]),np.array([-4.,4.]),False,bank_height)
             continue
         patch(np.linspace(rough_left,rough_right,int(np.ceil((rough_right-rough_left)/.025))+1),np.linspace(-1.,1.,81),True,bank_height)
         if left < rough_left: patch(np.array([left,rough_left]),np.array([-1.,1.]),False,bank_height)
