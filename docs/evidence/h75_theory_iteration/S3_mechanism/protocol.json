@@ -1,0 +1,332 @@
+{
+  "experiment_id": "H75_THEORY_FINE_ALPHA",
+  "title": "S3：冻结预测与细alpha配对检验",
+  "evaluation_role": "Fixed-parameter paired mechanism DEV; original H75+Local300; no training",
+  "case_labels": [
+    "full_0",
+    "full_0.1",
+    "full_0.2",
+    "full_0.25",
+    "full_0.3",
+    "full_0.4",
+    "full_0.5",
+    "full_0.6",
+    "full_0.7",
+    "full_0.75",
+    "full_0.8",
+    "full_0.9",
+    "full_1",
+    "Zero"
+  ],
+  "track_wheel_contacts": false,
+  "seeds": [
+    101,
+    102,
+    103
+  ],
+  "terrains": [
+    "gravel005",
+    "gravel010",
+    "gravel020",
+    "ridge040",
+    "ridge060",
+    "ridge080",
+    "ridge100"
+  ],
+  "speeds": [
+    1.8,
+    2.1,
+    2.3,
+    2.6
+  ],
+  "scenes": 176,
+  "lanes": 2464,
+  "episode_s": 10,
+  "max_physics_lane_steps": 123200000,
+  "optimizer_updates": 0,
+  "data_role": "Frozen prediction TEST: unseen physical combinations; seen terrain layouts; two technical repeats per group",
+  "interpretation": "Full-episode channel ablation DEV, not a same-entry-state intervention",
+  "stop_rule": "176 contexts/2464 physical episodes or engineering error; no training, no outcome replacement, no automatic expansion",
+  "code_revision": "0122e7d58a0b6ed8c27ac82e88d666b652f2b971",
+  "initialization": "Original H75+Local300 and same frozen complete initial state; no mid-run restore",
+  "primary_outcomes": [
+    "termination cause",
+    "full 10s observation",
+    "original goal arrival and final hold",
+    "path and speed errors",
+    "roll peak",
+    "contact impulses",
+    "steering rate and torque occupation"
+  ],
+  "tasks": {
+    "A": {
+      "W_m": 0.3,
+      "speed_rmse_m_s": 0.2
+    },
+    "B": {
+      "W_m": 0.6,
+      "speed_rmse_m_s": 0.1
+    },
+    "C": {
+      "W_m": 0.4,
+      "speed_rmse_m_s": 0.15
+    }
+  },
+  "configured_lanes": true,
+  "duplicate_pairs": [],
+  "primary_change": "Four ridge heights and four speeds with frozen five alpha and paired Zero",
+  "fixed_alphas": [
+    0,
+    0.1,
+    0.2,
+    0.25,
+    0.3,
+    0.4,
+    0.5,
+    0.6,
+    0.7,
+    0.75,
+    0.8,
+    0.9,
+    1
+  ],
+  "compact_results": true,
+  "batch_cases": 176,
+  "retention": "200Hz states, controller terms, rewards, XY; omit network observation copies and all5kHz contact archives",
+  "execution_revision": "batched fixed cases, physics unchanged; grouping changes lane arrangement and is recorded in batch_source",
+  "max_batch_envs": 672,
+  "retain_physics_contacts": false,
+  "purpose": "Identify height dependence absent from prior single10cm high-rate bank; calibrate before committing S3 forecasts",
+  "fit_protocol": {
+    "fit_physical_groups": [
+      101,
+      102
+    ],
+    "assessment_physical_groups": [
+      103
+    ],
+    "future_test": "S3 fine alpha and physical groups separated from this DEV bank",
+    "labels": "complete run, roll limit, tracking domain, tasks A/B/C separately"
+  },
+  "estimated_wall_time_minutes": [
+    35,
+    90
+  ],
+  "physical_parameter_envelope": {
+    "friction_range": [
+      0.7659991145004303,
+      0.8443532505610554
+    ],
+    "mass_scale": [
+      0.9889727289050418,
+      1.003437740593609
+    ],
+    "servo_gain_scale": [
+      0.9918904094704118,
+      1.0144071458237374
+    ],
+    "steer_zero_offset_rad": [
+      -0.0008226857552122873,
+      0.0014301699535214782
+    ]
+  },
+  "physical_groups": {
+    "301": {
+      "base_body": "chasis",
+      "friction_range": [
+        0.7973988028151191,
+        0.7973988028151191
+      ],
+      "mass_scale": [
+        0.991869866627265,
+        0.991869866627265
+      ],
+      "base_com_m": [
+        0,
+        0
+      ],
+      "latency_s": [
+        0.0,
+        0.0
+      ],
+      "servo_gain_scale": [
+        0.9997178432160116,
+        0.9997178432160116
+      ],
+      "steer_zero_offset_rad": [
+        0.0012654257616417151,
+        0.0012654257616417151
+      ],
+      "measurement_noise": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "push_interval_s": 1000000000,
+      "push_velocity_range": {
+        "x": [
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0
+        ]
+      }
+    },
+    "302": {
+      "base_body": "chasis",
+      "friction_range": [
+        0.8255283789521779,
+        0.8255283789521779
+      ],
+      "mass_scale": [
+        0.9991843697868935,
+        0.9991843697868935
+      ],
+      "base_com_m": [
+        0,
+        0
+      ],
+      "latency_s": [
+        0.0,
+        0.0
+      ],
+      "servo_gain_scale": [
+        1.0143681873278176,
+        1.0143681873278176
+      ],
+      "steer_zero_offset_rad": [
+        0.00043081587484402337,
+        0.00043081587484402337
+      ],
+      "measurement_noise": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "push_interval_s": 1000000000,
+      "push_velocity_range": {
+        "x": [
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0
+        ]
+      }
+    },
+    "303": {
+      "base_body": "chasis",
+      "friction_range": [
+        0.7828007814455861,
+        0.7828007814455861
+      ],
+      "mass_scale": [
+        0.9950020614158989,
+        0.9950020614158989
+      ],
+      "base_com_m": [
+        0,
+        0
+      ],
+      "latency_s": [
+        0.0,
+        0.0
+      ],
+      "servo_gain_scale": [
+        1.0100770702409263,
+        1.0100770702409263
+      ],
+      "steer_zero_offset_rad": [
+        -0.0002055761395189942,
+        -0.0002055761395189942
+      ],
+      "measurement_noise": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "push_interval_s": 1000000000,
+      "push_velocity_range": {
+        "x": [
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0
+        ]
+      }
+    },
+    "304": {
+      "base_body": "chasis",
+      "friction_range": [
+        0.8100333223882193,
+        0.8100333223882193
+      ],
+      "mass_scale": [
+        1.001974718724729,
+        1.001974718724729
+      ],
+      "base_com_m": [
+        0,
+        0
+      ],
+      "latency_s": [
+        0.0,
+        0.0
+      ],
+      "servo_gain_scale": [
+        1.0005183363123886,
+        1.0005183363123886
+      ],
+      "steer_zero_offset_rad": [
+        0.0005886938215946718,
+        0.0005886938215946718
+      ],
+      "measurement_noise": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "push_interval_s": 1000000000,
+      "push_velocity_range": {
+        "x": [
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "repeat_unit": "physical group; two repeats are nested technical repetitions",
+  "prediction_sha256": "9237ca8b97f60f3f6d3de9cd2cf0135a1b96db2b989637d7c5cc6aaad9168597",
+  "code_revision_before_freeze": "b02eb25563ef9d39cc01f6950ebdd30d7137c458",
+  "prediction_assessment": {
+    "continuous": "same critical-state nominal recovery margin, domain margins, path peak and speed RMSE; no H substitution",
+    "probability": "physical-feasibility vote versus full-window survival: Brier and reliability; task-constraint votes versus constraint satisfaction; final hold and full A/B/C success measured separately, not claimed forecast probabilities",
+    "selection": "physical and task-constrained frozen choices versus every fixed alpha; full A/B/C includes measured hold; pool repeats within physical group; report gains and losses, no retuning",
+    "comparison": "forecast file frozen before first rollout"
+  }
+}

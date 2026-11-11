@@ -21,10 +21,10 @@
     {
       "id": "S2",
       "scope": "216条接触时序、前后轮级联、饱和容量、alpha0失败机制、余量图",
-      "status": "partial",
+      "status": "completed",
       "budget": "reuse archived CPU records; no training",
-      "completed": "216条×3窗口，12工况五档/Zero时序图；名义p1、J_sat和参考零点；alpha0末窗命令限速现象；288条高度标定完成，轮接触事件映射101/102拟合、103评估；运行响应网格已固定",
-      "remaining": "完整接触广义动力学与alpha0命令饱和因果归因；名义公式不作为完整车成功证明",
+      "completed": "共用margin_theory模块；72条20562状态包络；2160接触运行点；504存档多刚体角动量闭合与低alpha失稳接触解释；330运行状态22工况13档物理/任务约束预测候选及全工况余量图",
+      "remaining": "",
       "calibration": {
         "episodes": 288,
         "contexts": 48,
@@ -34,12 +34,14 @@
           45,
           120
         ]
-      }
+      },
+      "candidate_prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/S2/mechanism_forecast/mechanism_forecast.json",
+      "closure": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/S2/CLOSURE.md"
     },
     {
       "id": "S3",
       "scope": "先提交冻结预测，再细alpha扫描",
-      "status": "interrupted",
+      "status": "prepared",
       "alpha": [
         0,
         0.1,
@@ -73,11 +75,11 @@
       "episodes": 2288,
       "horizon_s": 10,
       "max_environment_capacity": 4096,
-      "runtime": "resolve six gravel contexts and held physical groups after S2; commit exact manifest before execution",
-      "prerequisite": "S0 identities and S2 DEV response calibration complete; fitted predictions committed before run; S1/S2 remaining causal branches tracked separately",
+      "runtime": "672 environments max, four batches, new physical groups301-304; two nested repeats",
+      "prerequisite": "S0/S1/S2 completed; mechanism forecast and 301-304 manifest committed before physics",
       "storage": "200Hz required states/control/termination; no bulk video or full-body high-rate logs; selected contact windows only",
       "physical_episodes_including_zero": 2464,
-      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan",
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/mechanism_scan",
       "restart_condition": "S2 gives a model-linked, testable failure/recovery prediction; no interpolation-only validation as a substitute"
     },
     {
@@ -96,5 +98,5 @@
   "stop_rule": "每阶段完成后按数据迭代；不无上限训练；超过半小时等待时暂停目标，等待用户恢复",
   "notifications": "GPU stage completion/error Bark with receipts; shared gpu lock",
   "new_gpu_jobs_started": 2,
-  "current_priority": "S2: explain contact-linked low/middle/high alpha recovery and failure with actual steering authority; S3 remains stopped until mechanism prediction established"
+  "current_priority": "S3 frozen mechanism forecast validation; S4 after results"
 }
