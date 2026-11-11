@@ -1,0 +1,3334 @@
+[
+  {
+    "run": "pipeline",
+    "root": 0,
+    "model": "source",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.58,
+    "handoff": true,
+    "final_xy": [
+      10.017807006835938,
+      -0.2076568603515625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 0,
+    "model": "update100",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.1000000000000005,
+    "handoff": true,
+    "final_xy": [
+      10.01708984375,
+      0.1053314208984375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 0,
+    "model": "update200",
+    "success": false,
+    "end_code": 3,
+    "time_s": 2.08,
+    "handoff": true,
+    "final_xy": [
+      5.4679412841796875,
+      -0.4771728515625
+    ],
+    "return_value": -99.99998474121094
+  },
+  {
+    "run": "pipeline",
+    "root": 0,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.0600000000000005,
+    "handoff": true,
+    "final_xy": [
+      10.011917114257812,
+      -0.040485382080078125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 0,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.0200000000000005,
+    "handoff": true,
+    "final_xy": [
+      10.016098022460938,
+      0.12904739379882812
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 0,
+    "model": "update500",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.72,
+    "handoff": true,
+    "final_xy": [
+      4.905242919921875,
+      -0.1255016326904297
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 0,
+    "model": "update600",
+    "success": false,
+    "end_code": 3,
+    "time_s": 2.14,
+    "handoff": true,
+    "final_xy": [
+      5.3063201904296875,
+      -0.44948577880859375
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 1,
+    "model": "source",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.68,
+    "handoff": true,
+    "final_xy": [
+      4.2848358154296875,
+      0.10903167724609375
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 1,
+    "model": "update100",
+    "success": false,
+    "end_code": 12,
+    "time_s": 1.3,
+    "handoff": false,
+    "final_xy": [
+      3.4978790283203125,
+      -0.0116424560546875
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 1,
+    "model": "update200",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.74,
+    "handoff": true,
+    "final_xy": [
+      4.431976318359375,
+      -0.0012969970703125
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "pipeline",
+    "root": 1,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.18,
+    "handoff": true,
+    "final_xy": [
+      10.020370483398438,
+      0.0128173828125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 1,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.18,
+    "handoff": true,
+    "final_xy": [
+      10.004791259765625,
+      0.04229736328125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 1,
+    "model": "update500",
+    "success": false,
+    "end_code": 18,
+    "time_s": 6.140000000000001,
+    "handoff": true,
+    "final_xy": [
+      11.449005126953125,
+      0.49737548828125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 1,
+    "model": "update600",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.74,
+    "handoff": true,
+    "final_xy": [
+      4.74530029296875,
+      0.3717536926269531
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "pipeline",
+    "root": 2,
+    "model": "source",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.6,
+    "handoff": true,
+    "final_xy": [
+      4.1268310546875,
+      0.12007331848144531
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "pipeline",
+    "root": 2,
+    "model": "update100",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.58,
+    "handoff": true,
+    "final_xy": [
+      4.311767578125,
+      -0.06888961791992188
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 2,
+    "model": "update200",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.86,
+    "handoff": true,
+    "final_xy": [
+      10.025146484375,
+      0.0145111083984375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 2,
+    "model": "update300",
+    "success": false,
+    "end_code": 3,
+    "time_s": 2.06,
+    "handoff": true,
+    "final_xy": [
+      5.31292724609375,
+      0.20121002197265625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 2,
+    "model": "update400",
+    "success": false,
+    "end_code": 18,
+    "time_s": 5.78,
+    "handoff": true,
+    "final_xy": [
+      10.020599365234375,
+      0.3040924072265625
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "pipeline",
+    "root": 2,
+    "model": "update500",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.34,
+    "handoff": true,
+    "final_xy": [
+      10.00982666015625,
+      0.0329132080078125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 2,
+    "model": "update600",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.72,
+    "handoff": true,
+    "final_xy": [
+      4.9261322021484375,
+      -0.0895538330078125
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "pipeline",
+    "root": 3,
+    "model": "source",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.38,
+    "handoff": true,
+    "final_xy": [
+      10.013885498046875,
+      0.331756591796875
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 3,
+    "model": "update100",
+    "success": false,
+    "end_code": 9,
+    "time_s": 8.0,
+    "handoff": false,
+    "final_xy": [
+      13.81884765625,
+      -1.28656005859375
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 3,
+    "model": "update200",
+    "success": false,
+    "end_code": 15,
+    "time_s": 2.46,
+    "handoff": true,
+    "final_xy": [
+      5.300048828125,
+      0.8768119812011719
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "pipeline",
+    "root": 3,
+    "model": "update300",
+    "success": false,
+    "end_code": 15,
+    "time_s": 2.2600000000000002,
+    "handoff": true,
+    "final_xy": [
+      5.117279052734375,
+      0.7274932861328125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 3,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.28,
+    "handoff": true,
+    "final_xy": [
+      10.020843505859375,
+      0.042873382568359375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 3,
+    "model": "update500",
+    "success": false,
+    "end_code": 12,
+    "time_s": 1.68,
+    "handoff": true,
+    "final_xy": [
+      4.7723541259765625,
+      0.08379745483398438
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 3,
+    "model": "update600",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.6400000000000001,
+    "handoff": false,
+    "final_xy": [
+      3.8664093017578125,
+      0.0160980224609375
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 4,
+    "model": "source",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.8,
+    "handoff": true,
+    "final_xy": [
+      4.136627197265625,
+      -0.0455474853515625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 4,
+    "model": "update100",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.14,
+    "handoff": true,
+    "final_xy": [
+      10.017425537109375,
+      -0.078521728515625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 4,
+    "model": "update200",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.28,
+    "handoff": true,
+    "final_xy": [
+      3.7487640380859375,
+      -0.0377044677734375
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "pipeline",
+    "root": 4,
+    "model": "update300",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.42,
+    "handoff": true,
+    "final_xy": [
+      3.9366455078125,
+      -0.0182647705078125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 4,
+    "model": "update400",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.82,
+    "handoff": true,
+    "final_xy": [
+      4.485313415527344,
+      -0.192626953125
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "pipeline",
+    "root": 4,
+    "model": "update500",
+    "success": false,
+    "end_code": 3,
+    "time_s": 2.0,
+    "handoff": true,
+    "final_xy": [
+      4.8651885986328125,
+      0.0640106201171875
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "pipeline",
+    "root": 4,
+    "model": "update600",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.22,
+    "handoff": true,
+    "final_xy": [
+      10.0145263671875,
+      -0.05340385437011719
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 5,
+    "model": "source",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.44,
+    "handoff": true,
+    "final_xy": [
+      3.9613876342773438,
+      -0.06396865844726562
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 5,
+    "model": "update100",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.7,
+    "handoff": true,
+    "final_xy": [
+      4.4592132568359375,
+      -0.03914642333984375
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 5,
+    "model": "update200",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.62,
+    "handoff": true,
+    "final_xy": [
+      4.3693084716796875,
+      0.12841796875
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 5,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.0200000000000005,
+    "handoff": true,
+    "final_xy": [
+      10.027587890625,
+      -0.1572113037109375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 5,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.74,
+    "handoff": true,
+    "final_xy": [
+      10.01629638671875,
+      0.1583099365234375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 5,
+    "model": "update500",
+    "success": false,
+    "end_code": 15,
+    "time_s": 2.22,
+    "handoff": true,
+    "final_xy": [
+      5.689018249511719,
+      -0.9364776611328125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 5,
+    "model": "update600",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.72,
+    "handoff": true,
+    "final_xy": [
+      4.776847839355469,
+      -0.0178985595703125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 6,
+    "model": "source",
+    "success": false,
+    "end_code": 18,
+    "time_s": 5.46,
+    "handoff": true,
+    "final_xy": [
+      10.006416320800781,
+      -0.0093536376953125
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "pipeline",
+    "root": 6,
+    "model": "update100",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.32,
+    "handoff": false,
+    "final_xy": [
+      3.6569252014160156,
+      -0.038799285888671875
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 6,
+    "model": "update200",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.44,
+    "handoff": true,
+    "final_xy": [
+      10.016960144042969,
+      -0.00196075439453125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 6,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.16,
+    "handoff": true,
+    "final_xy": [
+      10.029144287109375,
+      -0.03598594665527344
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 6,
+    "model": "update400",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.7,
+    "handoff": true,
+    "final_xy": [
+      4.841499328613281,
+      -0.030941009521484375
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 6,
+    "model": "update500",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.22,
+    "handoff": true,
+    "final_xy": [
+      10.002578735351562,
+      0.04799652099609375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 6,
+    "model": "update600",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.08,
+    "handoff": true,
+    "final_xy": [
+      10.02734375,
+      0.0058441162109375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 7,
+    "model": "source",
+    "success": false,
+    "end_code": 3,
+    "time_s": 2.02,
+    "handoff": true,
+    "final_xy": [
+      5.377838134765625,
+      0.23040771484375
+    ],
+    "return_value": -100.00001525878906
+  },
+  {
+    "run": "pipeline",
+    "root": 7,
+    "model": "update100",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.0,
+    "handoff": true,
+    "final_xy": [
+      10.028518676757812,
+      0.0110626220703125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 7,
+    "model": "update200",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.9,
+    "handoff": true,
+    "final_xy": [
+      10.018426895141602,
+      -0.0499114990234375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 7,
+    "model": "update300",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.8,
+    "handoff": true,
+    "final_xy": [
+      4.574314117431641,
+      -0.19571685791015625
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "pipeline",
+    "root": 7,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.92,
+    "handoff": true,
+    "final_xy": [
+      10.004287719726562,
+      0.13161849975585938
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 7,
+    "model": "update500",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.22,
+    "handoff": false,
+    "final_xy": [
+      3.367441177368164,
+      -0.03586578369140625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 7,
+    "model": "update600",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.0200000000000005,
+    "handoff": true,
+    "final_xy": [
+      10.01059341430664,
+      0.09698104858398438
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 8,
+    "model": "source",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.22,
+    "handoff": true,
+    "final_xy": [
+      10.019006729125977,
+      -0.0308837890625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 8,
+    "model": "update100",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.34,
+    "handoff": true,
+    "final_xy": [
+      10.00545883178711,
+      0.0502777099609375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 8,
+    "model": "update200",
+    "success": false,
+    "end_code": 18,
+    "time_s": 5.88,
+    "handoff": true,
+    "final_xy": [
+      10.242860794067383,
+      0.49737548828125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 8,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.24,
+    "handoff": true,
+    "final_xy": [
+      10.006509780883789,
+      -0.077423095703125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 8,
+    "model": "update400",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.84,
+    "handoff": true,
+    "final_xy": [
+      5.172085762023926,
+      0.0082855224609375
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "pipeline",
+    "root": 8,
+    "model": "update500",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.92,
+    "handoff": true,
+    "final_xy": [
+      10.000936508178711,
+      0.0665283203125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 8,
+    "model": "update600",
+    "success": false,
+    "end_code": 15,
+    "time_s": 2.7,
+    "handoff": true,
+    "final_xy": [
+      5.6484222412109375,
+      1.1232757568359375
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 9,
+    "model": "source",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.4,
+    "handoff": true,
+    "final_xy": [
+      10.010834693908691,
+      -0.011646270751953125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 9,
+    "model": "update100",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.34,
+    "handoff": false,
+    "final_xy": [
+      3.6213855743408203,
+      -0.0082244873046875
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 9,
+    "model": "update200",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.88,
+    "handoff": true,
+    "final_xy": [
+      10.001104354858398,
+      -0.12006950378417969
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 9,
+    "model": "update300",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.44,
+    "handoff": true,
+    "final_xy": [
+      4.032895088195801,
+      -0.0646209716796875
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "pipeline",
+    "root": 9,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.48,
+    "handoff": true,
+    "final_xy": [
+      10.01462173461914,
+      -0.01349639892578125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 9,
+    "model": "update500",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.9000000000000001,
+    "handoff": true,
+    "final_xy": [
+      4.523118019104004,
+      -0.091583251953125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 9,
+    "model": "update600",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.56,
+    "handoff": true,
+    "final_xy": [
+      4.389442443847656,
+      0.201080322265625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 10,
+    "model": "source",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.76,
+    "handoff": true,
+    "final_xy": [
+      4.346958160400391,
+      -0.0428619384765625
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "pipeline",
+    "root": 10,
+    "model": "update100",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.3800000000000001,
+    "handoff": false,
+    "final_xy": [
+      3.5083351135253906,
+      -0.015350341796875
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 10,
+    "model": "update200",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.16,
+    "handoff": true,
+    "final_xy": [
+      10.0299072265625,
+      -0.0413970947265625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 10,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.9,
+    "handoff": true,
+    "final_xy": [
+      10.014659881591797,
+      -0.341705322265625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 10,
+    "model": "update400",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.8,
+    "handoff": true,
+    "final_xy": [
+      4.912525177001953,
+      -0.2567939758300781
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 10,
+    "model": "update500",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.56,
+    "handoff": true,
+    "final_xy": [
+      4.3620452880859375,
+      -0.15164566040039062
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 10,
+    "model": "update600",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.68,
+    "handoff": true,
+    "final_xy": [
+      4.783252716064453,
+      0.00519561767578125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 11,
+    "model": "source",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.52,
+    "handoff": true,
+    "final_xy": [
+      4.1382598876953125,
+      -0.00528717041015625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 11,
+    "model": "update100",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.92,
+    "handoff": true,
+    "final_xy": [
+      5.34259033203125,
+      0.234588623046875
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "pipeline",
+    "root": 11,
+    "model": "update200",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.28,
+    "handoff": true,
+    "final_xy": [
+      10.003551483154297,
+      0.0565185546875
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 11,
+    "model": "update300",
+    "success": false,
+    "end_code": 15,
+    "time_s": 2.34,
+    "handoff": true,
+    "final_xy": [
+      5.554557800292969,
+      -0.1743621826171875
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 11,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.32,
+    "handoff": true,
+    "final_xy": [
+      10.002693176269531,
+      0.028228759765625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 11,
+    "model": "update500",
+    "success": false,
+    "end_code": 18,
+    "time_s": 5.2,
+    "handoff": true,
+    "final_xy": [
+      10.00201416015625,
+      -0.264251708984375
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 11,
+    "model": "update600",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.48,
+    "handoff": true,
+    "final_xy": [
+      10.003593444824219,
+      -0.3932151794433594
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 12,
+    "model": "source",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.34,
+    "handoff": true,
+    "final_xy": [
+      10.005661010742188,
+      -0.03370475769042969
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 12,
+    "model": "update100",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.58,
+    "handoff": true,
+    "final_xy": [
+      4.272346496582031,
+      -0.003200531005859375
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "pipeline",
+    "root": 12,
+    "model": "update200",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.92,
+    "handoff": true,
+    "final_xy": [
+      4.7452239990234375,
+      -0.1361541748046875
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "pipeline",
+    "root": 12,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.86,
+    "handoff": true,
+    "final_xy": [
+      10.028327941894531,
+      -0.0132293701171875
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 12,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.0600000000000005,
+    "handoff": true,
+    "final_xy": [
+      10.004234313964844,
+      0.0864715576171875
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 12,
+    "model": "update500",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.78,
+    "handoff": true,
+    "final_xy": [
+      4.963188171386719,
+      -0.063446044921875
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "pipeline",
+    "root": 12,
+    "model": "update600",
+    "success": false,
+    "end_code": 3,
+    "time_s": 2.1,
+    "handoff": true,
+    "final_xy": [
+      5.784881591796875,
+      0.138641357421875
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 13,
+    "model": "source",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.22,
+    "handoff": true,
+    "final_xy": [
+      10.019515991210938,
+      -0.048675537109375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 13,
+    "model": "update100",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.38,
+    "handoff": true,
+    "final_xy": [
+      10.020172119140625,
+      -0.036376953125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 13,
+    "model": "update200",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.4000000000000001,
+    "handoff": true,
+    "final_xy": [
+      3.9381256103515625,
+      -0.012172698974609375
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "pipeline",
+    "root": 13,
+    "model": "update300",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.82,
+    "handoff": true,
+    "final_xy": [
+      4.8516845703125,
+      -0.11610031127929688
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "pipeline",
+    "root": 13,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.5200000000000005,
+    "handoff": true,
+    "final_xy": [
+      10.0028076171875,
+      0.018129348754882812
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 13,
+    "model": "update500",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.74,
+    "handoff": true,
+    "final_xy": [
+      4.6160125732421875,
+      0.127838134765625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 13,
+    "model": "update600",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.84,
+    "handoff": true,
+    "final_xy": [
+      10.012786865234375,
+      0.1242218017578125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 14,
+    "model": "source",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.82,
+    "handoff": true,
+    "final_xy": [
+      10.02178955078125,
+      0.27325439453125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 14,
+    "model": "update100",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.14,
+    "handoff": true,
+    "final_xy": [
+      10.014083862304688,
+      0.0108795166015625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 14,
+    "model": "update200",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.92,
+    "handoff": true,
+    "final_xy": [
+      5.1764984130859375,
+      0.1193695068359375
+    ],
+    "return_value": -100.00001525878906
+  },
+  {
+    "run": "pipeline",
+    "root": 14,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.12,
+    "handoff": true,
+    "final_xy": [
+      10.001449584960938,
+      0.0758819580078125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 14,
+    "model": "update400",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.72,
+    "handoff": true,
+    "final_xy": [
+      4.7529144287109375,
+      0.12740325927734375
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "pipeline",
+    "root": 14,
+    "model": "update500",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.2,
+    "handoff": true,
+    "final_xy": [
+      10.02850341796875,
+      -0.23080062866210938
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 14,
+    "model": "update600",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.86,
+    "handoff": true,
+    "final_xy": [
+      10.011383056640625,
+      -0.017541885375976562
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 15,
+    "model": "source",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.14,
+    "handoff": true,
+    "final_xy": [
+      10.008102416992188,
+      0.022623062133789062
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 15,
+    "model": "update100",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.6600000000000001,
+    "handoff": true,
+    "final_xy": [
+      4.3707427978515625,
+      -0.05345916748046875
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "pipeline",
+    "root": 15,
+    "model": "update200",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.68,
+    "handoff": true,
+    "final_xy": [
+      4.3615264892578125,
+      -0.04366302490234375
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 15,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.42,
+    "handoff": true,
+    "final_xy": [
+      10.001510620117188,
+      -0.0450592041015625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 15,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.0200000000000005,
+    "handoff": true,
+    "final_xy": [
+      10.02117919921875,
+      0.0385894775390625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 15,
+    "model": "update500",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.8,
+    "handoff": true,
+    "final_xy": [
+      10.022750854492188,
+      0.1292572021484375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 15,
+    "model": "update600",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.16,
+    "handoff": true,
+    "final_xy": [
+      10.010772705078125,
+      0.0355377197265625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 16,
+    "model": "source",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.78,
+    "handoff": true,
+    "final_xy": [
+      4.448516845703125,
+      -0.0110626220703125
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "pipeline",
+    "root": 16,
+    "model": "update100",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.46,
+    "handoff": true,
+    "final_xy": [
+      4.0689544677734375,
+      -0.044769287109375
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "pipeline",
+    "root": 16,
+    "model": "update200",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.7,
+    "handoff": true,
+    "final_xy": [
+      4.275909423828125,
+      -0.06552505493164062
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "pipeline",
+    "root": 16,
+    "model": "update300",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.82,
+    "handoff": true,
+    "final_xy": [
+      4.3505706787109375,
+      -0.36040496826171875
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 16,
+    "model": "update400",
+    "success": false,
+    "end_code": 4,
+    "time_s": 2.86,
+    "handoff": true,
+    "final_xy": [
+      7.0226287841796875,
+      -0.11817169189453125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 16,
+    "model": "update500",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.28,
+    "handoff": true,
+    "final_xy": [
+      10.00775146484375,
+      -0.09946441650390625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "pipeline",
+    "root": 16,
+    "model": "update600",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.58,
+    "handoff": true,
+    "final_xy": [
+      10.002670288085938,
+      0.0914459228515625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 0,
+    "model": "source",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.58,
+    "handoff": true,
+    "final_xy": [
+      10.017807006835938,
+      -0.2076568603515625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 0,
+    "model": "update100",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.1000000000000005,
+    "handoff": true,
+    "final_xy": [
+      10.01708984375,
+      0.1053314208984375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 0,
+    "model": "update200",
+    "success": false,
+    "end_code": 3,
+    "time_s": 2.08,
+    "handoff": true,
+    "final_xy": [
+      5.4679412841796875,
+      -0.4771728515625
+    ],
+    "return_value": -99.99998474121094
+  },
+  {
+    "run": "confirmation",
+    "root": 0,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.0600000000000005,
+    "handoff": true,
+    "final_xy": [
+      10.011917114257812,
+      -0.040485382080078125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 0,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.0200000000000005,
+    "handoff": true,
+    "final_xy": [
+      10.016098022460938,
+      0.12904739379882812
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 0,
+    "model": "update500",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.72,
+    "handoff": true,
+    "final_xy": [
+      4.905242919921875,
+      -0.1255016326904297
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 0,
+    "model": "update600",
+    "success": false,
+    "end_code": 3,
+    "time_s": 2.14,
+    "handoff": true,
+    "final_xy": [
+      5.3063201904296875,
+      -0.44948577880859375
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 1,
+    "model": "source",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.68,
+    "handoff": true,
+    "final_xy": [
+      4.2848358154296875,
+      0.10903167724609375
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 1,
+    "model": "update100",
+    "success": false,
+    "end_code": 12,
+    "time_s": 1.3,
+    "handoff": false,
+    "final_xy": [
+      3.4978790283203125,
+      -0.0116424560546875
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 1,
+    "model": "update200",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.74,
+    "handoff": true,
+    "final_xy": [
+      4.431976318359375,
+      -0.0012969970703125
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "confirmation",
+    "root": 1,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.18,
+    "handoff": true,
+    "final_xy": [
+      10.020370483398438,
+      0.0128173828125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 1,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.18,
+    "handoff": true,
+    "final_xy": [
+      10.004791259765625,
+      0.04229736328125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 1,
+    "model": "update500",
+    "success": false,
+    "end_code": 18,
+    "time_s": 6.140000000000001,
+    "handoff": true,
+    "final_xy": [
+      11.449005126953125,
+      0.49737548828125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 1,
+    "model": "update600",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.74,
+    "handoff": true,
+    "final_xy": [
+      4.74530029296875,
+      0.3717536926269531
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "confirmation",
+    "root": 2,
+    "model": "source",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.6,
+    "handoff": true,
+    "final_xy": [
+      4.1268310546875,
+      0.12007331848144531
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "confirmation",
+    "root": 2,
+    "model": "update100",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.58,
+    "handoff": true,
+    "final_xy": [
+      4.311767578125,
+      -0.06888961791992188
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 2,
+    "model": "update200",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.86,
+    "handoff": true,
+    "final_xy": [
+      10.025146484375,
+      0.0145111083984375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 2,
+    "model": "update300",
+    "success": false,
+    "end_code": 3,
+    "time_s": 2.06,
+    "handoff": true,
+    "final_xy": [
+      5.31292724609375,
+      0.20121002197265625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 2,
+    "model": "update400",
+    "success": false,
+    "end_code": 18,
+    "time_s": 5.78,
+    "handoff": true,
+    "final_xy": [
+      10.020599365234375,
+      0.3040924072265625
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "confirmation",
+    "root": 2,
+    "model": "update500",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.34,
+    "handoff": true,
+    "final_xy": [
+      10.00982666015625,
+      0.0329132080078125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 2,
+    "model": "update600",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.72,
+    "handoff": true,
+    "final_xy": [
+      4.9261322021484375,
+      -0.0895538330078125
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "confirmation",
+    "root": 3,
+    "model": "source",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.38,
+    "handoff": true,
+    "final_xy": [
+      10.013885498046875,
+      0.331756591796875
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 3,
+    "model": "update100",
+    "success": false,
+    "end_code": 9,
+    "time_s": 8.0,
+    "handoff": false,
+    "final_xy": [
+      13.81884765625,
+      -1.28656005859375
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 3,
+    "model": "update200",
+    "success": false,
+    "end_code": 15,
+    "time_s": 2.46,
+    "handoff": true,
+    "final_xy": [
+      5.300048828125,
+      0.8768119812011719
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "confirmation",
+    "root": 3,
+    "model": "update300",
+    "success": false,
+    "end_code": 15,
+    "time_s": 2.2600000000000002,
+    "handoff": true,
+    "final_xy": [
+      5.117279052734375,
+      0.7274932861328125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 3,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.28,
+    "handoff": true,
+    "final_xy": [
+      10.020843505859375,
+      0.042873382568359375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 3,
+    "model": "update500",
+    "success": false,
+    "end_code": 12,
+    "time_s": 1.68,
+    "handoff": true,
+    "final_xy": [
+      4.7723541259765625,
+      0.08379745483398438
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 3,
+    "model": "update600",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.6400000000000001,
+    "handoff": false,
+    "final_xy": [
+      3.8664093017578125,
+      0.0160980224609375
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 4,
+    "model": "source",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.8,
+    "handoff": true,
+    "final_xy": [
+      4.136627197265625,
+      -0.0455474853515625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 4,
+    "model": "update100",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.14,
+    "handoff": true,
+    "final_xy": [
+      10.017425537109375,
+      -0.078521728515625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 4,
+    "model": "update200",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.28,
+    "handoff": true,
+    "final_xy": [
+      3.7487640380859375,
+      -0.0377044677734375
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "confirmation",
+    "root": 4,
+    "model": "update300",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.42,
+    "handoff": true,
+    "final_xy": [
+      3.9366455078125,
+      -0.0182647705078125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 4,
+    "model": "update400",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.82,
+    "handoff": true,
+    "final_xy": [
+      4.485313415527344,
+      -0.192626953125
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "confirmation",
+    "root": 4,
+    "model": "update500",
+    "success": false,
+    "end_code": 3,
+    "time_s": 2.0,
+    "handoff": true,
+    "final_xy": [
+      4.8651885986328125,
+      0.0640106201171875
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "confirmation",
+    "root": 4,
+    "model": "update600",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.22,
+    "handoff": true,
+    "final_xy": [
+      10.0145263671875,
+      -0.05340385437011719
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 5,
+    "model": "source",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.44,
+    "handoff": true,
+    "final_xy": [
+      3.9613876342773438,
+      -0.06396865844726562
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 5,
+    "model": "update100",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.7,
+    "handoff": true,
+    "final_xy": [
+      4.4592132568359375,
+      -0.03914642333984375
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 5,
+    "model": "update200",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.62,
+    "handoff": true,
+    "final_xy": [
+      4.3693084716796875,
+      0.12841796875
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 5,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.0200000000000005,
+    "handoff": true,
+    "final_xy": [
+      10.027587890625,
+      -0.1572113037109375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 5,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.74,
+    "handoff": true,
+    "final_xy": [
+      10.01629638671875,
+      0.1583099365234375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 5,
+    "model": "update500",
+    "success": false,
+    "end_code": 15,
+    "time_s": 2.22,
+    "handoff": true,
+    "final_xy": [
+      5.689018249511719,
+      -0.9364776611328125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 5,
+    "model": "update600",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.72,
+    "handoff": true,
+    "final_xy": [
+      4.776847839355469,
+      -0.0178985595703125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 6,
+    "model": "source",
+    "success": false,
+    "end_code": 18,
+    "time_s": 5.46,
+    "handoff": true,
+    "final_xy": [
+      10.006416320800781,
+      -0.0093536376953125
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "confirmation",
+    "root": 6,
+    "model": "update100",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.32,
+    "handoff": false,
+    "final_xy": [
+      3.6569252014160156,
+      -0.038799285888671875
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 6,
+    "model": "update200",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.44,
+    "handoff": true,
+    "final_xy": [
+      10.016960144042969,
+      -0.00196075439453125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 6,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.16,
+    "handoff": true,
+    "final_xy": [
+      10.029144287109375,
+      -0.03598594665527344
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 6,
+    "model": "update400",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.7,
+    "handoff": true,
+    "final_xy": [
+      4.841499328613281,
+      -0.030941009521484375
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 6,
+    "model": "update500",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.22,
+    "handoff": true,
+    "final_xy": [
+      10.002578735351562,
+      0.04799652099609375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 6,
+    "model": "update600",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.08,
+    "handoff": true,
+    "final_xy": [
+      10.02734375,
+      0.0058441162109375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 7,
+    "model": "source",
+    "success": false,
+    "end_code": 3,
+    "time_s": 2.02,
+    "handoff": true,
+    "final_xy": [
+      5.377838134765625,
+      0.23040771484375
+    ],
+    "return_value": -100.00001525878906
+  },
+  {
+    "run": "confirmation",
+    "root": 7,
+    "model": "update100",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.0,
+    "handoff": true,
+    "final_xy": [
+      10.028518676757812,
+      0.0110626220703125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 7,
+    "model": "update200",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.9,
+    "handoff": true,
+    "final_xy": [
+      10.018426895141602,
+      -0.0499114990234375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 7,
+    "model": "update300",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.8,
+    "handoff": true,
+    "final_xy": [
+      4.574314117431641,
+      -0.19571685791015625
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "confirmation",
+    "root": 7,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.92,
+    "handoff": true,
+    "final_xy": [
+      10.004287719726562,
+      0.13161849975585938
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 7,
+    "model": "update500",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.22,
+    "handoff": false,
+    "final_xy": [
+      3.367441177368164,
+      -0.03586578369140625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 7,
+    "model": "update600",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.0200000000000005,
+    "handoff": true,
+    "final_xy": [
+      10.01059341430664,
+      0.09698104858398438
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 8,
+    "model": "source",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.22,
+    "handoff": true,
+    "final_xy": [
+      10.019006729125977,
+      -0.0308837890625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 8,
+    "model": "update100",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.34,
+    "handoff": true,
+    "final_xy": [
+      10.00545883178711,
+      0.0502777099609375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 8,
+    "model": "update200",
+    "success": false,
+    "end_code": 18,
+    "time_s": 5.88,
+    "handoff": true,
+    "final_xy": [
+      10.242860794067383,
+      0.49737548828125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 8,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.24,
+    "handoff": true,
+    "final_xy": [
+      10.006509780883789,
+      -0.077423095703125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 8,
+    "model": "update400",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.84,
+    "handoff": true,
+    "final_xy": [
+      5.172085762023926,
+      0.0082855224609375
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "confirmation",
+    "root": 8,
+    "model": "update500",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.92,
+    "handoff": true,
+    "final_xy": [
+      10.000936508178711,
+      0.0665283203125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 8,
+    "model": "update600",
+    "success": false,
+    "end_code": 15,
+    "time_s": 2.7,
+    "handoff": true,
+    "final_xy": [
+      5.6484222412109375,
+      1.1232757568359375
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 9,
+    "model": "source",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.4,
+    "handoff": true,
+    "final_xy": [
+      10.010834693908691,
+      -0.011646270751953125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 9,
+    "model": "update100",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.34,
+    "handoff": false,
+    "final_xy": [
+      3.6213855743408203,
+      -0.0082244873046875
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 9,
+    "model": "update200",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.88,
+    "handoff": true,
+    "final_xy": [
+      10.001104354858398,
+      -0.12006950378417969
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 9,
+    "model": "update300",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.44,
+    "handoff": true,
+    "final_xy": [
+      4.032895088195801,
+      -0.0646209716796875
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "confirmation",
+    "root": 9,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.48,
+    "handoff": true,
+    "final_xy": [
+      10.01462173461914,
+      -0.01349639892578125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 9,
+    "model": "update500",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.9000000000000001,
+    "handoff": true,
+    "final_xy": [
+      4.523118019104004,
+      -0.091583251953125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 9,
+    "model": "update600",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.56,
+    "handoff": true,
+    "final_xy": [
+      4.389442443847656,
+      0.201080322265625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 10,
+    "model": "source",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.76,
+    "handoff": true,
+    "final_xy": [
+      4.346958160400391,
+      -0.0428619384765625
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "confirmation",
+    "root": 10,
+    "model": "update100",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.3800000000000001,
+    "handoff": false,
+    "final_xy": [
+      3.5083351135253906,
+      -0.015350341796875
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 10,
+    "model": "update200",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.16,
+    "handoff": true,
+    "final_xy": [
+      10.0299072265625,
+      -0.0413970947265625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 10,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.9,
+    "handoff": true,
+    "final_xy": [
+      10.014659881591797,
+      -0.341705322265625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 10,
+    "model": "update400",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.8,
+    "handoff": true,
+    "final_xy": [
+      4.912525177001953,
+      -0.2567939758300781
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 10,
+    "model": "update500",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.56,
+    "handoff": true,
+    "final_xy": [
+      4.3620452880859375,
+      -0.15164566040039062
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 10,
+    "model": "update600",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.68,
+    "handoff": true,
+    "final_xy": [
+      4.783252716064453,
+      0.00519561767578125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 11,
+    "model": "source",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.52,
+    "handoff": true,
+    "final_xy": [
+      4.1382598876953125,
+      -0.00528717041015625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 11,
+    "model": "update100",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.92,
+    "handoff": true,
+    "final_xy": [
+      5.34259033203125,
+      0.234588623046875
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "confirmation",
+    "root": 11,
+    "model": "update200",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.28,
+    "handoff": true,
+    "final_xy": [
+      10.003551483154297,
+      0.0565185546875
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 11,
+    "model": "update300",
+    "success": false,
+    "end_code": 15,
+    "time_s": 2.34,
+    "handoff": true,
+    "final_xy": [
+      5.554557800292969,
+      -0.1743621826171875
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 11,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.32,
+    "handoff": true,
+    "final_xy": [
+      10.002693176269531,
+      0.028228759765625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 11,
+    "model": "update500",
+    "success": false,
+    "end_code": 18,
+    "time_s": 5.2,
+    "handoff": true,
+    "final_xy": [
+      10.00201416015625,
+      -0.264251708984375
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 11,
+    "model": "update600",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.48,
+    "handoff": true,
+    "final_xy": [
+      10.003593444824219,
+      -0.3932151794433594
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 12,
+    "model": "source",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.34,
+    "handoff": true,
+    "final_xy": [
+      10.005661010742188,
+      -0.03370475769042969
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 12,
+    "model": "update100",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.58,
+    "handoff": true,
+    "final_xy": [
+      4.272346496582031,
+      -0.003200531005859375
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "confirmation",
+    "root": 12,
+    "model": "update200",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.92,
+    "handoff": true,
+    "final_xy": [
+      4.7452239990234375,
+      -0.1361541748046875
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "confirmation",
+    "root": 12,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.86,
+    "handoff": true,
+    "final_xy": [
+      10.028327941894531,
+      -0.0132293701171875
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 12,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.0600000000000005,
+    "handoff": true,
+    "final_xy": [
+      10.004234313964844,
+      0.0864715576171875
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 12,
+    "model": "update500",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.78,
+    "handoff": true,
+    "final_xy": [
+      4.963188171386719,
+      -0.063446044921875
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "confirmation",
+    "root": 12,
+    "model": "update600",
+    "success": false,
+    "end_code": 3,
+    "time_s": 2.1,
+    "handoff": true,
+    "final_xy": [
+      5.784881591796875,
+      0.138641357421875
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 13,
+    "model": "source",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.22,
+    "handoff": true,
+    "final_xy": [
+      10.019515991210938,
+      -0.048675537109375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 13,
+    "model": "update100",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.38,
+    "handoff": true,
+    "final_xy": [
+      10.020172119140625,
+      -0.036376953125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 13,
+    "model": "update200",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.4000000000000001,
+    "handoff": true,
+    "final_xy": [
+      3.9381256103515625,
+      -0.012172698974609375
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "confirmation",
+    "root": 13,
+    "model": "update300",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.82,
+    "handoff": true,
+    "final_xy": [
+      4.8516845703125,
+      -0.11610031127929688
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "confirmation",
+    "root": 13,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.5200000000000005,
+    "handoff": true,
+    "final_xy": [
+      10.0028076171875,
+      0.018129348754882812
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 13,
+    "model": "update500",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.74,
+    "handoff": true,
+    "final_xy": [
+      4.6160125732421875,
+      0.127838134765625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 13,
+    "model": "update600",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.84,
+    "handoff": true,
+    "final_xy": [
+      10.012786865234375,
+      0.1242218017578125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 14,
+    "model": "source",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.82,
+    "handoff": true,
+    "final_xy": [
+      10.02178955078125,
+      0.27325439453125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 14,
+    "model": "update100",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.14,
+    "handoff": true,
+    "final_xy": [
+      10.014083862304688,
+      0.0108795166015625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 14,
+    "model": "update200",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.92,
+    "handoff": true,
+    "final_xy": [
+      5.1764984130859375,
+      0.1193695068359375
+    ],
+    "return_value": -100.00001525878906
+  },
+  {
+    "run": "confirmation",
+    "root": 14,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.12,
+    "handoff": true,
+    "final_xy": [
+      10.001449584960938,
+      0.0758819580078125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 14,
+    "model": "update400",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.72,
+    "handoff": true,
+    "final_xy": [
+      4.7529144287109375,
+      0.12740325927734375
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "confirmation",
+    "root": 14,
+    "model": "update500",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.2,
+    "handoff": true,
+    "final_xy": [
+      10.02850341796875,
+      -0.23080062866210938
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 14,
+    "model": "update600",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.86,
+    "handoff": true,
+    "final_xy": [
+      10.011383056640625,
+      -0.017541885375976562
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 15,
+    "model": "source",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.14,
+    "handoff": true,
+    "final_xy": [
+      10.008102416992188,
+      0.022623062133789062
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 15,
+    "model": "update100",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.6600000000000001,
+    "handoff": true,
+    "final_xy": [
+      4.3707427978515625,
+      -0.05345916748046875
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "confirmation",
+    "root": 15,
+    "model": "update200",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.68,
+    "handoff": true,
+    "final_xy": [
+      4.3615264892578125,
+      -0.04366302490234375
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 15,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.42,
+    "handoff": true,
+    "final_xy": [
+      10.001510620117188,
+      -0.0450592041015625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 15,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.0200000000000005,
+    "handoff": true,
+    "final_xy": [
+      10.02117919921875,
+      0.0385894775390625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 15,
+    "model": "update500",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.8,
+    "handoff": true,
+    "final_xy": [
+      10.022750854492188,
+      0.1292572021484375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 15,
+    "model": "update600",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.16,
+    "handoff": true,
+    "final_xy": [
+      10.010772705078125,
+      0.0355377197265625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 16,
+    "model": "source",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.78,
+    "handoff": true,
+    "final_xy": [
+      4.448516845703125,
+      -0.0110626220703125
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "confirmation",
+    "root": 16,
+    "model": "update100",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.46,
+    "handoff": true,
+    "final_xy": [
+      4.0689544677734375,
+      -0.044769287109375
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "confirmation",
+    "root": 16,
+    "model": "update200",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.7,
+    "handoff": true,
+    "final_xy": [
+      4.275909423828125,
+      -0.06552505493164062
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "confirmation",
+    "root": 16,
+    "model": "update300",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.82,
+    "handoff": true,
+    "final_xy": [
+      4.3505706787109375,
+      -0.36040496826171875
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 16,
+    "model": "update400",
+    "success": false,
+    "end_code": 4,
+    "time_s": 2.86,
+    "handoff": true,
+    "final_xy": [
+      7.0226287841796875,
+      -0.11817169189453125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 16,
+    "model": "update500",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.28,
+    "handoff": true,
+    "final_xy": [
+      10.00775146484375,
+      -0.09946441650390625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "confirmation",
+    "root": 16,
+    "model": "update600",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.58,
+    "handoff": true,
+    "final_xy": [
+      10.002670288085938,
+      0.0914459228515625
+    ],
+    "return_value": 100.0
+  }
+]
