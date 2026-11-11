@@ -85,3 +85,6 @@ $$B_{req}=\frac{\omega^2}{2[\phi_c-\operatorname{sign}(\omega)\phi]}.$$
 - 运行：`python learning/cli/analyze_roll_braking_boundary.py --run /media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_channel_scan --attachment imports/h_boundary_review --output /media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_H_boundary_review`。
 
 本次只增加离线分析，不修改模型、物理、判据、成功标签或原始记录。
+
+
+后续已重新估计持续恢复B，并找到后轮再接触冲击环节：[B估计与失败链](capacity_estimate/README.md)。
