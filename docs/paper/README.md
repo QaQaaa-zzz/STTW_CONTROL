@@ -1,38 +1,26 @@
 # STTW论文：偏好条件参考调节与越野恢复
 
-当前完整中文稿：[PDF](MANUSCRIPT.pdf) · [可编辑正文](MANUSCRIPT.md) · [浏览器阅读](MANUSCRIPT.html)。
+当前完整稿：[PDF](MANUSCRIPT.pdf) · [可编辑中文正文及英文摘要](MANUSCRIPT.md) · [HTML](MANUSCRIPT.html)。当前PDF由Markdown生成；MANUSCRIPT.tex及method_training.tex保留为历史平地英文材料，不是本版编辑源。
 
-主线是：**α形成速度—转向协调方式；地形与任务决定各方式的适用范围；恢复包络和跟踪域解释失效，并为选档提供依据。** 正文包含中英文摘要、两项命题及证明、14个公式、3张表、4张图、讨论和参考文献。图1首先展示实际/参考XY轨迹。
+主线：α改变速度—转向协调；接触状态决定转向恢复作用，侧倾与跟踪域分别限制任务；据此检验任务相关选档。正文包含两项命题、16个公式、4张表和7张图。第一张图为实际／原参考XY。
 
-## 对方案的收敛
+S0–S4实验已完成后再整合本稿。S1支持协调方向，精确标量化最优假设未被采用；S2补齐接触角动量与低α失稳机制；S3共2464条细档验证；S4共2112条新布局对照。C选档75/176、固定最佳70/176、简单规则66/176，A/B仍由固定档取得更高通过数。正文同时给出布局分组范围与配对得失。
 
-依据用户提供的 `/home/qy/.claude/plans/steady-puzzling-corbato.md`，采用偏好几何、恢复约束、任务选档三层结构。正文直接陈述主要发现，具体适用条件集中于实验协议和讨论；反例用于解释地形交互，不改变原始数据或失败分类。
+[逐项实验收尾](../evidence/h75_theory_iteration/CLOSURE.md) · [S4全部XY](/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/RESULTS.md) · [S4精简结果](../evidence/h75_theory_iteration/S4_layout/results/README.md)。正文E1–E9与evidence_manifest.json提供来源。
 
-|方案内容|本文处理|
-|---|---|
-|偏好权重引起取舍|证明包含共同代价的完整端点目标单调性；实际速度和路径误差由实验报告|
-|等容差对应α=0.5|改为由响应曲线确定，等权不自动等于等物理误差|
-|速度改变冲击和恢复|保留源码动力学、速度相关传递函数和恢复包络；冲量随速度线性增长作为需接触假设的模型|
-|两类安全余量选档|角度与距离先归一化；将在线预测列为后续方法|
-|历史平地与越野结果合并|Local200平地与Local300越野分开列出；通道消融和五档自然切换构成主证据|
-|一次展开约1900条实验|本次先完成论文及CPU复算，未启动新训练或GPU仿真|
+## 构建
 
-正文主结果为单脊双通道优势、石子通道效果变化、不同任务的α优势档位，以及侧倾超限/跟踪域退出两类失效。在线选档的已完成结果在第6.5节保留，方法建议在第7节。
-
-## 复算与构建
-
-使用含PyTorch的项目环境执行六项CPU检查：
-
-```bash
-PYTHONPATH=learning/src OPENBLAS_NUM_THREADS=1 python -m unittest discover -s learning/tests -p test_paper_preference_theory.py
-```
-
-检查源码模型系数、闭环多项式、有效奖励的仿射结构、完整目标单调性反例、等容差反例、冲量峰值及负核条件。检查不新增物理仿真。构建环境需要Markdown、Matplotlib、WeasyPrint和Noto CJK字体：
+使用含Markdown、Matplotlib、WeasyPrint和Noto CJK字体的Python环境：
 
 ```bash
 python docs/paper/build.py --pdf
 ```
 
-`MANUSCRIPT.tex`、`method_training.tex`及旧矩阵保留为历史平地英文稿材料；当前编辑源为上方Markdown。新版PDF由当前源生成，build.py默认使用当前源。原论文版本可由Git历史检索，历史实验资料不改写。
+`requirements.txt`记录本次使用的Python包版本。物理公式核对：
 
-实验来源见正文E1–E5和evidence_manifest.json。主要数字对应已完成的冻结策略仿真；本次新增工作为论文收敛、数学检查和排版。作者、单位、目标期刊、基金及最终作者审阅待填写，未代填声明。
+```bash
+PYTHONPATH=learning/src python -m unittest discover -s learning/tests -p test_paper_preference_theory.py
+PYTHONPATH=learning/src python -m unittest discover -s learning/tests -p test_margin_theory.py
+```
+
+本轮14项通过；排版和文章整合没有新增仿真或训练。PDF公式、结果页已检查，表4与机器汇总逐项一致。作者、单位、期刊、基金及最终作者审阅由作者补充；这是完整研究稿，尚未投稿。

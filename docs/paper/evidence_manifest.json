@@ -2,24 +2,39 @@
   "source": "docs/paper/MANUSCRIPT.md",
   "scope": "Preference-conditioned reference coordination and off-road recovery",
   "inputs": {
-    "docs/paper/MANUSCRIPT.md": "4484ebce26e7185cd8d543853e6c63d2382a6d7fd196b6a04bbecec9fcdf32d9",
+    "docs/paper/MANUSCRIPT.md": "1faa7afee4d1e5e6dc40ec9e55634dfa11d41b42626df1b220726e9d832af610",
     "docs/paper/figures/h75_theory_xy.png": "0c005cc059bf1e0b9683e76f00a04b6cc73ef30bbbeb1a0e7ffdc30bfe433cbd",
     "docs/paper/figures/h75_channels.png": "386bf87f9568fafc325da081c9ca13e2fee46466deab62617d84d674ec6acdde",
     "docs/paper/figures/h75_optimal_recovery.png": "0165aa6653439baf205a6b5b6fce0fa2d373bfd3374045a8da5ba2ad5d2517b9",
+    "docs/paper/figures/h75_contact_budget.png": "f1c318bb241158562a6657d8d6d33a6137e4df8c5e192a2e2d6183529fd68b87",
     "docs/paper/figures/h75_schedule_matrix.png": "c1639a652adeac89fa69c0937229f48c21bc154d352398649417c4c148a28b80",
-    "docs/paper/MANUSCRIPT.html": "6878698582f5a8dc28a96b0875ad598a69268af66288dd449ebdc0d6b90577ea",
-    "docs/paper/MANUSCRIPT.pdf": "ef81a17c6219ef5ad4d79f28b8dabf335a6b3f5ceb22f9085eb2a75b1e2a5cf6"
+    "docs/paper/figures/h75_fine_alpha_results.png": "cd80dc3190a967812717f530eb5eb6aba498c5f804d448991275270c74508473",
+    "docs/paper/figures/h75_layout_selection.png": "08063ae751a7df31a7e32846865c8f4c7d047df9ddabe7838212e3a1bdda41d8",
+    "docs/paper/MANUSCRIPT.html": "81df0844e53a52a21f3750c1b7c19cd9b0be8cc5b4b715488252e1c40f65909e",
+    "docs/paper/MANUSCRIPT.pdf": "487effa6b6747a2c2f3cc158f6eeb575afd3b36a809b0da3ff3485273670a7eb"
   },
   "evidence": {
     "E1": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/frozen_middle_comparison/README.md",
     "E2": "docs/evidence/h75_evidence_queue_20261110/final_results/README.md",
     "E3": "docs/evidence/h75_mathematical_verification/README.md",
     "E4": "docs/evidence/h75_theory_atlas/README.md",
-    "E5": "docs/evidence/h75_state_alpha_scan/README.md"
+    "E5": "docs/evidence/h75_state_alpha_scan/README.md",
+    "E6": "docs/evidence/h75_theory_iteration/S1/README.md",
+    "E7": "docs/evidence/h75_theory_iteration/S2/CLOSURE.md",
+    "E8": "docs/evidence/h75_theory_iteration/S3_mechanism/results/README.md",
+    "E9": "docs/evidence/h75_theory_iteration/S4_layout/results/README.md"
   },
-  "figures": 4,
+  "figures": 7,
   "new_physics_steps": 0,
+  "verification": "Agent checked local source artifacts and table arithmetic; author review pending",
+  "completed_experimental_stages": [
+    "S0",
+    "S1",
+    "S2",
+    "S3",
+    "S4"
+  ],
   "new_optimizer_updates": 0,
   "cpu_test_command": "PYTHONPATH=learning/src python -m unittest discover -s learning/tests -p test_paper_preference_theory.py",
-  "data_roles": "Historical flat DEV, off-road ablations, nominal model calculations, natural schedules; see Table 2."
+  "data_roles": "Historical flat DEV, off-road ablations, nominal model calculations, natural schedules, frozen fine-alpha validation and new-layout TEST; see Table 2."
 }

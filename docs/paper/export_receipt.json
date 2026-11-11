@@ -1,10 +1,8 @@
 {
-  "manuscript_sha256": "6af08532afde5795c96fe4988c81a5143ab2cd44289d050f0d1940f2df1263b2",
-  "evidence_manifest_sha256": "69171c06b88d94961d9aa4967c65289b6db74c3f80a9e564ede0cc83dcd90ef6",
-  "pdf_requested": true,
-  "disclosure": "Local LaTeX compilation; no manuscript or unpublished data sent to external service",
-  "pdf_sha256": "9cf885f74de993b8cfdf93c0b6f464c63a1b849565f0c55425e318a9465a287d",
-  "pdf_bytes": 218103,
-  "supplement_pdf_sha256": "193a8de7f6dd94b43a6043b79ca8c6ad306aebb55e11fd16a755dbac36efc8bc",
-  "supplement_pdf_bytes": 1209292
+  "source": "MANUSCRIPT.md",
+  "renderer": "Offline Markdown, Matplotlib SVG equations, WeasyPrint",
+  "manuscript_sha256": "1faa7afee4d1e5e6dc40ec9e55634dfa11d41b42626df1b220726e9d832af610",
+  "pdf_sha256": "487effa6b6747a2c2f3cc158f6eeb575afd3b36a809b0da3ff3485273670a7eb",
+  "pdf_bytes": 2112067,
+  "disclosure": "Local export; manuscript and experiment data not sent to an external service"
 }

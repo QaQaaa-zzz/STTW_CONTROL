@@ -29,6 +29,10 @@ def main():
         "E3": "docs/evidence/h75_mathematical_verification/README.md",
         "E4": "docs/evidence/h75_theory_atlas/README.md",
         "E5": "docs/evidence/h75_state_alpha_scan/README.md",
+        "E6": "docs/evidence/h75_theory_iteration/S1/README.md",
+        "E7": "docs/evidence/h75_theory_iteration/S2/CLOSURE.md",
+        "E8": "docs/evidence/h75_theory_iteration/S3_mechanism/results/README.md",
+        "E9": "docs/evidence/h75_theory_iteration/S4_layout/results/README.md",
     }
     manifest = {
         "source": "docs/paper/MANUSCRIPT.md",
@@ -37,11 +41,16 @@ def main():
         "evidence": evidence,
         "figures": len(figures),
         "new_physics_steps": 0,
+        "verification": "Agent checked local source artifacts and table arithmetic; author review pending",
+        "completed_experimental_stages": ["S0", "S1", "S2", "S3", "S4"],
         "new_optimizer_updates": 0,
         "cpu_test_command": "PYTHONPATH=learning/src python -m unittest discover -s learning/tests -p test_paper_preference_theory.py",
-        "data_roles": "Historical flat DEV, off-road ablations, nominal model calculations, natural schedules; see Table 2.",
+        "data_roles": "Historical flat DEV, off-road ablations, nominal model calculations, natural schedules, frozen fine-alpha validation and new-layout TEST; see Table 2.",
     }
     (HERE / "evidence_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n")
+    if args.pdf:
+        receipt = {"source": "MANUSCRIPT.md", "renderer": "Offline Markdown, Matplotlib SVG equations, WeasyPrint", "manuscript_sha256": hashlib.sha256(source.read_bytes()).hexdigest(), "pdf_sha256": hashlib.sha256(source.with_suffix(".pdf").read_bytes()).hexdigest(), "pdf_bytes": source.with_suffix(".pdf").stat().st_size, "disclosure": "Local export; manuscript and experiment data not sent to an external service"}
+        (HERE / "export_receipt.json").write_text(json.dumps(receipt, indent=2) + "\n")
 
 if __name__ == "__main__":
     main()
