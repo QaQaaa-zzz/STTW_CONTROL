@@ -23,7 +23,7 @@ class DitchGroundHandoff:
         if self.leg_hold not in ('joint_brake','finite_motor'):
             raise ValueError('Unknown handoff leg hold mode')
         settings=json.loads(Path(spec['settings']).read_text())
-        settings.update(num_envs=n,alphas=[spec['alpha']],zero_middle=[False]*n,zero_lower=[True]*n,
+        settings.update(num_envs=n,alphas=[spec['alpha']],zero_middle=[spec.get('zero_middle',False)]*n,zero_lower=[True]*n,
                         terrains={'ditch':'shared'},episode_s=env.max_episode_length*env.dt,
                         initial_state=None,user_speed_m_s=spec['speed_m_s'],auto_reset_horizon=False,
                         record_control_commands=True)
@@ -45,7 +45,7 @@ class DitchGroundHandoff:
         self.approaching=self.approach is not None
         self.approach_initialized=False
         (self.output/'ground_identity.json').write_text(json.dumps(dict(upper_sha256=self.ground.upper_sha256,
-            lower_sha256=self.ground.lower_sha256,zero_lower=True,controller='H75 + ECBC/ESO; lower residual zero',
+            lower_sha256=self.ground.lower_sha256,zero_lower=True,zero_middle=spec.get('zero_middle',False),controller=('ECBC/ESO + original follower; H75 correction zero' if spec.get('zero_middle',False) else 'H75 + ECBC/ESO; lower residual zero'),
             reference=reference_path or 'Original world-local y=0, no reanchoring at landing',control_dt_s=.005,policy_dt_s=.02,
             feedback='Existing ground clean-state interface; frozen randomized physical properties retained; jump noise/delay only before handback',
             pendulum=self.leg_hold),indent=2))

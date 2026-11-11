@@ -30,6 +30,6 @@ for i,name in enumerate(names):
  for j,speed in enumerate(speeds):
   totals=[sum(c['result']['success'] for c in rows if c['candidate_id']==i*per+j*len(alphas)+k) for k in range(len(alphas))];text+=f'|{name}|{speed}|'+ '|'.join(map(str,totals))+'|\n'
 text+=f"\n完整任务完成 {sum(c['result']['success'] for c in rows)}/{len(rows)}。耗时 {summary['elapsed_s']:.2f}s，物理环境步 {summary['physics_lane_steps']}。未参与训练，不按失败删除路线或放松道路。此轮同时扩展路线与地形，用于任务覆盖与能力采集，不归因某单因素。\n\n[每步奖励](reward.png) · [累计奖励](cumulative_reward.png) · [真实速度](speed.png) · [全部原始终止码与逐条件结果](cases.json)。\n\n原始高程、支持掩码、碰撞网格、路线与逐步数据：`{a.run}`。后续世界模型需要使用本地图数据重训/校准，当前不能宣称已学会在新地图自主决策。\n"
-cfg=json.loads((a.run/'config.json').read_text());text+='\n实际跳跃权重：`'+cfg.get('evaluation_checkpoint',cfg['bundle'])+'`。\n'
+cfg=json.loads((a.run/'config.json').read_text());text+='\n地面身份：'+('原跟随器＋ECBC/ESO，H75修正置零（诊断消融）' if cfg['ground_handoff'].get('zero_middle',False) else 'H75＋ECBC/ESO')+'。\n';text+='\n实际跳跃权重：`'+cfg.get('evaluation_checkpoint',cfg['bundle'])+'`。\n'
 (a.output/'RESULTS.md').write_text(text)
 print(text)
