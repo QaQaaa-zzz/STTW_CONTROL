@@ -1,0 +1,368 @@
+{
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_height_scan/analysis_summary.json",
+  "source_sha256": "f50cc4e0e3f39027034fbc1eda139dc17174779449a2869ba3243e910f5f9b78",
+  "rule": "maximize DEV task pass, then minimize mean failure penalty plus normalized path/speed RMSE, then lower alpha",
+  "rules": {
+    "10:2.3:A": {
+      "selected_alpha": 1,
+      "candidates": [
+        {
+          "alpha": 0,
+          "task_pass": 1,
+          "mean_cost": 5.3728670792447195
+        },
+        {
+          "alpha": 0.25,
+          "task_pass": 0,
+          "mean_cost": 2.113257857660453
+        },
+        {
+          "alpha": 0.5,
+          "task_pass": 0,
+          "mean_cost": 1.8998631710807485
+        },
+        {
+          "alpha": 0.75,
+          "task_pass": 0,
+          "mean_cost": 0.9436328419380718
+        },
+        {
+          "alpha": 1,
+          "task_pass": 1,
+          "mean_cost": 5.143091728289922
+        }
+      ]
+    },
+    "10:2.3:B": {
+      "selected_alpha": 0.75,
+      "candidates": [
+        {
+          "alpha": 0,
+          "task_pass": 0,
+          "mean_cost": 5.73257416072819
+        },
+        {
+          "alpha": 0.25,
+          "task_pass": 0,
+          "mean_cost": 2.12230754395326
+        },
+        {
+          "alpha": 0.5,
+          "task_pass": 0,
+          "mean_cost": 1.737451267739137
+        },
+        {
+          "alpha": 0.75,
+          "task_pass": 2,
+          "mean_cost": 1.0454278853204517
+        },
+        {
+          "alpha": 1,
+          "task_pass": 1,
+          "mean_cost": 5.198119593163331
+        }
+      ]
+    },
+    "10:2.3:C": {
+      "selected_alpha": 0.75,
+      "candidates": [
+        {
+          "alpha": 0,
+          "task_pass": 1,
+          "mean_cost": 5.399445736159881
+        },
+        {
+          "alpha": 0.25,
+          "task_pass": 0,
+          "mean_cost": 1.999373965793186
+        },
+        {
+          "alpha": 0.5,
+          "task_pass": 1,
+          "mean_cost": 1.731155032498969
+        },
+        {
+          "alpha": 0.75,
+          "task_pass": 2,
+          "mean_cost": 0.9307957564791044
+        },
+        {
+          "alpha": 1,
+          "task_pass": 1,
+          "mean_cost": 5.063949320465327
+        }
+      ]
+    },
+    "10:2.6:A": {
+      "selected_alpha": 1,
+      "candidates": [
+        {
+          "alpha": 0,
+          "task_pass": 0,
+          "mean_cost": 5.494436497489612
+        },
+        {
+          "alpha": 0.25,
+          "task_pass": 0,
+          "mean_cost": 6.138845127489833
+        },
+        {
+          "alpha": 0.5,
+          "task_pass": 0,
+          "mean_cost": 4.708373153375255
+        },
+        {
+          "alpha": 0.75,
+          "task_pass": 0,
+          "mean_cost": 5.073655566407575
+        },
+        {
+          "alpha": 1,
+          "task_pass": 0,
+          "mean_cost": 4.416361128290494
+        }
+      ]
+    },
+    "10:2.6:B": {
+      "selected_alpha": 1,
+      "candidates": [
+        {
+          "alpha": 0,
+          "task_pass": 0,
+          "mean_cost": 6.667748279869556
+        },
+        {
+          "alpha": 0.25,
+          "task_pass": 0,
+          "mean_cost": 6.438807853394084
+        },
+        {
+          "alpha": 0.5,
+          "task_pass": 0,
+          "mean_cost": 5.304843592974875
+        },
+        {
+          "alpha": 0.75,
+          "task_pass": 0,
+          "mean_cost": 5.770201625095473
+        },
+        {
+          "alpha": 1,
+          "task_pass": 1,
+          "mean_cost": 4.684925948580107
+        }
+      ]
+    },
+    "10:2.6:C": {
+      "selected_alpha": 0.5,
+      "candidates": [
+        {
+          "alpha": 0,
+          "task_pass": 0,
+          "mean_cost": 5.830663125962019
+        },
+        {
+          "alpha": 0.25,
+          "task_pass": 0,
+          "mean_cost": 6.099635532332791
+        },
+        {
+          "alpha": 0.5,
+          "task_pass": 1,
+          "mean_cost": 4.8639427787727785
+        },
+        {
+          "alpha": 0.75,
+          "task_pass": 0,
+          "mean_cost": 5.2478500207265215
+        },
+        {
+          "alpha": 1,
+          "task_pass": 0,
+          "mean_cost": 4.460634792016612
+        }
+      ]
+    },
+    "20:2.3:A": {
+      "selected_alpha": 0.75,
+      "candidates": [
+        {
+          "alpha": 0,
+          "task_pass": 0,
+          "mean_cost": 12.7999950821201
+        },
+        {
+          "alpha": 0.25,
+          "task_pass": 0,
+          "mean_cost": 9.427411150601175
+        },
+        {
+          "alpha": 0.5,
+          "task_pass": 0,
+          "mean_cost": 8.858866592248281
+        },
+        {
+          "alpha": 0.75,
+          "task_pass": 0,
+          "mean_cost": 5.175085531340705
+        },
+        {
+          "alpha": 1,
+          "task_pass": 0,
+          "mean_cost": 11.378313621713055
+        }
+      ]
+    },
+    "20:2.3:B": {
+      "selected_alpha": 0.75,
+      "candidates": [
+        {
+          "alpha": 0,
+          "task_pass": 0,
+          "mean_cost": 15.196760365118584
+        },
+        {
+          "alpha": 0.25,
+          "task_pass": 0,
+          "mean_cost": 10.83897154364321
+        },
+        {
+          "alpha": 0.5,
+          "task_pass": 0,
+          "mean_cost": 10.44331505894661
+        },
+        {
+          "alpha": 0.75,
+          "task_pass": 0,
+          "mean_cost": 5.949696894321177
+        },
+        {
+          "alpha": 1,
+          "task_pass": 0,
+          "mean_cost": 12.379678069717356
+        }
+      ]
+    },
+    "20:2.3:C": {
+      "selected_alpha": 0.75,
+      "candidates": [
+        {
+          "alpha": 0,
+          "task_pass": 0,
+          "mean_cost": 13.57651518761284
+        },
+        {
+          "alpha": 0.25,
+          "task_pass": 0,
+          "mean_cost": 9.822976609898939
+        },
+        {
+          "alpha": 0.5,
+          "task_pass": 0,
+          "mean_cost": 9.353252111209764
+        },
+        {
+          "alpha": 0.75,
+          "task_pass": 0,
+          "mean_cost": 5.374003717054923
+        },
+        {
+          "alpha": 1,
+          "task_pass": 0,
+          "mean_cost": 11.691160150286224
+        }
+      ]
+    },
+    "20:2.6:A": {
+      "selected_alpha": 0.25,
+      "candidates": [
+        {
+          "alpha": 0,
+          "task_pass": 0,
+          "mean_cost": 12.335667990975908
+        },
+        {
+          "alpha": 0.25,
+          "task_pass": 0,
+          "mean_cost": 9.206222411659029
+        },
+        {
+          "alpha": 0.5,
+          "task_pass": 0,
+          "mean_cost": 12.384354898499117
+        },
+        {
+          "alpha": 0.75,
+          "task_pass": 0,
+          "mean_cost": 12.702276714973978
+        },
+        {
+          "alpha": 1,
+          "task_pass": 0,
+          "mean_cost": 9.538168712622591
+        }
+      ]
+    },
+    "20:2.6:B": {
+      "selected_alpha": 0.25,
+      "candidates": [
+        {
+          "alpha": 0,
+          "task_pass": 0,
+          "mean_cost": 14.327686470415857
+        },
+        {
+          "alpha": 0.25,
+          "task_pass": 0,
+          "mean_cost": 10.948371845814917
+        },
+        {
+          "alpha": 0.5,
+          "task_pass": 0,
+          "mean_cost": 14.426235993289287
+        },
+        {
+          "alpha": 0.75,
+          "task_pass": 0,
+          "mean_cost": 14.982599918213156
+        },
+        {
+          "alpha": 1,
+          "task_pass": 0,
+          "mean_cost": 11.251497556351955
+        }
+      ]
+    },
+    "20:2.6:C": {
+      "selected_alpha": 0.25,
+      "candidates": [
+        {
+          "alpha": 0,
+          "task_pass": 0,
+          "mean_cost": 12.98058251125945
+        },
+        {
+          "alpha": 0.25,
+          "task_pass": 0,
+          "mean_cost": 9.742638539108965
+        },
+        {
+          "alpha": 0.5,
+          "task_pass": 0,
+          "mean_cost": 13.045955607667565
+        },
+        {
+          "alpha": 0.75,
+          "task_pass": 0,
+          "mean_cost": 13.438942587623993
+        },
+        {
+          "alpha": 1,
+          "task_pass": 0,
+          "mean_cost": 10.044935371519792
+        }
+      ]
+    }
+  },
+  "test_data_used": false
+}
