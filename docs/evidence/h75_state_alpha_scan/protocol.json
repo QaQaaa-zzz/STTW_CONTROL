@@ -1,0 +1,149 @@
+{
+  "experiment_id": "H75_STATE_ALPHA_SCAN",
+  "title": "入障前状态与五档alpha配对：5×5自然切换",
+  "evaluation_role": "Fixed-parameter paired mechanism DEV; original H75+Local300; no training",
+  "case_labels": [
+    "0_to_0",
+    "0_to_0.25",
+    "0_to_0.5",
+    "0_to_0.75",
+    "0_to_1",
+    "0.25_to_0",
+    "0.25_to_0.25",
+    "0.25_to_0.5",
+    "0.25_to_0.75",
+    "0.25_to_1",
+    "0.5_to_0",
+    "0.5_to_0.25",
+    "0.5_to_0.5",
+    "0.5_to_0.75",
+    "0.5_to_1",
+    "0.75_to_0",
+    "0.75_to_0.25",
+    "0.75_to_0.5",
+    "0.75_to_0.75",
+    "0.75_to_1",
+    "1_to_0",
+    "1_to_0.25",
+    "1_to_0.5",
+    "1_to_0.75",
+    "1_to_1",
+    "Zero_from_start",
+    "fixed05_duplicate",
+    "fixed1_duplicate"
+  ],
+  "track_wheel_contacts": false,
+  "execution_modes": [
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent",
+    "independent"
+  ],
+  "prefix_alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "target_alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "seeds": [
+    101,
+    102,
+    103
+  ],
+  "terrains": [
+    "dense_corridor",
+    "single_10cm"
+  ],
+  "speeds": [
+    2.3,
+    2.6
+  ],
+  "scenes": 12,
+  "lanes": 336,
+  "episode_s": 10,
+  "max_physics_lane_steps": 16800000,
+  "optimizer_updates": 0,
+  "data_role": "Familiar-layout DEV; physical-group-held-out selector diagnostic",
+  "interpretation": "25 natural prefix/target schedules plus Zero and two duplicates; common original start; switch at original route progress2.5m; no restore",
+  "stop_rule": "12 declared contexts or runtime error; retain native terminations; no extra training/retry",
+  "code_revision": "853fb6131fc463ac3417af7a9d19afada2591c95",
+  "initialization": "frozen H75+Local300; existing saved initial_state",
+  "primary_outcomes": [
+    "termination cause",
+    "full 10s observation",
+    "original goal arrival and final hold",
+    "path and speed errors",
+    "roll peak",
+    "contact impulses",
+    "steering rate and torque occupation"
+  ],
+  "tasks": {
+    "A": {
+      "W_m": 0.3,
+      "speed_rmse_m_s": 0.2
+    },
+    "B": {
+      "W_m": 0.6,
+      "speed_rmse_m_s": 0.1
+    },
+    "C": {
+      "W_m": 0.4,
+      "speed_rmse_m_s": 0.15
+    }
+  },
+  "natural_switch": true,
+  "batch_cases": 12,
+  "max_batch_envs": 4096,
+  "compact_results": true,
+  "retain_physics_contacts": false,
+  "configured_lanes": true,
+  "duplicate_pairs": [
+    [
+      "0.5_to_0.5",
+      "fixed05_duplicate"
+    ],
+    [
+      "1_to_1",
+      "fixed1_duplicate"
+    ]
+  ],
+  "selector_protocol": {
+    "features": "normalized latest measured roll, IMUx, steering angle/rate, speed, path error, heading sin/cos, correction offsets/filters, requested speed; all from before switch",
+    "rule": "3 nearest states in same terrain family, excluding the entire held-out physical group; rank mean task pass then normalized path/speed cost with failure penalty10 then smaller alpha",
+    "roles": "DEV only; not held-out terrain TEST",
+    "stop": "one finite bank; no parameter search or training",
+    "paired_initial_tolerance": "Report maximum XY/measurement pre-switch spread; only exact common switch tick and spreads <=1mm / .001 measurement units enter same-entry selector diagnostic; all episodes retained in overall results"
+  }
+}
