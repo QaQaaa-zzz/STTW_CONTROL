@@ -1,6 +1,10 @@
 """Run a frozen finite evidence queue, release GPU between stages, notify completion."""
-import argparse,json,subprocess,sys,datetime
+import argparse,json,subprocess,sys,datetime,os
 from pathlib import Path
+
+# Background services do not inherit the interactive project import path.
+source=str(Path(__file__).resolve().parents[1]/'src')
+os.environ['PYTHONPATH']=os.pathsep.join(filter(None,(source,os.environ.get('PYTHONPATH'))))
 p=argparse.ArgumentParser();p.add_argument('--queue',type=Path,required=True);p.add_argument('--resume',action='store_true');a=p.parse_args();q=a.queue;plan=json.loads((q/'plan.json').read_text());python=sys.executable
 
 def command(args,log):
