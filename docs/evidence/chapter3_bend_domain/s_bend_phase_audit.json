@@ -1,0 +1,302 @@
+[
+  {
+    "candidate": "s_bend_jump_v1.8_a0.0",
+    "root": 0,
+    "violation_time": 2.36,
+    "violation_phase": "approach",
+    "entry": null,
+    "handoff": null,
+    "end": 15,
+    "remaining_after_handoff": null
+  },
+  {
+    "candidate": "s_bend_jump_v1.5_a0.5",
+    "root": 1,
+    "violation_time": 2.3000000000000003,
+    "violation_phase": "approach",
+    "entry": null,
+    "handoff": null,
+    "end": 15,
+    "remaining_after_handoff": null
+  },
+  {
+    "candidate": "s_bend_jump_v2.6_a0.5",
+    "root": 1,
+    "violation_time": null,
+    "violation_phase": "none",
+    "entry": null,
+    "handoff": null,
+    "end": 3,
+    "remaining_after_handoff": null
+  },
+  {
+    "candidate": "s_bend_jump_v2.3_a0.0",
+    "root": 1,
+    "violation_time": 1.86,
+    "violation_phase": "approach",
+    "entry": null,
+    "handoff": null,
+    "end": 3,
+    "remaining_after_handoff": null
+  },
+  {
+    "candidate": "s_bend_jump_v2.6_a0.0",
+    "root": 1,
+    "violation_time": 1.8,
+    "violation_phase": "approach",
+    "entry": 3.2799999713897705,
+    "handoff": 4.259999752044678,
+    "end": 3,
+    "remaining_after_handoff": 0.14000024795532262
+  },
+  {
+    "candidate": "s_bend_jump_v2.0_a1.0",
+    "root": 0,
+    "violation_time": 2.1,
+    "violation_phase": "approach",
+    "entry": 3.759999990463257,
+    "handoff": 4.779999732971191,
+    "end": 18,
+    "remaining_after_handoff": 3.9800002670288084
+  },
+  {
+    "candidate": "s_bend_jump_v2.0_a0.5",
+    "root": 1,
+    "violation_time": 2.06,
+    "violation_phase": "approach",
+    "entry": 3.93999981880188,
+    "handoff": null,
+    "end": 3,
+    "remaining_after_handoff": null
+  },
+  {
+    "candidate": "s_bend_jump_v2.6_a1.0",
+    "root": 0,
+    "violation_time": null,
+    "violation_phase": "none",
+    "entry": null,
+    "handoff": null,
+    "end": 3,
+    "remaining_after_handoff": null
+  },
+  {
+    "candidate": "s_bend_jump_v1.5_a0.0",
+    "root": 0,
+    "violation_time": 2.3000000000000003,
+    "violation_phase": "approach",
+    "entry": null,
+    "handoff": null,
+    "end": 15,
+    "remaining_after_handoff": null
+  },
+  {
+    "candidate": "s_bend_jump_v1.5_a0.5",
+    "root": 0,
+    "violation_time": 3.7800000000000002,
+    "violation_phase": "approach",
+    "entry": 4.960000038146973,
+    "handoff": null,
+    "end": 3,
+    "remaining_after_handoff": null
+  },
+  {
+    "candidate": "s_bend_jump_v2.0_a0.5",
+    "root": 0,
+    "violation_time": 1.98,
+    "violation_phase": "approach",
+    "entry": 4.0,
+    "handoff": null,
+    "end": 3,
+    "remaining_after_handoff": null
+  },
+  {
+    "candidate": "s_bend_jump_v1.8_a1.0",
+    "root": 1,
+    "violation_time": 2.14,
+    "violation_phase": "approach",
+    "entry": 4.279999732971191,
+    "handoff": null,
+    "end": 9,
+    "remaining_after_handoff": null
+  },
+  {
+    "candidate": "s_bend_jump_v2.3_a1.0",
+    "root": 1,
+    "violation_time": null,
+    "violation_phase": "none",
+    "entry": null,
+    "handoff": null,
+    "end": 3,
+    "remaining_after_handoff": null
+  },
+  {
+    "candidate": "s_bend_jump_v1.5_a0.0",
+    "root": 1,
+    "violation_time": 2.54,
+    "violation_phase": "approach",
+    "entry": null,
+    "handoff": null,
+    "end": 15,
+    "remaining_after_handoff": null
+  },
+  {
+    "candidate": "s_bend_jump_v2.0_a1.0",
+    "root": 1,
+    "violation_time": 2.06,
+    "violation_phase": "approach",
+    "entry": 3.799999952316284,
+    "handoff": 4.759999752044678,
+    "end": 15,
+    "remaining_after_handoff": 1.5200002479553225
+  },
+  {
+    "candidate": "s_bend_jump_v2.6_a1.0",
+    "root": 1,
+    "violation_time": null,
+    "violation_phase": "none",
+    "entry": null,
+    "handoff": null,
+    "end": 3,
+    "remaining_after_handoff": null
+  },
+  {
+    "candidate": "s_bend_jump_v1.5_a1.0",
+    "root": 1,
+    "violation_time": 2.2800000000000002,
+    "violation_phase": "approach",
+    "entry": 5.059999942779541,
+    "handoff": null,
+    "end": 9,
+    "remaining_after_handoff": null
+  },
+  {
+    "candidate": "s_bend_jump_v1.8_a1.0",
+    "root": 0,
+    "violation_time": 2.16,
+    "violation_phase": "approach",
+    "entry": 4.339999675750732,
+    "handoff": null,
+    "end": 3,
+    "remaining_after_handoff": null
+  },
+  {
+    "candidate": "s_bend_jump_v2.3_a0.5",
+    "root": 1,
+    "violation_time": 1.84,
+    "violation_phase": "approach",
+    "entry": 3.419999837875366,
+    "handoff": 4.360000133514404,
+    "end": 3,
+    "remaining_after_handoff": 0.0799998664855961
+  },
+  {
+    "candidate": "s_bend_jump_v1.8_a0.5",
+    "root": 0,
+    "violation_time": 2.18,
+    "violation_phase": "approach",
+    "entry": null,
+    "handoff": null,
+    "end": 15,
+    "remaining_after_handoff": null
+  },
+  {
+    "candidate": "s_bend_jump_v2.0_a0.0",
+    "root": 0,
+    "violation_time": 2.12,
+    "violation_phase": "approach",
+    "entry": 4.039999961853027,
+    "handoff": null,
+    "end": 3,
+    "remaining_after_handoff": null
+  },
+  {
+    "candidate": "s_bend_jump_v2.3_a1.0",
+    "root": 0,
+    "violation_time": 1.94,
+    "violation_phase": "approach",
+    "entry": 3.359999895095825,
+    "handoff": null,
+    "end": 3,
+    "remaining_after_handoff": null
+  },
+  {
+    "candidate": "s_bend_jump_v1.5_a1.0",
+    "root": 0,
+    "violation_time": 2.34,
+    "violation_phase": "approach",
+    "entry": null,
+    "handoff": null,
+    "end": 15,
+    "remaining_after_handoff": null
+  },
+  {
+    "candidate": "s_bend_jump_v1.8_a0.5",
+    "root": 1,
+    "violation_time": 2.2600000000000002,
+    "violation_phase": "approach",
+    "entry": null,
+    "handoff": null,
+    "end": 15,
+    "remaining_after_handoff": null
+  },
+  {
+    "candidate": "s_bend_jump_v2.3_a0.0",
+    "root": 0,
+    "violation_time": null,
+    "violation_phase": "none",
+    "entry": 3.4600000381469727,
+    "handoff": 4.440000057220459,
+    "end": 3,
+    "remaining_after_handoff": 0.7799999427795408
+  },
+  {
+    "candidate": "s_bend_jump_v2.3_a0.5",
+    "root": 0,
+    "violation_time": 1.82,
+    "violation_phase": "approach",
+    "entry": 3.3999998569488525,
+    "handoff": 4.319999694824219,
+    "end": 4,
+    "remaining_after_handoff": 0.18000030517578125
+  },
+  {
+    "candidate": "s_bend_jump_v1.8_a0.0",
+    "root": 1,
+    "violation_time": 2.04,
+    "violation_phase": "approach",
+    "entry": null,
+    "handoff": null,
+    "end": 15,
+    "remaining_after_handoff": null
+  },
+  {
+    "candidate": "s_bend_jump_v2.0_a0.0",
+    "root": 1,
+    "violation_time": 2.22,
+    "violation_phase": "approach",
+    "entry": 4.139999866485596,
+    "handoff": null,
+    "end": 3,
+    "remaining_after_handoff": null
+  },
+  {
+    "candidate": "s_bend_jump_v2.6_a0.0",
+    "root": 0,
+    "violation_time": 1.74,
+    "violation_phase": "approach",
+    "entry": 3.4600000381469727,
+    "handoff": null,
+    "end": 9,
+    "remaining_after_handoff": null
+  },
+  {
+    "candidate": "s_bend_jump_v2.6_a0.5",
+    "root": 0,
+    "violation_time": 2.06,
+    "violation_phase": "approach",
+    "entry": 3.259999990463257,
+    "handoff": null,
+    "end": 3,
+    "remaining_after_handoff": null
+  }
+]
