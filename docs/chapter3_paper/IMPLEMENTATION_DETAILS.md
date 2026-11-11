@@ -1,3 +1,9 @@
+# Two-interface model reproduction entry
+
+Current model: `learning/src/sttw_control/interface_world_model.py`; training: `learning/cli/fit_interface_world_model.py` and `fit_handoff_continuation.py`; online panel: `prepare_interface_online.py` and `analyze_interface_online.py`. Frozen configuration and weights are under `/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_interface_all_routes/upstream_distance` and `downstream_goal_distance`; online raw data are under `chapter3_interface_online/repeat0`, `repeat1`, `repeat2`.
+
+The current world model predicts valid handoff, conditional39D state/time descriptor, and ground-route goal probability. It does not propagate all six historical event targets. The operational physical definitions below remain applicable, while historical event-model targets must not be mistaken for the current output schema.
+
 # Reproduction details: controller and event semantics
 
 These predicates describe the frozen reported implementation, not proposed replacements. Sources: `learning/src/sttw_control/ditch_jump_adapter.py`, `offroad_jump_reward.py`, `ditch_ground_handoff.py`, `torch_middle_control.py`, `torch_path_reward.py`; online configuration `chapter3_offroad_distance_online/config.json` and its pinned `chapter3_long_bend_goal/task.json`.

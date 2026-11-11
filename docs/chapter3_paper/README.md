@@ -1,44 +1,28 @@
 # Chapter 3 English manuscript
 
-**Research-direction update:** this manuscript is retained as the historical event-chain execution baseline. The two-interface planning method remains incomplete. A first downstream continuation predictor has now been fitted offline; its grouped and historical-transfer results, including a negative source-transfer result, are in [the new evidence](../evidence/chapter3_continuation_model/RESULTS.md). The upstream handoff distribution and composed online execution remain pending. See [revised design](../CHAPTER3_EVENT_WORLD_MODEL.md) and [stage/init/repeatability audit](../evidence/chapter3_handoff_audit/RESULTS.md). The earlier minimal-loop acceptance concerns engineering execution only, not validation of the new research question. Abstract/introduction are not rewritten as if the proposed method existed.
+**Current draft:** [PDF](MANUSCRIPT.pdf) · [editable LaTeX](MANUSCRIPT.tex). The main paper now describes the implemented two-interface model, rather than the earlier serial event-chain prototype. This is a research draft, not a submission-ready or superior-planning claim.
 
-**Current-stage scope:** the minimal predictive-planning execution loop is complete. Baseline superiority is not an acceptance condition; further optimization experiments are deferred. This does not imply journal acceptance or broad robustness.
+The scope is frozen STTW/jump composition on a known off-road map: query state and candidates → valid handoff/state distribution → conditional full-goal continuation → actual moving selection and execution. Ground routes have a separate output head sharing the upstream trunk. No empirical recoverability margin, new downstream corridor generalization, true-history warm start, or repeated feedback replanning is claimed.
 
-**Current paper:** [PDF](MANUSCRIPT.pdf) · [editable LaTeX](MANUSCRIPT.tex). This is the authoritative English research draft; `docs/CHAPTER3_MANUSCRIPT.md/.docx` retain the earlier Chinese working report.
+## Evidence and reading order
 
-The manuscript follows the official RA-L initial-submission two-column US Letter template. The downloaded `ieeeconf.cls` comes from the [template linked by IEEE RAS](https://ras.papercept.net/conferences/support/files/ieeeconf.zip); current guidance was opened on 2026-11-11 UTC at [RA-L Information for Authors](https://www.ieee-ras.org/publications/ra-l/ra-l-information-for-authors/). Formatting is a drafting choice, not a claim of acceptance or submission readiness. The current eight-page draft uses the published maximum rather than the six-page standard length; final venue choice and author approval remain outstanding.
+- [All 270 actual/reference XY trajectories and online results](../evidence/chapter3_interface_online/RESULTS.md): 30 independent roots, three repetitions; interface15/90, direct33/90, distance41/90. The 33 interface detours all time out.
+- [Model inputs, outputs and training curves](../evidence/chapter3_interface_model/RESULTS.md): 582-dimensional input, conditional39-dimensional handoff descriptor, grouped1379TRAIN/540DEV executions. DEV completion Brier0.11520; conditional handoff position RMSE0.1317m.
+- [Labels and all-route handoff evidence](../evidence/chapter3_interface_labels/RESULTS.md), [earlier continuation pilot](../evidence/chapter3_continuation_model/RESULTS.md), and [stage/init audit](../evidence/chapter3_handoff_audit/RESULTS.md) establish what the labels do and do not measure.
+- [Review and remaining gaps](REVIEW.md), [controller/event definitions](IMPLEMENTATION_DETAILS.md), and [current research design](../CHAPTER3_EVENT_WORLD_MODEL.md).
 
-## What is now in the paper
+The paper separates abstract, motivation, prior work, task, mathematical model, supervised training, candidate execution, experimental protocol, results, discussion and conclusion. Figures show actual handoff predictions, optimization curves and all online XY outcomes. Earlier event-chain manuscript versions remain in Git history; immutable experimental evidence remains linked from the source manifest.
 
-- Sections III–V: task/control interface, 30-D state and 11-D action encoding, terrain, six prescribed event transitions, three-head residual network, every output, masked training objective, training settings, particle rollout score and actual publication protocol.
-- Sections VI–VII: grouped TRAIN/DEV/TEST roles, conditional versus autoregressive predictions, training-loss figure, predicted/observed state and time figures, frozen TEST evaluation, physical route coverage, online outcomes and costs.
-- The main paper contains six figures: architecture, map, optimization, state outputs, event-time outputs, online forecasts/execution. Velocity/attitude and positive/negative probability plots remain in the [output evidence](../evidence/chapter3_event_outputs/README.md).
-- [Claim and gap review](REVIEW.md) distinguishes the now-supported contribution from stronger claims that still need experiments.
-
-[Operational event/controller definitions](IMPLEMENTATION_DETAILS.md) specify contact thresholds, flight debounce, handoff, failure limits and α semantics.
-
-## Build
-
-From this worktree root:
+## Build and traceability
 
 ```bash
 python3 docs/chapter3_paper/build.py
 ```
 
-All included figure files are versioned under `docs/evidence/`; no simulator or model is needed to compile the draft. Raw physics and frozen models remain on the experiment disk. [Source manifest](source_manifest.json) records experiment inputs, citation URLs and verification status. [Claim map](claims.csv) binds central claims to source locations. Software checks are not accountable human verification; author verification is pending, and `submission_ready` is false.
-
-## New evidence produced for this revision
-
-- [World-model output figures and 2666 DEV predictions](../evidence/chapter3_event_outputs/README.md): architecture, six recorded loss pairs, occurrence probabilities, time/state outputs, root3 early/middle/late forecasts including failure.
-- [Frozen event-model TEST evaluation](../evidence/chapter3_event_frozen_test/RESULTS.md): 240 executed candidates from four out-of-training roots, no refitting, no new physics. Main/shared autoregressive Brier 0.09570/0.11455; TRAIN-rate baseline0.12160. Both models' handoff occurrence errors are worse than a nearly certain constant.
-- [Previous online execution](../evidence/chapter3_offroad_distance_online/RESULTS.md): 36 actual trajectories, event/direct/rule5/12,5/12,6/12. No new online benefit claim is introduced by the frozen prediction evaluation.
+The local IEEE two-column template is retained from the earlier draft; current venue submission requirements must be rechecked at submission. The build receipt records actual page count and layout checks. Figures are versioned; no simulation or weights are needed to compile. Source and claim manifests distinguish current evidence from historical evidence and keep human verification pending. No new physics or policy training was performed for this manuscript revision.
 
 ## Author-review and tooling notes
 
 Author identity, affiliations, funding/conflicts, formal citations for the project's STTW/RecoveryBridge methods, repository disclosure scope and publisher-required AI disclosure remain for accountable human review. No author, funding, ethics approval, submission date or acceptance claim has been fabricated. The methods are implemented simulator methods, not a hardware validation.
 
 Scientific-writing and scientific-visualization skills guided the revision, and three delegated agents audited implementation, evaluated gaps and produced frozen prediction evidence. The manuscript text and analysis were AI-assisted and remain subject to author verification. Procedural skill attribution: T. Kassis, V. Agarwal, Y. He, D. Patel, and A. M. Brueckner, *Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents*, 2026, [arXiv:2609.00065](https://arxiv.org/abs/2609.00065), [DOI](https://doi.org/10.48550/arXiv.2609.00065). Metadata was checked against the arXiv record; this is a tooling citation, not robotics evidence.
-
-Supplement: [frozen candidate rankings and all selected XY trajectories](../evidence/chapter3_event_frozen_test/RANKING.md). Three-head/shared-head select 4/4 versus 0/4 successful stored branches; fixed detour also 4/4. Candidate publication states differ, so this is not an exact common-state or new online comparison.
-
-[Actual shared-head online ablation](../evidence/chapter3_shared_head_online/RESULTS.md): 36 Isaac trajectories; three-head/shared-head/rule5/12,1/12,8/12. Distinct from the earlier direct-classifier comparison; no training.

@@ -1,13 +1,10 @@
 {
-  "pages": 8,
+  "pages": 6,
   "format": "US Letter, official ieeeconf initial-submission template",
   "figures": [
-    "chapter3_paper/../evidence/chapter3_event_outputs/model_architecture.pdf",
-    "chapter3_paper/../evidence/chapter3_offroad_event_training/map_overview.png",
-    "chapter3_paper/../evidence/chapter3_event_outputs/training_loss.pdf",
-    "chapter3_paper/../evidence/chapter3_event_outputs/event_state_predictions.pdf",
-    "chapter3_paper/../evidence/chapter3_event_outputs/event_time_predictions.pdf",
-    "chapter3_paper/../evidence/chapter3_event_outputs/online_event_chain.pdf"
+    "chapter3_paper/../evidence/chapter3_interface_model/handoff_outputs.png",
+    "chapter3_paper/../evidence/chapter3_interface_model/training.png",
+    "chapter3_paper/../evidence/chapter3_interface_online/xy_all.png"
   ],
   "overfull_boxes": false,
   "submission_ready": false,

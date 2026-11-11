@@ -6,7 +6,7 @@ p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('--engine',default=str(Path.home()/'.local/bin/tectonic'))
 a=p.parse_args();here=Path(__file__).resolve().parent
 source=(here/'MANUSCRIPT.tex').read_text()
-paths=[here/'../evidence/chapter3_event_outputs',here/'../evidence/chapter3_offroad_event_training',here/'../evidence/chapter3_offroad_distance_online/plots']
+paths=[here/d for d in re.findall(r'\{([^{}]+/)\}',source.split(r'\graphicspath',1)[1].splitlines()[0])]
 figures=re.findall(r'\\includegraphics\[[^]]+\]\{([^}]+)\}',source)
 resolved=[next((d/name for d in paths if (d/name).is_file()),None) for name in figures]
 assert all(resolved),'Missing figure input'

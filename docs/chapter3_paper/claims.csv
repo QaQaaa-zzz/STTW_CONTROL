@@ -1,10 +1,11 @@
 claim_id,section,claim_summary,evidence_ids,human_verification
-C1,IV-A--IV-C,"30D state,11D plan,128D terrain,three62D heads;35770parameters",M1,pending
-C2,IV-D,Masked state/time loss and600Adamupdates; grouped TRAIN/DEV,"M2,E2",pending
-C3,V,"32particle score, overlapping road semantics, propagated measuredlatency","M1,M3",pending
-C4,VII-A,122/720 coverage;44straight20S58bypass0right-angle,E1,pending
-C5,VII-B,2666DEV transitions; conditional outputs and actual6pointloss,"E2,E5",pending
-C6,VII-C,TEST240/4roots;34success;Brier.09570/.11455/.12160,"E6,E7",pending
-C7,VII-D,"online5/12,5/12,6/12; only4independentroots",E3,pending
-C8,VII-D,root3early/mid/late forecast scores.6874/.3659/.1971,E5,pending
-C9,VII-D,RB34/240vs35/240;13gains12losses,E8,pending
+C1,Abstract;IV,582D input;39D conditional target;80 outputs,"IM1,IM2",pending
+C2,IV,Gaussian plus two BCE objectives;250epochs;groupedDEV selection,IM2,pending
+C3,IV,Downstream39-64-32-1;200epochs;conditional full-goal target,"IM3,I5",pending
+C4,V,32samples per upstream member;valid-handoff times conditional goal,IM1,pending
+C5,VI;VII,1379TRAIN/540DEV;Brier and state prediction errors,I1,pending
+C6,Abstract;VII,"30roots;270episodes;15/90,33/90,41/90",I2,pending
+C7,VII,13gains39losses;root bootstrap;recorded query equality,I2,pending
+C8,VII,33detour timeouts;TRAIN0/20 with forecast.238,"I2,I4",pending
+C9,VII,Approach and posthandoff failures both present,I3,pending
+C10,VIII,RB34/240 versus35/240 remains full-task comparison,E8,pending

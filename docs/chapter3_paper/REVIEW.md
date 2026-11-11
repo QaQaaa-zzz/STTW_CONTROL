@@ -1,3 +1,11 @@
+# Current manuscript review
+
+The English main text has now been rewritten around the implemented two-interface model and the frozen270-episode online panel. It explicitly reports15/90 versus33/90 and41/90, the ground-route ranking failure, shared ground-head training, conditional-state masking, complete-task probability composition and grouped selection.
+
+Remaining research gaps: independently isolate ground-head fitting; validate task-dependent downstream width/curvature; measure empirical rescue/margin labels if retained as a claim; test genuine history initialization; evaluate repeated replanning. None is described as completed. The current30 online roots become development if used for a correction. Human source/citation and author review remain pending. No baseline-superiority or certified-recoverability claim is accepted.
+
+## Historical review trail (superseded status statements retained below)
+
 ## Full two-interface execution now measured
 
 Training/output evidence: ../evidence/chapter3_interface_model/RESULTS.md. Frozen30-root,three-repeat execution: ../evidence/chapter3_interface_online/RESULTS.md. Completion15/90(interface),33/90(direct),41/90(rule). All33 interface detours time out; the ground head assigns substantial probability to a0/20 TRAIN action. Do not claim a winning planner or treat13 gains without39 losses as net benefit. The paper can now describe actual upstream distribution learning,downstream conditional goal learning,and composed physical execution. Ground-head correction,if attempted,must be bounded and retain this failed version;these roots become development for any subsequent modification. No changed downstream geometry or recovery-margin evidence exists.
