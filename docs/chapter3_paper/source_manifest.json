@@ -131,6 +131,14 @@
       "sha256": "805b6bb1ec987b9433b1d16a5ff9901f9300664e363913e2154ed938e805f4ab",
       "verification": "agent_source_inspected",
       "human_verification": "pending"
+    },
+    {
+      "id": "E10",
+      "title": "Actual online shared-head comparison",
+      "path": "docs/evidence/chapter3_shared_head_online/results.json",
+      "sha256": "e7b31e82fe0e72d4714b26a9fec284fa1f8446cb37124ca064ced2b3bde4f086",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending"
     }
   ],
   "references": [
@@ -174,5 +182,5 @@
   "scope": "English robotics research draft; no claim of journal acceptance",
   "new_physics_steps": 0,
   "new_policy_training_updates": 0,
-  "paper_sha256": "400332962084265d3eb71a752999727951fe1d564a068e56be914e391eb202dd"
+  "paper_sha256": "5aba2c92588fa679d273e1c98a6ce61de17f102a3e1f41c991d92e6c62e8b02d"
 }

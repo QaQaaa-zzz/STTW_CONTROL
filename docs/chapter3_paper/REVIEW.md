@@ -34,3 +34,5 @@ Final review additionally requested explicit contact/failure predicates and a co
 If continuing beyond this draft, first make the completion-score semantics and remaining-time input explicit, keeping the same map/skills/actions and a frozen new-root evaluation. Then compare a direct classifier, event model and an event-free transition alternative at the same observed-state inputs. Preserve the original method as control. No further bottom-level PPO campaign is required to expose this predictive-planning question.
 
 Follow-up completed: saved TEST ranking diagnostic connects model scores to branch choices (three-head4/4, shared0/4, fixed detour4/4). Small candidate-state differences preclude a causal common-state claim; the need for matched online decision comparison remains. See `../evidence/chapter3_event_frozen_test/RANKING.md`.
+
+Online head ablation now executed: three-head5/12, shared1/12, TRAIN rule8/12 across four previously inspected roots at three positions. This closes the absence of actual shared-head execution, not capacity control, untouched confirmation or superiority over the rule.

@@ -1,0 +1,16 @@
+{
+  "budget": "36 lanes x 10s, 144000 physics lane steps; 0 PPO; wall timeout 25 minutes",
+  "methods": [
+    "event_model",
+    "shared_head",
+    "geometry_rule"
+  ],
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_offroad_distance_online",
+  "invariants": "Same frozen map, roots, speed-alpha candidates, skills, horizon and measured-latency execution; only direct classifier replaced by frozen shared-head model",
+  "role": "Previously inspected root conditions, no confirmatory or exact-common-state claim",
+  "git_revision": "09774b741bb9476bc3121c3d997899b4d868e0e4",
+  "checkpoint_sha256": {
+    "event": "da20800289216a0cd568e407f37d1bb2af3bd5d623b77507e9201b5a35f9eba7",
+    "shared": "66994b9fddd1fcfc5ec96a3f0d55aee0b9546ebf30b0d8cf8df8a01a30bf3eee"
+  }
+}

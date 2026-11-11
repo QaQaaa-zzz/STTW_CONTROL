@@ -240,6 +240,8 @@ Mean query time across positions is 49.4--53.7~ms for the event model, 3.2--3.5~
 
 A separate skill comparison substitutes RB400 on 4 starts$\times$60 candidates. Original and RB400 skills complete 34/240 and 35/240, with 13 gained and 12 lost successes; S-bend completion is 5/60 for both. This motivates skill-conditioned evaluation but does not demonstrate a robustly expanded capability domain. RB400 is not required for the main pipeline.
 
+\paragraph{Online output-head comparison} An additional 36-trajectory run replaces the direct classifier with the frozen shared-head model on the same four declared root conditions and three query positions. Three-head/shared-head/rule complete 5/12, 1/12, and 8/12, respectively. The three-head model gains five and loses one paired root-position condition relative to shared-head. Early-query outcomes are 4/4 versus 0/4; middle-query outcomes are 0/4 versus 1/4. This descriptive difference links model structure to executed choices, but parameter counts and inference delays differ. The rule remains stronger overall. This separate run takes 83.73~s and 144,000 physical environment steps; it does not replace Table~\ref{tab:online}.
+
 \section{Discussion}
 The evidence supports three distinct statements. Frozen controllers complete ground-only and jump--ground tasks on the same terrain. A compact model predicts intermediate states/times and exposes errors hidden by a final label. Candidate scores are connected to actual publication and physical execution. Together these establish a working predictive planning interface, independently of whether it improves completion over a rule.
 
