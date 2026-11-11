@@ -25,7 +25,7 @@ rows=[]
 for case in cases:
  result=summary['cases'][case['lane']];rows.append(dict(**case,result=result))
 (a.output/'cases.json').write_text(json.dumps(rows,indent=2))
-text='# 越野任务地图与首次全候选执行\n\n![全部实际/参考XY](xy.png)\n\n![物理高程与路线](map_overview.png)\n\n四条路线共享同地图、同目标：直线跨沟、S弯接近跨沟、圆角90度弯接近跨沟、连续地面绕行。五速度1.5/1.8/2.0/2.3/2.6m/s来自STTW既有配置；α0/.5/1。共60候选×2初态=120条探索性DEV，不是独立泛化统计。候选在x1.8m实际发布，旧世界模型仅加载共用入口，不为新地图评分。原道路半宽0.6m、目标和失败判据保留；跳跃使用heading125，首次远岸接触后交回STTW。\n\n地形：真实30cm开口沟；沟外1–4mm圆顶石子（碰撞高度网格而非视觉装饰），2cm及8cm脊坡；x8.5–12m平整跳跃区。同高两岸，无整体高岸。碰撞网格水平分辨率约2.5cm，高程图5cm、单位米，沟缺口保留NaN及support=false；图显示厘米。圆角90度路径半径0.65m，不要求车辆瞬间转向。\n\n|路线|速度m/s|α0 /2|α0.5 /2|α1 /2|\n|---|---:|---:|---:|---:|\n'
+text='# 越野任务地图与首次全候选执行\n\n![全部实际/参考XY](xy.png)\n\n![物理高程与路线](map_overview.png)\n\n四条路线共享同地图、同目标：直线跨沟、S弯接近跨沟、圆角90度弯接近跨沟、连续地面绕行。五速度1.5/1.8/2.0/2.3/2.6m/s来自STTW既有配置；α0/.5/1。共60候选×2初态=120条探索性DEV，不是独立泛化统计。候选在x1.8m实际发布，旧世界模型仅加载共用入口，不为新地图评分。原道路半宽0.6m、目标和失败判据保留；跳跃使用heading125，首次远岸接触后交回STTW。\n\n地形：真实30cm开口沟；沟外1–4mm圆顶石子（碰撞高度网格而非视觉装饰），2cm及8cm脊坡；x8.5–12m平整跳跃区。同高两岸，无整体高岸。碰撞网格水平分辨率约2.5cm，高程图5cm、单位米，沟缺口保留NaN及support=false；图显示厘米。圆角90度路径半径见本运行map_contract.json，不要求车辆瞬间转向。\n\n|路线|速度m/s|α0 /2|α0.5 /2|α1 /2|\n|---|---:|---:|---:|---:|\n'
 for i,name in enumerate(names):
  for j,speed in enumerate(speeds):
   totals=[sum(c['result']['success'] for c in rows if c['candidate_id']==i*per+j*len(alphas)+k) for k in range(len(alphas))];text+=f'|{name}|{speed}|'+ '|'.join(map(str,totals))+'|\n'

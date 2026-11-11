@@ -7,9 +7,10 @@ from sttw_control.ditch_event_model import route_parameters,KnownHeightMap
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('--source',type=Path,required=True);p.add_argument('--spec',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();a.output.mkdir(exist_ok=False,parents=True)
 spec=json.loads(a.spec.read_text());cfg=json.loads((a.source/'config.json').read_text());old=np.load(cfg['ground_handoff']['reference_path']);s=old['s'];dense_x=np.linspace(-5,50,22001)
 # An S curve returns to the same straight jump corridor before x=9.
-t=np.clip((dense_x-2.5)/6,0,1);sy=1.1*np.sin(2*np.pi*t)*np.sin(np.pi*t)**2
+geometry=spec.get('route_geometry',{});lo,hi=geometry.get('s_interval_m',[2.5,8.5]);t=np.clip((dense_x-lo)/(hi-lo),0,1);sy=geometry.get('s_amplitude_m',1.1)*np.sin(2*np.pi*t)*np.sin(np.pi*t)**2
 # Fillet a rectangular offset with actual 90 degree changes of tangent.
-vertices=np.array([[-5,0],[3.2,0],[3.2,2.2],[6.8,2.2],[6.8,0],[50,0]],float);rounded=[vertices[0]];radius=.65
+offset=geometry.get('corner_offset_m',2.2);exit_x=geometry.get('corner_exit_x_m',6.8)
+vertices=np.array([[-5,0],[3.2,0],[3.2,offset],[exit_x,offset],[exit_x,0],[50,0]],float);rounded=[vertices[0]];radius=geometry.get('corner_radius_m',.65)
 for i in range(1,len(vertices)-1):
  u=vertices[i]-vertices[i-1];u/=np.linalg.norm(u);v=vertices[i+1]-vertices[i];v/=np.linalg.norm(v)
  start=vertices[i]-radius*u;end=vertices[i]+radius*v;center=start+radius*v
