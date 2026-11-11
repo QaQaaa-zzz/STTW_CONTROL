@@ -34,4 +34,4 @@ for path in sorted(a.source.glob('*_seed*.npz')):
  xy.legend(fontsize=7)
  fig.suptitle(path.stem+' | original frozen H75 + Local300\nCircle/square: first raised front/rear contact; full XY, event-time detail')
  name=path.stem+'_comparison.png';fig.savefig(a.output/name,dpi=140);plt.close(fig);lines+=['## '+path.stem,'','![]('+name+')','']
-(a.output/'FIGURES.md').write_text('\n'.join(lines)+'\n');print('case figures',len(list(a.output.glob('*_comparison.png'))))
+(a.output/'FIGURES.md').write_text('\n'.join(lines).rstrip()+'\n');print('case figures',len(list(a.output.glob('*_comparison.png'))))
