@@ -6,7 +6,7 @@ from torch import nn
 
 
 class HandoffContinuationModel:
-    """Predict observed two-second continuation; not full-goal feasibility.
+    """Predict the checkpoint-declared continuation or full-goal outcome.
 
     Scope: original cold ground reset,1.5m/s,alpha0.5,straight road and
     the declared source terrain/controller. Future terrain/initializer changes
@@ -24,8 +24,12 @@ class HandoffContinuationModel:
         if len(self.models)!=3:raise ValueError('Expected three frozen ensemble members')
 
     @torch.no_grad()
-    def predict(self, root, current_observation, physical_time_s):
+    def predict(self, root, current_observation, physical_time_s, task_context=None):
         features=np.concatenate((root,current_observation[:,50:75],np.asarray(physical_time_s).reshape(-1,1)),axis=1).astype(np.float32)
+        if task_context is not None:
+            features=np.concatenate((features,task_context),axis=1).astype(np.float32)
+        if features.shape[1]!=len(self.mean):
+            raise ValueError('Handoff features must match the checkpoint task-context schema')
         normalized=torch.from_numpy((features-self.mean)/self.std)
         samples=np.stack([torch.sigmoid(model(normalized[:,columns]).squeeze(-1)).numpy() for model,columns in self.models])
         key='continuation_probability' if self.target=='continuation' else 'conditional_goal_probability'

@@ -235,6 +235,14 @@
       "sha256": "94b533b888c90c08ecee7d8b403d3f5db894b63782511b7c4b7c870193c8f9a4",
       "verification": "agent_source_inspected",
       "human_verification": "pending"
+    },
+    {
+      "id": "I10",
+      "title": "Task-conditioned data and model",
+      "path": "docs/evidence/chapter3_task_condition_model/results.json",
+      "sha256": "3d98f501fce0a9db275ff98a3f9ae04a92270db61e8d6b1da005575e37b82060",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending"
     }
   ],
   "references": [
@@ -278,6 +286,6 @@
   "scope": "English robotics research draft; no claim of journal acceptance",
   "new_physics_steps": 0,
   "new_policy_training_updates": 0,
-  "paper_sha256": "51574facea4e30c6a53e831ef3be780a0bc67a883526b607cb9472fe0d2c4473",
+  "paper_sha256": "427d793d2d9830bcedfec368c7e876e0310805da9f501232c0aaabe39a34065a",
   "revision_scope": "Two-interface manuscript; earlier evidence retained as historical provenance"
 }

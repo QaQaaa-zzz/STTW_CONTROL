@@ -1,3 +1,7 @@
+## Task-conditioned extension fitted; online use still pending
+
+540 new full-prefix executions provide366 valid handoff labels (234TRAIN/132DEV,8/4root split). The58D task-conditioned ensemble uses actual downstream geometric samples,not task IDs. DEV Brier0.10827 versus same-data state-only0.10290; no superiority. On the previously inspected4matched historical sources,it scores different tasks differently but ranks straight first in all4,missing source7's left-only success. Preserve this negative ranking result. Runtime reload parity1.49e-8; no online choice claim yet. Evidence: ../evidence/chapter3_task_condition_model/RESULTS.md.
+
 ## Bounded ground-head correction completed without improvement
 
 Independent ground-only fitting improves DEV Brier slightly but not historical transfer. Actual DEVELOPMENT_RETEST270 episodes: interface14/90,direct30/90,rule42/90;29 chosen detours all time out. Only4/90 decisions change from the original panel. Keep original15/90 main panel and this failed correction; do not continue an unbounded fitting search. See ../evidence/chapter3_interface_ground_online/RESULTS.md. Task-dependent downstream recoverability remains unvalidated.

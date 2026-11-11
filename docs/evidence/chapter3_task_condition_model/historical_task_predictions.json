@@ -1,0 +1,77 @@
+{
+  "scope": "Historical4 matched handoff sources already inspected during design; no selection or refit; descriptive only,not independent TEST/online execution",
+  "cases": [
+    {
+      "source": 1,
+      "variant": "straight",
+      "predicted_goal": 0.41480913758277893,
+      "actual_goal": true
+    },
+    {
+      "source": 3,
+      "variant": "straight",
+      "predicted_goal": 0.2697242796421051,
+      "actual_goal": true
+    },
+    {
+      "source": 5,
+      "variant": "straight",
+      "predicted_goal": 0.1630450040102005,
+      "actual_goal": false
+    },
+    {
+      "source": 7,
+      "variant": "straight",
+      "predicted_goal": 0.10654657334089279,
+      "actual_goal": false
+    },
+    {
+      "source": 1,
+      "variant": "left",
+      "predicted_goal": 0.2787477672100067,
+      "actual_goal": false
+    },
+    {
+      "source": 3,
+      "variant": "left",
+      "predicted_goal": 0.1518591046333313,
+      "actual_goal": true
+    },
+    {
+      "source": 5,
+      "variant": "left",
+      "predicted_goal": 0.1559382826089859,
+      "actual_goal": false
+    },
+    {
+      "source": 7,
+      "variant": "left",
+      "predicted_goal": 0.07640429586172104,
+      "actual_goal": true
+    },
+    {
+      "source": 1,
+      "variant": "right",
+      "predicted_goal": 0.2788451015949249,
+      "actual_goal": true
+    },
+    {
+      "source": 3,
+      "variant": "right",
+      "predicted_goal": 0.14715920388698578,
+      "actual_goal": false
+    },
+    {
+      "source": 5,
+      "variant": "right",
+      "predicted_goal": 0.0607641227543354,
+      "actual_goal": false
+    },
+    {
+      "source": 7,
+      "variant": "right",
+      "predicted_goal": 0.04429739713668823,
+      "actual_goal": false
+    }
+  ]
+}
