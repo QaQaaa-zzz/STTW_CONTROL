@@ -46,11 +46,11 @@ result['by_family']={family:{t:{m:sum(x['tasks'][t] for x in rows if x['case'].s
 result['physical_outcomes']={m:dict(n=sum(x['label']==m for x in rows),full=sum(not x['failed'] for x in rows if x['label']==m),hold=sum(x['final_hold'] for x in rows if x['label']==m)) for m in spec['case_labels']}
 flat=[{**{k:v for k,v in x.items() if k!='tasks'},**{'task_'+t:x['tasks'][t] for t in 'ABC'}} for x in rows]
 with (o/'episode_metrics.csv').open('w') as f:
- w=csv.DictWriter(f,fieldnames=list(flat[0]));w.writeheader();w.writerows(flat)
+ w=csv.DictWriter(f,fieldnames=list(flat[0]),lineterminator="\n");w.writeheader();w.writerows(flat)
 (o/'summary.json').write_text(json.dumps(result,indent=2))
 for name,data in [('paired_choices.csv',pairs),('group_layout_counts.csv',cells),('same_alpha_pairs.csv',same_alpha)]:
  fields=list(dict.fromkeys(k for x in data for k in x))
- with (o/name).open('w') as f:w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(data)
+ with (o/name).open('w') as f:w=csv.DictWriter(f,fieldnames=fields,lineterminator="\n");w.writeheader();w.writerows(data)
 plt.rcParams.update({'font.size':11,'axes.spines.top':False,'axes.spines.right':False,'savefig.dpi':170})
 colors=['#0072B2','#56B4E9','#009E73','#E69F00','#D55E00','#777777','#332288','#CC79A7'];fig,axes=plt.subplots(1,3,figsize=(14,4.5),layout='constrained')
 for ax,t in zip(axes,'ABC'):
