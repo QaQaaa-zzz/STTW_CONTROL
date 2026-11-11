@@ -1,0 +1,194 @@
+{
+  "train_route_rates": {
+    "ground_detour": {
+      "n": 180,
+      "rate": 0.21666666666666667
+    },
+    "right_angle_jump": {
+      "n": 180,
+      "rate": 0.0
+    },
+    "s_bend_jump": {
+      "n": 270,
+      "rate": 0.13333333333333333
+    },
+    "straight_jump": {
+      "n": 269,
+      "rate": 0.19330855018587362
+    }
+  },
+  "route_lookup_brier": 0.1114137651267027,
+  "event_brier": 0.09570267458179038,
+  "constant_brier": 0.12159738109702906,
+  "scope": "Same frozen240 TEST predictions; route rates computed from1199 publication collection TRAIN roots only. No tuning.",
+  "rule_repeats": [
+    {
+      "root": 1,
+      "x": 3.0,
+      "old_success": true,
+      "new_success": true,
+      "old_choice": 22,
+      "new_choice": 22,
+      "old_code": 13,
+      "new_code": 13,
+      "old_delay": 0.02,
+      "new_delay": 0.02,
+      "query_root_max_abs_difference": 0.0,
+      "published_root_max_abs_difference": 0.0
+    },
+    {
+      "root": 3,
+      "x": 5.0,
+      "old_success": false,
+      "new_success": false,
+      "old_choice": 4,
+      "new_choice": 4,
+      "old_code": 3,
+      "new_code": 4,
+      "old_delay": 0.02,
+      "new_delay": 0.02,
+      "query_root_max_abs_difference": 0.0,
+      "published_root_max_abs_difference": 0.0
+    },
+    {
+      "root": 1,
+      "x": 5.0,
+      "old_success": false,
+      "new_success": true,
+      "old_choice": 4,
+      "new_choice": 4,
+      "old_code": 3,
+      "new_code": 13,
+      "old_delay": 0.02,
+      "new_delay": 0.02,
+      "query_root_max_abs_difference": 0.0,
+      "published_root_max_abs_difference": 0.0
+    },
+    {
+      "root": 2,
+      "x": 3.0,
+      "old_success": false,
+      "new_success": true,
+      "old_choice": 22,
+      "new_choice": 22,
+      "old_code": 18,
+      "new_code": 13,
+      "old_delay": 0.02,
+      "new_delay": 0.02,
+      "query_root_max_abs_difference": 0.0,
+      "published_root_max_abs_difference": 0.0
+    },
+    {
+      "root": 0,
+      "x": 5.0,
+      "old_success": false,
+      "new_success": false,
+      "old_choice": 4,
+      "new_choice": 4,
+      "old_code": 4,
+      "new_code": 4,
+      "old_delay": 0.02,
+      "new_delay": 0.02,
+      "query_root_max_abs_difference": 0.0,
+      "published_root_max_abs_difference": 0.0
+    },
+    {
+      "root": 2,
+      "x": 5.0,
+      "old_success": true,
+      "new_success": true,
+      "old_choice": 4,
+      "new_choice": 4,
+      "old_code": 13,
+      "new_code": 13,
+      "old_delay": 0.02,
+      "new_delay": 0.02,
+      "query_root_max_abs_difference": 0.0,
+      "published_root_max_abs_difference": 0.0
+    },
+    {
+      "root": 2,
+      "x": 1.8,
+      "old_success": true,
+      "new_success": true,
+      "old_choice": 48,
+      "new_choice": 48,
+      "old_code": 13,
+      "new_code": 13,
+      "old_delay": 0.02,
+      "new_delay": 0.02,
+      "query_root_max_abs_difference": 0.0,
+      "published_root_max_abs_difference": 0.0
+    },
+    {
+      "root": 1,
+      "x": 1.8,
+      "old_success": true,
+      "new_success": true,
+      "old_choice": 48,
+      "new_choice": 48,
+      "old_code": 13,
+      "new_code": 13,
+      "old_delay": 0.02,
+      "new_delay": 0.02,
+      "query_root_max_abs_difference": 0.0,
+      "published_root_max_abs_difference": 0.0
+    },
+    {
+      "root": 0,
+      "x": 1.8,
+      "old_success": true,
+      "new_success": true,
+      "old_choice": 48,
+      "new_choice": 48,
+      "old_code": 13,
+      "new_code": 13,
+      "old_delay": 0.02,
+      "new_delay": 0.02,
+      "query_root_max_abs_difference": 0.0,
+      "published_root_max_abs_difference": 0.0
+    },
+    {
+      "root": 0,
+      "x": 3.0,
+      "old_success": false,
+      "new_success": false,
+      "old_choice": 22,
+      "new_choice": 22,
+      "old_code": 3,
+      "new_code": 3,
+      "old_delay": 0.02,
+      "new_delay": 0.02,
+      "query_root_max_abs_difference": 0.0,
+      "published_root_max_abs_difference": 0.0
+    },
+    {
+      "root": 3,
+      "x": 3.0,
+      "old_success": false,
+      "new_success": false,
+      "old_choice": 22,
+      "new_choice": 22,
+      "old_code": 3,
+      "new_code": 3,
+      "old_delay": 0.02,
+      "new_delay": 0.02,
+      "query_root_max_abs_difference": 0.0,
+      "published_root_max_abs_difference": 0.0
+    },
+    {
+      "root": 3,
+      "x": 1.8,
+      "old_success": true,
+      "new_success": true,
+      "old_choice": 48,
+      "new_choice": 48,
+      "old_code": 13,
+      "new_code": 13,
+      "old_delay": 0.02,
+      "new_delay": 0.02,
+      "query_root_max_abs_difference": 0.0,
+      "published_root_max_abs_difference": 0.0
+    }
+  ]
+}

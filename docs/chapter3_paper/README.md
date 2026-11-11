@@ -1,5 +1,7 @@
 # Chapter 3 English manuscript
 
+**Research-direction update:** this manuscript is retained as the historical event-chain execution baseline. The new handoff-recoverability hypothesis and proposed two-interface model are not implemented results. See [revised design](../CHAPTER3_EVENT_WORLD_MODEL.md) and [stage/init/repeatability audit](../evidence/chapter3_handoff_audit/RESULTS.md). The earlier minimal-loop acceptance concerns engineering execution only, not validation of the new research question. Abstract/introduction are not rewritten as if the proposed method existed.
+
 **Current-stage scope:** the minimal predictive-planning execution loop is complete. Baseline superiority is not an acceptance condition; further optimization experiments are deferred. This does not imply journal acceptance or broad robustness.
 
 **Current paper:** [PDF](MANUSCRIPT.pdf) · [editable LaTeX](MANUSCRIPT.tex). This is the authoritative English research draft; `docs/CHAPTER3_MANUSCRIPT.md/.docx` retain the earlier Chinese working report.

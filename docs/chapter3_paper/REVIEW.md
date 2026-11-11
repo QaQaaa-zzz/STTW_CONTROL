@@ -1,5 +1,7 @@
 # Independent agent review and paper closure
 
+**Research-direction update:** this manuscript is retained as the historical event-chain execution baseline. The new handoff-recoverability hypothesis and proposed two-interface model are not implemented results. See [revised design](../CHAPTER3_EVENT_WORLD_MODEL.md) and [stage/init/repeatability audit](../evidence/chapter3_handoff_audit/RESULTS.md). The earlier minimal-loop acceptance concerns engineering execution only, not validation of the new research question. Abstract/introduction are not rewritten as if the proposed method existed.
+
 Three delegated agents examined (1) the implemented mathematical model, (2) the argument/evidence gap, and (3) outputs and visualization. The primary agent integrated their findings and inspected sources and rendered figures. This is an internal methodological review, not external peer review.
 
 ## Current-stage acceptance
