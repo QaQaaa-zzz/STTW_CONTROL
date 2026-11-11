@@ -1,0 +1,9 @@
+{
+  "fixed_cases": 360,
+  "nominal_unavoidable": 170,
+  "braked": 190,
+  "lp_checks": 36,
+  "lp_max_angle_difference_rad": 3.197442310920451e-14,
+  "recorded_states": 73,
+  "assumptions": "Fixed speed, constant coefficients a1<0,a2<0,a4>0, d=0; ideal actual |delta_dot|<=3 and |delta|<=.8; recorded-state tests freeze subsequent speed and remove future contact disturbance; not full PhysX certificates"
+}

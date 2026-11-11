@@ -1,5 +1,9 @@
 ## STTW保留实验总索引（2026-11-10整理）
 
+## H75名义最优恢复数学验证
+
+[证明、数据与图](evidence/h75_mathematical_verification/README.md)：通过负积分核证明限转角/限转向速度下的最小侧倾包络；360状态170名义不可避免越限、190当前方向刹住，36约束LP误差≤3.20e−14rad。单脊101在1.940s真实状态出发最优包络29.25ms越限；真实30ms终止。73真实状态冻结模型结果全保留。真实H75参考通道300导数检查通过；222速度通道即时alpha导数为零。完整PhysX不可恢复与alpha闭环排名尚未证明。0训练/0GPU。
+
 用户要求保留积极结果并精简无用尝试。已将底层、H75训练、低速与推力、跨速度路径、越野、动态切换、任务选档及续训机制整理为28个实验主题；[保留清单及每项原始XY/报告入口](evidence/sttw_retained_experiments/README.md)，[机器目录](evidence/sttw_retained_experiments/catalog.json)。当前事实和活动任务在[唯一研究台账](/home/qy/STTW_CONTROL/research-hub/STTW_PROJECT_STATE.md)维护。本文件下方历史不删除，不再把旧失败/排错当待办；同组对照与失败仍随各积极证据保留。本次仅整理文档，未新增训练或仿真。
 
 ## 同出口连接候选的控制状态保存/恢复接口已实现
