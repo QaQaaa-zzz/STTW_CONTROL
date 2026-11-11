@@ -1,0 +1,32 @@
+[
+  {
+    "video": "rb_run1_failure.mp4",
+    "source": "rb_run1_route61_h75",
+    "frames": 138,
+    "simulation_duration_s": 1.7850000000000001,
+    "playback_speed": 0.5,
+    "terminal_hold_s": 1,
+    "termination": "physical_failure",
+    "far_contact": false
+  },
+  {
+    "video": "rb_run2_failure.mp4",
+    "source": "rb_run2_route61_h75",
+    "frames": 201,
+    "simulation_duration_s": 2.83,
+    "playback_speed": 0.5,
+    "terminal_hold_s": 1,
+    "termination": "physical_failure",
+    "far_contact": false
+  },
+  {
+    "video": "rb_run3_failure.mp4",
+    "source": "rb_run3_route61_h75",
+    "frames": 184,
+    "simulation_duration_s": 2.545,
+    "playback_speed": 0.5,
+    "terminal_hold_s": 1,
+    "termination": "physical_failure",
+    "far_contact": false
+  }
+]
