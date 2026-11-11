@@ -1,0 +1,19 @@
+{
+  "question": "Does observed handoff dynamics add information beyond time, position, yaw and speed?",
+  "budget": "3 feature sets x3 seeds x200 CPU epochs;0physics/0PPO;stop before30min",
+  "split": "Exact existing grouped TRAIN/DEV;historical source/RB transfer never used for checkpoint selection",
+  "features": [
+    "time_only",
+    "geometry_speed_time",
+    "geometry_speed_time_dynamics"
+  ],
+  "fit": "64-32SiLU BCE Adam lr.001 wd.0001;TRAIN normalization;DEV Brier epoch selection",
+  "role": "Retrospective feature ablation, not causal recovery boundary or new independent TEST",
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_interface_all_routes/downstream_goal_distance",
+  "mount_wxyz": [
+    0.7071067811865476,
+    -0.7071067811865476,
+    0.0,
+    0.0
+  ]
+}

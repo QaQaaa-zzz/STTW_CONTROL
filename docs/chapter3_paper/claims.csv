@@ -11,3 +11,4 @@ C9,VII,Approach and posthandoff failures both present,I3,pending
 C10,VIII,RB34/240 versus35/240 remains full-task comparison,E8,pending
 C11,VII,Independent ground fit DEV improves and historical transfer worsens,I6,pending
 C12,VII,Development retest14/90 vs30/90 vs42/90;29detours timeout,I7,pending
+C13,VII,Adding handoff dynamics improves all6DEV roots and both historical groups,I8,pending

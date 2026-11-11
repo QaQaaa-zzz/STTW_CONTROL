@@ -159,6 +159,24 @@ The interface estimator has lower DEV Brier score than the direct comparator, bu
 \caption{Recorded upstream/direct training and development curves. Upstream selection uses the masked joint objective; the direct comparator uses DEV Brier. Their numerical scales are not interchangeable.}
 \end{figure}
 
+\subsection{Information in the handoff state}
+To test whether the continuation model uses more than elapsed time and nominal progress, we fitted three feature subsets on the same 463 TRAIN and 168 DEV valid handoffs. Each uses three 64--32 SiLU networks, 200 epochs, and the same grouped DEV checkpoint criterion. The geometric subset contains world $x,y$, mount-corrected yaw, forward velocity, and time. The dynamics extension adds roll, pitch, lateral and vertical velocity, and three world angular velocities. Existing root-only and latest-frame models are reused unchanged.
+\begin{table}[t]
+\centering\footnotesize
+\caption{Conditional goal Brier by input subset. Historical sets were previously inspected; DEV selects epochs.}
+\begin{tabular}{lrrr}\toprule
+Inputs&DEV&Source&RB\\
+&168&65&70\\\midrule
+Time only&.21142&.18155&.18660\\
+Geometry/speed/time&.19686&.14725&.15194\\
+With dynamics&.14450&.13305&.13488\\
+Root/time&.14178&.12881&.13602\\
+Root/frame/time&.14502&.12531&.13610\\\bottomrule
+\end{tabular}
+\label{tab:information}
+\end{table}
+Adding dynamics lowers Brier relative to geometry/speed/time in all six DEV roots and both historical sets (Table~\ref{tab:information}). Time alone performs near the constant prior. Thus measured handoff dynamics contains predictive information in the fixed downstream context. This is a grouped feature diagnostic, not an isolated causal effect of lean: several state fields and input parameter counts change together. The latest observation frame does not consistently improve on the physical root alone. Predictive information at observed handoffs does not establish that sampling those states upstream improves candidate selection.
+
 \subsection{Executed decisions}
 \begin{figure*}[t]
 \centering\includegraphics[width=.96\textwidth]{xy_all.png}

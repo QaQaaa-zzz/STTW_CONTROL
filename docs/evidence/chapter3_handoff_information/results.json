@@ -1,0 +1,204 @@
+{
+  "contract": {
+    "question": "Does observed handoff dynamics add information beyond time, position, yaw and speed?",
+    "budget": "3 feature sets x3 seeds x200 CPU epochs;0physics/0PPO;stop before30min",
+    "split": "Exact existing grouped TRAIN/DEV;historical source/RB transfer never used for checkpoint selection",
+    "features": [
+      "time_only",
+      "geometry_speed_time",
+      "geometry_speed_time_dynamics"
+    ],
+    "fit": "64-32SiLU BCE Adam lr.001 wd.0001;TRAIN normalization;DEV Brier epoch selection",
+    "role": "Retrospective feature ablation, not causal recovery boundary or new independent TEST",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_interface_all_routes/downstream_goal_distance",
+    "mount_wxyz": [
+      0.7071067811865476,
+      -0.7071067811865476,
+      0.0,
+      0.0
+    ]
+  },
+  "groups": [
+    {
+      "role": "TRAIN",
+      "n": 463,
+      "goals": 128,
+      "brier": {
+        "train_constant": 0.2000289112329483,
+        "root_only": 0.11898159980773926,
+        "state_history": 0.10154365003108978,
+        "nearest_neighbor": 0.0,
+        "time_only": 0.19953806698322296,
+        "geometry_speed_time": 0.17442704737186432,
+        "geometry_speed_time_dynamics": 0.12532591819763184
+      }
+    },
+    {
+      "role": "DEV",
+      "n": 168,
+      "goals": 50,
+      "brier": {
+        "train_constant": 0.20948973298072815,
+        "root_only": 0.14177531003952026,
+        "state_history": 0.145016610622406,
+        "nearest_neighbor": 0.2797619104385376,
+        "time_only": 0.2114223688840866,
+        "geometry_speed_time": 0.19685694575309753,
+        "geometry_speed_time_dynamics": 0.1444987952709198
+      }
+    },
+    {
+      "role": "source240",
+      "n": 65,
+      "goals": 16,
+      "brier": {
+        "train_constant": 0.18648046255111694,
+        "root_only": 0.12880545854568481,
+        "state_history": 0.12530851364135742,
+        "nearest_neighbor": 0.29230770468711853,
+        "time_only": 0.18155333399772644,
+        "geometry_speed_time": 0.14725464582443237,
+        "geometry_speed_time_dynamics": 0.13304747641086578
+      }
+    },
+    {
+      "role": "rb400_240",
+      "n": 70,
+      "goals": 17,
+      "brier": {
+        "train_constant": 0.18500655889511108,
+        "root_only": 0.13601654767990112,
+        "state_history": 0.1361028105020523,
+        "nearest_neighbor": 0.4571428596973419,
+        "time_only": 0.1865970641374588,
+        "geometry_speed_time": 0.15194426476955414,
+        "geometry_speed_time_dynamics": 0.13487601280212402
+      }
+    }
+  ],
+  "dev_roots": [
+    {
+      "dataset": "source1440",
+      "root": 6,
+      "n": 57,
+      "brier": {
+        "train_constant": 0.20192629098892212,
+        "root_only": 0.12234795093536377,
+        "state_history": 0.1174294650554657,
+        "nearest_neighbor": 0.22807016968727112,
+        "time_only": 0.20169445872306824,
+        "geometry_speed_time": 0.17415840923786163,
+        "geometry_speed_time_dynamics": 0.1334623098373413
+      }
+    },
+    {
+      "dataset": "source1440",
+      "root": 7,
+      "n": 51,
+      "brier": {
+        "train_constant": 0.1640925258398056,
+        "root_only": 0.13139735162258148,
+        "state_history": 0.11278925836086273,
+        "nearest_neighbor": 0.21568627655506134,
+        "time_only": 0.17260873317718506,
+        "geometry_speed_time": 0.15683084726333618,
+        "geometry_speed_time_dynamics": 0.12332215905189514
+      }
+    },
+    {
+      "dataset": "source720",
+      "root": 8,
+      "n": 14,
+      "brier": {
+        "train_constant": 0.268036425113678,
+        "root_only": 0.18619540333747864,
+        "state_history": 0.19140653312206268,
+        "nearest_neighbor": 0.2857142984867096,
+        "time_only": 0.26802775263786316,
+        "geometry_speed_time": 0.26559293270111084,
+        "geometry_speed_time_dynamics": 0.1839730441570282
+      }
+    },
+    {
+      "dataset": "source720",
+      "root": 9,
+      "n": 15,
+      "brier": {
+        "train_constant": 0.22545698285102844,
+        "root_only": 0.11564876139163971,
+        "state_history": 0.21377995610237122,
+        "nearest_neighbor": 0.5333333611488342,
+        "time_only": 0.21850967407226562,
+        "geometry_speed_time": 0.20029233396053314,
+        "geometry_speed_time_dynamics": 0.12394490092992783
+      }
+    },
+    {
+      "dataset": "source720",
+      "root": 10,
+      "n": 16,
+      "brier": {
+        "train_constant": 0.24408552050590515,
+        "root_only": 0.18168511986732483,
+        "state_history": 0.17379839718341827,
+        "nearest_neighbor": 0.4375,
+        "time_only": 0.23873183131217957,
+        "geometry_speed_time": 0.24016612768173218,
+        "geometry_speed_time_dynamics": 0.1889570951461792
+      }
+    },
+    {
+      "dataset": "source720",
+      "root": 11,
+      "n": 15,
+      "brier": {
+        "train_constant": 0.28506821393966675,
+        "root_only": 0.19298169016838074,
+        "state_history": 0.21665959060192108,
+        "nearest_neighbor": 0.2666666805744171,
+        "time_only": 0.2913057506084442,
+        "geometry_speed_time": 0.3054145872592926,
+        "geometry_speed_time_dynamics": 0.19472722709178925
+      }
+    }
+  ],
+  "selection": {
+    "time_only_7101": {
+      "epoch": 29,
+      "dev_brier": 0.2130780965089798
+    },
+    "time_only_7102": {
+      "epoch": 50,
+      "dev_brier": 0.21547408401966095
+    },
+    "time_only_7103": {
+      "epoch": 23,
+      "dev_brier": 0.2080431431531906
+    },
+    "geometry_speed_time_7101": {
+      "epoch": 200,
+      "dev_brier": 0.19585049152374268
+    },
+    "geometry_speed_time_7102": {
+      "epoch": 200,
+      "dev_brier": 0.19670867919921875
+    },
+    "geometry_speed_time_7103": {
+      "epoch": 200,
+      "dev_brier": 0.19835497438907623
+    },
+    "geometry_speed_time_dynamics_7101": {
+      "epoch": 160,
+      "dev_brier": 0.1507270485162735
+    },
+    "geometry_speed_time_dynamics_7102": {
+      "epoch": 150,
+      "dev_brier": 0.14265939593315125
+    },
+    "geometry_speed_time_dynamics_7103": {
+      "epoch": 189,
+      "dev_brier": 0.14491747319698334
+    }
+  },
+  "elapsed_s": 1.379795503016794
+}

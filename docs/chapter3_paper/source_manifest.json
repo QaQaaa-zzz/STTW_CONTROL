@@ -219,6 +219,14 @@
       "sha256": "530815b473f80723c56b8f457da7c939dd62f30dd86a24098a01cbe8be970a77",
       "verification": "agent_source_inspected",
       "human_verification": "pending"
+    },
+    {
+      "id": "I8",
+      "title": "Handoff information grouped feature ablation",
+      "path": "docs/evidence/chapter3_handoff_information/results.json",
+      "sha256": "80f389d085e990640c17d270ba6455e303b3d8592f9a2d2eb9d3eace762190c7",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending"
     }
   ],
   "references": [
@@ -262,6 +270,6 @@
   "scope": "English robotics research draft; no claim of journal acceptance",
   "new_physics_steps": 0,
   "new_policy_training_updates": 0,
-  "paper_sha256": "62503f1cf150a9525a7229b8e62771d792a069b711d030250329664ca78dd764",
+  "paper_sha256": "1eb685fac7af0ceaca16e2b9d8a7879f5818d0385c5a4a9946ac4dcd197781cc",
   "revision_scope": "Two-interface manuscript; earlier evidence retained as historical provenance"
 }
