@@ -243,6 +243,14 @@
       "sha256": "3d98f501fce0a9db275ff98a3f9ae04a92270db61e8d6b1da005575e37b82060",
       "verification": "agent_source_inspected",
       "human_verification": "pending"
+    },
+    {
+      "id": "I11",
+      "title": "Frozen measured-state downstream selection,270 full executions",
+      "path": "docs/evidence/chapter3_task_handoff_online/results.json",
+      "sha256": "52eb55e14df990c9cca84b7b0a2e323dbe6e673b2723a8786f93129c18f3a13c",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending"
     }
   ],
   "references": [

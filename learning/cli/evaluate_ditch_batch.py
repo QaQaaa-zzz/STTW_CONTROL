@@ -56,6 +56,7 @@ with torch.no_grad():
    (a.output/'status.json').write_text(json.dumps(dict(stage='evaluating',steps=step+1,active=int((~task.finished).sum()),elapsed_s=time.monotonic()-start)))
   if bool(task.finished.all()):break
 if moving is not None:moving.save()
+if task.downstream_planner is not None:task.downstream_planner.save(a.output)
 arrays=dict(time=(np.arange(len(rows))+1)*env.dt,initial_root_xyzw=initial_root,initial_observation=initial_obs)
 if histories:arrays['controller_history']=torch.stack(histories).cpu().numpy()
 arrays['reference_route_id']=torch.stack(route_history).cpu().numpy()

@@ -204,6 +204,10 @@ class VectorDitchHandoff(DitchGroundHandoff):
         self.event_time=torch.full((env.num_envs,5),float('nan'),device=env.device)
         self.event_root=torch.full((env.num_envs,5,13),float('nan'),device=env.device)
         self.event_road_violation=torch.zeros(env.num_envs,5,device=env.device,dtype=torch.bool)
+        self.downstream_planner=None
+        if 'handoff_route_planner' in spec:
+            from .handoff_route_planner import HandoffRoutePlanner
+            self.downstream_planner=HandoffRoutePlanner(self,spec['handoff_route_planner'])
         self.reset()
 
     def reset(self):
@@ -213,6 +217,11 @@ class VectorDitchHandoff(DitchGroundHandoff):
     def reset_idx(self,ids):
         e=self.env;g=self.ground
         e.reset_idx(ids)
+        if self.downstream_planner is not None:
+            for lane in ids.cpu().tolist():
+                if lane in self.downstream_planner.pending:
+                    self.downstream_planner.pending[lane][1]['status']='reset_before_publication'
+                    del self.downstream_planner.pending[lane]
         if self.handoff_route_ids is not None:
             g.route.route_ids[ids]=self.initial_route_ids[ids]
         self.phase[ids]=torch.where(self.ground_only[ids],3,0 if self.approach else 1)
@@ -235,6 +244,8 @@ class VectorDitchHandoff(DitchGroundHandoff):
         from types import SimpleNamespace
         e=self.env;g=self.ground;p=e.plant;alive=~self.finished
         root=e.physical()[0]
+        if self.downstream_planner is not None:
+            self.downstream_planner.publish_due(root)
         if self.approach:
             enter=alive&(self.phase==0)&(root[:,0]>=self.approach['jump_start_x_m'])
             self.phase[enter]=1;self.entry_time[enter]=e.episode_length_buf[enter]*e.dt
@@ -244,6 +255,8 @@ class VectorDitchHandoff(DitchGroundHandoff):
             indices=p.pendulum_servos.indices
             hold=p.dofs[:,indices,0].clamp(min=e.lo[2:],max=e.hi[2:])
             p.pendulum_target[ids]=hold[ids]
+            if self.downstream_planner is not None:
+                self.downstream_planner.query(ids,root,e.obs_buf)
             if self.handoff_route_ids is not None:
                 g.route.route_ids[ids]=self.handoff_route_ids[ids]
             g.resume_ground_lanes(ids,self.spec['speed_m_s'],self.spec['alpha'],observer_init_mask=self.measured_observer[ids])
