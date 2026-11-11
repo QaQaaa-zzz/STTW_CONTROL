@@ -2895,3 +2895,7 @@ Corrected render_isaac_scene_media.py: saved Isaac adapter body poses use xyzw, 
 |单调性对象与平衡点|其余两项测试、推导第4节|完整端点代价；相同容差不自动指定alpha=.5|
 
 命令：`PYTHONPATH=learning/src /home/qy/miniconda3/envs/env_isaaclab/bin/python -m unittest discover -s learning/tests -p test_paper_preference_theory.py -v`。8/8通过；CPU计算，无新仿真或训练。S0核对闭合；S1实验检验另行完成。
+
+## 2026-11-11 S4结果收尾
+
+`test_paper_preference_theory.py` 8/8、`test_margin_theory.py` 6/6重新通过。`analyze_mechanism_layout.py`验证176执行合同中的原H75身份、alpha及物理频率，冻结预测hash未变。2112任务标签按冻结阈值复算、24组布局/物理组任务统计与总数一致，配对净得失与总数差一致；176套NPZ/合同/XY/overview齐全。图已人工检查。证据：`docs/evidence/h75_theory_iteration/S4_layout/results/verification.json`。这次核验建立产物/统计一致性，实验收益按CLOSURE.md报告。

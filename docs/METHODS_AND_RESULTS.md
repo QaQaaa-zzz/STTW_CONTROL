@@ -2056,3 +2056,7 @@ source_type=repo_artifact；artifact_checked。共同起点150轮模型无外部
 
 ### 跨实验理论证据图谱（2026-11-10）
 核对28历史入口、重算1432条近期指标及216条H/跟踪域诊断，输出6图。78条domain全部触发前视前向距离≤.05m，其中74条H始终正；39侧倾终止均曾H负，97满窗均H非负。按地形/外扰、任务取舍、通道协同、两类失败、低速物理组织证据，保留简单选档负结果。历史报告级与逐轨迹复算分开。 [总报告](evidence/h75_theory_atlas/README.md)。
+
+## 2026-11-11 H75 S4冻结选档新布局验证
+
+原H75/Local300、共同起点，22工况×2新布局×4新物理组×12车道=2112回合，0训练。机制选档任务A/B/C为64/64/75（各176），最佳固定为68/71/70，简单规则51/71/66。C对固定0救回15丢失10；单脊机制66/128、碎石9/48，收益集中单脊。S0–S4实验收尾，当前选择器未全面超过固定档，不继续事后调参。详见[阶段收尾](evidence/h75_theory_iteration/CLOSURE.md)、[结果与XY](evidence/h75_theory_iteration/S4_layout/results/README.md)。原始数据在`/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test`。

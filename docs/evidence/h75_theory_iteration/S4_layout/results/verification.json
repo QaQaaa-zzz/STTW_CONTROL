@@ -1,0 +1,24 @@
+{
+  "all_176_artifact_sets": true,
+  "all_2112_task_scores": true,
+  "termination_total": true,
+  "strata_sum_to_totals": true,
+  "paired_gains_losses": true,
+  "stage_evidence_exists": {
+    "S1/OBJECTIVES.md": true,
+    "S1/COMPLETE_INTERVALS.md": true,
+    "S1/ETA_ORIGIN.md": true,
+    "S1/bend_allocation/README.md": true,
+    "S1/bend_allocation/XY_INDEX.md": true,
+    "S2/CLOSURE.md": true,
+    "S2/OPERATING_POINTS.md": true,
+    "S2/CONTACT_FAILURE_MECHANISM.md": true,
+    "S2/RECOVERY_MECHANISM.md": true,
+    "S2/tracking_domain/README.md": true,
+    "S2/mechanism_forecast/mechanism_forecast.json": true,
+    "mechanism_scan/prediction_analysis/README.md": true,
+    "mechanism_scan/prediction_analysis/CONTINUOUS.md": true,
+    "layout_test/RESULTS.md": true,
+    "layout_test/selection_analysis/README.md": true
+  }
+}
