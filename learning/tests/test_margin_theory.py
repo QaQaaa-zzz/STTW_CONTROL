@@ -40,6 +40,14 @@ class MarginTheoryTest(unittest.TestCase):
         forward,heading=m.tracking_domain_margins(1.,np.pi)
         self.assertGreater(forward,0);self.assertLess(heading,0)
 
+    def test_batch_margin_matches_scalar_braking_classification(self):
+        rng=np.random.default_rng(42);v=rng.uniform(.5,3,40)
+        states=rng.uniform([-.6,-8,-.8],[.6,8,.8],(40,3))
+        margins=m.recovery_margin_batch(v,states,self.c)
+        for speed,state,margin in zip(v,states,margins):
+            result=m.recovery_outcome(speed,state,self.c)
+            self.assertEqual(margin<0,result['outcome']=='unavoidable_nominal_limit')
+
     def test_known_capacity_and_cascade(self):
         low=m.impulse_capacity(1.8,self.c);high=m.impulse_capacity(2.6,self.c)
         self.assertAlmostEqual(low['p1_roll_rate'],.05291,places=4)

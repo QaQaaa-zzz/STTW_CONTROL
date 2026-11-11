@@ -86,3 +86,21 @@ def recovery_outcome(speed,state,config,rate_limit=3.,travel_limit=.8,roll_limit
     outcome='braked' if stop<cross else 'unavoidable_nominal_limit' if cross<len(t) else 'unresolved'
     i=min(stop,cross,len(t)-1)
     return dict(outcome=outcome,event_s=float(t[i]),phi_event_deg=float(np.degrees(side*phi[i])),angle_certificate_excess_rad=float(phi[i]-roll_limit) if outcome=='unavoidable_nominal_limit' else None)
+
+
+def recovery_margin_batch(speed,states,config,rate_limit=3.,travel_limit=.8,roll_limit=.7,horizon=1.,step=.00025):
+    """Remaining roll angle under best steering until braking or the horizon.
+
+Arrays: speed(N), states(N,3)=[phi,omega,delta]. Positive means the current
+outward motion can stop before the roll limit in this fixed-speed model.
+"""
+    states=np.asarray(states);side=np.where(states[:,1]>=0,1.,-1.)
+    y=(states*side[:,None]).T[...,None];t=np.arange(round(horizon/step)+1)[None]*step
+    c,b,a=coefficients(np.asarray(speed)[:,None],config)
+    hit=(travel_limit-y[2])/rate_limit
+    first=constant_rate_segment(y,np.minimum(t,hit),c,b,a,rate_limit)
+    phi,omega,_=constant_rate_segment(first,np.maximum(t-hit,0),c,b,a,0)
+    stopped=omega<=0;first_stop=np.where(stopped.any(1),stopped.argmax(1),t.shape[1]-1)
+    active=np.arange(t.shape[1])[None]<=first_stop[:,None]
+    peak=np.max(np.where(active,phi,-np.inf),axis=1)
+    return roll_limit-peak
