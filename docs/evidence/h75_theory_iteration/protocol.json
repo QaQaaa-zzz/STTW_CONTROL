@@ -6,21 +6,24 @@
     {
       "id": "S0",
       "scope": "系数/极点/冲量/参考通道零点/包络/仿射奖励",
-      "status": "partial",
-      "remaining": "参考通道零点与冲量容量独立检查"
+      "status": "completed",
+      "remaining": "",
+      "evidence": "six CPU identity tests plus source-state-matrix reference numerator and impulse capacity check"
     },
     {
       "id": "S1",
       "scope": "全部20面板完整端点目标、eta区间、弯道分配",
       "status": "partial",
-      "completed": "100原始轨迹、20面板误差前沿及精确候选区间",
-      "remaining": "完整端点重评分、共同代价/终止/折扣、分配律"
+      "completed": "100原始轨迹20面板前沿；300000策略步完整端点重评分，最大逐步差1.4315e-6",
+      "remaining": "弯道分配律与训练权重切线对应的检验；量化已见面板的预测方式"
     },
     {
       "id": "S2",
       "scope": "216条接触时序、前后轮级联、饱和容量、alpha0失败机制、余量图",
-      "status": "planned",
-      "budget": "reuse archived CPU records; no training"
+      "status": "partial",
+      "budget": "reuse archived CPU records; no training",
+      "completed": "216条×3窗口，12工况五档/Zero时序图；名义p1、J_sat和参考零点；alpha0末窗命令限速现象",
+      "remaining": "事件对齐的alpha运行点/冲量映射、独立组检验及冻结预测"
     },
     {
       "id": "S3",
