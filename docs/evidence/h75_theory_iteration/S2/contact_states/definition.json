@@ -1,0 +1,16 @@
+{
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_channel_scan/roll_contact_analysis",
+  "controller": "runs/isaac_signals_parity/dynamic.json",
+  "rows": 2160,
+  "events": "First normal contact >1N at world z>.002m from original 5kHz contact bins; sample at bin time",
+  "lags_s": [
+    -0.1,
+    0,
+    0.05,
+    0.1,
+    0.2
+  ],
+  "map": "Observed per-case response, no fitting or causal equivalence of event states",
+  "capacity": "Source-parameter linear unsaturated impulse limit, NOT actual terrain impulse",
+  "new_simulations": 0
+}

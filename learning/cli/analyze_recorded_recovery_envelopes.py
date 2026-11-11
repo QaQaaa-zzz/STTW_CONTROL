@@ -4,7 +4,7 @@ import csv
 import json
 from pathlib import Path
 import numpy as np
-from verify_nominal_recovery import classify
+from sttw_control.margin_theory import recovery_outcome as classify
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
