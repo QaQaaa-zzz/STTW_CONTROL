@@ -1,0 +1,846 @@
+{
+  "audit": [
+    {
+      "case": "dense_corridor_v2.3_seed101",
+      "prefix": 0,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 2.078493118286133,
+      "max_xy_spread_m": 0.001064300537109375
+    },
+    {
+      "case": "dense_corridor_v2.3_seed101",
+      "prefix": 0.25,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 1.5854988098144531,
+      "max_xy_spread_m": 0.00119781494140625
+    },
+    {
+      "case": "dense_corridor_v2.3_seed101",
+      "prefix": 0.5,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 2.0388641357421875,
+      "max_xy_spread_m": 0.0010123252868652344
+    },
+    {
+      "case": "dense_corridor_v2.3_seed101",
+      "prefix": 0.75,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 2.3404598236083984,
+      "max_xy_spread_m": 0.0019207000732421875
+    },
+    {
+      "case": "dense_corridor_v2.3_seed101",
+      "prefix": 1,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 1.203084945678711,
+      "max_xy_spread_m": 0.001953125
+    },
+    {
+      "case": "dense_corridor_v2.3_seed102",
+      "prefix": 0,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 1.4579029083251953,
+      "max_xy_spread_m": 0.001861572265625
+    },
+    {
+      "case": "dense_corridor_v2.3_seed102",
+      "prefix": 0.25,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 2.693754196166992,
+      "max_xy_spread_m": 0.0029544830322265625
+    },
+    {
+      "case": "dense_corridor_v2.3_seed102",
+      "prefix": 0.5,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 1.7565898895263672,
+      "max_xy_spread_m": 0.0024623870849609375
+    },
+    {
+      "case": "dense_corridor_v2.3_seed102",
+      "prefix": 0.75,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 2.0455894470214844,
+      "max_xy_spread_m": 0.0022630691528320312
+    },
+    {
+      "case": "dense_corridor_v2.3_seed102",
+      "prefix": 1,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 1.3899364471435547,
+      "max_xy_spread_m": 0.0018157958984375
+    },
+    {
+      "case": "dense_corridor_v2.3_seed103",
+      "prefix": 0,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 1.0984382629394531,
+      "max_xy_spread_m": 0.0006284713745117188
+    },
+    {
+      "case": "dense_corridor_v2.3_seed103",
+      "prefix": 0.25,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 1.916412353515625,
+      "max_xy_spread_m": 0.0012111663818359375
+    },
+    {
+      "case": "dense_corridor_v2.3_seed103",
+      "prefix": 0.5,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 1.5436630249023438,
+      "max_xy_spread_m": 0.0009374618530273438
+    },
+    {
+      "case": "dense_corridor_v2.3_seed103",
+      "prefix": 0.75,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 1.7631893157958984,
+      "max_xy_spread_m": 0.001491546630859375
+    },
+    {
+      "case": "dense_corridor_v2.3_seed103",
+      "prefix": 1,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 2.279327392578125,
+      "max_xy_spread_m": 0.0016222000122070312
+    },
+    {
+      "case": "dense_corridor_v2.6_seed101",
+      "prefix": 0,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "max_measurement_spread": 1.5003643035888672,
+      "max_xy_spread_m": 0.0008716583251953125
+    },
+    {
+      "case": "dense_corridor_v2.6_seed101",
+      "prefix": 0.25,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "max_measurement_spread": 1.8666439056396484,
+      "max_xy_spread_m": 0.0020351409912109375
+    },
+    {
+      "case": "dense_corridor_v2.6_seed101",
+      "prefix": 0.5,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "max_measurement_spread": 1.986825942993164,
+      "max_xy_spread_m": 0.001537322998046875
+    },
+    {
+      "case": "dense_corridor_v2.6_seed101",
+      "prefix": 0.75,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "max_measurement_spread": 1.4705829620361328,
+      "max_xy_spread_m": 0.0019435882568359375
+    },
+    {
+      "case": "dense_corridor_v2.6_seed101",
+      "prefix": 1,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "max_measurement_spread": 2.490917205810547,
+      "max_xy_spread_m": 0.0013370513916015625
+    },
+    {
+      "case": "dense_corridor_v2.6_seed102",
+      "prefix": 0,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "max_measurement_spread": 1.9037284851074219,
+      "max_xy_spread_m": 0.00128936767578125
+    },
+    {
+      "case": "dense_corridor_v2.6_seed102",
+      "prefix": 0.25,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        196,
+        200,
+        200
+      ],
+      "max_measurement_spread": 1.5740947723388672,
+      "max_xy_spread_m": 0.000885009765625
+    },
+    {
+      "case": "dense_corridor_v2.6_seed102",
+      "prefix": 0.5,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "max_measurement_spread": 1.722177505493164,
+      "max_xy_spread_m": 0.0009288787841796875
+    },
+    {
+      "case": "dense_corridor_v2.6_seed102",
+      "prefix": 0.75,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "max_measurement_spread": 1.8132038116455078,
+      "max_xy_spread_m": 0.0018405914306640625
+    },
+    {
+      "case": "dense_corridor_v2.6_seed102",
+      "prefix": 1,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "max_measurement_spread": 2.1252384185791016,
+      "max_xy_spread_m": 0.0010585784912109375
+    },
+    {
+      "case": "dense_corridor_v2.6_seed103",
+      "prefix": 0,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        196,
+        200,
+        200,
+        200
+      ],
+      "max_measurement_spread": 2.4911231994628906,
+      "max_xy_spread_m": 0.00176239013671875
+    },
+    {
+      "case": "dense_corridor_v2.6_seed103",
+      "prefix": 0.25,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        196,
+        200
+      ],
+      "max_measurement_spread": 1.8096733093261719,
+      "max_xy_spread_m": 0.0012254714965820312
+    },
+    {
+      "case": "dense_corridor_v2.6_seed103",
+      "prefix": 0.5,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "max_measurement_spread": 1.7339324951171875,
+      "max_xy_spread_m": 0.0009336471557617188
+    },
+    {
+      "case": "dense_corridor_v2.6_seed103",
+      "prefix": 0.75,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "max_measurement_spread": 2.2785568237304688,
+      "max_xy_spread_m": 0.0021200180053710938
+    },
+    {
+      "case": "dense_corridor_v2.6_seed103",
+      "prefix": 1,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "max_measurement_spread": 1.923482894897461,
+      "max_xy_spread_m": 0.0030879974365234375
+    },
+    {
+      "case": "single_10cm_v2.3_seed101",
+      "prefix": 0,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 0.15854327380657196,
+      "max_xy_spread_m": 0.00045108795166015625
+    },
+    {
+      "case": "single_10cm_v2.3_seed101",
+      "prefix": 0.25,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 0.21116025745868683,
+      "max_xy_spread_m": 0.0014848709106445312
+    },
+    {
+      "case": "single_10cm_v2.3_seed101",
+      "prefix": 0.5,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 0.15914390981197357,
+      "max_xy_spread_m": 0.0005931854248046875
+    },
+    {
+      "case": "single_10cm_v2.3_seed101",
+      "prefix": 0.75,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 0.1392230987548828,
+      "max_xy_spread_m": 0.001590728759765625
+    },
+    {
+      "case": "single_10cm_v2.3_seed101",
+      "prefix": 1,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 0.1634933203458786,
+      "max_xy_spread_m": 0.0004601478576660156
+    },
+    {
+      "case": "single_10cm_v2.3_seed102",
+      "prefix": 0,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 0.15878500044345856,
+      "max_xy_spread_m": 0.000133514404296875
+    },
+    {
+      "case": "single_10cm_v2.3_seed102",
+      "prefix": 0.25,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 0.1820850372314453,
+      "max_xy_spread_m": 0.0013303756713867188
+    },
+    {
+      "case": "single_10cm_v2.3_seed102",
+      "prefix": 0.5,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 0.14569956064224243,
+      "max_xy_spread_m": 0.0008131265640258789
+    },
+    {
+      "case": "single_10cm_v2.3_seed102",
+      "prefix": 0.75,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 0.14251326024532318,
+      "max_xy_spread_m": 0.0012731552124023438
+    },
+    {
+      "case": "single_10cm_v2.3_seed102",
+      "prefix": 1,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 0.14520196616649628,
+      "max_xy_spread_m": 0.0010881423950195312
+    },
+    {
+      "case": "single_10cm_v2.3_seed103",
+      "prefix": 0,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 0.1671237349510193,
+      "max_xy_spread_m": 0.0011506080627441406
+    },
+    {
+      "case": "single_10cm_v2.3_seed103",
+      "prefix": 0.25,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 0.17860984802246094,
+      "max_xy_spread_m": 0.0011606216430664062
+    },
+    {
+      "case": "single_10cm_v2.3_seed103",
+      "prefix": 0.5,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 0.14708109200000763,
+      "max_xy_spread_m": 0.0009717941284179688
+    },
+    {
+      "case": "single_10cm_v2.3_seed103",
+      "prefix": 0.75,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 0.15735414624214172,
+      "max_xy_spread_m": 0.0006623268127441406
+    },
+    {
+      "case": "single_10cm_v2.3_seed103",
+      "prefix": 1,
+      "eligible": false,
+      "switch_ticks": [
+        216,
+        216,
+        216,
+        216,
+        216
+      ],
+      "max_measurement_spread": 0.145481139421463,
+      "max_xy_spread_m": 0.0007758140563964844
+    },
+    {
+      "case": "single_10cm_v2.6_seed101",
+      "prefix": 0,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        200,
+        196
+      ],
+      "max_measurement_spread": 0.15250754356384277,
+      "max_xy_spread_m": 0.0012998580932617188
+    },
+    {
+      "case": "single_10cm_v2.6_seed101",
+      "prefix": 0.25,
+      "eligible": false,
+      "switch_ticks": [
+        196,
+        196,
+        196,
+        196,
+        196
+      ],
+      "max_measurement_spread": 0.15247812867164612,
+      "max_xy_spread_m": 0.0009915828704833984
+    },
+    {
+      "case": "single_10cm_v2.6_seed101",
+      "prefix": 0.5,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "max_measurement_spread": 0.17210763692855835,
+      "max_xy_spread_m": 0.0012145042419433594
+    },
+    {
+      "case": "single_10cm_v2.6_seed101",
+      "prefix": 0.75,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "max_measurement_spread": 0.20783421397209167,
+      "max_xy_spread_m": 0.0012798309326171875
+    },
+    {
+      "case": "single_10cm_v2.6_seed101",
+      "prefix": 1,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "max_measurement_spread": 0.1742699295282364,
+      "max_xy_spread_m": 0.0008420944213867188
+    },
+    {
+      "case": "single_10cm_v2.6_seed102",
+      "prefix": 0,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "max_measurement_spread": 0.1718740314245224,
+      "max_xy_spread_m": 0.0017294883728027344
+    },
+    {
+      "case": "single_10cm_v2.6_seed102",
+      "prefix": 0.25,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        196,
+        200,
+        196,
+        196
+      ],
+      "max_measurement_spread": 0.16538652777671814,
+      "max_xy_spread_m": 0.0009307861328125
+    },
+    {
+      "case": "single_10cm_v2.6_seed102",
+      "prefix": 0.5,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "max_measurement_spread": 0.1828526258468628,
+      "max_xy_spread_m": 0.0015554428100585938
+    },
+    {
+      "case": "single_10cm_v2.6_seed102",
+      "prefix": 0.75,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "max_measurement_spread": 0.1822078973054886,
+      "max_xy_spread_m": 0.0013004541397094727
+    },
+    {
+      "case": "single_10cm_v2.6_seed102",
+      "prefix": 1,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "max_measurement_spread": 0.17342917621135712,
+      "max_xy_spread_m": 0.0015106201171875
+    },
+    {
+      "case": "single_10cm_v2.6_seed103",
+      "prefix": 0,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "max_measurement_spread": 0.18558986485004425,
+      "max_xy_spread_m": 0.0013332366943359375
+    },
+    {
+      "case": "single_10cm_v2.6_seed103",
+      "prefix": 0.25,
+      "eligible": false,
+      "switch_ticks": [
+        196,
+        196,
+        196,
+        196,
+        196
+      ],
+      "max_measurement_spread": 0.1577935516834259,
+      "max_xy_spread_m": 0.0004912614822387695
+    },
+    {
+      "case": "single_10cm_v2.6_seed103",
+      "prefix": 0.5,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "max_measurement_spread": 0.21551133692264557,
+      "max_xy_spread_m": 0.00110626220703125
+    },
+    {
+      "case": "single_10cm_v2.6_seed103",
+      "prefix": 0.75,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "max_measurement_spread": 0.18479323387145996,
+      "max_xy_spread_m": 0.0016460418701171875
+    },
+    {
+      "case": "single_10cm_v2.6_seed103",
+      "prefix": 1,
+      "eligible": false,
+      "switch_ticks": [
+        200,
+        200,
+        200,
+        200,
+        200
+      ],
+      "max_measurement_spread": 0.20144271850585938,
+      "max_xy_spread_m": 0.0010985136032104492
+    }
+  ],
+  "results": [],
+  "role": "physical-group held-out DEV; familiar terrain; retrospective paired outcome lookup, not online selector rollout"
+}
