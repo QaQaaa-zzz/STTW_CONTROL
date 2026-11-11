@@ -1,0 +1,17 @@
+{
+  "envelope": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuation_calibration/batch/envelope.json",
+  "sources": {
+    "source720": "chapter3_offroad_event_training/collection",
+    "source1440": "chapter3_offroad_distance_training/collection",
+    "source240": "chapter3_offroad_new_roots/source",
+    "rb400_240": "chapter3_offroad_new_roots/rb400"
+  },
+  "data_role": "Retrospective DEV analysis; no new independent test; no changed original task labels",
+  "selection": "Actual published straight_jump candidates with measured handoff and no prior road violation; retained exclusions counted",
+  "capture": "Nominal envelope held continuously for0.2s, completed within1s after handoff; descriptive envelope entry, not validated capture",
+  "continuation": "Observed2s, no original physical/domain failure or cumulative road violation, x progress>=1m measured from first posthandoff frame",
+  "censoring": "Goal/timeout before2s without failure -> unknown, not negative; immediate task completion reported separately",
+  "scope": "Only straight y=0 downstream at1.5m/s alpha0.5; no S/curved transfer or recoverability claims",
+  "budget": "0 new physics,0training; CPU analysis of4 existing batches",
+  "frozen_before_analysis": true
+}

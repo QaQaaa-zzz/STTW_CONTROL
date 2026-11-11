@@ -1,3 +1,9 @@
+## Current interface evidence update
+
+The research direction is now effective skill handoff and downstream continuation, with the existing event-chain paper retained as a historical baseline. New retrospective labels are in `../evidence/chapter3_continuation_labels/RESULTS.md`. The nominal straight-ground envelope is not a valid necessary condition for capture: only11/46 and20/79 observed2s continuations entered and held it within1s in the two source collections. Use measured2s continuation as the initial downstream outcome; retain envelope entry as an auxiliary descriptor and report full-goal results separately. Do not rename absence of envelope entry as capture failure.
+
+Still required for the new paper: actual upstream/downstream interface training and grouped baselines, logged downstream controller state at the declared prediction instant, a matched branching/no-change diagnostic before rescuability labels, and physical execution of interface-guided decisions. Current retrospective associations do not establish planning gains. The supplied proposal's guaranteed speedups and success rates are not evidence.
+
 # Independent agent review and paper closure
 
 **Research-direction update:** this manuscript is retained as the historical event-chain execution baseline. The new handoff-recoverability hypothesis and proposed two-interface model are not implemented results. See [revised design](../CHAPTER3_EVENT_WORLD_MODEL.md) and [stage/init/repeatability audit](../evidence/chapter3_handoff_audit/RESULTS.md). The earlier minimal-loop acceptance concerns engineering execution only, not validation of the new research question. Abstract/introduction are not rewritten as if the proposed method existed.
