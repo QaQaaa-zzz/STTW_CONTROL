@@ -1,38 +1,20 @@
-Current revision: see [implemented review corrections](../evidence/chapter3_review_repairs/RESULTS.md). New models use55D compact upstream and19D Frenet context; original582D/world-x implementations and evidence remain supported. Joint retest26/30/27; shared horizon43/35/36. Earlier assessments below are historical where superseded.
+# Review-directed completion audit
 
-# Minimum-loop draft completion audit
+This audit concerns the user's four concrete corrections and the latest request to test saved RB candidates. Expected numerical gains in the critique are hypotheses, not acceptance labels. Original experiments remain in Git and raw run directories.
 
-This audit covers the requested simulation-based minimum loop and English research draft. It does not approve journal submission or claim a superior planner. No further experiment is scheduled for this deliverable.
-
-| Requirement | Inspected evidence | Finding |
+| Requirement | Current evidence | Assessment |
 |---|---|---|
-| Preserve frozen driving/jumping and physical constraints | Three joint-panel configs; `ditch_ground_handoff.py`; full execution logs | H75/source jump retained; no PPO or physical/goal relaxation |
-| Learned upstream state distribution, not only scenario selection | `interface_world_model.py`; I1 model fitting/output evidence | Valid-handoff probability and conditional 39D state/time distribution; actual supervised training documented |
-| Downstream task-conditioned outcome | `handoff_model.py`, `handoff_task_context.py`; I10 | 58D state/geometry model, grouped 234 TRAIN/132 DEV labels; negative ablation retained |
-| Integrate predicted states in decisions | Joint records and I12 `score_replay.json` | All 180 upstream score vectors and planned downstream routes reproduce exactly; route maximization follows expectation |
-| Reconsider using measured state while moving | Joint handoff query/publication records | 44 revisions; 259 actual publications verified; no state reset at publication |
-| Actual full-task positive simulations | I12 complete 270-episode records and XY | Feedback 30/90, open plan 28/90, fixed 28/90; eleven completions after revision and four successful non-straight final choices |
-| Preserve failures and credible limits | I2, I7, I10, I11, I12 and main text | All denominators retained; no causal-rescue, superiority, equivalence, learned margin or map-generalization claim |
-| Professional English manuscript with modeling/training/outputs | `MANUSCRIPT.tex`, PDF, claims/source manifests | Eight-page research draft: task, model, losses, planning, grouped experiments, figures, negative results and limitations |
-| Reproducible artifact and integration checks | Build receipt, source files, raw-run paths, related tests | PDF compiles with four resolved figures and no overflow; ten relevant tests pass; source paths resolve |
+| Shared remaining-route/time admission | I14; `route_horizon.py`; query and publication checks | Implemented. Development retest43/90 versus35/90 direct and36/90 distance. A nominal requested-speed screen, not a physical infeasibility bound. |
+| Compact action-conditioned residual handoff model | I13; TRAIN-only PCA16,55D input,8D action skip, speed/time baseline | Implemented and refitted on unchanged split. Time RMSE.462→.128s and lateral-position.209→.172m; forward-velocity.450→.511m/s worsens. The proposed universal prediction improvement is not supported. |
+| Route-relative continuation features | I13;19D Frenet geometry/dynamics and0.4s ballistic offsets | Implemented and refitted. DEV Brier.10827→.10650 remains worse than state-only.10290. Historical source7 still ranks straight first; its measured margins do not support the critique's assumed boundary crossing. |
+| State-dependent execution and measured-state revision | I15;270 physical trajectories,261 verified publications | Approach now varies over1.5/1.8/2.0m/s but89/90 choices use alpha1. Feedback26/90, open30/90, fixed27/90;41revisions and7subsequent goals. No demonstrated feedback advantage. |
+| Analyze RB's delivered state distribution | I13 historical legal-entry audit |71exact recorded entries,10gains10losses forRB400; lower lateral/roll-rate magnitudes do not imply a higher learned continuation score. |
+| Test existing RB candidates in the actual chain | I16;360 physical trajectories | Source11/90,RB30119/90,RB40013/90,RB50016/90. RB301 gains13/loses5, with11/3 among60exact recorded entries. Development screening only. |
+| Combine RB with measured-state route revision | `STTW_runs/chapter3_rb_feedback/declaration.json` | Active bounded270-episode experiment. Previous RB screening assigned downstream routes and cannot establish this combination. No result claimed until terminal records are analyzed. |
+| English manuscript describing model, fitting and outputs | MANUSCRIPT.tex/PDF; source and claim manifests | Eight pages,three figures,no overfull boxes. Physical errors, paired losses and development reuse reported. Human authorship/citation/submission checks remain pending. |
 
-## Boundaries that are not completed contributions
+The three phases remain ground preparation, frozen jump execution, and H75 continuation. The current work does not add jump training, an LLM, or a new architecture beyond the requested corrections. Missing RB2–15 weights are not recreated by training. No model has been deleted.
 
-- The joint extension covers fifteen straight approaches and three downstream roads. Earlier 60-candidate S/90-degree/detour results remain separate and include substantial failure.
-- All joint approach choices are 1.5 m/s, alpha 0. Available actions are not evidence of diverse state-dependent approach choices.
-- Feedback versus open-plan mean difference is 0.0222 with root-bootstrap interval [-0.1111, 0.1556]. Only 1/89 paired handoff descriptors match exactly. Eleven goals after revision are not eleven rescued counterfactual failures.
-- Empirical rescue margins, a trained short correction, true-history warm starts, new widths/maps and hardware execution are not demonstrated. They are not required to claim this bounded minimum executable loop and are not used to support it.
-- LLM remains deferred; it is not the planner or a contribution of this draft.
-- Authors, affiliations, funding/conflicts, human source/citation verification and submission approval remain pending. `submission_ready` stays false. Draft delivery does not imply publication readiness.
+The outstanding experimental item is the RB301 feedback combination. Its frozen source-trained continuation model is transferred without refitting; results must distinguish functioning transfer from calibrated RB-specific capability. No further checkpoint or threshold tuning is scheduled after that panel.
 
-## Evidence entry points
-
-- [Joint actual/reference XY and result table](../evidence/chapter3_joint_handoff_online/RESULTS.md)
-- [Full joint records](../evidence/chapter3_joint_handoff_online/results.json)
-- [Frozen protocol](../evidence/chapter3_joint_handoff_online/declaration.json)
-- [Recorded-input score replay](../evidence/chapter3_joint_handoff_online/score_replay.json)
-- [Model learning and physical predictions](../evidence/chapter3_interface_model/RESULTS.md)
-- [Task-conditioned fitting](../evidence/chapter3_task_condition_model/RESULTS.md)
-- [Matched historical task dependence](../evidence/chapter3_handoff_routes/RESULTS.md)
-
-Historical reviews and superseded status statements are retained in Git history rather than mixed with this final audit.
+[Review corrections and prediction plots](../evidence/chapter3_review_repairs/RESULTS.md) · [all repaired joint XY](../evidence/chapter3_repaired_joint_fast/RESULTS.md) · [all RB candidate XY](../evidence/chapter3_rb_candidate_handoff/RESULTS.md).
