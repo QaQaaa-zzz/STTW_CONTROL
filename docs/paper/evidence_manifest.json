@@ -1,29 +1,25 @@
 {
-  "scope": "Single integrated article; no separate supplement",
-  "manuscript_sha256": "cc232946ae242702f0dbd4e7d20548f6a2e233ea02cf86048064b4ee1057f7a1",
+  "source": "docs/paper/MANUSCRIPT.md",
+  "scope": "Preference-conditioned reference coordination and off-road recovery",
   "inputs": {
-    "docs/paper/MANUSCRIPT.tex": "cc232946ae242702f0dbd4e7d20548f6a2e233ea02cf86048064b4ee1057f7a1",
-    "docs/paper/local_font_maps.tex": "0d7e7ad36866e9a465dd987fd16c07163cb2cd4b8add4812fe085b68d6454b10",
-    "docs/paper/figures/preference_control_architecture.pdf": "740462592c69dcdac15133fe02a3f000e1401d43a381c2842df7775e35328018",
-    "docs/paper/figures/h75_route_preference_evidence.pdf": "5db3a340fa697bbdcd349d1bbd2cedd784888b6543cfd3f68d3123d4970c10b6",
-    "docs/paper/figures/low_s_pulse_matched.pdf": "62b3462b99b73043368a9f04a6f3f857f3c54eca818600d703ec1016a0ea0a5e",
-    "docs/paper/figures/exact_sharp90_matched.pdf": "50b6daeaab11d83a782d78cbe4ed19ed1098f4b7ca29027ee51defc06226138e",
-    "docs/paper/method_training.tex": "1e565d450ceac1ae17a33efca0acbb9a7f48623688a188816f40eddf59117429",
-    "docs/paper/matrix_summary.tex": "31e2d6ee81469576ec282547bd39429cedc34bafb6e52e8a4f271f02fa675e54",
-    "learning/configs/task_matrix_v2_high_h75.json": "93ed642291b32865857b937ec56a1b4cc08ae637b1c8e7971f5c0d80ca22dc80",
-    "learning/configs/task_matrix_v2_high_pure_pursuit.json": "07d45f556275d857e49373ceca1f85c6cf363df3863ce8a31d609f9764bc314b",
-    "learning/configs/task_matrix_v2_high_u170.json": "36d418876762daf1a8df7c177b28825fe2d73eef45cc80dded273488816a561a",
-    "learning/configs/task_matrix_v2_low_h75.json": "15cd02c0c05d8df17d7706da6e1a7fd9e585f6c4d8d08c27e885374db7697f11",
-    "learning/configs/task_matrix_v2_low_pure_pursuit.json": "b1d77856259fdcd6a3bc5799f7f522125df4a76a40ac3603c9bbcbecea1dd14a",
-    "learning/configs/task_matrix_v2_low_u170.json": "6626f4730494b4a40dbf7bfbc54cad9d3b84abdbd4f214e9fb0c2a7fcb11f4cf",
-    "learning/configs/task_matrix_v2_mid_h75.json": "3135b9741ea484a563e804f09800db82ad254fabe9c70524e9e3e240cb09a5ed",
-    "learning/configs/task_matrix_v2_mid_pure_pursuit.json": "fb064e804672fa5aeee8ed655b04ed13b8ec0bd754e839bca49d6dab1aa30a32",
-    "learning/configs/task_matrix_v2_mid_u170.json": "907ae5df8dea1b7642afb3734e196a3d09588a8f66fb48f6f5f025e76ca12472"
+    "docs/paper/MANUSCRIPT.md": "4484ebce26e7185cd8d543853e6c63d2382a6d7fd196b6a04bbecec9fcdf32d9",
+    "docs/paper/figures/h75_theory_xy.png": "0c005cc059bf1e0b9683e76f00a04b6cc73ef30bbbeb1a0e7ffdc30bfe433cbd",
+    "docs/paper/figures/h75_channels.png": "386bf87f9568fafc325da081c9ca13e2fee46466deab62617d84d674ec6acdde",
+    "docs/paper/figures/h75_optimal_recovery.png": "0165aa6653439baf205a6b5b6fce0fa2d373bfd3374045a8da5ba2ad5d2517b9",
+    "docs/paper/figures/h75_schedule_matrix.png": "c1639a652adeac89fa69c0937229f48c21bc154d352398649417c4c148a28b80",
+    "docs/paper/MANUSCRIPT.html": "6878698582f5a8dc28a96b0875ad598a69268af66288dd449ebdc0d6b90577ea",
+    "docs/paper/MANUSCRIPT.pdf": "ef81a17c6219ef5ad4d79f28b8dabf335a6b3f5ceb22f9085eb2a75b1e2a5cf6"
   },
-  "figure_count": 4,
-  "pdf_built": true,
-  "physics_steps": 0,
-  "optimizer_updates": 0,
-  "data_role": "Exploratory matched comparisons; source roles stated in article",
-  "pdf_sha256": "ed3c10d78197930d7f1c08c5bd9d6dd33c836e6f556780af411bcc46515d0f72"
+  "evidence": {
+    "E1": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/docs/results/sttw-tolerance-20261101/frozen_middle_comparison/README.md",
+    "E2": "docs/evidence/h75_evidence_queue_20261110/final_results/README.md",
+    "E3": "docs/evidence/h75_mathematical_verification/README.md",
+    "E4": "docs/evidence/h75_theory_atlas/README.md",
+    "E5": "docs/evidence/h75_state_alpha_scan/README.md"
+  },
+  "figures": 4,
+  "new_physics_steps": 0,
+  "new_optimizer_updates": 0,
+  "cpu_test_command": "PYTHONPATH=learning/src python -m unittest discover -s learning/tests -p test_paper_preference_theory.py",
+  "data_roles": "Historical flat DEV, off-road ablations, nominal model calculations, natural schedules; see Table 2."
 }

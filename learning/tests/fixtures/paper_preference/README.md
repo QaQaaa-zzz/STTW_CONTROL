@@ -1,0 +1,1 @@
+Frozen inputs copied without changes from runs/isaac_signals_parity/dynamic.json and runs/h75_selected_local300_flat/bundle/config.json. Used only for CPU model and reward identity tests; no rollout or training is launched.

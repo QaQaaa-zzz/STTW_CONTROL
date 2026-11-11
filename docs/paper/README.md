@@ -1,19 +1,38 @@
-# Preference-conditioned single-track control article
+# STTW论文：偏好条件参考调节与越野恢复
 
-[MANUSCRIPT.tex](MANUSCRIPT.tex) is the editable RAS-style main article and [MANUSCRIPT.pdf](MANUSCRIPT.pdf) is its compiled PDF. The paper has one integrated main text and no separately delivered supplement. The user-provided `RAS车.pdf` informed the problem presentation and figure style; its publisher identity was not copied.
+当前完整中文稿：[PDF](MANUSCRIPT.pdf) · [可编辑正文](MANUSCRIPT.md) · [浏览器阅读](MANUSCRIPT.html)。
 
-The manuscript uses the frozen H75 policy as its main learned controller. U170 is a second trained middle-policy comparator. The geometric comparator follows the original path by pure pursuit with exactly zero learned middle correction; all three use the same frozen lower controller. The new route matrix covers left/right turns, left/right-leading S turns, exact unrounded left/right 90-degree polylines, low/medium/high requested speeds, two complete prepared initial states, and nominal/+36 N world-Y pulse conditions. Every destination lies 7 m beyond the last bend or vertex. The 504 declared physical trajectories and all failures are retained on the data volume under `task_matrix_v2_20261104`; the [result index](../results/sttw-task-matrix-20261104/README.md) gives exact paths and identities.
+主线是：**α形成速度—转向协调方式；地形与任务决定各方式的适用范围；恢复包络和跟踪域解释失效，并为选档提供依据。** 正文包含中英文摘要、两项命题及证明、14个公式、3张表、4张图、讨论和参考文献。图1首先展示实际/参考XY轨迹。
 
-The five-alpha H75 nominal comparison and its development-selected curvature-speed pure-pursuit rule remain distinct from the new three-alpha matched matrix. Neither panel is an independent unseen-policy test. The [training methods](method_training.tex) include the middle-policy reward and PPO objective; H75 and U170 use the same `path_reward` and reference interface, while U170 continues H75 on an additional mixed low-speed training distribution. The nine resolved route-matrix configurations are in `learning/configs/task_matrix_v2_*.json` at the repository root.
+## 对方案的收敛
 
-Regenerate the matrix analysis and selected article figures from the saved raw run directories, then compile with:
+依据用户提供的 `/home/qy/.claude/plans/steady-puzzling-corbato.md`，采用偏好几何、恢复约束、任务选档三层结构。正文直接陈述主要发现，具体适用条件集中于实验协议和讨论；反例用于解释地形交互，不改变原始数据或失败分类。
+
+|方案内容|本文处理|
+|---|---|
+|偏好权重引起取舍|证明包含共同代价的完整端点目标单调性；实际速度和路径误差由实验报告|
+|等容差对应α=0.5|改为由响应曲线确定，等权不自动等于等物理误差|
+|速度改变冲击和恢复|保留源码动力学、速度相关传递函数和恢复包络；冲量随速度线性增长作为需接触假设的模型|
+|两类安全余量选档|角度与距离先归一化；将在线预测列为后续方法|
+|历史平地与越野结果合并|Local200平地与Local300越野分开列出；通道消融和五档自然切换构成主证据|
+|一次展开约1900条实验|本次先完成论文及CPU复算，未启动新训练或GPU仿真|
+
+正文主结果为单脊双通道优势、石子通道效果变化、不同任务的α优势档位，以及侧倾超限/跟踪域退出两类失效。在线选档的已完成结果在第6.5节保留，方法建议在第7节。
+
+## 复算与构建
+
+使用含PyTorch的项目环境执行六项CPU检查：
 
 ```bash
-PYTHONPATH=learning/src python docs/paper/analysis/task_matrix_v2.py --policy H75 --runs LOW_H75 LOW_PP MID_H75 MID_PP HIGH_H75 HIGH_PP --out ANALYSIS_H75
-PYTHONPATH=learning/src python docs/paper/analysis/task_matrix_v2.py --policy U170 --runs LOW_U170 LOW_PP MID_U170 MID_PP HIGH_U170 HIGH_PP --out ANALYSIS_U170
-python docs/paper/analysis/make_matrix_figures.py --analysis ANALYSIS_H75 --out docs/paper/figures
-python docs/paper/analysis/make_matrix_table.py --h75 ANALYSIS_H75 --u170 ANALYSIS_U170 --out docs/paper/matrix_summary.tex
-python docs/paper/build.py --pdf --engine tectonic
+PYTHONPATH=learning/src OPENBLAS_NUM_THREADS=1 python -m unittest discover -s learning/tests -p test_paper_preference_theory.py
 ```
 
-The data role is exploratory matched simulation. The current manuscript contains neither a trained tolerance predictor nor an online preference coordinator, and it makes no hardware claim. Author information and final human scientific approval remain to be supplied.
+检查源码模型系数、闭环多项式、有效奖励的仿射结构、完整目标单调性反例、等容差反例、冲量峰值及负核条件。检查不新增物理仿真。构建环境需要Markdown、Matplotlib、WeasyPrint和Noto CJK字体：
+
+```bash
+python docs/paper/build.py --pdf
+```
+
+`MANUSCRIPT.tex`、`method_training.tex`及旧矩阵保留为历史平地英文稿材料；当前编辑源为上方Markdown。新版PDF由当前源生成，build.py默认使用当前源。原论文版本可由Git历史检索，历史实验资料不改写。
+
+实验来源见正文E1–E5和evidence_manifest.json。主要数字对应已完成的冻结策略仿真；本次新增工作为论文收敛、数学检查和排版。作者、单位、目标期刊、基金及最终作者审阅待填写，未代填声明。
