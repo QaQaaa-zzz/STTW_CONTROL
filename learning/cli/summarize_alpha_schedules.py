@@ -11,7 +11,11 @@ for job in jobs:
   trace=z['lower_trace'][:,:,lane].reshape(-1,11);valid=trace[:,6].astype(bool);cause='full_window';ending=None
   if m['failed']:
    step=int(np.flatnonzero(z['failure'][:,lane])[0]);block=slice(step*4,(step+1)*4);ending=step*.02
-   flags={'domain_exit':bool(z['domain_exit'][block,lane].any()),'roll_limit':bool((trace[block,4]>.7).any()),'policy_fault':bool(z['policy_fault'][block,lane].any())};cause='+'.join(k for k,v in flags.items() if v) or 'other_unresolved'
+   flags={'domain_exit':bool(z['domain_exit'][block,lane].any()),'roll_limit':bool((trace[block,4]>.7).any()),'policy_fault':bool(z['policy_fault'][block,lane].any())}
+   for key in ['contact_failure','numerical_failure','roll_limit_failure']:
+    if key in z:
+     flags['roll_limit' if key=='roll_limit_failure' else key]=bool(z[key][block,lane].any())
+   cause='+'.join(k for k,v in flags.items() if v) or 'other_unresolved'
   switches=z['switch_tick'][:,lane] if 'switch_tick' in z else np.array([]);ticks=switches[switches>=0]
   rows.append(dict(case=job['name'],terrain=job['name'].split('_v')[0],label=spec['case_labels'][lane],cause=cause,termination_policy_step_start_s=ending,switch_time_s=float(ticks[0]*.005) if len(ticks) else None,path_peak_m=float(np.abs(trace[valid,3]).max()),**m))
   if pulse is not None:rows[-1]['applied_pulse_impulse_Ns']=pulse['impulse_Ns'][lane].tolist()

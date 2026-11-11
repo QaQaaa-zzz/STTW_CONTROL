@@ -1,0 +1,100 @@
+[
+  {
+    "terrain": "ridge040_layout0",
+    "route_centerline_max_height_m": 0.03999999910593033,
+    "positive_route_samples": 33,
+    "route_samples": 200,
+    "height_m": 0.04
+  },
+  {
+    "terrain": "ridge060_layout0",
+    "route_centerline_max_height_m": 0.05999999865889549,
+    "positive_route_samples": 33,
+    "route_samples": 200,
+    "height_m": 0.06
+  },
+  {
+    "terrain": "ridge080_layout0",
+    "route_centerline_max_height_m": 0.07999999821186066,
+    "positive_route_samples": 33,
+    "route_samples": 200,
+    "height_m": 0.08
+  },
+  {
+    "terrain": "ridge100_layout0",
+    "route_centerline_max_height_m": 0.10000000149011612,
+    "positive_route_samples": 33,
+    "route_samples": 200,
+    "height_m": 0.1
+  },
+  {
+    "terrain": "gravel005_layout0",
+    "route_centerline_max_height_m": 0.004999999888241291,
+    "positive_route_samples": 114,
+    "route_samples": 200,
+    "height_m": 0.005
+  },
+  {
+    "terrain": "gravel010_layout0",
+    "route_centerline_max_height_m": 0.009999999776482582,
+    "positive_route_samples": 125,
+    "route_samples": 200,
+    "height_m": 0.01
+  },
+  {
+    "terrain": "gravel020_layout0",
+    "route_centerline_max_height_m": 0.019999999552965164,
+    "positive_route_samples": 132,
+    "route_samples": 200,
+    "height_m": 0.02
+  },
+  {
+    "terrain": "ridge040_layout1",
+    "route_centerline_max_height_m": 0.03999999910593033,
+    "positive_route_samples": 34,
+    "route_samples": 200,
+    "height_m": 0.04
+  },
+  {
+    "terrain": "ridge060_layout1",
+    "route_centerline_max_height_m": 0.05999999865889549,
+    "positive_route_samples": 34,
+    "route_samples": 200,
+    "height_m": 0.06
+  },
+  {
+    "terrain": "ridge080_layout1",
+    "route_centerline_max_height_m": 0.07999999821186066,
+    "positive_route_samples": 34,
+    "route_samples": 200,
+    "height_m": 0.08
+  },
+  {
+    "terrain": "ridge100_layout1",
+    "route_centerline_max_height_m": 0.10000000149011612,
+    "positive_route_samples": 34,
+    "route_samples": 200,
+    "height_m": 0.1
+  },
+  {
+    "terrain": "gravel005_layout1",
+    "route_centerline_max_height_m": 0.004999999888241291,
+    "positive_route_samples": 92,
+    "route_samples": 200,
+    "height_m": 0.005
+  },
+  {
+    "terrain": "gravel010_layout1",
+    "route_centerline_max_height_m": 0.009999999776482582,
+    "positive_route_samples": 108,
+    "route_samples": 200,
+    "height_m": 0.01
+  },
+  {
+    "terrain": "gravel020_layout1",
+    "route_centerline_max_height_m": 0.019999999552965164,
+    "positive_route_samples": 116,
+    "route_samples": 200,
+    "height_m": 0.02
+  }
+]

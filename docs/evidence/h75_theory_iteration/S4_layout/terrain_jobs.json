@@ -1,0 +1,72 @@
+[
+  {
+    "family": "ridge",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/ridge040_layout0_scene.json",
+    "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/terrains/ridge040_layout0"
+  },
+  {
+    "family": "ridge",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/ridge060_layout0_scene.json",
+    "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/terrains/ridge060_layout0"
+  },
+  {
+    "family": "ridge",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/ridge080_layout0_scene.json",
+    "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/terrains/ridge080_layout0"
+  },
+  {
+    "family": "ridge",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/ridge100_layout0_scene.json",
+    "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/terrains/ridge100_layout0"
+  },
+  {
+    "family": "gravel",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/gravel005_layout0_scene.json",
+    "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/terrains/gravel005_layout0"
+  },
+  {
+    "family": "gravel",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/gravel010_layout0_scene.json",
+    "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/terrains/gravel010_layout0"
+  },
+  {
+    "family": "gravel",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/gravel020_layout0_scene.json",
+    "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/terrains/gravel020_layout0"
+  },
+  {
+    "family": "ridge",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/ridge040_layout1_scene.json",
+    "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/terrains/ridge040_layout1"
+  },
+  {
+    "family": "ridge",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/ridge060_layout1_scene.json",
+    "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/terrains/ridge060_layout1"
+  },
+  {
+    "family": "ridge",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/ridge080_layout1_scene.json",
+    "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/terrains/ridge080_layout1"
+  },
+  {
+    "family": "ridge",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/ridge100_layout1_scene.json",
+    "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/terrains/ridge100_layout1"
+  },
+  {
+    "family": "gravel",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/gravel005_layout1_scene.json",
+    "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/terrains/gravel005_layout1"
+  },
+  {
+    "family": "gravel",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/gravel010_layout1_scene.json",
+    "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/terrains/gravel010_layout1"
+  },
+  {
+    "family": "gravel",
+    "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/gravel020_layout1_scene.json",
+    "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/terrains/gravel020_layout1"
+  }
+]

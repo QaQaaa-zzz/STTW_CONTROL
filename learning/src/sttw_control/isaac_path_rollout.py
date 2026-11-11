@@ -104,6 +104,9 @@ class IsaacPathRollout:
             signals=self.plant.signals;position=self.plant.dofs[:,:,0];row=torch.stack((m[:,5]*self.wheel_radius_m,m[:,2],m[:,3],m[:,0],m[:,1],governed[:,1]),dim=-1);output=self.controller.step(row,self.physical_tick*.005>3.)
             steer=(output[:,0]+applied[:,0]).clamp(-3,3);steer=torch.maximum(torch.maximum(torch.full_like(steer,-3),(-.8-position[:,signals.steer])/.005),torch.minimum(torch.minimum(torch.full_like(steer,3),(.8-position[:,signals.steer])/.005),steer));command=torch.stack((steer,(governed[:,0]/self.wheel_radius_m+applied[:,1]).clamp(-60,60)),dim=-1)
             pre_failure=self.middle.fault|self.middle.domain_exit|~finite|~torch.isfinite(m).all(-1)|(m[:,0].abs()>.7);just_failed=self.alive&pre_failure;new_failure|=just_failed;self.alive&=~pre_failure;active_lower=self.alive.clone();peak=m[:,0].abs();endpoint=self.plant.roots.clone();stop_tick=torch.full((self.n,),self.physics_substeps,device=self.device,dtype=torch.long)
+            contact_failure=torch.zeros_like(valid)
+            numerical_failure=just_failed&(~finite|~torch.isfinite(m).all(-1))
+            roll_limit_failure=just_failed&(m[:,0].abs()>.7)
             wheel_points=[];wheel_forces=[]
             for physics_tick in range(self.physics_substeps):
                 if self.training_pulse is not None:self.training_pulse(physics_tick)
@@ -117,17 +120,17 @@ class IsaacPathRollout:
                     wheel_points.append(torch.stack([s.data.contact_pos_w[:,0] for s in self.plant.wheel_sensors],dim=1).clone())
                     wheel_forces.append(torch.stack([s.data.force_matrix_w[:,0] for s in self.plant.wheel_sensors],dim=1).clone())
                 q=self.plant.roots[:,3:7];x,y,z,w=q.unbind(-1);roll=-(torch.atan2(2*(w*x+y*z),1-2*(x*x+y*y))-torch.pi/2);peak=torch.where(self.alive,torch.maximum(peak,roll.abs()),peak)
-                failure=contact|~torch.isfinite(self.plant.roots).all(-1);hit=self.alive&failure;stop_tick=torch.where(hit,physics_tick+1,stop_tick);endpoint=torch.where(self.alive[:,None],self.plant.roots,endpoint);new_failure|=hit;self.alive&=~failure
+                failure=contact|~torch.isfinite(self.plant.roots).all(-1);hit=self.alive&failure;contact_failure|=hit&contact;numerical_failure|=hit&~torch.isfinite(self.plant.roots).all(-1);stop_tick=torch.where(hit,physics_tick+1,stop_tick);endpoint=torch.where(self.alive[:,None],self.plant.roots,endpoint);new_failure|=hit;self.alive&=~failure
             post_m,post_pose,post_v=self.plant.signals.observe(endpoint,self.plant.dofs[:,:,0],self.plant.dofs[:,:,1]);post_pose=post_pose-self.plant.origin
             self.physical_tick+=1;self.task_tick+=1;self.since_reset_tick+=1
             self.lower.finish(applied,wrap(post_pose[:,2]-pose[:,2])/.005);offsets=self.policy.offsets.clone();self.middle.after(post_m if self.randomization is None else self.measurement,post_pose,post_v,governed,command,applied,self.controller)
             projection=self.middle.projection;curvature=self.route.at(projection['progress'])[2];ratio=self.controller._system(self.speed)[3];chi=((torch.atan(self.cc['wheelbase']*curvature/np.cos(self.cc['caster']))/ratio).abs()-.18).div(.12).clamp(0,1)
             terms=costs(alpha=self.alpha,chi=chi,ev=post_v-self.speed,ey=projection['cross_track'],eh=wrap(projection['heading']-post_pose[:,2]),peak_roll=peak,roll_rate=post_m[:,1],speed=post_v,offsets=offsets,offset_rate=torch.zeros_like(offsets),config=self.config)
-            reward+=torch.where(active_lower,torch.nan_to_num(terms['reward']),0);bad=(post_m[:,0].abs()>.7)|self.middle.fault|self.middle.domain_exit;new_failure|=self.alive&bad;self.alive&=~bad
+            reward+=torch.where(active_lower,torch.nan_to_num(terms['reward']),0);bad=(post_m[:,0].abs()>.7)|self.middle.fault|self.middle.domain_exit;roll_limit_failure|=self.alive&(post_m[:,0].abs()>.7);new_failure|=self.alive&bad;self.alive&=~bad
             logs.append(torch.cat((post_pose[:self.trace_lanes,:2],post_v[:self.trace_lanes,None],projection['cross_track'][:self.trace_lanes,None],peak[:self.trace_lanes,None],terms['reward'][:self.trace_lanes,None],active_lower[:self.trace_lanes,None],stop_tick[:self.trace_lanes,None],governed[:self.trace_lanes],post_m[:self.trace_lanes,5:6]*self.wheel_radius_m),dim=-1));self.previous_reference=governed;self.previous_command=command
             if self.record_body_poses:body_poses.append(self.plant.rigid[:self.trace_lanes,:,:7].clone())
             if self.diagnostics:
-                details.append(dict(observation=self.middle.obs.clone(),nominal=self.middle.nominal.clone(),
+                details.append(dict(contact_failure=contact_failure.clone(),numerical_failure=numerical_failure.clone(),roll_limit_failure=roll_limit_failure.clone(),observation=self.middle.obs.clone(),nominal=self.middle.nominal.clone(),
                     progress=projection['progress'].clone(),pose=post_pose.clone(),measurement=post_m.clone(),policy_measurement=(post_m if self.randomization is None else self.measurement).clone(),
                     target=self.middle.flags['target'].clone(),offsets=self.policy.offsets.clone(),filtered=self.policy.filtered.clone(),
                     held_channels=self.middle.flags['held_channels'].clone(),rate_clipped=self.middle.flags['rate_clipped'].clone(),alive=self.alive.clone(),

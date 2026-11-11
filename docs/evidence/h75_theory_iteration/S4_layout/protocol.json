@@ -1,0 +1,345 @@
+{
+  "experiment_id": "H75_MECHANISM_LAYOUT_TEST",
+  "title": "S4新布局与新物理组冻结选档检验",
+  "evaluation_role": "Fixed-parameter paired mechanism DEV; original H75+Local300; no training",
+  "case_labels": [
+    "fixed0",
+    "fixed0.25",
+    "fixed0.5",
+    "fixed0.75",
+    "fixed1",
+    "Zero",
+    "mechanism_A",
+    "mechanism_B",
+    "mechanism_C",
+    "simple_A",
+    "simple_B",
+    "simple_C"
+  ],
+  "track_wheel_contacts": false,
+  "seeds": [
+    101,
+    102,
+    103
+  ],
+  "terrains": [
+    "gravel005",
+    "gravel010",
+    "gravel020",
+    "ridge040",
+    "ridge060",
+    "ridge080",
+    "ridge100"
+  ],
+  "speeds": [
+    1.8,
+    2.1,
+    2.3,
+    2.6
+  ],
+  "scenes": 176,
+  "lanes": 2112,
+  "episode_s": 10,
+  "max_physics_lane_steps": 105600000,
+  "optimizer_updates": 0,
+  "data_role": "TEST: two new terrain layouts and four new physical groups; no test tuning",
+  "interpretation": "Full-episode channel ablation DEV, not a same-entry-state intervention",
+  "stop_rule": "176 cases / 2112 episodes or engineering error; no retries or training",
+  "code_revision": "0122e7d58a0b6ed8c27ac82e88d666b652f2b971",
+  "initialization": "Original H75+Local300 and same frozen complete initial state; no mid-run restore",
+  "primary_outcomes": [
+    "termination cause",
+    "full 10s observation",
+    "original goal arrival and final hold",
+    "path and speed errors",
+    "roll peak",
+    "contact impulses",
+    "steering rate and torque occupation"
+  ],
+  "tasks": {
+    "A": {
+      "W_m": 0.3,
+      "speed_rmse_m_s": 0.2
+    },
+    "B": {
+      "W_m": 0.6,
+      "speed_rmse_m_s": 0.1
+    },
+    "C": {
+      "W_m": 0.4,
+      "speed_rmse_m_s": 0.15
+    }
+  },
+  "configured_lanes": true,
+  "duplicate_pairs": [],
+  "primary_change": "Four ridge heights and four speeds with frozen five alpha and paired Zero",
+  "fixed_alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "compact_results": true,
+  "batch_cases": 176,
+  "retention": "200Hz states, controller terms, rewards, XY; omit network observation copies and all5kHz contact archives",
+  "execution_revision": "batched fixed cases, physics unchanged; grouping changes lane arrangement and is recorded in batch_source",
+  "max_batch_envs": 672,
+  "retain_physics_contacts": false,
+  "purpose": "Identify height dependence absent from prior single10cm high-rate bank; calibrate before committing S3 forecasts",
+  "fit_protocol": {
+    "fit_physical_groups": [
+      101,
+      102
+    ],
+    "assessment_physical_groups": [
+      103
+    ],
+    "future_test": "S3 fine alpha and physical groups separated from this DEV bank",
+    "labels": "complete run, roll limit, tracking domain, tasks A/B/C separately"
+  },
+  "estimated_wall_time_minutes": [
+    35,
+    90
+  ],
+  "physical_parameter_envelope": {
+    "friction_range": [
+      0.7659991145004303,
+      0.8443532505610554
+    ],
+    "mass_scale": [
+      0.9889727289050418,
+      1.003437740593609
+    ],
+    "servo_gain_scale": [
+      0.9918904094704118,
+      1.0144071458237374
+    ],
+    "steer_zero_offset_rad": [
+      -0.0008226857552122873,
+      0.0014301699535214782
+    ]
+  },
+  "physical_groups": {
+    "401": {
+      "base_body": "chasis",
+      "friction_range": [
+        0.820328375903832,
+        0.820328375903832
+      ],
+      "mass_scale": [
+        0.9945363548999354,
+        0.9945363548999354
+      ],
+      "base_com_m": [
+        0,
+        0
+      ],
+      "latency_s": [
+        0.0,
+        0.0
+      ],
+      "servo_gain_scale": [
+        0.9932037842455803,
+        0.9932037842455803
+      ],
+      "steer_zero_offset_rad": [
+        0.0011024138621809876,
+        0.0011024138621809876
+      ],
+      "measurement_noise": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "push_interval_s": 1000000000,
+      "push_velocity_range": {
+        "x": [
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0
+        ]
+      }
+    },
+    "402": {
+      "base_body": "chasis",
+      "friction_range": [
+        0.7867474457225548,
+        0.7867474457225548
+      ],
+      "mass_scale": [
+        1.0015403846027107,
+        1.0015403846027107
+      ],
+      "base_com_m": [
+        0,
+        0
+      ],
+      "latency_s": [
+        0.0,
+        0.0
+      ],
+      "servo_gain_scale": [
+        0.9973323618525253,
+        0.9973323618525253
+      ],
+      "steer_zero_offset_rad": [
+        -0.00011337575790411043,
+        -0.00011337575790411043
+      ],
+      "measurement_noise": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "push_interval_s": 1000000000,
+      "push_velocity_range": {
+        "x": [
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0
+        ]
+      }
+    },
+    "403": {
+      "base_body": "chasis",
+      "friction_range": [
+        0.7799153793283915,
+        0.7799153793283915
+      ],
+      "mass_scale": [
+        1.0025336169499592,
+        1.0025336169499592
+      ],
+      "base_com_m": [
+        0,
+        0
+      ],
+      "latency_s": [
+        0.0,
+        0.0
+      ],
+      "servo_gain_scale": [
+        0.9981315877612528,
+        0.9981315877612528
+      ],
+      "steer_zero_offset_rad": [
+        0.0011923088597052605,
+        0.0011923088597052605
+      ],
+      "measurement_noise": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "push_interval_s": 1000000000,
+      "push_velocity_range": {
+        "x": [
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0
+        ]
+      }
+    },
+    "404": {
+      "base_body": "chasis",
+      "friction_range": [
+        0.789732924993652,
+        0.789732924993652
+      ],
+      "mass_scale": [
+        0.9955164463068991,
+        0.9955164463068991
+      ],
+      "base_com_m": [
+        0,
+        0
+      ],
+      "latency_s": [
+        0.0,
+        0.0
+      ],
+      "servo_gain_scale": [
+        0.9987435936301244,
+        0.9987435936301244
+      ],
+      "steer_zero_offset_rad": [
+        0.0004313045028269981,
+        0.0004313045028269981
+      ],
+      "measurement_noise": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "push_interval_s": 1000000000,
+      "push_velocity_range": {
+        "x": [
+          0,
+          0
+        ],
+        "y": [
+          0,
+          0
+        ]
+      }
+    }
+  },
+  "repeat_unit": "No technical repeats; crossed two layouts and four physical groups",
+  "prediction_sha256": "9237ca8b97f60f3f6d3de9cd2cf0135a1b96db2b989637d7c5cc6aaad9168597",
+  "code_revision_before_freeze": "b02eb25563ef9d39cc01f6950ebdd30d7137c458",
+  "prediction_assessment": {
+    "primary": "paired task success selected vs every fixed alpha and same-task simple rule; full-window and final-hold separately",
+    "grouping": "two layouts x four physical groups, per-cell and per-physical-group counts; gains and losses",
+    "freeze": "original mechanism model unchanged; simple rule uses only pre-S3 DEV101-103; no S3 outcomes to pick new alpha"
+  },
+  "comparison": "Five fixed alpha, Zero, three task-conditioned mechanism choices, three archived simple DEV-ranking choices",
+  "selection_time": "Before rollout at original common start; alpha fixed for episode",
+  "selection_inputs": [
+    "terrain family",
+    "terrain height",
+    "requested speed",
+    "task A/B/C"
+  ],
+  "fixed_context": "same original route, initial state and task tolerances; no state-dependent online switching claim",
+  "layout_definition": {
+    "ridge_centers_s_m": [
+      3.9,
+      4.5
+    ],
+    "old_ridge_center_s_m": 4.2,
+    "gravel_seeds": [
+      202611210,
+      202611211
+    ],
+    "stone_density_per_m2": 24,
+    "lateral_compression": 0.25
+  },
+  "analysis_unit": "Report each layout and physical group; no treating 22 repeated contexts as independent physics draws",
+  "diagnostic_addition": "Persist transient nonwheel contact, nonfinite, and roll-limit terminal bits at 200Hz; physical decisions and control unchanged"
+}

@@ -1,0 +1,336 @@
+{
+  "model_sha256": "9237ca8b97f60f3f6d3de9cd2cf0135a1b96db2b989637d7c5cc6aaad9168597",
+  "decisions": [
+    {
+      "family": "gravel",
+      "height_m": 0.005,
+      "speed_m_s": 2.3,
+      "mechanism": {
+        "A": 0.0,
+        "B": 0.2,
+        "C": 0.0
+      },
+      "simple": {
+        "A": 0.25,
+        "B": 0.25,
+        "C": 0.25
+      }
+    },
+    {
+      "family": "gravel",
+      "height_m": 0.005,
+      "speed_m_s": 2.6,
+      "mechanism": {
+        "A": 0.5,
+        "B": 0.75,
+        "C": 0.7
+      },
+      "simple": {
+        "A": 0.25,
+        "B": 1,
+        "C": 0.5
+      }
+    },
+    {
+      "family": "gravel",
+      "height_m": 0.01,
+      "speed_m_s": 2.3,
+      "mechanism": {
+        "A": 0.8,
+        "B": 0.75,
+        "C": 0.75
+      },
+      "simple": {
+        "A": 1,
+        "B": 0.75,
+        "C": 0.75
+      }
+    },
+    {
+      "family": "gravel",
+      "height_m": 0.01,
+      "speed_m_s": 2.6,
+      "mechanism": {
+        "A": 0.9,
+        "B": 0.9,
+        "C": 0.9
+      },
+      "simple": {
+        "A": 1,
+        "B": 1,
+        "C": 0.5
+      }
+    },
+    {
+      "family": "gravel",
+      "height_m": 0.02,
+      "speed_m_s": 2.3,
+      "mechanism": {
+        "A": 0.8,
+        "B": 0.8,
+        "C": 0.8
+      },
+      "simple": {
+        "A": 0.75,
+        "B": 0.75,
+        "C": 0.75
+      }
+    },
+    {
+      "family": "gravel",
+      "height_m": 0.02,
+      "speed_m_s": 2.6,
+      "mechanism": {
+        "A": 0.1,
+        "B": 1.0,
+        "C": 1.0
+      },
+      "simple": {
+        "A": 0.25,
+        "B": 0.25,
+        "C": 0.25
+      }
+    },
+    {
+      "family": "ridge",
+      "height_m": 0.04,
+      "speed_m_s": 1.8,
+      "mechanism": {
+        "A": 0.0,
+        "B": 0.6,
+        "C": 0.0
+      },
+      "simple": {
+        "A": 0.5,
+        "B": 0.5,
+        "C": 0.5
+      }
+    },
+    {
+      "family": "ridge",
+      "height_m": 0.04,
+      "speed_m_s": 2.1,
+      "mechanism": {
+        "A": 0.0,
+        "B": 0.25,
+        "C": 0.0
+      },
+      "simple": {
+        "A": 0.75,
+        "B": 1,
+        "C": 0.75
+      }
+    },
+    {
+      "family": "ridge",
+      "height_m": 0.04,
+      "speed_m_s": 2.3,
+      "mechanism": {
+        "A": 0.0,
+        "B": 0.3,
+        "C": 0.0
+      },
+      "simple": {
+        "A": 0.75,
+        "B": 1,
+        "C": 0.75
+      }
+    },
+    {
+      "family": "ridge",
+      "height_m": 0.04,
+      "speed_m_s": 2.6,
+      "mechanism": {
+        "A": 0.0,
+        "B": 0.5,
+        "C": 0.0
+      },
+      "simple": {
+        "A": 0.25,
+        "B": 1,
+        "C": 0.5
+      }
+    },
+    {
+      "family": "ridge",
+      "height_m": 0.06,
+      "speed_m_s": 1.8,
+      "mechanism": {
+        "A": 0.0,
+        "B": 0.75,
+        "C": 0.0
+      },
+      "simple": {
+        "A": 0.25,
+        "B": 0.25,
+        "C": 0.25
+      }
+    },
+    {
+      "family": "ridge",
+      "height_m": 0.06,
+      "speed_m_s": 2.1,
+      "mechanism": {
+        "A": 0.0,
+        "B": 0.3,
+        "C": 0.0
+      },
+      "simple": {
+        "A": 0.75,
+        "B": 0.75,
+        "C": 0.75
+      }
+    },
+    {
+      "family": "ridge",
+      "height_m": 0.06,
+      "speed_m_s": 2.3,
+      "mechanism": {
+        "A": 0.0,
+        "B": 0.4,
+        "C": 0.0
+      },
+      "simple": {
+        "A": 0.5,
+        "B": 0.5,
+        "C": 0.5
+      }
+    },
+    {
+      "family": "ridge",
+      "height_m": 0.06,
+      "speed_m_s": 2.6,
+      "mechanism": {
+        "A": 0.2,
+        "B": 0.6,
+        "C": 0.1
+      },
+      "simple": {
+        "A": 0.25,
+        "B": 0.75,
+        "C": 0.5
+      }
+    },
+    {
+      "family": "ridge",
+      "height_m": 0.08,
+      "speed_m_s": 1.8,
+      "mechanism": {
+        "A": 1.0,
+        "B": 1.0,
+        "C": 1.0
+      },
+      "simple": {
+        "A": 1,
+        "B": 1,
+        "C": 1
+      }
+    },
+    {
+      "family": "ridge",
+      "height_m": 0.08,
+      "speed_m_s": 2.1,
+      "mechanism": {
+        "A": 0.25,
+        "B": 1.0,
+        "C": 0.25
+      },
+      "simple": {
+        "A": 0.25,
+        "B": 1,
+        "C": 0.25
+      }
+    },
+    {
+      "family": "ridge",
+      "height_m": 0.08,
+      "speed_m_s": 2.3,
+      "mechanism": {
+        "A": 0.75,
+        "B": 1.0,
+        "C": 0.9
+      },
+      "simple": {
+        "A": 0,
+        "B": 1,
+        "C": 0
+      }
+    },
+    {
+      "family": "ridge",
+      "height_m": 0.08,
+      "speed_m_s": 2.6,
+      "mechanism": {
+        "A": 0.3,
+        "B": 1.0,
+        "C": 0.3
+      },
+      "simple": {
+        "A": 0.25,
+        "B": 0.25,
+        "C": 0.25
+      }
+    },
+    {
+      "family": "ridge",
+      "height_m": 0.1,
+      "speed_m_s": 1.8,
+      "mechanism": {
+        "A": 0.0,
+        "B": 0.75,
+        "C": 0.0
+      },
+      "simple": {
+        "A": 0.75,
+        "B": 0.75,
+        "C": 0.75
+      }
+    },
+    {
+      "family": "ridge",
+      "height_m": 0.1,
+      "speed_m_s": 2.1,
+      "mechanism": {
+        "A": 1.0,
+        "B": 1.0,
+        "C": 1.0
+      },
+      "simple": {
+        "A": 0,
+        "B": 0.75,
+        "C": 0.75
+      }
+    },
+    {
+      "family": "ridge",
+      "height_m": 0.1,
+      "speed_m_s": 2.3,
+      "mechanism": {
+        "A": 0.0,
+        "B": 0.7,
+        "C": 0.0
+      },
+      "simple": {
+        "A": 0.5,
+        "B": 0.75,
+        "C": 0.5
+      }
+    },
+    {
+      "family": "ridge",
+      "height_m": 0.1,
+      "speed_m_s": 2.6,
+      "mechanism": {
+        "A": 0.6,
+        "B": 0.5,
+        "C": 0.5
+      },
+      "simple": {
+        "A": 0.25,
+        "B": 0.5,
+        "C": 0.5
+      }
+    }
+  ],
+  "simple_rule": "Same archived algorithm: maximize DEV task successes, minimize failure-penalty plus normalized path/speed RMSE, then smaller alpha"
+}

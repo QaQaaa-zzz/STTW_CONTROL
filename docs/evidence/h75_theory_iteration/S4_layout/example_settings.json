@@ -1,0 +1,184 @@
+{
+  "asset": "runs/isaac_urdf_drive/vehicle.urdf",
+  "controller_config": "runs/isaac_signals_parity/dynamic.json",
+  "lower_actor": "runs/local300_torch_portable_parity/actor.npz",
+  "lower_sha256": "517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125",
+  "plant_options": {
+    "wheel_collision": "sdf",
+    "friction_offset_threshold": 0.0,
+    "compliant_wheels": {
+      "frontwheel": {
+        "stiffness": 5324.4083452801915,
+        "damping": 112.38579318769304
+      },
+      "rearwheel": {
+        "stiffness": 7833.38122453075,
+        "damping": 173.11038721684574
+      }
+    },
+    "env_spacing": 3.0,
+    "track_wheel_contacts": true,
+    "track_contact_wrench": true,
+    "max_contact_data_count_per_prim": 128,
+    "raw_contact_only": true
+  },
+  "initial_state": "runs/h75_selected_local300_flat/initial_state.npz",
+  "selected_lower": "learning/configs/isaaclab_selected_lower.json",
+  "role": "S4 frozen selectors at common original start; no online switching or training",
+  "evaluation_role": "New layout and new physics TEST; selection uses terrain family/height/request speed/task known before rollout",
+  "num_envs": 12,
+  "alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1,
+    0,
+    0.0,
+    0.2,
+    0.0,
+    0.25,
+    0.25,
+    0.25
+  ],
+  "zero_middle": [
+    false,
+    false,
+    false,
+    false,
+    false,
+    true,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ],
+  "case_labels": [
+    "fixed0",
+    "fixed0.25",
+    "fixed0.5",
+    "fixed0.75",
+    "fixed1",
+    "Zero",
+    "mechanism_A",
+    "mechanism_B",
+    "mechanism_C",
+    "simple_A",
+    "simple_B",
+    "simple_C"
+  ],
+  "auto_reset_horizon": false,
+  "user_speed_m_s": 2.3,
+  "seed": 401,
+  "trace_lanes": 12,
+  "episode_s": 10.0,
+  "record_control_commands": false,
+  "record_body_poses": false,
+  "record_controller_terms": true,
+  "randomization": {
+    "base_body": "chasis",
+    "friction_range": [
+      0.820328375903832,
+      0.820328375903832
+    ],
+    "mass_scale": [
+      0.9945363548999354,
+      0.9945363548999354
+    ],
+    "base_com_m": [
+      0,
+      0
+    ],
+    "latency_s": [
+      0.0,
+      0.0
+    ],
+    "servo_gain_scale": [
+      0.9932037842455803,
+      0.9932037842455803
+    ],
+    "steer_zero_offset_rad": [
+      0.0011024138621809876,
+      0.0011024138621809876
+    ],
+    "measurement_noise": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "push_interval_s": 1000000000,
+    "push_velocity_range": {
+      "x": [
+        0,
+        0
+      ],
+      "y": [
+        0,
+        0
+      ]
+    }
+  },
+  "zero_reference_channels": [
+    [
+      false,
+      false
+    ],
+    [
+      false,
+      false
+    ],
+    [
+      false,
+      false
+    ],
+    [
+      false,
+      false
+    ],
+    [
+      false,
+      false
+    ],
+    [
+      false,
+      false
+    ],
+    [
+      false,
+      false
+    ],
+    [
+      false,
+      false
+    ],
+    [
+      false,
+      false
+    ],
+    [
+      false,
+      false
+    ],
+    [
+      false,
+      false
+    ],
+    [
+      false,
+      false
+    ]
+  ],
+  "reward_components": true,
+  "paired_reward_diagnostics": true,
+  "compact_results": true,
+  "omit_diagnostic_fields": [
+    "observation",
+    "policy_measurement"
+  ]
+}

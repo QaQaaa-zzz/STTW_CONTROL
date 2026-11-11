@@ -13,6 +13,7 @@ from sttw_control.margin_theory import recovery_margin_batch,tracking_domain_mar
 def collect(run,family,controller):
     jobs=json.loads((run/'jobs.json').read_text());metrics=json.loads((run/'analysis_summary.json').read_text())['rows'];rows=[]
     for job in jobs:
+        if job.get('family',family)!=family:continue
         height=float(json.loads((Path(job['terrain'])/'identity.json').read_text())['height_m'])
         if family=='gravel' and height==0:continue
         folder=run/job['name'];c=json.loads((folder/'contract.json').read_text());z=np.load(folder/'trajectory.npz');route=np.load(Path(c['bundle'])/'route.npz');cfg=json.loads((Path(c['bundle'])/'config.json').read_text())['follower'];n=len(c['settings']['alphas']);trace=z['lower_trace'].reshape(-1,n,11);time=(np.arange(len(trace))+1)*c['lower_dt']

@@ -1,0 +1,419 @@
+[
+  {
+    "case": "gravel010_v2.3_seed301_rep0",
+    "label": "Zero",
+    "active_physics_counts": [
+      25.0,
+      17.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.66530442237854
+  },
+  {
+    "case": "gravel010_v2.3_seed304_rep1",
+    "label": "Zero",
+    "active_physics_counts": [
+      14.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.5256483554840088
+  },
+  {
+    "case": "gravel010_v2.6_seed301_rep1",
+    "label": "full_0.6",
+    "active_physics_counts": [
+      7.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.6462653875350952
+  },
+  {
+    "case": "gravel010_v2.6_seed303_rep0",
+    "label": "Zero",
+    "active_physics_counts": [
+      25.0,
+      5.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.6522077322006226
+  },
+  {
+    "case": "gravel020_v2.3_seed301_rep0",
+    "label": "full_0.7",
+    "active_physics_counts": [
+      25.0,
+      15.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.6895086169242859
+  },
+  {
+    "case": "gravel020_v2.3_seed302_rep0",
+    "label": "full_0.6",
+    "active_physics_counts": [
+      25.0,
+      25.0,
+      25.0,
+      18.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.44770288467407227
+  },
+  {
+    "case": "gravel020_v2.3_seed303_rep0",
+    "label": "full_0.1",
+    "active_physics_counts": [
+      25.0,
+      25.0,
+      25.0,
+      14.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.6999902725219727
+  },
+  {
+    "case": "gravel020_v2.3_seed303_rep1",
+    "label": "full_0.3",
+    "active_physics_counts": [
+      25.0,
+      25.0,
+      14.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.5683883428573608
+  },
+  {
+    "case": "gravel020_v2.3_seed304_rep0",
+    "label": "full_1",
+    "active_physics_counts": [
+      25.0,
+      11.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.6475468873977661
+  },
+  {
+    "case": "gravel020_v2.3_seed304_rep0",
+    "label": "Zero",
+    "active_physics_counts": [
+      25.0,
+      25.0,
+      5.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.45331871509552
+  },
+  {
+    "case": "gravel020_v2.3_seed304_rep1",
+    "label": "full_0",
+    "active_physics_counts": [
+      25.0,
+      25.0,
+      25.0,
+      4.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.6266329884529114
+  },
+  {
+    "case": "gravel020_v2.3_seed304_rep1",
+    "label": "full_0.2",
+    "active_physics_counts": [
+      25.0,
+      25.0,
+      25.0,
+      8.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.47685956954956055
+  },
+  {
+    "case": "gravel020_v2.3_seed304_rep1",
+    "label": "full_0.6",
+    "active_physics_counts": [
+      25.0,
+      5.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.5580061674118042
+  },
+  {
+    "case": "gravel020_v2.3_seed304_rep1",
+    "label": "full_0.8",
+    "active_physics_counts": [
+      25.0,
+      23.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.6491295099258423
+  },
+  {
+    "case": "gravel020_v2.6_seed301_rep0",
+    "label": "full_0.7",
+    "active_physics_counts": [
+      25.0,
+      25.0,
+      25.0,
+      12.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.4983794689178467
+  },
+  {
+    "case": "gravel020_v2.6_seed301_rep0",
+    "label": "full_0.8",
+    "active_physics_counts": [
+      25.0,
+      7.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.5870276689529419
+  },
+  {
+    "case": "gravel020_v2.6_seed301_rep1",
+    "label": "full_0.7",
+    "active_physics_counts": [
+      25.0,
+      25.0,
+      25.0,
+      4.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.39572346210479736
+  },
+  {
+    "case": "gravel020_v2.6_seed301_rep1",
+    "label": "full_0.8",
+    "active_physics_counts": [
+      25.0,
+      25.0,
+      15.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.3877849578857422
+  },
+  {
+    "case": "gravel020_v2.6_seed301_rep1",
+    "label": "full_1",
+    "active_physics_counts": [
+      25.0,
+      25.0,
+      6.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.4410972595214844
+  },
+  {
+    "case": "gravel020_v2.6_seed302_rep0",
+    "label": "full_0",
+    "active_physics_counts": [
+      25.0,
+      25.0,
+      25.0,
+      23.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.6895043253898621
+  },
+  {
+    "case": "gravel020_v2.6_seed302_rep0",
+    "label": "full_0.25",
+    "active_physics_counts": [
+      10.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.5388971567153931
+  },
+  {
+    "case": "gravel020_v2.6_seed302_rep0",
+    "label": "full_0.5",
+    "active_physics_counts": [
+      14.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.6164142489433289
+  },
+  {
+    "case": "gravel020_v2.6_seed302_rep0",
+    "label": "full_0.8",
+    "active_physics_counts": [
+      25.0,
+      25.0,
+      22.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.6408092379570007
+  },
+  {
+    "case": "gravel020_v2.6_seed302_rep0",
+    "label": "full_0.9",
+    "active_physics_counts": [
+      20.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.40721213817596436
+  },
+  {
+    "case": "gravel020_v2.6_seed303_rep0",
+    "label": "full_0",
+    "active_physics_counts": [
+      25.0,
+      25.0,
+      25.0,
+      6.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.6142295598983765
+  },
+  {
+    "case": "gravel020_v2.6_seed303_rep0",
+    "label": "full_0.1",
+    "active_physics_counts": [
+      25.0,
+      25.0,
+      10.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.6251139044761658
+  },
+  {
+    "case": "gravel020_v2.6_seed303_rep0",
+    "label": "full_0.25",
+    "active_physics_counts": [
+      25.0,
+      16.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.6567020416259766
+  },
+  {
+    "case": "gravel020_v2.6_seed303_rep1",
+    "label": "full_0.2",
+    "active_physics_counts": [
+      25.0,
+      25.0,
+      25.0,
+      8.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.6507135629653931
+  },
+  {
+    "case": "gravel020_v2.6_seed303_rep1",
+    "label": "full_0.6",
+    "active_physics_counts": [
+      25.0,
+      25.0,
+      19.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.6879681348800659
+  },
+  {
+    "case": "gravel020_v2.6_seed303_rep1",
+    "label": "Zero",
+    "active_physics_counts": [
+      25.0,
+      22.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.5889862775802612
+  },
+  {
+    "case": "gravel020_v2.6_seed304_rep0",
+    "label": "full_0.3",
+    "active_physics_counts": [
+      25.0,
+      11.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.5762627720832825
+  },
+  {
+    "case": "gravel020_v2.6_seed304_rep0",
+    "label": "full_0.4",
+    "active_physics_counts": [
+      25.0,
+      19.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.49814116954803467
+  },
+  {
+    "case": "gravel020_v2.6_seed304_rep0",
+    "label": "full_0.7",
+    "active_physics_counts": [
+      25.0,
+      25.0,
+      3.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.47464895248413086
+  },
+  {
+    "case": "gravel020_v2.6_seed304_rep0",
+    "label": "full_0.9",
+    "active_physics_counts": [
+      3.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.6165276169776917
+  },
+  {
+    "case": "gravel020_v2.6_seed304_rep0",
+    "label": "full_1",
+    "active_physics_counts": [
+      25.0,
+      5.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.5297683477401733
+  },
+  {
+    "case": "gravel020_v2.6_seed304_rep1",
+    "label": "full_0",
+    "active_physics_counts": [
+      25.0,
+      25.0,
+      19.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.683441162109375
+  },
+  {
+    "case": "gravel020_v2.6_seed304_rep1",
+    "label": "full_0.6",
+    "active_physics_counts": [
+      25.0,
+      25.0,
+      25.0,
+      5.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.4979877471923828
+  },
+  {
+    "case": "ridge100_v2.6_seed303_rep0",
+    "label": "full_0.8",
+    "active_physics_counts": [
+      25.0,
+      25.0,
+      25.0,
+      24.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.6967312097549438
+  },
+  {
+    "case": "ridge100_v2.6_seed303_rep1",
+    "label": "full_0.7",
+    "active_physics_counts": [
+      25.0,
+      25.0,
+      25.0,
+      2.0
+    ],
+    "finite_body": true,
+    "peak_roll": 0.669852614402771
+  }
+]

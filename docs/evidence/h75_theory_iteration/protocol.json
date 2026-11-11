@@ -41,7 +41,7 @@
     {
       "id": "S3",
       "scope": "先提交冻结预测，再细alpha扫描",
-      "status": "prepared",
+      "status": "completed",
       "alpha": [
         0,
         0.1,
@@ -80,14 +80,29 @@
       "storage": "200Hz required states/control/termination; no bulk video or full-body high-rate logs; selected contact windows only",
       "physical_episodes_including_zero": 2464,
       "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/mechanism_scan",
-      "restart_condition": "S2 gives a model-linked, testable failure/recovery prediction; no interpolation-only validation as a substitute"
+      "restart_condition": "S2 gives a model-linked, testable failure/recovery prediction; no interpolation-only validation as a substitute",
+      "launch_receipt": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/mechanism_scan_queue/launch_receipt.json",
+      "evaluation_status": "complete",
+      "results": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/mechanism_scan/prediction_analysis/README.md",
+      "remaining_analysis": "",
+      "continuous_report": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/mechanism_scan/prediction_analysis/CONTINUOUS.md"
     },
     {
       "id": "S4",
       "scope": "冻结选择器对全部五固定档及已有简单规则，新布局/新物理组配对",
-      "status": "planned",
-      "budget": "exact independent scenarios and scoring frozen before run, after S3 model choice",
-      "inputs": "pre-obstacle observable state and terrain; no outcome or future-contact leakage"
+      "status": "prepared",
+      "budget": "2112 episodes of10s; 672 max environments,4 batches;35–90min;0 training",
+      "inputs": "pre-obstacle observable state and terrain; no outcome or future-contact leakage",
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test",
+      "episodes": 2112,
+      "contexts": 176,
+      "terrain_layouts": 2,
+      "physical_groups": [
+        401,
+        402,
+        403,
+        404
+      ]
     },
     {
       "id": "S5",
@@ -97,6 +112,6 @@
   ],
   "stop_rule": "每阶段完成后按数据迭代；不无上限训练；超过半小时等待时暂停目标，等待用户恢复",
   "notifications": "GPU stage completion/error Bark with receipts; shared gpu lock",
-  "new_gpu_jobs_started": 2,
-  "current_priority": "S3 frozen mechanism forecast validation; S4 after results"
+  "new_gpu_jobs_started": 3,
+  "current_priority": "Run frozen S4 new-layout/new-physics validation; no continued150"
 }

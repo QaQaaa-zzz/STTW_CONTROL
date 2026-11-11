@@ -1,0 +1,17 @@
+{
+  "route": "runs/h75_selected_local300_flat/bundle/route.npz",
+  "bounds_m": [
+    -2,
+    24
+  ],
+  "horizontal_scale_m": 0.1,
+  "vertical_scale_m": 0.005,
+  "slope_threshold": 1.5,
+  "center_s_m": 3.9,
+  "length_m": 0.8,
+  "half_width_m": 0.8,
+  "oblique_s_per_lateral_m": 0.25,
+  "switch_s_m": 5.3,
+  "height_m": 0.08,
+  "role": "S4 unseen ridge placement; original height/length/width/slope preserved"
+}
