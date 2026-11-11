@@ -1,0 +1,410 @@
+{
+  "adopted": true,
+  "feature_names": [
+    "roll_rad",
+    "pitch_rad",
+    "yaw_rad",
+    "world_y_m",
+    "vx_error_m_s"
+  ],
+  "absolute_bounds": [
+    0.06774117704815227,
+    0.017453292519943295,
+    0.26883127450458055,
+    0.15472412109375,
+    0.18612356185913084
+  ],
+  "cases": [
+    {
+      "lane": 0,
+      "role": "CALIB",
+      "observed_full_window": true,
+      "window_inside_envelope": true,
+      "window_forward_progress_m": 3.1028900146484375,
+      "max_normalized_feature": [
+        0.3539073947012445,
+        0.10431258787060409,
+        0.18386996853157178,
+        0.3327169625246548,
+        0.573436179800958
+      ],
+      "end_code": 9,
+      "road_violation": false
+    },
+    {
+      "lane": 1,
+      "role": "CALIB",
+      "observed_full_window": true,
+      "window_inside_envelope": true,
+      "window_forward_progress_m": 3.0930252075195312,
+      "max_normalized_feature": [
+        0.4669945911442657,
+        0.10131776809779174,
+        0.3754690907949963,
+        0.7144723865877712,
+        0.5875441357991481
+      ],
+      "end_code": 9,
+      "road_violation": false
+    },
+    {
+      "lane": 2,
+      "role": "CALIB",
+      "observed_full_window": true,
+      "window_inside_envelope": true,
+      "window_forward_progress_m": 3.0923919677734375,
+      "max_normalized_feature": [
+        0.3754084194651594,
+        0.09465348910057238,
+        0.2286185000813848,
+        0.42839003944773174,
+        0.6932939204681995
+      ],
+      "end_code": 9,
+      "road_violation": false
+    },
+    {
+      "lane": 3,
+      "role": "CALIB",
+      "observed_full_window": true,
+      "window_inside_envelope": true,
+      "window_forward_progress_m": 3.1013107299804688,
+      "max_normalized_feature": [
+        0.40455092959801786,
+        0.20390901734299868,
+        0.31812813398773776,
+        0.3741863905325444,
+        0.5267967260472821
+      ],
+      "end_code": 9,
+      "road_violation": false
+    },
+    {
+      "lane": 4,
+      "role": "CALIB",
+      "observed_full_window": true,
+      "window_inside_envelope": true,
+      "window_forward_progress_m": 3.0756149291992188,
+      "max_normalized_feature": [
+        0.8333333333333333,
+        0.12477337856497518,
+        0.8333333333333333,
+        0.8333333333333334,
+        0.5992765341273294
+      ],
+      "end_code": 9,
+      "road_violation": false
+    },
+    {
+      "lane": 5,
+      "role": "CALIB",
+      "observed_full_window": true,
+      "window_inside_envelope": true,
+      "window_forward_progress_m": 3.108306884765625,
+      "max_normalized_feature": [
+        0.17751756074366068,
+        0.14611610317221374,
+        0.18243789012178824,
+        0.41835552268244575,
+        0.8333333333333334
+      ],
+      "end_code": 9,
+      "road_violation": false
+    },
+    {
+      "lane": 6,
+      "role": "CALIB",
+      "observed_full_window": true,
+      "window_inside_envelope": true,
+      "window_forward_progress_m": 3.0875473022460938,
+      "max_normalized_feature": [
+        0.4792545033578056,
+        0.11355334296749886,
+        0.39748514343828073,
+        0.6690335305719921,
+        0.5870669747141773
+      ],
+      "end_code": 9,
+      "road_violation": false
+    },
+    {
+      "lane": 7,
+      "role": "CALIB",
+      "observed_full_window": true,
+      "window_inside_envelope": true,
+      "window_forward_progress_m": 3.0920562744140625,
+      "max_normalized_feature": [
+        0.6344795247014183,
+        0.1254603425691291,
+        0.49963120242827713,
+        0.4511094674556213,
+        0.5178017592320743
+      ],
+      "end_code": 9,
+      "road_violation": false
+    },
+    {
+      "lane": 8,
+      "role": "CALIB",
+      "observed_full_window": true,
+      "window_inside_envelope": true,
+      "window_forward_progress_m": 3.0850868225097656,
+      "max_normalized_feature": [
+        0.41794409046981384,
+        0.1048793136569646,
+        0.2932456962327599,
+        0.5416420118343195,
+        0.5243494340933581
+      ],
+      "end_code": 9,
+      "road_violation": false
+    },
+    {
+      "lane": 9,
+      "role": "CALIB",
+      "observed_full_window": true,
+      "window_inside_envelope": true,
+      "window_forward_progress_m": 3.100811004638672,
+      "max_normalized_feature": [
+        0.3554552861827044,
+        0.11446253634400017,
+        0.2107417587823597,
+        0.5269354043392505,
+        0.831408036391827
+      ],
+      "end_code": 9,
+      "road_violation": false
+    },
+    {
+      "lane": 10,
+      "role": "CALIB",
+      "observed_full_window": true,
+      "window_inside_envelope": true,
+      "window_forward_progress_m": 3.094331741333008,
+      "max_normalized_feature": [
+        0.36592132025314683,
+        0.1576356815608221,
+        0.29602292213197495,
+        0.42038954635108483,
+        0.6384415316909258
+      ],
+      "end_code": 9,
+      "road_violation": false
+    },
+    {
+      "lane": 11,
+      "role": "CALIB",
+      "observed_full_window": true,
+      "window_inside_envelope": true,
+      "window_forward_progress_m": 3.0942420959472656,
+      "max_normalized_feature": [
+        0.7555190489458214,
+        0.14061902087252454,
+        0.48093566894370426,
+        0.715853057199211,
+        0.5070678765166037
+      ],
+      "end_code": 9,
+      "road_violation": false
+    },
+    {
+      "lane": 12,
+      "role": "HOLDOUT",
+      "observed_full_window": true,
+      "window_inside_envelope": true,
+      "window_forward_progress_m": 3.094024658203125,
+      "max_normalized_feature": [
+        0.6259314046502702,
+        0.1755895813640104,
+        0.3995620591299303,
+        0.7908037475345168,
+        0.5729333993288745
+      ],
+      "end_code": 9,
+      "road_violation": false
+    },
+    {
+      "lane": 13,
+      "role": "HOLDOUT",
+      "observed_full_window": true,
+      "window_inside_envelope": true,
+      "window_forward_progress_m": 3.0897884368896484,
+      "max_normalized_feature": [
+        0.5285820949558212,
+        0.10874909097592685,
+        0.4141519474727637,
+        0.8254068047337279,
+        0.5388679407700266
+      ],
+      "end_code": 9,
+      "road_violation": false
+    },
+    {
+      "lane": 14,
+      "role": "HOLDOUT",
+      "observed_full_window": true,
+      "window_inside_envelope": true,
+      "window_forward_progress_m": 3.1021175384521484,
+      "max_normalized_feature": [
+        0.3797276702743766,
+        0.08318701792935779,
+        0.31123838816789,
+        0.4952539447731755,
+        0.5318776909963738
+      ],
+      "end_code": 9,
+      "road_violation": false
+    },
+    {
+      "lane": 15,
+      "role": "HOLDOUT",
+      "observed_full_window": true,
+      "window_inside_envelope": true,
+      "window_forward_progress_m": 3.1009883880615234,
+      "max_normalized_feature": [
+        0.3437936738146532,
+        0.11720228209169573,
+        0.18036926522265118,
+        0.24225838264299804,
+        0.6411578272095313
+      ],
+      "end_code": 9,
+      "road_violation": false
+    },
+    {
+      "lane": 16,
+      "role": "HOLDOUT",
+      "observed_full_window": true,
+      "window_inside_envelope": true,
+      "window_forward_progress_m": 3.0960044860839844,
+      "max_normalized_feature": [
+        0.42474782955251195,
+        0.13373245973509726,
+        0.3553735373390691,
+        0.9699211045364892,
+        0.659877913372654
+      ],
+      "end_code": 9,
+      "road_violation": false
+    },
+    {
+      "lane": 17,
+      "role": "HOLDOUT",
+      "observed_full_window": true,
+      "window_inside_envelope": true,
+      "window_forward_progress_m": 3.0983009338378906,
+      "max_normalized_feature": [
+        0.34990514297177744,
+        0.13631419963031569,
+        0.2818308805318745,
+        0.3978673570019724,
+        0.626981339350815
+      ],
+      "end_code": 9,
+      "road_violation": false
+    },
+    {
+      "lane": 18,
+      "role": "HOLDOUT",
+      "observed_full_window": true,
+      "window_inside_envelope": true,
+      "window_forward_progress_m": 3.1008567810058594,
+      "max_normalized_feature": [
+        0.5703509293955387,
+        0.1745264943362737,
+        0.3781947672474906,
+        0.628525641025641,
+        0.883373760726197
+      ],
+      "end_code": 9,
+      "road_violation": false
+    },
+    {
+      "lane": 19,
+      "role": "HOLDOUT",
+      "observed_full_window": true,
+      "window_inside_envelope": true,
+      "window_forward_progress_m": 3.1064491271972656,
+      "max_normalized_feature": [
+        0.38115370053632874,
+        0.13446285978014036,
+        0.18717404790461326,
+        0.525,
+        0.5818931394868028
+      ],
+      "end_code": 9,
+      "road_violation": false
+    },
+    {
+      "lane": 20,
+      "role": "HOLDOUT",
+      "observed_full_window": true,
+      "window_inside_envelope": true,
+      "window_forward_progress_m": 3.1050338745117188,
+      "max_normalized_feature": [
+        0.23670998640729618,
+        0.08955619699662562,
+        0.23761201844187663,
+        0.3492110453648915,
+        0.6381930236359342
+      ],
+      "end_code": 9,
+      "road_violation": false
+    },
+    {
+      "lane": 21,
+      "role": "HOLDOUT",
+      "observed_full_window": true,
+      "window_inside_envelope": false,
+      "window_forward_progress_m": 3.095855712890625,
+      "max_normalized_feature": [
+        0.40990156522978227,
+        0.20787463588840135,
+        0.31668196084202027,
+        1.0456607495069032,
+        0.5699461787915541
+      ],
+      "end_code": 9,
+      "road_violation": false
+    },
+    {
+      "lane": 22,
+      "role": "HOLDOUT",
+      "observed_full_window": true,
+      "window_inside_envelope": true,
+      "window_forward_progress_m": 3.087677001953125,
+      "max_normalized_feature": [
+        0.6210012679563279,
+        0.12742798597298263,
+        0.4375580642622399,
+        0.4199087771203156,
+        0.76557069490538
+      ],
+      "end_code": 9,
+      "road_violation": false
+    },
+    {
+      "lane": 23,
+      "role": "HOLDOUT",
+      "observed_full_window": true,
+      "window_inside_envelope": true,
+      "window_forward_progress_m": 3.0883560180664062,
+      "max_normalized_feature": [
+        0.5881588296015977,
+        0.15709328314152318,
+        0.47965421703036726,
+        0.7855029585798816,
+        0.5448475057220902
+      ],
+      "end_code": 9,
+      "road_violation": false
+    }
+  ],
+  "calib_inside": 12,
+  "holdout_inside": 11,
+  "contact_seen_lanes": 24,
+  "elapsed_s": 42.05341203897842,
+  "physics_lane_steps": 57600,
+  "scope": "Straight nominal ground,1.5m/s,alpha0.5 only; no curved-road recovery certification",
+  "limitations": "Nominal empirical reference envelope only; no recovery-domain or safety claim. Contact presence checked; raw peak buffer occupancy not exported. Holdout used for coverage report, not threshold fitting."
+}

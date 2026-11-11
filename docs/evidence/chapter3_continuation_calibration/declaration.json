@@ -1,0 +1,59 @@
+{
+  "question": "Calibrate a dynamic continuation envelope without conditioning on successful jumps",
+  "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_handoff_same_lane/cold_a/config.json",
+  "calibration_lanes": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "holdout_lanes": [
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+  ],
+  "budget": {
+    "environments": 24,
+    "episode_s": 6,
+    "physical_lane_steps_max": 57600,
+    "training_updates": 0,
+    "wall_limit_min": 25
+  },
+  "window_s": [
+    3.5,
+    5.5
+  ],
+  "scope": "Straight nominal ground,1.5m/s,alpha0.5 only; no curved-road recovery certification",
+  "envelope_rule": "For each absolute roll,pitch,yaw,world-y,vx-1.5 feature:1.2 times CALIB-window maximum, with floors[1deg,1deg,1deg,0.02m,0.1m/s]; report coverage of untouched HOLDOUT. Do not adopt if any CALIB terminates before5.5s, violates corridor, or bounds exceed original hard constraints.",
+  "capture_hold_s": 0.2,
+  "posthandoff_window_s": 2.0,
+  "capture_deadline_s": 1.0,
+  "minimum_forward_progress_m": 1.0,
+  "hard_limits": {
+    "road_half_width_m": 0.6,
+    "roll_deg": 35,
+    "pitch_deg": 75
+  },
+  "stop": "25min wall timeout or evaluator exception; no automatic extension",
+  "resources": "24lane batched GPU evaluation; user authorized small parallel evaluations",
+  "interpretation": "Empirical nominal envelope, not a viability set. Original task goal is deliberately outside run; goal success and calibrated continuation are separate.",
+  "contact_gate": "Use recorded400Hz contact modes and original256contact buffer; known-ground contact must register. No new multimap configuration.",
+  "code_revision": "b733aae9 plus prepare_continuation_calibration.py"
+}

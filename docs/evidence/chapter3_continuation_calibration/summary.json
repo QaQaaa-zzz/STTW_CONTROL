@@ -1,0 +1,247 @@
+{
+  "cases": [
+    {
+      "lane": 0,
+      "success": false,
+      "skill": "ground_only",
+      "end_code": 9,
+      "handoff_s": null,
+      "entry_s": 0.0,
+      "steps": 300,
+      "road_violation": false
+    },
+    {
+      "lane": 1,
+      "success": false,
+      "skill": "ground_only",
+      "end_code": 9,
+      "handoff_s": null,
+      "entry_s": 0.0,
+      "steps": 300,
+      "road_violation": false
+    },
+    {
+      "lane": 2,
+      "success": false,
+      "skill": "ground_only",
+      "end_code": 9,
+      "handoff_s": null,
+      "entry_s": 0.0,
+      "steps": 300,
+      "road_violation": false
+    },
+    {
+      "lane": 3,
+      "success": false,
+      "skill": "ground_only",
+      "end_code": 9,
+      "handoff_s": null,
+      "entry_s": 0.0,
+      "steps": 300,
+      "road_violation": false
+    },
+    {
+      "lane": 4,
+      "success": false,
+      "skill": "ground_only",
+      "end_code": 9,
+      "handoff_s": null,
+      "entry_s": 0.0,
+      "steps": 300,
+      "road_violation": false
+    },
+    {
+      "lane": 5,
+      "success": false,
+      "skill": "ground_only",
+      "end_code": 9,
+      "handoff_s": null,
+      "entry_s": 0.0,
+      "steps": 300,
+      "road_violation": false
+    },
+    {
+      "lane": 6,
+      "success": false,
+      "skill": "ground_only",
+      "end_code": 9,
+      "handoff_s": null,
+      "entry_s": 0.0,
+      "steps": 300,
+      "road_violation": false
+    },
+    {
+      "lane": 7,
+      "success": false,
+      "skill": "ground_only",
+      "end_code": 9,
+      "handoff_s": null,
+      "entry_s": 0.0,
+      "steps": 300,
+      "road_violation": false
+    },
+    {
+      "lane": 8,
+      "success": false,
+      "skill": "ground_only",
+      "end_code": 9,
+      "handoff_s": null,
+      "entry_s": 0.0,
+      "steps": 300,
+      "road_violation": false
+    },
+    {
+      "lane": 9,
+      "success": false,
+      "skill": "ground_only",
+      "end_code": 9,
+      "handoff_s": null,
+      "entry_s": 0.0,
+      "steps": 300,
+      "road_violation": false
+    },
+    {
+      "lane": 10,
+      "success": false,
+      "skill": "ground_only",
+      "end_code": 9,
+      "handoff_s": null,
+      "entry_s": 0.0,
+      "steps": 300,
+      "road_violation": false
+    },
+    {
+      "lane": 11,
+      "success": false,
+      "skill": "ground_only",
+      "end_code": 9,
+      "handoff_s": null,
+      "entry_s": 0.0,
+      "steps": 300,
+      "road_violation": false
+    },
+    {
+      "lane": 12,
+      "success": false,
+      "skill": "ground_only",
+      "end_code": 9,
+      "handoff_s": null,
+      "entry_s": 0.0,
+      "steps": 300,
+      "road_violation": false
+    },
+    {
+      "lane": 13,
+      "success": false,
+      "skill": "ground_only",
+      "end_code": 9,
+      "handoff_s": null,
+      "entry_s": 0.0,
+      "steps": 300,
+      "road_violation": false
+    },
+    {
+      "lane": 14,
+      "success": false,
+      "skill": "ground_only",
+      "end_code": 9,
+      "handoff_s": null,
+      "entry_s": 0.0,
+      "steps": 300,
+      "road_violation": false
+    },
+    {
+      "lane": 15,
+      "success": false,
+      "skill": "ground_only",
+      "end_code": 9,
+      "handoff_s": null,
+      "entry_s": 0.0,
+      "steps": 300,
+      "road_violation": false
+    },
+    {
+      "lane": 16,
+      "success": false,
+      "skill": "ground_only",
+      "end_code": 9,
+      "handoff_s": null,
+      "entry_s": 0.0,
+      "steps": 300,
+      "road_violation": false
+    },
+    {
+      "lane": 17,
+      "success": false,
+      "skill": "ground_only",
+      "end_code": 9,
+      "handoff_s": null,
+      "entry_s": 0.0,
+      "steps": 300,
+      "road_violation": false
+    },
+    {
+      "lane": 18,
+      "success": false,
+      "skill": "ground_only",
+      "end_code": 9,
+      "handoff_s": null,
+      "entry_s": 0.0,
+      "steps": 300,
+      "road_violation": false
+    },
+    {
+      "lane": 19,
+      "success": false,
+      "skill": "ground_only",
+      "end_code": 9,
+      "handoff_s": null,
+      "entry_s": 0.0,
+      "steps": 300,
+      "road_violation": false
+    },
+    {
+      "lane": 20,
+      "success": false,
+      "skill": "ground_only",
+      "end_code": 9,
+      "handoff_s": null,
+      "entry_s": 0.0,
+      "steps": 300,
+      "road_violation": false
+    },
+    {
+      "lane": 21,
+      "success": false,
+      "skill": "ground_only",
+      "end_code": 9,
+      "handoff_s": null,
+      "entry_s": 0.0,
+      "steps": 300,
+      "road_violation": false
+    },
+    {
+      "lane": 22,
+      "success": false,
+      "skill": "ground_only",
+      "end_code": 9,
+      "handoff_s": null,
+      "entry_s": 0.0,
+      "steps": 300,
+      "road_violation": false
+    },
+    {
+      "lane": 23,
+      "success": false,
+      "skill": "ground_only",
+      "end_code": 9,
+      "handoff_s": null,
+      "entry_s": 0.0,
+      "steps": 300,
+      "road_violation": false
+    }
+  ],
+  "elapsed_s": 42.05341203897842,
+  "physics_lane_steps": 57600,
+  "scope": "Nominal straight-ground calibration:12 CALIB and12 HOLDOUT conditions; no jump, no training; horizon timeout is not failure of the observation-window criterion; original physical thresholds; success is selected skill sequence plus task goal without prior original-road violation; jump routes require measured far-bank handback, ground-only routes do not; not old support hold"
+}
