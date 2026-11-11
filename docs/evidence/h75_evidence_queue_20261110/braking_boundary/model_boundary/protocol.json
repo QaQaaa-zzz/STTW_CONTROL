@@ -1,0 +1,31 @@
+{
+  "config": {
+    "fixed_roll_reference": null,
+    "dt": 0.005,
+    "wo": 40.0,
+    "wc": 5.0,
+    "disturbance_filter": 8.0,
+    "minimum_speed": 0.5,
+    "max_steer_rate": 4.0,
+    "mass": 5.4,
+    "cg_forward": 0.164,
+    "cg_height": 0.2,
+    "wheelbase": 0.408,
+    "trail": 0.024,
+    "caster": 0.4363323129985824,
+    "gravity": 9.8
+  },
+  "config_path": "runs/isaac_signals_parity/dynamic.json",
+  "velocity_domain_m_s": [
+    0.5,
+    3
+  ],
+  "steer_angle_limit_rad": 0.8,
+  "ideal_actual_steer_rate_limit_rad_s": 3,
+  "roll_limit_rad": 0.7,
+  "B_model_deg_s2": 6146.053403416946,
+  "formula": "max_v(|a1(v)|*3 + |a2(v)|*0.8 + a4*0.7)",
+  "assumptions": "Nominal roll-steer model, no external/contact residual, ideal rate tracking; fixed-test v constant; not PhysX full-vehicle tests",
+  "test_matrix": "3 speeds x5 roll angles x8 roll rates x3 steer angles =360; max directional steering until angle limit;1s horizon;dt1ms and0.5ms",
+  "selection": "For every context with a taskC full-alpha positive, choose first in [.5,.75,1,0,.25]; compare full1 unless selected1 then full.5; report all five full-alpha results"
+}

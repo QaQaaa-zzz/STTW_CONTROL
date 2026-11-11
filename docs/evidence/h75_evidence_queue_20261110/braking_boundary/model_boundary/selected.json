@@ -1,0 +1,42 @@
+[
+  {
+    "case": "dense10_v2.3_seed101",
+    "positive": "full_0.75",
+    "comparison": "full_1"
+  },
+  {
+    "case": "dense10_v2.3_seed102",
+    "positive": "full_1",
+    "comparison": "full_0.5"
+  },
+  {
+    "case": "dense10_v2.3_seed103",
+    "positive": "full_0.75",
+    "comparison": "full_1"
+  },
+  {
+    "case": "dense10_v2.6_seed101",
+    "positive": "full_0.5",
+    "comparison": "full_1"
+  },
+  {
+    "case": "dense10_v2.6_seed103",
+    "positive": "full_0.5",
+    "comparison": "full_1"
+  },
+  {
+    "case": "single10_v2.6_seed101",
+    "positive": "full_0.5",
+    "comparison": "full_1"
+  },
+  {
+    "case": "single10_v2.6_seed102",
+    "positive": "full_0.5",
+    "comparison": "full_1"
+  },
+  {
+    "case": "single10_v2.6_seed103",
+    "positive": "full_0.5",
+    "comparison": "full_1"
+  }
+]

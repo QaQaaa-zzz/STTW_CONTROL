@@ -88,3 +88,6 @@ $$B_{req}=\frac{\omega^2}{2[\phi_c-\operatorname{sign}(\omega)\phi]}.$$
 
 
 后续已重新估计持续恢复B，并找到后轮再接触冲击环节：[B估计与失败链](capacity_estimate/README.md)。
+
+
+参数计算与固定初态模型测试已补充：[统一模型B及8组正例相图](model_boundary/README.md)。

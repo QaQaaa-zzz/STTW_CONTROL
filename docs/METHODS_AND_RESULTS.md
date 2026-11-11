@@ -2044,3 +2044,7 @@ source_type=repo_artifact；artifact_checked。共同起点150轮模型无外部
 
 ### 实测持续回正能力与后轮再接触（2026-11-10）
 复用216条；其他物理组53条轨迹69个同向恢复片段的停止位移等效B中位1118°/s²，IQR782–1512。失败主例双轮无接触阶段净回正510°/s²；1.925–1.940s后轮再接触伴随−19.54Nm投影力矩和角速度−157→−534°/s，需求580→9024°/s²。命令−3rad/s已用满，未到转角幅值边界。采用数据支持的阶段解释，不称经验B为理论最大能力。[完整图/CSV](evidence/h75_evidence_queue_20261110/braking_boundary/capacity_estimate/README.md)。
+
+
+### 参数B与固定名义模型测试（2026-11-10）
+从原模型及理想执行约束推导速度域0.5–3m/s的B上界6146°/s²；360固定初态两种步长分类一致，190停止、170超限（不是全策略恢复域）。60条完整alpha轨迹全部计算，11条任务C正例H均正，8工况重画中文双面板。未新增PhysX试验。 [报告](evidence/h75_evidence_queue_20261110/braking_boundary/model_boundary/README.md)。
