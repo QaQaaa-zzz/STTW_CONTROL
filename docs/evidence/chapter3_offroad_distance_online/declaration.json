@@ -1,0 +1,28 @@
+{
+  "rule": [
+    {
+      "x": 1.8,
+      "candidate": 48,
+      "name": "ground_detour_v1.8_a0.0",
+      "train_completed": 6,
+      "train_roots": 6
+    },
+    {
+      "x": 3.0,
+      "candidate": 22,
+      "name": "s_bend_jump_v2.0_a0.5",
+      "train_completed": 3,
+      "train_roots": 6
+    },
+    {
+      "x": 5.0,
+      "candidate": 4,
+      "name": "straight_jump_v1.8_a0.5",
+      "train_completed": 4,
+      "train_roots": 6
+    }
+  ],
+  "model_selection": "Frozen TRAIN/DEV only",
+  "objective": "Both learned methods maximize predicted completion; actual measured latency executed",
+  "invariants": "Original map, roads, physics, horizon, skills and H75"
+}

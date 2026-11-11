@@ -1,0 +1,387 @@
+{
+  "roots": [
+    {
+      "y_m": -0.018266495149879745,
+      "yaw_rad": -0.005720133013397365,
+      "roll_rad": -0.010366766370687413,
+      "speed_m_s": 1.9786874475237364
+    },
+    {
+      "y_m": -0.006641175969959244,
+      "yaw_rad": -0.025873712027039038,
+      "roll_rad": 0.013903277343582914,
+      "speed_m_s": 1.9499058948968828
+    },
+    {
+      "y_m": -0.020769975209283743,
+      "yaw_rad": -0.0032359889404913397,
+      "roll_rad": -0.014495022377926174,
+      "speed_m_s": 1.9243089359600354
+    },
+    {
+      "y_m": -0.0169506356760767,
+      "yaw_rad": 0.021790468545526846,
+      "roll_rad": 0.01524435587663758,
+      "speed_m_s": 2.0920386386913785
+    }
+  ],
+  "cases": [
+    {
+      "root": 0,
+      "x": 1.8,
+      "method": "direct_success",
+      "role": "TEST_ONLINE",
+      "logical_case": 1,
+      "lane": 0
+    },
+    {
+      "root": 2,
+      "x": 1.8,
+      "method": "direct_success",
+      "role": "TEST_ONLINE",
+      "logical_case": 19,
+      "lane": 1
+    },
+    {
+      "root": 1,
+      "x": 1.8,
+      "method": "direct_success",
+      "role": "TEST_ONLINE",
+      "logical_case": 10,
+      "lane": 2
+    },
+    {
+      "root": 2,
+      "x": 1.8,
+      "method": "event_model",
+      "role": "TEST_ONLINE",
+      "logical_case": 18,
+      "lane": 3
+    },
+    {
+      "root": 0,
+      "x": 3.0,
+      "method": "direct_success",
+      "role": "TEST_ONLINE",
+      "logical_case": 4,
+      "lane": 4
+    },
+    {
+      "root": 1,
+      "x": 3.0,
+      "method": "forced",
+      "role": "TEST_ONLINE",
+      "logical_case": 14,
+      "lane": 5
+    },
+    {
+      "root": 2,
+      "x": 3.0,
+      "method": "direct_success",
+      "role": "TEST_ONLINE",
+      "logical_case": 22,
+      "lane": 6
+    },
+    {
+      "root": 3,
+      "x": 1.8,
+      "method": "event_model",
+      "role": "TEST_ONLINE",
+      "logical_case": 27,
+      "lane": 7
+    },
+    {
+      "root": 3,
+      "x": 5.0,
+      "method": "direct_success",
+      "role": "TEST_ONLINE",
+      "logical_case": 34,
+      "lane": 8
+    },
+    {
+      "root": 3,
+      "x": 5.0,
+      "method": "forced",
+      "role": "TEST_ONLINE",
+      "logical_case": 35,
+      "lane": 9
+    },
+    {
+      "root": 1,
+      "x": 5.0,
+      "method": "forced",
+      "role": "TEST_ONLINE",
+      "logical_case": 17,
+      "lane": 10
+    },
+    {
+      "root": 2,
+      "x": 3.0,
+      "method": "forced",
+      "role": "TEST_ONLINE",
+      "logical_case": 23,
+      "lane": 11
+    },
+    {
+      "root": 3,
+      "x": 3.0,
+      "method": "event_model",
+      "role": "TEST_ONLINE",
+      "logical_case": 30,
+      "lane": 12
+    },
+    {
+      "root": 1,
+      "x": 3.0,
+      "method": "direct_success",
+      "role": "TEST_ONLINE",
+      "logical_case": 13,
+      "lane": 13
+    },
+    {
+      "root": 2,
+      "x": 5.0,
+      "method": "event_model",
+      "role": "TEST_ONLINE",
+      "logical_case": 24,
+      "lane": 14
+    },
+    {
+      "root": 2,
+      "x": 3.0,
+      "method": "event_model",
+      "role": "TEST_ONLINE",
+      "logical_case": 21,
+      "lane": 15
+    },
+    {
+      "root": 3,
+      "x": 5.0,
+      "method": "event_model",
+      "role": "TEST_ONLINE",
+      "logical_case": 33,
+      "lane": 16
+    },
+    {
+      "root": 0,
+      "x": 5.0,
+      "method": "forced",
+      "role": "TEST_ONLINE",
+      "logical_case": 8,
+      "lane": 17
+    },
+    {
+      "root": 0,
+      "x": 1.8,
+      "method": "event_model",
+      "role": "TEST_ONLINE",
+      "logical_case": 0,
+      "lane": 18
+    },
+    {
+      "root": 2,
+      "x": 5.0,
+      "method": "forced",
+      "role": "TEST_ONLINE",
+      "logical_case": 26,
+      "lane": 19
+    },
+    {
+      "root": 3,
+      "x": 3.0,
+      "method": "direct_success",
+      "role": "TEST_ONLINE",
+      "logical_case": 31,
+      "lane": 20
+    },
+    {
+      "root": 2,
+      "x": 1.8,
+      "method": "forced",
+      "role": "TEST_ONLINE",
+      "logical_case": 20,
+      "lane": 21
+    },
+    {
+      "root": 1,
+      "x": 1.8,
+      "method": "forced",
+      "role": "TEST_ONLINE",
+      "logical_case": 11,
+      "lane": 22
+    },
+    {
+      "root": 0,
+      "x": 5.0,
+      "method": "event_model",
+      "role": "TEST_ONLINE",
+      "logical_case": 6,
+      "lane": 23
+    },
+    {
+      "root": 1,
+      "x": 5.0,
+      "method": "event_model",
+      "role": "TEST_ONLINE",
+      "logical_case": 15,
+      "lane": 24
+    },
+    {
+      "root": 1,
+      "x": 3.0,
+      "method": "event_model",
+      "role": "TEST_ONLINE",
+      "logical_case": 12,
+      "lane": 25
+    },
+    {
+      "root": 0,
+      "x": 1.8,
+      "method": "forced",
+      "role": "TEST_ONLINE",
+      "logical_case": 2,
+      "lane": 26
+    },
+    {
+      "root": 0,
+      "x": 5.0,
+      "method": "direct_success",
+      "role": "TEST_ONLINE",
+      "logical_case": 7,
+      "lane": 27
+    },
+    {
+      "root": 0,
+      "x": 3.0,
+      "method": "forced",
+      "role": "TEST_ONLINE",
+      "logical_case": 5,
+      "lane": 28
+    },
+    {
+      "root": 2,
+      "x": 5.0,
+      "method": "direct_success",
+      "role": "TEST_ONLINE",
+      "logical_case": 25,
+      "lane": 29
+    },
+    {
+      "root": 3,
+      "x": 3.0,
+      "method": "forced",
+      "role": "TEST_ONLINE",
+      "logical_case": 32,
+      "lane": 30
+    },
+    {
+      "root": 3,
+      "x": 1.8,
+      "method": "direct_success",
+      "role": "TEST_ONLINE",
+      "logical_case": 28,
+      "lane": 31
+    },
+    {
+      "root": 1,
+      "x": 1.8,
+      "method": "event_model",
+      "role": "TEST_ONLINE",
+      "logical_case": 9,
+      "lane": 32
+    },
+    {
+      "root": 3,
+      "x": 1.8,
+      "method": "forced",
+      "role": "TEST_ONLINE",
+      "logical_case": 29,
+      "lane": 33
+    },
+    {
+      "root": 1,
+      "x": 5.0,
+      "method": "direct_success",
+      "role": "TEST_ONLINE",
+      "logical_case": 16,
+      "lane": 34
+    },
+    {
+      "root": 0,
+      "x": 3.0,
+      "method": "event_model",
+      "role": "TEST_ONLINE",
+      "logical_case": 3,
+      "lane": 35
+    }
+  ],
+  "candidates": [
+    "event_model",
+    "direct_success",
+    "forced"
+  ],
+  "route_names": [
+    "straight_jump_v1.5_a0.0",
+    "straight_jump_v1.5_a0.5",
+    "straight_jump_v1.5_a1.0",
+    "straight_jump_v1.8_a0.0",
+    "straight_jump_v1.8_a0.5",
+    "straight_jump_v1.8_a1.0",
+    "straight_jump_v2.0_a0.0",
+    "straight_jump_v2.0_a0.5",
+    "straight_jump_v2.0_a1.0",
+    "straight_jump_v2.3_a0.0",
+    "straight_jump_v2.3_a0.5",
+    "straight_jump_v2.3_a1.0",
+    "straight_jump_v2.6_a0.0",
+    "straight_jump_v2.6_a0.5",
+    "straight_jump_v2.6_a1.0",
+    "s_bend_jump_v1.5_a0.0",
+    "s_bend_jump_v1.5_a0.5",
+    "s_bend_jump_v1.5_a1.0",
+    "s_bend_jump_v1.8_a0.0",
+    "s_bend_jump_v1.8_a0.5",
+    "s_bend_jump_v1.8_a1.0",
+    "s_bend_jump_v2.0_a0.0",
+    "s_bend_jump_v2.0_a0.5",
+    "s_bend_jump_v2.0_a1.0",
+    "s_bend_jump_v2.3_a0.0",
+    "s_bend_jump_v2.3_a0.5",
+    "s_bend_jump_v2.3_a1.0",
+    "s_bend_jump_v2.6_a0.0",
+    "s_bend_jump_v2.6_a0.5",
+    "s_bend_jump_v2.6_a1.0",
+    "right_angle_jump_v1.5_a0.0",
+    "right_angle_jump_v1.5_a0.5",
+    "right_angle_jump_v1.5_a1.0",
+    "right_angle_jump_v1.8_a0.0",
+    "right_angle_jump_v1.8_a0.5",
+    "right_angle_jump_v1.8_a1.0",
+    "right_angle_jump_v2.0_a0.0",
+    "right_angle_jump_v2.0_a0.5",
+    "right_angle_jump_v2.0_a1.0",
+    "right_angle_jump_v2.3_a0.0",
+    "right_angle_jump_v2.3_a0.5",
+    "right_angle_jump_v2.3_a1.0",
+    "right_angle_jump_v2.6_a0.0",
+    "right_angle_jump_v2.6_a0.5",
+    "right_angle_jump_v2.6_a1.0",
+    "ground_detour_v1.5_a0.0",
+    "ground_detour_v1.5_a0.5",
+    "ground_detour_v1.5_a1.0",
+    "ground_detour_v1.8_a0.0",
+    "ground_detour_v1.8_a0.5",
+    "ground_detour_v1.8_a1.0",
+    "ground_detour_v2.0_a0.0",
+    "ground_detour_v2.0_a0.5",
+    "ground_detour_v2.0_a1.0",
+    "ground_detour_v2.3_a0.0",
+    "ground_detour_v2.3_a0.5",
+    "ground_detour_v2.3_a1.0",
+    "ground_detour_v2.6_a0.0",
+    "ground_detour_v2.6_a0.5",
+    "ground_detour_v2.6_a1.0"
+  ],
+  "scope": "New4roots; paired3query positions and3methods; not12independent roots",
+  "budget": "36episodes\u00d710s=144000physics lane steps max;0training; expected2-4minutes; stop once or actual runtime error"
+}

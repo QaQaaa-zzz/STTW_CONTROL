@@ -1,0 +1,602 @@
+[
+  {
+    "root": 2,
+    "lane": 3,
+    "x": 1.8,
+    "method": "event_model",
+    "success": true,
+    "end_code": 13,
+    "road_violation": false,
+    "selected": 48,
+    "query_ms": 62.05305099138059,
+    "status": "published",
+    "route": "ground_detour_v1.8_a0.0",
+    "admissible_count": 60,
+    "query_state": [
+      1.8153915405273438,
+      -0.02085113525390625,
+      0.11894117295742035,
+      0.7013698220252991,
+      0.001453469623811543,
+      0.0008115503005683422,
+      0.7127955555915833,
+      2.0399327278137207,
+      0.026669595390558243,
+      -0.00019498287292663008,
+      0.042316943407058716,
+      0.002422215649858117,
+      0.21996735036373138
+    ],
+    "top3": [
+      {
+        "id": 48,
+        "route": "ground_detour_v1.8_a0.0",
+        "score": 0.6793440287645787
+      },
+      {
+        "id": 51,
+        "route": "ground_detour_v2.0_a0.0",
+        "score": 0.6490401160980864
+      },
+      {
+        "id": 45,
+        "route": "ground_detour_v1.5_a0.0",
+        "score": 0.586955671419623
+      }
+    ],
+    "simulated_delay_s": 0.08,
+    "motion_during_delay_m": 0.16388994953015665,
+    "entry_s": null,
+    "handoff_s": null
+  },
+  {
+    "root": 3,
+    "lane": 7,
+    "x": 1.8,
+    "method": "event_model",
+    "success": true,
+    "end_code": 13,
+    "road_violation": false,
+    "selected": 48,
+    "query_ms": 49.09219400724396,
+    "status": "published",
+    "route": "ground_detour_v1.8_a0.0",
+    "admissible_count": 60,
+    "query_state": [
+      1.8305320739746094,
+      -0.010776519775390625,
+      0.11894857883453369,
+      0.712006688117981,
+      0.005449722521007061,
+      0.004716167692095041,
+      0.7021358609199524,
+      1.9920567274093628,
+      0.01937832683324814,
+      1.0893461876548827e-05,
+      -0.04725315794348717,
+      -0.0008227758225984871,
+      -0.1300376057624817
+    ],
+    "top3": [
+      {
+        "id": 48,
+        "route": "ground_detour_v1.8_a0.0",
+        "score": 0.6874357753887854
+      },
+      {
+        "id": 51,
+        "route": "ground_detour_v2.0_a0.0",
+        "score": 0.6517541031082064
+      },
+      {
+        "id": 45,
+        "route": "ground_detour_v1.5_a0.0",
+        "score": 0.6108478573902012
+      }
+    ],
+    "simulated_delay_s": 0.06,
+    "motion_during_delay_m": 0.11889240946484056,
+    "entry_s": null,
+    "handoff_s": null
+  },
+  {
+    "root": 3,
+    "lane": 12,
+    "x": 3.0,
+    "method": "event_model",
+    "success": false,
+    "end_code": 18,
+    "road_violation": true,
+    "selected": 48,
+    "query_ms": 49.35099999420345,
+    "status": "published",
+    "route": "ground_detour_v1.8_a0.0",
+    "admissible_count": 60,
+    "query_state": [
+      3.0129528045654297,
+      -0.00058746337890625,
+      0.11907507479190826,
+      0.7001464366912842,
+      0.033153362572193146,
+      0.03300374001264572,
+      0.7124651074409485,
+      2.0478787422180176,
+      0.22471223771572113,
+      0.1448010355234146,
+      0.5552738904953003,
+      0.23987741768360138,
+      -0.7238869071006775
+    ],
+    "top3": [
+      {
+        "id": 48,
+        "route": "ground_detour_v1.8_a0.0",
+        "score": 0.36585674455338796
+      },
+      {
+        "id": 45,
+        "route": "ground_detour_v1.5_a0.0",
+        "score": 0.3330101059684464
+      },
+      {
+        "id": 51,
+        "route": "ground_detour_v2.0_a0.0",
+        "score": 0.30651865150222807
+      }
+    ],
+    "simulated_delay_s": 0.06,
+    "motion_during_delay_m": 0.12388473696277887,
+    "entry_s": null,
+    "handoff_s": null
+  },
+  {
+    "root": 2,
+    "lane": 14,
+    "x": 5.0,
+    "method": "event_model",
+    "success": false,
+    "end_code": 15,
+    "road_violation": true,
+    "selected": 3,
+    "query_ms": 51.610753987915814,
+    "status": "published",
+    "route": "straight_jump_v1.8_a0.0",
+    "admissible_count": 30,
+    "query_state": [
+      5.019870758056641,
+      0.09842491149902344,
+      0.14127333462238312,
+      0.6865831017494202,
+      -0.03120400756597519,
+      -0.008451765403151512,
+      0.7263323664665222,
+      2.0404305458068848,
+      -0.12307073920965195,
+      -0.03348695486783981,
+      -0.6281202435493469,
+      0.6701425909996033,
+      -0.08788017183542252
+    ],
+    "top3": [
+      {
+        "id": 3,
+        "route": "straight_jump_v1.8_a0.0",
+        "score": 0.2966432912215803
+      },
+      {
+        "id": 18,
+        "route": "s_bend_jump_v1.8_a0.0",
+        "score": 0.25662013756321633
+      },
+      {
+        "id": 6,
+        "route": "straight_jump_v2.0_a0.0",
+        "score": 0.24761499771313078
+      }
+    ],
+    "simulated_delay_s": 0.06,
+    "motion_during_delay_m": 0.12370211167271478,
+    "entry_s": null,
+    "handoff_s": null
+  },
+  {
+    "root": 2,
+    "lane": 15,
+    "x": 3.0,
+    "method": "event_model",
+    "success": false,
+    "end_code": 18,
+    "road_violation": true,
+    "selected": 48,
+    "query_ms": 49.42983400542289,
+    "status": "published",
+    "route": "ground_detour_v1.8_a0.0",
+    "admissible_count": 60,
+    "query_state": [
+      3.0010643005371094,
+      0.004451751708984375,
+      0.11924515664577484,
+      0.7010394930839539,
+      0.018488077446818352,
+      0.01758451573550701,
+      0.7126659154891968,
+      2.0221445560455322,
+      -0.021472422406077385,
+      -0.07649572938680649,
+      -0.3426973521709442,
+      0.0522322803735733,
+      0.369165301322937
+    ],
+    "top3": [
+      {
+        "id": 48,
+        "route": "ground_detour_v1.8_a0.0",
+        "score": 0.34925553924912256
+      },
+      {
+        "id": 45,
+        "route": "ground_detour_v1.5_a0.0",
+        "score": 0.3430830705431191
+      },
+      {
+        "id": 3,
+        "route": "straight_jump_v1.8_a0.0",
+        "score": 0.2932917415730832
+      }
+    ],
+    "simulated_delay_s": 0.06,
+    "motion_during_delay_m": 0.12157231412267415,
+    "entry_s": null,
+    "handoff_s": null
+  },
+  {
+    "root": 3,
+    "lane": 16,
+    "x": 5.0,
+    "method": "event_model",
+    "success": true,
+    "end_code": 13,
+    "road_violation": false,
+    "selected": 3,
+    "query_ms": 50.70847598835826,
+    "status": "published",
+    "route": "straight_jump_v1.8_a0.0",
+    "admissible_count": 30,
+    "query_state": [
+      5.039089202880859,
+      0.0206146240234375,
+      0.13653238117694855,
+      0.7293387055397034,
+      0.05328443646430969,
+      0.041321609169244766,
+      0.6808218955993652,
+      2.029381513595581,
+      0.1677044928073883,
+      0.012969251722097397,
+      0.47797396779060364,
+      1.3816747665405273,
+      0.8601051568984985
+    ],
+    "top3": [
+      {
+        "id": 3,
+        "route": "straight_jump_v1.8_a0.0",
+        "score": 0.19711488481998435
+      },
+      {
+        "id": 18,
+        "route": "s_bend_jump_v1.8_a0.0",
+        "score": 0.1752986124810237
+      },
+      {
+        "id": 0,
+        "route": "straight_jump_v1.5_a0.0",
+        "score": 0.1639713986822277
+      }
+    ],
+    "simulated_delay_s": 0.06,
+    "motion_during_delay_m": 0.12515674612120284,
+    "entry_s": 3.8999998569488525,
+    "handoff_s": 4.920000076293945
+  },
+  {
+    "root": 0,
+    "lane": 18,
+    "x": 1.8,
+    "method": "event_model",
+    "success": true,
+    "end_code": 13,
+    "road_violation": false,
+    "selected": 48,
+    "query_ms": 50.3891289990861,
+    "status": "published",
+    "route": "ground_detour_v1.8_a0.0",
+    "admissible_count": 60,
+    "query_state": [
+      1.8207511901855469,
+      -0.0193328857421875,
+      0.11894416809082031,
+      0.7032049298286438,
+      4.957496639690362e-05,
+      -0.0006146555533632636,
+      0.7109870314598083,
+      2.0294957160949707,
+      0.00947156734764576,
+      -0.00011651682871161029,
+      0.021150676533579826,
+      0.0009698984795249999,
+      0.11890838295221329
+    ],
+    "top3": [
+      {
+        "id": 48,
+        "route": "ground_detour_v1.8_a0.0",
+        "score": 0.6775835874652374
+      },
+      {
+        "id": 51,
+        "route": "ground_detour_v2.0_a0.0",
+        "score": 0.6445131300577532
+      },
+      {
+        "id": 45,
+        "route": "ground_detour_v1.5_a0.0",
+        "score": 0.5902171732430193
+      }
+    ],
+    "simulated_delay_s": 0.06,
+    "motion_during_delay_m": 0.12199314330635744,
+    "entry_s": null,
+    "handoff_s": null
+  },
+  {
+    "root": 0,
+    "lane": 23,
+    "x": 5.0,
+    "method": "event_model",
+    "success": false,
+    "end_code": 3,
+    "road_violation": false,
+    "selected": 3,
+    "query_ms": 49.05746498843655,
+    "status": "published",
+    "route": "straight_jump_v1.8_a0.0",
+    "admissible_count": 30,
+    "query_state": [
+      5.010892868041992,
+      -0.01467132568359375,
+      0.1390453279018402,
+      0.7011616230010986,
+      -0.010251140221953392,
+      0.0007490187999792397,
+      0.712928295135498,
+      2.0017242431640625,
+      -0.00590171804651618,
+      0.060190729796886444,
+      -0.14428167045116425,
+      1.359933853149414,
+      -0.10289927572011948
+    ],
+    "top3": [
+      {
+        "id": 3,
+        "route": "straight_jump_v1.8_a0.0",
+        "score": 0.25319993870099444
+      },
+      {
+        "id": 18,
+        "route": "s_bend_jump_v1.8_a0.0",
+        "score": 0.22356663184861797
+      },
+      {
+        "id": 0,
+        "route": "straight_jump_v1.5_a0.0",
+        "score": 0.21603832935374145
+      }
+    ],
+    "simulated_delay_s": 0.06,
+    "motion_during_delay_m": 0.12546490912794994,
+    "entry_s": 3.859999895095825,
+    "handoff_s": 4.940000057220459
+  },
+  {
+    "root": 1,
+    "lane": 24,
+    "x": 5.0,
+    "method": "event_model",
+    "success": false,
+    "end_code": 18,
+    "road_violation": true,
+    "selected": 3,
+    "query_ms": 50.24450799101032,
+    "status": "published",
+    "route": "straight_jump_v1.8_a0.0",
+    "admissible_count": 30,
+    "query_state": [
+      5.011577606201172,
+      -0.0006103515625,
+      0.13709767162799835,
+      0.70320725440979,
+      0.011183352209627628,
+      0.010291097685694695,
+      0.7108224630355835,
+      2.1065633296966553,
+      0.08139847218990326,
+      0.07218070328235626,
+      -0.1230606660246849,
+      1.414171576499939,
+      0.03989892825484276
+    ],
+    "top3": [
+      {
+        "id": 3,
+        "route": "straight_jump_v1.8_a0.0",
+        "score": 0.26732525127369133
+      },
+      {
+        "id": 18,
+        "route": "s_bend_jump_v1.8_a0.0",
+        "score": 0.2652837545835699
+      },
+      {
+        "id": 0,
+        "route": "straight_jump_v1.5_a0.0",
+        "score": 0.23445380249510145
+      }
+    ],
+    "simulated_delay_s": 0.06,
+    "motion_during_delay_m": 0.1272176488375224,
+    "entry_s": 3.879999876022339,
+    "handoff_s": 4.920000076293945
+  },
+  {
+    "root": 1,
+    "lane": 25,
+    "x": 3.0,
+    "method": "event_model",
+    "success": false,
+    "end_code": 9,
+    "road_violation": true,
+    "selected": 45,
+    "query_ms": 49.48958399472758,
+    "status": "published",
+    "route": "ground_detour_v1.5_a0.0",
+    "admissible_count": 60,
+    "query_state": [
+      3.015789031982422,
+      -0.051204681396484375,
+      0.12096921354532242,
+      0.7092090845108032,
+      -0.010627766139805317,
+      -0.007597186602652073,
+      0.7048771977424622,
+      2.1403956413269043,
+      -0.07271218299865723,
+      0.06826577335596085,
+      -0.09955797344446182,
+      -0.3936530649662018,
+      -0.4250425100326538
+    ],
+    "top3": [
+      {
+        "id": 45,
+        "route": "ground_detour_v1.5_a0.0",
+        "score": 0.3429975215253407
+      },
+      {
+        "id": 48,
+        "route": "ground_detour_v1.8_a0.0",
+        "score": 0.3301148886125444
+      },
+      {
+        "id": 3,
+        "route": "straight_jump_v1.8_a0.0",
+        "score": 0.2649948004908144
+      }
+    ],
+    "simulated_delay_s": 0.06,
+    "motion_during_delay_m": 0.1252249976474117,
+    "entry_s": null,
+    "handoff_s": null
+  },
+  {
+    "root": 1,
+    "lane": 32,
+    "x": 1.8,
+    "method": "event_model",
+    "success": true,
+    "end_code": 13,
+    "road_violation": false,
+    "selected": 48,
+    "query_ms": 53.1557569920551,
+    "status": "published",
+    "route": "ground_detour_v1.8_a0.0",
+    "admissible_count": 60,
+    "query_state": [
+      1.8185348510742188,
+      -0.0151824951171875,
+      0.11894866824150085,
+      0.712424099445343,
+      -0.010352515615522861,
+      -0.01085201557725668,
+      0.7015889883041382,
+      2.0366098880767822,
+      -0.07731878012418747,
+      -1.1417330824770033e-05,
+      -0.05253345146775246,
+      0.002695128321647644,
+      -0.19623391330242157
+    ],
+    "top3": [
+      {
+        "id": 48,
+        "route": "ground_detour_v1.8_a0.0",
+        "score": 0.6066485308507779
+      },
+      {
+        "id": 51,
+        "route": "ground_detour_v2.0_a0.0",
+        "score": 0.5666112304313631
+      },
+      {
+        "id": 45,
+        "route": "ground_detour_v1.5_a0.0",
+        "score": 0.5231554216849014
+      }
+    ],
+    "simulated_delay_s": 0.06,
+    "motion_during_delay_m": 0.12255332018386778,
+    "entry_s": null,
+    "handoff_s": null
+  },
+  {
+    "root": 0,
+    "lane": 35,
+    "x": 3.0,
+    "method": "event_model",
+    "success": false,
+    "end_code": 9,
+    "road_violation": true,
+    "selected": 45,
+    "query_ms": 49.49182999553159,
+    "status": "published",
+    "route": "ground_detour_v1.5_a0.0",
+    "admissible_count": 60,
+    "query_state": [
+      3.0072860717773438,
+      -0.00030517578125,
+      0.11912427842617035,
+      0.7115633487701416,
+      0.010440567508339882,
+      0.010706227272748947,
+      0.702462911605835,
+      2.143472194671631,
+      0.06269272416830063,
+      0.02874017134308815,
+      0.12378653883934021,
+      -0.5099908709526062,
+      -0.3800809979438782
+    ],
+    "top3": [
+      {
+        "id": 45,
+        "route": "ground_detour_v1.5_a0.0",
+        "score": 0.27995754321972144
+      },
+      {
+        "id": 3,
+        "route": "straight_jump_v1.8_a0.0",
+        "score": 0.277558548080057
+      },
+      {
+        "id": 48,
+        "route": "ground_detour_v1.8_a0.0",
+        "score": 0.26841700409014735
+      }
+    ],
+    "simulated_delay_s": 0.06,
+    "motion_during_delay_m": 0.12452686909522584,
+    "entry_s": null,
+    "handoff_s": null
+  }
+]

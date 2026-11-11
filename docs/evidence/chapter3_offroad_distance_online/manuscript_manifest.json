@@ -1,0 +1,31 @@
+{
+  "draft": "docs/CHAPTER3_MANUSCRIPT.md",
+  "status": "research_draft_author_review_pending",
+  "verification": "Saved outputs and links checked; no new simulation for manuscript export",
+  "ledger_revision": 453,
+  "raw_base": "/media/qy/6A7E3DB07E3D75C3/STTW_runs",
+  "runs": [
+    "chapter3_offroad_event_training",
+    "chapter3_offroad_distance_training",
+    "chapter3_offroad_distance_online",
+    "chapter3_offroad_new_roots"
+  ],
+  "online_counts": {
+    "event_model": [
+      5,
+      12
+    ],
+    "direct_success": [
+      5,
+      12
+    ],
+    "forced": [
+      6,
+      12
+    ]
+  },
+  "independent_online_roots": 4,
+  "figures_embedded_in_docx": 5,
+  "docx_equations": "editable LaTeX source text, not native Word equations",
+  "source_revision_before_documentation": "d9ad4088"
+}
