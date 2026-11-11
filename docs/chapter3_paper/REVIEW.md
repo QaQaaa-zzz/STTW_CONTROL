@@ -1,74 +1,36 @@
-## Task-conditioned extension fitted; online use still pending
+# Minimum-loop draft completion audit
 
-540 new full-prefix executions provide366 valid handoff labels (234TRAIN/132DEV,8/4root split). The58D task-conditioned ensemble uses actual downstream geometric samples,not task IDs. DEV Brier0.10827 versus same-data state-only0.10290; no superiority. On the previously inspected4matched historical sources,it scores different tasks differently but ranks straight first in all4,missing source7's left-only success. Preserve this negative ranking result. Runtime reload parity1.49e-8; no online choice claim yet. Evidence: ../evidence/chapter3_task_condition_model/RESULTS.md.
+This audit covers the requested simulation-based minimum loop and English research draft. It does not approve journal submission or claim a superior planner. No further experiment is scheduled for this deliverable.
 
-## Bounded ground-head correction completed without improvement
-
-Independent ground-only fitting improves DEV Brier slightly but not historical transfer. Actual DEVELOPMENT_RETEST270 episodes: interface14/90,direct30/90,rule42/90;29 chosen detours all time out. Only4/90 decisions change from the original panel. Keep original15/90 main panel and this failed correction; do not continue an unbounded fitting search. See ../evidence/chapter3_interface_ground_online/RESULTS.md. Task-dependent downstream recoverability remains unvalidated.
-
-# Current manuscript review
-
-The English main text has now been rewritten around the implemented two-interface model and the frozen270-episode online panel. It explicitly reports15/90 versus33/90 and41/90, the ground-route ranking failure, shared ground-head training, conditional-state masking, complete-task probability composition and grouped selection.
-
-Remaining research gaps: independently isolate ground-head fitting; validate task-dependent downstream width/curvature; measure empirical rescue/margin labels if retained as a claim; test genuine history initialization; evaluate repeated replanning. None is described as completed. The current30 online roots become development if used for a correction. Human source/citation and author review remain pending. No baseline-superiority or certified-recoverability claim is accepted.
-
-## Historical review trail (superseded status statements retained below)
-
-## Full two-interface execution now measured
-
-Training/output evidence: ../evidence/chapter3_interface_model/RESULTS.md. Frozen30-root,three-repeat execution: ../evidence/chapter3_interface_online/RESULTS.md. Completion15/90(interface),33/90(direct),41/90(rule). All33 interface detours time out; the ground head assigns substantial probability to a0/20 TRAIN action. Do not claim a winning planner or treat13 gains without39 losses as net benefit. The paper can now describe actual upstream distribution learning,downstream conditional goal learning,and composed physical execution. Ground-head correction,if attempted,must be bounded and retain this failed version;these roots become development for any subsequent modification. No changed downstream geometry or recovery-margin evidence exists.
-
-## Downstream model pilot now available
-
-See ../evidence/chapter3_continuation_model/RESULTS.md. Three compact MLP members predict observed2s continuation from measured handoff state under a fixed cold initialization.82 TRAIN cases/8 roots and36 DEV cases/4 roots;DEV selects epochs. Brier0.12376 versus constant0.23242 on DEV, but source historical transfer0.22978 versus0.22700 is negative. Historical RB transfer is better than constant but is neither RB training nor same-state recovery improvement. Upstream modeling, complete controller-state logging, new downstream layouts and composed physical decisions remain missing. Do not present this conditional classifier alone as the completed world model.
-
-## Current interface evidence update
-
-The research direction is now effective skill handoff and downstream continuation, with the existing event-chain paper retained as a historical baseline. New retrospective labels are in `../evidence/chapter3_continuation_labels/RESULTS.md`. The nominal straight-ground envelope is not a valid necessary condition for capture: only11/46 and20/79 observed2s continuations entered and held it within1s in the two source collections. Use measured2s continuation as the initial downstream outcome; retain envelope entry as an auxiliary descriptor and report full-goal results separately. Do not rename absence of envelope entry as capture failure.
-
-Still required for the new paper: actual upstream/downstream interface training and grouped baselines, logged downstream controller state at the declared prediction instant, a matched branching/no-change diagnostic before rescuability labels, and physical execution of interface-guided decisions. Current retrospective associations do not establish planning gains. The supplied proposal's guaranteed speedups and success rates are not evidence.
-
-# Independent agent review and paper closure
-
-**Research-direction update:** this manuscript is retained as the historical event-chain execution baseline. The new handoff-recoverability hypothesis and proposed two-interface model are not implemented results. See [revised design](../CHAPTER3_EVENT_WORLD_MODEL.md) and [stage/init/repeatability audit](../evidence/chapter3_handoff_audit/RESULTS.md). The earlier minimal-loop acceptance concerns engineering execution only, not validation of the new research question. Abstract/introduction are not rewritten as if the proposed method existed.
-
-Three delegated agents examined (1) the implemented mathematical model, (2) the argument/evidence gap, and (3) outputs and visualization. The primary agent integrated their findings and inspected sources and rendered figures. This is an internal methodological review, not external peer review.
-
-## Current-stage acceptance
-
-The user explicitly accepts an operational minimal loop without outperforming a baseline. Existing trained-model predictions, online candidate selection, physical bypass/crossing and STTW continuation satisfy this engineering-stage criterion. No further superiority experiment is required for this delivery. Performance, robustness and causal-benefit studies below are optional future extensions, not blockers.
-
-## Contribution that the current evidence supports
-
-An event-level predictive planning interface composes frozen ground and jump controllers for continuous forward traversal of a known off-road map. It predicts intermediate physical consequences, ranks finite route/approach candidates, accounts for motion during inference, and executes selections through landing handoff to a common goal. The contribution is not a general-purpose world model, arbitrary route generation, or a demonstrated completion-rate improvement.
-
-|Reviewer finding|Action completed|Evidence/status|
+| Requirement | Inspected evidence | Finding |
 |---|---|---|
-|World-model definition was underspecified|Added exact state/action/map dimensions, event table, architecture, residual distribution and loss|English Sections IV–V, checked against source|
-|Training was described as an outcome rather than a reproducible method|Added whole-root split, labels, missing-event handling, PCA, prefixes, optimizer/budget/checkpoint rule, actual loss figure|Sections IV-D and VI|
-|Actual model outputs were absent|Added all2666 DEV predicted/observed transitions, occurrence plots including failures, time/XY plots, velocity/attitude and online event means|chapter3_event_outputs|
-|Model metrics used only two DEV roots|Evaluated both frozen models on240 saved out-of-training-root executions; no refit|chapter3_event_frozen_test; previous inspection of these TEST roots disclosed|
-|Teacher-forced metrics could be confused with model rollouts|Separated conditional previous-event inputs from32-particle initial autoregressive forecasts|Sections IV-D, V-A, VI-B, VII|
-|Three-head effect lacked a comparator|Shared-head event-conditioned ablation evaluated on identical inputs and TEST trajectories|Capacity35770/27710 disclosed; not a pure structure-only effect|
-|Route-switch case could imply learned capability boundary|Explicitly attribute late bypass exclusion to geometric admission; retain failed middle case|Section VII online case|
-|Recovery and mode claims exceeded code|Replace learned mode-transition/stabilization claims with prescribed event index and goal-continuation proxy|Sections III–V|
-|Score could be called calibrated probability incorrectly|Document overlapping goal/road semantics and heuristic ranking interpretation|Ranking-score equation and Section V|
-|Initial road flag in fitting was always false|Count original publication histories:0/1199 TRAIN/DEV,0/240 TEST|No observed mismatch in these frozen datasets|
+| Preserve frozen driving/jumping and physical constraints | Three joint-panel configs; `ditch_ground_handoff.py`; full execution logs | H75/source jump retained; no PPO or physical/goal relaxation |
+| Learned upstream state distribution, not only scenario selection | `interface_world_model.py`; I1 model fitting/output evidence | Valid-handoff probability and conditional 39D state/time distribution; actual supervised training documented |
+| Downstream task-conditioned outcome | `handoff_model.py`, `handoff_task_context.py`; I10 | 58D state/geometry model, grouped 234 TRAIN/132 DEV labels; negative ablation retained |
+| Integrate predicted states in decisions | Joint records and I12 `score_replay.json` | All 180 upstream score vectors and planned downstream routes reproduce exactly; route maximization follows expectation |
+| Reconsider using measured state while moving | Joint handoff query/publication records | 44 revisions; 259 actual publications verified; no state reset at publication |
+| Actual full-task positive simulations | I12 complete 270-episode records and XY | Feedback 30/90, open plan 28/90, fixed 28/90; eleven completions after revision and four successful non-straight final choices |
+| Preserve failures and credible limits | I2, I7, I10, I11, I12 and main text | All denominators retained; no causal-rescue, superiority, equivalence, learned margin or map-generalization claim |
+| Professional English manuscript with modeling/training/outputs | `MANUSCRIPT.tex`, PDF, claims/source manifests | Eight-page research draft: task, model, losses, planning, grouped experiments, figures, negative results and limitations |
+| Reproducible artifact and integration checks | Build receipt, source files, raw-run paths, related tests | PDF compiles with four resolved figures and no overflow; ten relevant tests pass; source paths resolve |
 
-Final review additionally requested explicit contact/failure predicates and a controller/α definition. Both were added to the manuscript and `IMPLEMENTATION_DETAILS.md`; the reviewer confirmed model equations, training, output figures and denominators against actual evidence.
+## Boundaries that are not completed contributions
 
-## Optional future work beyond the completed minimal execution loop
+- The joint extension covers fifteen straight approaches and three downstream roads. Earlier 60-candidate S/90-degree/detour results remain separate and include substantial failure.
+- All joint approach choices are 1.5 m/s, alpha 0. Available actions are not evidence of diverse state-dependent approach choices.
+- Feedback versus open-plan mean difference is 0.0222 with root-bootstrap interval [-0.1111, 0.1556]. Only 1/89 paired handoff descriptors match exactly. Eleven goals after revision are not eleven rescued counterfactual failures.
+- Empirical rescue margins, a trained short correction, true-history warm starts, new widths/maps and hardware execution are not demonstrated. They are not required to claim this bounded minimum executable loop and are not used to support it.
+- LLM remains deferred; it is not the planner or a contribution of this draft.
+- Authors, affiliations, funding/conflicts, human source/citation verification and submission approval remain pending. `submission_ready` stays false. Draft delivery does not imply publication readiness.
 
-1. **Prediction-to-decision benefit is not established.** Current online outcomes5/12 versus rule6/12 are valid closed-loop evidence; they do not demonstrate that intermediate predictions improve decisions. A counterfactual choice panel or matched ablation is needed only if the paper claims such a benefit. Do not tune the inspected TEST batch and continue calling it untouched TEST.
-2. **The score and state are imperfect.** Explicit remaining horizon is omitted, and goal/road probabilities overlap. Correcting them requires a new version with new frozen model/evaluation identity; it must not silently replace the current reported method. The manuscript describes the implemented estimator precisely.
-3. **No ordinary fixed-step dynamics or no-continuation ablation.** Shared-head still uses event labels. These missing comparators limit claims about event formulation and downstream recovery as causes of better decisions. They are not disguised as completed experiments.
-4. **Limited scope and sample size.** Four TEST roots, one map, one optimizer seed, failure of right-angle routes, and no hardware validation preclude broad robustness claims. A follow-up should add grouped new-root/new-map testing if generalization is claimed, rather than repeatedly optimizing isolated failures.
-5. **Publication preparation.** Author verification, project-method references, declarations and final venue/layout approval are pending. The eight-page source is a professional research draft, not a submission certificate or an assertion that RA-L must accept the contribution.
+## Evidence entry points
 
-## Deferred extension; not a prerequisite for this delivery
+- [Joint actual/reference XY and result table](../evidence/chapter3_joint_handoff_online/RESULTS.md)
+- [Full joint records](../evidence/chapter3_joint_handoff_online/results.json)
+- [Frozen protocol](../evidence/chapter3_joint_handoff_online/declaration.json)
+- [Recorded-input score replay](../evidence/chapter3_joint_handoff_online/score_replay.json)
+- [Model learning and physical predictions](../evidence/chapter3_interface_model/RESULTS.md)
+- [Task-conditioned fitting](../evidence/chapter3_task_condition_model/RESULTS.md)
+- [Matched historical task dependence](../evidence/chapter3_handoff_routes/RESULTS.md)
 
-Only if the user later requests performance improvement, first make the completion-score semantics and remaining-time input explicit, keeping the same map/skills/actions and a frozen new-root evaluation. Then compare a direct classifier, event model and an event-free transition alternative at the same observed-state inputs. Preserve the original method as control. No further bottom-level PPO campaign is required to expose this predictive-planning question.
-
-Follow-up completed: saved TEST ranking diagnostic connects model scores to branch choices (three-head4/4, shared0/4, fixed detour4/4). Small candidate-state differences preclude a causal common-state claim; the need for matched online decision comparison remains. See `../evidence/chapter3_event_frozen_test/RANKING.md`.
-
-Online head ablation now executed: three-head5/12, shared1/12, TRAIN rule8/12 across four previously inspected roots at three positions. This closes the absence of actual shared-head execution, not capacity control, untouched confirmation or superiority over the rule.
+Historical reviews and superseded status statements are retained in Git history rather than mixed with this final audit.

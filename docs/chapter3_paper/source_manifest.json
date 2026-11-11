@@ -184,7 +184,7 @@
       "id": "IM1",
       "title": "Actual interface model",
       "path": "learning/src/sttw_control/interface_world_model.py",
-      "sha256": "646a8b3a9d5ad04c25f3e06fcfb5942e8b1c011554c0e4bd69b4af2cc1d29c8e",
+      "sha256": "4951305efa0302204444677e31373fdff2772cc0dde165064bc4c9fdfa9ddbc8",
       "verification": "agent_source_inspected",
       "human_verification": "pending"
     },
@@ -249,6 +249,14 @@
       "title": "Frozen measured-state downstream selection,270 full executions",
       "path": "docs/evidence/chapter3_task_handoff_online/results.json",
       "sha256": "52eb55e14df990c9cca84b7b0a2e323dbe6e673b2723a8786f93129c18f3a13c",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending"
+    },
+    {
+      "id": "I12",
+      "title": "Frozen joint approach/downstream feedback and full executions",
+      "path": "docs/evidence/chapter3_joint_handoff_online/results.json",
+      "sha256": "fa220b31f1d028beb2aec89ec7e4e4fae7444c1e716691a1c14f6222ccbfd245",
       "verification": "agent_source_inspected",
       "human_verification": "pending"
     }

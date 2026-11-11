@@ -2,7 +2,7 @@
 
 **Current draft:** [PDF](MANUSCRIPT.pdf) · [editable LaTeX](MANUSCRIPT.tex). The main paper now describes the implemented two-interface model, rather than the earlier serial event-chain prototype. This is a research draft, not a submission-ready or superior-planning claim.
 
-The scope is frozen STTW/jump composition on a known off-road map: query state and candidates → valid handoff/state distribution → conditional full-goal continuation → actual moving selection and execution. Ground routes have a separate output head sharing the upstream trunk. No empirical recoverability margin, new downstream corridor generalization, true-history warm start, or repeated feedback replanning is claimed.
+The scope is frozen STTW/jump composition on a known off-road map: query state and candidates → valid handoff/state distribution → conditional full-goal continuation → actual moving selection and execution. Ground routes have a separate output head sharing the upstream trunk. The extension adds task-conditioned downstream road choice at measured handoff. No empirical recoverability margin, unseen corridor-width generalization, or true-history warm start is claimed.
 
 ## Evidence and reading order
 
@@ -27,4 +27,9 @@ Author identity, affiliations, funding/conflicts, formal citations for the proje
 
 Scientific-writing and scientific-visualization skills guided the revision, and three delegated agents audited implementation, evaluated gaps and produced frozen prediction evidence. The manuscript text and analysis were AI-assisted and remain subject to author verification. Procedural skill attribution: T. Kassis, V. Agarwal, Y. He, D. Patel, and A. M. Brueckner, *Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents*, 2026, [arXiv:2609.00065](https://arxiv.org/abs/2609.00065), [DOI](https://doi.org/10.48550/arXiv.2609.00065). Metadata was checked against the arXiv record; this is a tooling citation, not robotics evidence.
 
-Current measured-state extension: 270 frozen executions, task-conditioned 13/90, state-only 15/90, fixed straight 14/90; one successful selected left continuation. Evidence I11 preserves unmatched incoming states and all failures. This is downstream-only feedback, not joint upstream/downstream optimization.
+Current measured-state extension: 270 frozen executions, task-conditioned 13/90, state-only 15/90, fixed straight 14/90; one successful selected left continuation. Evidence I11 preserves unmatched incoming states and all failures. This isolated panel is downstream-only feedback; the joint panel below evaluates both interfaces.
+
+
+## Final minimum-loop result
+
+[Joint panel and all XY trajectories](../evidence/chapter3_joint_handoff_online/RESULTS.md): frozen 30 new roots × three repetitions × three methods, 270 executions. Joint feedback completes 30/90; open plan and fixed each complete 28/90. Feedback changes 44 downstream plans, with eleven subsequent goals. All approach selections remain 1.5 m/s, alpha 0. Prediction-to-action execution is verified; neither superiority nor causal rescue is established. This final extension covers 15 straight approaches and three downstream routes; the earlier 60-candidate failures remain separate evidence. No new experiments are required for this minimum-loop draft handoff.

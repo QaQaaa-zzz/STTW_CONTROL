@@ -32,7 +32,7 @@ class MovingDitchPlanner:
         self.interface=None
         if 'interface_model' in config:
             from .interface_world_model import InterfaceWorldModel
-            self.interface=InterfaceWorldModel(config['interface_model'])
+            self.interface=InterfaceWorldModel(config['interface_model'],config.get('task_condition'))
         self.methods=config['methods'];self.queried=np.zeros(task.env.num_envs,bool);self.pending={};self.records=[]
     def admission(self,roots):
         distance=route_distances(roots,self.roads);allowed=distance<=self.task.road_half_width
@@ -67,6 +67,8 @@ class MovingDitchPlanner:
             elif not allowed.any():status='no_admissible_connection_keep_current';selected=None
             else:
                 selected=int(scores.argmax());self.publish([lane],[selected]);status='published'
+                if record.get('prediction') and 'selected_downstream_route' in record['prediction']:
+                    task.handoff_route_ids[lane]=record['prediction']['selected_downstream_route'][selected]
             record.update(status=status,selected=selected,published_step=step,published_root=roots[lane].tolist(),admissible_at_publish=allowed[0].tolist(),distance_at_publish_m=distance[0].tolist(),feedback_changed_choice=selected is not None and selected!=record['proposed'],simulated_delay_s=(step-record['query_step'])*env.dt,motion_during_delay_m=float(np.linalg.norm(roots[lane,:2]-np.asarray(record['query_root'])[:2])))
             del self.pending[lane]
         ids=np.flatnonzero(~self.queried&~finished&(phase==0)&(roots[:,0]>=self.threshold))
@@ -76,12 +78,12 @@ class MovingDitchPlanner:
             if self.methods[lane]=='forced':
                 eligible[:]=False;eligible[self.config['forced_candidates'][lane]]=True;allowed&=eligible[None]
                 prediction=None;scores=eligible.astype(float)
-            elif self.methods[lane] in ('interface_world_model','interface_direct'):
+            elif self.methods[lane] in ('interface_world_model','interface_direct','interface_task'):
                 if self.interface is None:raise ValueError('interface_model directory required')
                 history=torch.cat([v.flatten(1) for v in (g.controller.eso,g.controller.disturbance[:,None],g.controller.gains,g.previous_reference,g.previous_command,g.policy.filtered,g.policy.offsets,g.middle.frames,g.middle.mask)],-1)[lane:lane+1].cpu().numpy()
                 n=len(self.parameters)
-                score=self.interface.score if self.methods[lane]=='interface_world_model' else self.interface.score_direct
-                prediction=score(np.repeat(roots[lane:lane+1],n,0),np.repeat(observation[lane:lane+1].cpu().numpy(),n,0),np.repeat(history,n,0),np.full(n,step*env.dt),self.parameters,particles=32)
+                score=self.interface.score_direct if self.methods[lane]=='interface_direct' else self.interface.score
+                prediction=score(np.repeat(roots[lane:lane+1],n,0),np.repeat(observation[lane:lane+1].cpu().numpy(),n,0),np.repeat(history,n,0),np.full(n,step*env.dt),self.parameters,particles=32,**({'task_conditioned':True} if self.methods[lane]=='interface_task' else {}))
                 scores=np.asarray(prediction['score'])
             elif self.methods[lane] in self.predictors:
                 history=torch.cat([v.flatten(1) for v in (g.controller.eso,g.controller.disturbance[:,None],g.controller.gains,g.previous_reference,g.previous_command,g.policy.filtered,g.policy.offsets,g.middle.frames,g.middle.mask)],-1)[lane:lane+1].cpu().numpy()

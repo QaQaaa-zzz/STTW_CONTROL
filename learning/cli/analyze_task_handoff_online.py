@@ -6,7 +6,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('--run',type=Path,required=True);a=p.parse_args()
-methods=['task_context','state_only','fixed_straight'];rows=[];raw={};wall=steps=0
+declaration=json.loads((a.run/'declaration.json').read_text());methods=declaration['methods'];joint=methods[0]=='joint_feedback';rows=[];raw={};wall=steps=0
 for rep in range(3):
  run=a.run/f'repeat{rep}';pr=json.loads((run/'protocol.json').read_text());cfg=json.loads((run/'config.json').read_text());summary=json.loads((run/'evaluation/summary.json').read_text());rec={r['lane']:r for r in json.loads((run/'evaluation/handoff_planning.json').read_text())['records']};z=np.load(run/'evaluation/trajectories.npz');raw[rep]=(z,cfg,pr);wall+=summary['elapsed_s'];steps+=summary['physics_lane_steps']
  for case,outcome in zip(pr['cases'],summary['cases']):
@@ -38,10 +38,10 @@ for row in rows:
 assert all(c['delay_correct'] and c['route_recorded'] for c in publication_checks)
 route_outcomes=[]
 for rid in (60,61,62):
- rr=[r for r in rows if r['method']=='task_context' and r['decision'] and r['decision']['selected_route']==rid]
+ rr=[r for r in rows if r['method']==methods[0] and r['decision'] and r['decision']['selected_route']==rid]
  route_outcomes.append(dict(route=rid,selected=len(rr),goals=sum(r['success'] for r in rr)))
 # Show every successful non-straight choice; this panel is explicitly descriptive.
-positive=[r for r in rows if r['method']=='task_context' and r['success'] and r['decision']['selected_route']!=60]
+positive=[r for r in rows if r['method']==methods[0] and r['success'] and r['decision']['selected_route']!=60]
 if positive:
  pf,pa=plt.subplots(1,len(positive),figsize=(7*len(positive),4),squeeze=False,layout='constrained')
  for ax,row in zip(pa[0],positive):
@@ -66,11 +66,28 @@ for col,method in enumerate(methods):
  rax[0,col].set(xlabel='time(s)',ylabel='Per-step task reward',title=method);rax[1,col].set(xlabel='time(s)',ylabel='Cumulative task reward')
 fig.suptitle('All270 episodes; blue goal/red failure; immutable downstream references dashed; true endpoints')
 fig.savefig(a.run/'xy_all.png',dpi=160);plt.close(fig);rf.savefig(a.run/'reward_all.png',dpi=160);plt.close(rf)
-result=dict(route_outcomes=route_outcomes,publication_checks=publication_checks,groups=groups,comparisons=comparisons,cases=rows,pairs=pairs,elapsed_s=wall,physics_lane_steps=steps,scope='Frozen30 new roots x3methods x3crossed slots;all upstream failures retained;query-state match only measured descriptors,not hidden solver state')
+joint_decisions=[]
+if joint:
+ for rep in range(3):
+  moving=json.loads((a.run/f'repeat{rep}/evaluation/moving_planning.json').read_text())['records']
+  cases={r['lane']:r for r in rows if r['repeat']==rep}
+  for rec in moving:
+   row=cases[rec['lane']];prediction=rec['prediction'];selected=rec.get('selected')
+   planned=prediction['selected_downstream_route'][selected] if prediction and selected is not None else 60
+   actual=row['decision']['selected_route'] if row['decision'] else None
+   joint_decisions.append(dict(root=row['root'],slot=row['slot'],method=row['method'],approach_candidate=selected,planned_downstream=planned,measured_choice=actual,revised=actual is not None and actual!=planned,success=row['success'],upstream_query_ms=rec['query_seconds']*1000,upstream_delay_s=rec.get('simulated_delay_s'),upstream_query_root=rec['query_root']))
+result=dict(joint_decisions=joint_decisions,route_outcomes=route_outcomes,publication_checks=publication_checks,groups=groups,comparisons=comparisons,cases=rows,pairs=pairs,elapsed_s=wall,physics_lane_steps=steps,scope='Frozen30 new roots x3methods x3crossed slots;all upstream failures retained;query-state match only measured descriptors,not hidden solver state')
 (a.run/'results.json').write_text(json.dumps(result,indent=2))
-lines=['# Measured-state downstream route selection','','![All actual/reference XY](xy_all.png)','','![Per-step and cumulative rewards](reward_all.png)','','30 new independent roots,15 predeclared straight approach speed/alpha pairs each used twice. Three methods and three crossed-slot repetitions;90 episodes/method are not 90 independent roots. All upstream failures remain in main denominator. Models/conditions frozen before execution.','','|Method|Goal/N|Handoffs|Valid handoffs|Published|Road violations|Mean query ms|','|---|---:|---:|---:|---:|---:|---:|']
+lines=['# Measured-state downstream route selection','','![All actual/reference XY](xy_all.png)','','![Per-step and cumulative rewards](reward_all.png)','','30 new independent roots; three methods and three crossed-slot repetitions, 90 episodes/method. All upstream failures remain in the denominator. Models and conditions frozen before execution.','','|Method|Goal/N|Handoffs|Valid handoffs|Published|Road violations|Mean query ms|','|---|---:|---:|---:|---:|---:|---:|']
 for g in groups:lines.append(f"|{g['method']}|{g['success']}/{g['n']}|{g['handoffs']}|{g['valid_handoffs']}|{g['published']}|{g['road_violation']}|{g['mean_query_ms']:.3f}|")
 lines+=['','|Comparator|Mean root difference|Root bootstrap95%|Gains/losses|Equal query descriptors/both queried|','|---|---:|---|---:|---:|']
 for c in comparisons:lines.append(f"|{c['comparator']}|{c['condition_mean_difference']:.4f}|{c['root_bootstrap95']}|{c['gains']}/{c['losses']}|{c['query_descriptor_exact']}/{c['both_query']}|")
 lines+=['','![Successful non-straight selection, descriptive](selected_success.png)','','Task-conditioned selected-route outcomes: '+str(route_outcomes)+'. These conditional counts are selection-biased, not route rankings. All '+str(len(publication_checks))+' publications match the logged route and declared delay.','',f'Actual {steps} physical lane steps; summed simulation wall{wall:.2f}s; 0 training.','', 'At first measured handoff the frozen model scores 3 known downstream roads. Straight H75 continues during rounded-up measured inference delay; publication changes the route index only and does not reset physical/controller state. Existing physical/corridor/goal predicates are retained. Candidate-route selection is downstream only; approach pairs are preassigned,not jointly optimized by this extension.','', 'No independent-map or certified recovery-margin claim. Differences in recorded query states are explicitly counted; even exact descriptors do not serialize hidden solver state. Causal gain attribution requires matched incoming states and repeated evidence. State-only scores share the same input across the3roads and ties choose the first (straight).','', 'Full query/publication records,model scores,actual contexts and endpoints remain in repeat0/1/2 and results.json. All failures and unpublished decisions are retained.']
+if joint:
+ lines+=['','|Method|Approach choices|Planned downstream|Handoff revisions|Successful revised|Mean upstream query ms|','|---|---|---|---:|---:|---:|']
+ for method in methods:
+  rr=[r for r in joint_decisions if r['method']==method]
+  lines.append(f"|{method}|{dict(collections.Counter(r['approach_candidate'] for r in rr))}|{dict(collections.Counter(r['planned_downstream'] for r in rr))}|{sum(r['revised'] for r in rr)}|{sum(r['revised'] and r['success'] for r in rr)}|{np.mean([r['upstream_query_ms'] for r in rr]):.3f}|")
+ lines=[line for line in lines if not line.startswith('At first measured handoff') and not line.startswith('No independent-map')]
+ lines+=['', 'Joint panel: at x=3 m, frozen upstream predictions score 15 approach speed/preference pairs and three downstream routes. Joint-open retains its planned downstream route; joint-feedback queries again at measured handoff. Fixed uses 2 m/s, alpha .5 and straight continuation. The planned road runs during handoff inference delay. Route publication does not reset physical/controller state. This extension excludes upstream S/90-degree/bypass candidates; earlier broader panels remain separate.','', 'No certified margin, independent-map generalization, superiority or equivalence claim. Query descriptors differ and hidden solver state is not serialized. All failures remain in the primary denominator.']
 (a.run/'RESULTS.md').write_text('\n'.join(lines)+'\n');print(json.dumps(dict(groups=groups,comparisons=comparisons,elapsed_s=wall),indent=2))

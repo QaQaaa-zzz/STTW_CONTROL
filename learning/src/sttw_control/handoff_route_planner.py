@@ -14,7 +14,7 @@ class HandoffRoutePlanner:
         self.config=config
         self.route_ids=config['candidate_route_ids']
         self.methods=config['methods']
-        if len(self.methods)!=task.env.num_envs or any(m not in ('task_context','state_only','fixed_straight') for m in self.methods):
+        if len(self.methods)!=task.env.num_envs or any(m not in ('task_context','state_only','fixed_straight','planned') for m in self.methods):
             raise ValueError('One declared downstream method is required per environment')
         route=task.ground.route
         if any(i<0 or i>=len(route.xy) for i in self.route_ids):raise ValueError('Invalid downstream candidate route')
@@ -32,7 +32,9 @@ class HandoffRoutePlanner:
             obs=observation[lane:lane+1].detach().cpu().numpy()
             now=float(e.episode_length_buf[lane])*e.dt
             context=np.concatenate([route_context(physical,route,self.task.road_half_width,self.mount) for route in self.routes])
-            if method=='fixed_straight':scores=np.r_[1.,np.zeros(len(self.routes)-1)]
+            if method in ('fixed_straight','planned'):
+                desired=self.route_ids[0] if method=='fixed_straight' else int(self.task.handoff_route_ids[lane])
+                scores=np.asarray([float(r==desired) for r in self.route_ids])
             else:
                 n=len(self.routes)
                 scores=self.models[method].predict(np.repeat(physical,n,0),np.repeat(obs,n,0),np.full(n,now),context)['conditional_goal_probability']

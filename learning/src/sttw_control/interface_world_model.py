@@ -17,12 +17,18 @@ def inputs(root, observation, history, time_s, parameters, crop):
 
 
 class InterfaceWorldModel:
-    def __init__(self, directory):
+    def __init__(self, directory, task_config=None):
         self.directory=Path(directory)
         self.meta=json.loads((self.directory/'model.json').read_text())
         self.map=KnownHeightMap(np.load(self.meta['terrain_npz'])['vertices'],self.meta['terrain_spec'])
         self.downstream=HandoffContinuationModel(self.meta['downstream_directory'])
         if self.downstream.target!='goal':raise ValueError('Full-task composition requires conditional goal predictor')
+        self.task_config=task_config
+        if task_config is not None:
+            self.task_downstream=HandoffContinuationModel(task_config['model'],feature_set='task_context')
+            self.task_mount=json.loads((Path(task_config['model'])/'declaration.json').read_text())['mount_wxyz']
+            bank=np.load(task_config['routes'])
+            self.task_routes=[{key:bank[key][i] for key in ('xy','heading','curvature')} for i in task_config['route_ids']]
         self.ground=[]
         if 'ground_directory' in self.meta:
             for path in sorted(Path(self.meta['ground_directory']).glob('ground_*.pt')):
@@ -50,9 +56,10 @@ class InterfaceWorldModel:
         return dict(score=value.tolist(),predicted_completion=value.tolist(),scope='Direct full-goal comparator; same query input and grouped training data')
 
     @torch.no_grad()
-    def score(self,root,observation,history,time_s,parameters,particles=32,seed=71101):
+    def score(self,root,observation,history,time_s,parameters,particles=32,seed=71101,task_conditioned=False):
         raw=inputs(root,observation,history,time_s,parameters,self.map.crop(root))
         xx=torch.tensor((raw-self.c['input_mean'])/self.c['input_std'])
+        route_values=[];route_conditionals=[]
         rng=np.random.default_rng(seed);jump=parameters[:,-1]>.5;values=[];handoffs=[];means=[];within=[]
         for member in self.members:
             out=member(xx).numpy();mu=out[:,:39];logvar=out[:,39:78].clip(-4,3)
@@ -63,17 +70,42 @@ class InterfaceWorldModel:
             sampled[:,:,38]=np.maximum(sampled[:,:,38],np.asarray(time_s)[:,None])
             sampled[:,:,37]=1. # Latest measured-frame validity flag.
             flat=sampled.reshape(-1,39);obs=np.zeros((len(flat),80),np.float32);obs[:,50:75]=flat[:,13:38]
-            downstream=self.downstream.predict(flat[:,:13],obs,flat[:,38])['conditional_goal_probability'].reshape(len(root),particles).mean(1)
+            if task_conditioned:
+                from .handoff_task_context import route_context
+                if not np.all(jump):raise ValueError('Task-conditioned extension currently covers jump candidates only')
+                per_route=[]
+                for route in self.task_routes:
+                    context=route_context(flat[:,:13],route,self.task_config['half_width_m'],self.task_mount)
+                    probability=self.task_downstream.predict(flat[:,:13],obs,flat[:,38],context)['conditional_goal_probability']
+                    per_route.append(probability.reshape(len(root),particles).mean(1))
+                conditional_routes=np.stack(per_route,axis=1)
+                downstream=conditional_routes.max(1)
+            else:
+                downstream=self.downstream.predict(flat[:,:13],obs,flat[:,38])['conditional_goal_probability'].reshape(len(root),particles).mean(1)
             ph=1/(1+np.exp(-out[:,78].clip(-30,30)));pg=1/(1+np.exp(-out[:,79].clip(-30,30)))
+            if task_conditioned:
+                route_values.append(ph[:,None]*conditional_routes);route_conditionals.append(conditional_routes)
             values.append(np.where(jump,ph*downstream,pg));handoffs.append(ph);within.append(downstream)
             means.append(mu*self.c['target_std']+self.c['target_mean'])
         if self.ground:
             ground_probability=np.mean([torch.sigmoid(member(torch.tensor((raw-mean)/std))[:,0]).numpy()
                                         for member,mean,std in self.ground],axis=0)
             values=[np.where(jump,value,ground_probability) for value in values]
-        return dict(score=np.mean(values,axis=0).tolist(),predicted_completion=np.mean(values,axis=0).tolist(),
+        result=dict(score=np.mean(values,axis=0).tolist(),predicted_completion=np.mean(values,axis=0).tolist(),
                     valid_handoff_probability=np.mean(handoffs,axis=0).tolist(),
                     conditional_goal_probability=np.mean(within,axis=0).tolist(),
                     predicted_handoff_mean=np.mean(means,axis=0).tolist(),
                     member_score_std=np.std(values,axis=0).tolist(),
                     scope='Fixed map/source jump/cold H75; composed goal probability estimate, not certified feasibility. Ground routes use separate direct branch.')
+
+        if task_conditioned:
+            # Choose a single route after averaging all particles and members.
+            # E[max_route outcome] would grant unavailable sample-specific foresight.
+            joint=np.mean(route_values,axis=0);selected=joint.argmax(1)
+            result.update(score=joint.max(1).tolist(),predicted_completion=joint.max(1).tolist(),
+                          downstream_route_scores=joint.tolist(),
+                          conditional_goal_probability=np.mean(route_conditionals,axis=0)[np.arange(len(root)),selected].tolist(),
+                          member_score_std=np.std(route_values,axis=0)[np.arange(len(root)),selected].tolist(),
+                          selected_downstream_route=np.asarray(self.task_config['route_ids'])[selected].tolist(),
+                          scope='Frozen upstream distribution composed with task-conditioned downstream outcomes; one route selected per approach before execution; no sample-wise hindsight')
+        return result
