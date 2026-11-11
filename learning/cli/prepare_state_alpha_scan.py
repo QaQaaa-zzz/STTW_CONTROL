@@ -8,6 +8,7 @@ for old in json.loads((a.source/'jobs.json').read_text()):
  cfg=json.loads(Path(old['config']).read_text());cfg.update(num_envs=28,trace_lanes=28,alphas=prefix,zero_middle=[False]*25+[True,False,False],case_labels=labels,compact_results=True)
  cfg['alpha_switch'].update(target_alpha=targets,execution_modes=['independent']*28)
  cfg['plant_options'].update(track_wheel_contacts=False,track_contact_wrench=False,raw_contact_only=False)
+ cfg.pop('physics_contact_recording',None)
  dest=r/(old['name']+'.json');dest.write_text(json.dumps(cfg,indent=2));jobs.append(dict(old,config=str(dest)))
 (r/'protocol.json').write_text(json.dumps(spec,indent=2,ensure_ascii=False));(r/'jobs.json').write_text(json.dumps(jobs,indent=2));(r/'status.json').write_text(json.dumps(dict(stage='prepared',planned=12,episodes=336)))
 (r/'README.md').write_text('# 五档状态相关选档验证\n\n12工况 × (25自然切换＋Zero＋2重复)=336条；每条10s、0训练。冻结协议见protocol.json。\n\n先保留全部XY、每步/累计奖励、失败原因和轨迹；随后留一物理组检查状态选档。三个物理组均为已用DEV，不称新布局泛化。只在共同前段与切换时刻核对成立的组上作同入口选档分析；缺失或前段失败保留并单列。\n\n路径：RESULTS.md（全覆盖XY）、ANALYSIS.md（完整任务与终止）、state_selection.md（选档诊断）、status.json。此处是执行计划，不是实验结果。\n')
