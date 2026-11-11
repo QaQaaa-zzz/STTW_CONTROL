@@ -1,0 +1,1082 @@
+[
+  {
+    "candidate": "right_angle_jump_v1.5_a0.5",
+    "root": 0,
+    "samples": 132,
+    "slew_fraction": 0.5681818181818182,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.19671443104743958,
+    "steer_error_rmse_rad": 0.058077563068230975
+  },
+  {
+    "candidate": "s_bend_jump_v1.8_a0.0",
+    "root": 0,
+    "samples": 177,
+    "slew_fraction": 0.9265536723163842,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.18374879658222198,
+    "steer_error_rmse_rad": 0.06435248797840562
+  },
+  {
+    "candidate": "ground_detour_v1.8_a0.5",
+    "root": 1,
+    "samples": 439,
+    "slew_fraction": 0.9271070615034168,
+    "nominal_peak_rad": 0.2487577646970749,
+    "governed_peak_rad": 0.16794762015342712,
+    "steer_error_rmse_rad": 0.06495086701395712
+  },
+  {
+    "candidate": "s_bend_jump_v1.5_a0.5",
+    "root": 1,
+    "samples": 202,
+    "slew_fraction": 0.7871287128712872,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.1783166229724884,
+    "steer_error_rmse_rad": 0.07351520515913877
+  },
+  {
+    "candidate": "ground_detour_v2.0_a0.0",
+    "root": 1,
+    "samples": 313,
+    "slew_fraction": 0.9744408945686901,
+    "nominal_peak_rad": 0.24272234737873077,
+    "governed_peak_rad": 0.15434853732585907,
+    "steer_error_rmse_rad": 0.09077837190973657
+  },
+  {
+    "candidate": "right_angle_jump_v1.8_a1.0",
+    "root": 0,
+    "samples": 127,
+    "slew_fraction": 0.6377952755905512,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.16851750016212463,
+    "steer_error_rmse_rad": 0.06425957807764719
+  },
+  {
+    "candidate": "s_bend_jump_v2.6_a0.5",
+    "root": 1,
+    "samples": 90,
+    "slew_fraction": 0.8888888888888888,
+    "nominal_peak_rad": 0.2481323778629303,
+    "governed_peak_rad": 0.12514667212963104,
+    "steer_error_rmse_rad": 0.25590057623710016
+  },
+  {
+    "candidate": "right_angle_jump_v2.0_a0.5",
+    "root": 0,
+    "samples": 117,
+    "slew_fraction": 0.7948717948717948,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.16790103912353516,
+    "steer_error_rmse_rad": 0.057427585327605786
+  },
+  {
+    "candidate": "ground_detour_v1.5_a1.0",
+    "root": 0,
+    "samples": 491,
+    "slew_fraction": 0.8676171079429735,
+    "nominal_peak_rad": 0.20593766868114471,
+    "governed_peak_rad": 0.16760165989398956,
+    "steer_error_rmse_rad": 0.056244314588544043
+  },
+  {
+    "candidate": "right_angle_jump_v2.0_a1.0",
+    "root": 0,
+    "samples": 128,
+    "slew_fraction": 0.78125,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.15319210290908813,
+    "steer_error_rmse_rad": 0.06430870188984529
+  },
+  {
+    "candidate": "straight_jump_v2.3_a0.0",
+    "root": 1,
+    "samples": 176,
+    "slew_fraction": 0.8068181818181818,
+    "nominal_peak_rad": 0.24943910539150238,
+    "governed_peak_rad": 0.12309309840202332,
+    "steer_error_rmse_rad": 0.10405696715289313
+  },
+  {
+    "candidate": "straight_jump_v1.8_a1.0",
+    "root": 1,
+    "samples": 201,
+    "slew_fraction": 0.6616915422885572,
+    "nominal_peak_rad": 0.10664341598749161,
+    "governed_peak_rad": 0.030021198093891144,
+    "steer_error_rmse_rad": 0.030912448190784692
+  },
+  {
+    "candidate": "ground_detour_v2.3_a0.0",
+    "root": 0,
+    "samples": 351,
+    "slew_fraction": 0.9173789173789174,
+    "nominal_peak_rad": 0.17992503941059113,
+    "governed_peak_rad": 0.12460391968488693,
+    "steer_error_rmse_rad": 0.07125399001142582
+  },
+  {
+    "candidate": "right_angle_jump_v1.8_a0.0",
+    "root": 0,
+    "samples": 69,
+    "slew_fraction": 0.8115942028985508,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.20087794959545135,
+    "steer_error_rmse_rad": 0.07787131008809897
+  },
+  {
+    "candidate": "s_bend_jump_v2.3_a0.0",
+    "root": 1,
+    "samples": 104,
+    "slew_fraction": 0.9326923076923077,
+    "nominal_peak_rad": 0.24672262370586395,
+    "governed_peak_rad": 0.14057688415050507,
+    "steer_error_rmse_rad": 0.1342680355660475
+  },
+  {
+    "candidate": "s_bend_jump_v2.6_a0.0",
+    "root": 1,
+    "samples": 164,
+    "slew_fraction": 0.9390243902439024,
+    "nominal_peak_rad": 0.21496252715587616,
+    "governed_peak_rad": 0.1024315133690834,
+    "steer_error_rmse_rad": 0.07190028515532541
+  },
+  {
+    "candidate": "straight_jump_v2.0_a0.0",
+    "root": 0,
+    "samples": 194,
+    "slew_fraction": 0.8195876288659794,
+    "nominal_peak_rad": 0.21276870369911194,
+    "governed_peak_rad": 0.13927963376045227,
+    "steer_error_rmse_rad": 0.0863580573089975
+  },
+  {
+    "candidate": "right_angle_jump_v2.3_a0.5",
+    "root": 0,
+    "samples": 42,
+    "slew_fraction": 0.8571428571428571,
+    "nominal_peak_rad": 0.1773393303155899,
+    "governed_peak_rad": 0.13375325500965118,
+    "steer_error_rmse_rad": 0.09271119187891448
+  },
+  {
+    "candidate": "straight_jump_v1.5_a0.5",
+    "root": 1,
+    "samples": 231,
+    "slew_fraction": 0.4675324675324675,
+    "nominal_peak_rad": 0.044274281710386276,
+    "governed_peak_rad": 0.03469645977020264,
+    "steer_error_rmse_rad": 0.02605485371153459
+  },
+  {
+    "candidate": "s_bend_jump_v2.0_a1.0",
+    "root": 0,
+    "samples": 188,
+    "slew_fraction": 0.9308510638297872,
+    "nominal_peak_rad": 0.25258055329322815,
+    "governed_peak_rad": 0.10723736882209778,
+    "steer_error_rmse_rad": 0.057589704214269996
+  },
+  {
+    "candidate": "s_bend_jump_v2.0_a0.5",
+    "root": 1,
+    "samples": 197,
+    "slew_fraction": 0.9441624365482234,
+    "nominal_peak_rad": 0.29008474946022034,
+    "governed_peak_rad": 0.14489230513572693,
+    "steer_error_rmse_rad": 0.08748139370912397
+  },
+  {
+    "candidate": "ground_detour_v1.5_a0.5",
+    "root": 0,
+    "samples": 491,
+    "slew_fraction": 0.8676171079429735,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.20883028209209442,
+    "steer_error_rmse_rad": 0.07186648937818892
+  },
+  {
+    "candidate": "s_bend_jump_v2.6_a1.0",
+    "root": 0,
+    "samples": 89,
+    "slew_fraction": 0.9213483146067416,
+    "nominal_peak_rad": 0.2322668880224228,
+    "governed_peak_rad": 0.08190028369426727,
+    "steer_error_rmse_rad": 0.236911785935599
+  },
+  {
+    "candidate": "ground_detour_v2.3_a1.0",
+    "root": 1,
+    "samples": 197,
+    "slew_fraction": 0.9593908629441624,
+    "nominal_peak_rad": 0.24880732595920563,
+    "governed_peak_rad": 0.10855778306722641,
+    "steer_error_rmse_rad": 0.1341088781408719
+  },
+  {
+    "candidate": "right_angle_jump_v2.3_a0.0",
+    "root": 1,
+    "samples": 47,
+    "slew_fraction": 0.8723404255319149,
+    "nominal_peak_rad": 0.21261708438396454,
+    "governed_peak_rad": 0.16659103333950043,
+    "steer_error_rmse_rad": 0.0705852912362369
+  },
+  {
+    "candidate": "s_bend_jump_v1.5_a0.0",
+    "root": 0,
+    "samples": 209,
+    "slew_fraction": 0.7990430622009569,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.18604698777198792,
+    "steer_error_rmse_rad": 0.06270456735984858
+  },
+  {
+    "candidate": "right_angle_jump_v2.6_a1.0",
+    "root": 1,
+    "samples": 90,
+    "slew_fraction": 0.7333333333333333,
+    "nominal_peak_rad": 0.26244357228279114,
+    "governed_peak_rad": 0.13093575835227966,
+    "steer_error_rmse_rad": 0.18979852200433606
+  },
+  {
+    "candidate": "right_angle_jump_v2.3_a1.0",
+    "root": 0,
+    "samples": 43,
+    "slew_fraction": 0.8604651162790697,
+    "nominal_peak_rad": 0.1833869367837906,
+    "governed_peak_rad": 0.12282411754131317,
+    "steer_error_rmse_rad": 0.07921698179378364
+  },
+  {
+    "candidate": "s_bend_jump_v1.5_a0.5",
+    "root": 0,
+    "samples": 248,
+    "slew_fraction": 0.8991935483870968,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.19546154141426086,
+    "steer_error_rmse_rad": 0.07421924252095684
+  },
+  {
+    "candidate": "s_bend_jump_v2.0_a0.5",
+    "root": 0,
+    "samples": 200,
+    "slew_fraction": 0.93,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.15693014860153198,
+    "steer_error_rmse_rad": 0.0769299782152553
+  },
+  {
+    "candidate": "straight_jump_v1.8_a0.0",
+    "root": 1,
+    "samples": 202,
+    "slew_fraction": 0.5693069306930693,
+    "nominal_peak_rad": 0.05821869894862175,
+    "governed_peak_rad": 0.04320670664310455,
+    "steer_error_rmse_rad": 0.04193073172545714
+  },
+  {
+    "candidate": "straight_jump_v2.0_a0.5",
+    "root": 0,
+    "samples": 184,
+    "slew_fraction": 0.7391304347826086,
+    "nominal_peak_rad": 0.08792664110660553,
+    "governed_peak_rad": 0.04240217059850693,
+    "steer_error_rmse_rad": 0.05052642893691116
+  },
+  {
+    "candidate": "right_angle_jump_v1.5_a0.5",
+    "root": 1,
+    "samples": 132,
+    "slew_fraction": 0.5606060606060606,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.1916443407535553,
+    "steer_error_rmse_rad": 0.06664756447525788
+  },
+  {
+    "candidate": "right_angle_jump_v2.0_a1.0",
+    "root": 1,
+    "samples": 128,
+    "slew_fraction": 0.7109375,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.1655450165271759,
+    "steer_error_rmse_rad": 0.08989812926019701
+  },
+  {
+    "candidate": "ground_detour_v2.3_a0.0",
+    "root": 1,
+    "samples": 491,
+    "slew_fraction": 0.9103869653767821,
+    "nominal_peak_rad": 0.2491406351327896,
+    "governed_peak_rad": 0.16024655103683472,
+    "steer_error_rmse_rad": 0.07830373167577165
+  },
+  {
+    "candidate": "right_angle_jump_v1.8_a1.0",
+    "root": 1,
+    "samples": 123,
+    "slew_fraction": 0.5934959349593496,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.16549243032932281,
+    "steer_error_rmse_rad": 0.05576104157031615
+  },
+  {
+    "candidate": "s_bend_jump_v1.8_a1.0",
+    "root": 1,
+    "samples": 214,
+    "slew_fraction": 0.9065420560747663,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.1509818583726883,
+    "steer_error_rmse_rad": 0.06245508479967603
+  },
+  {
+    "candidate": "right_angle_jump_v2.3_a1.0",
+    "root": 1,
+    "samples": 47,
+    "slew_fraction": 0.8723404255319149,
+    "nominal_peak_rad": 0.21227684617042542,
+    "governed_peak_rad": 0.13879655301570892,
+    "steer_error_rmse_rad": 0.08340708969135888
+  },
+  {
+    "candidate": "ground_detour_v1.8_a0.5",
+    "root": 0,
+    "samples": 470,
+    "slew_fraction": 0.8978723404255319,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.16171076893806458,
+    "steer_error_rmse_rad": 0.08850777435503944
+  },
+  {
+    "candidate": "straight_jump_v1.8_a0.5",
+    "root": 1,
+    "samples": 201,
+    "slew_fraction": 0.6567164179104478,
+    "nominal_peak_rad": 0.08518064767122269,
+    "governed_peak_rad": 0.08465456962585449,
+    "steer_error_rmse_rad": 0.05129322231242543
+  },
+  {
+    "candidate": "ground_detour_v1.5_a0.0",
+    "root": 0,
+    "samples": 491,
+    "slew_fraction": 0.8105906313645621,
+    "nominal_peak_rad": 0.2556368112564087,
+    "governed_peak_rad": 0.1838688850402832,
+    "steer_error_rmse_rad": 0.06493722572351346
+  },
+  {
+    "candidate": "ground_detour_v2.6_a0.5",
+    "root": 0,
+    "samples": 187,
+    "slew_fraction": 0.9197860962566845,
+    "nominal_peak_rad": 0.18051159381866455,
+    "governed_peak_rad": 0.12407253682613373,
+    "steer_error_rmse_rad": 0.11749376568969926
+  },
+  {
+    "candidate": "ground_detour_v2.3_a1.0",
+    "root": 0,
+    "samples": 80,
+    "slew_fraction": 0.875,
+    "nominal_peak_rad": 0.1686881184577942,
+    "governed_peak_rad": 0.11761488020420074,
+    "steer_error_rmse_rad": 0.18993103077457293
+  },
+  {
+    "candidate": "straight_jump_v1.5_a0.0",
+    "root": 0,
+    "samples": 233,
+    "slew_fraction": 0.43776824034334766,
+    "nominal_peak_rad": 0.03320746868848801,
+    "governed_peak_rad": 0.02890729159116745,
+    "steer_error_rmse_rad": 0.021513229332881783
+  },
+  {
+    "candidate": "ground_detour_v2.6_a0.0",
+    "root": 0,
+    "samples": 250,
+    "slew_fraction": 0.956,
+    "nominal_peak_rad": 0.21793566644191742,
+    "governed_peak_rad": 0.129692941904068,
+    "steer_error_rmse_rad": 0.17126296811356903
+  },
+  {
+    "candidate": "ground_detour_v2.6_a1.0",
+    "root": 0,
+    "samples": 217,
+    "slew_fraction": 0.9400921658986175,
+    "nominal_peak_rad": 0.16189169883728027,
+    "governed_peak_rad": 0.110663503408432,
+    "steer_error_rmse_rad": 0.13835626604064857
+  },
+  {
+    "candidate": "straight_jump_v2.0_a0.0",
+    "root": 1,
+    "samples": 190,
+    "slew_fraction": 0.7315789473684211,
+    "nominal_peak_rad": 0.19942410290241241,
+    "governed_peak_rad": 0.11834420263767242,
+    "steer_error_rmse_rad": 0.10146882248568376
+  },
+  {
+    "candidate": "straight_jump_v2.6_a0.5",
+    "root": 0,
+    "samples": 111,
+    "slew_fraction": 0.7567567567567568,
+    "nominal_peak_rad": 0.08786401152610779,
+    "governed_peak_rad": 0.05630236119031906,
+    "steer_error_rmse_rad": 0.1483663024309495
+  },
+  {
+    "candidate": "straight_jump_v1.8_a1.0",
+    "root": 0,
+    "samples": 201,
+    "slew_fraction": 0.5373134328358209,
+    "nominal_peak_rad": 0.09069549292325974,
+    "governed_peak_rad": 0.04091927036643028,
+    "steer_error_rmse_rad": 0.032745642185339915
+  },
+  {
+    "candidate": "straight_jump_v2.3_a0.5",
+    "root": 0,
+    "samples": 167,
+    "slew_fraction": 0.7365269461077845,
+    "nominal_peak_rad": 0.16236072778701782,
+    "governed_peak_rad": 0.09324117749929428,
+    "steer_error_rmse_rad": 0.09770685791956785
+  },
+  {
+    "candidate": "s_bend_jump_v2.3_a1.0",
+    "root": 1,
+    "samples": 91,
+    "slew_fraction": 0.9340659340659341,
+    "nominal_peak_rad": 0.15995867550373077,
+    "governed_peak_rad": 0.10315622389316559,
+    "steer_error_rmse_rad": 0.21545927133382436
+  },
+  {
+    "candidate": "ground_detour_v1.8_a1.0",
+    "root": 0,
+    "samples": 440,
+    "slew_fraction": 0.9409090909090909,
+    "nominal_peak_rad": 0.2944532334804535,
+    "governed_peak_rad": 0.15590237081050873,
+    "steer_error_rmse_rad": 0.07832188236061655
+  },
+  {
+    "candidate": "straight_jump_v1.5_a1.0",
+    "root": 0,
+    "samples": 236,
+    "slew_fraction": 0.8135593220338984,
+    "nominal_peak_rad": 0.28169170022010803,
+    "governed_peak_rad": 0.14788159728050232,
+    "steer_error_rmse_rad": 0.1378242416634811
+  },
+  {
+    "candidate": "straight_jump_v1.5_a1.0",
+    "root": 1,
+    "samples": 231,
+    "slew_fraction": 0.683982683982684,
+    "nominal_peak_rad": 0.08017315715551376,
+    "governed_peak_rad": 0.028716780245304108,
+    "steer_error_rmse_rad": 0.028970202457023937
+  },
+  {
+    "candidate": "right_angle_jump_v1.8_a0.5",
+    "root": 0,
+    "samples": 123,
+    "slew_fraction": 0.5853658536585366,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.18780970573425293,
+    "steer_error_rmse_rad": 0.05695250779342066
+  },
+  {
+    "candidate": "ground_detour_v2.6_a1.0",
+    "root": 1,
+    "samples": 60,
+    "slew_fraction": 0.95,
+    "nominal_peak_rad": 0.161571204662323,
+    "governed_peak_rad": 0.11691142618656158,
+    "steer_error_rmse_rad": 0.14440049236412128
+  },
+  {
+    "candidate": "straight_jump_v2.6_a1.0",
+    "root": 0,
+    "samples": 84,
+    "slew_fraction": 0.6190476190476191,
+    "nominal_peak_rad": 0.13272172212600708,
+    "governed_peak_rad": 0.031950823962688446,
+    "steer_error_rmse_rad": 0.1805027628301477
+  },
+  {
+    "candidate": "right_angle_jump_v1.8_a0.0",
+    "root": 1,
+    "samples": 118,
+    "slew_fraction": 0.5677966101694916,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.1986551284790039,
+    "steer_error_rmse_rad": 0.06697111896720766
+  },
+  {
+    "candidate": "right_angle_jump_v2.6_a0.5",
+    "root": 0,
+    "samples": 109,
+    "slew_fraction": 0.8073394495412844,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.14842012524604797,
+    "steer_error_rmse_rad": 0.06305085629911962
+  },
+  {
+    "candidate": "ground_detour_v2.0_a0.5",
+    "root": 1,
+    "samples": 356,
+    "slew_fraction": 0.9101123595505618,
+    "nominal_peak_rad": 0.22598831355571747,
+    "governed_peak_rad": 0.12326003611087799,
+    "steer_error_rmse_rad": 0.10653053162148757
+  },
+  {
+    "candidate": "ground_detour_v2.3_a0.5",
+    "root": 1,
+    "samples": 376,
+    "slew_fraction": 0.9042553191489362,
+    "nominal_peak_rad": 0.26079538464546204,
+    "governed_peak_rad": 0.14541400969028473,
+    "steer_error_rmse_rad": 0.09695195383322047
+  },
+  {
+    "candidate": "right_angle_jump_v2.0_a0.5",
+    "root": 1,
+    "samples": 120,
+    "slew_fraction": 0.7666666666666667,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.16863621771335602,
+    "steer_error_rmse_rad": 0.05474165593606867
+  },
+  {
+    "candidate": "s_bend_jump_v1.5_a0.0",
+    "root": 1,
+    "samples": 188,
+    "slew_fraction": 0.8351063829787234,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.20323197543621063,
+    "steer_error_rmse_rad": 0.06378464395575606
+  },
+  {
+    "candidate": "s_bend_jump_v2.0_a1.0",
+    "root": 1,
+    "samples": 190,
+    "slew_fraction": 0.9578947368421052,
+    "nominal_peak_rad": 0.2498738318681717,
+    "governed_peak_rad": 0.11957014352083206,
+    "steer_error_rmse_rad": 0.07146087609406566
+  },
+  {
+    "candidate": "right_angle_jump_v2.6_a0.0",
+    "root": 0,
+    "samples": 49,
+    "slew_fraction": 0.8571428571428571,
+    "nominal_peak_rad": 0.2194395363330841,
+    "governed_peak_rad": 0.16431817412376404,
+    "steer_error_rmse_rad": 0.0663342927507126
+  },
+  {
+    "candidate": "straight_jump_v1.8_a0.5",
+    "root": 0,
+    "samples": 201,
+    "slew_fraction": 0.6019900497512438,
+    "nominal_peak_rad": 0.08516641706228256,
+    "governed_peak_rad": 0.06608741730451584,
+    "steer_error_rmse_rad": 0.04234231346630297
+  },
+  {
+    "candidate": "right_angle_jump_v2.6_a1.0",
+    "root": 0,
+    "samples": 44,
+    "slew_fraction": 0.8636363636363636,
+    "nominal_peak_rad": 0.18939225375652313,
+    "governed_peak_rad": 0.11977123469114304,
+    "steer_error_rmse_rad": 0.10026902671686139
+  },
+  {
+    "candidate": "s_bend_jump_v2.6_a1.0",
+    "root": 1,
+    "samples": 88,
+    "slew_fraction": 0.8977272727272727,
+    "nominal_peak_rad": 0.13840410113334656,
+    "governed_peak_rad": 0.08828601986169815,
+    "steer_error_rmse_rad": 0.16008975230186143
+  },
+  {
+    "candidate": "straight_jump_v2.0_a0.5",
+    "root": 1,
+    "samples": 184,
+    "slew_fraction": 0.7554347826086957,
+    "nominal_peak_rad": 0.08588586002588272,
+    "governed_peak_rad": 0.04344213381409645,
+    "steer_error_rmse_rad": 0.05890171854780367
+  },
+  {
+    "candidate": "straight_jump_v2.3_a1.0",
+    "root": 1,
+    "samples": 86,
+    "slew_fraction": 0.6744186046511628,
+    "nominal_peak_rad": 0.1346152126789093,
+    "governed_peak_rad": 0.027254518121480942,
+    "steer_error_rmse_rad": 0.2083879498575117
+  },
+  {
+    "candidate": "ground_detour_v2.0_a1.0",
+    "root": 0,
+    "samples": 400,
+    "slew_fraction": 0.8725,
+    "nominal_peak_rad": 0.24111315608024597,
+    "governed_peak_rad": 0.13357236981391907,
+    "steer_error_rmse_rad": 0.08245041452557234
+  },
+  {
+    "candidate": "ground_detour_v1.8_a0.0",
+    "root": 1,
+    "samples": 466,
+    "slew_fraction": 0.9034334763948498,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.18912771344184875,
+    "steer_error_rmse_rad": 0.08303036944256585
+  },
+  {
+    "candidate": "right_angle_jump_v1.5_a0.0",
+    "root": 0,
+    "samples": 127,
+    "slew_fraction": 0.5354330708661418,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.21408478915691376,
+    "steer_error_rmse_rad": 0.05293167258337292
+  },
+  {
+    "candidate": "ground_detour_v2.0_a0.0",
+    "root": 0,
+    "samples": 408,
+    "slew_fraction": 0.9387254901960784,
+    "nominal_peak_rad": 0.2684093713760376,
+    "governed_peak_rad": 0.17898616194725037,
+    "steer_error_rmse_rad": 0.09520189246101851
+  },
+  {
+    "candidate": "s_bend_jump_v1.5_a1.0",
+    "root": 1,
+    "samples": 253,
+    "slew_fraction": 0.7984189723320159,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.16639463603496552,
+    "steer_error_rmse_rad": 0.07721977617472707
+  },
+  {
+    "candidate": "s_bend_jump_v1.8_a1.0",
+    "root": 0,
+    "samples": 217,
+    "slew_fraction": 0.9354838709677419,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.14634588360786438,
+    "steer_error_rmse_rad": 0.06684690367106126
+  },
+  {
+    "candidate": "straight_jump_v2.3_a0.5",
+    "root": 1,
+    "samples": 103,
+    "slew_fraction": 0.6407766990291263,
+    "nominal_peak_rad": 0.09788994491100311,
+    "governed_peak_rad": 0.08019836992025375,
+    "steer_error_rmse_rad": 0.12206798932725858
+  },
+  {
+    "candidate": "ground_detour_v2.0_a1.0",
+    "root": 1,
+    "samples": 397,
+    "slew_fraction": 0.8790931989924433,
+    "nominal_peak_rad": 0.22506949305534363,
+    "governed_peak_rad": 0.12443166971206665,
+    "steer_error_rmse_rad": 0.07885244666782772
+  },
+  {
+    "candidate": "right_angle_jump_v2.6_a0.0",
+    "root": 1,
+    "samples": 50,
+    "slew_fraction": 0.88,
+    "nominal_peak_rad": 0.23089034855365753,
+    "governed_peak_rad": 0.1545422226190567,
+    "steer_error_rmse_rad": 0.07248056189701445
+  },
+  {
+    "candidate": "s_bend_jump_v2.3_a0.5",
+    "root": 1,
+    "samples": 171,
+    "slew_fraction": 0.9415204678362573,
+    "nominal_peak_rad": 0.22729304432868958,
+    "governed_peak_rad": 0.10184464603662491,
+    "steer_error_rmse_rad": 0.06175971075321975
+  },
+  {
+    "candidate": "right_angle_jump_v1.8_a0.5",
+    "root": 1,
+    "samples": 127,
+    "slew_fraction": 0.5984251968503937,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.18378502130508423,
+    "steer_error_rmse_rad": 0.07411757587734409
+  },
+  {
+    "candidate": "ground_detour_v2.0_a0.5",
+    "root": 0,
+    "samples": 491,
+    "slew_fraction": 0.9348268839103869,
+    "nominal_peak_rad": 0.29152119159698486,
+    "governed_peak_rad": 0.15130476653575897,
+    "steer_error_rmse_rad": 0.1013674743368982
+  },
+  {
+    "candidate": "ground_detour_v2.3_a0.5",
+    "root": 0,
+    "samples": 282,
+    "slew_fraction": 0.9539007092198581,
+    "nominal_peak_rad": 0.19703012704849243,
+    "governed_peak_rad": 0.12648750841617584,
+    "steer_error_rmse_rad": 0.1439889709641589
+  },
+  {
+    "candidate": "s_bend_jump_v1.8_a0.5",
+    "root": 0,
+    "samples": 192,
+    "slew_fraction": 0.9010416666666666,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.16170020401477814,
+    "steer_error_rmse_rad": 0.07085973652786338
+  },
+  {
+    "candidate": "right_angle_jump_v2.0_a0.0",
+    "root": 1,
+    "samples": 123,
+    "slew_fraction": 0.7967479674796748,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.19357585906982422,
+    "steer_error_rmse_rad": 0.06801235126860498
+  },
+  {
+    "candidate": "ground_detour_v1.5_a1.0",
+    "root": 1,
+    "samples": 491,
+    "slew_fraction": 0.7861507128309573,
+    "nominal_peak_rad": 0.19785505533218384,
+    "governed_peak_rad": 0.14030425250530243,
+    "steer_error_rmse_rad": 0.045963492350691436
+  },
+  {
+    "candidate": "straight_jump_v2.0_a1.0",
+    "root": 0,
+    "samples": 183,
+    "slew_fraction": 0.7540983606557377,
+    "nominal_peak_rad": 0.10889389365911484,
+    "governed_peak_rad": 0.04278752580285072,
+    "steer_error_rmse_rad": 0.056038853771640515
+  },
+  {
+    "candidate": "s_bend_jump_v2.0_a0.0",
+    "root": 0,
+    "samples": 202,
+    "slew_fraction": 0.9554455445544554,
+    "nominal_peak_rad": 0.27304282784461975,
+    "governed_peak_rad": 0.15638957917690277,
+    "steer_error_rmse_rad": 0.08556756135273648
+  },
+  {
+    "candidate": "straight_jump_v1.5_a0.5",
+    "root": 0,
+    "samples": 232,
+    "slew_fraction": 0.6508620689655172,
+    "nominal_peak_rad": 0.12469374388456345,
+    "governed_peak_rad": 0.07634872943162918,
+    "steer_error_rmse_rad": 0.04685192980883911
+  },
+  {
+    "candidate": "s_bend_jump_v2.3_a1.0",
+    "root": 0,
+    "samples": 168,
+    "slew_fraction": 0.9226190476190477,
+    "nominal_peak_rad": 0.21534357964992523,
+    "governed_peak_rad": 0.09159646928310394,
+    "steer_error_rmse_rad": 0.13551552462191996
+  },
+  {
+    "candidate": "straight_jump_v2.6_a0.5",
+    "root": 1,
+    "samples": 81,
+    "slew_fraction": 0.5679012345679012,
+    "nominal_peak_rad": 0.0952468290925026,
+    "governed_peak_rad": 0.04182273894548416,
+    "steer_error_rmse_rad": 0.13490740601842025
+  },
+  {
+    "candidate": "straight_jump_v2.0_a1.0",
+    "root": 1,
+    "samples": 184,
+    "slew_fraction": 0.7391304347826086,
+    "nominal_peak_rad": 0.13493172824382782,
+    "governed_peak_rad": 0.07018118351697922,
+    "steer_error_rmse_rad": 0.06827622874737721
+  },
+  {
+    "candidate": "straight_jump_v2.6_a1.0",
+    "root": 1,
+    "samples": 85,
+    "slew_fraction": 0.5176470588235295,
+    "nominal_peak_rad": 0.0707617700099945,
+    "governed_peak_rad": 0.03606115281581879,
+    "steer_error_rmse_rad": 0.1642614418653936
+  },
+  {
+    "candidate": "straight_jump_v2.6_a0.0",
+    "root": 0,
+    "samples": 157,
+    "slew_fraction": 0.7643312101910829,
+    "nominal_peak_rad": 0.12050622701644897,
+    "governed_peak_rad": 0.08500280976295471,
+    "steer_error_rmse_rad": 0.12129919636357762
+  },
+  {
+    "candidate": "ground_detour_v1.5_a0.0",
+    "root": 1,
+    "samples": 491,
+    "slew_fraction": 0.8513238289205702,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.20808468759059906,
+    "steer_error_rmse_rad": 0.0631457216768296
+  },
+  {
+    "candidate": "s_bend_jump_v1.5_a1.0",
+    "root": 0,
+    "samples": 222,
+    "slew_fraction": 0.8243243243243243,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.16449683904647827,
+    "steer_error_rmse_rad": 0.05790284835995986
+  },
+  {
+    "candidate": "right_angle_jump_v1.5_a0.0",
+    "root": 1,
+    "samples": 125,
+    "slew_fraction": 0.536,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.2079612910747528,
+    "steer_error_rmse_rad": 0.05175364225609461
+  },
+  {
+    "candidate": "ground_detour_v1.8_a0.0",
+    "root": 0,
+    "samples": 443,
+    "slew_fraction": 0.8645598194130926,
+    "nominal_peak_rad": 0.18544575572013855,
+    "governed_peak_rad": 0.14460884034633636,
+    "steer_error_rmse_rad": 0.06424747154835232
+  },
+  {
+    "candidate": "s_bend_jump_v1.8_a0.5",
+    "root": 1,
+    "samples": 194,
+    "slew_fraction": 0.9278350515463918,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.16371388733386993,
+    "steer_error_rmse_rad": 0.05842215923787033
+  },
+  {
+    "candidate": "right_angle_jump_v2.3_a0.0",
+    "root": 0,
+    "samples": 44,
+    "slew_fraction": 0.8636363636363636,
+    "nominal_peak_rad": 0.1894286423921585,
+    "governed_peak_rad": 0.14823876321315765,
+    "steer_error_rmse_rad": 0.11192711093322973
+  },
+  {
+    "candidate": "straight_jump_v1.8_a0.0",
+    "root": 0,
+    "samples": 202,
+    "slew_fraction": 0.7574257425742574,
+    "nominal_peak_rad": 0.13711421191692352,
+    "governed_peak_rad": 0.10400611907243729,
+    "steer_error_rmse_rad": 0.07104992603100001
+  },
+  {
+    "candidate": "right_angle_jump_v2.0_a0.0",
+    "root": 0,
+    "samples": 115,
+    "slew_fraction": 0.8173913043478261,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.19394661486148834,
+    "steer_error_rmse_rad": 0.07743724051740705
+  },
+  {
+    "candidate": "ground_detour_v1.8_a1.0",
+    "root": 1,
+    "samples": 436,
+    "slew_fraction": 0.8738532110091743,
+    "nominal_peak_rad": 0.22499096393585205,
+    "governed_peak_rad": 0.152633398771286,
+    "steer_error_rmse_rad": 0.057054277320760106
+  },
+  {
+    "candidate": "right_angle_jump_v2.6_a0.5",
+    "root": 1,
+    "samples": 45,
+    "slew_fraction": 0.8666666666666667,
+    "nominal_peak_rad": 0.20063896477222443,
+    "governed_peak_rad": 0.1387912780046463,
+    "steer_error_rmse_rad": 0.08802651919767378
+  },
+  {
+    "candidate": "s_bend_jump_v2.3_a0.0",
+    "root": 0,
+    "samples": 173,
+    "slew_fraction": 0.9653179190751445,
+    "nominal_peak_rad": 0.18791668117046356,
+    "governed_peak_rad": 0.13652993738651276,
+    "steer_error_rmse_rad": 0.07028469887112229
+  },
+  {
+    "candidate": "right_angle_jump_v1.5_a1.0",
+    "root": 0,
+    "samples": 131,
+    "slew_fraction": 0.5648854961832062,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.185867041349411,
+    "steer_error_rmse_rad": 0.06338082943953495
+  },
+  {
+    "candidate": "right_angle_jump_v2.3_a0.5",
+    "root": 1,
+    "samples": 34,
+    "slew_fraction": 0.8235294117647058,
+    "nominal_peak_rad": 0.13434666395187378,
+    "governed_peak_rad": 0.11673691123723984,
+    "steer_error_rmse_rad": 0.08450779432102772
+  },
+  {
+    "candidate": "ground_detour_v2.6_a0.0",
+    "root": 1,
+    "samples": 83,
+    "slew_fraction": 0.8674698795180723,
+    "nominal_peak_rad": 0.1564023196697235,
+    "governed_peak_rad": 0.12022542953491211,
+    "steer_error_rmse_rad": 0.2235603798250375
+  },
+  {
+    "candidate": "ground_detour_v2.6_a0.5",
+    "root": 1,
+    "samples": 93,
+    "slew_fraction": 0.8817204301075269,
+    "nominal_peak_rad": 0.157274067401886,
+    "governed_peak_rad": 0.11087842285633087,
+    "steer_error_rmse_rad": 0.1537081435845144
+  },
+  {
+    "candidate": "s_bend_jump_v2.3_a0.5",
+    "root": 0,
+    "samples": 170,
+    "slew_fraction": 0.9470588235294117,
+    "nominal_peak_rad": 0.24155758321285248,
+    "governed_peak_rad": 0.10629710555076599,
+    "steer_error_rmse_rad": 0.08340743862775848
+  },
+  {
+    "candidate": "straight_jump_v2.3_a1.0",
+    "root": 0,
+    "samples": 166,
+    "slew_fraction": 0.6746987951807228,
+    "nominal_peak_rad": 0.12767383456230164,
+    "governed_peak_rad": 0.08411281555891037,
+    "steer_error_rmse_rad": 0.10367977424861133
+  },
+  {
+    "candidate": "ground_detour_v1.5_a0.5",
+    "root": 1,
+    "samples": 491,
+    "slew_fraction": 0.8839103869653768,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.1916789561510086,
+    "steer_error_rmse_rad": 0.06662001633814361
+  },
+  {
+    "candidate": "straight_jump_v1.5_a0.0",
+    "root": 1,
+    "samples": 232,
+    "slew_fraction": 0.49137931034482757,
+    "nominal_peak_rad": 0.039991021156311035,
+    "governed_peak_rad": 0.03129500150680542,
+    "steer_error_rmse_rad": 0.02870215943497769
+  },
+  {
+    "candidate": "s_bend_jump_v1.8_a0.0",
+    "root": 1,
+    "samples": 217,
+    "slew_fraction": 0.8571428571428571,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.16199037432670593,
+    "steer_error_rmse_rad": 0.07193213917869348
+  },
+  {
+    "candidate": "straight_jump_v2.3_a0.0",
+    "root": 0,
+    "samples": 106,
+    "slew_fraction": 0.660377358490566,
+    "nominal_peak_rad": 0.250000536441803,
+    "governed_peak_rad": 0.11666037142276764,
+    "steer_error_rmse_rad": 0.21474734657688904
+  },
+  {
+    "candidate": "s_bend_jump_v2.0_a0.0",
+    "root": 1,
+    "samples": 207,
+    "slew_fraction": 0.9565217391304348,
+    "nominal_peak_rad": 0.2706345021724701,
+    "governed_peak_rad": 0.16215980052947998,
+    "steer_error_rmse_rad": 0.09483610779925865
+  },
+  {
+    "candidate": "s_bend_jump_v2.6_a0.0",
+    "root": 0,
+    "samples": 173,
+    "slew_fraction": 0.953757225433526,
+    "nominal_peak_rad": 0.2716461718082428,
+    "governed_peak_rad": 0.12961219251155853,
+    "steer_error_rmse_rad": 0.09032274662450258
+  },
+  {
+    "candidate": "right_angle_jump_v1.5_a1.0",
+    "root": 1,
+    "samples": 130,
+    "slew_fraction": 0.5615384615384615,
+    "nominal_peak_rad": 0.30000001192092896,
+    "governed_peak_rad": 0.17691388726234436,
+    "steer_error_rmse_rad": 0.05091741993253139
+  },
+  {
+    "candidate": "straight_jump_v2.6_a0.0",
+    "root": 1,
+    "samples": 80,
+    "slew_fraction": 0.6125,
+    "nominal_peak_rad": 0.06597291678190231,
+    "governed_peak_rad": 0.027438435703516006,
+    "steer_error_rmse_rad": 0.10100516203870381
+  },
+  {
+    "candidate": "s_bend_jump_v2.6_a0.5",
+    "root": 0,
+    "samples": 163,
+    "slew_fraction": 0.901840490797546,
+    "nominal_peak_rad": 0.1871369183063507,
+    "governed_peak_rad": 0.0978805273771286,
+    "steer_error_rmse_rad": 0.14601925439747884
+  }
+]

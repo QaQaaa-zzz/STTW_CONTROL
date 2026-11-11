@@ -29,6 +29,9 @@ class DitchGroundHandoff:
                         record_control_commands=True)
         bundle=Path(spec['bundle']);identity=json.loads((bundle/'identity.json').read_text())
         config=json.loads((bundle/'config.json').read_text())
+        if 'nominal_steer_slew_rad_s' in spec:
+            if spec['nominal_steer_slew_rad_s']<=0:raise ValueError('Positive nominal steering reference slew required')
+            config['follower']['nominal_steer_slew_rad_s']=spec['nominal_steer_slew_rad_s']
         actor=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],config,n,env.device)
         self.ground=IsaacPathRollout(bundle,settings,actor,plant=env.plant)
         reference_path=spec.get("reference_path")
@@ -46,7 +49,7 @@ class DitchGroundHandoff:
         self.approach_initialized=False
         (self.output/'ground_identity.json').write_text(json.dumps(dict(upper_sha256=self.ground.upper_sha256,
             lower_sha256=self.ground.lower_sha256,zero_lower=True,zero_middle=spec.get('zero_middle',False),controller=('ECBC/ESO + original follower; H75 correction zero' if spec.get('zero_middle',False) else 'H75 + ECBC/ESO; lower residual zero'),
-            reference=reference_path or 'Original world-local y=0, no reanchoring at landing',control_dt_s=.005,policy_dt_s=.02,
+            follower=config['follower'],reference=reference_path or 'Original world-local y=0, no reanchoring at landing',control_dt_s=.005,policy_dt_s=.02,
             feedback='Existing ground clean-state interface; frozen randomized physical properties retained; jump noise/delay only before handback',
             pendulum=self.leg_hold),indent=2))
 
