@@ -205,7 +205,7 @@ On DEV, far-contact time MAE is 0.0349~s and XY error 0.1002~m; goal-continuatio
 \end{figure*}
 
 \subsection{Frozen held-out-root prediction}
-Table~\ref{tab:test} evaluates both frozen models on 240 stored TEST executions with 34 completions. The branched model yields far-contact time error 0.0402~s and XY error 0.1042~m. Its initial autoregressive completion Brier is 0.09570, compared with 0.11455 for the shared-head model and 0.12160 for the TRAIN-rate constant. This separates out-of-training-root prediction evidence from DEV checkpoint selection.
+Table~\ref{tab:test} evaluates both frozen models on 240 stored TEST executions with 34 completions. The branched model yields far-contact time error 0.0402~s and XY error 0.1042~m. Its initial autoregressive completion Brier is 0.09570, compared with 0.11455 for the shared-head model and 0.12160 for the TRAIN-rate constant. This separates out-of-training-root prediction evidence from DEV checkpoint selection. A supplementary ranking diagnostic selects the successful low-speed detour in all four roots with the three-head scores, whereas the shared-head scores select failed S-bend branches in all four. The same fixed detour also succeeds four times. These are saved branch outcomes, not new online trials: scores use candidate-specific publication states with small differences, so they do not establish exact common-state counterfactual benefit.
 \begin{table}[t]
 \centering\caption{Frozen prediction on four previously observed TEST roots. Three-head/shared-head errors; lower is better.}\label{tab:test}
 \footnotesize\setlength{\tabcolsep}{3pt}\begin{tabular}{lrrr}\toprule

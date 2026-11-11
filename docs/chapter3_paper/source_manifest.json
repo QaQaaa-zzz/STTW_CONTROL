@@ -123,6 +123,14 @@
       "sha256": "42903f8a1cd42d442936ea23c1dc5e6d288f11272f85f5d55a9718c66911d7b1",
       "verification": "agent_source_inspected",
       "human_verification": "pending"
+    },
+    {
+      "id": "E9",
+      "title": "Frozen candidate ranking diagnostic",
+      "path": "docs/evidence/chapter3_event_frozen_test/ranking.json",
+      "sha256": "805b6bb1ec987b9433b1d16a5ff9901f9300664e363913e2154ed938e805f4ab",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending"
     }
   ],
   "references": [
@@ -166,5 +174,5 @@
   "scope": "English robotics research draft; no claim of journal acceptance",
   "new_physics_steps": 0,
   "new_policy_training_updates": 0,
-  "paper_sha256": "d466d5ac8c92ab2b9dbff9b7d01b504617b451584711f5a6576c2d412727db73"
+  "paper_sha256": "400332962084265d3eb71a752999727951fe1d564a068e56be914e391eb202dd"
 }

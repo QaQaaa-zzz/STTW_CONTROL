@@ -1,0 +1,151 @@
+{
+  "scope": "Post-hoc frozen ranking diagnostic on previously inspected TEST roots; candidate-specific publication states differ. Not an online comparison or exact common-state counterfactual.",
+  "new_physics_steps": 0,
+  "new_training_updates": 0,
+  "models": {
+    "Three-head": "da20800289216a0cd568e407f37d1bb2af3bd5d623b77507e9201b5a35f9eba7",
+    "Shared-head": "66994b9fddd1fcfc5ec96a3f0d55aee0b9546ebf30b0d8cf8df8a01a30bf3eee"
+  },
+  "roots": [
+    {
+      "root": 0,
+      "candidate_count": 60,
+      "successful_candidates": 8,
+      "initial_position_component_range_m": [
+        0.00054931640625,
+        0.00054931640625,
+        1.2069940567016602e-06
+      ],
+      "initial_velocity_component_range_m_s": [
+        0.0003591775894165039,
+        9.329244494438171e-05,
+        0.0006211476866155863
+      ],
+      "selections": {
+        "Three-head": {
+          "root": 0,
+          "candidate": "ground_detour_v1.8_a0.0",
+          "success": 1,
+          "predicted_completion": 0.46079530867936924,
+          "predicted_time_s": 8.709121704101562,
+          "prior_road_violation": false,
+          "lane": 173
+        },
+        "Shared-head": {
+          "root": 0,
+          "candidate": "s_bend_jump_v1.5_a0.0",
+          "success": 0,
+          "predicted_completion": 0.5377863982737351,
+          "predicted_time_s": 8.027262178526144,
+          "prior_road_violation": false,
+          "lane": 222
+        }
+      }
+    },
+    {
+      "root": 1,
+      "candidate_count": 60,
+      "successful_candidates": 9,
+      "initial_position_component_range_m": [
+        0.0009307861328125,
+        0.0002593994140625,
+        6.407499313354492e-07
+      ],
+      "initial_velocity_component_range_m_s": [
+        0.0001621246337890625,
+        0.00030599161982536316,
+        0.00019029114628210664
+      ],
+      "selections": {
+        "Three-head": {
+          "root": 1,
+          "candidate": "ground_detour_v1.8_a0.0",
+          "success": 1,
+          "predicted_completion": 0.5115595714834287,
+          "predicted_time_s": 8.862078666687012,
+          "prior_road_violation": false,
+          "lane": 32
+        },
+        "Shared-head": {
+          "root": 1,
+          "candidate": "s_bend_jump_v1.5_a0.0",
+          "success": 0,
+          "predicted_completion": 0.5298921590352093,
+          "predicted_time_s": 7.9077783462707885,
+          "prior_road_violation": false,
+          "lane": 121
+        }
+      }
+    },
+    {
+      "root": 2,
+      "candidate_count": 60,
+      "successful_candidates": 11,
+      "initial_position_component_range_m": [
+        0.00054931640625,
+        0.0007781982421875,
+        1.3932585716247559e-06
+      ],
+      "initial_velocity_component_range_m_s": [
+        0.0003628730773925781,
+        0.0005963207222521305,
+        0.00018248970445711166
+      ],
+      "selections": {
+        "Three-head": {
+          "root": 2,
+          "candidate": "ground_detour_v1.8_a0.0",
+          "success": 1,
+          "predicted_completion": 0.5426254912685718,
+          "predicted_time_s": 9.135221481323242,
+          "prior_road_violation": false,
+          "lane": 93
+        },
+        "Shared-head": {
+          "root": 2,
+          "candidate": "s_bend_jump_v1.5_a0.0",
+          "success": 0,
+          "predicted_completion": 0.544134173670609,
+          "predicted_time_s": 8.117074804700678,
+          "prior_road_violation": false,
+          "lane": 110
+        }
+      }
+    },
+    {
+      "root": 3,
+      "candidate_count": 60,
+      "successful_candidates": 6,
+      "initial_position_component_range_m": [
+        0.0007781982421875,
+        0.000751495361328125,
+        2.332031726837158e-06
+      ],
+      "initial_velocity_component_range_m_s": [
+        0.0011398792266845703,
+        0.00036413222551345825,
+        0.00023317117302212864
+      ],
+      "selections": {
+        "Three-head": {
+          "root": 3,
+          "candidate": "ground_detour_v1.8_a0.0",
+          "success": 1,
+          "predicted_completion": 0.4534196627445784,
+          "predicted_time_s": 9.102797508239746,
+          "prior_road_violation": false,
+          "lane": 176
+        },
+        "Shared-head": {
+          "root": 3,
+          "candidate": "s_bend_jump_v1.5_a0.0",
+          "success": 0,
+          "predicted_completion": 0.5415338009152668,
+          "predicted_time_s": 7.8076339716644725,
+          "prior_road_violation": false,
+          "lane": 120
+        }
+      }
+    }
+  ]
+}
