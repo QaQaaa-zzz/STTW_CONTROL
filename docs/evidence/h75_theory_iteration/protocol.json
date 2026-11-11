@@ -13,9 +13,10 @@
     {
       "id": "S1",
       "scope": "全部20面板完整端点目标、eta区间、弯道分配",
-      "status": "partial",
-      "completed": "100原始轨迹20面板前沿；300000策略步完整端点重评分，最大逐步差1.4315e-6；eta端点归一化来源精确复算；完整θ区间20面板，25/100候选在自身偏好最优",
-      "remaining": "H03/H05弯道分配律曲线检验与适用范围，完成后再推进S2"
+      "status": "completed",
+      "completed": "100原始轨迹20面板前沿；300000策略步完整端点重评分，最大逐步差1.4315e-6；eta端点归一化来源精确复算；完整θ区间20面板，25/100候选在自身偏好最优；H03/H05共328轨迹、80配对工况完成分配律检验，完整XY与20路线曲线。96/96相邻名义平滑比较速度上升/减速份额下降，94/96外偏增加；定量最优分配律不采用",
+      "remaining": "",
+      "decision": "Use structural coordination trend and empirical task-conditioned selection; reject exact-optimality and global Huber-switch claims"
     },
     {
       "id": "S2",
@@ -95,5 +96,5 @@
   "stop_rule": "每阶段完成后按数据迭代；不无上限训练；超过半小时等待时暂停目标，等待用户恢复",
   "notifications": "GPU stage completion/error Bark with receipts; shared gpu lock",
   "new_gpu_jobs_started": 2,
-  "current_priority": "Complete S1 bend-allocation validation; no S2-S4 advancement before S1 closure"
+  "current_priority": "S2: explain contact-linked low/middle/high alpha recovery and failure with actual steering authority; S3 remains stopped until mechanism prediction established"
 }

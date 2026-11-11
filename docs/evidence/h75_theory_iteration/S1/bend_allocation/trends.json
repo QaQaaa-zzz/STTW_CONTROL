@@ -1,0 +1,1074 @@
+{
+  "H03": {
+    "edges": 32,
+    "speed_increases": 32,
+    "outward_increases": 30,
+    "speed_share_decreases": 32,
+    "details": [
+      {
+        "route": "tasktest_low_S_left_68_R1p35_v2p05",
+        "bank": 1,
+        "alpha_pair": [
+          0.0,
+          0.25
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_low_S_left_68_R1p35_v2p05",
+        "bank": 1,
+        "alpha_pair": [
+          0.25,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_low_S_left_68_R1p35_v2p05",
+        "bank": 1,
+        "alpha_pair": [
+          0.5,
+          0.75
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_low_S_left_68_R1p35_v2p05",
+        "bank": 1,
+        "alpha_pair": [
+          0.75,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_high_single_left_92_R3p05_v3p0",
+        "bank": 1,
+        "alpha_pair": [
+          0.0,
+          0.25
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_high_single_left_92_R3p05_v3p0",
+        "bank": 1,
+        "alpha_pair": [
+          0.25,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_high_single_left_92_R3p05_v3p0",
+        "bank": 1,
+        "alpha_pair": [
+          0.5,
+          0.75
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_high_single_left_92_R3p05_v3p0",
+        "bank": 1,
+        "alpha_pair": [
+          0.75,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_low_S_left_68_R1p35_v2p05",
+        "bank": 3,
+        "alpha_pair": [
+          0.0,
+          0.25
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_low_S_left_68_R1p35_v2p05",
+        "bank": 3,
+        "alpha_pair": [
+          0.25,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_low_S_left_68_R1p35_v2p05",
+        "bank": 3,
+        "alpha_pair": [
+          0.5,
+          0.75
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_low_S_left_68_R1p35_v2p05",
+        "bank": 3,
+        "alpha_pair": [
+          0.75,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_high_single_left_92_R3p05_v3p0",
+        "bank": 3,
+        "alpha_pair": [
+          0.0,
+          0.25
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_high_single_left_92_R3p05_v3p0",
+        "bank": 3,
+        "alpha_pair": [
+          0.25,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_high_single_left_92_R3p05_v3p0",
+        "bank": 3,
+        "alpha_pair": [
+          0.5,
+          0.75
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_high_single_left_92_R3p05_v3p0",
+        "bank": 3,
+        "alpha_pair": [
+          0.75,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_low_single_right_88_R1p2_v1p95",
+        "bank": 1,
+        "alpha_pair": [
+          0.0,
+          0.25
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_low_single_right_88_R1p2_v1p95",
+        "bank": 1,
+        "alpha_pair": [
+          0.25,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_low_single_right_88_R1p2_v1p95",
+        "bank": 1,
+        "alpha_pair": [
+          0.5,
+          0.75
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_low_single_right_88_R1p2_v1p95",
+        "bank": 1,
+        "alpha_pair": [
+          0.75,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_high_S_right_64_R2p9_v3p1",
+        "bank": 1,
+        "alpha_pair": [
+          0.0,
+          0.25
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_high_S_right_64_R2p9_v3p1",
+        "bank": 1,
+        "alpha_pair": [
+          0.25,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": false,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_high_S_right_64_R2p9_v3p1",
+        "bank": 1,
+        "alpha_pair": [
+          0.5,
+          0.75
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_high_S_right_64_R2p9_v3p1",
+        "bank": 1,
+        "alpha_pair": [
+          0.75,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_low_single_right_88_R1p2_v1p95",
+        "bank": 3,
+        "alpha_pair": [
+          0.0,
+          0.25
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_low_single_right_88_R1p2_v1p95",
+        "bank": 3,
+        "alpha_pair": [
+          0.25,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_low_single_right_88_R1p2_v1p95",
+        "bank": 3,
+        "alpha_pair": [
+          0.5,
+          0.75
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_low_single_right_88_R1p2_v1p95",
+        "bank": 3,
+        "alpha_pair": [
+          0.75,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_high_S_right_64_R2p9_v3p1",
+        "bank": 3,
+        "alpha_pair": [
+          0.0,
+          0.25
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_high_S_right_64_R2p9_v3p1",
+        "bank": 3,
+        "alpha_pair": [
+          0.25,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": false,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_high_S_right_64_R2p9_v3p1",
+        "bank": 3,
+        "alpha_pair": [
+          0.5,
+          0.75
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "tasktest_high_S_right_64_R2p9_v3p1",
+        "bank": 3,
+        "alpha_pair": [
+          0.75,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      }
+    ]
+  },
+  "H05": {
+    "edges": 64,
+    "speed_increases": 64,
+    "outward_increases": 64,
+    "speed_share_decreases": 64,
+    "details": [
+      {
+        "route": "low_single_left_R1p45",
+        "bank": 2,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "low_single_left_R1p45",
+        "bank": 2,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "low_single_right_R1p45",
+        "bank": 2,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "low_single_right_R1p45",
+        "bank": 2,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "low_s_left_R1p55",
+        "bank": 2,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "low_s_left_R1p55",
+        "bank": 2,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "low_s_right_R1p55",
+        "bank": 2,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "low_s_right_R1p55",
+        "bank": 2,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "low_single_left_R2p5",
+        "bank": 2,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "low_single_left_R2p5",
+        "bank": 2,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "low_single_right_R2p5",
+        "bank": 2,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "low_single_right_R2p5",
+        "bank": 2,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "low_single_left_R1p45",
+        "bank": 5,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "low_single_left_R1p45",
+        "bank": 5,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "low_single_right_R1p45",
+        "bank": 5,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "low_single_right_R1p45",
+        "bank": 5,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "low_s_left_R1p55",
+        "bank": 5,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "low_s_left_R1p55",
+        "bank": 5,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "low_s_right_R1p55",
+        "bank": 5,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "low_s_right_R1p55",
+        "bank": 5,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "low_single_left_R2p5",
+        "bank": 5,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "low_single_left_R2p5",
+        "bank": 5,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "low_single_right_R2p5",
+        "bank": 5,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "low_single_right_R2p5",
+        "bank": 5,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "mid_single_left_R2p3",
+        "bank": 2,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "mid_single_left_R2p3",
+        "bank": 2,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "mid_single_right_R2p3",
+        "bank": 2,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "mid_single_right_R2p3",
+        "bank": 2,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "mid_s_left_R2p4",
+        "bank": 2,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "mid_s_left_R2p4",
+        "bank": 2,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "mid_s_right_R2p4",
+        "bank": 2,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "mid_s_right_R2p4",
+        "bank": 2,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "mid_single_left_R2p3",
+        "bank": 5,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "mid_single_left_R2p3",
+        "bank": 5,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "mid_single_right_R2p3",
+        "bank": 5,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "mid_single_right_R2p3",
+        "bank": 5,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "mid_s_left_R2p4",
+        "bank": 5,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "mid_s_left_R2p4",
+        "bank": 5,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "mid_s_right_R2p4",
+        "bank": 5,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "mid_s_right_R2p4",
+        "bank": 5,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "high_single_left_R3p1",
+        "bank": 2,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "high_single_left_R3p1",
+        "bank": 2,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "high_single_right_R3p1",
+        "bank": 2,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "high_single_right_R3p1",
+        "bank": 2,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "high_s_left_R3p2",
+        "bank": 2,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "high_s_left_R3p2",
+        "bank": 2,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "high_s_right_R3p2",
+        "bank": 2,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "high_s_right_R3p2",
+        "bank": 2,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "high_single_left_R2p2",
+        "bank": 2,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "high_single_left_R2p2",
+        "bank": 2,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "high_single_right_R2p2",
+        "bank": 2,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "high_single_right_R2p2",
+        "bank": 2,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "high_single_left_R3p1",
+        "bank": 5,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "high_single_left_R3p1",
+        "bank": 5,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "high_single_right_R3p1",
+        "bank": 5,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "high_single_right_R3p1",
+        "bank": 5,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "high_s_left_R3p2",
+        "bank": 5,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "high_s_left_R3p2",
+        "bank": 5,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "high_s_right_R3p2",
+        "bank": 5,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "high_s_right_R3p2",
+        "bank": 5,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "high_single_left_R2p2",
+        "bank": 5,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "high_single_left_R2p2",
+        "bank": 5,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "high_single_right_R2p2",
+        "bank": 5,
+        "alpha_pair": [
+          0.0,
+          0.5
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      },
+      {
+        "route": "high_single_right_R2p2",
+        "bank": 5,
+        "alpha_pair": [
+          0.5,
+          1.0
+        ],
+        "speed_increases": true,
+        "outward_increases": true,
+        "speed_share_decreases": true
+      }
+    ]
+  }
+}
