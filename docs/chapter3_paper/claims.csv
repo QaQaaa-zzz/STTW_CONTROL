@@ -1,0 +1,10 @@
+claim_id,section,claim_summary,evidence_ids,human_verification
+C1,IV-A--IV-C,"30D state,11D plan,128D terrain,three62D heads;35770parameters",M1,pending
+C2,IV-D,Masked state/time loss and600Adamupdates; grouped TRAIN/DEV,"M2,E2",pending
+C3,V,"32particle score, overlapping road semantics, propagated measuredlatency","M1,M3",pending
+C4,VII-A,122/720 coverage;44straight20S58bypass0right-angle,E1,pending
+C5,VII-B,2666DEV transitions; conditional outputs and actual6pointloss,"E2,E5",pending
+C6,VII-C,TEST240/4roots;34success;Brier.09570/.11455/.12160,"E6,E7",pending
+C7,VII-D,"online5/12,5/12,6/12; only4independentroots",E3,pending
+C8,VII-D,root3early/mid/late forecast scores.6874/.3659/.1971,E5,pending
+C9,VII-D,RB34/240vs35/240;13gains12losses,E8,pending

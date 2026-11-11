@@ -1,0 +1,170 @@
+{
+  "submission_ready": false,
+  "author_verification": "pending",
+  "generated_utc": "2026-11-11T02:45:40.361328+00:00",
+  "canonical": "docs/chapter3_paper/MANUSCRIPT.tex",
+  "sources": [
+    {
+      "id": "E1",
+      "title": "Initial route coverage",
+      "path": "docs/evidence/chapter3_offroad_event_training/RESULTS.md",
+      "sha256": "e8ccdfb810e6e3bd3c031167802842ae1e0870995d8863c8140c750eba657049",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending"
+    },
+    {
+      "id": "E2",
+      "title": "Grouped multi-position model fitting",
+      "path": "docs/evidence/chapter3_offroad_distance_training/PREDICTION.md",
+      "sha256": "cbada5330f1f43c3f7ac64946b53dfdbb7b8caa6f133bf09fa1590e1f5978a64",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending"
+    },
+    {
+      "id": "E3",
+      "title": "Actual online execution",
+      "path": "docs/evidence/chapter3_offroad_distance_online/results.json",
+      "sha256": "b231f02778ebd24e4ced380e9399a17d05c4d0d21d2b65d75149600624253814",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending"
+    },
+    {
+      "id": "E4",
+      "title": "Shared-head DEV ablation",
+      "path": "docs/evidence/chapter3_shared_event_head/RESULTS.md",
+      "sha256": "8ddad91765e5b167f35f0af80b4d17ddbf5b19ed3b98f7c52234254374188a85",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending"
+    },
+    {
+      "id": "E5",
+      "title": "Model outputs and predictions",
+      "path": "docs/evidence/chapter3_event_outputs/outputs.json",
+      "sha256": "4d0cef5882b8186a0a8590501063047bd97bbf3ae9680d296d5320c7f193ded4",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending"
+    },
+    {
+      "id": "E6",
+      "title": "Frozen TEST predictions",
+      "path": "docs/evidence/chapter3_event_frozen_test/event.json",
+      "sha256": "828c6bb661345667c50791569a6a57959aba3131606736b48bcfafd5011f5c0c",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending"
+    },
+    {
+      "id": "E7",
+      "title": "Frozen shared-head TEST predictions",
+      "path": "docs/evidence/chapter3_event_frozen_test/shared_head.json",
+      "sha256": "76894abef2239a30fedad24bd13ea3a207d44cd1f38b606f4ad667e94c7c94b4",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending"
+    },
+    {
+      "id": "E8",
+      "title": "RB skill substitution",
+      "path": "docs/evidence/chapter3_offroad_new_roots/ANALYSIS.md",
+      "sha256": "259aab66bf93bbf64eb39e1286b35f88d798c52ef7767c847890fe3bba421df8",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending"
+    },
+    {
+      "id": "M1",
+      "title": "Implemented model and scoring",
+      "path": "learning/src/sttw_control/ditch_event_model.py",
+      "sha256": "07ab6e66b0d816080317fb2ea730c138d8e3bdf2d514b5b8c3a9ea6da1455e22",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending"
+    },
+    {
+      "id": "M2",
+      "title": "Implemented supervised training",
+      "path": "learning/cli/fit_ditch_event_model.py",
+      "sha256": "ed5a553f26a6455e9102e45ce97d955e8d362102185d7fec80cf3b564c5a5703",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending"
+    },
+    {
+      "id": "M3",
+      "title": "Actual latency and route publication",
+      "path": "learning/src/sttw_control/moving_ditch_planner.py",
+      "sha256": "adf649834b999576107884342716a998493d81ba043f5f2befea5aef0c6a23e8",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending"
+    },
+    {
+      "id": "M4",
+      "title": "Actual event scorer",
+      "path": "learning/src/sttw_control/offroad_jump_reward.py",
+      "sha256": "ce65cb6075e1d8fa30100b457f04da88a278eef4aa253a0b8ee3fb65834039af",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending"
+    },
+    {
+      "id": "M5",
+      "title": "Physical contact and failure adapter",
+      "path": "learning/src/sttw_control/ditch_jump_adapter.py",
+      "sha256": "8dfdb316954e6fd4cc78fedf806cde917a7b17007df6b51a157c71521cca8458",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending"
+    },
+    {
+      "id": "M6",
+      "title": "Actual handoff and task success",
+      "path": "learning/src/sttw_control/ditch_ground_handoff.py",
+      "sha256": "2a45968e3d054105d1d87fc96f39b4b0c5d517efa4882dfbc42901911fbdbd83",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending"
+    },
+    {
+      "id": "M7",
+      "title": "Controller preference",
+      "path": "learning/src/sttw_control/torch_middle_control.py",
+      "sha256": "42903f8a1cd42d442936ea23c1dc5e6d288f11272f85f5d55a9718c66911d7b1",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending"
+    }
+  ],
+  "references": [
+    {
+      "id": "burridge1999",
+      "url": "https://kodlab.seas.upenn.edu/uploads/Kod/Sequential1999.pdf",
+      "verification": "primary_source_opened_by_agent; human review pending"
+    },
+    {
+      "id": "xin2020",
+      "url": "https://arxiv.org/abs/2003.03678",
+      "verification": "primary_source_opened_by_agent; human review pending"
+    },
+    {
+      "id": "lee2024",
+      "url": "https://arxiv.org/abs/2405.01792",
+      "verification": "primary_source_opened_by_agent; human review pending"
+    },
+    {
+      "id": "chua2018",
+      "url": "https://arxiv.org/abs/1805.12114",
+      "verification": "primary_source_opened_by_agent; human review pending"
+    },
+    {
+      "id": "yang2020",
+      "url": "https://proceedings.mlr.press/v100/yang20a.html",
+      "verification": "primary_source_opened_by_agent; human review pending"
+    },
+    {
+      "id": "wu2022",
+      "url": "https://arxiv.org/abs/2206.14176",
+      "verification": "primary_source_opened_by_agent; human review pending"
+    },
+    {
+      "id": "scientific_skills",
+      "url": "https://arxiv.org/abs/2609.00065",
+      "verification": "primary_source_opened_by_agent; human review pending"
+    }
+  ],
+  "template_source": "https://ras.papercept.net/conferences/support/files/ieeeconf.zip",
+  "scope": "English robotics research draft; no claim of journal acceptance",
+  "new_physics_steps": 0,
+  "new_policy_training_updates": 0,
+  "paper_sha256": "d466d5ac8c92ab2b9dbff9b7d01b504617b451584711f5a6576c2d412727db73"
+}
