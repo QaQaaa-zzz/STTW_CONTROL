@@ -1,0 +1,11 @@
+{
+  "matched_arrays": [
+    "transitions.npz",
+    "codec.npz"
+  ],
+  "branched": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_offroad_distance_training/model",
+  "shared": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_shared_event_head/model",
+  "dev_roots": 2,
+  "training_seeds": 1,
+  "scope": "DEV event-head structure comparison; no online performance claim"
+}

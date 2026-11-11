@@ -1,0 +1,15 @@
+{
+  "purpose": "Shared versus three event output heads; not an ordinary fixed-step dynamics baseline",
+  "collection": "chapter3_offroad_distance_training/segments",
+  "data_roles": "same 6 TRAIN roots / 2 DEV roots; no TEST fitting",
+  "updates": 600,
+  "batch_size": 256,
+  "optimizer": "Adam 0.001",
+  "seed": 20261110,
+  "stop": "600 updates or error, no automatic extension",
+  "expected_wall_minutes": 3,
+  "device": "CPU",
+  "physics_steps": 0,
+  "scope": "DEV structural ablation; parameter counts differ; preserve mode input and all targets",
+  "source_revision": "fb96225ab39f9b9cb2a9e5c4e5485515625de498"
+}

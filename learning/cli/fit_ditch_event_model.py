@@ -8,7 +8,7 @@ from sttw_control.ditch_event_model import EventTransitionNetwork,KnownHeightMap
 
 
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--collection',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--updates',type=int,default=600);p.add_argument('--conditional-event-targets',action='store_true');p.add_argument('--prefix-stride',type=int,default=0);p.add_argument('--skip-offline-selection',action='store_true');p.add_argument('--ground-height-hold',action='store_true')
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--collection',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--updates',type=int,default=600);p.add_argument('--conditional-event-targets',action='store_true');p.add_argument('--prefix-stride',type=int,default=0);p.add_argument('--skip-offline-selection',action='store_true');p.add_argument('--ground-height-hold',action='store_true');p.add_argument('--shared-event-head',action='store_true',help='Ablation: one output head, with unchanged event conditioning and targets')
  a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False);torch.set_num_threads(2);torch.manual_seed(20261110);rng=np.random.default_rng(20261110);start=time.monotonic()
  cfg=json.loads((a.collection/'config.json').read_text());protocol=json.loads((a.collection/'protocol.json').read_text());summary=json.loads((a.collection/'evaluation/summary.json').read_text());data=dict(np.load(a.collection/'evaluation/trajectories.npz'));routes=np.load(cfg['ground_handoff']['reference_path'])['xy']
  roles=np.array([c['role'] for c in protocol['cases']]);terrain_file=a.collection/'evaluation/terrain/terrain.npz';terrain=KnownHeightMap(np.load(terrain_file)['vertices'],cfg['ditch_terrain'])
@@ -67,7 +67,7 @@ def main():
  residual=ns-s;residual[:,:3]-=s[:,7:10]*dt[:,None]
  if a.ground_height_hold:
   ground=(modes==0)|(modes==4);residual[ground,2]=ns[ground,2]-s[ground,2]
- constructor=dict(ground_height_hold=a.ground_height_hold,plan_dimension=plans.shape[1],conditional_event_targets=a.conditional_event_targets,dimension=s.shape[1],state_mean=s[train].mean(0),state_std=np.maximum(s[train].std(0),.02),plan_mean=plans[train].mean(0),plan_std=np.maximum(plans[train].std(0),.02),residual_mean=residual[train].mean(0),residual_std=np.maximum(residual[train].std(0),.02))
+ constructor=dict(shared_event_head=a.shared_event_head,ground_height_hold=a.ground_height_hold,plan_dimension=plans.shape[1],conditional_event_targets=a.conditional_event_targets,dimension=s.shape[1],state_mean=s[train].mean(0),state_std=np.maximum(s[train].std(0),.02),plan_mean=plans[train].mean(0),plan_std=np.maximum(plans[train].std(0),.02),residual_mean=residual[train].mean(0),residual_std=np.maximum(residual[train].std(0),.02))
  model=EventTransitionNetwork(**constructor);opt=torch.optim.Adam(model.parameters(),lr=.001);tensors=[torch.from_numpy(x) for x in (s,plans,crop,modes,ns,dt,hit)];train_ids=np.flatnonzero(train);dev_ids=np.flatnonzero(dev);best=float('inf');logs=[]
  writer=SummaryWriter(str(a.output/'tensorboard'))
  for update in range(a.updates):
@@ -79,7 +79,7 @@ def main():
    if validation<best:best=validation;selected=update+1;weights=copy.deepcopy(model.state_dict())
  writer.close()
  model.load_state_dict(weights);torch.save(dict(constructor=constructor,state_dict=weights),a.output/'model.pt')
- meta=dict(ground_height_hold=a.ground_height_hold,prefix_stride_policy_steps=a.prefix_stride,inference_common_random_numbers=True,plan_skill_feature='last candidate parameter:1jump,0ground' if ground_only.any() else None,terrain_file=str(terrain_file),terrain_spec=cfg['ditch_terrain'],goal=cfg['ground_handoff']['goal'],candidate_parameters=params.tolist(),candidate_names=protocol['candidates'],selected_update=selected,training_logs=logs,collection=str(a.collection),scope='Exploratory same-map event model; grouped starts only; no map generalization or planning benefit claim',conditional_event_targets=a.conditional_event_targets,state='root xyzw13 + TRAIN-only PCA16 of causal80+352 history + prior road violation; history compression is not a Markov guarantee')
+ meta=dict(shared_event_head=a.shared_event_head,parameter_count=sum(p.numel() for p in model.parameters()),ground_height_hold=a.ground_height_hold,prefix_stride_policy_steps=a.prefix_stride,inference_common_random_numbers=True,plan_skill_feature='last candidate parameter:1jump,0ground' if ground_only.any() else None,terrain_file=str(terrain_file),terrain_spec=cfg['ditch_terrain'],goal=cfg['ground_handoff']['goal'],candidate_parameters=params.tolist(),candidate_names=protocol['candidates'],selected_update=selected,training_logs=logs,collection=str(a.collection),scope='Exploratory same-map event model; grouped starts only; no map generalization or planning benefit claim',conditional_event_targets=a.conditional_event_targets,state='root xyzw13 + TRAIN-only PCA16 of causal80+352 history + prior road violation; history compression is not a Markov guarantee')
  (a.output/'model.json').write_text(json.dumps(meta,indent=2));np.savez_compressed(a.output/'transitions.npz',lane=lanes,mode=modes,state=s,next_state=ns,time=dt,hit=hit,role=roles[lanes])
  metrics={}
  with torch.no_grad():

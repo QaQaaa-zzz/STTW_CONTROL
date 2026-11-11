@@ -52,16 +52,16 @@ class KnownHeightMap:
 
 
 class EventTransitionNetwork(nn.Module):
-    def __init__(self,dimension,state_mean,state_std,plan_mean,plan_std,residual_mean,residual_std,conditional_event_targets=False,plan_dimension=10,ground_height_hold=False):
-        super().__init__();self.dimension=dimension;self.conditional_event_targets=conditional_event_targets;self.ground_height_hold=ground_height_hold
+    def __init__(self,dimension,state_mean,state_std,plan_mean,plan_std,residual_mean,residual_std,conditional_event_targets=False,plan_dimension=10,ground_height_hold=False,shared_event_head=False):
+        super().__init__();self.dimension=dimension;self.conditional_event_targets=conditional_event_targets;self.ground_height_hold=ground_height_hold;self.shared_event_head=shared_event_head
         for name,value in dict(state_mean=state_mean,state_std=state_std,plan_mean=plan_mean,plan_std=plan_std,residual_mean=residual_mean,residual_std=residual_std).items():self.register_buffer(name,torch.as_tensor(value,dtype=torch.float32))
         self.terrain=nn.Sequential(nn.Linear(128,32),nn.SiLU(),nn.Linear(32,32),nn.SiLU())
         self.shared=nn.Sequential(nn.Linear(dimension+plan_dimension+6+32,128),nn.SiLU(),nn.Linear(128,64),nn.SiLU())
-        self.heads=nn.ModuleList([nn.Linear(64,2*dimension+2) for _ in range(3)])
+        self.heads=nn.ModuleList([nn.Linear(64,2*dimension+2) for _ in range(1 if shared_event_head else 3)])
     def forward(self,state,plan,crop,mode):
         x=torch.cat(((state-self.state_mean)/self.state_std,(plan-self.plan_mean)/self.plan_std,nn.functional.one_hot(mode,6).float(),self.terrain(crop)),-1)
         encoded=self.shared(x);all_heads=torch.stack([head(encoded) for head in self.heads],1)
-        head=torch.where(mode==0,0,torch.where(mode==4,2,1))
+        head=torch.zeros_like(mode) if self.shared_event_head else torch.where(mode==0,0,torch.where(mode==4,2,1))
         value=all_heads[torch.arange(len(mode),device=mode.device),head]
         d=self.dimension
         return value[:,:d],value[:,d:2*d].clamp(-4,3),value[:,-2],value[:,-1]
