@@ -54,6 +54,8 @@ if a.stage in ('collect','repair','evaluate'):
   final=trained['completed_updates']
   final_path=out/'train/training'/f'model_{final}.pt'
   if final not in cfg['evaluated_updates'] and final_path.exists():models.append((f'final{final}',final_path))
+  if cfg.get('evaluation_models'):
+   models=[('source',None)]+[(m['name'],Path(m['checkpoint'])) for m in cfg['evaluation_models']]
   candidates=len(models)
  n=len(roots)*candidates
  env_cfg=json.loads(Path(cfg['nominal_environment']).read_text());env_cfg.update(num_envs=n,record_verified_diagnostics=False)
@@ -132,9 +134,11 @@ if a.stage in ('collect','repair','evaluate'):
   matrix=success.reshape(len(roots),candidates);baseline=matrix[:,0];scores=[]
   for j,(name,path) in enumerate(models):
    scores.append(dict(name=name,checkpoint=str(path) if path else None,completed=int(matrix[:,j].sum()),gained=int((matrix[:,j]&~baseline).sum()),lost=int((~matrix[:,j]&baseline).sum()),labels=matrix[:,j].tolist()))
-  eligible=[r for r in scores if r['lost']==0]
+  selection_rule=cfg.get('selection_rule','retain_source')
+  eligible=scores if selection_rule=='completion' else [r for r in scores if r['lost']==0]
   best=max(eligible,key=lambda r:r['completed'])
   result.update(models=scores,selected=best,source_positive_count=int(baseline.sum()),retention_vacuous=not bool(baseline.any()),selection='Among evaluated checkpoints retain all source-positive fixed DEV roots, then maximize completed goals; ties keep earlier/source. DEV selection only, not independent TEST.')
+  if selection_rule=='completion':result['selection']='Maximize fixed DEV completed goals; report gained/lost without a zero-loss veto; ties keep earlier/source. DEV selection only.'
   (out/'selected_model.json').write_text(json.dumps(result,indent=2))
  (stage_dir/'status.json').write_text(json.dumps(result,indent=2));os.sync();os._exit(0)
 

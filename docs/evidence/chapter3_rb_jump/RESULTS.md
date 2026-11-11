@@ -27,3 +27,5 @@
 原始轨迹、配置和 checkpoint：`/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rb_jump_scheduled`；`pipeline/train/training/model_update_00xxx.pt`。全部模型身份路径见两次 `selected_model.json`，未重新训练或以结果追调参数。
 
 复测 119 条成败标签与首评逐条一致；这验证了该固定 DEV 协议的复现性，不是新独立样本。第400轮新增4、丢失2，净增2；第600轮新增5、丢失5，净增0。暂保留原策略，第400轮仅作为能力取舍候选，不自动进入主线。
+
+后续按完成数排名的[400轮附近补测](NEAR400.md)：本批500轮9/17最高，400和301轮8/17；共同source仅6/17，存在批次差异，尚无稳定最优的新结论。

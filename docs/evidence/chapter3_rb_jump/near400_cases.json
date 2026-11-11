@@ -1,0 +1,1668 @@
+[
+  {
+    "run": "near400",
+    "root": 0,
+    "model": "source",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.6000000000000005,
+    "handoff": true,
+    "final_xy": [
+      10.01312255859375,
+      0.0080718994140625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 0,
+    "model": "update300",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.84,
+    "handoff": true,
+    "final_xy": [
+      4.580841064453125,
+      -0.1320953369140625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 0,
+    "model": "update301",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.3,
+    "handoff": true,
+    "final_xy": [
+      10.029205322265625,
+      0.0183258056640625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 0,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.36,
+    "handoff": true,
+    "final_xy": [
+      10.0001220703125,
+      -0.10634994506835938
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 0,
+    "model": "update401",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.62,
+    "handoff": true,
+    "final_xy": [
+      4.557647705078125,
+      -0.14743995666503906
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 0,
+    "model": "update500",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.72,
+    "handoff": true,
+    "final_xy": [
+      10.028228759765625,
+      0.027751922607421875
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 0,
+    "model": "update501",
+    "success": false,
+    "end_code": 18,
+    "time_s": 5.74,
+    "handoff": true,
+    "final_xy": [
+      10.002227783203125,
+      -0.000995635986328125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 1,
+    "model": "source",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.72,
+    "handoff": true,
+    "final_xy": [
+      4.347076416015625,
+      0.00577545166015625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 1,
+    "model": "update300",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.3800000000000001,
+    "handoff": true,
+    "final_xy": [
+      3.8608551025390625,
+      -0.009429931640625
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "near400",
+    "root": 1,
+    "model": "update301",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.36,
+    "handoff": true,
+    "final_xy": [
+      3.8846893310546875,
+      -0.0264129638671875
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 1,
+    "model": "update400",
+    "success": false,
+    "end_code": 3,
+    "time_s": 2.18,
+    "handoff": true,
+    "final_xy": [
+      5.5602569580078125,
+      0.026458740234375
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 1,
+    "model": "update401",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.84,
+    "handoff": true,
+    "final_xy": [
+      10.0244140625,
+      -0.1700897216796875
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 1,
+    "model": "update500",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.78,
+    "handoff": true,
+    "final_xy": [
+      10.00958251953125,
+      0.01116943359375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 1,
+    "model": "update501",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.82,
+    "handoff": true,
+    "final_xy": [
+      5.01776123046875,
+      0.020709991455078125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 2,
+    "model": "source",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.6400000000000001,
+    "handoff": true,
+    "final_xy": [
+      4.2101898193359375,
+      0.142059326171875
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 2,
+    "model": "update300",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.9000000000000001,
+    "handoff": true,
+    "final_xy": [
+      5.038726806640625,
+      -0.4265918731689453
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 2,
+    "model": "update301",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.4,
+    "handoff": true,
+    "final_xy": [
+      10.009536743164062,
+      0.08553314208984375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 2,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.9,
+    "handoff": true,
+    "final_xy": [
+      10.015625,
+      -0.19886016845703125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 2,
+    "model": "update401",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.7,
+    "handoff": true,
+    "final_xy": [
+      4.7009124755859375,
+      -0.0094146728515625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 2,
+    "model": "update500",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.2,
+    "handoff": true,
+    "final_xy": [
+      10.020187377929688,
+      0.0489501953125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 2,
+    "model": "update501",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.22,
+    "handoff": true,
+    "final_xy": [
+      10.021286010742188,
+      -0.0470123291015625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 3,
+    "model": "source",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.26,
+    "handoff": true,
+    "final_xy": [
+      10.012069702148438,
+      0.023712158203125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 3,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.36,
+    "handoff": true,
+    "final_xy": [
+      10.026657104492188,
+      -0.0453338623046875
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 3,
+    "model": "update301",
+    "success": false,
+    "end_code": 3,
+    "time_s": 2.1,
+    "handoff": true,
+    "final_xy": [
+      5.3217010498046875,
+      0.1365509033203125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 3,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.0600000000000005,
+    "handoff": true,
+    "final_xy": [
+      10.005874633789062,
+      -0.04472541809082031
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 3,
+    "model": "update401",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.24,
+    "handoff": true,
+    "final_xy": [
+      10.024978637695312,
+      0.03774261474609375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 3,
+    "model": "update500",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.6400000000000001,
+    "handoff": true,
+    "final_xy": [
+      4.67596435546875,
+      0.016864776611328125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 3,
+    "model": "update501",
+    "success": false,
+    "end_code": 18,
+    "time_s": 6.0,
+    "handoff": true,
+    "final_xy": [
+      10.540481567382812,
+      0.4876251220703125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 4,
+    "model": "source",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.74,
+    "handoff": true,
+    "final_xy": [
+      4.069122314453125,
+      -0.047027587890625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 4,
+    "model": "update300",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.6400000000000001,
+    "handoff": true,
+    "final_xy": [
+      4.3756866455078125,
+      -0.025634765625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 4,
+    "model": "update301",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.32,
+    "handoff": true,
+    "final_xy": [
+      3.8393325805664062,
+      -0.0038299560546875
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "near400",
+    "root": 4,
+    "model": "update400",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.98,
+    "handoff": true,
+    "final_xy": [
+      4.740852355957031,
+      -0.19439697265625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 4,
+    "model": "update401",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.62,
+    "handoff": true,
+    "final_xy": [
+      4.311531066894531,
+      0.07525634765625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 4,
+    "model": "update500",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.86,
+    "handoff": true,
+    "final_xy": [
+      4.666847229003906,
+      0.041656494140625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 4,
+    "model": "update501",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.36,
+    "handoff": true,
+    "final_xy": [
+      3.915008544921875,
+      -0.026212692260742188
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 5,
+    "model": "source",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.44,
+    "handoff": true,
+    "final_xy": [
+      3.9621124267578125,
+      -0.06333160400390625
+    ],
+    "return_value": -100.00001525878906
+  },
+  {
+    "run": "near400",
+    "root": 5,
+    "model": "update300",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.46,
+    "handoff": true,
+    "final_xy": [
+      4.074836730957031,
+      -0.0939178466796875
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 5,
+    "model": "update301",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.34,
+    "handoff": true,
+    "final_xy": [
+      10.012130737304688,
+      -0.0420379638671875
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 5,
+    "model": "update400",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.42,
+    "handoff": true,
+    "final_xy": [
+      3.9787673950195312,
+      0.03009033203125
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "near400",
+    "root": 5,
+    "model": "update401",
+    "success": false,
+    "end_code": 3,
+    "time_s": 2.02,
+    "handoff": true,
+    "final_xy": [
+      4.868019104003906,
+      -0.18414306640625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 5,
+    "model": "update500",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.72,
+    "handoff": true,
+    "final_xy": [
+      10.002059936523438,
+      -0.0744171142578125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 5,
+    "model": "update501",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.36,
+    "handoff": true,
+    "final_xy": [
+      10.025382995605469,
+      -0.0133209228515625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 6,
+    "model": "source",
+    "success": false,
+    "end_code": 18,
+    "time_s": 5.18,
+    "handoff": true,
+    "final_xy": [
+      10.000747680664062,
+      -0.22601318359375
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 6,
+    "model": "update300",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.74,
+    "handoff": true,
+    "final_xy": [
+      4.900360107421875,
+      -0.21244049072265625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 6,
+    "model": "update301",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.0,
+    "handoff": true,
+    "final_xy": [
+      10.021621704101562,
+      0.06871795654296875
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 6,
+    "model": "update400",
+    "success": false,
+    "end_code": 18,
+    "time_s": 5.24,
+    "handoff": true,
+    "final_xy": [
+      10.019523620605469,
+      0.4678840637207031
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 6,
+    "model": "update401",
+    "success": false,
+    "end_code": 15,
+    "time_s": 2.7,
+    "handoff": true,
+    "final_xy": [
+      5.5847320556640625,
+      0.748077392578125
+    ],
+    "return_value": -100.00001525878906
+  },
+  {
+    "run": "near400",
+    "root": 6,
+    "model": "update500",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.42,
+    "handoff": true,
+    "final_xy": [
+      10.003402709960938,
+      -0.1314697265625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 6,
+    "model": "update501",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.76,
+    "handoff": true,
+    "final_xy": [
+      4.857261657714844,
+      0.090850830078125
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "near400",
+    "root": 7,
+    "model": "source",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.0600000000000005,
+    "handoff": true,
+    "final_xy": [
+      10.014739990234375,
+      -0.094268798828125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 7,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.0200000000000005,
+    "handoff": true,
+    "final_xy": [
+      10.017871856689453,
+      -0.0452423095703125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 7,
+    "model": "update301",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.24,
+    "handoff": true,
+    "final_xy": [
+      10.01369857788086,
+      -0.22015380859375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 7,
+    "model": "update400",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.98,
+    "handoff": true,
+    "final_xy": [
+      5.104314804077148,
+      -0.15386962890625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 7,
+    "model": "update401",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.24,
+    "handoff": true,
+    "final_xy": [
+      10.005355834960938,
+      -0.09196090698242188
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 7,
+    "model": "update500",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.22,
+    "handoff": false,
+    "final_xy": [
+      3.3673553466796875,
+      -0.03617286682128906
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 7,
+    "model": "update501",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.6400000000000001,
+    "handoff": true,
+    "final_xy": [
+      4.630485534667969,
+      0.18658447265625
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "near400",
+    "root": 8,
+    "model": "source",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.28,
+    "handoff": true,
+    "final_xy": [
+      10.007808685302734,
+      -0.2896156311035156
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 8,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.22,
+    "handoff": true,
+    "final_xy": [
+      10.02531623840332,
+      -0.03075408935546875
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 8,
+    "model": "update301",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.8800000000000001,
+    "handoff": true,
+    "final_xy": [
+      4.802459716796875,
+      -0.020660400390625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 8,
+    "model": "update400",
+    "success": false,
+    "end_code": 3,
+    "time_s": 2.2800000000000002,
+    "handoff": true,
+    "final_xy": [
+      5.654462814331055,
+      0.1232452392578125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 8,
+    "model": "update401",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.7,
+    "handoff": true,
+    "final_xy": [
+      4.284885406494141,
+      0.0219573974609375
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 8,
+    "model": "update500",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.96,
+    "handoff": true,
+    "final_xy": [
+      10.011824607849121,
+      -0.0319061279296875
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 8,
+    "model": "update501",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.74,
+    "handoff": true,
+    "final_xy": [
+      4.537474632263184,
+      0.121978759765625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 9,
+    "model": "source",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.6600000000000001,
+    "handoff": true,
+    "final_xy": [
+      4.265697479248047,
+      0.09334182739257812
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "near400",
+    "root": 9,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.1000000000000005,
+    "handoff": true,
+    "final_xy": [
+      10.010053634643555,
+      -0.08718681335449219
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 9,
+    "model": "update301",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.26,
+    "handoff": true,
+    "final_xy": [
+      10.020066261291504,
+      0.13325881958007812
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 9,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.24,
+    "handoff": true,
+    "final_xy": [
+      10.023456573486328,
+      -0.001064300537109375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 9,
+    "model": "update401",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.52,
+    "handoff": true,
+    "final_xy": [
+      4.165647506713867,
+      0.0587310791015625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 9,
+    "model": "update500",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.86,
+    "handoff": true,
+    "final_xy": [
+      4.496550559997559,
+      -0.086456298828125
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "near400",
+    "root": 9,
+    "model": "update501",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.6600000000000001,
+    "handoff": true,
+    "final_xy": [
+      4.629096984863281,
+      0.02520751953125
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "near400",
+    "root": 10,
+    "model": "source",
+    "success": false,
+    "end_code": 4,
+    "time_s": 2.3000000000000003,
+    "handoff": true,
+    "final_xy": [
+      5.026618957519531,
+      -0.0234527587890625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 10,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.04,
+    "handoff": true,
+    "final_xy": [
+      10.02896499633789,
+      0.09991455078125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 10,
+    "model": "update301",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.76,
+    "handoff": true,
+    "final_xy": [
+      4.956024169921875,
+      -0.181304931640625
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "near400",
+    "root": 10,
+    "model": "update400",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.7,
+    "handoff": true,
+    "final_xy": [
+      4.40234375,
+      -0.19074630737304688
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 10,
+    "model": "update401",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.58,
+    "handoff": true,
+    "final_xy": [
+      4.58172607421875,
+      -0.16389846801757812
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "near400",
+    "root": 10,
+    "model": "update500",
+    "success": false,
+    "end_code": 3,
+    "time_s": 2.18,
+    "handoff": true,
+    "final_xy": [
+      5.497898101806641,
+      0.4910545349121094
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 10,
+    "model": "update501",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.1000000000000005,
+    "handoff": true,
+    "final_xy": [
+      10.020130157470703,
+      -0.03404998779296875
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 11,
+    "model": "source",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.52,
+    "handoff": true,
+    "final_xy": [
+      4.1400299072265625,
+      -0.00629425048828125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 11,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.3,
+    "handoff": true,
+    "final_xy": [
+      10.01144790649414,
+      -0.0125885009765625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 11,
+    "model": "update301",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.44,
+    "handoff": true,
+    "final_xy": [
+      4.034976959228516,
+      -0.006011962890625
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "near400",
+    "root": 11,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.08,
+    "handoff": true,
+    "final_xy": [
+      10.016952514648438,
+      0.107208251953125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 11,
+    "model": "update401",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.5600000000000005,
+    "handoff": true,
+    "final_xy": [
+      10.015129089355469,
+      0.3486328125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 11,
+    "model": "update500",
+    "success": false,
+    "end_code": 18,
+    "time_s": 5.4,
+    "handoff": true,
+    "final_xy": [
+      10.003913879394531,
+      -0.08095550537109375
+    ],
+    "return_value": -99.9999771118164
+  },
+  {
+    "run": "near400",
+    "root": 11,
+    "model": "update501",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.72,
+    "handoff": true,
+    "final_xy": [
+      4.772514343261719,
+      0.015872955322265625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 12,
+    "model": "source",
+    "success": false,
+    "end_code": 4,
+    "time_s": 1.8,
+    "handoff": true,
+    "final_xy": [
+      4.4947357177734375,
+      0.016248703002929688
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 12,
+    "model": "update300",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.74,
+    "handoff": true,
+    "final_xy": [
+      4.582908630371094,
+      -0.12977981567382812
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 12,
+    "model": "update301",
+    "success": false,
+    "end_code": 3,
+    "time_s": 2.24,
+    "handoff": true,
+    "final_xy": [
+      5.5373992919921875,
+      -0.14329910278320312
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "near400",
+    "root": 12,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.22,
+    "handoff": true,
+    "final_xy": [
+      10.021629333496094,
+      0.04448699951171875
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 12,
+    "model": "update401",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.12,
+    "handoff": true,
+    "final_xy": [
+      10.008316040039062,
+      -0.091796875
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 12,
+    "model": "update500",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.92,
+    "handoff": true,
+    "final_xy": [
+      5.2812347412109375,
+      0.0178985595703125
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "near400",
+    "root": 12,
+    "model": "update501",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.82,
+    "handoff": true,
+    "final_xy": [
+      10.005462646484375,
+      0.105682373046875
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 13,
+    "model": "source",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.34,
+    "handoff": true,
+    "final_xy": [
+      10.001068115234375,
+      0.0062103271484375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 13,
+    "model": "update300",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.42,
+    "handoff": true,
+    "final_xy": [
+      3.9673309326171875,
+      -0.012847900390625
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "near400",
+    "root": 13,
+    "model": "update301",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.0,
+    "handoff": true,
+    "final_xy": [
+      10.014312744140625,
+      0.3736724853515625
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 13,
+    "model": "update400",
+    "success": false,
+    "end_code": 15,
+    "time_s": 2.66,
+    "handoff": true,
+    "final_xy": [
+      5.9354705810546875,
+      -0.4747638702392578
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 13,
+    "model": "update401",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.58,
+    "handoff": true,
+    "final_xy": [
+      4.604156494140625,
+      -0.07206916809082031
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 13,
+    "model": "update500",
+    "success": false,
+    "end_code": 18,
+    "time_s": 5.72,
+    "handoff": true,
+    "final_xy": [
+      10.028961181640625,
+      0.08231735229492188
+    ],
+    "return_value": -99.99998474121094
+  },
+  {
+    "run": "near400",
+    "root": 13,
+    "model": "update501",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.8,
+    "handoff": true,
+    "final_xy": [
+      5.0854644775390625,
+      -0.1725006103515625
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 14,
+    "model": "source",
+    "success": false,
+    "end_code": 18,
+    "time_s": 5.58,
+    "handoff": true,
+    "final_xy": [
+      11.056549072265625,
+      0.4897918701171875
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "near400",
+    "root": 14,
+    "model": "update300",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.28,
+    "handoff": true,
+    "final_xy": [
+      10.022735595703125,
+      -0.0377044677734375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 14,
+    "model": "update301",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.74,
+    "handoff": true,
+    "final_xy": [
+      4.7007904052734375,
+      -0.1752471923828125
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 14,
+    "model": "update400",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.9000000000000001,
+    "handoff": true,
+    "final_xy": [
+      5.1145477294921875,
+      0.0572662353515625
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "near400",
+    "root": 14,
+    "model": "update401",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.04,
+    "handoff": true,
+    "final_xy": [
+      10.016571044921875,
+      -0.02936553955078125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 14,
+    "model": "update500",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.18,
+    "handoff": true,
+    "final_xy": [
+      10.010345458984375,
+      -0.14325332641601562
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 14,
+    "model": "update501",
+    "success": false,
+    "end_code": 18,
+    "time_s": 5.82,
+    "handoff": true,
+    "final_xy": [
+      10.012802124023438,
+      -0.09390640258789062
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "near400",
+    "root": 15,
+    "model": "source",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.36,
+    "handoff": true,
+    "final_xy": [
+      10.0181884765625,
+      0.13242721557617188
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 15,
+    "model": "update300",
+    "success": false,
+    "end_code": 3,
+    "time_s": 2.06,
+    "handoff": true,
+    "final_xy": [
+      5.4083709716796875,
+      0.26175689697265625
+    ],
+    "return_value": -99.99998474121094
+  },
+  {
+    "run": "near400",
+    "root": 15,
+    "model": "update301",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.3,
+    "handoff": true,
+    "final_xy": [
+      10.00299072265625,
+      -0.06853485107421875
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 15,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.24,
+    "handoff": true,
+    "final_xy": [
+      10.014419555664062,
+      0.0565032958984375
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 15,
+    "model": "update401",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.84,
+    "handoff": true,
+    "final_xy": [
+      10.014968872070312,
+      -0.026611328125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 15,
+    "model": "update500",
+    "success": true,
+    "end_code": 13,
+    "time_s": 4.78,
+    "handoff": true,
+    "final_xy": [
+      10.022201538085938,
+      -0.0626983642578125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 15,
+    "model": "update501",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.6600000000000001,
+    "handoff": true,
+    "final_xy": [
+      4.621917724609375,
+      -0.1078033447265625
+    ],
+    "return_value": -100.00000762939453
+  },
+  {
+    "run": "near400",
+    "root": 16,
+    "model": "source",
+    "success": false,
+    "end_code": 3,
+    "time_s": 2.08,
+    "handoff": true,
+    "final_xy": [
+      4.86376953125,
+      -0.08412933349609375
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 16,
+    "model": "update300",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.44,
+    "handoff": true,
+    "final_xy": [
+      4.07818603515625,
+      -0.02095794677734375
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "near400",
+    "root": 16,
+    "model": "update301",
+    "success": false,
+    "end_code": 9,
+    "time_s": 8.0,
+    "handoff": true,
+    "final_xy": [
+      13.175048828125,
+      0.08732795715332031
+    ],
+    "return_value": -100.0
+  },
+  {
+    "run": "near400",
+    "root": 16,
+    "model": "update400",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.72,
+    "handoff": true,
+    "final_xy": [
+      10.010574340820312,
+      -0.3117542266845703
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 16,
+    "model": "update401",
+    "success": false,
+    "end_code": 3,
+    "time_s": 1.74,
+    "handoff": true,
+    "final_xy": [
+      4.4355010986328125,
+      -0.043796539306640625
+    ],
+    "return_value": -99.99999237060547
+  },
+  {
+    "run": "near400",
+    "root": 16,
+    "model": "update500",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.32,
+    "handoff": true,
+    "final_xy": [
+      10.010223388671875,
+      -0.0333251953125
+    ],
+    "return_value": 100.0
+  },
+  {
+    "run": "near400",
+    "root": 16,
+    "model": "update501",
+    "success": true,
+    "end_code": 13,
+    "time_s": 5.3,
+    "handoff": true,
+    "final_xy": [
+      10.00128173828125,
+      -0.088592529296875
+    ],
+    "return_value": 100.0
+  }
+]
