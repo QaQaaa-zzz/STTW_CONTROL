@@ -32,7 +32,7 @@ if spec.get('batch_cases'):
     for job in batch:
      cfg=json.loads(Path(job['config']).read_text())
      case={key:cfg[key] for key in ('alphas','zero_middle','user_speed_m_s','seed','randomization','case_labels')}
-     for key in ('evaluation_pulse','zero_reference_channels'):
+     for key in ('evaluation_pulse','zero_reference_channels','alpha_switch'):
       if key in cfg:case[key]=cfg[key]
      case.update(terrain_path=job['terrain'],output=str(r/job['name']));cases.append(case)
     folder=r/'batches'/f'batch_{batch_index:03d}'

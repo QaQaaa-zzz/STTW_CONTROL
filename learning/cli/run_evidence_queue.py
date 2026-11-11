@@ -34,10 +34,12 @@ try:
         command(['/bin/bash','learning/scripts/gpu_queue.sh',python,'-u','learning/cli/run_alpha_mechanism.py','--run',str(r)]+(['--resume'] if a.resume else []),r/'runtime.log')
         status('analyzing',current=current,completed=completed)
         command([python,'learning/cli/summarize_alpha_schedules.py','--run',str(r)],r/'analysis.log')
+        if item.get('state_selection'):
+            command([python,'learning/cli/analyze_state_alpha_scan.py','--run',str(r)],r/'state_selection.log')
         completed.append(current)
         notify(f'STTW阶段完成：{current}，{item["contexts"]}工况/{item["episodes"]}条；结果{r}/ANALYSIS.md。后续自动排队。',r/'completion_notice.json')
     status('complete',completed=completed)
-    notify(f'STTW全部证据队列完成：{plan["total_episodes"]}条，四阶段；索引{q}/README.md',q/'completion_notice.json')
+    notify(f'STTW全部证据队列完成：{plan["total_episodes"]}条，{len(plan["stages"])}阶段；索引{q}/README.md',q/'completion_notice.json')
 except Exception as error:
     status('error',current=current,completed=completed,error=str(error))
     notify(f'STTW证据队列异常停止：{current}，见{q}/status.json；未自动扩大或重跑。',q/'error_notice.json')

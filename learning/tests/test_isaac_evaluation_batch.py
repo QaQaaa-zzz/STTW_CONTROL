@@ -13,6 +13,14 @@ class BatchEvaluationTest(unittest.TestCase):
             self.assertEqual(s['lane_alphas'][6*i:6*i+6],[0,.25,.5,.75,1,0])
             self.assertEqual(s['zero_middle'][6*i:6*i+6],[False]*5+[True])
 
+    def test_switch_targets_follow_case_lane_order(self):
+        cases=[dict(terrain_path='ridge',user_speed_m_s=2.3,alphas=[0,.5],zero_middle=[False,False],alpha_switch=dict(target_alpha=t,execution_modes=['independent']*2,progress_s_m=2.5,progress_frame='original_route')) for t in ([.25,1],[.75,0])]
+        settings=batch_settings({},cases)
+        self.assertEqual(settings['alpha_switch']['target_alpha'],[.25,1,.75,0])
+        self.assertEqual(len(settings['alpha_switch']['execution_modes']),4)
+        cases[1]['alpha_switch']['progress_s_m']=3.
+        with self.assertRaises(ValueError):batch_settings({},cases)
+
     def test_mixed_seed_groups_preserve_frozen_parameters(self):
         import json
         from pathlib import Path

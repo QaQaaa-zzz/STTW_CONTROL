@@ -20,6 +20,13 @@ def batch_settings(settings, cases):
                   lane_speeds=[case['user_speed_m_s'] for case in cases for _ in range(case['lane_count'])],
                   alphas=[a for case in cases for a in case.get('alphas',ALPHAS)],
                   zero_middle=[z for case in cases for z in case.get('zero_middle',[False]*5+[True])])
+    if 'alpha_switch' in cases[0]:
+        result['alpha_switch']=deepcopy(cases[0]['alpha_switch'])
+        for case in cases:
+            if any(case['alpha_switch'][k]!=result['alpha_switch'][k] for k in ('progress_s_m','progress_frame')):
+                raise ValueError('Batched switches require the same original-route progress trigger')
+        for key in ('target_alpha','execution_modes'):
+            result['alpha_switch'][key]=[value for case in cases for value in case['alpha_switch'][key]]
     if 'zero_reference_channels' in cases[0]:
         result['zero_reference_channels']=[mask for case in cases for mask in case['zero_reference_channels']]
     if 'evaluation_pulse' in cases[0]:
@@ -58,7 +65,7 @@ def split_case(arrays, contract, case, case_index):
     settings.update(num_envs=count, trace_lanes=count, alphas=case.get('alphas',ALPHAS[:count]),
                     zero_middle=case.get('zero_middle',([False]*5+[True])[:count]), user_speed_m_s=case['user_speed_m_s'],
                     terrains={'evaluation': case['terrain_path']})
-    for key in ('evaluation_pulse','zero_reference_channels','case_labels'):
+    for key in ('evaluation_pulse','zero_reference_channels','case_labels','alpha_switch'):
         if key in case:settings[key]=deepcopy(case[key])
     if case.get('randomization') is not None:
         settings.update(seed=case['seed'],randomization=deepcopy(case['randomization']))
