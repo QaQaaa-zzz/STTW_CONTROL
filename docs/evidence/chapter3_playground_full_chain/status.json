@@ -1,0 +1,368 @@
+{
+  "stage": "complete",
+  "completed": 24,
+  "total": 24,
+  "elapsed_s": 172.29254364967346,
+  "results": [
+    {
+      "skill": "source",
+      "route": 60,
+      "continuation": "h75",
+      "termination": "physical_failure",
+      "goal": false,
+      "airborne": true,
+      "far_contact": false,
+      "handoff_s": null,
+      "duration_s": 2.785,
+      "final_xy": [
+        10.130419731140137,
+        0.20692910254001617
+      ]
+    },
+    {
+      "skill": "source",
+      "route": 60,
+      "continuation": "zero_middle",
+      "termination": "physical_failure",
+      "goal": false,
+      "airborne": true,
+      "far_contact": false,
+      "handoff_s": null,
+      "duration_s": 2.795,
+      "final_xy": [
+        10.16348648071289,
+        0.13416743278503418
+      ]
+    },
+    {
+      "skill": "source",
+      "route": 61,
+      "continuation": "h75",
+      "termination": "physical_failure",
+      "goal": false,
+      "airborne": true,
+      "far_contact": false,
+      "handoff_s": null,
+      "duration_s": 2.815,
+      "final_xy": [
+        10.207796096801758,
+        0.1687595248222351
+      ]
+    },
+    {
+      "skill": "source",
+      "route": 61,
+      "continuation": "zero_middle",
+      "termination": "physical_failure",
+      "goal": false,
+      "airborne": true,
+      "far_contact": false,
+      "handoff_s": null,
+      "duration_s": 2.855,
+      "final_xy": [
+        10.15210247039795,
+        0.16912369430065155
+      ]
+    },
+    {
+      "skill": "source",
+      "route": 62,
+      "continuation": "h75",
+      "termination": "physical_failure",
+      "goal": false,
+      "airborne": false,
+      "far_contact": false,
+      "handoff_s": null,
+      "duration_s": 1.79,
+      "final_xy": [
+        6.843478679656982,
+        -0.13694415986537933
+      ]
+    },
+    {
+      "skill": "source",
+      "route": 62,
+      "continuation": "zero_middle",
+      "termination": "physical_failure",
+      "goal": false,
+      "airborne": true,
+      "far_contact": false,
+      "handoff_s": null,
+      "duration_s": 2.38,
+      "final_xy": [
+        9.107385635375977,
+        0.1731540411710739
+      ]
+    },
+    {
+      "skill": "rb_run1",
+      "route": 60,
+      "continuation": "h75",
+      "termination": "corridor_or_domain_exit",
+      "goal": false,
+      "airborne": true,
+      "far_contact": false,
+      "handoff_s": null,
+      "duration_s": 2.36,
+      "final_xy": [
+        8.992027282714844,
+        -0.06561915576457977
+      ]
+    },
+    {
+      "skill": "rb_run1",
+      "route": 60,
+      "continuation": "zero_middle",
+      "termination": "physical_failure",
+      "goal": false,
+      "airborne": true,
+      "far_contact": false,
+      "handoff_s": null,
+      "duration_s": 2.875,
+      "final_xy": [
+        10.265250205993652,
+        0.08169066160917282
+      ]
+    },
+    {
+      "skill": "rb_run1",
+      "route": 61,
+      "continuation": "h75",
+      "termination": "physical_failure",
+      "goal": false,
+      "airborne": true,
+      "far_contact": false,
+      "handoff_s": null,
+      "duration_s": 2.785,
+      "final_xy": [
+        10.214762687683105,
+        0.1306537687778473
+      ]
+    },
+    {
+      "skill": "rb_run1",
+      "route": 61,
+      "continuation": "zero_middle",
+      "termination": "physical_failure",
+      "goal": false,
+      "airborne": true,
+      "far_contact": false,
+      "handoff_s": null,
+      "duration_s": 2.955,
+      "final_xy": [
+        10.35107421875,
+        0.10154376924037933
+      ]
+    },
+    {
+      "skill": "rb_run1",
+      "route": 62,
+      "continuation": "h75",
+      "termination": "physical_failure",
+      "goal": false,
+      "airborne": false,
+      "far_contact": false,
+      "handoff_s": null,
+      "duration_s": 2.14,
+      "final_xy": [
+        8.16904354095459,
+        -0.10519613325595856
+      ]
+    },
+    {
+      "skill": "rb_run1",
+      "route": 62,
+      "continuation": "zero_middle",
+      "termination": "physical_failure",
+      "goal": false,
+      "airborne": false,
+      "far_contact": false,
+      "handoff_s": null,
+      "duration_s": 2.245,
+      "final_xy": [
+        8.565007209777832,
+        0.024691618978977203
+      ]
+    },
+    {
+      "skill": "rb_run2",
+      "route": 60,
+      "continuation": "h75",
+      "termination": "physical_failure",
+      "goal": false,
+      "airborne": true,
+      "far_contact": false,
+      "handoff_s": null,
+      "duration_s": 2.83,
+      "final_xy": [
+        10.140816688537598,
+        0.14798806607723236
+      ]
+    },
+    {
+      "skill": "rb_run2",
+      "route": 60,
+      "continuation": "zero_middle",
+      "termination": "physical_failure",
+      "goal": false,
+      "airborne": false,
+      "far_contact": false,
+      "handoff_s": null,
+      "duration_s": 1.825,
+      "final_xy": [
+        7.06632137298584,
+        0.2363586276769638
+      ]
+    },
+    {
+      "skill": "rb_run2",
+      "route": 61,
+      "continuation": "h75",
+      "termination": "physical_failure",
+      "goal": false,
+      "airborne": false,
+      "far_contact": false,
+      "handoff_s": null,
+      "duration_s": 1.83,
+      "final_xy": [
+        7.191970348358154,
+        -0.14112159609794617
+      ]
+    },
+    {
+      "skill": "rb_run2",
+      "route": 61,
+      "continuation": "zero_middle",
+      "termination": "physical_failure",
+      "goal": false,
+      "airborne": true,
+      "far_contact": false,
+      "handoff_s": null,
+      "duration_s": 2.89,
+      "final_xy": [
+        10.16843032836914,
+        0.1509135216474533
+      ]
+    },
+    {
+      "skill": "rb_run2",
+      "route": 62,
+      "continuation": "h75",
+      "termination": "physical_failure",
+      "goal": false,
+      "airborne": true,
+      "far_contact": false,
+      "handoff_s": null,
+      "duration_s": 2.81,
+      "final_xy": [
+        10.230273246765137,
+        0.1646096259355545
+      ]
+    },
+    {
+      "skill": "rb_run2",
+      "route": 62,
+      "continuation": "zero_middle",
+      "termination": "physical_failure",
+      "goal": false,
+      "airborne": true,
+      "far_contact": false,
+      "handoff_s": null,
+      "duration_s": 2.825,
+      "final_xy": [
+        10.23291301727295,
+        0.12405199557542801
+      ]
+    },
+    {
+      "skill": "rb_run3",
+      "route": 60,
+      "continuation": "h75",
+      "termination": "physical_failure",
+      "goal": false,
+      "airborne": false,
+      "far_contact": false,
+      "handoff_s": null,
+      "duration_s": 2.2600000000000002,
+      "final_xy": [
+        8.758995056152344,
+        -0.08416961878538132
+      ]
+    },
+    {
+      "skill": "rb_run3",
+      "route": 60,
+      "continuation": "zero_middle",
+      "termination": "physical_failure",
+      "goal": false,
+      "airborne": true,
+      "far_contact": false,
+      "handoff_s": null,
+      "duration_s": 2.81,
+      "final_xy": [
+        10.170479774475098,
+        0.0668233260512352
+      ]
+    },
+    {
+      "skill": "rb_run3",
+      "route": 61,
+      "continuation": "h75",
+      "termination": "physical_failure",
+      "goal": false,
+      "airborne": false,
+      "far_contact": false,
+      "handoff_s": null,
+      "duration_s": 2.245,
+      "final_xy": [
+        8.603520393371582,
+        0.3957468271255493
+      ]
+    },
+    {
+      "skill": "rb_run3",
+      "route": 61,
+      "continuation": "zero_middle",
+      "termination": "physical_failure",
+      "goal": false,
+      "airborne": true,
+      "far_contact": false,
+      "handoff_s": null,
+      "duration_s": 2.8000000000000003,
+      "final_xy": [
+        10.139860153198242,
+        0.21067962050437927
+      ]
+    },
+    {
+      "skill": "rb_run3",
+      "route": 62,
+      "continuation": "h75",
+      "termination": "physical_failure",
+      "goal": false,
+      "airborne": true,
+      "far_contact": false,
+      "handoff_s": null,
+      "duration_s": 2.685,
+      "final_xy": [
+        10.086677551269531,
+        0.12756332755088806
+      ]
+    },
+    {
+      "skill": "rb_run3",
+      "route": 62,
+      "continuation": "zero_middle",
+      "termination": "corridor_or_domain_exit",
+      "goal": false,
+      "airborne": false,
+      "far_contact": false,
+      "handoff_s": null,
+      "duration_s": 2.2800000000000002,
+      "final_xy": [
+        8.56714153289795,
+        0.3807607591152191
+      ]
+    }
+  ]
+}
