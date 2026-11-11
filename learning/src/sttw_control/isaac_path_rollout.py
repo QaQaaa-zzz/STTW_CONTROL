@@ -205,11 +205,19 @@ class IsaacPathRollout:
         self.policy.channel_intervention_mode=snapshot['channel_intervention_mode']
 
     @torch.no_grad()
-    def resume_ground_lanes(self,indices,speed,alpha):
+    def resume_ground_lanes(self,indices,speed,alpha,*,observer_init_mask=None):
         """Resume ground control after landing; keep all other lanes and physics intact."""
         self.controller.reset(indices);self.lower.reset(indices);self.alive[indices]=True
         self.speed[indices]=speed;self.alpha[indices]=alpha
         measurement,pose,velocity=self.plant.observe();self.measurement[indices]=measurement[indices]
+        if observer_init_mask is not None:
+            measured_ids=indices[observer_init_mask]
+            # ESO state: steer angle, lean angle, lean rate, unknown disturbance.
+            # Initializing from one observation is not temporal prewarming.
+            self.controller.eso[measured_ids,0]=measurement[measured_ids,2]
+            self.controller.eso[measured_ids,1]=measurement[measured_ids,0]
+            self.controller.eso[measured_ids,2]=measurement[measured_ids,1]
+            self.controller.filtered_roll_rate[measured_ids]=measurement[measured_ids,1]
         self.previous_reference[indices]=torch.stack((velocity,measurement[:,2]),-1)[indices]
         self.previous_command[indices]=torch.stack((measurement[:,3],measurement[:,5]),-1)[indices]
         points=self.route.xy[self.route.route_ids] if self.route.batched else self.route.xy[None]

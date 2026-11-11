@@ -1,0 +1,40 @@
+{
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_offroad_new_roots/source",
+  "selected_source_lanes": [
+    222,
+    115,
+    121,
+    152,
+    228,
+    31,
+    196,
+    119,
+    205,
+    6,
+    23,
+    96,
+    46,
+    161,
+    16,
+    151,
+    234,
+    111,
+    37,
+    80,
+    38,
+    211,
+    83,
+    178
+  ],
+  "budget": "48 environments x10s maximum;192000 physical lane steps;0PPO;25min wall limit",
+  "selection": "Round-robin source-root/route groups, ascending candidate ID among recorded handoffs; no success/failure selection",
+  "change": "At actual handoff only: measured steer/lean/lean-rate ESO state and lean-rate filter initial value; unknown disturbance remains zero; H75 history reset unchanged",
+  "labels": "First2s posthandoff descriptive survival/domain/corridor diagnostics; no calibrated recovery-domain label",
+  "invariants": "Frozen original source jump/H75, same tasks, contacts, thresholds, initial root conditions, full prefix rerun, no root-only snapshot restore",
+  "concurrency": "User explicitly authorized this small evaluation alongside existing H75 task",
+  "git_revision": "90ff4dd6f9b96eeeffbdfdd226bc72e0a9f4191d",
+  "working_source_hashes": {
+    "learning/src/sttw_control/isaac_path_rollout.py": "1e1c35beceba5dbc80e55d9e393299947af4b9fe9ad2965d714f087c6a7a0dd5",
+    "learning/src/sttw_control/ditch_ground_handoff.py": "824b1c75eaa71ab674405989255fce6bf059aeac8ef1361c76e5ae8363566a54"
+  }
+}

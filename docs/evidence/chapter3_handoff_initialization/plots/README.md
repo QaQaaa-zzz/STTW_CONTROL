@@ -1,0 +1,28 @@
+# 完整轨迹与奖励索引
+
+原始数据：`/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_handoff_initialization/evaluation/trajectories.npz`。全部48条，不筛除失败；50Hz原始数据，无平滑。XY等比例；圆点为合格目标，叉为真实终点。候选各自原道路与发布参考不同，不把其中之一叫纯ECBC基线。
+
+- Panel 0: [root_000.png](root_000.png)
+- Panel 1: [root_001.png](root_001.png)
+- Panel 2: [root_002.png](root_002.png)
+- Panel 3: [root_003.png](root_003.png)
+- Panel 4: [root_004.png](root_004.png)
+- Panel 5: [root_005.png](root_005.png)
+- Panel 6: [root_006.png](root_006.png)
+- Panel 7: [root_007.png](root_007.png)
+- Panel 8: [root_008.png](root_008.png)
+- Panel 9: [root_009.png](root_009.png)
+- Panel 10: [root_010.png](root_010.png)
+- Panel 11: [root_011.png](root_011.png)
+- Panel 12: [root_012.png](root_012.png)
+- Panel 13: [root_013.png](root_013.png)
+- Panel 14: [root_014.png](root_014.png)
+- Panel 15: [root_015.png](root_015.png)
+- Panel 16: [root_016.png](root_016.png)
+- Panel 17: [root_017.png](root_017.png)
+- Panel 18: [root_018.png](root_018.png)
+- Panel 19: [root_019.png](root_019.png)
+- Panel 20: [root_020.png](root_020.png)
+- Panel 21: [root_021.png](root_021.png)
+- Panel 22: [root_022.png](root_022.png)
+- Panel 23: [root_023.png](root_023.png)

@@ -169,6 +169,10 @@ class VectorDitchHandoff(DitchGroundHandoff):
         if self.leg_hold!='finite_motor' or self.handoff_event!='first_far_contact':
             raise ValueError('Vector continuation uses finite motors and first far contact')
         self.auto_reset=auto_reset
+        initialization=spec.get('observer_initialization_lanes',['cold']*env.num_envs)
+        if len(initialization)!=env.num_envs or any(v not in ('cold','measured') for v in initialization):
+            raise ValueError('Observer initialization requires one cold/measured mode per lane')
+        self.measured_observer=torch.tensor([v=='measured' for v in initialization],device=env.device)
         self.phase=torch.ones(env.num_envs,device=env.device,dtype=torch.long)
         self.finished=torch.zeros_like(self.phase,dtype=torch.bool)
         self.reached_goal=self.finished.clone();self.push_seen=self.finished.clone()
@@ -230,7 +234,7 @@ class VectorDitchHandoff(DitchGroundHandoff):
             indices=p.pendulum_servos.indices
             hold=p.dofs[:,indices,0].clamp(min=e.lo[2:],max=e.hi[2:])
             p.pendulum_target[ids]=hold[ids]
-            g.resume_ground_lanes(ids,self.spec['speed_m_s'],self.spec['alpha'])
+            g.resume_ground_lanes(ids,self.spec['speed_m_s'],self.spec['alpha'],observer_init_mask=self.measured_observer[ids])
             g.physical_tick[ids]=e.episode_length_buf[ids]*4
             self.phase[ids]=2;self.handoff_time[ids]=e.episode_length_buf[ids]*e.dt
             self.event_time[ids,3]=self.handoff_time[ids];self.event_root[ids,3]=root[ids];self.event_road_violation[ids,3]=self.road_violation[ids]
