@@ -2880,3 +2880,18 @@ Go2实际参考：`/home/qy/projects/My_unitree_go2_gym/legged_gym/envs/base/leg
 
 ## Saved-pose scene video quaternion correction
 Corrected render_isaac_scene_media.py: saved Isaac adapter body poses use xyzw, MuJoCo mocap uses wxyz. Prior STL videos displayed incorrect link orientations and are superseded; original videos retained under runs/h75_scene_media/incorrect_quaternion_preview. Both current videos regenerated, 300 frames/30 fps/10 s/960x640 confirmed with ffprobe and decoded multi-time frame inspection. All 2000 recorded poses per case checked against URDF joint anchors; maximum discrepancy 3.219e-6 m (pose_mapping_check.json). No changed physics, source trajectories, controller or model weights; no new simulation. This supersedes the earlier visual-completion claim for the malformed STL videos.
+
+## 2026-11-10 S0：新主线公式与源码核对
+
+[完整推导与假设](evidence/h75_theory_iteration/S0_DERIVATION.md)。冻结参数在`learning/tests/fixtures/paper_preference/`，源码为`torch_controller.py`和`torch_path_reward.py`。
+
+|方案项|源码/独立核验|结果|
+|---|---|---|
+|动力学系数、增益、特征多项式|`test_source_coefficients_and_pole_placement`|6个速度点为(s+5)³|
+|单位冲量响应|`test_impulse_peak_from_source_gains`|2.25→2.567m/s峰值约+4.87%|
+|参考通道正零点|`test_reference_channel_zero_and_nominal_envelope`|分子γ(s²−a₄)，独立状态空间转换|
+|包络与核符号|推导第2节；上述包络测试及`test_recovery_kernel_is_negative_in_declared_range`|解析符号覆盖v≥.5、全部正时间；矩阵指数交叉验证极值与允许控制及转角行程饱和|
+|奖励对alpha仿射|`test_effective_reward_affine_with_caps`|含分项限幅的源码计算通过|
+|单调性对象与平衡点|其余两项测试、推导第4节|完整端点代价；相同容差不自动指定alpha=.5|
+
+命令：`PYTHONPATH=learning/src /home/qy/miniconda3/envs/env_isaaclab/bin/python -m unittest discover -s learning/tests -p test_paper_preference_theory.py -v`。8/8通过；CPU计算，无新仿真或训练。S0核对闭合；S1实验检验另行完成。

@@ -8,22 +8,22 @@
       "scope": "系数/极点/冲量/参考通道零点/包络/仿射奖励",
       "status": "completed",
       "remaining": "",
-      "evidence": "six CPU identity tests plus source-state-matrix reference numerator and impulse capacity check"
+      "evidence": "S0_DERIVATION.md continuous-time kernel proof and exact rate/travel envelope;8/8 CPU tests;docs/VALIDATION.md source mapping"
     },
     {
       "id": "S1",
       "scope": "全部20面板完整端点目标、eta区间、弯道分配",
       "status": "partial",
-      "completed": "100原始轨迹20面板前沿；300000策略步完整端点重评分，最大逐步差1.4315e-6",
-      "remaining": "弯道分配律与训练权重切线对应的检验；量化已见面板的预测方式"
+      "completed": "100原始轨迹20面板前沿；300000策略步完整端点重评分，最大逐步差1.4315e-6；eta端点归一化来源精确复算；完整θ区间20面板，25/100候选在自身偏好最优",
+      "remaining": "H03/H05弯道分配律曲线检验与适用范围，完成后再推进S2"
     },
     {
       "id": "S2",
       "scope": "216条接触时序、前后轮级联、饱和容量、alpha0失败机制、余量图",
       "status": "partial",
       "budget": "reuse archived CPU records; no training",
-      "completed": "216条×3窗口，12工况五档/Zero时序图；名义p1、J_sat和参考零点；alpha0末窗命令限速现象",
-      "remaining": "事件对齐的alpha运行点/冲量映射、独立组检验及冻结预测",
+      "completed": "216条×3窗口，12工况五档/Zero时序图；名义p1、J_sat和参考零点；alpha0末窗命令限速现象；288条高度标定完成，轮接触事件映射101/102拟合、103评估；运行响应网格已固定",
+      "remaining": "完整接触广义动力学与alpha0命令饱和因果归因；名义公式不作为完整车成功证明",
       "calibration": {
         "episodes": 288,
         "contexts": 48,
@@ -38,7 +38,7 @@
     {
       "id": "S3",
       "scope": "先提交冻结预测，再细alpha扫描",
-      "status": "planned",
+      "status": "interrupted",
       "alpha": [
         0,
         0.1,
@@ -73,8 +73,11 @@
       "horizon_s": 10,
       "max_environment_capacity": 4096,
       "runtime": "resolve six gravel contexts and held physical groups after S2; commit exact manifest before execution",
-      "prerequisite": "S1/S2 analysis complete; prediction frozen in Git",
-      "storage": "200Hz required states/control/termination; no bulk video or full-body high-rate logs; selected contact windows only"
+      "prerequisite": "S0 identities and S2 DEV response calibration complete; fitted predictions committed before run; S1/S2 remaining causal branches tracked separately",
+      "storage": "200Hz required states/control/termination; no bulk video or full-body high-rate logs; selected contact windows only",
+      "physical_episodes_including_zero": 2464,
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/fine_scan",
+      "restart_condition": "S2 gives a model-linked, testable failure/recovery prediction; no interpolation-only validation as a substitute"
     },
     {
       "id": "S4",
@@ -91,5 +94,6 @@
   ],
   "stop_rule": "每阶段完成后按数据迭代；不无上限训练；超过半小时等待时暂停目标，等待用户恢复",
   "notifications": "GPU stage completion/error Bark with receipts; shared gpu lock",
-  "new_gpu_jobs_started": 0
+  "new_gpu_jobs_started": 2,
+  "current_priority": "Complete S1 bend-allocation validation; no S2-S4 advancement before S1 closure"
 }
