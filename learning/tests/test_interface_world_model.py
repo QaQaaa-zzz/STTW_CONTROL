@@ -53,3 +53,14 @@ def test_task_route_is_chosen_after_ensemble_average(monkeypatch):
     assert result['selected_downstream_route']==[60]
     np.testing.assert_allclose(result['score'],[.5*1.7/3])
     np.testing.assert_allclose(result['downstream_route_scores'],[[.5*1.7/3,.5*1.3/3]])
+
+
+def test_optional_velocity_baseline_preserves_time_and_legacy_behavior():
+    from sttw_control.interface_world_model import handoff_baseline
+    raw=np.zeros((1,582),np.float32);raw[:,445]=2.;raw[:,451]=2.
+    transform=dict(roads=np.array([[[0.,0.],[5.,0.],[10.,0.]]]),parameters=np.zeros((1,8)),jump_start_x_m=5.)
+    legacy=handoff_baseline(raw,transform)
+    transform['velocity_baseline']='none'
+    revised=handoff_baseline(raw,transform)
+    assert legacy[0,7]==2. and revised[0,7]==0.
+    assert legacy[0,38]==revised[0,38]==4.5

@@ -1,0 +1,7 @@
+{
+  "velocity_baseline": "none",
+  "change": "TRAIN-only16D observed-history PCA;13root+16history+entrydistance+16terrain+time+8action=55inputs;action concatenated to final64D hidden;time baseline and optional requested-vx baseline residual39D;no autoregressive PCA prediction",
+  "budget": "3members x250CPUepochs;0physics/PPO;stop within25min",
+  "split": "Unchanged1379TRAIN/540DEV;valid-handoff regression463TRAIN/168DEV;historical240 never selected",
+  "limits": "Reference speed/time baseline is an approximation;full-goal masks unchanged;not guaranteed cure or action diversity"
+}

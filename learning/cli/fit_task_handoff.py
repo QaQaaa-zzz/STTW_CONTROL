@@ -10,10 +10,11 @@ p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('--collection',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
 p.add_argument('--mount-config',type=Path,default=Path('learning/configs/rb_sttw_platform.json'))
 p.add_argument('--context-representation',choices=['world_x','frenet'],default='world_x')
+p.add_argument('--state-fields',choices=['full','physical'],default='full')
 a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False);torch.set_num_threads(2);start=time.monotonic()
 mount=json.loads(a.mount_config.read_text())['mount_rotation_wxyz']
-contract=dict(context_representation=a.context_representation,question='Can downstream geometry distinguish full-goal continuation at a measured handoff?',budget='2feature sets x3seeds x200CPUepochs;0PPO/0newphysics;stop before30min',
- inputs='39D measured root/latest frame/time plus19D known downstream route context; no task ID input',context='Legacy world-x preview or19D Frenet: lateral/heading error,tangent/normal velocity,0.4s ballistic left/right margins,6heading/6curvature previews,width; ballistic margins not safety certificates',offsets_m=OFFSETS_M.tolist(),mount_wxyz=mount,
+contract=dict(state_fields=a.state_fields,context_representation=a.context_representation,question='Can downstream geometry distinguish full-goal continuation at a measured handoff?',budget='2feature sets x3seeds x200CPUepochs;0PPO/0newphysics;stop before30min',
+ inputs='Full39D descriptor or14D physical root/time, plus19D known downstream route context; no task ID input',context='Legacy world-x preview or19D Frenet: lateral/heading error,tangent/normal velocity,0.4s ballistic left/right margins,6heading/6curvature previews,width; ballistic margins not safety certificates',offsets_m=OFFSETS_M.tolist(),mount_wxyz=mount,
  target='Original full-goal outcome,conditional on handoff without prior road violation; missing/invalid handoffs excluded only from downstream conditional fit',split='Original source720 root split8TRAIN/4DEV; all3task variants of a root kept together; no independent TEST',
  model='64/32SiLU;BCE Adam lr.001 wd.0001;3seeds7101/7102/7103;200epochs;TRAIN normalization;DEV Brier selects epoch',source=str(a.collection),limitations='Fixed physical map,H75/jump/cold initialization/speed1.5/alpha.5;only downstream route changes;not a general viability margin')
 (a.output/'declaration.json').write_text(json.dumps(contract,indent=2))
@@ -36,7 +37,8 @@ x=np.array(inputs,np.float32);y=np.array(targets,np.float32);train=np.array([r['
 assert not {r['root'] for r,m in zip(rows,train) if m}&{r['root'] for r,m in zip(rows,dev) if m}
 mean=x[train].mean(0);std=x[train].std(0).clip(.01);xx=torch.tensor((x-mean)/std);yy=torch.tensor(y);selection={};pred={}
 np.savez_compressed(a.output/'dataset.npz',x=x,y=y,train=train,dev=dev,mean=mean,std=std)
-for name,columns in [('state_only',list(range(39))),('task_context',list(range(58)))]:
+state_columns=list(range(39)) if a.state_fields=='full' else list(range(13))+[38]
+for name,columns in [('state_only',state_columns),('task_context',state_columns+list(range(39,58)))]:
  values=[]
  for seed in [7101,7102,7103]:
   torch.manual_seed(seed);net=nn.Sequential(nn.Linear(len(columns),64),nn.SiLU(),nn.Linear(64,32),nn.SiLU(),nn.Linear(32,1));opt=torch.optim.Adam(net.parameters(),lr=.001,weight_decay=.0001);best=float('inf');curve=[]

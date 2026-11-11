@@ -1,0 +1,27 @@
+{
+  "state_fields": "physical",
+  "context_representation": "frenet",
+  "question": "Can downstream geometry distinguish full-goal continuation at a measured handoff?",
+  "budget": "2feature sets x3seeds x200CPUepochs;0PPO/0newphysics;stop before30min",
+  "inputs": "Full39D descriptor or14D physical root/time, plus19D known downstream route context; no task ID input",
+  "context": "Legacy world-x preview or19D Frenet: lateral/heading error,tangent/normal velocity,0.4s ballistic left/right margins,6heading/6curvature previews,width; ballistic margins not safety certificates",
+  "offsets_m": [
+    0.0,
+    0.5,
+    1.0,
+    2.0,
+    3.0,
+    4.0
+  ],
+  "mount_wxyz": [
+    0.7071067811865476,
+    -0.7071067811865476,
+    0.0,
+    0.0
+  ],
+  "target": "Original full-goal outcome,conditional on handoff without prior road violation; missing/invalid handoffs excluded only from downstream conditional fit",
+  "split": "Original source720 root split8TRAIN/4DEV; all3task variants of a root kept together; no independent TEST",
+  "model": "64/32SiLU;BCE Adam lr.001 wd.0001;3seeds7101/7102/7103;200epochs;TRAIN normalization;DEV Brier selects epoch",
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_task_condition_collection",
+  "limitations": "Fixed physical map,H75/jump/cold initialization/speed1.5/alpha.5;only downstream route changes;not a general viability margin"
+}

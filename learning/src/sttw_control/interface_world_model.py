@@ -137,6 +137,6 @@ def handoff_baseline(raw,transform):
     geom=transform['parameters'][:,:5]
     selected=((parameters[:,None,:5]-geom[None])**2).sum(-1).argmin(1)
     lengths=remaining_route_length(raw[:,:13],bank,dict(x_min_m=transform['jump_start_x_m'],x_max_m=30.,abs_y_max_m=100.))[np.arange(len(raw)),selected]
-    baseline=np.zeros((len(raw),39),np.float32);baseline[:,7]=parameters[:,5]
+    baseline=np.zeros((len(raw),39),np.float32);baseline[:,7]=parameters[:,5] if transform.get('velocity_baseline','requested')=='requested' else 0.
     baseline[:,38]=raw[:,445]+lengths/parameters[:,5]
     return baseline

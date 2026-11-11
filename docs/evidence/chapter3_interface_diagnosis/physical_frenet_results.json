@@ -1,0 +1,3845 @@
+{
+  "contract": {
+    "state_fields": "physical",
+    "context_representation": "frenet",
+    "question": "Can downstream geometry distinguish full-goal continuation at a measured handoff?",
+    "budget": "2feature sets x3seeds x200CPUepochs;0PPO/0newphysics;stop before30min",
+    "inputs": "Full39D descriptor or14D physical root/time, plus19D known downstream route context; no task ID input",
+    "context": "Legacy world-x preview or19D Frenet: lateral/heading error,tangent/normal velocity,0.4s ballistic left/right margins,6heading/6curvature previews,width; ballistic margins not safety certificates",
+    "offsets_m": [
+      0.0,
+      0.5,
+      1.0,
+      2.0,
+      3.0,
+      4.0
+    ],
+    "mount_wxyz": [
+      0.7071067811865476,
+      -0.7071067811865476,
+      0.0,
+      0.0
+    ],
+    "target": "Original full-goal outcome,conditional on handoff without prior road violation; missing/invalid handoffs excluded only from downstream conditional fit",
+    "split": "Original source720 root split8TRAIN/4DEV; all3task variants of a root kept together; no independent TEST",
+    "model": "64/32SiLU;BCE Adam lr.001 wd.0001;3seeds7101/7102/7103;200epochs;TRAIN normalization;DEV Brier selects epoch",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_task_condition_collection",
+    "limitations": "Fixed physical map,H75/jump/cold initialization/speed1.5/alpha.5;only downstream route changes;not a general viability margin"
+  },
+  "coverage": [
+    {
+      "variant": "straight",
+      "total": 180,
+      "goals": 36,
+      "valid_handoffs": 122,
+      "prior_road_handoffs": 10,
+      "physics_lane_steps": 698400,
+      "elapsed_s": 93.49874843101134
+    },
+    {
+      "variant": "left",
+      "total": 180,
+      "goals": 17,
+      "valid_handoffs": 122,
+      "prior_road_handoffs": 10,
+      "physics_lane_steps": 720000,
+      "elapsed_s": 96.02962808098528
+    },
+    {
+      "variant": "right",
+      "total": 180,
+      "goals": 18,
+      "valid_handoffs": 122,
+      "prior_road_handoffs": 10,
+      "physics_lane_steps": 720000,
+      "elapsed_s": 96.18312895201962
+    }
+  ],
+  "groups": [
+    {
+      "role": "TRAIN",
+      "variant": null,
+      "n": 234,
+      "goals": 49,
+      "brier": {
+        "state_only": 0.11140264570713043,
+        "task_context": 0.10907822847366333,
+        "constant": 0.16555261611938477,
+        "task_prior": 0.15609249472618103
+      }
+    },
+    {
+      "role": "TRAIN",
+      "variant": "straight",
+      "n": 78,
+      "goals": 27,
+      "brier": {
+        "state_only": 0.14549586176872253,
+        "task_context": 0.15760712325572968,
+        "constant": 0.24503257870674133,
+        "task_prior": 0.22633132338523865
+      }
+    },
+    {
+      "role": "TRAIN",
+      "variant": "left",
+      "n": 78,
+      "goals": 12,
+      "brier": {
+        "state_only": 0.08987203240394592,
+        "task_context": 0.0859052985906601,
+        "constant": 0.13326393067836761,
+        "task_prior": 0.13017749786376953
+      }
+    },
+    {
+      "role": "TRAIN",
+      "variant": "right",
+      "n": 78,
+      "goals": 10,
+      "brier": {
+        "state_only": 0.09884005039930344,
+        "task_context": 0.08372225612401962,
+        "constant": 0.1183614507317543,
+        "task_prior": 0.11176858842372894
+      }
+    },
+    {
+      "role": "DEV",
+      "variant": null,
+      "n": 132,
+      "goals": 22,
+      "brier": {
+        "state_only": 0.10429821908473969,
+        "task_context": 0.11317814886569977,
+        "constant": 0.14071518182754517,
+        "task_prior": 0.14557808637619019
+      }
+    },
+    {
+      "role": "DEV",
+      "variant": "straight",
+      "n": 44,
+      "goals": 9,
+      "brier": {
+        "state_only": 0.09436322003602982,
+        "task_context": 0.09968874603509903,
+        "constant": 0.16273020207881927,
+        "task_prior": 0.18275956809520721
+      }
+    },
+    {
+      "role": "DEV",
+      "variant": "left",
+      "n": 44,
+      "goals": 5,
+      "brier": {
+        "state_only": 0.09404682368040085,
+        "task_context": 0.09790091961622238,
+        "constant": 0.10989414900541306,
+        "task_prior": 0.1023399829864502
+      }
+    },
+    {
+      "role": "DEV",
+      "variant": "right",
+      "n": 44,
+      "goals": 8,
+      "brier": {
+        "state_only": 0.1244845911860466,
+        "task_context": 0.1419447809457779,
+        "constant": 0.14952117204666138,
+        "task_prior": 0.15163470804691315
+      }
+    }
+  ],
+  "cases": [
+    {
+      "variant": "straight",
+      "lane": 0,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.679999828338623,
+      "end_code": 4
+    },
+    {
+      "variant": "straight",
+      "lane": 2,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.619999885559082,
+      "end_code": 15
+    },
+    {
+      "variant": "straight",
+      "lane": 4,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": true,
+      "handoff_s": 5.059999942779541,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 5,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.039999961853027,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 7,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": true,
+      "handoff_s": 5.099999904632568,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 8,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 4
+    },
+    {
+      "variant": "straight",
+      "lane": 9,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 18
+    },
+    {
+      "variant": "straight",
+      "lane": 14,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.759999752044678,
+      "end_code": 15
+    },
+    {
+      "variant": "straight",
+      "lane": 15,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.3_a0.0",
+      "success": false,
+      "handoff_s": 4.400000095367432,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 16,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.599999904632568,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 17,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.639999866485596,
+      "end_code": 4
+    },
+    {
+      "variant": "straight",
+      "lane": 19,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": true,
+      "handoff_s": 5.659999847412109,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 21,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 22,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a1.0",
+      "success": false,
+      "handoff_s": 4.679999828338623,
+      "end_code": 15
+    },
+    {
+      "variant": "straight",
+      "lane": 23,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.3_a0.5",
+      "success": false,
+      "handoff_s": 4.279999732971191,
+      "end_code": 15
+    },
+    {
+      "variant": "straight",
+      "lane": 24,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.179999828338623,
+      "end_code": 18
+    },
+    {
+      "variant": "straight",
+      "lane": 25,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.679999828338623,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 26,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.059999942779541,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 27,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.699999809265137,
+      "end_code": 15
+    },
+    {
+      "variant": "straight",
+      "lane": 28,
+      "root": 1,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": true,
+      "handoff_s": 5.659999847412109,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 29,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.599999904632568,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 30,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.3_a0.5",
+      "success": false,
+      "handoff_s": 4.299999713897705,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 32,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.6_a0.5",
+      "success": false,
+      "handoff_s": 4.0,
+      "end_code": 15
+    },
+    {
+      "variant": "straight",
+      "lane": 33,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a1.0",
+      "success": false,
+      "handoff_s": 4.259999752044678,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 34,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.699999809265137,
+      "end_code": 4
+    },
+    {
+      "variant": "straight",
+      "lane": 35,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.699999809265137,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 36,
+      "root": 1,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.059999942779541,
+      "end_code": 18
+    },
+    {
+      "variant": "straight",
+      "lane": 37,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.059999942779541,
+      "end_code": 18
+    },
+    {
+      "variant": "straight",
+      "lane": 38,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 15
+    },
+    {
+      "variant": "straight",
+      "lane": 39,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": true,
+      "handoff_s": 5.639999866485596,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 42,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.819999694824219,
+      "end_code": 15
+    },
+    {
+      "variant": "straight",
+      "lane": 43,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.139999866485596,
+      "end_code": 4
+    },
+    {
+      "variant": "straight",
+      "lane": 45,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": true,
+      "handoff_s": 4.699999809265137,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 46,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.0,
+      "end_code": 4
+    },
+    {
+      "variant": "straight",
+      "lane": 48,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": true,
+      "handoff_s": 4.71999979019165,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 52,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.039999961853027,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 53,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a0.0",
+      "success": true,
+      "handoff_s": 4.239999771118164,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 54,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.679999828338623,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 56,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a0.5",
+      "success": false,
+      "handoff_s": 4.259999752044678,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 59,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.099999904632568,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 62,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": true,
+      "handoff_s": 5.079999923706055,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 65,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a1.0",
+      "success": false,
+      "handoff_s": 4.360000133514404,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 66,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": false,
+      "handoff_s": 4.739999771118164,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 67,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.699999809265137,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 69,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.3_a0.0",
+      "success": false,
+      "handoff_s": 4.420000076293945,
+      "end_code": 15
+    },
+    {
+      "variant": "straight",
+      "lane": 73,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": true,
+      "handoff_s": 5.639999866485596,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 74,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.3_a1.0",
+      "success": false,
+      "handoff_s": 4.380000114440918,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 76,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 4
+    },
+    {
+      "variant": "straight",
+      "lane": 77,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": true,
+      "handoff_s": 5.699999809265137,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 78,
+      "root": 1,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.079999923706055,
+      "end_code": 18
+    },
+    {
+      "variant": "straight",
+      "lane": 79,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a0.0",
+      "success": true,
+      "handoff_s": 4.380000114440918,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 80,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": true,
+      "handoff_s": 4.659999847412109,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 81,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a0.5",
+      "success": true,
+      "handoff_s": 4.299999713897705,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 82,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.059999942779541,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 83,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.6_a1.0",
+      "success": false,
+      "handoff_s": 4.059999942779541,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 84,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.699999809265137,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 85,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": false,
+      "handoff_s": 4.679999828338623,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 87,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a1.0",
+      "success": true,
+      "handoff_s": 4.699999809265137,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 88,
+      "root": 1,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": true,
+      "handoff_s": 5.679999828338623,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 89,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.039999961853027,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 90,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.6_a0.0",
+      "success": false,
+      "handoff_s": 4.179999828338623,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 92,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a1.0",
+      "success": false,
+      "handoff_s": 4.679999828338623,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 93,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.099999904632568,
+      "end_code": 18
+    },
+    {
+      "variant": "straight",
+      "lane": 94,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.619999885559082,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 95,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.019999980926514,
+      "end_code": 15
+    },
+    {
+      "variant": "straight",
+      "lane": 96,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a1.0",
+      "success": true,
+      "handoff_s": 4.699999809265137,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 97,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.019999980926514,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 98,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": true,
+      "handoff_s": 5.079999923706055,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 100,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.699999809265137,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 102,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.0,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 103,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.6_a0.5",
+      "success": false,
+      "handoff_s": 4.0,
+      "end_code": 15
+    },
+    {
+      "variant": "straight",
+      "lane": 107,
+      "root": 1,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a0.0",
+      "success": false,
+      "handoff_s": 4.299999713897705,
+      "end_code": 15
+    },
+    {
+      "variant": "straight",
+      "lane": 108,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": true,
+      "handoff_s": 4.679999828338623,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 109,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.619999885559082,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 110,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.039999961853027,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 111,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": true,
+      "handoff_s": 5.059999942779541,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 112,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.619999885559082,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 114,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.079999923706055,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 115,
+      "root": 1,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.819999694824219,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 116,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a0.0",
+      "success": true,
+      "handoff_s": 4.380000114440918,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 117,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.099999904632568,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 118,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": true,
+      "handoff_s": 5.679999828338623,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 119,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.059999942779541,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 120,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": true,
+      "handoff_s": 5.619999885559082,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 121,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": true,
+      "handoff_s": 5.659999847412109,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 124,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 4
+    },
+    {
+      "variant": "straight",
+      "lane": 125,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.3_a0.5",
+      "success": false,
+      "handoff_s": 4.460000038146973,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 126,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": true,
+      "handoff_s": 5.019999980926514,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 128,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": true,
+      "handoff_s": 5.71999979019165,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 129,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.3_a0.0",
+      "success": false,
+      "handoff_s": 4.420000076293945,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 132,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a1.0",
+      "success": false,
+      "handoff_s": 4.739999771118164,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 133,
+      "root": 1,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": true,
+      "handoff_s": 5.079999923706055,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 135,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 137,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.679999828338623,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 138,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a1.0",
+      "success": false,
+      "handoff_s": 4.759999752044678,
+      "end_code": 15
+    },
+    {
+      "variant": "straight",
+      "lane": 139,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.039999961853027,
+      "end_code": 4
+    },
+    {
+      "variant": "straight",
+      "lane": 140,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.079999923706055,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 142,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": false,
+      "handoff_s": 4.679999828338623,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 143,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": true,
+      "handoff_s": 5.699999809265137,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 148,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a0.5",
+      "success": true,
+      "handoff_s": 4.339999675750732,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 149,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.059999942779541,
+      "end_code": 4
+    },
+    {
+      "variant": "straight",
+      "lane": 150,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.639999866485596,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 151,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": false,
+      "handoff_s": 4.739999771118164,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 152,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": true,
+      "handoff_s": 4.759999752044678,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 155,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.039999961853027,
+      "end_code": 18
+    },
+    {
+      "variant": "straight",
+      "lane": 156,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.679999828338623,
+      "end_code": 4
+    },
+    {
+      "variant": "straight",
+      "lane": 157,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.0,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 158,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": true,
+      "handoff_s": 5.039999961853027,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 160,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": true,
+      "handoff_s": 4.739999771118164,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 162,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.699999809265137,
+      "end_code": 18
+    },
+    {
+      "variant": "straight",
+      "lane": 163,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.059999942779541,
+      "end_code": 18
+    },
+    {
+      "variant": "straight",
+      "lane": 164,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.699999809265137,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 165,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a1.0",
+      "success": false,
+      "handoff_s": 4.639999866485596,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 166,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": true,
+      "handoff_s": 5.0,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 168,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": true,
+      "handoff_s": 4.799999713897705,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 169,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.019999980926514,
+      "end_code": 15
+    },
+    {
+      "variant": "straight",
+      "lane": 170,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a1.0",
+      "success": false,
+      "handoff_s": 4.699999809265137,
+      "end_code": 4
+    },
+    {
+      "variant": "straight",
+      "lane": 171,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": true,
+      "handoff_s": 5.659999847412109,
+      "end_code": 13
+    },
+    {
+      "variant": "straight",
+      "lane": 173,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": false,
+      "handoff_s": 4.71999979019165,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 174,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": false,
+      "handoff_s": 4.699999809265137,
+      "end_code": 3
+    },
+    {
+      "variant": "straight",
+      "lane": 176,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a1.0",
+      "success": false,
+      "handoff_s": 4.460000038146973,
+      "end_code": 15
+    },
+    {
+      "variant": "straight",
+      "lane": 179,
+      "root": 1,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": true,
+      "handoff_s": 5.71999979019165,
+      "end_code": 13
+    },
+    {
+      "variant": "left",
+      "lane": 0,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.679999828338623,
+      "end_code": 4
+    },
+    {
+      "variant": "left",
+      "lane": 2,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.619999885559082,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 4,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": true,
+      "handoff_s": 5.059999942779541,
+      "end_code": 13
+    },
+    {
+      "variant": "left",
+      "lane": 5,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.039999961853027,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 7,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.099999904632568,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 8,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 9,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.699999809265137,
+      "end_code": 18
+    },
+    {
+      "variant": "left",
+      "lane": 14,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.759999752044678,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 15,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.3_a0.0",
+      "success": false,
+      "handoff_s": 4.400000095367432,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 16,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 17,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.619999885559082,
+      "end_code": 4
+    },
+    {
+      "variant": "left",
+      "lane": 19,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": true,
+      "handoff_s": 5.619999885559082,
+      "end_code": 13
+    },
+    {
+      "variant": "left",
+      "lane": 21,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.679999828338623,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 22,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a1.0",
+      "success": false,
+      "handoff_s": 4.679999828338623,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 23,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.3_a0.5",
+      "success": false,
+      "handoff_s": 4.279999732971191,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 24,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.179999828338623,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 25,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.679999828338623,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 26,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.059999942779541,
+      "end_code": 18
+    },
+    {
+      "variant": "left",
+      "lane": 27,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.699999809265137,
+      "end_code": 9
+    },
+    {
+      "variant": "left",
+      "lane": 28,
+      "root": 1,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 9
+    },
+    {
+      "variant": "left",
+      "lane": 29,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 18
+    },
+    {
+      "variant": "left",
+      "lane": 30,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.3_a0.5",
+      "success": false,
+      "handoff_s": 4.299999713897705,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 32,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.6_a0.5",
+      "success": false,
+      "handoff_s": 4.0,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 33,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a1.0",
+      "success": false,
+      "handoff_s": 4.259999752044678,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 34,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.699999809265137,
+      "end_code": 4
+    },
+    {
+      "variant": "left",
+      "lane": 35,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.699999809265137,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 36,
+      "root": 1,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.059999942779541,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 37,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.059999942779541,
+      "end_code": 18
+    },
+    {
+      "variant": "left",
+      "lane": 38,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 9
+    },
+    {
+      "variant": "left",
+      "lane": 39,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": true,
+      "handoff_s": 5.639999866485596,
+      "end_code": 13
+    },
+    {
+      "variant": "left",
+      "lane": 42,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.819999694824219,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 43,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.139999866485596,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 45,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": true,
+      "handoff_s": 4.699999809265137,
+      "end_code": 13
+    },
+    {
+      "variant": "left",
+      "lane": 46,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.0,
+      "end_code": 4
+    },
+    {
+      "variant": "left",
+      "lane": 48,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": true,
+      "handoff_s": 4.71999979019165,
+      "end_code": 13
+    },
+    {
+      "variant": "left",
+      "lane": 52,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": true,
+      "handoff_s": 5.039999961853027,
+      "end_code": 13
+    },
+    {
+      "variant": "left",
+      "lane": 53,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a0.0",
+      "success": false,
+      "handoff_s": 4.239999771118164,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 54,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 56,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a0.5",
+      "success": false,
+      "handoff_s": 4.259999752044678,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 59,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.099999904632568,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 62,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.079999923706055,
+      "end_code": 18
+    },
+    {
+      "variant": "left",
+      "lane": 65,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a1.0",
+      "success": false,
+      "handoff_s": 4.360000133514404,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 66,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": false,
+      "handoff_s": 4.739999771118164,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 67,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.739999771118164,
+      "end_code": 18
+    },
+    {
+      "variant": "left",
+      "lane": 69,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.3_a0.0",
+      "success": false,
+      "handoff_s": 4.420000076293945,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 73,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.639999866485596,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 74,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.3_a1.0",
+      "success": false,
+      "handoff_s": 4.380000114440918,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 76,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 77,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.699999809265137,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 78,
+      "root": 1,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.079999923706055,
+      "end_code": 9
+    },
+    {
+      "variant": "left",
+      "lane": 79,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a0.0",
+      "success": false,
+      "handoff_s": 4.380000114440918,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 80,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": true,
+      "handoff_s": 4.659999847412109,
+      "end_code": 13
+    },
+    {
+      "variant": "left",
+      "lane": 81,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a0.5",
+      "success": false,
+      "handoff_s": 4.299999713897705,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 82,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.059999942779541,
+      "end_code": 18
+    },
+    {
+      "variant": "left",
+      "lane": 83,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.6_a1.0",
+      "success": false,
+      "handoff_s": 4.059999942779541,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 84,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.699999809265137,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 85,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": false,
+      "handoff_s": 4.679999828338623,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 87,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a1.0",
+      "success": false,
+      "handoff_s": 4.699999809265137,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 88,
+      "root": 1,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": true,
+      "handoff_s": 5.679999828338623,
+      "end_code": 13
+    },
+    {
+      "variant": "left",
+      "lane": 89,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.039999961853027,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 90,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.6_a0.0",
+      "success": false,
+      "handoff_s": 4.179999828338623,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 92,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a1.0",
+      "success": false,
+      "handoff_s": 4.679999828338623,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 93,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": true,
+      "handoff_s": 5.099999904632568,
+      "end_code": 13
+    },
+    {
+      "variant": "left",
+      "lane": 94,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.619999885559082,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 95,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.019999980926514,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 96,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a1.0",
+      "success": true,
+      "handoff_s": 4.699999809265137,
+      "end_code": 13
+    },
+    {
+      "variant": "left",
+      "lane": 97,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.019999980926514,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 98,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": true,
+      "handoff_s": 5.079999923706055,
+      "end_code": 13
+    },
+    {
+      "variant": "left",
+      "lane": 100,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.699999809265137,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 102,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.0,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 103,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.6_a0.5",
+      "success": false,
+      "handoff_s": 4.0,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 107,
+      "root": 1,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a0.0",
+      "success": false,
+      "handoff_s": 4.299999713897705,
+      "end_code": 18
+    },
+    {
+      "variant": "left",
+      "lane": 108,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": false,
+      "handoff_s": 4.679999828338623,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 109,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.619999885559082,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 110,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.039999961853027,
+      "end_code": 4
+    },
+    {
+      "variant": "left",
+      "lane": 111,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": true,
+      "handoff_s": 5.059999942779541,
+      "end_code": 13
+    },
+    {
+      "variant": "left",
+      "lane": 112,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": true,
+      "handoff_s": 5.619999885559082,
+      "end_code": 13
+    },
+    {
+      "variant": "left",
+      "lane": 114,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.079999923706055,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 115,
+      "root": 1,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.819999694824219,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 116,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a0.0",
+      "success": true,
+      "handoff_s": 4.380000114440918,
+      "end_code": 13
+    },
+    {
+      "variant": "left",
+      "lane": 117,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.099999904632568,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 118,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.679999828338623,
+      "end_code": 18
+    },
+    {
+      "variant": "left",
+      "lane": 119,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.059999942779541,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 120,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": true,
+      "handoff_s": 5.619999885559082,
+      "end_code": 13
+    },
+    {
+      "variant": "left",
+      "lane": 121,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 18
+    },
+    {
+      "variant": "left",
+      "lane": 124,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 4
+    },
+    {
+      "variant": "left",
+      "lane": 125,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.3_a0.5",
+      "success": false,
+      "handoff_s": 4.460000038146973,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 126,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.019999980926514,
+      "end_code": 18
+    },
+    {
+      "variant": "left",
+      "lane": 128,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.71999979019165,
+      "end_code": 18
+    },
+    {
+      "variant": "left",
+      "lane": 129,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.3_a0.0",
+      "success": false,
+      "handoff_s": 4.420000076293945,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 132,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a1.0",
+      "success": false,
+      "handoff_s": 4.739999771118164,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 133,
+      "root": 1,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.079999923706055,
+      "end_code": 18
+    },
+    {
+      "variant": "left",
+      "lane": 135,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 137,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.679999828338623,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 138,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a1.0",
+      "success": false,
+      "handoff_s": 4.759999752044678,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 139,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.039999961853027,
+      "end_code": 12
+    },
+    {
+      "variant": "left",
+      "lane": 140,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.079999923706055,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 142,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": false,
+      "handoff_s": 4.679999828338623,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 143,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": true,
+      "handoff_s": 5.699999809265137,
+      "end_code": 13
+    },
+    {
+      "variant": "left",
+      "lane": 148,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a0.5",
+      "success": true,
+      "handoff_s": 4.339999675750732,
+      "end_code": 13
+    },
+    {
+      "variant": "left",
+      "lane": 149,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.059999942779541,
+      "end_code": 4
+    },
+    {
+      "variant": "left",
+      "lane": 150,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.639999866485596,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 151,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": false,
+      "handoff_s": 4.739999771118164,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 152,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.759999752044678,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 155,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.039999961853027,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 156,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.679999828338623,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 157,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.0,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 158,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.039999961853027,
+      "end_code": 18
+    },
+    {
+      "variant": "left",
+      "lane": 160,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": false,
+      "handoff_s": 4.739999771118164,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 162,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.699999809265137,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 163,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.059999942779541,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 164,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.699999809265137,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 165,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a1.0",
+      "success": false,
+      "handoff_s": 4.639999866485596,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 166,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.0,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 168,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.799999713897705,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 169,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.019999980926514,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 170,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a1.0",
+      "success": false,
+      "handoff_s": 4.699999809265137,
+      "end_code": 18
+    },
+    {
+      "variant": "left",
+      "lane": 171,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 3
+    },
+    {
+      "variant": "left",
+      "lane": 173,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": false,
+      "handoff_s": 4.71999979019165,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 174,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": false,
+      "handoff_s": 4.699999809265137,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 176,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a1.0",
+      "success": false,
+      "handoff_s": 4.460000038146973,
+      "end_code": 15
+    },
+    {
+      "variant": "left",
+      "lane": 179,
+      "root": 1,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.71999979019165,
+      "end_code": 15
+    },
+    {
+      "variant": "right",
+      "lane": 0,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.679999828338623,
+      "end_code": 4
+    },
+    {
+      "variant": "right",
+      "lane": 2,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 18
+    },
+    {
+      "variant": "right",
+      "lane": 4,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.059999942779541,
+      "end_code": 18
+    },
+    {
+      "variant": "right",
+      "lane": 5,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.039999961853027,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 7,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": true,
+      "handoff_s": 5.099999904632568,
+      "end_code": 13
+    },
+    {
+      "variant": "right",
+      "lane": 8,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.619999885559082,
+      "end_code": 4
+    },
+    {
+      "variant": "right",
+      "lane": 9,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": true,
+      "handoff_s": 5.699999809265137,
+      "end_code": 13
+    },
+    {
+      "variant": "right",
+      "lane": 14,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.759999752044678,
+      "end_code": 15
+    },
+    {
+      "variant": "right",
+      "lane": 15,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.3_a0.0",
+      "success": false,
+      "handoff_s": 4.400000095367432,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 16,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.579999923706055,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 17,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": true,
+      "handoff_s": 5.699999809265137,
+      "end_code": 13
+    },
+    {
+      "variant": "right",
+      "lane": 19,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.619999885559082,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 21,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 22,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a1.0",
+      "success": false,
+      "handoff_s": 4.679999828338623,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 23,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.3_a0.5",
+      "success": false,
+      "handoff_s": 4.279999732971191,
+      "end_code": 15
+    },
+    {
+      "variant": "right",
+      "lane": 24,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.179999828338623,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 25,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.679999828338623,
+      "end_code": 15
+    },
+    {
+      "variant": "right",
+      "lane": 26,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.059999942779541,
+      "end_code": 18
+    },
+    {
+      "variant": "right",
+      "lane": 27,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.639999866485596,
+      "end_code": 4
+    },
+    {
+      "variant": "right",
+      "lane": 28,
+      "root": 1,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 29,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.679999828338623,
+      "end_code": 18
+    },
+    {
+      "variant": "right",
+      "lane": 30,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.3_a0.5",
+      "success": false,
+      "handoff_s": 4.299999713897705,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 32,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.6_a0.5",
+      "success": false,
+      "handoff_s": 4.0,
+      "end_code": 15
+    },
+    {
+      "variant": "right",
+      "lane": 33,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a1.0",
+      "success": false,
+      "handoff_s": 4.259999752044678,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 34,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.699999809265137,
+      "end_code": 4
+    },
+    {
+      "variant": "right",
+      "lane": 35,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.699999809265137,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 36,
+      "root": 1,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": true,
+      "handoff_s": 5.059999942779541,
+      "end_code": 13
+    },
+    {
+      "variant": "right",
+      "lane": 37,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": true,
+      "handoff_s": 5.059999942779541,
+      "end_code": 13
+    },
+    {
+      "variant": "right",
+      "lane": 38,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": true,
+      "handoff_s": 5.659999847412109,
+      "end_code": 13
+    },
+    {
+      "variant": "right",
+      "lane": 39,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.639999866485596,
+      "end_code": 9
+    },
+    {
+      "variant": "right",
+      "lane": 42,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.819999694824219,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 43,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.139999866485596,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 45,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": false,
+      "handoff_s": 4.699999809265137,
+      "end_code": 18
+    },
+    {
+      "variant": "right",
+      "lane": 46,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.0,
+      "end_code": 4
+    },
+    {
+      "variant": "right",
+      "lane": 48,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.71999979019165,
+      "end_code": 15
+    },
+    {
+      "variant": "right",
+      "lane": 52,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.039999961853027,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 53,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a0.0",
+      "success": true,
+      "handoff_s": 4.239999771118164,
+      "end_code": 13
+    },
+    {
+      "variant": "right",
+      "lane": 54,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.679999828338623,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 56,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a0.5",
+      "success": false,
+      "handoff_s": 4.259999752044678,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 59,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.099999904632568,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 62,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.079999923706055,
+      "end_code": 18
+    },
+    {
+      "variant": "right",
+      "lane": 65,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a1.0",
+      "success": false,
+      "handoff_s": 4.360000133514404,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 66,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": false,
+      "handoff_s": 4.739999771118164,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 67,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.679999828338623,
+      "end_code": 18
+    },
+    {
+      "variant": "right",
+      "lane": 69,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.3_a0.0",
+      "success": false,
+      "handoff_s": 4.420000076293945,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 73,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.679999828338623,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 74,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.3_a1.0",
+      "success": true,
+      "handoff_s": 4.380000114440918,
+      "end_code": 13
+    },
+    {
+      "variant": "right",
+      "lane": 76,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 4
+    },
+    {
+      "variant": "right",
+      "lane": 77,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.699999809265137,
+      "end_code": 18
+    },
+    {
+      "variant": "right",
+      "lane": 78,
+      "root": 1,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.079999923706055,
+      "end_code": 9
+    },
+    {
+      "variant": "right",
+      "lane": 79,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a0.0",
+      "success": false,
+      "handoff_s": 4.380000114440918,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 80,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.659999847412109,
+      "end_code": 18
+    },
+    {
+      "variant": "right",
+      "lane": 81,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a0.5",
+      "success": true,
+      "handoff_s": 4.299999713897705,
+      "end_code": 13
+    },
+    {
+      "variant": "right",
+      "lane": 82,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.059999942779541,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 83,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.6_a1.0",
+      "success": false,
+      "handoff_s": 4.059999942779541,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 84,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.699999809265137,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 85,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": false,
+      "handoff_s": 4.679999828338623,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 87,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a1.0",
+      "success": true,
+      "handoff_s": 4.699999809265137,
+      "end_code": 13
+    },
+    {
+      "variant": "right",
+      "lane": 88,
+      "root": 1,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.679999828338623,
+      "end_code": 9
+    },
+    {
+      "variant": "right",
+      "lane": 89,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.039999961853027,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 90,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.6_a0.0",
+      "success": false,
+      "handoff_s": 4.179999828338623,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 92,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a1.0",
+      "success": false,
+      "handoff_s": 4.679999828338623,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 93,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.099999904632568,
+      "end_code": 15
+    },
+    {
+      "variant": "right",
+      "lane": 94,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.619999885559082,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 95,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.019999980926514,
+      "end_code": 18
+    },
+    {
+      "variant": "right",
+      "lane": 96,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a1.0",
+      "success": true,
+      "handoff_s": 4.699999809265137,
+      "end_code": 13
+    },
+    {
+      "variant": "right",
+      "lane": 97,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.019999980926514,
+      "end_code": 15
+    },
+    {
+      "variant": "right",
+      "lane": 98,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.079999923706055,
+      "end_code": 18
+    },
+    {
+      "variant": "right",
+      "lane": 100,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.699999809265137,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 102,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.0,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 103,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.6_a0.5",
+      "success": true,
+      "handoff_s": 4.0,
+      "end_code": 13
+    },
+    {
+      "variant": "right",
+      "lane": 107,
+      "root": 1,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a0.0",
+      "success": false,
+      "handoff_s": 4.299999713897705,
+      "end_code": 18
+    },
+    {
+      "variant": "right",
+      "lane": 108,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": true,
+      "handoff_s": 4.679999828338623,
+      "end_code": 13
+    },
+    {
+      "variant": "right",
+      "lane": 109,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.619999885559082,
+      "end_code": 18
+    },
+    {
+      "variant": "right",
+      "lane": 110,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.039999961853027,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 111,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.059999942779541,
+      "end_code": 18
+    },
+    {
+      "variant": "right",
+      "lane": 112,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.619999885559082,
+      "end_code": 9
+    },
+    {
+      "variant": "right",
+      "lane": 114,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.079999923706055,
+      "end_code": 4
+    },
+    {
+      "variant": "right",
+      "lane": 115,
+      "root": 1,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.819999694824219,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 116,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a0.0",
+      "success": false,
+      "handoff_s": 4.380000114440918,
+      "end_code": 18
+    },
+    {
+      "variant": "right",
+      "lane": 117,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": false,
+      "handoff_s": 5.099999904632568,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 118,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": true,
+      "handoff_s": 5.679999828338623,
+      "end_code": 13
+    },
+    {
+      "variant": "right",
+      "lane": 119,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.059999942779541,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 120,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.619999885559082,
+      "end_code": 18
+    },
+    {
+      "variant": "right",
+      "lane": 121,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 15
+    },
+    {
+      "variant": "right",
+      "lane": 124,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 4
+    },
+    {
+      "variant": "right",
+      "lane": 125,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.3_a0.5",
+      "success": false,
+      "handoff_s": 4.460000038146973,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 126,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.019999980926514,
+      "end_code": 18
+    },
+    {
+      "variant": "right",
+      "lane": 128,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.71999979019165,
+      "end_code": 9
+    },
+    {
+      "variant": "right",
+      "lane": 129,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.3_a0.0",
+      "success": false,
+      "handoff_s": 4.420000076293945,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 132,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a1.0",
+      "success": false,
+      "handoff_s": 4.739999771118164,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 133,
+      "root": 1,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.0",
+      "success": true,
+      "handoff_s": 5.079999923706055,
+      "end_code": 13
+    },
+    {
+      "variant": "right",
+      "lane": 135,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.659999847412109,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 137,
+      "root": 10,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.679999828338623,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 138,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a1.0",
+      "success": false,
+      "handoff_s": 4.759999752044678,
+      "end_code": 15
+    },
+    {
+      "variant": "right",
+      "lane": 139,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.039999961853027,
+      "end_code": 4
+    },
+    {
+      "variant": "right",
+      "lane": 140,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.079999923706055,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 142,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": false,
+      "handoff_s": 4.679999828338623,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 143,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.699999809265137,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 148,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a0.5",
+      "success": false,
+      "handoff_s": 4.339999675750732,
+      "end_code": 18
+    },
+    {
+      "variant": "right",
+      "lane": 149,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.059999942779541,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 150,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": false,
+      "handoff_s": 5.639999866485596,
+      "end_code": 18
+    },
+    {
+      "variant": "right",
+      "lane": 151,
+      "root": 8,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": false,
+      "handoff_s": 4.739999771118164,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 152,
+      "root": 0,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.759999752044678,
+      "end_code": 15
+    },
+    {
+      "variant": "right",
+      "lane": 155,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.039999961853027,
+      "end_code": 18
+    },
+    {
+      "variant": "right",
+      "lane": 156,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.679999828338623,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 157,
+      "root": 4,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.0,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 158,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": true,
+      "handoff_s": 5.039999961853027,
+      "end_code": 13
+    },
+    {
+      "variant": "right",
+      "lane": 160,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": false,
+      "handoff_s": 4.739999771118164,
+      "end_code": 15
+    },
+    {
+      "variant": "right",
+      "lane": 162,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": false,
+      "handoff_s": 4.699999809265137,
+      "end_code": 18
+    },
+    {
+      "variant": "right",
+      "lane": 163,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.059999942779541,
+      "end_code": 18
+    },
+    {
+      "variant": "right",
+      "lane": 164,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.5",
+      "success": false,
+      "handoff_s": 5.699999809265137,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 165,
+      "root": 9,
+      "role": "DEV",
+      "candidate": "straight_jump_v2.0_a1.0",
+      "success": false,
+      "handoff_s": 4.639999866485596,
+      "end_code": 18
+    },
+    {
+      "variant": "right",
+      "lane": 166,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a0.5",
+      "success": false,
+      "handoff_s": 5.0,
+      "end_code": 18
+    },
+    {
+      "variant": "right",
+      "lane": 168,
+      "root": 3,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.0",
+      "success": true,
+      "handoff_s": 4.799999713897705,
+      "end_code": 13
+    },
+    {
+      "variant": "right",
+      "lane": 169,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.8_a1.0",
+      "success": false,
+      "handoff_s": 5.019999980926514,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 170,
+      "root": 7,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a1.0",
+      "success": false,
+      "handoff_s": 4.699999809265137,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 171,
+      "root": 11,
+      "role": "DEV",
+      "candidate": "straight_jump_v1.5_a1.0",
+      "success": true,
+      "handoff_s": 5.659999847412109,
+      "end_code": 13
+    },
+    {
+      "variant": "right",
+      "lane": 173,
+      "root": 6,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": false,
+      "handoff_s": 4.71999979019165,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 174,
+      "root": 2,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.0_a0.5",
+      "success": false,
+      "handoff_s": 4.699999809265137,
+      "end_code": 3
+    },
+    {
+      "variant": "right",
+      "lane": 176,
+      "root": 5,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v2.3_a1.0",
+      "success": false,
+      "handoff_s": 4.460000038146973,
+      "end_code": 15
+    },
+    {
+      "variant": "right",
+      "lane": 179,
+      "root": 1,
+      "role": "TRAIN",
+      "candidate": "straight_jump_v1.5_a0.0",
+      "success": false,
+      "handoff_s": 5.71999979019165,
+      "end_code": 9
+    }
+  ],
+  "selection": {
+    "state_only_7101": {
+      "epoch": 187,
+      "dev_brier": 0.10575525462627411
+    },
+    "state_only_7102": {
+      "epoch": 192,
+      "dev_brier": 0.10401763767004013
+    },
+    "state_only_7103": {
+      "epoch": 192,
+      "dev_brier": 0.10551606118679047
+    },
+    "task_context_7101": {
+      "epoch": 55,
+      "dev_brier": 0.11529739201068878
+    },
+    "task_context_7102": {
+      "epoch": 51,
+      "dev_brier": 0.1280597299337387
+    },
+    "task_context_7103": {
+      "epoch": 157,
+      "dev_brier": 0.12525029480457306
+    }
+  },
+  "elapsed_s": 2.5683241689985152
+}

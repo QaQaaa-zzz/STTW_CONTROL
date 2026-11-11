@@ -1,0 +1,96 @@
+{
+  "scope": "Existing grouped TRAIN/DEV only; route-group rankings use different observed handoffs and are not counterfactual route outcomes",
+  "vx_baselines": {
+    "TRAIN": {
+      "n": 463,
+      "requested_speed_rmse": 0.5737304091453552,
+      "train_mean_rmse": 0.4132513999938965,
+      "correlation": -0.026104787697222208
+    },
+    "DEV": {
+      "n": 168,
+      "requested_speed_rmse": 0.5939502120018005,
+      "train_mean_rmse": 0.44458919763565063,
+      "correlation": -0.15245436856433137
+    }
+  },
+  "vx_by_request": [
+    {
+      "speed": 1.5,
+      "n": 40,
+      "observed": 2.1435940265655518
+    },
+    {
+      "speed": 1.7999999523162842,
+      "n": 54,
+      "observed": 1.9799165725708008
+    },
+    {
+      "speed": 2.0,
+      "n": 39,
+      "observed": 2.184906005859375
+    },
+    {
+      "speed": 2.299999952316284,
+      "n": 25,
+      "observed": 1.931221604347229
+    },
+    {
+      "speed": 2.5999999046325684,
+      "n": 10,
+      "observed": 1.8066564798355103
+    }
+  ],
+  "task_ranking": [
+    {
+      "role": "TRAIN",
+      "groups": 78,
+      "exact_handoff_groups": 1,
+      "mixed_outcome_groups": 32,
+      "oracle_goals": 32,
+      "selection": {
+        "state_only": {
+          "goals": 21,
+          "mixed_goals": 21
+        },
+        "task_context": {
+          "goals": 29,
+          "mixed_goals": 29
+        },
+        "constant": {
+          "goals": 27,
+          "mixed_goals": 27
+        },
+        "task_prior": {
+          "goals": 27,
+          "mixed_goals": 27
+        }
+      }
+    },
+    {
+      "role": "DEV",
+      "groups": 44,
+      "exact_handoff_groups": 3,
+      "mixed_outcome_groups": 13,
+      "oracle_goals": 14,
+      "selection": {
+        "state_only": {
+          "goals": 7,
+          "mixed_goals": 6
+        },
+        "task_context": {
+          "goals": 10,
+          "mixed_goals": 9
+        },
+        "constant": {
+          "goals": 9,
+          "mixed_goals": 8
+        },
+        "task_prior": {
+          "goals": 9,
+          "mixed_goals": 8
+        }
+      }
+    }
+  ]
+}
