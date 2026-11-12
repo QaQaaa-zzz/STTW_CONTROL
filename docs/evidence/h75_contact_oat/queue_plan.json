@@ -134,5 +134,6 @@
     "learning/cli/analyze_contact_oat.py",
     "--root",
     "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat"
-  ]
+  ],
+  "overlap_cpu_analysis": true
 }
