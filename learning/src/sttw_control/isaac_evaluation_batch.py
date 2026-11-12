@@ -1,8 +1,28 @@
 """Lane packing and ordinary six-lane outputs for batched fixed-case evaluation."""
 from copy import deepcopy
+from pathlib import Path
 import numpy as np
 
 ALPHAS = [0., .25, .5, .75, 1., 0.]
+
+
+def pack_compatible_stages(stages):
+    """Pack factor cells sharing one physical asset and complete controller stack."""
+    groups={}
+    for stage in stages:
+        key=tuple(stage[name] for name in ('asset','bundle','initial_state','controller_config','lower_actor'))
+        if key not in groups:
+            groups[key]=deepcopy(stage)
+            groups[key]['cells']=[]
+            groups[key]['source_stages']=[]
+        groups[key]['cells'].extend(deepcopy(stage['cells']))
+        groups[key]['source_stages'].append(stage['name'])
+    for stage in groups.values():
+        if len(stage['source_stages'])>1:
+            stage['name']='combined_'+stage['name']
+            stage['path']=str(Path(stage['path']).parent/stage['name'])
+        for cell in stage['cells']:cell['stage']=stage['name']
+    return list(groups.values())
 
 
 def batch_settings(settings, cases):

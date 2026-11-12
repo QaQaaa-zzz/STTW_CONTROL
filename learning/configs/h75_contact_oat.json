@@ -92,5 +92,6 @@
   "analysis_contract": "Paired one-factor contrasts within each fixed physical block and placement; no independent interpretation of repeated alpha lanes. World rotation transforms route, terrain, root pose and world velocities together and is a coordinate-symmetry control. No monotonic preference direction is imposed.",
   "retention": "Per-case 200 Hz states, contact forces and control, 50 Hz rewards, PNG XY/diagnostics and compact summary. No video, no 5 kHz contact archive, no duplicated batch trajectories, no new weights.",
   "stop_rule": "Exactly 2112 episodes; stop on engineering error, no automatic retries, expansion, training or policy fitting. All stages and CPU analysis queued before launch.",
-  "overlap_cpu_analysis": true
+  "overlap_cpu_analysis": true,
+  "pack_compatible_stages": true
 }

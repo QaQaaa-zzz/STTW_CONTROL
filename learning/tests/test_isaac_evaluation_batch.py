@@ -60,3 +60,23 @@ class BatchEvaluationTest(unittest.TestCase):
         self.assertEqual(c['settings']['num_envs'],120)
 
 if __name__=='__main__':unittest.main()
+
+class StagePackingTest(unittest.TestCase):
+    def test_factor_cells_pack_without_changing_conditions(self):
+        from sttw_control.isaac_evaluation_batch import pack_compatible_stages
+        stages=[dict(name=name,path='/run/'+name,asset='same.urdf',bundle='H75',initial_state='start',controller_config='ECBC',lower_actor='Local300',cells=[dict(id=name,stage=name,height=.1,alpha=[0,.25,.5,.75,1,0])]) for name in ('position','slope','obliquity')]
+        packed=pack_compatible_stages(stages)
+        self.assertEqual(len(packed),1)
+        self.assertEqual(len(packed[0]['cells']),3)
+        for original,cell in zip(stages,packed[0]['cells']):
+            self.assertEqual({k:v for k,v in original['cells'][0].items() if k!='stage'},{k:v for k,v in cell.items() if k!='stage'})
+        self.assertEqual(stages[0]['cells'][0]['stage'],'position')
+
+    def test_distinct_assets_states_and_controller_stacks_do_not_mix(self):
+        from copy import deepcopy
+        from sttw_control.isaac_evaluation_batch import pack_compatible_stages
+        base=dict(name='base',path='/run/base',asset='a',bundle='b',initial_state='s',controller_config='c',lower_actor='l',cells=[])
+        stages=[base]
+        for key in ('asset','bundle','initial_state','controller_config','lower_actor'):
+            item=deepcopy(base);item[key]='other';item['name']=key;stages.append(item)
+        self.assertEqual(len(pack_compatible_stages(stages)),6)

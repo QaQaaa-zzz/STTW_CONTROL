@@ -1,0 +1,69 @@
+{
+  "applies_to": "Future preparations only; current nearly finished queue and saved data untouched",
+  "max_batch_envs": 4096,
+  "old_gpu_stages": 9,
+  "packed_gpu_stages": 7,
+  "preserved_conditions": 44,
+  "preserved_episodes": 2112,
+  "exact_parameter_mapping": "same cell IDs and all non-stage fields",
+  "stages": [
+    {
+      "name": "combined_position",
+      "sources": [
+        "position",
+        "slope",
+        "obliquity"
+      ],
+      "physical_episodes": 1440,
+      "batch_envs": 1440
+    },
+    {
+      "name": "wheelbase_0.9",
+      "sources": [
+        "wheelbase_0.9"
+      ],
+      "physical_episodes": 144,
+      "batch_envs": 144
+    },
+    {
+      "name": "wheelbase_1.1",
+      "sources": [
+        "wheelbase_1.1"
+      ],
+      "physical_episodes": 144,
+      "batch_envs": 144
+    },
+    {
+      "name": "wheelbase_1.2",
+      "sources": [
+        "wheelbase_1.2"
+      ],
+      "physical_episodes": 144,
+      "batch_envs": 144
+    },
+    {
+      "name": "wheelbase_1.3",
+      "sources": [
+        "wheelbase_1.3"
+      ],
+      "physical_episodes": 144,
+      "batch_envs": 144
+    },
+    {
+      "name": "world_yaw45",
+      "sources": [
+        "world_yaw45"
+      ],
+      "physical_episodes": 48,
+      "batch_envs": 48
+    },
+    {
+      "name": "world_yaw90",
+      "sources": [
+        "world_yaw90"
+      ],
+      "physical_episodes": 48,
+      "batch_envs": 48
+    }
+  ]
+}

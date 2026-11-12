@@ -52,7 +52,7 @@ def terrain(center=4.2,length=.8,oblique=.25,height=.1):
  return str(out)
 stages=[];cells=[]
 def stage(name,asset=None,custom_bundle=None,initial_state=None):
- path=root/name;path.mkdir(exist_ok=a.resume_preparation);item=dict(name=name,path=str(path),asset=asset or str(base_asset),bundle=custom_bundle or str(bundle),initial_state=initial_state or base['initial_state'],cells=[]);stages.append(item);return item
+ path=root/name;path.mkdir(exist_ok=a.resume_preparation);item=dict(name=name,path=str(path),asset=asset or str(base_asset),bundle=custom_bundle or str(bundle),initial_state=initial_state or base['initial_state'],controller_config=base['controller_config'],lower_actor=base['lower_actor'],cells=[]);stages.append(item);return item
 
 def cell(item,cell_id,factor,value,center=4.2,length=.8,oblique=.25,height=.1,scale=1.,terrain_path=None):
  row=dict(id=cell_id,stage=item['name'],factor=factor,value=value,center_s_m=center,length_m=length,oblique_s_per_n=oblique,height_m=height,wheelbase_scale=scale,world_rotation_deg=value if factor=='world_rotation' else 0,terrain=terrain_path or terrain(center,length,oblique,height),reference_heading_deg=float(np.degrees(np.interp(center,route['s'],route['heading'])))+(value if factor=='world_rotation' else 0))
@@ -88,6 +88,10 @@ for angle in plan['world_rotations_deg']:
  initial=dict(np.load(base['initial_state']));pose=initial['root_pose'].copy();pose[:3]=rotate_xyz(pose[:3]);q=pose[3:7];qnew=(rot*Rotation.from_quat(q[[1,2,3,0]])).as_quat();pose[3:7]=qnew[[3,0,1,2]];initial['root_pose']=pose;initial['root_velocity']=np.r_[rot.apply(initial['root_velocity'][:3]),rot.apply(initial['root_velocity'][3:])];np.savez_compressed(derived/'initial_state.npz',**initial)
  original=Path(terrain());raw=dict(np.load(original/'terrain.npz'));raw['vertices']=rotate_xyz(raw['vertices']).astype(np.float32);out=root/'terrains'/f'world_yaw{angle:g}';out.mkdir(exist_ok=a.resume_preparation);np.savez_compressed(out/'terrain.npz',**raw);meta=json.loads((original/'identity.json').read_text());meta.update(route=str(derived/'route.npz'),world_rotation_deg=angle,rotation_pivot=pivot.tolist(),sha256=hashlib.sha256((out/'terrain.npz').read_bytes()).hexdigest());(out/'identity.json').write_text(json.dumps(meta,indent=2))
  E=stage(f'world_yaw{angle:g}',custom_bundle=str(derived),initial_state=str(derived/'initial_state.npz'));cell(E,f'world_yaw{angle:g}','world_rotation',angle,terrain_path=str(out))
+if plan.get('pack_compatible_stages',False):
+ from sttw_control.isaac_evaluation_batch import pack_compatible_stages
+ stages=pack_compatible_stages(stages);cells=[cell for item in stages for cell in item['cells']]
+ for item in stages:Path(item['path']).mkdir(exist_ok=a.resume_preparation)
 # Quantify the actual discretized meshes, rather than only requested dimensions.
 for row in terrain_parameters:
  z=np.load(Path(row['terrain'])/'terrain.npz');v=z['vertices'];tri=z['triangles'];normal=np.cross(v[tri[:,1]]-v[tri[:,0]],v[tri[:,2]]-v[tri[:,0]]);raised=(v[tri,2]>0).any(1);nz=normal[:,2];finite=raised&(abs(nz)>1e-10);grades=np.linalg.norm(normal[finite,:2],axis=1)/abs(nz[finite]);row.update(actual_max_height_m=float(v[:,2].max()),actual_max_finite_face_grade=float(grades.max()) if len(grades) else 0.,vertical_raised_faces=int((raised&(abs(nz)<=1e-10)).sum()))
