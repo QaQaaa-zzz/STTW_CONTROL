@@ -1,0 +1,23 @@
+{
+  "time_utc": "2026-11-12T08:15:58.053015+00:00",
+  "baseline": {
+    "stage": "position",
+    "episodes": 672,
+    "physics_elapsed_s": 530.6347048282623,
+    "physics_steps": 33600000,
+    "episodes_per_s": 1.266407933528377
+  },
+  "optimization": [
+    "GPU stages do not wait for CPU plots and statistics",
+    "Single CPU postprocess worker overlaps with the next shared-lock GPU stage",
+    "Reuse complete plots, metrics and reward components on resume",
+    "Existing GPU batching, 50-step transfer chunks, compact arrays and cached terrain projection retained"
+  ],
+  "scientific_changes": [],
+  "planned_episodes": 2112,
+  "preserved_cases": 112,
+  "preserved_episodes": 672,
+  "interruption": "Stopped old queue to enable pipeline; slope/batch_000 was initializing, no completed slope cases; attempt log retained",
+  "test": "Two CPU resume/plot separation tests passed; zero extra simulation tests",
+  "measurement": "No new physics speedup claimed yet; wall-clock pipeline improvement will be recorded by stage timing"
+}

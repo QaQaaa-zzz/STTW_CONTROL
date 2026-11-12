@@ -1,5 +1,6 @@
 """Run a frozen finite evidence queue, release GPU between stages, notify completion."""
-import argparse,json,subprocess,sys,datetime,os
+import argparse,json,subprocess,sys,datetime,os,time
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 # Background services do not inherit the interactive project import path.
@@ -16,12 +17,27 @@ def status(stage,**fields):
 def notify(message,receipt):
     command([python,'learning/scripts/notify_sttw_job.py','--message',message,'--receipt',str(receipt)],q/'notifications.log')
 
-current='preparing';completed=[]
+def postprocess(item,plots=False):
+    r=Path(item['path']);started=time.monotonic()
+    if plots:
+        command([python,'-u','learning/cli/run_alpha_mechanism.py','--run',str(r),'--plots-only','--resume'],r/'postprocess.log')
+    command([python,'learning/cli/summarize_alpha_schedules.py','--run',str(r)],r/'analysis.log')
+    if item.get('state_selection'):
+        command([python,'learning/cli/analyze_state_alpha_scan.py','--run',str(r)],r/'state_selection.log')
+    if item.get('analysis_command'):
+        command(item['analysis_command'],r/'factor_analysis.log')
+    (r/'postprocess_timing.json').write_text(json.dumps(dict(elapsed_s=time.monotonic()-started,overlapped_with_next_gpu_stage=plots),indent=2))
+    completed.append(item['name'])
+    notify(f'STTW阶段完成：{item["name"]}，{item["contexts"]}工况/{item["episodes"]}条；结果{r}/ANALYSIS.md。后续自动排队。',r/'completion_notice.json')
+
+current='preparing';completed=[];physical_completed=[];futures=[]
+overlap=plan.get('overlap_cpu_analysis',False)
+pool=ThreadPoolExecutor(max_workers=1) if overlap else None
 try:
     for item in plan['stages']:
         r=Path(item['path']);current=item['name']
         if a.resume and (r/'analysis_summary.json').exists() and json.loads((r/'status.json').read_text())['stage']=='complete':
-            completed.append(current);continue
+            completed.append(current);physical_completed.append(current);continue
         status('preparing',current=current,completed=completed)
         if current=='h75_height_scan':
             for scene in sorted(r.glob('*_scene.json')):
@@ -34,16 +50,20 @@ try:
             for scene in sorted(r.glob('*_scene.json')):
                 if a.resume and (r/'terrains'/scene.stem.removesuffix('_scene')/'terrain.npz').exists():continue
                 command([python,'learning/cli/build_route_pebbles.py','--scene-config',str(scene),'--output',str(r/'terrains'/scene.stem.removesuffix('_scene'))],r/'terrain_build.log')
-        status('queued_or_running',current=current,completed=completed)
-        command(['/bin/bash','learning/scripts/gpu_queue.sh',python,'-u','learning/cli/run_alpha_mechanism.py','--run',str(r)]+(['--resume'] if a.resume else []),r/'runtime.log')
-        status('analyzing',current=current,completed=completed)
-        command([python,'learning/cli/summarize_alpha_schedules.py','--run',str(r)],r/'analysis.log')
-        if item.get('state_selection'):
-            command([python,'learning/cli/analyze_state_alpha_scan.py','--run',str(r)],r/'state_selection.log')
-        if item.get('analysis_command'):
-            command(item['analysis_command'],r/'factor_analysis.log')
-        completed.append(current)
-        notify(f'STTW阶段完成：{current}，{item["contexts"]}工况/{item["episodes"]}条；结果{r}/ANALYSIS.md。后续自动排队。',r/'completion_notice.json')
+        for future in futures:
+            if future.done():future.result()
+        status('queued_or_running',current=current,completed=completed,physical_completed=physical_completed,cpu_analysis_overlap=overlap)
+        command(['/bin/bash','learning/scripts/gpu_queue.sh',python,'-u','learning/cli/run_alpha_mechanism.py','--run',str(r)]+(['--resume'] if a.resume else [])+(['--defer-plots'] if overlap else []),r/'runtime.log')
+        physical_completed.append(current)
+        if overlap:
+            futures.append(pool.submit(postprocess,item,True))
+        else:
+            status('analyzing',current=current,completed=completed)
+            postprocess(item)
+    if overlap:
+        status('postprocessing',current='all_physics_complete',completed=completed,physical_completed=physical_completed)
+        for future in futures:future.result()
+        pool.shutdown()
     if plan.get('final_analysis_command'):
         command(plan['final_analysis_command'],q/'final_analysis.log')
     status('complete',completed=completed)

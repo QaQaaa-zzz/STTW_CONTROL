@@ -1,13 +1,14 @@
 """Execute the finite declared same-entry channel matrix using existing tools."""
 import argparse,json,os,subprocess
 from pathlib import Path
-p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True);p.add_argument('--resume',action='store_true');a=p.parse_args();r=a.run;spec=json.loads((r/'protocol.json').read_text());jobs=json.loads((r/'jobs.json').read_text());lab='/home/qy/miniconda3/envs/env_isaaclab/bin/python';cpu='/home/qy/miniconda3/envs/mjp/bin/python';lines=['# '+spec.get('title','同入障状态通道消融'),'','原H75+Local300；'+spec.get('data_role','DEV机制实验')+'。完整统计见ANALYSIS.md。',''];(r/'RESULTS.md').write_text('\n'.join(lines));status={'stage':'running','completed':0,'planned':len(jobs)}
+p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True);p.add_argument('--resume',action='store_true');p.add_argument('--defer-plots',action='store_true');p.add_argument('--plots-only',action='store_true');a=p.parse_args();r=a.run;spec=json.loads((r/'protocol.json').read_text());jobs=json.loads((r/'jobs.json').read_text());lab='/home/qy/miniconda3/envs/env_isaaclab/bin/python';cpu='/home/qy/miniconda3/envs/mjp/bin/python';lines=['# '+spec.get('title','同入障状态通道消融'),'','原H75+Local300；'+spec.get('data_role','DEV机制实验')+'。完整统计见ANALYSIS.md。',''];(r/'RESULTS.md').write_text('\n'.join(lines));status={'stage':'running','completed':0,'planned':len(jobs)}
 if spec.get('batch_cases'):
  from concurrent.futures import ThreadPoolExecutor
  from itertools import groupby
  import shutil
  def plot_job(job):
   out=r/job['name']
+  if a.resume and all((out/name).exists() for name in ('figure_manifest.json','condition_metrics.json','reward_components.npz')):return
   contract=json.loads((out/'contract.json').read_text());contract['settings']['compact_results']=True;(out/'contract.json').write_text(json.dumps(contract,indent=2))
   with (r/(job['name']+'_plot.log')).open('w') as log:
    subprocess.run([cpu,'learning/cli/plot_isaac_gpu_evaluation.py','--run',str(out),'--lane-labels',json.dumps(spec['case_labels']),'--title',job['name']],stdout=log,stderr=subprocess.STDOUT,check=True)
@@ -22,8 +23,10 @@ if spec.get('batch_cases'):
   for job in jobs:
    out=r/job['name']
    if (out/'status.json').exists() and json.loads((out/'status.json').read_text())['stage']=='complete':
-    futures.append(plots.submit(plot_job,job));status['completed']+=1
+    if not a.defer_plots:futures.append(plots.submit(plot_job,job))
+    status['completed']+=1
    else:pending.append(job)
+  if a.plots_only and pending:raise ValueError('Plot-only stage has unfinished physical cases')
   batch_index=0
   group=pending
   batch_size=spec.get('max_batch_envs',4096)//len(spec['case_labels'])
@@ -42,11 +45,12 @@ if spec.get('batch_cases'):
     command=[lab,'-u','learning/cli/evaluate_isaac_gpu.py','--backend','lab','--bundle',spec.get('bundle','runs/h75_selected_local300_flat/bundle'),'--config',batch[0]['config'],'--terrain',batch[0]['terrain'],'--output',str(folder),'--seconds','10','--case-manifest',str(manifest)]
     (r/'status.json').write_text(json.dumps(dict(status,batch=[job['name'] for job in batch]),indent=2))
     with (r/f'batch_{batch_index:03d}.log').open('w') as log:subprocess.run(command,stdout=log,stderr=subprocess.STDOUT,check=True)
-    futures.extend(plots.submit(plot_job,job) for job in batch);status['completed']+=len(batch);batch_index+=1
+    if not a.defer_plots:futures.extend(plots.submit(plot_job,job) for job in batch)
+    status['completed']+=len(batch);batch_index+=1
   for future in futures:future.result()
  for job in jobs:
   lines+=['',f"## {job['name']}",'',f"![XY]({job['name']}/xy.png)",f"[奖励与速度]({job['name']}/overview.png) · [执行配置]({job['name']}/contract.json)"]
- (r/'RESULTS.md').write_text('\n'.join(lines)+'\n');status['stage']='complete';(r/'status.json').write_text(json.dumps(status,indent=2));raise SystemExit
+ (r/'RESULTS.md').write_text('\n'.join(lines)+'\n');status['stage']='physics_complete' if a.defer_plots else 'complete';(r/'status.json').write_text(json.dumps(status,indent=2));raise SystemExit
 for job in jobs:
  out=r/job['name'];(r/'status.json').write_text(json.dumps(status,indent=2))
  protocol=job.get('protocol',str(r/'protocol.json'))

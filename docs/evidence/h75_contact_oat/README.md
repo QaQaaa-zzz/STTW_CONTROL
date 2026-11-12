@@ -21,3 +21,7 @@
 曲线方向与优选alpha均由实验决定；不根据结果增加条件。配对保持同一物理组、初态、策略、控制器、执行器和全部非目标因素。完整实验原数据在外盘root，不把准备文件当成已执行结果。
 
 入口：`PYTHONPATH=learning/src /home/qy/miniconda3/envs/mjp/bin/python learning/cli/run_evidence_queue.py --queue /media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/queue`。9阶段均已写好并统一排队，阶段CPU统计与最终全矩阵统计自动执行，完成/异常发送Bark。
+
+## 流水线加速
+
+首阶段672回合物理仿真530.63秒，1.266回合/秒；原GPU批量、50步分块转存、缓存地形投影和精简存储已启用。新增GPU阶段与单CPU后处理阶段重叠，GPU不等待出图与统计；已完成图/奖励重建可恢复复用。物理、初态、样本数、控制频率、五alpha/Zero不改。两项CPU恢复测试通过，不新增仿真探针。第一阶段112工况/672回合与全部图完整保留，第二阶段初始化中断的日志保留，按未完成阶段恢复。实际新流水线耗时由postprocess_timing.json和queue/status.json记录。
