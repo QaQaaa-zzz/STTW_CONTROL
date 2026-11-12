@@ -15,7 +15,11 @@ def status(stage,**fields):
     (q/'status.json').write_text(json.dumps(dict(stage=stage,time_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),**fields),indent=2))
 
 def notify(message,receipt):
-    command([python,'learning/scripts/notify_sttw_job.py','--message',message,'--receipt',str(receipt)],q/'notifications.log')
+    log=q/'notifications.log'
+    with log.open('a') as f:
+        result=subprocess.run([python,'learning/scripts/notify_sttw_job.py','--message',message,'--receipt',str(receipt)],stdout=f,stderr=subprocess.STDOUT)
+    if result.returncode:
+        receipt.write_text(json.dumps(dict(status='failed',time_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),message=message,exit_code=result.returncode,log=str(log)),ensure_ascii=False,indent=2)+'\n')
 
 def postprocess(item,plots=False):
     r=Path(item['path']);started=time.monotonic()

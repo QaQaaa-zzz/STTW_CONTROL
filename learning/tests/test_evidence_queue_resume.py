@@ -25,3 +25,35 @@ class EvidenceResumeTests(unittest.TestCase):
    self.assertNotEqual(result.returncode,0)
    self.assertIn('unfinished physical cases',result.stderr)
    self.assertFalse((root/'batches').exists())
+
+class EvidenceNotificationTests(unittest.TestCase):
+ def test_notification_failure_does_not_invalidate_completed_work(self):
+  import runpy
+  from unittest.mock import patch
+  entry=ENTRY.with_name('run_evidence_queue.py')
+  original_run=subprocess.run
+  with tempfile.TemporaryDirectory() as directory:
+   root=Path(directory);marker=root/'analysis_complete'
+   (root/'plan.json').write_text(json.dumps(dict(stages=[],total_episodes=0,overlap_cpu_analysis=True,final_analysis_command=[sys.executable,'-c',f'from pathlib import Path; Path({str(marker)!r}).write_text("done")'])))
+   def run(args,**kwargs):
+    if 'learning/scripts/notify_sttw_job.py' in args:return subprocess.CompletedProcess(args,1)
+    return original_run(args,**kwargs)
+   with patch.object(sys,'argv',[str(entry),'--queue',str(root)]),patch.object(subprocess,'run',side_effect=run):
+    runpy.run_path(str(entry),run_name='__main__')
+   self.assertTrue(marker.exists())
+   self.assertEqual(json.loads((root/'status.json').read_text())['stage'],'complete')
+   self.assertEqual(json.loads((root/'completion_notice.json').read_text())['status'],'failed')
+
+ def test_simulation_failure_still_stops_queue(self):
+  import runpy
+  from unittest.mock import patch
+  entry=ENTRY.with_name('run_evidence_queue.py')
+  with tempfile.TemporaryDirectory() as directory:
+   root=Path(directory);stage=root/'stage';stage.mkdir()
+   (root/'plan.json').write_text(json.dumps(dict(stages=[dict(name='fixture',path=str(stage),contexts=1,episodes=6)],total_episodes=6)))
+   def run(args,**kwargs):
+    if 'learning/scripts/notify_sttw_job.py' in args:return subprocess.CompletedProcess(args,1)
+    raise subprocess.CalledProcessError(2,args)
+   with patch.object(sys,'argv',[str(entry),'--queue',str(root)]),patch.object(subprocess,'run',side_effect=run):
+    with self.assertRaises(subprocess.CalledProcessError):runpy.run_path(str(entry),run_name='__main__')
+   self.assertEqual(json.loads((root/'status.json').read_text())['stage'],'error')
