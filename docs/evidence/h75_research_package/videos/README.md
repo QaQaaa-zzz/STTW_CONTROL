@@ -10,3 +10,5 @@
 - [ridge100_v2.6_layout1_seed402](ridge100_v2.6_layout1_seed402.mp4)
 - [ridge100_v2.6_layout1_seed403](ridge100_v2.6_layout1_seed403.mp4)
 - [ridge100_v2.6_layout1_seed404](ridge100_v2.6_layout1_seed404.mp4)
+
+[两个布局排序反转的理论与数据分析](../layout_reversal/README.md)
