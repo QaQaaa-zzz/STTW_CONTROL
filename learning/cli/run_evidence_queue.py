@@ -40,8 +40,12 @@ try:
         command([python,'learning/cli/summarize_alpha_schedules.py','--run',str(r)],r/'analysis.log')
         if item.get('state_selection'):
             command([python,'learning/cli/analyze_state_alpha_scan.py','--run',str(r)],r/'state_selection.log')
+        if item.get('analysis_command'):
+            command(item['analysis_command'],r/'factor_analysis.log')
         completed.append(current)
         notify(f'STTW阶段完成：{current}，{item["contexts"]}工况/{item["episodes"]}条；结果{r}/ANALYSIS.md。后续自动排队。',r/'completion_notice.json')
+    if plan.get('final_analysis_command'):
+        command(plan['final_analysis_command'],q/'final_analysis.log')
     status('complete',completed=completed)
     notify(f'STTW全部证据队列完成：{plan["total_episodes"]}条，{len(plan["stages"])}阶段；索引{q}/README.md',q/'completion_notice.json')
 except Exception as error:

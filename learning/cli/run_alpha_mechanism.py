@@ -17,7 +17,7 @@ if spec.get('batch_cases'):
    if index.exists():shutil.copy2(index,out/'omitted_contact_record_index.json')
    shutil.rmtree(contacts)
  futures=[]
- with ThreadPoolExecutor(max_workers=1) as plots:
+ with ThreadPoolExecutor(max_workers=spec.get("plot_workers",1)) as plots:
   pending=[]
   for job in jobs:
    out=r/job['name']
@@ -39,7 +39,7 @@ if spec.get('batch_cases'):
     while folder.exists():
      batch_index+=1;folder=r/'batches'/f'batch_{batch_index:03d}'
     manifest=r/f'batch_{batch_index:03d}.json';manifest.write_text(json.dumps(cases,indent=2))
-    command=[lab,'-u','learning/cli/evaluate_isaac_gpu.py','--backend','lab','--bundle','runs/h75_selected_local300_flat/bundle','--config',batch[0]['config'],'--terrain',batch[0]['terrain'],'--output',str(folder),'--seconds','10','--case-manifest',str(manifest)]
+    command=[lab,'-u','learning/cli/evaluate_isaac_gpu.py','--backend','lab','--bundle',spec.get('bundle','runs/h75_selected_local300_flat/bundle'),'--config',batch[0]['config'],'--terrain',batch[0]['terrain'],'--output',str(folder),'--seconds','10','--case-manifest',str(manifest)]
     (r/'status.json').write_text(json.dumps(dict(status,batch=[job['name'] for job in batch]),indent=2))
     with (r/f'batch_{batch_index:03d}.log').open('w') as log:subprocess.run(command,stdout=log,stderr=subprocess.STDOUT,check=True)
     futures.extend(plots.submit(plot_job,job) for job in batch);status['completed']+=len(batch);batch_index+=1
@@ -50,7 +50,7 @@ if spec.get('batch_cases'):
 for job in jobs:
  out=r/job['name'];(r/'status.json').write_text(json.dumps(status,indent=2))
  protocol=job.get('protocol',str(r/'protocol.json'))
- command=[lab,'-u','learning/cli/evaluate_isaac_gpu.py','--backend','lab','--bundle','runs/h75_selected_local300_flat/bundle','--config',job['config'],'--terrain',job['terrain'],'--output',str(out),'--seconds','10']
+ command=[lab,'-u','learning/cli/evaluate_isaac_gpu.py','--backend','lab','--bundle',spec.get('bundle','runs/h75_selected_local300_flat/bundle'),'--config',job['config'],'--terrain',job['terrain'],'--output',str(out),'--seconds','10']
  if (spec.get('configured_lanes') or spec.get('natural_switch')):
   command+=['--configured-lanes']
  else:

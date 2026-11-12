@@ -1,0 +1,699 @@
+{
+  "source": {
+    "actuator_disable_contract": "cpu_bitmask_mjx_zero_stateless_fixed_affine_v1",
+    "source_xml_sha256": "053b2bd96634ad69edf35c6328b2f219486a03fb8ba3f80c402e1fcc696869cd",
+    "portable_xml_sha256": "9e5c7de46245008e0efd9d3ab3729bfb987a87f79c08a2159459e562a0f4ba56",
+    "assets": {
+      "meshes/chasis_link.STL": "01be830a25ac010bfd465f7d6839e94cd01b0304fa51105fead09d7c537510c3",
+      "meshes/frontfork_link.STL": "ad45d498d8b886f2977f0ab5093a2d74e3bf8345d91f9b7650faec9b2735b35b",
+      "meshes/frontsuspension_link.STL": "5101b8a5db1e864b59f926c33e52a6429fb70b4f62df655cfb2a1d695e416220",
+      "meshes/frontwheel_link.STL": "c5bdeeb0bad8e2f9a779307593f75bf54781274dc45179a84f93273c05a36337",
+      "meshes/rearsuspension_link.STL": "84963c406d91fba9fbdfac7dad82a3c58fca0507b6a418107867c88df7827680",
+      "meshes/rearwheel_link.STL": "5551b3e5c6abb5016623b2c17d8d35ada89f82d12a914e5fcd05b20ecec786cc"
+    },
+    "transform": "remove_unused_torus_assets_disable_startup_position_servo",
+    "mujoco_version": "3.10.0"
+  },
+  "exported_xml_sha256": "7675e69a7d8368387b6869dbb61d2282a05fd8151587b85fa1f85ce689c54695",
+  "imu_site_quat_wxyz": [
+    0.7070966437111191,
+    -0.7070992410268896,
+    0.0035355256678974516,
+    -0.0035355126812103765
+  ],
+  "timestep_s": 0.0002,
+  "bodies": [
+    {
+      "name": "chasis",
+      "position": [
+        0.0,
+        0.0,
+        0.254
+      ],
+      "quat_wxyz": [
+        0.7070966437111191,
+        0.7070992410268896,
+        -0.0035355126812103765,
+        0.0035355256678974516
+      ],
+      "mass": 2.6709,
+      "inertia": [
+        0.00732482,
+        0.00696271,
+        0.00233007
+      ],
+      "inertial_pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "inertial_quat_wxyz": [
+        -0.09533798637329494,
+        0.6985839001510611,
+        0.06883099016195288,
+        0.7057998991196748
+      ],
+      "inertia_body": [
+        [
+          0.002576899237716139,
+          -0.0010382994717121627,
+          -6.738700644442851e-05
+        ],
+        [
+          -0.0010382994717121627,
+          0.006717399205490904,
+          -2.9357445489999094e-05
+        ],
+        [
+          -6.738700644442851e-05,
+          -2.935744548999917e-05,
+          0.007323301556792965
+        ]
+      ]
+    },
+    {
+      "name": "frontfork",
+      "position": [
+        0.0965134075033728,
+        -7.674794742814011e-08,
+        0.2758602109908464
+      ],
+      "quat_wxyz": [
+        0.6895706484374611,
+        0.6895731869981756,
+        -0.15649490817244377,
+        0.15649435869326792
+      ],
+      "mass": 0.60059,
+      "inertia": [
+        0.000652809,
+        0.00044826,
+        0.000315451
+      ],
+      "inertial_pos": [
+        0.015593,
+        -0.028725,
+        0.0
+      ],
+      "inertial_quat_wxyz": [
+        0.7070992648175612,
+        0.7070992648175612,
+        0.003260321221031272,
+        0.003260321221031272
+      ],
+      "inertia_body": [
+        [
+          0.0006527803125101705,
+          3.1108087729306906e-06,
+          0.0
+        ],
+        [
+          3.11080877293069e-06,
+          0.00031547968748982914,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0004482599999999998
+        ]
+      ]
+    },
+    {
+      "name": "frontsuspension",
+      "position": [
+        0.20204244681538025,
+        5.669387251177135e-07,
+        0.10166835049940308
+      ],
+      "quat_wxyz": [
+        0.6895706484374611,
+        0.6895731869981756,
+        -0.15649490817244377,
+        0.15649435869326792
+      ],
+      "mass": 0.13737,
+      "inertia": [
+        6.8261e-05,
+        6.1561e-05,
+        1.4167e-05
+      ],
+      "inertial_pos": [
+        0.0,
+        0.012836,
+        0.0
+      ],
+      "inertial_quat_wxyz": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "inertia_body": [
+        [
+          6.8261e-05,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          6.1561e-05,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.4167e-05
+        ]
+      ]
+    },
+    {
+      "name": "frontwheel",
+      "position": [
+        0.20204244681538025,
+        5.669387251177135e-07,
+        0.10166835049940308
+      ],
+      "quat_wxyz": [
+        0.7070966437111191,
+        0.7070992410268898,
+        -0.0035355126812103566,
+        0.0035355256678974434
+      ],
+      "mass": 0.47237,
+      "inertia": [
+        0.002032,
+        0.0010678,
+        0.0010677
+      ],
+      "inertial_pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "inertial_quat_wxyz": [
+        0.5,
+        0.5,
+        -0.5,
+        0.5
+      ],
+      "inertia_body": [
+        [
+          0.0010678,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0010677,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.002032
+        ]
+      ]
+    },
+    {
+      "name": "rearsuspension",
+      "position": [
+        -0.02009284384415612,
+        1.2640968042462017e-07,
+        0.21938334409220933
+      ],
+      "quat_wxyz": [
+        0.7070966437111191,
+        0.7070992410268896,
+        -0.0035355126812103765,
+        0.0035355256678974516
+      ],
+      "mass": 0.83342,
+      "inertia": [
+        0.0015951,
+        0.00159009,
+        0.000393403
+      ],
+      "inertial_pos": [
+        -0.11047,
+        -0.091964,
+        0.0
+      ],
+      "inertial_quat_wxyz": [
+        -0.2571278688209801,
+        0.660950662802556,
+        0.25171987157998005,
+        0.6585336640356371
+      ],
+      "inertia_body": [
+        [
+          0.000932891239514924,
+          -0.0005954418866728583,
+          4.176125784751369e-07
+        ],
+        [
+          -0.0005954418866728583,
+          0.001050602340954752,
+          3.218152647424885e-07
+        ],
+        [
+          4.176125784751371e-07,
+          3.21815264742489e-07,
+          0.001595099419530325
+        ]
+      ]
+    },
+    {
+      "name": "rearwheel",
+      "position": [
+        -0.15942493825094206,
+        5.528320608655498e-07,
+        0.10189417196117137
+      ],
+      "quat_wxyz": [
+        0.7070966437111191,
+        0.7070992410268896,
+        -0.0035355126812103765,
+        0.0035355256678974516
+      ],
+      "mass": 0.71956,
+      "inertia": [
+        0.0021738,
+        0.0011426,
+        0.0011424
+      ],
+      "inertial_pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "inertial_quat_wxyz": [
+        0.0,
+        0.7071067811865475,
+        0.0,
+        0.7071067811865475
+      ],
+      "inertia_body": [
+        [
+          0.0011423999999999996,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0011425999999999995,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.002173799999999999
+        ]
+      ]
+    }
+  ],
+  "joints": [
+    {
+      "name": "steering_joint",
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "limited": true,
+      "range": [
+        -0.8,
+        0.8
+      ],
+      "spring_reference": 0.0,
+      "stiffness": 0.0,
+      "damping": 0.0
+    },
+    {
+      "name": "frontwheel_joint",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "limited": false,
+      "range": [
+        0.0,
+        0.0
+      ],
+      "spring_reference": 0.0,
+      "stiffness": 0.0,
+      "damping": 0.0
+    },
+    {
+      "name": "rearsuspension_joint",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "limited": true,
+      "range": [
+        -0.05,
+        0.05
+      ],
+      "spring_reference": 0.0,
+      "stiffness": 150.59394318797962,
+      "damping": 3.0118788637595926
+    },
+    {
+      "name": "rearwheel_joint",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "limited": false,
+      "range": [
+        0.0,
+        0.0
+      ],
+      "spring_reference": 0.0,
+      "stiffness": 0.0,
+      "damping": 0.0
+    }
+  ],
+  "actuators": [
+    {
+      "name": "cmd_steering_p",
+      "joint": "steering_joint",
+      "enabled": false,
+      "gain": [
+        10.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bias": [
+        0.0,
+        -10.0,
+        -0.1,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "gear": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "control_limited": true,
+      "force_limited": true,
+      "ctrlrange": [
+        -0.8,
+        0.8
+      ],
+      "forcerange": [
+        -1.0,
+        1.0
+      ]
+    },
+    {
+      "name": "cmd_rearwheel_v",
+      "joint": "rearwheel_joint",
+      "enabled": true,
+      "gain": [
+        3.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bias": [
+        0.0,
+        0.0,
+        -3.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "gear": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "control_limited": true,
+      "force_limited": true,
+      "ctrlrange": [
+        -60.0,
+        60.0
+      ],
+      "forcerange": [
+        -3.0,
+        3.0
+      ]
+    },
+    {
+      "name": "cmd_steering_v",
+      "joint": "steering_joint",
+      "enabled": true,
+      "gain": [
+        20.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bias": [
+        0.0,
+        0.0,
+        -20.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "gear": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "control_limited": true,
+      "force_limited": true,
+      "ctrlrange": [
+        -3.0,
+        3.0
+      ],
+      "forcerange": [
+        -1.0,
+        1.0
+      ]
+    },
+    {
+      "name": "cmd_steering_vint",
+      "joint": "steering_joint",
+      "enabled": true,
+      "gain": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "bias": [
+        0.0,
+        -0.0,
+        -0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "gear": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "control_limited": true,
+      "force_limited": true,
+      "ctrlrange": [
+        -3.0,
+        3.0
+      ],
+      "forcerange": [
+        -1.0,
+        1.0
+      ]
+    }
+  ],
+  "ground_friction": [
+    0.8,
+    0.005,
+    0.0001
+  ],
+  "actor_collision_filter": 1,
+  "root_translation": "0 0 0.254",
+  "vehicle_geoms": [
+    {
+      "body": "chasis",
+      "type": 6,
+      "size": [
+        0.2,
+        0.06,
+        0.05
+      ],
+      "friction": [
+        0.8,
+        0.005,
+        0.0001
+      ]
+    },
+    {
+      "body": "frontfork",
+      "type": 6,
+      "size": [
+        0.025,
+        0.15,
+        0.055
+      ],
+      "friction": [
+        0.8,
+        0.005,
+        0.0001
+      ]
+    },
+    {
+      "body": "frontsuspension",
+      "type": 6,
+      "size": [
+        0.015,
+        0.025,
+        0.05
+      ],
+      "friction": [
+        0.8,
+        0.005,
+        0.0001
+      ]
+    },
+    {
+      "body": "frontwheel",
+      "type": 4,
+      "size": [
+        0.1,
+        0.1,
+        0.025
+      ],
+      "friction": [
+        0.8,
+        0.005,
+        0.0001
+      ]
+    },
+    {
+      "body": "rearsuspension",
+      "type": 6,
+      "size": [
+        0.11,
+        0.035,
+        0.055
+      ],
+      "friction": [
+        0.8,
+        0.005,
+        0.0001
+      ]
+    },
+    {
+      "body": "rearwheel",
+      "type": 4,
+      "size": [
+        0.1,
+        0.1,
+        0.025
+      ],
+      "friction": [
+        0.8,
+        0.005,
+        0.0001
+      ]
+    }
+  ],
+  "differences": [
+    "Ellipsoid wheels explicitly sampled to 226-vertex convex OBJ; analytic contact not preserved.",
+    "PhysX solver/contact offsets and friction semantics require explicit calibration.",
+    "Actuators/sensors removed from import; implement their source contracts in runtime.",
+    "Visual-only meshes omitted; collision primitives and body inertias retained.",
+    "Restore rigid-body AND DOF states after prepare_sim; it alters states at public time zero."
+  ],
+  "asset_format": "urdf",
+  "meshes": {
+    "ellipsoid_0.1_0.1_0.025.obj": {
+      "sha256": "5b8ac347bf98373f285f5da56a7cbb6f3355c3a6364638ab4f2164406b515c1f",
+      "vertices": 226,
+      "faces": 448,
+      "source_semiaxes_m": [
+        0.1,
+        0.1,
+        0.025
+      ],
+      "polar_segments": 8,
+      "azimuth_segments": 32
+    }
+  },
+  "urdf_joint_effort_semantics": "1000 is importer metadata; runtime source actuator limits and passive torques are authoritative",
+  "root_quat_wxyz": [
+    0.7070966437111191,
+    0.7070992410268896,
+    -0.0035355126812103765,
+    0.0035355256678974516
+  ],
+  "geometry_variant": {
+    "parent_asset": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/isaac_urdf_drive/vehicle.urdf",
+    "scale": 0.9,
+    "delta_steering_head_x_m": -0.040162819660230435,
+    "controller_updated": false
+  }
+}

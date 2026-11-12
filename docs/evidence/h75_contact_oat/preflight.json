@@ -1,0 +1,15 @@
+{
+  "stage": "CPU_geometry_checks_passed",
+  "urdf_variants": 5,
+  "terrain_array_parity": "exact",
+  "rotated_route_velocity_inverse_checks": 2,
+  "extra_simulation_episodes": 0,
+  "analysis_archived_fixture": {
+    "episodes": 48,
+    "result": "same raw archived outcomes reproduced, no simulation",
+    "counts_checked": [
+      "layout0 alpha0 4/4",
+      "layout1 alpha1 full4/4 hold2/4"
+    ]
+  }
+}

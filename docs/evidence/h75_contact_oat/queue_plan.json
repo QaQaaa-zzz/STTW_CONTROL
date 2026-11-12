@@ -1,0 +1,138 @@
+{
+  "stages": [
+    {
+      "name": "position",
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/position",
+      "contexts": 112,
+      "episodes": 672,
+      "analysis_command": [
+        "/home/qy/miniconda3/envs/mjp/bin/python",
+        "learning/cli/analyze_contact_oat.py",
+        "--root",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat",
+        "--stage",
+        "position"
+      ]
+    },
+    {
+      "name": "slope",
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/slope",
+      "contexts": 96,
+      "episodes": 576,
+      "analysis_command": [
+        "/home/qy/miniconda3/envs/mjp/bin/python",
+        "learning/cli/analyze_contact_oat.py",
+        "--root",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat",
+        "--stage",
+        "slope"
+      ]
+    },
+    {
+      "name": "wheelbase_0.9",
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/wheelbase_0.9",
+      "contexts": 24,
+      "episodes": 144,
+      "analysis_command": [
+        "/home/qy/miniconda3/envs/mjp/bin/python",
+        "learning/cli/analyze_contact_oat.py",
+        "--root",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat",
+        "--stage",
+        "wheelbase_0.9"
+      ]
+    },
+    {
+      "name": "wheelbase_1.1",
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/wheelbase_1.1",
+      "contexts": 24,
+      "episodes": 144,
+      "analysis_command": [
+        "/home/qy/miniconda3/envs/mjp/bin/python",
+        "learning/cli/analyze_contact_oat.py",
+        "--root",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat",
+        "--stage",
+        "wheelbase_1.1"
+      ]
+    },
+    {
+      "name": "wheelbase_1.2",
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/wheelbase_1.2",
+      "contexts": 24,
+      "episodes": 144,
+      "analysis_command": [
+        "/home/qy/miniconda3/envs/mjp/bin/python",
+        "learning/cli/analyze_contact_oat.py",
+        "--root",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat",
+        "--stage",
+        "wheelbase_1.2"
+      ]
+    },
+    {
+      "name": "wheelbase_1.3",
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/wheelbase_1.3",
+      "contexts": 24,
+      "episodes": 144,
+      "analysis_command": [
+        "/home/qy/miniconda3/envs/mjp/bin/python",
+        "learning/cli/analyze_contact_oat.py",
+        "--root",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat",
+        "--stage",
+        "wheelbase_1.3"
+      ]
+    },
+    {
+      "name": "obliquity",
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/obliquity",
+      "contexts": 32,
+      "episodes": 192,
+      "analysis_command": [
+        "/home/qy/miniconda3/envs/mjp/bin/python",
+        "learning/cli/analyze_contact_oat.py",
+        "--root",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat",
+        "--stage",
+        "obliquity"
+      ]
+    },
+    {
+      "name": "world_yaw45",
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/world_yaw45",
+      "contexts": 8,
+      "episodes": 48,
+      "analysis_command": [
+        "/home/qy/miniconda3/envs/mjp/bin/python",
+        "learning/cli/analyze_contact_oat.py",
+        "--root",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat",
+        "--stage",
+        "world_yaw45"
+      ]
+    },
+    {
+      "name": "world_yaw90",
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/world_yaw90",
+      "contexts": 8,
+      "episodes": 48,
+      "analysis_command": [
+        "/home/qy/miniconda3/envs/mjp/bin/python",
+        "learning/cli/analyze_contact_oat.py",
+        "--root",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat",
+        "--stage",
+        "world_yaw90"
+      ]
+    }
+  ],
+  "total_episodes": 2112,
+  "optimizer_updates": 0,
+  "final_analysis_command": [
+    "/home/qy/miniconda3/envs/mjp/bin/python",
+    "learning/cli/analyze_contact_oat.py",
+    "--root",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat"
+  ]
+}

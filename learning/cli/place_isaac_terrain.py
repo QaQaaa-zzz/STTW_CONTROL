@@ -20,21 +20,24 @@ if a.terrain in ('bend_bump', 'bend_ramp', 'route_rough', 'route_waves'):
     axis = np.arange(cfg['bounds_m'][0], cfg['bounds_m'][1] + spacing / 2, spacing)
     x, y = np.meshgrid(axis, axis, indexing='ij')
     points = np.stack((x.ravel(), y.ravel()), axis=-1)
-    # Project onto the fixed route; the terrain never follows the vehicle.
-    ids = np.flatnonzero(route['s'] <= float(route['turn_end']) + (6 if a.terrain.startswith('route_') else 3))
-    xy = route['xy'][ids]
-    start, edge = xy[:-1], np.diff(xy, axis=0)
-    ss, lateral = [], []
-    for chunk in np.array_split(points, 32):
-        delta = chunk[:, None, :] - start
-        fraction = np.clip((delta * edge).sum(-1) / (edge * edge).sum(-1), 0, 1)
-        offset = delta - fraction[..., None] * edge
-        nearest = (offset * offset).sum(-1).argmin(-1)
-        row = np.arange(len(chunk))
-        ss.append(route['s'][ids[:-1]][nearest] + fraction[row, nearest] * np.diff(route['s'][ids])[nearest])
-        tangent = edge[nearest] / np.linalg.norm(edge[nearest], axis=-1)[:, None]
-        lateral.append(tangent[:, 0] * offset[row, nearest, 1] - tangent[:, 1] * offset[row, nearest, 0])
-    s, n = np.concatenate(ss), np.concatenate(lateral)
+    if cfg.get('projection_cache'):
+        projection=np.load(cfg['projection_cache']);s,n=projection['s'],projection['n']
+    else:
+        # Project onto the fixed route; the terrain never follows the vehicle.
+        ids = np.flatnonzero(route['s'] <= float(route['turn_end']) + (6 if a.terrain.startswith('route_') else 3))
+        xy = route['xy'][ids]
+        start, edge = xy[:-1], np.diff(xy, axis=0)
+        ss, lateral = [], []
+        for chunk in np.array_split(points, 32):
+            delta = chunk[:, None, :] - start
+            fraction = np.clip((delta * edge).sum(-1) / (edge * edge).sum(-1), 0, 1)
+            offset = delta - fraction[..., None] * edge
+            nearest = (offset * offset).sum(-1).argmin(-1)
+            row = np.arange(len(chunk))
+            ss.append(route['s'][ids[:-1]][nearest] + fraction[row, nearest] * np.diff(route['s'][ids])[nearest])
+            tangent = edge[nearest] / np.linalg.norm(edge[nearest], axis=-1)[:, None]
+            lateral.append(tangent[:, 0] * offset[row, nearest, 1] - tangent[:, 1] * offset[row, nearest, 0])
+        s, n = np.concatenate(ss), np.concatenate(lateral)
     if a.terrain.startswith('route_'):
         np.random.seed(cfg['seed'])
         tile = terrain_utils.SubTerrain(a.terrain, width=len(axis), length=len(axis),

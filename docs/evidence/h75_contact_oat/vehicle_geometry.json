@@ -1,0 +1,157 @@
+[
+  {
+    "scale": 1.0,
+    "asset": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/isaac_urdf_drive/vehicle.urdf",
+    "steering_head_delta_local_x_m": 0.0,
+    "zero_pose_projected_axle_distance_m": 0.4016281966023044,
+    "controller_wheelbase_m": 0.408,
+    "total_mass_kg": 5.43421,
+    "zero_pose_com_world_m": [
+      0.004074392562654375,
+      2.0634015536979909e-07,
+      0.19786351940073488
+    ],
+    "zero_pose_inertia_com_world_kg_m2": [
+      [
+        0.03313263670086413,
+        6.671784553650249e-05,
+        -0.012383749234170504
+      ],
+      [
+        6.671784553650249e-05,
+        0.12390505677657446,
+        2.981331377834201e-05
+      ],
+      [
+        -0.012383749234170504,
+        2.9813313778341936e-05,
+        0.09398216655048001
+      ]
+    ],
+    "changed_parameter": "steering-head local x mount only; fixed local masses and inertias"
+  },
+  {
+    "scale": 0.9,
+    "asset": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/assets/wheelbase_0.9/vehicle.urdf",
+    "steering_head_delta_local_x_m": -0.040162819660230435,
+    "zero_pose_projected_axle_distance_m": 0.3614673850663226,
+    "controller_wheelbase_m": 0.408,
+    "total_mass_kg": 5.43421,
+    "zero_pose_com_world_m": [
+      -0.004870391504642417,
+      2.0634015536979909e-07,
+      0.19777406857834795
+    ],
+    "zero_pose_inertia_com_world_kg_m2": [
+      [
+        0.03314985961332227,
+        6.67213345628508e-05,
+        -0.013156076732504261
+      ],
+      [
+        6.67213345628508e-05,
+        0.10616498771682803,
+        2.9813348669768548e-05
+      ],
+      [
+        -0.013156076732504261,
+        2.9813348669768476e-05,
+        0.07622487457827543
+      ]
+    ],
+    "changed_parameter": "steering-head local x mount only; fixed local masses and inertias"
+  },
+  {
+    "scale": 1.1,
+    "asset": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/assets/wheelbase_1.1/vehicle.urdf",
+    "steering_head_delta_local_x_m": 0.04016281966023048,
+    "zero_pose_projected_axle_distance_m": 0.44178900813828637,
+    "controller_wheelbase_m": 0.408,
+    "total_mass_kg": 5.43421,
+    "zero_pose_com_world_m": [
+      0.01301917662995119,
+      2.0634015536979909e-07,
+      0.1979529702231218
+    ],
+    "zero_pose_inertia_com_world_kg_m2": [
+      [
+        0.033115717277341056,
+        6.671435651015415e-05,
+        -0.011641769617707055
+      ],
+      [
+        6.671435651015415e-05,
+        0.14468011635200742,
+        2.9813278886915474e-05
+      ],
+      [
+        -0.011641769617707055,
+        2.98132788869154e-05,
+        0.11477414554943602
+      ]
+    ],
+    "changed_parameter": "steering-head local x mount only; fixed local masses and inertias"
+  },
+  {
+    "scale": 1.2,
+    "asset": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/assets/wheelbase_1.2/vehicle.urdf",
+    "steering_head_delta_local_x_m": 0.08032563932046087,
+    "zero_pose_projected_axle_distance_m": 0.4819498196742682,
+    "controller_wheelbase_m": 0.408,
+    "total_mass_kg": 5.43421,
+    "zero_pose_com_world_m": [
+      0.021963960697247983,
+      2.0634015536979909e-07,
+      0.1980424210455087
+    ],
+    "zero_pose_inertia_com_world_kg_m2": [
+      [
+        0.03309910134275305,
+        6.671086748380581e-05,
+        -0.010930137883113932
+      ],
+      [
+        6.671086748380581e-05,
+        0.16849016644312675,
+        2.9813243995488934e-05
+      ],
+      [
+        -0.010930137883113932,
+        2.981324399548886e-05,
+        0.13860081157514337
+      ]
+    ],
+    "changed_parameter": "steering-head local x mount only; fixed local masses and inertias"
+  },
+  {
+    "scale": 1.3,
+    "asset": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/assets/wheelbase_1.3/vehicle.urdf",
+    "steering_head_delta_local_x_m": 0.12048845898069134,
+    "zero_pose_projected_axle_distance_m": 0.5221106312102501,
+    "controller_wheelbase_m": 0.408,
+    "total_mass_kg": 5.43421,
+    "zero_pose_com_world_m": [
+      0.03090874476454479,
+      2.0634015536979909e-07,
+      0.19813187186789571
+    ],
+    "zero_pose_inertia_com_world_kg_m2": [
+      [
+        0.0330827888971001,
+        6.670737845745748e-05,
+        -0.010248854030391136
+      ],
+      [
+        6.670737845745748e-05,
+        0.19533520704993257,
+        2.9813209104062394e-05
+      ],
+      [
+        -0.010248854030391136,
+        2.981320910406232e-05,
+        0.16546216462760213
+      ]
+    ],
+    "changed_parameter": "steering-head local x mount only; fixed local masses and inertias"
+  }
+]
