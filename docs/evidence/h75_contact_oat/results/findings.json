@@ -1,0 +1,144 @@
+{
+  "slope": [
+    {
+      "length": 0.4,
+      "n": 80,
+      "full": 0,
+      "physical": 74,
+      "hold": 0,
+      "unload": 0.39712499999999995
+    },
+    {
+      "length": 0.6,
+      "n": 80,
+      "full": 11,
+      "physical": 51,
+      "hold": 7,
+      "unload": 0.31431249999999994
+    },
+    {
+      "length": 0.8,
+      "n": 80,
+      "full": 30,
+      "physical": 39,
+      "hold": 24,
+      "unload": 0.2745
+    },
+    {
+      "length": 1,
+      "n": 80,
+      "full": 78,
+      "physical": 1,
+      "hold": 75,
+      "unload": 0.1359375
+    },
+    {
+      "length": 1.2,
+      "n": 80,
+      "full": 80,
+      "physical": 0,
+      "hold": 79,
+      "unload": 0.1094375
+    },
+    {
+      "length": 1.6,
+      "n": 80,
+      "full": 80,
+      "physical": 0,
+      "hold": 80,
+      "unload": 0.0659375
+    },
+    {
+      "length": 2,
+      "n": 80,
+      "full": 80,
+      "physical": 0,
+      "hold": 80,
+      "unload": 0.0485625
+    }
+  ],
+  "wheelbase": [
+    {
+      "scale": 0.9,
+      "n": 80,
+      "full": 17,
+      "physical": 28,
+      "hold": 10,
+      "unload": 0.28468750000000004
+    },
+    {
+      "scale": 1,
+      "n": 80,
+      "full": 30,
+      "physical": 39,
+      "hold": 24,
+      "unload": 0.2745
+    },
+    {
+      "scale": 1.1,
+      "n": 80,
+      "full": 11,
+      "physical": 47,
+      "hold": 8,
+      "unload": 0.25793750000000004
+    },
+    {
+      "scale": 1.2,
+      "n": 80,
+      "full": 1,
+      "physical": 61,
+      "hold": 0,
+      "unload": 0.26512500000000006
+    },
+    {
+      "scale": 1.3,
+      "n": 80,
+      "full": 5,
+      "physical": 64,
+      "hold": 0,
+      "unload": 0.2495625
+    }
+  ],
+  "obliquity": [
+    {
+      "obliquity": -0.5,
+      "n": 40,
+      "full": 0,
+      "physical": 39,
+      "hold": 0,
+      "unload": 0.2355
+    },
+    {
+      "obliquity": -0.25,
+      "n": 40,
+      "full": 0,
+      "physical": 39,
+      "hold": 0,
+      "unload": 0.256
+    },
+    {
+      "obliquity": 0,
+      "n": 40,
+      "full": 6,
+      "physical": 27,
+      "hold": 6,
+      "unload": 0.22962500000000002
+    },
+    {
+      "obliquity": 0.25,
+      "n": 40,
+      "full": 19,
+      "physical": 17,
+      "hold": 18,
+      "unload": 0.238625
+    },
+    {
+      "obliquity": 0.5,
+      "n": 40,
+      "full": 22,
+      "physical": 11,
+      "hold": 16,
+      "unload": 0.20249999999999999
+    }
+  ]
+}

@@ -33,3 +33,7 @@
 ## 完成通知故障修复
 
 本轮9阶段和2112回合已完成；最后阶段Bark的SSL握手超时曾使队列误报error、跳过最终汇总。通知现在单独写sent/failed回执，失败不影响实验完成状态；真实仿真/分析错误仍停止。4项CPU恢复/通知测试通过。恢复时复用全部完成阶段，仅执行最终CPU汇总；原错误状态保留在外盘queue/error_before_notification_fix.json，网络错误日志保留。
+
+## 已完成结果（2112/2112）
+
+[核心结论与图](results/INTERPRETATION.md)；[全部逐回合数据](results/episodes.csv)；[全部条件统计](results/summary.json)。
