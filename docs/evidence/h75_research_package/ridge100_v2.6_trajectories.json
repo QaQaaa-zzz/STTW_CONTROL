@@ -1,0 +1,67 @@
+{
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test",
+  "scope": "Eight unchanged original trajectory.npz files; configurations already supplied separately.",
+  "files": [
+    {
+      "archive": "ridge100_v2.6_layout0_trajectories.zip",
+      "path": "ridge100_v2.6_layout0_seed401/trajectory.npz",
+      "bytes": 10029605,
+      "sha256": "c584160e6f900b5a572aa36e6200f583bccc2b2e93a54612e71be166bd79009f"
+    },
+    {
+      "archive": "ridge100_v2.6_layout0_trajectories.zip",
+      "path": "ridge100_v2.6_layout0_seed402/trajectory.npz",
+      "bytes": 9095401,
+      "sha256": "f9e628deac4ba911e1dcd326cf2020f7b9065f228f1b4258f65ea119194439c0"
+    },
+    {
+      "archive": "ridge100_v2.6_layout0_trajectories.zip",
+      "path": "ridge100_v2.6_layout0_seed403/trajectory.npz",
+      "bytes": 9242874,
+      "sha256": "40c9c48c6bf1d332c6401fef5293dd32fac65d7f8ddb2fac991b34ba5ca10b9e"
+    },
+    {
+      "archive": "ridge100_v2.6_layout0_trajectories.zip",
+      "path": "ridge100_v2.6_layout0_seed404/trajectory.npz",
+      "bytes": 9832020,
+      "sha256": "a9ab4c752a60aa1754ed48c2cbeff6c6c5ad89c513ae9cd19f784b2ff083e6ae"
+    },
+    {
+      "archive": "ridge100_v2.6_layout1_trajectories.zip",
+      "path": "ridge100_v2.6_layout1_seed401/trajectory.npz",
+      "bytes": 10381650,
+      "sha256": "40bf5fe7d3ab8e79d48b2a0cfebd832a75723988fb3616f92501f4d4a7802b0a"
+    },
+    {
+      "archive": "ridge100_v2.6_layout1_trajectories.zip",
+      "path": "ridge100_v2.6_layout1_seed402/trajectory.npz",
+      "bytes": 9695160,
+      "sha256": "73e22417a419f6f010c32626ed6bc2237c4c66365dda43ce899fa50225541898"
+    },
+    {
+      "archive": "ridge100_v2.6_layout1_trajectories.zip",
+      "path": "ridge100_v2.6_layout1_seed403/trajectory.npz",
+      "bytes": 10123339,
+      "sha256": "bcee10afabc7db64b0498393875af6ab371ae7285c83af9c24975d8963068f61"
+    },
+    {
+      "archive": "ridge100_v2.6_layout1_trajectories.zip",
+      "path": "ridge100_v2.6_layout1_seed404/trajectory.npz",
+      "bytes": 10487013,
+      "sha256": "74cda431b0b400d3ea52d112d6bb6a38978590e3240e97a82b1b0caedd6b225f"
+    }
+  ],
+  "archives": [
+    {
+      "path": "ridge100_v2.6_layout0_trajectories.zip",
+      "bytes": 38200578,
+      "sha256": "81b43fbec7e7c63e171fa3289247e7032f268142a9893ee7209e0141548aa141"
+    },
+    {
+      "path": "ridge100_v2.6_layout1_trajectories.zip",
+      "bytes": 40687840,
+      "sha256": "185cbf0e6c863f8d30702ac8ca2864a2827dfbfbb6a5c026630b95276754c9cb"
+    }
+  ],
+  "verification": "Inner NPZ CRC, outer archive CRC and all eight original/extracted SHA256 matches passed."
+}

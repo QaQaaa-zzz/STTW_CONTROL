@@ -35,3 +35,13 @@ PYTHONPATH=learning/src python -m unittest discover -s learning/tests -p test_ma
 原始运行目录：`/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/`。分析脚本中原始绝对路径须在另一台机器上按MANIFEST来源映射；未将本机路径假装成可迁移SDK环境。
 
 打包入口：`python learning/cli/package_h75_research.py --output docs/evidence/h75_research_package/h75_research_evidence.zip`。
+
+## 指定八工况原始轨迹补充包
+
+10 cm单脊、2.6 m/s，layout 0/1 × seed 401–404，共八个工况。每个目录中的原始 `trajectory.npz` 完整保留，没有裁剪字段、车道或失败回合；解压后保留原工况目录名。配置不重复打包。
+
+- [layout 0：四工况原始轨迹](ridge100_v2.6_layout0_trajectories.zip)
+- [layout 1：四工况原始轨迹](ridge100_v2.6_layout1_trajectories.zip)
+- [八文件清单、大小、SHA256及校验结果](ridge100_v2.6_trajectories.json)
+
+来源：`layout_test/ridge100_v2.6_layout{0,1}_seed{401,402,403,404}/trajectory.npz`。已核对内外压缩文件CRC及八个解压文件与原文件的SHA256一致。
