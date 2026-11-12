@@ -6,9 +6,9 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.colors import Normalize
-from PIL import Image,ImageDraw
+from PIL import Image,ImageDraw,ImageFont
 
-p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path,required=True);p.add_argument('--cases',type=Path,help='JSON list of saved run, terrain, lane, label and output name');a=p.parse_args();a.output.mkdir(parents=True,exist_ok=True)
+p=argparse.ArgumentParser(description=__doc__);p.add_argument('--output',type=Path,required=True);p.add_argument('--cases',type=Path,help='JSON list of saved run, terrain, lane, label and output name');p.add_argument('--comparison-root',type=Path,help='Root with per-condition contracts and body_state trajectories');p.add_argument('--case-names',nargs='+',help='Condition directory names for comparison videos');p.add_argument('--preview-only',action='store_true');a=p.parse_args();a.output.mkdir(parents=True,exist_ok=True)
 ridge=[Path('runs/h75_terrain_speed_sweep/oblique_2cm'),Path('runs/h75_selected_local300_bend/bump_terrain'),Path('runs/h75_terrain_speed_sweep/oblique_6cm')]
 density=[Path('runs/h75_gravel_p1/assets/S1'),Path('runs/h75_gravel_g0/assets/S2_5mm'),Path('runs/h75_gravel_p1/assets/S3')]
 heights=[Path('runs/h75_gravel_p1/assets/S4'),density[1],Path('runs/h75_gravel_g0/assets/S5_5mm')]
@@ -20,7 +20,7 @@ def terrain(path):
   x=ar['grid_x'] if 'grid_x' in ar else np.linspace(*meta['bounds_m'],h.shape[0]);y=ar['grid_y'] if 'grid_y' in ar else np.linspace(*meta['bounds_m'],h.shape[1])
  return meta,x,y,h
 
-if a.cases is None:
+if a.cases is None and a.comparison_root is None:
  route=np.load('runs/h75_selected_local300_flat/bundle/route.npz');routexy=route['xy'];rs=route['s'];center=np.array([np.interp(5,rs,routexy[:,j]) for j in range(2)])
  fig,axs=plt.subplots(3,3,figsize=(15,11),layout='constrained')
  for row,paths in enumerate([ridge,density,heights]):
@@ -47,6 +47,102 @@ if a.cases is None:
 
 os.environ.setdefault('MUJOCO_GL','egl')
 import mujoco
+
+def comparison(run):
+ """Six synchronous recorded lanes, true terrain triangles and original visual links."""
+ contract=json.loads((run/'contract.json').read_text());settings=contract['settings'];names=contract['bodies']
+ lanes=list(range(6));assert settings['case_labels'][5]=='Zero'
+ with np.load(run/'trajectory.npz') as ar:
+  poses=ar['body_state'][:,:6,:,:7].copy();trace=ar['lower_trace'].reshape(-1,settings['num_envs'],11)[:,:6].copy()
+  measurement=ar['measurement'][:,:6].copy()
+  flags={k:ar[k][:,:6].copy() for k in ('roll_limit_failure','domain_exit','contact_failure','numerical_failure')}
+ poses[...,3:]=poses[...,[6,3,4,5]]
+ poses[...,:3]-=np.asarray(contract['origin'])[:6,None,:]
+ valid=trace[:,:,6].astype(bool);last=np.array([np.flatnonzero(valid[:,i])[-1] for i in lanes])
+ times=np.arange(len(trace))[:,None]*contract['lower_dt']+trace[:,:,7]*contract['physics_dt']
+ ground=Path(settings['terrains']['evaluation']);meta=json.loads((ground/'identity.json').read_text())
+ raw=np.load(ground/'terrain.npz');vertices=raw['vertices'];triangles=raw['triangles']
+ # The nonzero ridge triangles retain their exact coordinates; the rest is the flat plane.
+ faces=triangles[(vertices[triangles,2]>0).any(axis=1)];used,indices=np.unique(faces,return_inverse=True)
+ mesh_file=a.output/(run.name+'_terrain.obj')
+ with mesh_file.open('w') as f:
+  np.savetxt(f,vertices[used],fmt='v %.8f %.8f %.8f');np.savetxt(f,indices.reshape(-1,3)+1,fmt='f %d %d %d')
+ route=np.load(meta['route']);routexy=route['xy'];rs=route['s'];center=np.array([np.interp(meta['center_s_m'],rs,routexy[:,j]) for j in range(2)])
+ doc=ET.Element('mujoco');asset=ET.SubElement(doc,'asset');world=ET.SubElement(doc,'worldbody')
+ ET.SubElement(world,'geom',type='plane',size='40 40 .01',pos='0 0 -.0002',rgba='.80 .82 .79 1')
+ ET.SubElement(world,'light',pos='0 -3 8',dir='0 .3 -1',diffuse='.75 .75 .75',castshadow='false')
+ ET.SubElement(asset,'mesh',name='ridge',file=str(mesh_file.resolve()))
+ ET.SubElement(world,'geom',type='mesh',mesh='ridge',rgba='.46 .38 .26 1',contype='0',conaffinity='0')
+ source_xml=Path('mujoco_ros_ws20260313/model/scalebike_scene_matlab.xml').resolve();source=ET.parse(source_xml).getroot()
+ bodies={b.attrib['name']:b for b in source.findall('.//body')};mesh_defs={m.attrib['name']:m for m in source.findall('asset/mesh')}
+ for name in names:
+  body=ET.SubElement(world,'body',name=name,mocap='true')
+  for g in bodies[name].findall('geom'):
+   if g.attrib.get('type')=='mesh' and g.attrib.get('group')=='1':
+    definition=copy.deepcopy(mesh_defs[g.attrib['mesh']]);definition.set('file',str(source_xml.parent/'meshes'/definition.attrib['file']));asset.append(definition)
+    body.append(copy.deepcopy(g))
+ visual=ET.SubElement(doc,'visual');ET.SubElement(visual,'global',offwidth='640',offheight='380')
+ ET.SubElement(visual,'headlight',ambient='.45 .45 .45',diffuse='.65 .65 .65',specular='.1 .1 .1');ET.SubElement(visual,'map',znear='.003')
+ model=mujoco.MjModel.from_xml_string(ET.tostring(doc,encoding='unicode'));data=mujoco.MjData(model)
+ renderer=mujoco.Renderer(model,height=380,width=640);camera=mujoco.MjvCamera();camera.azimuth=135;camera.elevation=-25;camera.distance=1.7
+ font=ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',18);small=ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',15)
+ # Fixed top view gives the exact obstacle location and a metre scale.
+ inset=Image.new('RGB',(210,185),(248,249,247));draw=ImageDraw.Draw(inset)
+ bound=2.;scale=42.
+ def project(xy):return tuple(np.round((np.asarray(xy)-center)*[scale,-scale]+[105,95]).astype(int))
+ for face in faces:
+  draw.polygon([project(p[:2]) for p in vertices[face]],fill=(142,117,79))
+ keep=np.linalg.norm(routexy-center,axis=1)<2.4
+ draw.line([project(p) for p in routexy[keep]],fill=(36,119,210),width=2)
+ draw.line([(15,165),(57,165)],fill=(20,25,30),width=3);draw.text((63,155),'1 m',font=small,fill=(20,25,30))
+ draw.text((10,4),'Ridge / fixed path',font=small,fill=(20,25,30))
+ fps=20;frame_times=np.arange(0,10,1/fps);output=a.output/(run.name+'.mp4')
+ if a.preview_only:frame_times=np.array([1.7])
+ else:
+  proc=subprocess.Popen(['ffmpeg','-loglevel','error','-y','-f','rawvideo','-pix_fmt','rgb24','-s','1920x940','-r',str(fps),'-i','-','-an','-c:v','libx264','-preset','fast','-crf','22','-pix_fmt','yuv420p',str(output)],stdin=subprocess.PIPE)
+ endpoints=[]
+ for lane in lanes:
+  reasons=[k.replace('_failure','').replace('_',' ') for k,value in flags.items() if value[:last[lane]+1,lane].any()]
+  endpoints.append(dict(lane=lane,label=settings['case_labels'][lane],last_sample_s=float(times[last[lane],lane]),reason=', '.join(reasons) or '10 s completed'))
+ for frame_number,t in enumerate(frame_times):
+  canvas=Image.new('RGB',(1920,940),(243,245,247));draw=ImageDraw.Draw(canvas)
+  draw.text((18,10),f'{run.name} | ridge {meta["height_m"]*100:.0f} cm | request {settings["user_speed_m_s"]:.1f} m/s | t={t:.2f} s',font=font,fill=(20,25,30))
+  draw.text((18,36),'Recorded Isaac trajectories | H75 + frozen Local300 | blue = original path | true terrain and vehicle scale',font=small,fill=(60,65,70))
+  for lane in lanes:
+   index=min(int(np.searchsorted(times[:,lane],t)),last[lane]);stopped=t>times[last[lane],lane]
+   data.mocap_pos[:]=poses[index,lane,:,:3];data.mocap_quat[:]=poses[index,lane,:,3:];mujoco.mj_forward(model,data)
+   camera.lookat[:]=poses[index,lane,0,:3];camera.lookat[2]=.16;renderer.update_scene(data,camera)
+   for j in range(0,len(routexy)-4,4):
+    if np.linalg.norm(routexy[j]-camera.lookat[:2])>2.1:continue
+    aa=np.r_[routexy[j],.002];bb=np.r_[routexy[j+4],.002]
+    geom=renderer.scene.geoms[renderer.scene.ngeom];mujoco.mjv_initGeom(geom,mujoco.mjtGeom.mjGEOM_CAPSULE,np.zeros(3),np.zeros(3),np.eye(3).ravel(),np.array([.05,.35,.85,1.]));mujoco.mjv_connector(geom,mujoco.mjtGeom.mjGEOM_CAPSULE,.004,aa,bb);renderer.scene.ngeom+=1
+   panel=Image.fromarray(renderer.render());pd=ImageDraw.Draw(panel)
+   label='Zero middle' if lane==5 else f'alpha = {settings["alphas"][lane]:g}'
+   pd.rectangle((0,0,640,48),fill=(255,255,255));pd.text((12,4),label,font=font,fill=(20,25,30))
+   pd.text((12,27),f'v={trace[index,lane,2]:.2f} m/s   roll={np.degrees(measurement[index,lane,0]):+.1f} deg',font=small,fill=(45,50,55))
+   if stopped:
+    pd.rectangle((0,331,640,380),fill=(255,235,233));pd.text((12,335),f'STOP {times[last[lane],lane]:.3f} s: {endpoints[lane]["reason"]}',font=small,fill=(165,35,35))
+   canvas.paste(panel,((lane%3)*640,65+(lane//3)*380))
+  # A shared map avoids covering any vehicle panel.
+  minimap=inset.resize((185,163));canvas.paste(minimap,(1710,770))
+  draw=ImageDraw.Draw(canvas);draw.text((18,838),f'Ridge length {meta["length_m"]:.2f} m | width {2*meta["half_width_m"]:.2f} m | centre s={meta["center_s_m"]:.2f} m',font=font,fill=(20,25,30))
+  draw.text((18,867),'All panels use the same recording clock; terminated lanes hold their final saved pose.',font=small,fill=(60,65,70))
+  draw.text((18,891),'Visual playback from 200 Hz link poses. Renderer: MuJoCo; original simulation: Isaac Lab.',font=small,fill=(60,65,70))
+  if a.preview_only or frame_number==34:canvas.save(a.output/(run.name+'_preview.jpg'),quality=92)
+  if not a.preview_only:proc.stdin.write(np.asarray(canvas).tobytes())
+ if not a.preview_only:proc.stdin.close();assert proc.wait()==0
+ renderer.close();mesh_file.unlink()
+ return dict(case=run.name,source=str(run),video=str(output),terrain=str(ground),lanes=endpoints,quaternion_conversion='xyzw to wxyz',pose_source='body_link_state_w, first seven fields',physics_steps=0,fps=fps,frames=len(frame_times),duration_s=10,preview_only=a.preview_only)
+
+if a.comparison_root is not None:
+ assert a.case_names
+ records=[]
+ for name in a.case_names:
+  records.append(comparison(a.comparison_root/name))
+  (a.output/'comparison_manifest.json').write_text(json.dumps(records,indent=2)+'\n')
+  print('completed',name,flush=True)
+ (a.output/'README.md').write_text('# 八工况仿真视频\n\n每个视频同步展示alpha=0、0.25、0.5、0.75、1及Zero，完整10秒。真实终止后定格并标明原因。原始Isaac Lab车体姿态、原STL与真实单脊网格；MuJoCo仅渲染回放。\n\n'+''.join(f'- [{r["case"]}]({Path(r["video"]).name})\n' for r in records))
+ raise SystemExit(0)
 
 def video(name,run,ground,label,lane=2):
  contract=json.loads((run/'contract.json').read_text());names=contract['bodies'];alpha=contract['settings']['alphas'][lane];speed=contract['settings'].get('user_speed_m_s',2.3)

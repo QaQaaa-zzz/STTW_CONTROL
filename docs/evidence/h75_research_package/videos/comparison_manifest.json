@@ -1,0 +1,466 @@
+[
+  {
+    "case": "ridge100_v2.6_layout0_seed401",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/ridge100_v2.6_layout0_seed401",
+    "video": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/videos/ridge100_v2.6_layout0_seed401.mp4",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/terrains/ridge100_layout0",
+    "lanes": [
+      {
+        "lane": 0,
+        "label": "fixed0",
+        "last_sample_s": 9.999999999888242,
+        "reason": "10 s completed"
+      },
+      {
+        "lane": 1,
+        "label": "fixed0.25",
+        "last_sample_s": 9.999999999888242,
+        "reason": "10 s completed"
+      },
+      {
+        "lane": 2,
+        "label": "fixed0.5",
+        "last_sample_s": 9.999999999888242,
+        "reason": "10 s completed"
+      },
+      {
+        "lane": 3,
+        "label": "fixed0.75",
+        "last_sample_s": 1.939600000102073,
+        "reason": "contact"
+      },
+      {
+        "lane": 4,
+        "label": "fixed1",
+        "last_sample_s": 1.9349999998882412,
+        "reason": "roll limit"
+      },
+      {
+        "lane": 5,
+        "label": "Zero",
+        "last_sample_s": 1.8799999998882413,
+        "reason": "roll limit"
+      }
+    ],
+    "quaternion_conversion": "xyzw to wxyz",
+    "pose_source": "body_link_state_w, first seven fields",
+    "physics_steps": 0,
+    "fps": 20,
+    "frames": 200,
+    "duration_s": 10,
+    "preview_only": false,
+    "verification": {
+      "frames": 200,
+      "duration_s": 10,
+      "width": 1920,
+      "height": 940,
+      "bytes": 982347
+    }
+  },
+  {
+    "case": "ridge100_v2.6_layout0_seed402",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/ridge100_v2.6_layout0_seed402",
+    "video": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/videos/ridge100_v2.6_layout0_seed402.mp4",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/terrains/ridge100_layout0",
+    "lanes": [
+      {
+        "lane": 0,
+        "label": "fixed0",
+        "last_sample_s": 9.999999999888242,
+        "reason": "10 s completed"
+      },
+      {
+        "lane": 1,
+        "label": "fixed0.25",
+        "last_sample_s": 2.3499999998882415,
+        "reason": "roll limit"
+      },
+      {
+        "lane": 2,
+        "label": "fixed0.5",
+        "last_sample_s": 2.1599999998882415,
+        "reason": "domain exit"
+      },
+      {
+        "lane": 3,
+        "label": "fixed0.75",
+        "last_sample_s": 1.9249999998882412,
+        "reason": "roll limit"
+      },
+      {
+        "lane": 4,
+        "label": "fixed1",
+        "last_sample_s": 1.9049999998882414,
+        "reason": "roll limit"
+      },
+      {
+        "lane": 5,
+        "label": "Zero",
+        "last_sample_s": 1.8599999998882413,
+        "reason": "roll limit"
+      }
+    ],
+    "quaternion_conversion": "xyzw to wxyz",
+    "pose_source": "body_link_state_w, first seven fields",
+    "physics_steps": 0,
+    "fps": 20,
+    "frames": 200,
+    "duration_s": 10,
+    "preview_only": false,
+    "verification": {
+      "frames": 200,
+      "duration_s": 10,
+      "width": 1920,
+      "height": 940,
+      "bytes": 762155
+    }
+  },
+  {
+    "case": "ridge100_v2.6_layout0_seed403",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/ridge100_v2.6_layout0_seed403",
+    "video": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/videos/ridge100_v2.6_layout0_seed403.mp4",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/terrains/ridge100_layout0",
+    "lanes": [
+      {
+        "lane": 0,
+        "label": "fixed0",
+        "last_sample_s": 9.999999999888242,
+        "reason": "10 s completed"
+      },
+      {
+        "lane": 1,
+        "label": "fixed0.25",
+        "last_sample_s": 9.999999999888242,
+        "reason": "10 s completed"
+      },
+      {
+        "lane": 2,
+        "label": "fixed0.5",
+        "last_sample_s": 2.1199999998882415,
+        "reason": "domain exit"
+      },
+      {
+        "lane": 3,
+        "label": "fixed0.75",
+        "last_sample_s": 1.9399999998882413,
+        "reason": "roll limit"
+      },
+      {
+        "lane": 4,
+        "label": "fixed1",
+        "last_sample_s": 1.9199999998882413,
+        "reason": "roll limit"
+      },
+      {
+        "lane": 5,
+        "label": "Zero",
+        "last_sample_s": 1.8599999998882413,
+        "reason": "roll limit"
+      }
+    ],
+    "quaternion_conversion": "xyzw to wxyz",
+    "pose_source": "body_link_state_w, first seven fields",
+    "physics_steps": 0,
+    "fps": 20,
+    "frames": 200,
+    "duration_s": 10,
+    "preview_only": false,
+    "verification": {
+      "frames": 200,
+      "duration_s": 10,
+      "width": 1920,
+      "height": 940,
+      "bytes": 865011
+    }
+  },
+  {
+    "case": "ridge100_v2.6_layout0_seed404",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/ridge100_v2.6_layout0_seed404",
+    "video": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/videos/ridge100_v2.6_layout0_seed404.mp4",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/terrains/ridge100_layout0",
+    "lanes": [
+      {
+        "lane": 0,
+        "label": "fixed0",
+        "last_sample_s": 9.999999999888242,
+        "reason": "10 s completed"
+      },
+      {
+        "lane": 1,
+        "label": "fixed0.25",
+        "last_sample_s": 9.999999999888242,
+        "reason": "10 s completed"
+      },
+      {
+        "lane": 2,
+        "label": "fixed0.5",
+        "last_sample_s": 2.219999999888241,
+        "reason": "domain exit"
+      },
+      {
+        "lane": 3,
+        "label": "fixed0.75",
+        "last_sample_s": 1.9349999998882412,
+        "reason": "roll limit"
+      },
+      {
+        "lane": 4,
+        "label": "fixed1",
+        "last_sample_s": 1.9199999998882413,
+        "reason": "roll limit"
+      },
+      {
+        "lane": 5,
+        "label": "Zero",
+        "last_sample_s": 1.8599999998882413,
+        "reason": "roll limit"
+      }
+    ],
+    "quaternion_conversion": "xyzw to wxyz",
+    "pose_source": "body_link_state_w, first seven fields",
+    "physics_steps": 0,
+    "fps": 20,
+    "frames": 200,
+    "duration_s": 10,
+    "preview_only": false,
+    "verification": {
+      "frames": 200,
+      "duration_s": 10,
+      "width": 1920,
+      "height": 940,
+      "bytes": 895843
+    }
+  },
+  {
+    "case": "ridge100_v2.6_layout1_seed401",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/ridge100_v2.6_layout1_seed401",
+    "video": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/videos/ridge100_v2.6_layout1_seed401.mp4",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/terrains/ridge100_layout1",
+    "lanes": [
+      {
+        "lane": 0,
+        "label": "fixed0",
+        "last_sample_s": 2.1049999998882414,
+        "reason": "roll limit"
+      },
+      {
+        "lane": 1,
+        "label": "fixed0.25",
+        "last_sample_s": 2.174999999888241,
+        "reason": "roll limit"
+      },
+      {
+        "lane": 2,
+        "label": "fixed0.5",
+        "last_sample_s": 9.999999999888242,
+        "reason": "10 s completed"
+      },
+      {
+        "lane": 3,
+        "label": "fixed0.75",
+        "last_sample_s": 2.5149999998882415,
+        "reason": "roll limit"
+      },
+      {
+        "lane": 4,
+        "label": "fixed1",
+        "last_sample_s": 9.999999999888242,
+        "reason": "10 s completed"
+      },
+      {
+        "lane": 5,
+        "label": "Zero",
+        "last_sample_s": 7.279999999888242,
+        "reason": "domain exit"
+      }
+    ],
+    "quaternion_conversion": "xyzw to wxyz",
+    "pose_source": "body_link_state_w, first seven fields",
+    "physics_steps": 0,
+    "fps": 20,
+    "frames": 200,
+    "duration_s": 10,
+    "preview_only": false,
+    "verification": {
+      "frames": 200,
+      "duration_s": 10,
+      "width": 1920,
+      "height": 940,
+      "bytes": 1108102
+    }
+  },
+  {
+    "case": "ridge100_v2.6_layout1_seed402",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/ridge100_v2.6_layout1_seed402",
+    "video": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/videos/ridge100_v2.6_layout1_seed402.mp4",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/terrains/ridge100_layout1",
+    "lanes": [
+      {
+        "lane": 0,
+        "label": "fixed0",
+        "last_sample_s": 2.1199999998882415,
+        "reason": "roll limit"
+      },
+      {
+        "lane": 1,
+        "label": "fixed0.25",
+        "last_sample_s": 1.9999999998882414,
+        "reason": "roll limit"
+      },
+      {
+        "lane": 2,
+        "label": "fixed0.5",
+        "last_sample_s": 2.4949999998882415,
+        "reason": "roll limit"
+      },
+      {
+        "lane": 3,
+        "label": "fixed0.75",
+        "last_sample_s": 2.2099999998882414,
+        "reason": "roll limit"
+      },
+      {
+        "lane": 4,
+        "label": "fixed1",
+        "last_sample_s": 9.999999999888242,
+        "reason": "10 s completed"
+      },
+      {
+        "lane": 5,
+        "label": "Zero",
+        "last_sample_s": 9.499999999888242,
+        "reason": "domain exit"
+      }
+    ],
+    "quaternion_conversion": "xyzw to wxyz",
+    "pose_source": "body_link_state_w, first seven fields",
+    "physics_steps": 0,
+    "fps": 20,
+    "frames": 200,
+    "duration_s": 10,
+    "preview_only": false,
+    "verification": {
+      "frames": 200,
+      "duration_s": 10,
+      "width": 1920,
+      "height": 940,
+      "bytes": 1020354
+    }
+  },
+  {
+    "case": "ridge100_v2.6_layout1_seed403",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/ridge100_v2.6_layout1_seed403",
+    "video": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/videos/ridge100_v2.6_layout1_seed403.mp4",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/terrains/ridge100_layout1",
+    "lanes": [
+      {
+        "lane": 0,
+        "label": "fixed0",
+        "last_sample_s": 2.1249999998882414,
+        "reason": "roll limit"
+      },
+      {
+        "lane": 1,
+        "label": "fixed0.25",
+        "last_sample_s": 2.029999999888241,
+        "reason": "roll limit"
+      },
+      {
+        "lane": 2,
+        "label": "fixed0.5",
+        "last_sample_s": 2.2449999998882415,
+        "reason": "roll limit"
+      },
+      {
+        "lane": 3,
+        "label": "fixed0.75",
+        "last_sample_s": 2.4399999998882413,
+        "reason": "domain exit"
+      },
+      {
+        "lane": 4,
+        "label": "fixed1",
+        "last_sample_s": 9.999999999888242,
+        "reason": "10 s completed"
+      },
+      {
+        "lane": 5,
+        "label": "Zero",
+        "last_sample_s": 7.699999999888242,
+        "reason": "domain exit"
+      }
+    ],
+    "quaternion_conversion": "xyzw to wxyz",
+    "pose_source": "body_link_state_w, first seven fields",
+    "physics_steps": 0,
+    "fps": 20,
+    "frames": 200,
+    "duration_s": 10,
+    "preview_only": false,
+    "verification": {
+      "frames": 200,
+      "duration_s": 10,
+      "width": 1920,
+      "height": 940,
+      "bytes": 933952
+    }
+  },
+  {
+    "case": "ridge100_v2.6_layout1_seed404",
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/ridge100_v2.6_layout1_seed404",
+    "video": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/videos/ridge100_v2.6_layout1_seed404.mp4",
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test/terrains/ridge100_layout1",
+    "lanes": [
+      {
+        "lane": 0,
+        "label": "fixed0",
+        "last_sample_s": 2.134999999888241,
+        "reason": "roll limit"
+      },
+      {
+        "lane": 1,
+        "label": "fixed0.25",
+        "last_sample_s": 2.1799999998882416,
+        "reason": "domain exit"
+      },
+      {
+        "lane": 2,
+        "label": "fixed0.5",
+        "last_sample_s": 9.999999999888242,
+        "reason": "10 s completed"
+      },
+      {
+        "lane": 3,
+        "label": "fixed0.75",
+        "last_sample_s": 2.299999999888241,
+        "reason": "roll limit"
+      },
+      {
+        "lane": 4,
+        "label": "fixed1",
+        "last_sample_s": 9.999999999888242,
+        "reason": "10 s completed"
+      },
+      {
+        "lane": 5,
+        "label": "Zero",
+        "last_sample_s": 9.999999999888242,
+        "reason": "10 s completed"
+      }
+    ],
+    "quaternion_conversion": "xyzw to wxyz",
+    "pose_source": "body_link_state_w, first seven fields",
+    "physics_steps": 0,
+    "fps": 20,
+    "frames": 200,
+    "duration_s": 10,
+    "preview_only": false,
+    "verification": {
+      "frames": 200,
+      "duration_s": 10,
+      "width": 1920,
+      "height": 940,
+      "bytes": 1139970
+    }
+  }
+]

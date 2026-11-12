@@ -45,3 +45,7 @@ PYTHONPATH=learning/src python -m unittest discover -s learning/tests -p test_ma
 - [八文件清单、大小、SHA256及校验结果](ridge100_v2.6_trajectories.json)
 
 来源：`layout_test/ridge100_v2.6_layout{0,1}_seed{401,402,403,404}/trajectory.npz`。已核对内外压缩文件CRC及八个解压文件与原文件的SHA256一致。
+
+## 八工况视频
+
+[视频目录与下载](videos/README.md)：layout0/1×seed401–404，每工况五档alpha及Zero同步六宫格，10秒、1920×940、20fps，八段合计7.71MB。包含真实单脊网格、原始车辆STL、速度/侧倾与真实终止标签。全部视频已逐帧解码核验200帧与10秒时长，首工况越脊及终止画面已人工检查。
