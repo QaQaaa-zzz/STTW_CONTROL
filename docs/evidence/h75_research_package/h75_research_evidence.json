@@ -1,0 +1,23 @@
+{
+  "archive": "h75_research_evidence.zip",
+  "bytes": 30282710,
+  "sha256": "2fefd4ee660f48c047f55abd9e23f04cc62169a4c0281b0200b7485b741b1ead",
+  "files": 2904,
+  "uncompressed_bytes": 79195238,
+  "counts": {
+    "calibration": {
+      "cases": 48,
+      "episodes": 288
+    },
+    "mechanism_scan": {
+      "cases": 176,
+      "episodes": 2464
+    },
+    "layout_test": {
+      "cases": 176,
+      "episodes": 2112
+    }
+  },
+  "verified": "ZIP CRC and every payload SHA256 match source",
+  "source_revision": "74b0e15ce65582c85cc52f546a8cc62e997f4151"
+}
