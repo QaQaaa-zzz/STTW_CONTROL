@@ -1974,3 +1974,8 @@ GLM端到端集成（用户2026-11-09新授权）：已配置glm-5.3从11场景�
 ### Playground Run3 150轮适配及完整链对照
 
 150轮4804.021秒，训练终止成功0/255245；原Run3/75/150完整链分别0/3、0/3、1/3，150右弯通过，75左弯跑满但未满足最终保持。不能用训练best0或存活替代完整任务验收。全覆盖XY与失败见docs/evidence/chapter3_playground_sttw_rb_sttw/README.md。已恢复150的Actor/Critic/normalizer/Adam，固定追加150轮至300；地图、奖励、随机化、网络、4096×24不变。新增--resume保留全局更新数，训练图接入实际日志字段，重放权重及优化器逐项相等。后续仍需统一checkpoint三路线及扰动验收，当前不采用。
+
+
+### Playground累计300复测与速度奖励修正
+
+225完整链2/3、300为0/3；全部XY与失败见docs/evidence/chapter3_playground_sttw_rb_sttw/README.md。旧进度奖励2Δx与有界速度奖励冲突，匀速3.4m/s分项高于1.8m/s。新阶段从225权重/fresh Adam起步，进度封顶1.8m/s并加速度平方误差权重2，限定150轮，其他物理/网络/随机化/验收不改。图范围扩展保留x24.483m失败终点；导出器纠正周期checkpoint附带的是更新前模型采样分数。

@@ -161,8 +161,10 @@ class PlaygroundRBEnv:
         failure=(roll.abs()>.7)|(pitch.abs()>1.309)|(q[:,2]<0)|(q[:,1].abs()>.6)|(q[:,0]>13.5)|~torch.isfinite(q).all(-1)
         timeout=self.length>=self.max_episode_length
         done=success|failure|timeout
-        progress=(q[:,0]-start_x).clamp(-.1,.1)
+        reward_cfg=self.cfg['reward']
+        progress=(q[:,0]-start_x).clamp(-.1,.02*reward_cfg.get('progress_speed_cap_m_s',5.))
         reward=2*progress+.02*(torch.exp(-4*(v[:,0]-1.8).square())-2*roll.square()-pitch.square()-2*yaw.square()-2*q[:,1].square())
+        reward-=.02*reward_cfg.get('speed_error_weight',0.)*(v[:,0]-1.8).square()
         reward+=grounded*.02*(2*torch.exp(-8*pose_error)-.1*joint_speed)
         reward+=success*10.-(failure|timeout)*5.
         reward=torch.nan_to_num(reward,nan=-5.,posinf=-5.,neginf=-5.)

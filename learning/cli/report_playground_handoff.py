@@ -11,14 +11,17 @@ config=json.loads(Path(d['source_config']).read_text());hand=config['ground_hand
 mechanism=hand.get('handoff_mechanism','contact_delay')
 fig,axes=plt.subplots(len(d['routes']),1,figsize=(12,6),squeeze=False)
 for ax,route in zip(axes[:,0],d['routes']):
+ xmin,xmax,ymin,ymax=0.,20.,-1.5,1.5
  for row in s['results']:
   if row['route']!=route:continue
   z=np.load(a.root/row.get('case_dir',f"{row['skill']}_route{route}_{row['continuation']}")/'trajectory.npz');t=z['trace']
   ax.plot(t[:,1],t[:,2],label=row.get('case_dir',row['skill']+' / '+row['continuation']),linestyle='-' if row['continuation']=='h75' else '--')
   ax.scatter(t[-1,1],t[-1,2],marker='x',s=20)
+  xmin=min(xmin,float(t[:,1].min())-.2);xmax=max(xmax,float(t[:,1].max())+.2)
+  ymin=min(ymin,float(t[:,2].min())-.2);ymax=max(ymax,float(t[:,2].max())+.2)
  ax.plot(z['reference_xy'][:,0],z['reference_xy'][:,1],'k:',label='original route')
  ax.axvspan(d['terrain']['front_x_m'],d['terrain']['front_x_m']+d['terrain']['width_m'],alpha=.2,color='black')
- ax.set(xlabel='x (m)',ylabel='y (m)',title=f'Route {route}',xlim=(0,20),ylim=(-1.5,1.5));ax.set_aspect('equal',adjustable='box');ax.grid(alpha=.2)
+ ax.set(xlabel='x (m)',ylabel='y (m)',title=f'Route {route}',xlim=(xmin,xmax),ylim=(ymin,ymax));ax.set_aspect('equal',adjustable='box');ax.grid(alpha=.2)
 axes[-1,0].legend(fontsize=6);fig.tight_layout();fig.savefig(a.root/'xy.png',dpi=160)
 tracking,panels=plt.subplots(3,len(d['routes']),figsize=(15,9),squeeze=False,layout='constrained')
 for j,route in enumerate(d['routes']):

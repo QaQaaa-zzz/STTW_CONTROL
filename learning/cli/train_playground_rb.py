@@ -58,7 +58,7 @@ ppo.init_storage(cfg['num_envs'],cfg['steps_per_update'],[76],[106],[4])
 writer=SummaryWriter(str(a.output/'training'));training=a.output/'training';training.mkdir(exist_ok=True)
 def checkpoint(path,iteration,info):
     torch.save(dict(model_state_dict=actor.state_dict(),optimizer_state_dict=ppo.optimizer.state_dict(),iter=iteration,infos=info),path)
-checkpoint(training/'model_initial.pt',start_update,dict(initialization='Actor/critic/normalizer/optimizer restored; new environment rollout' if a.resume else 'Run3 actor/critic/normalizer weights only; fresh Go2 PPO optimizer'))
+checkpoint(training/'model_initial.pt',start_update,dict(initialization='Actor/critic/normalizer/optimizer restored; new environment rollout' if a.resume else f'Actor/critic/normalizer from {cfg["bundle"]}; fresh Go2 PPO optimizer'))
 best=-float('inf');obs,critic=env.obs,env.critic
 for stage_update in range(cfg['updates']):
     update=start_update+stage_update

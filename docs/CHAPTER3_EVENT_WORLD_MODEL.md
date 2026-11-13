@@ -318,3 +318,5 @@ home_posture完成2/18，仍无三路线统一候选；不再继续交接标量�
 Playground RB适配入口learning/cli/train_playground_rb.py已接通，配置learning/configs/playground_rb_training.json；Run3原76D/106D和256×3网络，训练handoff目标与完整链验收分开。4096总环境、物理512分批、Go2 PPO24×150；三次初始化失败0更新保留，当前training150_batched已有真实更新。实测约80分钟剩余超过用户阈值，暂停目标等待用户继续，不自动接后续训练或评测。训练/通知/TensorBoard实时入口统一见/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/handoff.json。
 
 本轮150更新完成，完整链原/75/150为0/3、0/3、1/3，150右弯首次满足原最终门槛但未稳健采用。以这一实际改善为依据，限定恢复model150及优化器续训150轮至300，环境重置、物理/奖励/随机化/网络不变；合同rb_adaptation/continuation300_protocol.json。预计75–90分钟，启动核查后按30分钟阈值暂停目标，阶段Bark通知，等待用户继续后比较完整链，不自动扩展预算。
+
+累计300完成后固定225/300三路线分别2/3与0/3；奖励存在进度鼓励超速的明确代数冲突。下一限定阶段从225权重、fresh optimizer训练150轮，进度封顶1.8m/s并加速度误差平方罚2，其他物理/网络/随机化与验收不改。合同rb_adaptation/landing_reward_protocol.json，旧训练保持独立，不追加交接标量扫描。

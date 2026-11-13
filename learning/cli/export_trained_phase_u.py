@@ -16,5 +16,8 @@ for prefix,network in (('',model.actor),('critic_',model.critic)):
         arrays[f'{prefix}bias_{i}']=layer.bias.detach().numpy()
 np.savez(a.output/'actor.npz',**arrays)
 identity=dict(model.identity)
-identity.update(skill_id=a.output.name,source_bundle=str(a.source_bundle.resolve()),training_checkpoint=str(a.checkpoint.resolve()),training_checkpoint_sha256=hashlib.sha256(a.checkpoint.read_bytes()).hexdigest(),stored_checkpoint_iter=checkpoint.get('iter'),scored_policy_update=(checkpoint.get('infos') or {}).get('update'),selection_evidence=checkpoint.get('infos'),artifact_sha256=hashlib.sha256((a.output/'actor.npz').read_bytes()).hexdigest(),conversion='exact selected Torch actor/critic/normalizer arrays; no extra optimization',source_note='source records identify original Phase U initialization; training_checkpoint identifies current weights')
+info=checkpoint.get("infos") or {}
+reward_policy=info.get("scored_policy_update",info.get("update"))
+scored_policy=reward_policy if reward_policy==checkpoint.get("iter") else None
+identity.update(skill_id=a.output.name,source_bundle=str(a.source_bundle.resolve()),training_checkpoint=str(a.checkpoint.resolve()),training_checkpoint_sha256=hashlib.sha256(a.checkpoint.read_bytes()).hexdigest(),stored_checkpoint_iter=checkpoint.get('iter'),scored_policy_update=scored_policy,selection_evidence_policy_update=reward_policy,selection_evidence=checkpoint.get('infos'),artifact_sha256=hashlib.sha256((a.output/'actor.npz').read_bytes()).hexdigest(),conversion='exact selected Torch actor/critic/normalizer arrays; no extra optimization',source_note='source records identify original Phase U initialization; training_checkpoint identifies current weights')
 (a.output/'identity.json').write_text(json.dumps(identity,indent=2));print(json.dumps({k:identity[k] for k in ('skill_id','stored_checkpoint_iter','scored_policy_update','training_checkpoint','artifact_sha256')},indent=2))

@@ -9,7 +9,7 @@
   "isaaclab_checkout": "/home/qy/projects/IsaacLab",
   "registry": "learning/configs/playground_rb_skill_sources.json",
   "skill": "rb_run3",
-  "bundle": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/source/rb_run3",
+  "bundle": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/full_chain300/update225",
   "entry_bank": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/entry_bank.npz",
   "terrain": {
     "front_x_m": 10.3,
@@ -155,7 +155,7 @@
     "gamma": 0.99,
     "lam": 0.95
   },
-  "role": "Run3 weights-only task adaptation; fresh optimizer; training handoff target is not full-chain success",
+  "role": "Nominal DEV selected update225 weights; fresh optimizer; corrected speed/progress reward; 150 stage-relative updates, not cumulative iteration",
   "stop_rule": "150updates, nonfinite or runtime failure stops; user requested pause agent if waiting estimate exceeds30min; background authorized budget remains",
   "reward": {
     "progress": 2.0,
@@ -164,7 +164,9 @@
     "failure": -5.0,
     "ready_hold_s": 0.2,
     "timeout_is_terminal_failure": true,
-    "handoff_angular_rate_max_rad_s": 0.3
+    "handoff_angular_rate_max_rad_s": 0.3,
+    "progress_speed_cap_m_s": 1.8,
+    "speed_error_weight": 2.0
   },
   "acceptance": "Separate continuous STTW-RB-STTW routes60/61/62, original full goal hold .5, then perturbation bank; no claim from training reward",
   "tensorboard_url": "http://localhost:41961",
