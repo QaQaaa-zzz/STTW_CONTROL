@@ -312,3 +312,7 @@ RB400接入0.6rad/s名义转向参考的组合评测：同120条开发条件，�
 两米平地协议下flat_buffers4/18（直线）、stable_gate2/18（右弯）、observer_settle2/18（零额外ESO预热）；尚无统一候选三路线通过。far_bank_ground同物理独立锁摆起步H75三路线3/3，支持聚焦交接。后续joint_settle在车轮交接前检查摆角/摆速/俯仰；home_posture准备在原有限伺服权限内使用qfrc_bias/kp补偿归位，严格原构型再锁摆，并比较缩摆。每阶段18回合、10秒、零训练，源快照/配置/停止条件在对应run协议。
 
 home_posture完成2/18，仍无三路线统一候选；不再继续交接标量扫参。下一步围绕同高跨沟的RB落地恢复适配，保留原Run3对照；正式续训前落实Playground GPU环境与Go2适用随机化、原模型网络/时序、明确更新预算与TensorBoard。当前未实现或启动该训练，不把已有Isaac入口冒称Playground适配。
+
+用户最新等待约束：预计等待超过30分钟时，暂停当前持续目标并结束自动推进，说明等待对象和预计时间，等待用户明确继续；覆盖此前一小时等待阈值。仅暂停助手目标，不自行杀死已授权且按既定预算运行的后台任务。当前Playground RB续训尚未启动；不得把准备工作说成训练执行。
+
+Playground RB适配入口learning/cli/train_playground_rb.py已接通，配置learning/configs/playground_rb_training.json；Run3原76D/106D和256×3网络，训练handoff目标与完整链验收分开。4096总环境、物理512分批、Go2 PPO24×150；三次初始化失败0更新保留，当前training150_batched已有真实更新。实测约80分钟剩余超过用户阈值，暂停目标等待用户继续，不自动接后续训练或评测。训练/通知/TensorBoard实时入口统一见/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/handoff.json。

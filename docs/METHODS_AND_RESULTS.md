@@ -1965,3 +1965,7 @@ GLM端到端集成（用户2026-11-09新授权）：已配置glm-5.3从11场景�
 ## Playground带摆完整链状态交接开发
 
 冻结高成功率Run3，GPU物理/张量/网络批量测试了即时触地、下降、收摆、原生RB落地、分阶段状态回交与小幅路径引导；原始失败和源快照保留。恢复源XML轮地显式pair与高度观测坐标适配均为明确变化，非原域不变转移。用户明确沟前后各两米平地后发现配置说明未落实，修正实际碎石区间，8项地形测试通过。修正地图18条名义DEV完整目标4/18且全为直线，左右弯均失败，仍未采用为完整链方案。下一有限阶段测试连续状态稳定门控，超限清零，不重置物理状态。全部XY与结果：docs/evidence/chapter3_playground_sttw_rb_sttw/README.md；原始协议和逐步数据：/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw。
+
+## Playground RB原权重续训接线与批量容量修复
+
+采用原Run3 Actor/Critic/normalizer与Go2 PPO，76/106维和三层256网络不变；真实两米平地沟、GPU RK4 5ms与20ms Actor，物理512分批但PPO保持4096环境×24步×150轮。MuJoCo启动属性随机化、原Isaac Lab DelayBuffer、观测噪声和周期推扰实际接通，奖励/终止用干净状态。8环境含自动reset集成有限；三次4096初始化因CCD/显存失败，均0优化，原记录保留；training150_batched已有真实更新。训练handoff目标不等于完整链成功。预计约80分钟，按用户30分钟等待约定暂停目标、后台完成既定预算并通知，之后需用户继续才做完整链验证。证据根：/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation。

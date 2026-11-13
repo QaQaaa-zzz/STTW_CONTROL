@@ -43,6 +43,26 @@ class PendulumSkill:
         self.payload=payload
         self.policy = jax.jit(make_checkpoint_policy(dimensions, payload, deterministic=True))
 
+    def load_adapted_actor(self, bundle):
+        """Load a declared task-adapted export; keep source physics/action mapping."""
+        import numpy as np
+        import jax
+        import jax.numpy as jp
+        path=Path(bundle);identity=json.loads((path/'identity.json').read_text())
+        raw=(path/'actor.npz').read_bytes()
+        if hashlib.sha256(raw).hexdigest()!=identity['artifact_sha256']:
+            raise ValueError('Adapted actor export identity mismatch')
+        arrays={key:jp.asarray(value) for key,value in dict(np.load(path/'actor.npz')).items()}
+        if arrays['mean'].shape!=(76,):raise ValueError('Native Playground actor requires the original 76-D input')
+        def policy(observation,key):
+            x=(observation['state']-arrays['mean'])/arrays['std']
+            for i in range(4):
+                x=x@arrays[f'kernel_{i}']+arrays[f'bias_{i}']
+                if i<3:x=jax.nn.silu(x)
+            return jp.tanh(x[:4]),{}
+        self.policy=jax.jit(policy)
+        self.record=dict(source_frozen_policy=self.record,adaptation=identity)
+
     def infer(self, actor_observation, knee_position):
         """Return normalized action and native actuator targets, without stepping.
 

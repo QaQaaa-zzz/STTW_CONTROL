@@ -1,0 +1,172 @@
+{
+  "num_envs": 4096,
+  "updates": 150,
+  "steps_per_update": 24,
+  "episode_s": 5.0,
+  "seed": 20261113,
+  "save_interval": 25,
+  "go2_checkout": "/home/qy/projects/My_unitree_go2_gym",
+  "isaaclab_checkout": "/home/qy/projects/IsaacLab",
+  "registry": "learning/configs/playground_rb_skill_sources.json",
+  "skill": "rb_run3",
+  "bundle": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/source/rb_run3",
+  "entry_bank": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/entry_bank.npz",
+  "terrain": {
+    "front_x_m": 10.3,
+    "width_m": 0.3,
+    "ground_end_x_m": 25.0,
+    "stone_height_min_m": 0.001,
+    "stone_height_max_m": 0.004,
+    "stones_per_m2": 10,
+    "seed": 20261111,
+    "lateral_limit_m": 3.9,
+    "far_bank_height_m": 0.0,
+    "rough_x_intervals_m": [
+      [
+        2.5,
+        8.3
+      ],
+      [
+        12.6,
+        20.0
+      ]
+    ],
+    "land_bridge_y_interval_m": [
+      1.4,
+      4.0
+    ],
+    "full_width_rough": true,
+    "ridges": [
+      {
+        "x_interval_m": [
+          4.5,
+          5.5
+        ],
+        "y_interval_m": [
+          -4.0,
+          4.0
+        ],
+        "height_m": 0.02
+      },
+      {
+        "x_interval_m": [
+          13.0,
+          15.0
+        ],
+        "y_interval_m": [
+          -4.0,
+          4.0
+        ],
+        "height_m": 0.04
+      }
+    ]
+  },
+  "ground_physics": {
+    "integrator": "RK4",
+    "friction": 0.8,
+    "native_wheel_contacts": false
+  },
+  "randomization": {
+    "base_body": "chasis",
+    "friction_range": [
+      0.3,
+      1.0
+    ],
+    "mass_scale": [
+      0.9,
+      1.1
+    ],
+    "base_com_m": [
+      -0.03,
+      0.03
+    ],
+    "servo_gain_scale": [
+      0.9,
+      1.1
+    ],
+    "steer_zero_offset_rad": [
+      -0.035,
+      0.035
+    ],
+    "latency_s": [
+      0.005,
+      0.015
+    ],
+    "push_interval_s": 4,
+    "push_velocity_range": {
+      "x": [
+        -0.4,
+        0.4
+      ],
+      "y": [
+        -0.4,
+        0.4
+      ],
+      "roll": [
+        -0.6,
+        0.6
+      ],
+      "pitch": [
+        -0.6,
+        0.6
+      ],
+      "yaw": [
+        -0.6,
+        0.6
+      ]
+    },
+    "mapping_note": "MuJoCo startup: proportional mass/inertia per world, base COM, all actuator gains, absolute sliding friction .3-1 on geom and explicit pairs; existing source limits retained. Original Isaac Lab DelayBuffer at5ms for actions and sensors; offsets/noise only in observed frame; periodic clean-state velocity pushes. Nominal future evaluation friction.8 and no randomization.",
+    "sensor_dt_s": 0.005,
+    "joint_zero_offset_rad": [
+      -0.035,
+      0.035
+    ],
+    "frame_noise": [
+      0.01,
+      0.01,
+      0.01,
+      0.2,
+      0.2,
+      0.2,
+      0.2,
+      0.2,
+      0.2,
+      0.01,
+      0.01,
+      0.01,
+      0.15,
+      0.15,
+      0.15,
+      1.5,
+      1.5,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.1,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "ppo_overrides": {
+    "learning_rate": 1e-05,
+    "schedule": "adaptive",
+    "gamma": 0.99,
+    "lam": 0.95
+  },
+  "role": "Run3 weights-only task adaptation; fresh optimizer; training handoff target is not full-chain success",
+  "stop_rule": "150updates, nonfinite or runtime failure stops; user requested pause agent if waiting estimate exceeds30min; background authorized budget remains",
+  "reward": {
+    "progress": 2.0,
+    "step": 0.02,
+    "success": 10.0,
+    "failure": -5.0,
+    "ready_hold_s": 0.2,
+    "timeout_is_terminal_failure": true,
+    "handoff_angular_rate_max_rad_s": 0.3
+  },
+  "acceptance": "Separate continuous STTW-RB-STTW routes60/61/62, original full goal hold .5, then perturbation bank; no claim from training reward",
+  "tensorboard_url": "http://localhost:41961",
+  "physics_batch_size": 512
+}

@@ -106,6 +106,7 @@ def main():
     if set(overrides)-set(hcfg['follower']):raise ValueError('Unknown follower override')
     hcfg['follower'].update(overrides)
     skills={name:PendulumSkill(a.registry,name) for name in a.skills}
+    for name,path in cfg.get('rb_adaptation_bundles',{}).items():skills[name].load_adapted_actor(path)
     original=next(iter(skills.values())).bundle; idx=original.model_index
     model=mujoco.MjModel.from_binary_path(str(a.model)) if a.model else transplant(original,terrain,a.output,a.physics_substeps,ground_physics)
     if not np.isclose(model.opt.timestep,.005/a.physics_substeps):
