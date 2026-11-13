@@ -288,3 +288,7 @@ RB400接入0.6rad/s名义转向参考的组合评测：同120条开发条件，�
 
 ### 锁摆STTW转弯修复进展
 原地图12路径72回合41到达，最高脊坡4cm条件45到达；固定alpha0在后者12/12名义通过。216回合速度/初始横偏扩展中alpha0 98/108、零中层51/108，2.2m/s仍有9失败。下一步定位高速出弯航向恢复，并建立同路径/同地图/同锁摆Isaac对照；不以降难度结果冒充原图恢复。完整任务完成后按用户要求Bark通知。记录位于chapter3_playground_isaac_recovery/turning_suite；首轮CCD溢出invalid。
+
+### 带摆STTW可用配置验收
+
+**带摆STTW Playground修复在用户授权降难度范围内采用并通过验收。** 原第三章XY/三角索引/沟桥/碎石/2cm脊坡不变，仅最高8cm脊坡降4cm；1.8m/s、冻结H75 alpha0、锁髋膝、原位置伺服、implicitfast1ms、摩擦0.8，无续训/质量惯量/力矩上限扩权。12类地形路径×横偏±.05m/航向±.03rad/侧倾±.015rad全组合96/96，配对零中层64/96；同条件Isaac57/96、零中层19/96。连续x3→17m含左右连续弯、原地桥和两脊坡8/8、基线3/8，9.025–9.075s，最终保持加强至.5s。逐步重算保持/进度/失败标志通过，地图及物理审计通过；7项地形测试通过；12类与连续路线13视频时长核对、静帧检查完成。全部DEV，原8cm在1.8m/s仍33/36，4cm在2.2m/s仍27/36，不称原难度全恢复、全alpha或实车泛化；RB跳跃未列入本次STTW验收。交付入口`runs/worktrees/sttw-offroad/docs/evidence/chapter3_playground_isaac_recovery/README.md`；可运行配置`learning/configs/playground_sttw_offroad.json`、`playground_sttw_continuous.json`。

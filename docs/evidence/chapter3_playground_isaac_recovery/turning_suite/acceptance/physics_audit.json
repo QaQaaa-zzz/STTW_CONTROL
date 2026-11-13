@@ -1,0 +1,44 @@
+{
+  "source": "Original saved chapter3 mesh",
+  "vertices": 221502,
+  "triangles": 440326,
+  "unchanged_xy_and_triangles": true,
+  "changed_height_x_interval_m": [
+    13.024999618530273,
+    14.975000381469727
+  ],
+  "maximum_height_reduction_m": 0.04000000283122063,
+  "body_mass_and_inertia_unchanged": true,
+  "actuator_force_limits_unchanged": [
+    [
+      -5.0,
+      5.0
+    ],
+    [
+      -6.0,
+      6.0
+    ],
+    [
+      -30.0,
+      30.0
+    ],
+    [
+      -30.0,
+      30.0
+    ]
+  ],
+  "integrator": "mjINT_IMPLICITFAST",
+  "timestep": 0.001,
+  "wheel_friction": {
+    "frontwheel_collision": [
+      0.8,
+      0.005,
+      0.0001
+    ],
+    "rearwheel_collision": [
+      0.8,
+      0.005,
+      0.0001
+    ]
+  }
+}

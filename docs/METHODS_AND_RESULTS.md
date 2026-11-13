@@ -1949,3 +1949,10 @@ GLM端到端集成（用户2026-11-09新授权）：已配置glm-5.3从11场景�
 ## 60cm碎石沟训练与奖励诊断
 
 150轮训练及原/最佳138/最终150三模型单初态回放已完成，均未完成远岸落地续行。旧高度奖励主导，落地奖励为零；Go2物理/执行/观测随机化已接入，但地形固定。任务、奖励、源码、随机化范围、负结果与XY详见 [/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ditch_jump150_20261109/evaluation/RESULTS.md](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_ditch_jump150_20261109/evaluation/RESULTS.md)。UMV目标奖励结构已转为待训练配置，不能称性能改善。
+
+
+## Playground带摆STTW越野恢复验收
+
+**带摆STTW Playground修复在用户授权降难度范围内采用并通过验收。** 原第三章XY/三角索引/沟桥/碎石/2cm脊坡不变，仅最高8cm脊坡降4cm；1.8m/s、冻结H75 alpha0、锁髋膝、原位置伺服、implicitfast1ms、摩擦0.8，无续训/质量惯量/力矩上限扩权。12类地形路径×横偏±.05m/航向±.03rad/侧倾±.015rad全组合96/96，配对零中层64/96；同条件Isaac57/96、零中层19/96。连续x3→17m含左右连续弯、原地桥和两脊坡8/8、基线3/8，9.025–9.075s，最终保持加强至.5s。逐步重算保持/进度/失败标志通过，地图及物理审计通过；7项地形测试通过；12类与连续路线13视频时长核对、静帧检查完成。全部DEV，原8cm在1.8m/s仍33/36，4cm在2.2m/s仍27/36，不称原难度全恢复、全alpha或实车泛化；RB跳跃未列入本次STTW验收。交付入口`runs/worktrees/sttw-offroad/docs/evidence/chapter3_playground_isaac_recovery/README.md`；可运行配置`learning/configs/playground_sttw_offroad.json`、`playground_sttw_continuous.json`。
+
+拒绝短前视0.5秒候选（alpha0 98→69/108）；首轮CCD溢出无效，保存而不计入成绩。不是单因素归因：地形接触映射、锁摆、积分器和摩擦联合修复；未重新训练网络。

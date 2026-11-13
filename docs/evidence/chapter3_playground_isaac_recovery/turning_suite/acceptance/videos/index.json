@@ -1,0 +1,114 @@
+{
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_isaac_recovery/turning_suite/acceptance/evaluation",
+  "role": "Saved measured qpos replay, no re-integration, real-time30fps plus1s labeled final hold",
+  "videos": [
+    {
+      "file": "stones_straight_y-0.05_yaw-0.03_roll-0.015.mp4",
+      "lane": 0,
+      "case": "stones_straight_y-0.05_yaw-0.03_roll-0.015",
+      "duration_s": 1.945,
+      "frames": 89,
+      "terminal_hold_s": 1,
+      "termination": "goal_hold"
+    },
+    {
+      "file": "stones_left90_y-0.05_yaw-0.03_roll-0.015.mp4",
+      "lane": 16,
+      "case": "stones_left90_y-0.05_yaw-0.03_roll-0.015",
+      "duration_s": 2.54,
+      "frames": 107,
+      "terminal_hold_s": 1,
+      "termination": "goal_hold"
+    },
+    {
+      "file": "stones_right90_y-0.05_yaw-0.03_roll-0.015.mp4",
+      "lane": 32,
+      "case": "stones_right90_y-0.05_yaw-0.03_roll-0.015",
+      "duration_s": 2.66,
+      "frames": 110,
+      "terminal_hold_s": 1,
+      "termination": "goal_hold"
+    },
+    {
+      "file": "stones_s_bend_y-0.05_yaw-0.03_roll-0.015.mp4",
+      "lane": 48,
+      "case": "stones_s_bend_y-0.05_yaw-0.03_roll-0.015",
+      "duration_s": 2.91,
+      "frames": 118,
+      "terminal_hold_s": 1,
+      "termination": "goal_hold"
+    },
+    {
+      "file": "ridge20mm_straight_y-0.05_yaw-0.03_roll-0.015.mp4",
+      "lane": 64,
+      "case": "ridge20mm_straight_y-0.05_yaw-0.03_roll-0.015",
+      "duration_s": 1.945,
+      "frames": 89,
+      "terminal_hold_s": 1,
+      "termination": "goal_hold"
+    },
+    {
+      "file": "ridge20mm_left90_y-0.05_yaw-0.03_roll-0.015.mp4",
+      "lane": 80,
+      "case": "ridge20mm_left90_y-0.05_yaw-0.03_roll-0.015",
+      "duration_s": 2.5300000000000002,
+      "frames": 106,
+      "terminal_hold_s": 1,
+      "termination": "goal_hold"
+    },
+    {
+      "file": "ridge20mm_right90_y-0.05_yaw-0.03_roll-0.015.mp4",
+      "lane": 96,
+      "case": "ridge20mm_right90_y-0.05_yaw-0.03_roll-0.015",
+      "duration_s": 2.575,
+      "frames": 108,
+      "terminal_hold_s": 1,
+      "termination": "goal_hold"
+    },
+    {
+      "file": "ridge20mm_s_bend_y-0.05_yaw-0.03_roll-0.015.mp4",
+      "lane": 112,
+      "case": "ridge20mm_s_bend_y-0.05_yaw-0.03_roll-0.015",
+      "duration_s": 2.935,
+      "frames": 119,
+      "terminal_hold_s": 1,
+      "termination": "goal_hold"
+    },
+    {
+      "file": "ridge40mm_straight_y-0.05_yaw-0.03_roll-0.015.mp4",
+      "lane": 128,
+      "case": "ridge40mm_straight_y-0.05_yaw-0.03_roll-0.015",
+      "duration_s": 1.95,
+      "frames": 89,
+      "terminal_hold_s": 1,
+      "termination": "goal_hold"
+    },
+    {
+      "file": "ridge40mm_left90_y-0.05_yaw-0.03_roll-0.015.mp4",
+      "lane": 144,
+      "case": "ridge40mm_left90_y-0.05_yaw-0.03_roll-0.015",
+      "duration_s": 2.515,
+      "frames": 106,
+      "terminal_hold_s": 1,
+      "termination": "goal_hold"
+    },
+    {
+      "file": "ridge40mm_right90_y-0.05_yaw-0.03_roll-0.015.mp4",
+      "lane": 160,
+      "case": "ridge40mm_right90_y-0.05_yaw-0.03_roll-0.015",
+      "duration_s": 2.6,
+      "frames": 108,
+      "terminal_hold_s": 1,
+      "termination": "goal_hold"
+    },
+    {
+      "file": "ridge40mm_s_bend_y-0.05_yaw-0.03_roll-0.015.mp4",
+      "lane": 176,
+      "case": "ridge40mm_s_bend_y-0.05_yaw-0.03_roll-0.015",
+      "duration_s": 2.995,
+      "frames": 120,
+      "terminal_hold_s": 1,
+      "termination": "goal_hold"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_isaac_recovery/turning_suite/continuous_route/evaluation",
+  "role": "Saved measured qpos replay, no re-integration, real-time30fps plus1s labeled final hold",
+  "videos": [
+    {
+      "file": "continuous_bridge_y-0.05_yaw-0.03_roll-0.015.mp4",
+      "lane": 0,
+      "case": "continuous_bridge_y-0.05_yaw-0.03_roll-0.015",
+      "duration_s": 9.045,
+      "frames": 302,
+      "terminal_hold_s": 1,
+      "termination": "goal_hold"
+    }
+  ]
+}

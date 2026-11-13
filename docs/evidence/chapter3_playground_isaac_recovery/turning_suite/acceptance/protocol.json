@@ -1,0 +1,10 @@
+{
+  "role": "Prospective combined-initial-error acceptance DEV; frozen candidate selected on previous tests",
+  "episodes": 192,
+  "maximum_seconds_each": 10,
+  "maximum_physics_steps": 1920000,
+  "optimizer_updates": 0,
+  "conditions": "12 paths x full factorial lateral +/-0.05m, yaw +/-0.03rad, roll +/-0.015rad; speed1.8m/s; alpha0 and matched zero-middle; original global paths not reanchored; highest ridge4cm, other map geometry unchanged",
+  "controller_initialization": "ESO initialized once from measured steer, roll and roll-rate; no temporal warmup",
+  "acceptance": "All 96 candidate conditions must achieve existing path/heading/speed hold without physical or corridor termination. Failures retained, no claim on original8cm or higher speeds."
+}

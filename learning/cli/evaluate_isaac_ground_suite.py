@@ -20,7 +20,7 @@ class Simulation:
     def reset(self,cases,case_ids):
         roots=plant.robot.data.default_root_state.clone();positions=plant.robot.data.default_joint_pos.clone();velocities=torch.zeros_like(positions)
         for i,k in enumerate(case_ids):
-            c=cases[k];yaw=c['start_yaw'];roots[i,:2]=torch.tensor(c['start_xy'],device=plant.device);roots[i,3:7]=torch.tensor([np.cos(yaw/2)/np.sqrt(2),np.cos(yaw/2)/np.sqrt(2),np.sin(yaw/2)/np.sqrt(2),np.sin(yaw/2)/np.sqrt(2)],device=plant.device);roots[i,7:9]=torch.tensor([c['speed_m_s']*np.cos(yaw),c['speed_m_s']*np.sin(yaw)],device=plant.device)
+            c=cases[k];yaw=c['start_yaw'];angle=np.pi/2+c.get('start_roll_rad',0.);roots[i,:2]=torch.tensor(c['start_xy'],device=plant.device);roots[i,3:7]=torch.tensor([np.cos(yaw/2)*np.cos(angle/2),np.cos(yaw/2)*np.sin(angle/2),np.sin(yaw/2)*np.sin(angle/2),np.sin(yaw/2)*np.cos(angle/2)],device=plant.device);roots[i,7:9]=torch.tensor([c['speed_m_s']*np.cos(yaw),c['speed_m_s']*np.sin(yaw)],device=plant.device)
         plant.reset_idx(torch.arange(n,device=plant.device),state=dict(root_pose=roots[:,:7],root_velocity=roots[:,7:],joint_position=positions,joint_velocity=velocities));plant.set_pendulum_locked(True)
     def observe(self):
         m,pose,speed=plant.observe();q=plant.roots[:,3:7];x,y,z,w=q.unbind(-1);pitch=torch.asin((2*(w*y-z*x)).clamp(-1,1))

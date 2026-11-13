@@ -1,0 +1,26 @@
+[
+  {
+    "run": "acceptance/evaluation",
+    "candidate_conditions": 96,
+    "independent_saved_trace_check": "passed",
+    "final_hold_s": 0.2,
+    "max_final_path_heading_speed_error": [
+      0.24505388736724854,
+      0.19831299781799316,
+      0.21998047828674316
+    ],
+    "baseline_success": 64
+  },
+  {
+    "run": "continuous_route/evaluation",
+    "candidate_conditions": 8,
+    "independent_saved_trace_check": "passed",
+    "final_hold_s": 0.5,
+    "max_final_path_heading_speed_error": [
+      0.18951065838336945,
+      0.19612902402877808,
+      0.14275717735290527
+    ],
+    "baseline_success": 3
+  }
+]

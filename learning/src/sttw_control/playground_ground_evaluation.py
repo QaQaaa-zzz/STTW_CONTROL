@@ -25,7 +25,7 @@ def evaluate_ground_suite(model,mm,idx,cfg,bundle,hcfg,identity,controller_confi
         from mujoco_playground._src import mjx_env
         qpos=np.tile(model.key_qpos[idx.keyframe_id],(n,1));qvel=np.tile(model.key_qvel[idx.keyframe_id],(n,1))
         for lane,case_id in enumerate(case_ids):
-            case=cases[case_id];qpos[lane,:2]=case['start_xy'];yaw=case['start_yaw'];qpos[lane,3:7]=[np.cos(yaw/2),0,0,np.sin(yaw/2)];qvel[lane,:2]=case['speed_m_s']*np.array([np.cos(yaw),np.sin(yaw)])
+            case=cases[case_id];qpos[lane,:2]=case['start_xy'];yaw=case['start_yaw'];roll=case.get('start_roll_rad',0.);qpos[lane,3:7]=[np.cos(yaw/2)*np.cos(roll/2),np.cos(yaw/2)*np.sin(roll/2),np.sin(yaw/2)*np.sin(roll/2),np.sin(yaw/2)*np.cos(roll/2)];qvel[lane,:2]=case['speed_m_s']*np.array([np.cos(yaw),np.sin(yaw)])
         mm=mm.replace(eq_data=mm.eq_data.at[brake_ids,0].set(jp.asarray(qpos[0,[idx.hip_qpos_address,idx.knee_qpos_address]])))
         def make(q,v):
             d=mjx_env.make_data(model,qpos=q,qvel=v,impl='warp',naconmax=4096,naccdmax=512,njmax=256)
@@ -44,6 +44,7 @@ def evaluate_ground_suite(model,mm,idx,cfg,bundle,hcfg,identity,controller_confi
         data=None
         observe=lambda data:simulation.observe()
     q,m,pose,v,pitch=observe(data);raw=torch.stack((v,m[:,2]),-1);previous=torch.stack((m[:,3],m[:,5]),-1)
+    ctl.eso[:,:3]=m[:,[2,0,1]];ctl.filtered_roll_rate[:]=m[:,1]
     middle.reset(m,pose,v,raw,raw,previous,ctl)
     target=tensor(np.zeros((n,4)));target[:,2:]=tensor(q[:,[idx.hip_qpos_address,idx.knee_qpos_address]]) if simulation is None else simulation.plant.pendulum_target
     alive=torch.ones(n,dtype=torch.bool);hold=torch.zeros(n);goal=tensor([cases[i]['goal_s'] for i in case_ids]);turn_end=tensor([cases[i]['turn_end_s'] for i in case_ids]);reason=['timeout']*n;duration=np.full(n,suite['seconds']);rows=[];initial_qpos=q.copy();started=time.monotonic()
