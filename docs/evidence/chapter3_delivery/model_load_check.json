@@ -1,0 +1,5 @@
+{
+  "torch_models": 21,
+  "numpy_model_files": 4,
+  "scope": "CPU deserialization for Torch models; finite numeric arrays for NumPy model files; original native checkpoints byte-verified against registry. No new physical evaluation."
+}
