@@ -1,0 +1,173 @@
+[
+  {
+    "skill": "rb_run1",
+    "route": 60,
+    "continuation": "h75",
+    "termination": "physical_failure",
+    "goal": false,
+    "airborne": true,
+    "far_contact": false,
+    "first_far_contact_s": null,
+    "handoff_s": null,
+    "duration_s": 2.71,
+    "final_xy": [
+      10.18624210357666,
+      0.1658812016248703
+    ],
+    "failed_stage": "RB before far contact",
+    "final_roll_rad": 0.7006322145462036,
+    "final_pitch_rad": 0.3522634208202362
+  },
+  {
+    "skill": "rb_run1",
+    "route": 61,
+    "continuation": "h75",
+    "termination": "physical_failure",
+    "goal": false,
+    "airborne": true,
+    "far_contact": false,
+    "first_far_contact_s": null,
+    "handoff_s": null,
+    "duration_s": 2.955,
+    "final_xy": [
+      10.218049049377441,
+      0.084597148001194
+    ],
+    "failed_stage": "RB before far contact",
+    "final_roll_rad": -0.5421795845031738,
+    "final_pitch_rad": 1.3125879764556885
+  },
+  {
+    "skill": "rb_run1",
+    "route": 62,
+    "continuation": "h75",
+    "termination": "physical_failure",
+    "goal": false,
+    "airborne": true,
+    "far_contact": false,
+    "first_far_contact_s": null,
+    "handoff_s": null,
+    "duration_s": 2.6750000000000003,
+    "final_xy": [
+      10.299291610717773,
+      0.34437066316604614
+    ],
+    "failed_stage": "RB before far contact",
+    "final_roll_rad": 0.8648328185081482,
+    "final_pitch_rad": -1.1891658306121826
+  },
+  {
+    "skill": "rb_run2",
+    "route": 60,
+    "continuation": "h75",
+    "termination": "physical_failure",
+    "goal": false,
+    "airborne": false,
+    "far_contact": false,
+    "first_far_contact_s": null,
+    "handoff_s": null,
+    "duration_s": 1.795,
+    "final_xy": [
+      6.849264144897461,
+      0.26257243752479553
+    ],
+    "failed_stage": "STTW approach",
+    "final_roll_rad": 0.7233046293258667,
+    "final_pitch_rad": 0.06002277508378029
+  },
+  {
+    "skill": "rb_run2",
+    "route": 61,
+    "continuation": "h75",
+    "termination": "physical_failure",
+    "goal": false,
+    "airborne": true,
+    "far_contact": false,
+    "first_far_contact_s": null,
+    "handoff_s": null,
+    "duration_s": 2.745,
+    "final_xy": [
+      10.202569961547852,
+      0.18868325650691986
+    ],
+    "failed_stage": "RB before far contact",
+    "final_roll_rad": 0.363155722618103,
+    "final_pitch_rad": 1.319718837738037
+  },
+  {
+    "skill": "rb_run2",
+    "route": 62,
+    "continuation": "h75",
+    "termination": "physical_failure",
+    "goal": false,
+    "airborne": true,
+    "far_contact": false,
+    "first_far_contact_s": null,
+    "handoff_s": null,
+    "duration_s": 2.825,
+    "final_xy": [
+      10.151383399963379,
+      0.11896726489067078
+    ],
+    "failed_stage": "RB before far contact",
+    "final_roll_rad": 0.7283481359481812,
+    "final_pitch_rad": 1.305118441581726
+  },
+  {
+    "skill": "rb_run3",
+    "route": 60,
+    "continuation": "h75",
+    "termination": "physical_failure",
+    "goal": false,
+    "airborne": false,
+    "far_contact": false,
+    "first_far_contact_s": null,
+    "handoff_s": null,
+    "duration_s": 2.235,
+    "final_xy": [
+      8.64310359954834,
+      0.33835557103157043
+    ],
+    "failed_stage": "STTW approach",
+    "final_roll_rad": 0.7312321662902832,
+    "final_pitch_rad": -0.015625501051545143
+  },
+  {
+    "skill": "rb_run3",
+    "route": 61,
+    "continuation": "h75",
+    "termination": "physical_failure",
+    "goal": false,
+    "airborne": false,
+    "far_contact": false,
+    "first_far_contact_s": null,
+    "handoff_s": null,
+    "duration_s": 1.665,
+    "final_xy": [
+      6.560021877288818,
+      0.20657509565353394
+    ],
+    "failed_stage": "STTW approach",
+    "final_roll_rad": 0.7252321839332581,
+    "final_pitch_rad": 0.0506216399371624
+  },
+  {
+    "skill": "rb_run3",
+    "route": 62,
+    "continuation": "h75",
+    "termination": "physical_failure",
+    "goal": false,
+    "airborne": false,
+    "far_contact": false,
+    "first_far_contact_s": null,
+    "handoff_s": null,
+    "duration_s": 2.3000000000000003,
+    "final_xy": [
+      8.752605438232422,
+      -0.030415181070566177
+    ],
+    "failed_stage": "STTW approach",
+    "final_roll_rad": -0.7086811661720276,
+    "final_pitch_rad": 0.004772457759827375
+  }
+]

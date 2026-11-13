@@ -1,0 +1,17 @@
+{
+  "role": "DEV integration, no training",
+  "budget_episodes": 9,
+  "max_seconds_per_episode": 10,
+  "max_physics_steps": 18000,
+  "git_revision": "a352fa6b",
+  "pythonpath": [
+    "learning/src",
+    "/home/qy/DVGC/runs/worktrees/multidim-envelope/JIT/src"
+  ],
+  "startup_errors": [
+    "missing sttw_control.ditch_terrain import path",
+    "missing jit_dvgc import path"
+  ],
+  "startup_errors_before_physics": true,
+  "comparison_limit": "terrain and handoff delay changed together; no single-factor causal claim"
+}
