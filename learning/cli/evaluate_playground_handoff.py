@@ -31,11 +31,11 @@ from jit_dvgc.model import _build_index
 from jit_dvgc.observation import initial_history, advance_history, observable_frame, actor_observation, ObservableGeometry
 
 
-def transplant(bundle, terrain, output):
+def transplant(bundle, terrain, output, physics_substeps=1):
     """Two disjoint heightfields, preserving the sampled rough bank surface."""
     root = ET.parse(bundle.xml_path).getroot()
     root.find('compiler').set('meshdir', str(bundle.xml_path.parent/'meshes'))
-    root.find('option').set('timestep', '.005')
+    root.find('option').set('timestep', str(.005/physics_substeps))
     root.find('option').set('ccd_iterations', '100')
     world, assets = root.find('worldbody'), root.find('asset')
     for name in ('floor', 'step'):
@@ -94,6 +94,7 @@ def main():
     p.add_argument('--model',type=Path,help='Reuse an existing terrain MJB from this task')
     p.add_argument('--approach', choices=['native','h75'], default='h75')
     p.add_argument('--routes',nargs='+',type=int,default=[60,61,62]); p.add_argument('--seconds',type=float,default=10)
+    p.add_argument('--physics-substeps',type=int,default=1,choices=[1,5,25],help='Physics substeps per unchanged 5 ms controller tick')
     p.add_argument('--ground-only',action='store_true',help='Keep ground control throughout; no RB activation')
     a=p.parse_args(); a.output.mkdir(parents=True,exist_ok=False); torch.set_num_threads(1)
     cfg=json.loads(a.config.read_text()); hand=cfg['ground_handoff']; terrain=cfg['ditch_terrain']
@@ -101,12 +102,15 @@ def main():
     controller=json.loads(Path(json.loads(Path(hand['settings']).read_text())['controller_config']).read_text())
     skills={name:PendulumSkill(a.registry,name) for name in a.skills}
     original=next(iter(skills.values())).bundle; idx=original.model_index
-    model=mujoco.MjModel.from_binary_path(str(a.model)) if a.model else transplant(original,terrain,a.output); idx=_build_index(model); geometry=build_geometry_contract(model); mm=mjx.put_model(model,impl='warp')
+    model=mujoco.MjModel.from_binary_path(str(a.model)) if a.model else transplant(original,terrain,a.output,a.physics_substeps)
+    if not np.isclose(model.opt.timestep,.005/a.physics_substeps):
+        raise ValueError('Cached terrain model physics dt differs from requested substeps; rebuild it')
+    idx=_build_index(model); geometry=build_geometry_contract(model); mm=mjx.put_model(model,impl='warp')
     roads=np.load(hand['reference_path']); n=len(a.routes)*len(skills)*len(a.modes)
-    contract=dict(terrain_model=str(a.model) if a.model else str(a.output/'terrain.mjb'),role='bounded native Playground transfer DEV, no training',skills={k:s.record for k,s in skills.items()},terrain=terrain,source_config=str(a.config),routes=a.routes,episode_s=a.seconds,episodes=n,physics_steps_max=round(a.seconds/.005)*n,backend='MuJoCo Playground mjx_env.step, MJX-Warp',heightfield_contact_workspace=512,physics_dt=.005,lower_dt=.005,upper_dt=.02,ground_model=identity,goal=hand['goal'],road_half_width_m=hand['road_half_width_m'],start_x_m=1.5,start_vx_m_s=2.,handoff='RB remains active for configured delay after first far-bank wheel contact; then next 5ms boundary',handoff_delay_s=hand.get('handoff_delay_s',0.),approach=a.approach,ground_only=a.ground_only,jump_start_x_m=hand['approach']['jump_start_x_m'],scope='Declared approach controller then native RB jump then H75 or zero-middle STTW. No planning or training.',terrain_conversion='Existing seeded terrain vertices resampled to 25mm heightfields, open trench and bridge retained; native vehicle and contacts retained, not a controlled simulator-only comparison.',pendulum='finite native position servos hold measured landing joint angles; no joint lock',observer='measured ESO initialization, empty H75 history at handoff')
+    contract=dict(terrain_model=str(a.model) if a.model else str(a.output/'terrain.mjb'),role='bounded native Playground transfer DEV, no training',skills={k:s.record for k,s in skills.items()},terrain=terrain,source_config=str(a.config),routes=a.routes,episode_s=a.seconds,episodes=n,physics_steps_max=round(a.seconds/.005)*n*a.physics_substeps,backend='MuJoCo Playground mjx_env.step, MJX-Warp',heightfield_contact_workspace=512,physics_dt=.005/a.physics_substeps,physics_substeps=a.physics_substeps,lower_dt=.005,upper_dt=.02,ground_model=identity,goal=hand['goal'],road_half_width_m=hand['road_half_width_m'],start_x_m=1.5,start_vx_m_s=2.,handoff='RB remains active for configured delay after first far-bank wheel contact; then next 5ms boundary',handoff_delay_s=hand.get('handoff_delay_s',0.),approach=a.approach,ground_only=a.ground_only,jump_start_x_m=hand['approach']['jump_start_x_m'],scope='Declared approach controller then native RB jump then H75 or zero-middle STTW. No planning or training.',terrain_conversion='Existing seeded terrain vertices resampled to 25mm heightfields, open trench and bridge retained; native vehicle and contacts retained, not a controlled simulator-only comparison.',pendulum='finite native position servos hold measured landing joint angles; no joint lock',observer='measured ESO initialization, empty H75 history at handoff')
     (a.output/'declaration.json').write_text(json.dumps(contract,indent=2))
     @jax.jit
-    def step(data,ctrl):return mjx_env.step(mm,data,ctrl,1)
+    def step(data,ctrl):return mjx_env.step(mm,data,ctrl,a.physics_substeps)
     @jax.jit
     def frame(data,history,last,signal):
         g=extract_geometry(data,geometry)
