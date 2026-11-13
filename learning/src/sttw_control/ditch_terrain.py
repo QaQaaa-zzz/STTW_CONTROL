@@ -2,7 +2,7 @@
 import numpy as np
 
 
-def build_ditch_terrain(spec):
+def build_ditch_terrain(spec, *, return_patches=False):
     front, width = spec['front_x_m'], spec['width_m']
     if width <= 0 or not 0 <= spec['stone_height_min_m'] <= spec['stone_height_max_m'] <= .15 or spec['stones_per_m2'] < 0:
         raise ValueError('Positive trench width, nonnegative density and ordered stone heights in [0, .15] required')
@@ -12,6 +12,7 @@ def build_ditch_terrain(spec):
     rough_start=min(v[0] for v in intervals);rough_end=max(v[1] for v in intervals)
     rng = np.random.default_rng(spec['seed'])
     vertices, triangles = [], []
+    patches = []
     def patch(xs, ys, rough, bank_height):
         x, y = np.meshgrid(xs, ys, indexing='ij')
         z = np.zeros_like(x)
@@ -37,6 +38,7 @@ def build_ditch_terrain(spec):
             z *= np.clip((x-xs[0])/.1,0,1)*np.clip((xs[-1]-x)/.1,0,1)
         start = sum(len(v) for v in vertices)
         vertices.append(np.stack((x,y,z+bank_height),-1).reshape(-1,3))
+        patches.append((xs.copy(), ys.copy(), (z+bank_height).copy()))
         a = np.arange(x.size).reshape(x.shape)[:-1,:-1].ravel()+start
         stride = len(ys)
         triangles.extend((np.stack((a,a+stride,a+1),-1),np.stack((a+1,a+stride,a+stride+1),-1)))
@@ -62,7 +64,8 @@ def build_ditch_terrain(spec):
         if not 1.<lo<hi<=4. or spec.get('far_bank_height_m',0.)!=0.:
             raise ValueError('The lateral land bridge requires same-height banks and 1 < y_min < y_max <= 4')
         patch(np.array([front,front+width]),np.array([lo,hi]),False,0.)
-    return np.concatenate(vertices).astype(np.float32),np.concatenate(triangles).astype(np.int32)
+    mesh = (np.concatenate(vertices).astype(np.float32),np.concatenate(triangles).astype(np.int32))
+    return (*mesh, patches) if return_patches else mesh
 
 
 def ditch_support_mask(wheels, forces, roll, pitch, forward_velocity, spec):

@@ -1,0 +1,27 @@
+{
+  "user_requirement": "STTW hip and knee locked, RB releases them",
+  "terrain_source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rb_candidate_handoff/source/config.json",
+  "terrain": "Exact original third chapter map including original trench; no moved gap or changed rough intervals",
+  "variants": [
+    "chapter3_near_position_locked",
+    "chapter3_near_velocity_locked",
+    "chapter3_far_position_locked",
+    "chapter3_far_velocity_locked"
+  ],
+  "routes": [
+    60,
+    61,
+    62
+  ],
+  "episodes": 12,
+  "seconds": 10,
+  "maximum_physics_steps": 120000,
+  "optimizer_updates": 0,
+  "role": "DEV ground segment diagnosis on both banks, not full jump-chain completion",
+  "start_x_near": 1.5,
+  "start_x_far": 11.2,
+  "goal_near": 8.3,
+  "goal_far": 16.5,
+  "brake": "Joint equality target at STTW entry, release for RB, relock at actual handoff; no state teleportation",
+  "acceptance": "All original ground routes stay within original roll/corridor limits and reach segment endpoint; actual brake drift measured"
+}

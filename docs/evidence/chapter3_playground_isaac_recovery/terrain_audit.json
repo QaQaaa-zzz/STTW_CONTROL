@@ -1,0 +1,8 @@
+{
+  "samples": 512,
+  "max_surface_error_m": 4.4890415135112605e-08,
+  "mean_surface_error_m": 2.0992195544806306e-09,
+  "tolerance_m": 1e-06,
+  "passed": true,
+  "method": "Barycentric samples on original Isaac triangles versus rays through compiled MuJoCo heightfields; all nonterrain geoms excluded"
+}

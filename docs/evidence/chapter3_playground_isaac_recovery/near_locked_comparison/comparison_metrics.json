@@ -1,0 +1,74 @@
+[
+  {
+    "run": "locked_position",
+    "route": 60,
+    "end": "goal",
+    "goal": true,
+    "duration_s": 3.33,
+    "common_window_s": 2.2,
+    "common_speed_rmse_m_s": 0.08232018517172182,
+    "common_path_rmse_m": 0.02626385624879539,
+    "max_path_m": 0.054207466542720795,
+    "peak_roll_rad": 0.00816915649920702
+  },
+  {
+    "run": "locked_velocity",
+    "route": 60,
+    "end": "physical_failure",
+    "goal": false,
+    "duration_s": 2.2,
+    "common_window_s": 2.2,
+    "common_speed_rmse_m_s": 0.08951870397329863,
+    "common_path_rmse_m": 0.026425899443581823,
+    "max_path_m": 0.09729618579149246,
+    "peak_roll_rad": 0.7212916612625122
+  },
+  {
+    "run": "locked_position",
+    "route": 61,
+    "end": "goal",
+    "goal": true,
+    "duration_s": 3.33,
+    "common_window_s": 2.2,
+    "common_speed_rmse_m_s": 0.08232030994470087,
+    "common_path_rmse_m": 0.026268111318613025,
+    "max_path_m": 0.05487484484910965,
+    "peak_roll_rad": 0.008348777890205383
+  },
+  {
+    "run": "locked_velocity",
+    "route": 61,
+    "end": "physical_failure",
+    "goal": false,
+    "duration_s": 2.2,
+    "common_window_s": 2.2,
+    "common_speed_rmse_m_s": 0.08949284875731658,
+    "common_path_rmse_m": 0.026422459563760523,
+    "max_path_m": 0.09725523740053177,
+    "peak_roll_rad": 0.7210559844970703
+  },
+  {
+    "run": "locked_position",
+    "route": 62,
+    "end": "goal",
+    "goal": true,
+    "duration_s": 3.33,
+    "common_window_s": 2.2,
+    "common_speed_rmse_m_s": 0.08231245806637315,
+    "common_path_rmse_m": 0.026275408212628894,
+    "max_path_m": 0.05426499620079994,
+    "peak_roll_rad": 0.00821938831359148
+  },
+  {
+    "run": "locked_velocity",
+    "route": 62,
+    "end": "physical_failure",
+    "goal": false,
+    "duration_s": 2.2,
+    "common_window_s": 2.2,
+    "common_speed_rmse_m_s": 0.08949658617171462,
+    "common_path_rmse_m": 0.026422465502553266,
+    "max_path_m": 0.097255639731884,
+    "peak_roll_rad": 0.7210692167282104
+  }
+]

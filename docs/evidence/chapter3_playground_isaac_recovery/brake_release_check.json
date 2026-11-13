@@ -1,0 +1,13 @@
+{
+  "cpu_lock_drift_rad": [
+    -5.660493733739003e-07,
+    7.920087390367314e-07
+  ],
+  "cpu_released_motion_rad": [
+    0.5404368958010326,
+    -0.5077150017060255
+  ],
+  "physical_steps": 200,
+  "physics_dt": 0.001,
+  "scope": "same compiled model, CPU lock then release; does not test full RB handoff"
+}

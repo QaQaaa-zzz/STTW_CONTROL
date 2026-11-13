@@ -1,0 +1,126 @@
+{
+  "RK4": [
+    {
+      "time_s": 0.001,
+      "steer_rad": 0.002081550186776376,
+      "steer_rate_rad_s": -3.120171960575015,
+      "motor_torque_Nm": -5.0
+    },
+    {
+      "time_s": 0.002,
+      "steer_rad": 0.0041641485059146005,
+      "steer_rate_rad_s": -3.1195909531757797,
+      "motor_torque_Nm": -5.0
+    },
+    {
+      "time_s": 0.003,
+      "steer_rad": 0.006246858640529539,
+      "steer_rate_rad_s": -3.120096241624646,
+      "motor_torque_Nm": -5.0
+    },
+    {
+      "time_s": 0.004,
+      "steer_rad": 0.008329130647577582,
+      "steer_rate_rad_s": -3.1204727300784034,
+      "motor_torque_Nm": -5.0
+    },
+    {
+      "time_s": 0.005,
+      "steer_rad": 0.010411076020854252,
+      "steer_rate_rad_s": -3.12075358106928,
+      "motor_torque_Nm": -5.0
+    },
+    {
+      "time_s": 0.006,
+      "steer_rad": 0.012492777560383405,
+      "steer_rate_rad_s": -3.120963393981576,
+      "motor_torque_Nm": -5.0
+    },
+    {
+      "time_s": 0.007,
+      "steer_rad": 0.01457429678173091,
+      "steer_rate_rad_s": -3.121120417171236,
+      "motor_torque_Nm": -5.0
+    },
+    {
+      "time_s": 0.008,
+      "steer_rad": 0.016655679387513625,
+      "steer_rate_rad_s": -3.1212382331629622,
+      "motor_torque_Nm": -5.0
+    },
+    {
+      "time_s": 0.009000000000000001,
+      "steer_rad": 0.01873695929965857,
+      "steer_rate_rad_s": -3.12132697236966,
+      "motor_torque_Nm": -5.0
+    },
+    {
+      "time_s": 0.010000000000000002,
+      "steer_rad": 0.020818161703027135,
+      "steer_rate_rad_s": -3.1213940968759877,
+      "motor_torque_Nm": -5.0
+    }
+  ],
+  "implicitfast": [
+    {
+      "time_s": 0.001,
+      "steer_rad": 9.921409109094176e-05,
+      "steer_rate_rad_s": 0.09921409109094176,
+      "motor_torque_Nm": 2.0
+    },
+    {
+      "time_s": 0.002,
+      "steer_rad": 0.00019921461507955795,
+      "steer_rate_rad_s": 0.10000052398861617,
+      "motor_torque_Nm": 0.015718178181164832
+    },
+    {
+      "time_s": 0.003,
+      "steer_rad": 0.0002992110884740852,
+      "steer_rate_rad_s": 0.09999647339452723,
+      "motor_torque_Nm": -1.0479772323268577e-05
+    },
+    {
+      "time_s": 0.004,
+      "steer_rad": 0.0003992085451203721,
+      "steer_rate_rad_s": 0.09999745664628693,
+      "motor_torque_Nm": 7.053210945540123e-05
+    },
+    {
+      "time_s": 0.005,
+      "steer_rad": 0.0004992065813927011,
+      "steer_rate_rad_s": 0.09999803627232903,
+      "motor_torque_Nm": 5.086707426160686e-05
+    },
+    {
+      "time_s": 0.006,
+      "steer_rad": 0.0005992050504397742,
+      "steer_rate_rad_s": 0.09999846904707316,
+      "motor_torque_Nm": 3.9274553419232916e-05
+    },
+    {
+      "time_s": 0.007,
+      "steer_rad": 0.0006992038548013511,
+      "steer_rate_rad_s": 0.09999880436157696,
+      "motor_torque_Nm": 3.061905853685154e-05
+    },
+    {
+      "time_s": 0.008,
+      "steer_rad": 0.0007992029200563,
+      "steer_rate_rad_s": 0.09999906525494887,
+      "motor_torque_Nm": 2.391276846092083e-05
+    },
+    {
+      "time_s": 0.009000000000000001,
+      "steer_rad": 0.0008992021884810005,
+      "steer_rate_rad_s": 0.09999926842470051,
+      "motor_torque_Nm": 1.8694901022797694e-05
+    },
+    {
+      "time_s": 0.010000000000000002,
+      "steer_rad": 0.0009992016152288894,
+      "steer_rate_rad_s": 0.09999942674788888,
+      "motor_torque_Nm": 1.463150598968177e-05
+    }
+  ]
+}

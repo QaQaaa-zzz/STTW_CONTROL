@@ -56,3 +56,33 @@ def test_full_width_ridges_share_collision_height_and_leave_gap_open():
  crop=h.crop(r)
  np.testing.assert_allclose(crop[:,0],[80,0,0,0],atol=.001)
  assert crop[:,1].tolist()==[1,0,1,1]
+
+
+def test_playground_patches_preserve_isaac_vertices_and_open_trench():
+ spec={**SPEC,'stones_per_m2':1,'land_bridge_y_interval_m':[1.4,4.]}
+ vertices,faces,patches=build_ditch_terrain(spec,return_patches=True)
+ original_vertices,original_faces=build_ditch_terrain(spec)
+ np.testing.assert_array_equal(vertices,original_vertices)
+ np.testing.assert_array_equal(faces,original_faces)
+ rebuilt=[]
+ for xs,ys,z in patches:
+  x,y=np.meshgrid(xs,ys,indexing='ij')
+  rebuilt.append(np.stack((x,y,z),-1).reshape(-1,3))
+  # Rotate grid 90 degrees to preserve the Isaac cell diagonal.
+  bottom=z.min();scale=max(z.max()-bottom,1e-6)
+  heightfield=((z[::-1,:]-bottom)/scale).astype(np.float32)
+  np.testing.assert_allclose(heightfield[::-1,:]*scale+bottom,z,atol=1e-8)
+ np.testing.assert_array_equal(np.concatenate(rebuilt).astype(np.float32),vertices)
+
+
+def test_rotated_heightfield_uses_isaac_triangle_diagonal():
+ import mujoco
+ # One source cell with z=x*y at vertices. Isaac splits along x+y=1.
+ m=mujoco.MjModel.from_xml_string('<mujoco><asset><hfield name="h" nrow="2" ncol="2" size=".5 .5 1 .1"/></asset><worldbody><geom type="hfield" hfield="h" pos=".5 .5 0" quat=".7071067811865476 0 0 .7071067811865476"/></worldbody></mujoco>')
+ z=np.array([[0.,0.],[0.,1.]])
+ m.hfield_data[:]=z[::-1,:].ravel()
+ d=mujoco.MjData(m);mujoco.mj_forward(m,d)
+ for x,y in ((.25,.25),(.75,.75),(.25,.75),(.75,.25),(.5,.5)):
+  gid=np.zeros(1,dtype=np.int32)
+  distance=mujoco.mj_ray(m,d,np.array([x,y,2.]),np.array([0.,0.,-1.]),None,1,-1,gid)
+  np.testing.assert_allclose(2-distance,max(0.,x+y-1),atol=1e-7)

@@ -1,0 +1,74 @@
+[
+  {
+    "run": "locked_position",
+    "route": 60,
+    "end": "goal",
+    "goal": true,
+    "duration_s": 2.59,
+    "common_window_s": 0.515,
+    "common_speed_rmse_m_s": 0.04895748711106519,
+    "common_path_rmse_m": 0.007449055792382847,
+    "max_path_m": 0.05248356983065605,
+    "peak_roll_rad": 0.006181863136589527
+  },
+  {
+    "run": "locked_velocity",
+    "route": 60,
+    "end": "physical_failure",
+    "goal": false,
+    "duration_s": 0.515,
+    "common_window_s": 0.515,
+    "common_speed_rmse_m_s": 0.147883618469475,
+    "common_path_rmse_m": 0.045749760078649476,
+    "max_path_m": 0.116316057741642,
+    "peak_roll_rad": 0.7004693150520325
+  },
+  {
+    "run": "locked_position",
+    "route": 61,
+    "end": "corridor_or_domain_exit",
+    "goal": false,
+    "duration_s": 1.875,
+    "common_window_s": 0.61,
+    "common_speed_rmse_m_s": 0.06039949041632743,
+    "common_path_rmse_m": 0.01890351688532668,
+    "max_path_m": 0.6065454483032227,
+    "peak_roll_rad": 0.13721506297588348
+  },
+  {
+    "run": "locked_velocity",
+    "route": 61,
+    "end": "physical_failure",
+    "goal": false,
+    "duration_s": 0.61,
+    "common_window_s": 0.61,
+    "common_speed_rmse_m_s": 0.18969847670475212,
+    "common_path_rmse_m": 0.04954579433841889,
+    "max_path_m": 0.13953593373298645,
+    "peak_roll_rad": 0.7099948525428772
+  },
+  {
+    "run": "locked_position",
+    "route": 62,
+    "end": "goal",
+    "goal": true,
+    "duration_s": 2.735,
+    "common_window_s": 0.915,
+    "common_speed_rmse_m_s": 0.05141415803930967,
+    "common_path_rmse_m": 0.07571021365594936,
+    "max_path_m": 0.5356071591377258,
+    "peak_roll_rad": 0.18918155133724213
+  },
+  {
+    "run": "locked_velocity",
+    "route": 62,
+    "end": "physical_failure",
+    "goal": false,
+    "duration_s": 0.915,
+    "common_window_s": 0.915,
+    "common_speed_rmse_m_s": 0.25495487463244826,
+    "common_path_rmse_m": 0.10262050570930302,
+    "max_path_m": 0.32025036215782166,
+    "peak_roll_rad": 0.7014940977096558
+  }
+]
