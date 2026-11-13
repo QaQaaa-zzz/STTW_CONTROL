@@ -13,6 +13,7 @@ import jax
 import jax.numpy as jp
 import mujoco
 from mujoco import mjx
+from mujoco.mjx.warp.types import DATA_NON_VMAP
 from mujoco_playground._src import mjx_env
 from jit_dvgc.action_mapping import map_action
 from jit_dvgc.geometry import build_geometry_contract, extract_geometry
@@ -72,7 +73,9 @@ class PlaygroundRBEnv:
             d=d.replace(eq_active=d.eq_active.at[self.brake_ids].set(False))
             return mjx.forward(plant(mass,friction,gain,com),d)
         self.make=jax.jit(jax.vmap(make))
-        self.advance=jax.jit(jax.vmap(lambda d,c,m,f,g,o:mjx_env.step(plant(m,f,g,o),d,c,1)))
+        jump=jax.vmap(lambda d,c,m,f,g,o:mjx_env.step(plant(m,f,g,o),d,c,1))
+        home_opt=mm.opt.replace(timestep=jp.asarray(.001,dtype=mm.opt.timestep.dtype),integrator=type(mm.opt.integrator)(int(mujoco.mjtIntegrator.mjINT_IMPLICITFAST)))
+        home_step=jax.vmap(lambda d,c,m,f,g,o:mjx_env.step(plant(m,f,g,o).replace(opt=home_opt),d,c,5))
         def reset_one(d,q,v,mask,m,f,g,o):
             candidate=d.replace(qpos=jp.where(mask,q,d.qpos),qvel=jp.where(mask,v,d.qvel),
                 qacc_warmstart=jp.where(mask,0.,d.qacc_warmstart),ctrl=jp.where(mask,0.,d.ctrl),time=jp.where(mask,0.,d.time))
@@ -91,6 +94,28 @@ class PlaygroundRBEnv:
             far=jp.zeros((batch,2),dtype=jp.int32).at[worlds].max((wheels&active[:,None]&(c.contact__pos[:,0]>front)[:,None]).astype(jp.int32)).astype(bool)
             return supported,far
         self.contacts=contacts
+        @jax.jit
+        def advance(d,c,homing,m,f,g,o):
+            def only_jump(_):
+                out=jump(d,c,m,f,g,o);return out,*contacts(out)
+            def only_home(_):
+                out=home_step(d,c,m,f,g,o);return out,*contacts(out)
+            def mixed(_):
+                rd=jump(d,c,m,f,g,o);gd=home_step(d,c,m,f,g,o)
+                rs,rf=contacts(rd);gs,gf=contacts(gd)
+                def choose(path,r,h):
+                    if path[-1].name in DATA_NON_VMAP:return h
+                    return jp.where(homing.reshape((batch,)+(1,)*(r.ndim-1)),h,r)
+                out=jax.tree_util.tree_map_with_path(choose,rd,gd)
+                return out,jp.where(homing[:,None],gs,rs),jp.where(homing[:,None],gf,rf)
+            return jax.lax.cond(jp.all(homing),only_home,lambda _:jax.lax.cond(jp.any(homing),mixed,only_jump,None),None)
+        self.advance=advance
+        self.homing=torch.zeros(n,device=self.device,dtype=torch.bool)
+        self.homing_events=torch.zeros((),device=self.device)
+        self.far_wheels=torch.zeros(n,2,device=self.device,dtype=torch.bool)
+        self.home_kp=torch.tensor(model.actuator_gainprm[2:,0],device=self.device,dtype=torch.float32)
+        self.ctrl_lo=torch.tensor(model.actuator_ctrlrange[:,0],device=self.device,dtype=torch.float32)
+        self.ctrl_hi=torch.tensor(model.actuator_ctrlrange[:,1],device=self.device,dtype=torch.float32)
         self.home=torch.tensor(model.key_qpos[idx.keyframe_id,[idx.hip_qpos_address,idx.knee_qpos_address]],device=self.device,dtype=torch.float32)
         self.joint_q=[idx.hip_qpos_address,idx.knee_qpos_address];self.joint_v=[idx.hip_dof_address,idx.knee_dof_address]
         self.initial_q=torch.tensor(np.load(cfg['entry_bank'])['qpos'],device=self.device,dtype=torch.float32)
@@ -139,16 +164,30 @@ class PlaygroundRBEnv:
             for axis,col in [('x',0),('y',1),('roll',3),('pitch',4),('yaw',5)]:
                 lo,hi=self.randomization['push_velocity_range'][axis]
                 velocity[:,col]+=push*(lo+(hi-lo)*self.rand((self.num_envs,)))
-            velocity=self.to_jax(velocity);ctrl=self.to_jax(self.delays['action'].compute(target))
-            self.data=[self.advance(d.replace(qvel=velocity[sl]),ctrl[sl],*[x[sl] for x in self.properties]) for d,sl in zip(self.data,self.slices)]
-            contact=[self.contacts(d) for d in self.data]
-            supported,far=(jp.concatenate([x[i] for x in contact]) for i in range(2))
+            requested=target.clone();observed_action=action.clone()
+            if self.cfg.get('physical_homing',False):
+                roll,pitch,yaw=self.angle.unbind(-1)
+                body_speed=velocity[:,0]*torch.cos(yaw)+velocity[:,1]*torch.sin(yaw)
+                gyro=self.to_torch(self.field('sensordata'))[:,self.idx.sensor_addresses[5]]
+                enter=self.far_wheels.all(-1)&self.airborne&(roll.abs()<.15)&(pitch.abs()<.2)&(velocity[:,2].abs()<.5)&(gyro.abs()<.6)&(body_speed>=1.5)&~self.homing
+                self.homing |= enter;self.homing_events+=enter.sum()
+                bias=self.to_torch(self.field('qfrc_bias'))[:,self.joint_v]
+                home_target=(self.home+bias/(self.home_kp*self.to_torch(self.properties[2])[:,2:])).clamp(self.ctrl_lo[2:],self.ctrl_hi[2:])
+                requested[:,2:]=torch.where(self.homing[:,None],home_target,target[:,2:])
+                delta=requested[:,2:]-self.home
+                span=torch.where(delta>=0,self.ctrl_hi[2:]-self.home,self.home-self.ctrl_lo[2:]).clamp_min(1e-6)
+                observed_action[:,2:]=torch.where(self.homing[:,None],(delta/span).clamp(-1,1),action[:,2:])
+            velocity=self.to_jax(velocity);ctrl=self.to_jax(self.delays['action'].compute(requested));homing=self.to_jax(self.homing)
+            result=[self.advance(d.replace(qvel=velocity[sl]),ctrl[sl],homing[sl],*[x[sl] for x in self.properties]) for d,sl in zip(self.data,self.slices)]
+            self.data=[x[0] for x in result]
+            supported,far=(jp.concatenate([x[i] for x in result]) for i in [1,2])
+            self.far_wheels=self.to_torch(far)
             self.airborne |= ~self.to_torch(supported).any(-1)
-            frame,_=self.frames(self.to_jax(action))
+            frame,angle=self.frames(self.to_jax(observed_action));self.angle=self.to_torch(angle)
             noisy=self.to_torch(frame).clone();noisy[:,9:12]+=self.offset
             noisy+=(2*torch.rand_like(noisy)-1)*self.noise
             delayed=self.delays['sensor'].compute(noisy)
-        self.last=action
+        self.last=observed_action
         self.history=torch.cat((self.history[:,1:],delayed[:,None]),1)
         self.length+=1;self.update_observation()
         q=self.to_torch(self.field('qpos'));v=self.to_torch(self.field('qvel'));roll,pitch,yaw=self.angle.unbind(-1)
@@ -175,6 +214,7 @@ class PlaygroundRBEnv:
         self.data=[self.reset_data(d,initial_q[sl],initial_v[sl],reset[sl],*[x[sl] for x in self.properties]) for d,sl in zip(self.data,self.slices)]
         self.history=torch.where(done[:,None,None],0.,self.history);self.last=torch.where(done[:,None],0.,self.last)
         self.length=torch.where(done,0,self.length);self.hold=torch.where(done,0.,self.hold);self.airborne &= ~done
+        self.homing &= ~done;self.far_wheels &= ~done[:,None]
         for buffer in self.delays.values():buffer.reset(done)
         self.update_observation()
         return self.obs,self.critic,reward,done,{'time_outs':torch.zeros_like(timeout)}

@@ -51,6 +51,8 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
     gate_hold=tensor([variants[i].get('gate_hold_s',0.) for r,m,i in lanes]).float()
     settle_joints=hand.get('require_settled_pendulum',False)
     home_compensation=hand.get('home_bias_compensation',False)
+    require_both_wheels=hand.get('require_both_far_wheels',False)
+    lock_first=hand.get('sttw_only_after_lock',False)
     native_landing=hand.get('landing_control')=='native'
     rb_guidance=tensor([variants[i].get('rb_guidance_bound_rad',0.) for r,m,i in lanes]).float()
     gate_upper=hand.get('gate_recovery_upper',False)
@@ -71,7 +73,10 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         valid &= jp.any((g==idx.frontwheel_geom_id)|(g==idx.rearwheel_geom_id),-1)
         valid &= jp.any(terrain_geoms[jp.clip(g,0,model.ngeom-1)]&(g>=0),-1)
         worlds=c.contact__worldid[None,:]==jp.arange(n)[:,None]
-        return jp.stack((jp.any(worlds&valid,1),jp.any(worlds&valid&(c.contact__pos[:,0]>terrain['front_x_m']+terrain['width_m']),1)),1)
+        far=valid&(c.contact__pos[:,0]>terrain['front_x_m']+terrain['width_m'])
+        front=jp.any(worlds&far&jp.any(g==idx.frontwheel_geom_id,-1),1)
+        rear=jp.any(worlds&far&jp.any(g==idx.rearwheel_geom_id,-1),1)
+        return jp.stack((jp.any(worlds&valid,1),front|rear,front&rear),1)
 
     def ground_one(d,c,lock,damping):
         plant=mm.replace(eq_data=mm.eq_data.at[brake_ids,0].set(lock),actuator_biasprm=mm.actuator_biasprm.at[0,2].set(-damping))
@@ -100,7 +105,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 if path[-1].name in DATA_NON_VMAP:return new
                 return jp.where(alive.reshape((n,)+(1,)*(new.ndim-1)),new,old)
             return jax.tree_util.tree_map_with_path(freeze,d,data),flags
-        return jax.lax.cond(jp.any(alive),step,lambda _:(data,jp.zeros((n,2),dtype=jp.bool_)),None)
+        return jax.lax.cond(jp.any(alive),step,lambda _:(data,jp.zeros((n,3),dtype=jp.bool_)),None)
 
     @jax.jit
     def observe(data):
@@ -123,6 +128,12 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         init_start=time.perf_counter()
         qpos=np.tile(model.key_qpos[idx.keyframe_id],(n,1));qvel=np.tile(model.key_qvel[idx.keyframe_id],(n,1))
         qpos[:,0]=hand.get('start_x_m',1.5);qvel[:,0]=hand.get('start_vx_m_s',2.)
+        for lane,(_,_,variant) in enumerate(lanes):
+            initial=variants[variant]
+            qpos[lane,1]+=initial.get('initial_y_m',0.)
+            roll=initial.get('initial_roll_rad',0.)/2;yaw=initial.get('initial_yaw_rad',0.)/2
+            delta=np.array([np.cos(yaw)*np.cos(roll),np.cos(yaw)*np.sin(roll),np.sin(yaw)*np.sin(roll),np.sin(yaw)*np.cos(roll)])
+            orientation=qpos[lane,3:7].copy();mujoco.mju_mulQuat(qpos[lane,3:7],delta,orientation)
         for lane,(_,_,i) in enumerate(lanes):
             case=variants[i];yaw=case.get('start_yaw_rad',0.);roll=case.get('start_roll_rad',0.)
             qpos[lane,1]=case.get('start_y_m',0.)
@@ -149,13 +160,13 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         middle.lane_ticks=torch.zeros(n,device=device,dtype=torch.long);middle.latent=torch.zeros_like(raw)
         phase=torch.zeros(n,device=device,dtype=torch.long);alive=torch.ones(n,device=device,dtype=torch.bool)
         recovering=torch.zeros_like(alive)
-        stable_time=torch.zeros(n,device=device)
-        airborne=torch.zeros_like(alive);flags=torch.zeros(n,2,device=device,dtype=torch.bool)
+        stable_time=torch.zeros(n,device=device);upper_ready_time=torch.zeros(n,device=device)
+        airborne=torch.zeros_like(alive);flags=torch.zeros(n,3,device=device,dtype=torch.bool)
         far_time=torch.full((n,),-1.,device=device);entry_time=far_time.clone();handoff_time=far_time.clone();hold=torch.zeros(n,device=device)
         lock=q[:,brake_qpos].clone();target=torch.zeros(n,4,device=device);target[:,2:]=lock
         zero=tensor([mode=='zero_middle' for _,mode,i in lanes]);lo=tensor(model.actuator_ctrlrange[:,0]).float();hi=tensor(model.actuator_ctrlrange[:,1]).float()
         codes=torch.zeros(n,device=device,dtype=torch.long);durations=torch.full((n,),args.seconds,device=device)
-        rows=[];poses=[];velocities=[];valid_rows=[];goal=hand['goal'];data.qpos.block_until_ready();init_s=time.perf_counter()-init_start;rollout_start=time.perf_counter()
+        rows=[];poses=[];velocities=[];contact_rows=[];valid_rows=[];goal=hand['goal'];data.qpos.block_until_ready();init_s=time.perf_counter()-init_start;rollout_start=time.perf_counter()
         for tick in range(round(args.seconds/.005)+1):
             t=tick*.005
             enter=alive&(phase==0)&(q[:,0]>=jump_start)&(tick%4==0)&(not args.ground_only)
@@ -167,18 +178,21 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 descending=(v[:,2]<-.1)&(q[:,2]-terrain['far_bank_height_m']<=landing_height)&(q[:,0]>terrain['front_x_m']+terrain['width_m']-.15)
                 preparing=alive&(phase==1)&airborne&(descending|flags[:,1])
                 phase=torch.where(preparing,3,phase)
-                ready=flags[:,1]&(angles[:,0].abs()<.35)&(angles[:,1].abs()<.45)&(v[:,2].abs()<1.5)
+                landed=flags[:,2] if require_both_wheels else flags[:,1]
+                ready=landed&(angles[:,0].abs()<.35)&(angles[:,1].abs()<.45)&(v[:,2].abs()<1.5)
                 if staged_native:
-                    body_ready=flags[:,1]&(angles[:,0].abs()<gate_roll)&(angles[:,1].abs()<.2)&(v[:,2].abs()<.5)&(m[:,1].abs()<gate_rate)&(speed>=1.5)
+                    body_ready=landed&(angles[:,0].abs()<gate_roll)&(angles[:,1].abs()<.2)&(v[:,2].abs()<.5)&(m[:,1].abs()<gate_rate)&(speed>=1.5)
                     if settle_joints:
                         body_ready &= (angles[:,1].abs()<.03)&(v[:,4].abs()<.3)&((q[:,brake_qpos]-home_pose).abs().amax(-1)<.15)&(v[:,[idx.hip_dof_address,idx.knee_dof_address]].abs().amax(-1)<.5)
                     stable_time=torch.where(alive&(phase==3)&body_ready,stable_time+.005,0.)
                     taking_wheels=alive&(phase==3)&body_ready&(stable_time>=gate_hold)
                     phase=torch.where(taking_wheels,4,phase)
                 if native_landing:ready &= (angles[:,0].abs()<.08)&(angles[:,1].abs()<.15)&(v[:,2].abs()<.4)&(m[:,1].abs()<.3)
+                ready &= (v[:,5].abs()<hand.get('handoff_yaw_rate_max_rad_s',float('inf')))&(m[:,3].abs()<hand.get('handoff_steer_rate_max_rad_s',float('inf')))
+                ready &= (speed-hand.get('continuation',{}).get('speed_m_s',1.5)).abs()<=hand.get('handoff_speed_error_max_m_s',float('inf'))
                 if home_landing or native_landing:ready &= ((q[:,brake_qpos]-home_pose).abs().amax(-1)<hand.get('lock_position_tolerance_rad',.08))&(v[:,[idx.hip_dof_address,idx.knee_dof_address]].abs().amax(-1)<hand.get('lock_velocity_tolerance_rad_s',.5))&(m[:,1].abs()<1.)
                 returning=alive&(phase==(4 if staged_native else 3))&ready
-                reset_control=taking_wheels if staged_native else returning if native_landing else preparing|far|returning
+                reset_control=returning if lock_first else taking_wheels if staged_native else returning if native_landing else preparing|far|returning
             else:
                 returning=alive&(phase==1)&(far_time>=0)&(t-far_time>=hand.get('handoff_delay_s',0.)-1e-7)
                 reset_control=returning
@@ -200,9 +214,12 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
             reached=at_goal&(hold>=goal.get('hold_s',0.))
             stop=alive&(physical|outside|reached);codes=torch.where(stop,torch.where(physical,1,torch.where(outside,2,3)),codes);durations=torch.where(stop,t,durations)
             rows.append(torch.cat((torch.full((n,1),t,device=device),q[:,:3],angles,v[:,:3],(phase==2)[:,None],ey[:,None],target,(phase==0)[:,None],m[:,5:6],middle.v_user[:,None],phase[:,None]),1))
-            poses.append(q);velocities.append(v);valid_rows.append(alive.clone());alive &= ~stop
+            poses.append(q);velocities.append(v);contact_rows.append(flags.clone());valid_rows.append(alive.clone());alive &= ~stop
             if tick==round(args.seconds/.005):break
-            recovering &= ~((phase==2)&(m[:,0].abs()<.05)&(m[:,1].abs()<.2)&(eh.abs()<.15)&(ey<.2))
+            upper_ready=(phase==2)&(m[:,0].abs()<.05)&(m[:,1].abs()<.2)&(eh.abs()<.15)&(ey<.2)
+            upper_ready &= ((speed-middle.v_user).abs()<hand.get('upper_ready_speed_error_m_s',float('inf')))&(v[:,5].abs()<hand.get('upper_ready_yaw_rate_rad_s',float('inf')))&(m[:,3].abs()<hand.get('upper_ready_steer_rate_rad_s',float('inf')))
+            upper_ready_time=torch.where(recovering&upper_ready,upper_ready_time+.005,0.)
+            recovering &= ~(upper_ready&(upper_ready_time>=hand.get('upper_ready_hold_s',0.)))
             governed=middle.before(pose,zero_mask=zero|(recovering if gate_upper else False))
             ctl.config['wc']=torch.where(phase>=2,recovery_wc,controller_config['wc'])
             feedback_speed=torch.where((phase>=2)&body_feedback,speed,m[:,5]*.07)
@@ -219,8 +236,9 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 guide=(far_time>=0)&(m[:,0].abs()<.15)&(m[:,1].abs()<.6)
                 rb_target[:,0]=(rb_target[:,0]+torch.where(guide,correction,0.)).clamp(lo[0],hi[0])
                 delivered=to_torch(action).clone();delivered[:,0]=rb_target[:,0]/hi[0]
-                last=jp.where(to_jax(((phase==1)|(phase==3))&alive)[:,None],to_jax(delivered),last)
-                target=torch.where(((phase==1)|(phase==3))[:,None],rb_target,target)
+                rb_controls=(phase==1)|(phase==3)|((phase==4)&lock_first)
+                last=jp.where(to_jax(rb_controls&alive)[:,None],to_jax(delivered),last)
+                target=torch.where(rb_controls[:,None],rb_target,target)
             if align_landing:
                 aligned=target[:,0]+(middle.nominal[:,1]-target[:,0]).clamp(-.015,.015)
                 ground_target[:,0]=torch.where((phase==3)&(~flags[:,0] if home_landing else True),aligned,ground_target[:,0])
@@ -232,18 +250,26 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
             if home_compensation:
                 compensated=(home_pose+to_torch(data.qfrc_bias[:,[idx.hip_dof_address,idx.knee_dof_address]])/joint_kp).clamp(lo[2:],hi[2:])
                 ground_target[:,2:]=torch.where((phase==4)[:,None],compensated,ground_target[:,2:])
+            if lock_first:
+                # RB owns wheels throughout physical homing; STTW starts only after locking.
+                ground_target[:,:2]=torch.where((phase==4)[:,None],target[:,:2],ground_target[:,:2])
             target=torch.where(ground_mode[:,None],ground_target,target)
+            if lock_first:
+                delta=target[:,2:]-home_pose
+                span=torch.where(delta>=0,hi[2:]-home_pose,home_pose-lo[2:]).clamp_min(1e-6)
+                actual=to_torch(last).clone();actual[:,2:]=(delta/span).clamp(-1,1)
+                last=jp.where(to_jax((phase==4)&alive)[:,None],to_jax(actual),last)
             data,jflags=advance(data,to_jax(target),to_jax(lock),to_jax(torch.where(phase>=2,landing_damping,.1)),to_jax(phase==1 if align_landing else ((phase==1)|(phase==3))),to_jax((phase==0)|(phase==2)),to_jax(alive));flags=to_torch(jflags)
             q,v,m,pose,speed,angles=map(to_torch,observe(data))
             middle.after(m,pose,speed,governed,torch.stack((steer,target[:,1]),1),torch.zeros(n,2,device=device),ctl)
             if (tick+1)%4==0:history,obs=frame(data,history,last,height_offset)
         torch.cuda.synchronize();rollout_s=time.perf_counter()-rollout_start
-        traces=torch.stack(rows).cpu().numpy();positions=torch.stack(poses).cpu().numpy();speeds=torch.stack(velocities).cpu().numpy();valid=torch.stack(valid_rows).cpu().numpy()
+        traces=torch.stack(rows).cpu().numpy();positions=torch.stack(poses).cpu().numpy();speeds=torch.stack(velocities).cpu().numpy();valid=torch.stack(valid_rows).cpu().numpy();contact_trace=torch.stack(contact_rows).cpu().numpy()
         codes,durations,entry_time,far_time,handoff_time,hold,airborne=[x.cpu().numpy() for x in (codes,durations,entry_time,far_time,handoff_time,hold,airborne)]
         for lane,(route_id,mode,variant) in enumerate(lanes):
             case_dir=f'{name}_route{route_id}_{mode}'+(f'_v{variant}' if len(variants)>1 else '')
             target_dir=args.output/case_dir;target_dir.mkdir();keep=valid[:,lane];trace=traces[keep,lane];qsave=positions[keep,lane]
-            np.savez_compressed(target_dir/'trajectory.npz',trace=trace,qpos=qsave,qvel=speeds[keep,lane],reference_xy=saved['xy'][route_id],columns=['time','x','y','z','roll','pitch','yaw','vx','vy','vz','ground_active','path_distance','steer_target','rear_target','hip_target','knee_target','approaching','rear_rate_rad_s','requested_speed_m_s','phase'])
+            np.savez_compressed(target_dir/'trajectory.npz',trace=trace,qpos=qsave,qvel=speeds[keep,lane],wheel_contact_flags=contact_trace[keep,lane],wheel_contact_columns=['any_terrain','any_far','both_far'],reference_xy=saved['xy'][route_id],columns=['time','x','y','z','roll','pitch','yaw','vx','vy','vz','ground_active','path_distance','steer_target','rear_target','hip_target','knee_target','approaching','rear_rate_rad_s','requested_speed_m_s','phase'])
             row=dict(case_dir=case_dir,variant=variants[variant],skill=name,route=route_id,continuation=mode,termination=['timeout','physical_failure','corridor_or_domain_exit','goal'][codes[lane]],goal=bool(codes[lane]==3),rb_entry_s=None if entry_time[lane]<0 else float(entry_time[lane]),goal_hold_s=float(hold[lane]),airborne=bool(airborne[lane]),far_contact=bool(far_time[lane]>=0),first_far_contact_s=None if far_time[lane]<0 else float(far_time[lane]),handoff_s=None if handoff_time[lane]<0 else float(handoff_time[lane]),duration_s=float(durations[lane]),final_xy=qsave[-1,:2].tolist())
             results.append(row)
         all_timing.append(dict(skill=name,lanes=n,initialization_s=init_s,rollout_s=rollout_s,simulated_ticks_per_lane=tick))

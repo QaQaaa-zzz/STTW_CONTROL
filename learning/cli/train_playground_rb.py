@@ -35,7 +35,7 @@ env=PlaygroundRBEnv(model,skill,cfg)
 actor=PhaseUActorCritic(76,106,4,cfg['bundle']).to('cuda:0')
 recipe=spring_jump_recipe(cfg['go2_checkout']);algorithm=recipe['train']['algorithm'];algorithm.update(cfg['ppo_overrides'])
 (a.output/'go2_recipe.json').write_text(json.dumps(recipe,indent=2))
-(a.output/'randomization.json').write_text(json.dumps(dict(config=cfg['randomization'],actual='MuJoCo GPU startup properties; upstream Isaac Lab DelayBuffer;5ms sensor/action delay; noise and offsets only in observations;4s velocity pushes; raw clean reward',physics_dt_s=.005,actor_dt_s=.02),indent=2))
+(a.output/'randomization.json').write_text(json.dumps(dict(config=cfg['randomization'],actual='MuJoCo GPU startup properties; upstream Isaac Lab DelayBuffer;5ms sensor/action delay; noise and offsets only in observations;4s velocity pushes; raw clean reward',jump_physics_dt_s=.005,homing_physics_dt_s=.001 if cfg.get('physical_homing',False) else .005,sensor_dt_s=.005,actor_dt_s=.02),indent=2))
 if a.check_steps:
     env.length.fill_(env.max_episode_length-1)
     with torch.inference_mode():
@@ -62,7 +62,7 @@ checkpoint(training/'model_initial.pt',start_update,dict(initialization='Actor/c
 best=-float('inf');obs,critic=env.obs,env.critic
 for stage_update in range(cfg['updates']):
     update=start_update+stage_update
-    tick=time.perf_counter();env.stats.zero_()
+    tick=time.perf_counter();env.stats.zero_();env.homing_events.zero_()
     with torch.inference_mode():
         for _ in range(cfg['steps_per_update']):
             action=ppo.act(obs,critic)
@@ -78,7 +78,7 @@ for stage_update in range(cfg['updates']):
         actor.update_distribution(ppo.storage.observations[0])
         old_mu,old_sigma=ppo.storage.mu[0],ppo.storage.sigma[0]
         kl=torch.sum(torch.log(actor.action_std/old_sigma)+(old_sigma.square()+(old_mu-actor.action_mean).square())/(2*actor.action_std.square())-.5,-1).mean()
-    record=dict(update=update+1,scored_policy_update=update,mean_step_reward=score,sample_s=sample_s,optimize_s=opt_s,loss_value=loss[0],loss_surrogate=loss[1],entropy=loss[3],kl_first_rollout_step=float(kl),learning_rate=ppo.learning_rate,terminal_counts=env.stats.tolist())
+    record=dict(update=update+1,scored_policy_update=update,mean_step_reward=score,sample_s=sample_s,optimize_s=opt_s,loss_value=loss[0],loss_surrogate=loss[1],entropy=loss[3],kl_first_rollout_step=float(kl),learning_rate=ppo.learning_rate,terminal_counts=env.stats.tolist(),homing_entries=int(env.homing_events))
     with (a.output/'training.jsonl').open('a') as f:f.write(json.dumps(record)+'\n')
     for key,value in record.items():
         if isinstance(value,(int,float)):writer.add_scalar(key,value,update+1)

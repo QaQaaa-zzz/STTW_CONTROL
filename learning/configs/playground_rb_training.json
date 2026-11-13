@@ -9,7 +9,7 @@
   "isaaclab_checkout": "/home/qy/projects/IsaacLab",
   "registry": "learning/configs/playground_rb_skill_sources.json",
   "skill": "rb_run3",
-  "bundle": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/full_chain300/update225",
+  "bundle": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/landing_reward_chain/landing75",
   "entry_bank": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/entry_bank.npz",
   "terrain": {
     "front_x_m": 10.3,
@@ -155,7 +155,7 @@
     "gamma": 0.99,
     "lam": 0.95
   },
-  "role": "Nominal DEV selected update225 weights; fresh optimizer; corrected speed/progress reward; 150 stage-relative updates, not cumulative iteration",
+  "role": "Selected corrected-reward75 weights; fresh optimizer; train actual finite-servo homing with RB wheel control, then unchanged stable handoff goal.150 stage-relative updates.",
   "stop_rule": "150updates, nonfinite or runtime failure stops; user requested pause agent if waiting estimate exceeds30min; background authorized budget remains",
   "reward": {
     "progress": 2.0,
@@ -170,5 +170,11 @@
   },
   "acceptance": "Separate continuous STTW-RB-STTW routes60/61/62, original full goal hold .5, then perturbation bank; no claim from training reward",
   "tensorboard_url": "http://localhost:41961",
-  "physics_batch_size": 512
+  "physics_batch_size": 512,
+  "physical_homing": true,
+  "homing_physics": {
+    "integrator": "implicitfast",
+    "physics_dt_s": 0.001,
+    "substeps_per_sensor": 5
+  }
 }
