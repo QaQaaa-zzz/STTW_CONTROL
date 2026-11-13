@@ -1969,3 +1969,8 @@ GLM端到端集成（用户2026-11-09新授权）：已配置glm-5.3从11场景�
 ## Playground RB原权重续训接线与批量容量修复
 
 采用原Run3 Actor/Critic/normalizer与Go2 PPO，76/106维和三层256网络不变；真实两米平地沟、GPU RK4 5ms与20ms Actor，物理512分批但PPO保持4096环境×24步×150轮。MuJoCo启动属性随机化、原Isaac Lab DelayBuffer、观测噪声和周期推扰实际接通，奖励/终止用干净状态。8环境含自动reset集成有限；三次4096初始化因CCD/显存失败，均0优化，原记录保留；training150_batched已有真实更新。训练handoff目标不等于完整链成功。预计约80分钟，按用户30分钟等待约定暂停目标、后台完成既定预算并通知，之后需用户继续才做完整链验证。证据根：/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation。
+
+
+### Playground Run3 150轮适配及完整链对照
+
+150轮4804.021秒，训练终止成功0/255245；原Run3/75/150完整链分别0/3、0/3、1/3，150右弯通过，75左弯跑满但未满足最终保持。不能用训练best0或存活替代完整任务验收。全覆盖XY与失败见docs/evidence/chapter3_playground_sttw_rb_sttw/README.md。已恢复150的Actor/Critic/normalizer/Adam，固定追加150轮至300；地图、奖励、随机化、网络、4096×24不变。新增--resume保留全局更新数，训练图接入实际日志字段，重放权重及优化器逐项相等。后续仍需统一checkpoint三路线及扰动验收，当前不采用。

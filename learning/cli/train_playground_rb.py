@@ -2,7 +2,7 @@
 import argparse,json,os,sys,time,shutil
 from pathlib import Path
 os.environ.setdefault('XLA_PYTHON_CLIENT_PREALLOCATE','false')
-p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--check-steps',type=int,default=0);p.add_argument('--num-envs',type=int);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--check-steps',type=int,default=0);p.add_argument('--num-envs',type=int);p.add_argument('--resume',type=Path);a=p.parse_args()
 cfg=json.loads(a.config.read_text())
 if a.num_envs is not None:cfg['num_envs']=a.num_envs
 if cfg['num_envs']<=0 or cfg['updates']<1:raise ValueError('Positive environment and update counts required')
@@ -47,13 +47,21 @@ if a.check_steps:
     if not finite:raise RuntimeError('Nonfinite integration output')
     print(json.dumps(status));sys.exit(0)
 ppo=PPO(actor,device='cuda:0',**algorithm)
+start_update=0
+if a.resume:
+    restored=torch.load(a.resume,map_location='cuda:0',weights_only=False)
+    actor.load_state_dict(restored['model_state_dict']);ppo.optimizer.load_state_dict(restored['optimizer_state_dict'])
+    ppo.learning_rate=ppo.optimizer.param_groups[0]['lr'];start_update=restored['iter']
+    status.update(parent_checkpoint=str(a.resume.resolve()),start_update=start_update,target_global_update=start_update+cfg['updates'])
+    (a.output/'resume.json').write_text(json.dumps(dict(parent_checkpoint=str(a.resume.resolve()),start_update=start_update,optimizer_restored=True,learning_rate=ppo.learning_rate,environment_reset=True),indent=2))
 ppo.init_storage(cfg['num_envs'],cfg['steps_per_update'],[76],[106],[4])
 writer=SummaryWriter(str(a.output/'training'));training=a.output/'training';training.mkdir(exist_ok=True)
 def checkpoint(path,iteration,info):
     torch.save(dict(model_state_dict=actor.state_dict(),optimizer_state_dict=ppo.optimizer.state_dict(),iter=iteration,infos=info),path)
-checkpoint(training/'model_initial.pt',0,dict(initialization='Run3 actor/critic/normalizer weights only; fresh Go2 PPO optimizer'))
+checkpoint(training/'model_initial.pt',start_update,dict(initialization='Actor/critic/normalizer/optimizer restored; new environment rollout' if a.resume else 'Run3 actor/critic/normalizer weights only; fresh Go2 PPO optimizer'))
 best=-float('inf');obs,critic=env.obs,env.critic
-for update in range(cfg['updates']):
+for stage_update in range(cfg['updates']):
+    update=start_update+stage_update
     tick=time.perf_counter();env.stats.zero_()
     with torch.inference_mode():
         for _ in range(cfg['steps_per_update']):
@@ -74,8 +82,8 @@ for update in range(cfg['updates']):
     with (a.output/'training.jsonl').open('a') as f:f.write(json.dumps(record)+'\n')
     for key,value in record.items():
         if isinstance(value,(int,float)):writer.add_scalar(key,value,update+1)
-    writer.flush();status.update(stage='training',completed_updates=update+1,last=record,estimated_remaining_s=(sample_s+opt_s)*(cfg['updates']-update-1));save_status();print(json.dumps(record),flush=True)
+    writer.flush();status.update(stage='training',completed_updates=stage_update+1,completed_global_updates=update+1,last=record,estimated_remaining_s=(sample_s+opt_s)*(cfg['updates']-stage_update-1));save_status();print(json.dumps(record),flush=True)
     if not np.isfinite([score,*loss,float(kl)]).all():raise RuntimeError('Nonfinite training statistics')
     if (update+1)%cfg['save_interval']==0:checkpoint(training/f'model_{update+1}.pt',update+1,record)
-checkpoint(training/f'model_{cfg["updates"]}.pt',cfg['updates'],dict(final_update_unscored=True))
+checkpoint(training/f'model_{start_update+cfg["updates"]}.pt',start_update+cfg['updates'],dict(final_update_unscored=True))
 status.update(stage='training_complete');save_status();writer.close()
