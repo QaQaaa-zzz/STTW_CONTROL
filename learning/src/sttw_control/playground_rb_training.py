@@ -194,7 +194,7 @@ class PlaygroundRBEnv:
         grounded=self.to_torch(far).all(-1)&self.airborne
         pose_error=(q[:,self.joint_q]-self.home).square().sum(-1)
         joint_speed=v[:,self.joint_v].square().sum(-1)
-        ready=grounded&(v[:,3:6].abs().amax(-1)<.3)&(roll.abs()<.08)&(pitch.abs()<.1)&(yaw.abs()<.15)&(v[:,1].abs()<.2)&(v[:,2].abs()<.2)&(v[:,0]>1.4)&(v[:,0]<2.2)&(pose_error<.15**2)&(joint_speed<.5**2)
+        ready=grounded&(v[:,3:6].abs().amax(-1)<.3)&(roll.abs()<.08)&(pitch.abs()<.1)&(yaw.abs()<.15)&(v[:,1].abs()<.2)&(v[:,2].abs()<.2)&(v[:,0]>1.4)&(v[:,0]<2.2)&(pose_error<self.cfg['reward'].get('handoff_pose_norm_max_rad',.15)**2)&(joint_speed<self.cfg['reward'].get('handoff_joint_speed_norm_max_rad_s',.5)**2)
         self.hold=torch.where(ready,self.hold+.02,0.)
         success=self.hold>=.2
         failure=(roll.abs()>.7)|(pitch.abs()>1.309)|(q[:,2]<0)|(q[:,1].abs()>.6)|(q[:,0]>13.5)|~torch.isfinite(q).all(-1)

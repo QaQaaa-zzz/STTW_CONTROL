@@ -9,7 +9,7 @@ p=argparse.ArgumentParser();p.add_argument('root',type=Path);a=p.parse_args()
 s=json.loads((a.root/'status.json').read_text());d=json.loads((a.root/'declaration.json').read_text())
 config=json.loads(Path(d['source_config']).read_text());hand=config['ground_handoff']
 mechanism=hand.get('handoff_mechanism','contact_delay')
-fig,axes=plt.subplots(len(d['routes']),1,figsize=(12,6),squeeze=False)
+fig,axes=plt.subplots(len(d['routes']),1,figsize=(12,max(6,3*len(d['routes']))),squeeze=False)
 for ax,route in zip(axes[:,0],d['routes']):
  xmin,xmax,ymin,ymax=0.,20.,-1.5,1.5
  for row in s['results']:
@@ -23,7 +23,7 @@ for ax,route in zip(axes[:,0],d['routes']):
  ax.axvspan(d['terrain']['front_x_m'],d['terrain']['front_x_m']+d['terrain']['width_m'],alpha=.2,color='black')
  ax.set(xlabel='x (m)',ylabel='y (m)',title=f'Route {route}',xlim=(xmin,xmax),ylim=(ymin,ymax));ax.set_aspect('equal',adjustable='box');ax.grid(alpha=.2)
 axes[-1,0].legend(fontsize=6);fig.tight_layout();fig.savefig(a.root/'xy.png',dpi=160)
-tracking,panels=plt.subplots(3,len(d['routes']),figsize=(15,9),squeeze=False,layout='constrained')
+tracking,panels=plt.subplots(3,len(d['routes']),figsize=(max(15,4*len(d['routes'])),9),squeeze=False,layout='constrained')
 for j,route in enumerate(d['routes']):
  for row in s['results']:
   if row['route']!=route:continue
