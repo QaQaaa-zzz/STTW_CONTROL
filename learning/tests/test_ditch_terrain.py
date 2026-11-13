@@ -6,6 +6,19 @@ from sttw_control.phase_u_events import classify_terminal
 SPEC=dict(front_x_m=3.6,width_m=.6,ground_end_x_m=25.,stone_height_min_m=.01,stone_height_max_m=.04,stones_per_m2=30,seed=20261109)
 
 
+def test_chain_has_two_meter_flat_takeoff_and_landing_buffers():
+    import json
+    from pathlib import Path
+    config=json.loads(Path('learning/configs/playground_sttw_rb_sttw.json').read_text())
+    vertices,faces=build_ditch_terrain(config['ditch_terrain'])
+    xyz=vertices[faces]
+    for lo,hi in config['flat_intervals_m']:
+        overlaps=(xyz[:,:,0].max(1)>lo+1e-6)&(xyz[:,:,0].min(1)<hi-1e-6)
+        np.testing.assert_allclose(xyz[overlaps,:,2],0.,atol=1e-8)
+        assert hi-lo >= 2.-1e-6
+    assert vertices[:,2].max() > .039
+
+
 def test_gap_is_open_and_both_banks_are_rough():
     vertices, faces = build_ditch_terrain(SPEC)
     xs=vertices[faces,0]
