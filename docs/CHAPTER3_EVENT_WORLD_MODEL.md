@@ -292,3 +292,13 @@ RB400接入0.6rad/s名义转向参考的组合评测：同120条开发条件，�
 ### 带摆STTW可用配置验收
 
 **带摆STTW Playground修复在用户授权降难度范围内采用并通过验收。** 原第三章XY/三角索引/沟桥/碎石/2cm脊坡不变，仅最高8cm脊坡降4cm；1.8m/s、冻结H75 alpha0、锁髋膝、原位置伺服、implicitfast1ms、摩擦0.8，无续训/质量惯量/力矩上限扩权。12类地形路径×横偏±.05m/航向±.03rad/侧倾±.015rad全组合96/96，配对零中层64/96；同条件Isaac57/96、零中层19/96。连续x3→17m含左右连续弯、原地桥和两脊坡8/8、基线3/8，9.025–9.075s，最终保持加强至.5s。逐步重算保持/进度/失败标志通过，地图及物理审计通过；7项地形测试通过；12类与连续路线13视频时长核对、静帧检查完成。全部DEV，原8cm在1.8m/s仍33/36，4cm在2.2m/s仍27/36，不称原难度全恢复、全alpha或实车泛化；RB跳跃未列入本次STTW验收。交付入口`runs/worktrees/sttw-offroad/docs/evidence/chapter3_playground_isaac_recovery/README.md`；可运行配置`learning/configs/playground_sttw_offroad.json`、`playground_sttw_continuous.json`。
+
+### STTW→RB→STTW完整链测试
+
+用户要求在地形上接着测试完整链。沿用已验收锁摆STTW（1.8m/s、alpha0、4cm最高脊坡），原生RB三模型×原第三章路线60/61/62，共9回合、每条10秒、最多90000物理步、零训练。接近x9释放摆、远岸轮地实触后RB保留.5秒，再按实际姿态重锁交STTW，末端额外.5秒保持。原生RB的5ms历史证据不冒充本轮implicitfast1ms新域结果；分阶段报告失败。配置/合同/原始输出：/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw。
+
+用户指定此前高成功率RB：核验原任务250回合Run3为246/250，actor ffe98cc0c497，transition_128000；当前以rb_run3为主。追加三路线各10秒有界测试，STTW保留implicitfast1ms×5，RB恢复原RK4 5ms×1，策略20ms；连续状态、地形和摩擦不变，零训练。原先9条均RB阶段物理失败，保留evaluation/RESULTS.md。首次数值切换启动因MJX枚举类型报错未产生完成回合，保留run3_native_rb_clock；修正枚举转整数后输出run3_native_rb_retry。
+
+加速审计：串联入口逐lane运行，Torch控制在CPU，原每5ms调用mjx.get_data下载完整状态，且该安装版本的Warp get_data未填充contact。旧两批远岸接触/回交字段不可用，原始结果保留并标注。当前修正GPU接触归约、合并状态回传、复用初始化JIT/actor及共享编译缓存；三条固定路线有界验证，每100tick与原生GPU接触数组的独立NumPy归约核对。该版本尚未实现整链vmap或全GPU控制，不能称Go2式全GPU批量环境；记录setup/init/rollout/output时间，不能把旧错误判据运行时间当严格同语义加速比。
+
+用户进一步要求全GPU、简洁调用：已删除串联CPU循环，改用playground_handoff_evaluation的vmap多环境、GPU Torch H75/ECBC/ESO和JAX RB、DLPack；接触/阶段/终止留GPU，最后统一导出。三路线批次完成36.107秒（循环34.820秒），三条均有真实远岸接触，均在0.5秒回交等待完成前物理失败。详情与全覆盖XY：docs/evidence/chapter3_playground_sttw_rb_sttw/README.md。加速实现完成，串联稳定落地仍未完成。

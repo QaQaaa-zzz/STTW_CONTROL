@@ -1956,3 +1956,8 @@ GLM端到端集成（用户2026-11-09新授权）：已配置glm-5.3从11场景�
 **带摆STTW Playground修复在用户授权降难度范围内采用并通过验收。** 原第三章XY/三角索引/沟桥/碎石/2cm脊坡不变，仅最高8cm脊坡降4cm；1.8m/s、冻结H75 alpha0、锁髋膝、原位置伺服、implicitfast1ms、摩擦0.8，无续训/质量惯量/力矩上限扩权。12类地形路径×横偏±.05m/航向±.03rad/侧倾±.015rad全组合96/96，配对零中层64/96；同条件Isaac57/96、零中层19/96。连续x3→17m含左右连续弯、原地桥和两脊坡8/8、基线3/8，9.025–9.075s，最终保持加强至.5s。逐步重算保持/进度/失败标志通过，地图及物理审计通过；7项地形测试通过；12类与连续路线13视频时长核对、静帧检查完成。全部DEV，原8cm在1.8m/s仍33/36，4cm在2.2m/s仍27/36，不称原难度全恢复、全alpha或实车泛化；RB跳跃未列入本次STTW验收。交付入口`runs/worktrees/sttw-offroad/docs/evidence/chapter3_playground_isaac_recovery/README.md`；可运行配置`learning/configs/playground_sttw_offroad.json`、`playground_sttw_continuous.json`。
 
 拒绝短前视0.5秒候选（alpha0 98→69/108）；首轮CCD溢出无效，保存而不计入成绩。不是单因素归因：地形接触映射、锁摆、积分器和摩擦联合修复；未重新训练网络。
+
+
+### 第三章GPU串联入口与接触记录更正
+
+**串联入口已改为GPU批处理并完成三路线测试。** 复用MJX-Warp vmap、CUDA H75/ECBC/ESO、JAX RB和DLPack；物理状态/观测/动作/阶段掩码留GPU，最终统一导出200Hz轨迹。Run3三路线总36.107秒、循环34.820秒（固定2000tick批窗口）；旧逐条接触修正版阶段56.360秒，轨迹不同，不称逐位等价加速基准。三条均真实远岸接触5.090/5.105/5.095秒，5.115/5.460/5.480秒触发物理失败，均未熬过既定0.5秒RB回交等待；串联目标0/3。重要更正：旧evaluation/run3_native_rb_retry的mjx.get_data未复制Warp接触数组，其无远岸接触/无回交字段无效；新入口直接GPU原始接触归约，旧状态留作诊断。全覆盖XY与证据：`runs/worktrees/sttw-offroad/docs/evidence/chapter3_playground_sttw_rb_sttw/README.md`。

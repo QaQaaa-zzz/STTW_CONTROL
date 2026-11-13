@@ -39,7 +39,7 @@ class TorchMiddleControl:
 
     def reset(self,measurement,pose,speed,raw,previous_reference,previous_command,controller,initial_progress=None):
         self.policy.reset(slice(None));self.frames.zero_();self.mask.zero_()
-        self.tick=0;self.pose=pose.clone();self.yaw_rate=torch.zeros_like(speed)
+        self.tick=0;self.lane_ticks=None;self.pose=pose.clone();self.yaw_rate=torch.zeros_like(speed)
         self.projection=self.route.project(pose[:,:2],torch.zeros_like(speed) if initial_progress is None else initial_progress,torch.zeros_like(speed))
         self.follower=self.route.pursuit(self.projection['progress'],pose,speed,self.v_user)
         self.nominal,self.rates=self.route.publish(raw,self.follower['command'])
@@ -62,10 +62,36 @@ class TorchMiddleControl:
             torch.zeros_like(raw),self.yaw_rate,self.rates,controller)
         self.frames[indices,-1]=frame[indices];self.mask[indices,-1]=1.
 
+    def reset_mask(self, mask, measurement, pose, speed, controller):
+        """Reset returning GPU lanes without dynamic indexing or host synchronization."""
+        choose=lambda new,old:torch.where(mask.reshape((-1,)+(1,)*(old.ndim-1)),new,old)
+        self.policy.offsets=choose(0.,self.policy.offsets)
+        self.policy.filtered=choose(0.,self.policy.filtered)
+        self.frames=choose(0.,self.frames);self.mask=choose(0.,self.mask)
+        self.pose=choose(pose,self.pose);self.yaw_rate=choose(0.,self.yaw_rate)
+        selected=self.route.xy[self.route.route_ids] if self.route.batched else self.route.xy[None]
+        nearest=(selected-pose[:,None,:2]).square().sum(-1).argmin(-1)
+        projection=self.route.project(pose[:,:2],self.route.s[nearest],torch.zeros_like(speed))
+        follower=self.route.pursuit(projection['progress'],pose,speed,self.v_user)
+        raw=torch.stack((speed,measurement[:,2]),-1)
+        nominal,rates=self.route.publish(raw,follower['command'])
+        for key,value in projection.items():self.projection[key]=choose(value,self.projection[key])
+        for key,value in follower.items():self.follower[key]=choose(value,self.follower[key])
+        self.nominal=choose(nominal,self.nominal);self.rates=choose(rates,self.rates)
+        self.fault=choose(follower['numerical_fault'],self.fault);self.domain_exit=choose(follower['invalid'],self.domain_exit)
+        controller.eso=choose(torch.cat((measurement[:,[2,0,1]],torch.zeros_like(speed[:,None])),1),controller.eso)
+        controller.filtered_roll_rate=choose(measurement[:,1],controller.filtered_roll_rate)
+        controller.disturbance=choose(0.,controller.disturbance);controller.gains=choose(controller.initial_gains,controller.gains)
+        previous=torch.stack((measurement[:,3],measurement[:,5]),-1)
+        frame=local_frame(measurement,speed,nominal,raw,previous,torch.zeros_like(raw),self.yaw_rate,rates,controller)
+        self.frames[:,-1]=choose(frame,self.frames[:,-1]);self.mask[:,-1]=choose(1.,self.mask[:,-1])
+        self.lane_ticks=torch.where(mask,0,self.lane_ticks)
+
     def before(self,pose,zero_middle=False,noise_std=None,zero_mask=None,latent_override=None):
-        if self.tick%4==0:
+        if self.lane_ticks is not None or self.tick%4==0:
             self.obs,fault=self.observation(pose)
-            self.latent=torch.zeros_like(self.nominal) if zero_middle else self.policy.latent(self.obs)
+            candidate=torch.zeros_like(self.nominal) if zero_middle else self.policy.latent(self.obs)
+            self.latent=candidate if self.lane_ticks is None else torch.where((self.lane_ticks%4==0)[:,None],candidate,self.latent)
             if latent_override is not None:self.latent=latent_override
             if noise_std is not None:
                 self.latent=self.latent+noise_std*torch.randn_like(self.latent)
@@ -80,9 +106,20 @@ class TorchMiddleControl:
         self.yaw_rate=wrap(pose[:,2]-self.pose[:,2])/.005
         self.projection=self.route.project(pose[:,:2],self.projection['progress'],torch.linalg.vector_norm(pose[:,:2]-self.pose[:,:2],dim=-1))
         self.pose=pose.clone();self.tick+=1
-        if self.tick%4==0:
+        if self.lane_ticks is not None:
+            self.lane_ticks+=1
+            refresh=self.lane_ticks%4==0
+            candidate=self.route.pursuit(self.projection['progress'],pose,speed,self.v_user)
+            for key,value in candidate.items():
+                old=self.follower[key];self.follower[key]=torch.where(refresh.reshape((-1,)+(1,)*(old.ndim-1)),value,old)
+        elif self.tick%4==0:
             self.follower=self.route.pursuit(self.projection['progress'],pose,speed,self.v_user)
         self.nominal,self.rates=self.route.publish(self.nominal,self.follower['command'])
         self.fault|=self.follower['numerical_fault']|~torch.isfinite(measurement).all(-1)
         self.domain_exit|=self.follower['invalid']&~self.follower['numerical_fault']
-        if self.tick%4==0:self.record(measurement,speed,governed,command,applied,controller)
+        if self.lane_ticks is not None:
+            frames,mask=self.frames,self.mask
+            self.record(measurement,speed,governed,command,applied,controller)
+            self.frames=torch.where(refresh[:,None,None],self.frames,frames)
+            self.mask=torch.where(refresh[:,None],self.mask,mask)
+        elif self.tick%4==0:self.record(measurement,speed,governed,command,applied,controller)

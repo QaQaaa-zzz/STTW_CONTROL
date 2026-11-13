@@ -1,0 +1,103 @@
+{
+  "schema": "chapter3_playground_handoff_task",
+  "role": "STTW-RB-STTW continuous chain DEV; adopted ground physics transferred to native RB, no training",
+  "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rb_candidate_handoff/source/config.json",
+  "flat_buffer_m": 2.0,
+  "flat_intervals_m": [
+    [
+      8.3,
+      10.3
+    ],
+    [
+      10.6,
+      12.6
+    ]
+  ],
+  "ditch_terrain": {
+    "front_x_m": 10.3,
+    "width_m": 0.3,
+    "ground_end_x_m": 25.0,
+    "stone_height_min_m": 0.001,
+    "stone_height_max_m": 0.004,
+    "stones_per_m2": 10,
+    "seed": 20261111,
+    "lateral_limit_m": 3.9,
+    "far_bank_height_m": 0.0,
+    "rough_x_intervals_m": [
+      [
+        2.5,
+        8.5
+      ],
+      [
+        12.0,
+        20.0
+      ]
+    ],
+    "land_bridge_y_interval_m": [
+      1.4,
+      4.0
+    ],
+    "full_width_rough": true,
+    "ridges": [
+      {
+        "x_interval_m": [
+          4.5,
+          5.5
+        ],
+        "y_interval_m": [
+          -4.0,
+          4.0
+        ],
+        "height_m": 0.02
+      },
+      {
+        "x_interval_m": [
+          13.0,
+          15.0
+        ],
+        "y_interval_m": [
+          -4.0,
+          4.0
+        ],
+        "height_m": 0.04
+      }
+    ]
+  },
+  "ground_handoff": {
+    "bundle": "runs/rb_h75_ecbc_ground/left90_R2/bundle",
+    "settings": "runs/rb_h75_ecbc_ground/left90_R2/config.json",
+    "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_task_condition_collection/issued.npz",
+    "road_half_width_m": 0.6,
+    "goal": {
+      "x_min_m": 16.5,
+      "x_max_m": 18.5,
+      "abs_y_max_m": 0.5,
+      "min_vx_m_s": 0.5,
+      "hold_s": 0.5,
+      "path_tolerance_m": 0.3,
+      "heading_tolerance_rad": 0.2,
+      "speed_tolerance_m_s": 0.4
+    },
+    "approach": {
+      "speed_m_s": 1.8,
+      "alpha": 0.0,
+      "jump_start_x_m": 9.0
+    },
+    "handoff_delay_s": 0.5,
+    "start_x_m": 1.5,
+    "nominal_steer_slew_rad_s": 0.6,
+    "start_vx_m_s": 1.8,
+    "continuation": {
+      "speed_m_s": 1.8,
+      "alpha": 0.0
+    }
+  },
+  "ground_physics": {
+    "integrator": "implicitfast",
+    "friction": 0.8
+  },
+  "rb_physics": {
+    "integrator": "RK4",
+    "physics_dt_s": 0.005
+  }
+}
