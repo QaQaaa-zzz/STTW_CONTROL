@@ -1,0 +1,21 @@
+{
+  "episodes": 12,
+  "seconds_per_episode": 10,
+  "physics_steps_max": 24000,
+  "training": false,
+  "terrains": [
+    "flat",
+    "rough"
+  ],
+  "routes": [
+    60,
+    61,
+    62
+  ],
+  "methods": [
+    "h75",
+    "zero_middle"
+  ],
+  "skill": "rb_run1 loaded only for model identity, never activated",
+  "speed_request": 2.0
+}

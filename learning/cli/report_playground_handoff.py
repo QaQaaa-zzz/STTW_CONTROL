@@ -22,4 +22,7 @@ lines=['# Native Playground RB–STTW handoff trial','','![All actual/reference 
 for r in s['results']:
  lines.append(f"|{r['skill']}|{r['route']}|{r['continuation']}|{r['airborne']}|{r['far_contact']}|{r['handoff_s']}|{r['termination']}|{r['final_xy']}|")
 lines+=['',f"Completed {s['completed']}/{s['total']} episodes. The declared approach controller (see declaration.json) precedes native RB jumping; after measured far-bank wheel contact RB continues for {d.get('handoff_delay_s', 0.)} s before H75 or its zero-middle comparator is engaged. Native vehicle, servos and finite-torque leg hold remain physical; no pose reset or artificial stable-support requirement.",'','The heightfield retains the original seeded rough-bank surface through 25mm resampling. Native vehicle/collision behavior and 5ms physics differ from Isaac, so this is a transfer feasibility trial, not a simulator-only causal comparison. H75 starts with measured ESO state and empty policy history.']
+if d.get('ground_only',False):
+ lines[0]='# Native RB chassis ground-only STTW test'
+ lines += ['', 'Ground-only override: RB is never activated; H75 and zero-middle each control the entire approach. The ditch is outside the reachable domain. Requested speed is 2 m/s. The controller is the current ECBC+ESO adapter, without Local300; this is not the original H75 vehicle/control stack.']
 (a.root/'RESULTS.md').write_text('\n'.join(lines)+'\n')

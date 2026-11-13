@@ -42,6 +42,11 @@ def transplant(bundle, terrain, output):
         geom = world.find(f"geom[@name='{name}']")
         geom.set('contype', '0'); geom.set('conaffinity', '0'); geom.set('rgba', '0 0 0 0')
     world.find("geom[@name='step']").set('pos', f"{terrain['front_x_m']+2} 0 0")
+    # Explicit pairs bypass contype/conaffinity; remove the replaced ground contacts.
+    contacts = root.find('contact')
+    for pair in list(contacts):
+        if pair.tag == 'pair' and {pair.get('geom1'), pair.get('geom2')} & {'floor', 'step'}:
+            contacts.remove(pair)
     vertices, triangles = build_ditch_terrain(terrain)
     heights = []
     front, far = terrain['front_x_m'], terrain['front_x_m']+terrain['width_m']
@@ -89,6 +94,7 @@ def main():
     p.add_argument('--model',type=Path,help='Reuse an existing terrain MJB from this task')
     p.add_argument('--approach', choices=['native','h75'], default='h75')
     p.add_argument('--routes',nargs='+',type=int,default=[60,61,62]); p.add_argument('--seconds',type=float,default=10)
+    p.add_argument('--ground-only',action='store_true',help='Keep ground control throughout; no RB activation')
     a=p.parse_args(); a.output.mkdir(parents=True,exist_ok=False); torch.set_num_threads(1)
     cfg=json.loads(a.config.read_text()); hand=cfg['ground_handoff']; terrain=cfg['ditch_terrain']
     bundle=Path(hand['bundle']); identity=json.loads((bundle/'identity.json').read_text()); hcfg=json.loads((bundle/'config.json').read_text())
@@ -97,7 +103,7 @@ def main():
     original=next(iter(skills.values())).bundle; idx=original.model_index
     model=mujoco.MjModel.from_binary_path(str(a.model)) if a.model else transplant(original,terrain,a.output); idx=_build_index(model); geometry=build_geometry_contract(model); mm=mjx.put_model(model,impl='warp')
     roads=np.load(hand['reference_path']); n=len(a.routes)*len(skills)*len(a.modes)
-    contract=dict(terrain_model=str(a.model) if a.model else str(a.output/'terrain.mjb'),role='bounded native Playground transfer DEV, no training',skills={k:s.record for k,s in skills.items()},terrain=terrain,source_config=str(a.config),routes=a.routes,episode_s=a.seconds,episodes=n,physics_steps_max=round(a.seconds/.005)*n,backend='MuJoCo Playground mjx_env.step, MJX-Warp',heightfield_contact_workspace=512,physics_dt=.005,lower_dt=.005,upper_dt=.02,ground_model=identity,goal=hand['goal'],road_half_width_m=hand['road_half_width_m'],start_x_m=1.5,start_vx_m_s=2.,handoff='RB remains active for configured delay after first far-bank wheel contact; then next 5ms boundary',handoff_delay_s=hand.get('handoff_delay_s',0.),approach=a.approach,jump_start_x_m=hand['approach']['jump_start_x_m'],scope='Declared approach controller then native RB jump then H75 or zero-middle STTW. No planning or training.',terrain_conversion='Existing seeded terrain vertices resampled to 25mm heightfields, open trench and bridge retained; native vehicle and contacts retained, not a controlled simulator-only comparison.',pendulum='finite native position servos hold measured landing joint angles; no joint lock',observer='measured ESO initialization, empty H75 history at handoff')
+    contract=dict(terrain_model=str(a.model) if a.model else str(a.output/'terrain.mjb'),role='bounded native Playground transfer DEV, no training',skills={k:s.record for k,s in skills.items()},terrain=terrain,source_config=str(a.config),routes=a.routes,episode_s=a.seconds,episodes=n,physics_steps_max=round(a.seconds/.005)*n,backend='MuJoCo Playground mjx_env.step, MJX-Warp',heightfield_contact_workspace=512,physics_dt=.005,lower_dt=.005,upper_dt=.02,ground_model=identity,goal=hand['goal'],road_half_width_m=hand['road_half_width_m'],start_x_m=1.5,start_vx_m_s=2.,handoff='RB remains active for configured delay after first far-bank wheel contact; then next 5ms boundary',handoff_delay_s=hand.get('handoff_delay_s',0.),approach=a.approach,ground_only=a.ground_only,jump_start_x_m=hand['approach']['jump_start_x_m'],scope='Declared approach controller then native RB jump then H75 or zero-middle STTW. No planning or training.',terrain_conversion='Existing seeded terrain vertices resampled to 25mm heightfields, open trench and bridge retained; native vehicle and contacts retained, not a controlled simulator-only comparison.',pendulum='finite native position servos hold measured landing joint angles; no joint lock',observer='measured ESO initialization, empty H75 history at handoff')
     (a.output/'declaration.json').write_text(json.dumps(contract,indent=2))
     @jax.jit
     def step(data,ctrl):return mjx_env.step(mm,data,ctrl,1)
@@ -130,7 +136,7 @@ def main():
             middle.reset(m,pose,speed,raw,raw,previous,ctl,initial_progress=route.s[nearest])
         for tick in range(round(a.seconds/.005)+1):
             m,pose,speed,angles=measurement(data,idx); q=np.asarray(data.qpos); v=np.asarray(data.qvel)
-            if approaching and q[0]>=hand['approach']['jump_start_x_m'] and tick%4==0:
+            if approaching and not a.ground_only and q[0]>=hand['approach']['jump_start_x_m'] and tick%4==0:
                 approaching=False
                 (target/'jump_entry.json').write_text(json.dumps(dict(time_s=tick*.005,qpos=q.tolist(),qvel=v.tolist(),physical_reset=False)))
             # Download actual solver contacts, not a height-only touchdown proxy.
@@ -153,14 +159,14 @@ def main():
                 (target/'handoff.json').write_text(json.dumps(handoff,indent=2))
             ey=float(np.min(np.linalg.norm(np.asarray(route.xy)-q[:2],axis=1)))
             poses.append(q.copy())
-            rows.append([tick*.005,*q[:3],*angles,*v[:3],float(active),ey,*target_ctrl,float(approaching)])
+            rows.append([tick*.005,*q[:3],*angles,*v[:3],float(active),ey,*target_ctrl,float(approaching),float(m[0,5]),float(middle.v_user[0])])
             if not np.isfinite(q).all() or abs(angles[0])>.7 or abs(angles[1])>1.309:reason='physical_failure';break
             if (active or approaching) and (ey>hand['road_half_width_m'] or bool(middle.domain_exit[0])):reason='corridor_or_domain_exit';break
             goal=hand['goal']
-            if active and goal['x_min_m']<=q[0]<=goal['x_max_m'] and abs(q[1])<=goal['abs_y_max_m'] and v[0]>=goal['min_vx_m_s']:reason='goal';break
+            if (active or a.ground_only) and goal['x_min_m']<=q[0]<=goal['x_max_m'] and abs(q[1])<=goal['abs_y_max_m'] and v[0]>=goal['min_vx_m_s']:reason='goal';break
             if tick==round(a.seconds/.005):break
             if active or approaching:
-                governed=middle.before(pose,zero_middle=(mode=='zero_middle' and active))
+                governed=middle.before(pose,zero_middle=(mode=='zero_middle' and (active or a.ground_only)))
                 command=ctl.step(torch.stack((m[:,5]*.07,m[:,2],m[:,3],m[:,0],m[:,1],governed[:,1]),-1),torch.tensor([tick*.005>3.]))
                 steer=float(command[0,0].clamp(-3,3)); target_ctrl[0]=np.clip(target_ctrl[0]+.005*steer,-.8,.8)
                 target_ctrl[1]=float((governed[0,0]/.07).clamp(-60,60))
@@ -175,7 +181,7 @@ def main():
             if (tick+1)%4==0:
                 signal=jp.logical_and(data.qpos[0]>=9.5,data.qpos[0]<=11.)
                 history,obs=frame(data,history,last,signal)
-        np.savez_compressed(target/'trajectory.npz',trace=np.asarray(rows),qpos=np.asarray(poses),columns=['time','x','y','z','roll','pitch','yaw','vx','vy','vz','ground_active','path_distance','steer_target','rear_target','hip_target','knee_target','approaching'],reference_xy=np.asarray(route.xy))
+        np.savez_compressed(target/'trajectory.npz',trace=np.asarray(rows),qpos=np.asarray(poses),columns=['time','x','y','z','roll','pitch','yaw','vx','vy','vz','ground_active','path_distance','steer_target','rear_target','hip_target','knee_target','approaching','rear_rate_rad_s','requested_speed_m_s'],reference_xy=np.asarray(route.xy))
         row=dict(skill=name,route=route_id,continuation=mode,termination=reason,goal=reason=='goal',airborne=bool(airborne),far_contact=bool(clearance),first_far_contact_s=far_contact_time,handoff_s=None if handoff is None else handoff['time_s'],duration_s=tick*.005,final_xy=q[:2].tolist())
         results.append(row); print(json.dumps(row),flush=True)
         (a.output/'status.json').write_text(json.dumps(dict(stage='running',completed=len(results),total=n,elapsed_s=time.time()-start,results=results),indent=2))
