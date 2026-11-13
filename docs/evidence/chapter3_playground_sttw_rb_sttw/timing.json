@@ -1,11 +1,11 @@
 {
-  "total_s": 36.10654989100294,
+  "total_s": 108.09813289099839,
   "batches": [
     {
       "skill": "rb_run3",
-      "lanes": 3,
-      "initialization_s": 1.2008813930442557,
-      "rollout_s": 34.81967604003148,
+      "lanes": 18,
+      "initialization_s": 1.2043611349654384,
+      "rollout_s": 106.62092149298405,
       "simulated_ticks_per_lane": 2000
     }
   ],

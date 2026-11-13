@@ -34,6 +34,7 @@ def transplant(bundle, terrain, output, physics_substeps=1, ground_physics=None)
     world.find("geom[@name='step']").set('pos', f"{terrain['front_x_m']+2} 0 0")
     # Explicit pairs bypass contype/conaffinity; remove the replaced ground contacts.
     contacts = root.find('contact')
+    native_wheel_pairs=[dict(pair.attrib) for pair in contacts if pair.get('geom1')=='floor' and pair.get('geom2') in ('frontwheel_collision','rearwheel_collision')]
     for pair in list(contacts):
         if pair.tag == 'pair' and {pair.get('geom1'), pair.get('geom2')} & {'floor', 'step'}:
             contacts.remove(pair)
@@ -46,6 +47,9 @@ def transplant(bundle, terrain, output, physics_substeps=1, ground_physics=None)
         # Rotate local grid 90 degrees so MuJoCo's cell diagonal matches Isaac.
         heights.append(((zz[::-1,:]-bottom)/scale).astype(np.float32))
     ground_physics = ground_physics or {}
+    if ground_physics.get('native_wheel_contacts',False):
+        for i in range(len(patches)):
+            for pair in native_wheel_pairs:ET.SubElement(contacts,'pair',**dict(pair,geom1=f'bank{i}'))
     if 'integrator' in ground_physics:
         root.find('option').set('integrator',ground_physics['integrator'])
     if ground_physics.get('steering_velocity_gain') is not None:
@@ -114,8 +118,8 @@ def main():
         from sttw_control.playground_ground_evaluation import evaluate_ground_suite
         evaluate_ground_suite(model,mm,idx,cfg,bundle,hcfg,identity,controller,a.output,a.physics_substeps,brake_ids)
         return
-    n=len(a.routes)*len(skills)*len(a.modes)
-    contract=dict(terrain_model=str(a.model) if a.model else str(a.output/'terrain.mjb'),role='bounded native Playground transfer DEV, no training',skills={k:s.record for k,s in skills.items()},terrain=terrain,source_config=str(a.config),routes=a.routes,episode_s=a.seconds,episodes=n,physics_steps_max=round(a.seconds/.005)*n*(a.physics_substeps+(1 if rb_physics else a.physics_substeps)),backend='MJX-Warp vmap; GPU Torch H75/ECBC/ESO; JAX RB; DLPack; final-only host export',heightfield_contact_workspace=512,physics_dt=.005/a.physics_substeps,physics_substeps=a.physics_substeps,lower_dt=.005,upper_dt=.02,ground_model=identity,goal=hand['goal'],road_half_width_m=hand['road_half_width_m'],start_x_m=hand.get('start_x_m',1.5),start_vx_m_s=hand.get('start_vx_m_s',2.),handoff='RB remains active for configured delay after first far-bank wheel contact; then next 5ms boundary',handoff_delay_s=hand.get('handoff_delay_s',0.),approach=a.approach,ground_only=a.ground_only,jump_start_x_m=hand['approach']['jump_start_x_m'],scope='Declared approach controller then native RB jump then H75 or zero-middle STTW. No planning or training.',ground_physics=ground_physics,rb_physics=rb_physics,terrain_conversion='Original Isaac rectangular patches, coordinates and heights retained without interpolation; 90-degree local grid rotation matches original triangle diagonal',pendulum='STTW hip/knee equality brakes at entry posture; released during RB, relocked at measured handoff posture; native finite servos retained',observer='measured ESO initialization, empty H75 history at handoff')
+    n=len(a.routes)*len(skills)*len(a.modes)*len(hand.get('handoff_variants',[{}]))
+    contract=dict(terrain_model=str(a.model) if a.model else str(a.output/'terrain.mjb'),role='bounded native Playground transfer DEV, no training',skills={k:s.record for k,s in skills.items()},terrain=terrain,source_config=str(a.config),routes=a.routes,episode_s=a.seconds,episodes=n,physics_steps_max=round(a.seconds/.005)*n*(a.physics_substeps+(1 if rb_physics else a.physics_substeps)),backend='MJX-Warp vmap; GPU Torch H75/ECBC/ESO; JAX RB; DLPack; final-only host export',heightfield_contact_workspace=512,physics_dt=.005/a.physics_substeps,physics_substeps=a.physics_substeps,lower_dt=.005,upper_dt=.02,ground_model=identity,goal=hand['goal'],road_half_width_m=hand['road_half_width_m'],start_x_m=hand.get('start_x_m',1.5),start_vx_m_s=hand.get('start_vx_m_s',2.),handoff=hand.get('handoff_mechanism','fixed contact delay'),handoff_delay_s=hand.get('handoff_delay_s',0.),approach=a.approach,ground_only=a.ground_only,jump_start_x_m=hand['approach']['jump_start_x_m'],scope='Declared approach controller then native RB jump then H75 or zero-middle STTW. No planning or training.',ground_physics=ground_physics,rb_physics=rb_physics,terrain_conversion='Original Isaac rectangular patches, coordinates and heights retained without interpolation; 90-degree local grid rotation matches original triangle diagonal',pendulum='STTW hip/knee equality brakes at entry posture; released during RB, relocked at measured handoff posture; native finite servos retained',observer='measured ESO initialization, empty H75 history at handoff')
     (a.output/'declaration.json').write_text(json.dumps(contract,indent=2))
     from sttw_control.playground_handoff_evaluation import evaluate_handoff
     evaluate_handoff(model,mm,idx,cfg,bundle,hcfg,identity,controller,skills,a,brake_ids)

@@ -67,14 +67,14 @@ class TorchController:
         self.disturbance[indices] = 0
         self.gains[indices] = self.initial_gains[indices]
 
-    def step(self, measurement, enable_eso):
+    def step(self, measurement, enable_eso, eso_scale=1.):
         c = self.config
         speed, steer, steer_rate, roll, roll_rate, reference = measurement.unbind(-1)
         weight=1-torch.exp(-2*math.pi*c['dt']*self.roll_rate_filter_hz)
         self.filtered_roll_rate=torch.where(self.roll_rate_filter_hz>0,self.filtered_roll_rate+weight*(roll_rate-self.filtered_roll_rate),roll_rate)
         roll_rate=self.filtered_roll_rate
         a1, a2, a4, ratio, gains = self._system(speed)
-        shift = torch.where(enable_eso, -self.disturbance/a4, 0.) if c.get('use_eso_correction', True) else torch.zeros_like(speed)
+        shift = eso_scale*(torch.where(enable_eso, -self.disturbance/a4, 0.) if c.get('use_eso_correction', True) else torch.zeros_like(speed))
         if c['fixed_roll_reference'] is not None:
             reference = ratio*c['fixed_roll_reference']
         reference_roll = reference/ratio if c['fixed_roll_reference'] is None else torch.full_like(speed, c['fixed_roll_reference'])

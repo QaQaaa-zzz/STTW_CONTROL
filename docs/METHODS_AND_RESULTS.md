@@ -1961,3 +1961,7 @@ GLM端到端集成（用户2026-11-09新授权）：已配置glm-5.3从11场景�
 ### 第三章GPU串联入口与接触记录更正
 
 **串联入口已改为GPU批处理并完成三路线测试。** 复用MJX-Warp vmap、CUDA H75/ECBC/ESO、JAX RB和DLPack；物理状态/观测/动作/阶段掩码留GPU，最终统一导出200Hz轨迹。Run3三路线总36.107秒、循环34.820秒（固定2000tick批窗口）；旧逐条接触修正版阶段56.360秒，轨迹不同，不称逐位等价加速基准。三条均真实远岸接触5.090/5.105/5.095秒，5.115/5.460/5.480秒触发物理失败，均未熬过既定0.5秒RB回交等待；串联目标0/3。重要更正：旧evaluation/run3_native_rb_retry的mjx.get_data未复制Warp接触数组，其无远岸接触/无回交字段无效；新入口直接GPU原始接触归约，旧状态留作诊断。全覆盖XY与证据：`runs/worktrees/sttw-offroad/docs/evidence/chapter3_playground_sttw_rb_sttw/README.md`。
+
+## Playground带摆完整链状态交接开发
+
+冻结高成功率Run3，GPU物理/张量/网络批量测试了即时触地、下降、收摆、原生RB落地、分阶段状态回交与小幅路径引导；原始失败和源快照保留。恢复源XML轮地显式pair与高度观测坐标适配均为明确变化，非原域不变转移。用户明确沟前后各两米平地后发现配置说明未落实，修正实际碎石区间，8项地形测试通过。修正地图18条名义DEV完整目标4/18且全为直线，左右弯均失败，仍未采用为完整链方案。下一有限阶段测试连续状态稳定门控，超限清零，不重置物理状态。全部XY与结果：docs/evidence/chapter3_playground_sttw_rb_sttw/README.md；原始协议和逐步数据：/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw。

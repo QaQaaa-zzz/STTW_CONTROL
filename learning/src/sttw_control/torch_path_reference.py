@@ -59,6 +59,7 @@ class TorchPathReference:
     def pursuit(self,progress,pose,speed,v_user):
         c=self.config['follower']
         look=(c['lookahead_time_s']*speed.clamp_min(c['lookahead_min_speed_m_s'])).clamp(c['lookahead_min_m'],c['lookahead_max_m'])
+        look=look*c.get('lookahead_scale',1.)
         point=self.at(progress+look)[0];heading=self.at(progress)[1]
         delta=point-pose[:,:2];cs=torch.cos(pose[:,2]);sn=torch.sin(pose[:,2])
         body=torch.stack((cs*delta[:,0]+sn*delta[:,1],-sn*delta[:,0]+cs*delta[:,1]),dim=-1)
