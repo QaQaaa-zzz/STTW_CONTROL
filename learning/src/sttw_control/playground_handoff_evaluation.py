@@ -128,12 +128,6 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         init_start=time.perf_counter()
         qpos=np.tile(model.key_qpos[idx.keyframe_id],(n,1));qvel=np.tile(model.key_qvel[idx.keyframe_id],(n,1))
         qpos[:,0]=hand.get('start_x_m',1.5);qvel[:,0]=hand.get('start_vx_m_s',2.)
-        for lane,(_,_,variant) in enumerate(lanes):
-            initial=variants[variant]
-            qpos[lane,1]+=initial.get('initial_y_m',0.)
-            roll=initial.get('initial_roll_rad',0.)/2;yaw=initial.get('initial_yaw_rad',0.)/2
-            delta=np.array([np.cos(yaw)*np.cos(roll),np.cos(yaw)*np.sin(roll),np.sin(yaw)*np.sin(roll),np.sin(yaw)*np.cos(roll)])
-            orientation=qpos[lane,3:7].copy();mujoco.mju_mulQuat(qpos[lane,3:7],delta,orientation)
         for lane,(_,_,i) in enumerate(lanes):
             case=variants[i];yaw=case.get('start_yaw_rad',0.);roll=case.get('start_roll_rad',0.)
             qpos[lane,1]=case.get('start_y_m',0.)
