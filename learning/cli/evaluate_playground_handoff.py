@@ -97,7 +97,7 @@ def main():
     original=next(iter(skills.values())).bundle; idx=original.model_index
     model=mujoco.MjModel.from_binary_path(str(a.model)) if a.model else transplant(original,terrain,a.output); idx=_build_index(model); geometry=build_geometry_contract(model); mm=mjx.put_model(model,impl='warp')
     roads=np.load(hand['reference_path']); n=len(a.routes)*len(skills)*len(a.modes)
-    contract=dict(terrain_model=str(a.model) if a.model else str(a.output/'terrain.mjb'),role='bounded native Playground transfer DEV, no training',skills={k:s.record for k,s in skills.items()},terrain=terrain,source_config=str(a.config),routes=a.routes,episode_s=a.seconds,episodes=n,physics_steps_max=round(a.seconds/.005)*n,backend='MuJoCo Playground mjx_env.step, MJX-Warp',heightfield_contact_workspace=512,physics_dt=.005,lower_dt=.005,upper_dt=.02,ground_model=identity,goal=hand['goal'],road_half_width_m=hand['road_half_width_m'],start_x_m=1.5,start_vx_m_s=2.,handoff='first wheel contact on far bank after genuine airborne interval; next 5ms lower-control boundary',approach=a.approach,jump_start_x_m=hand['approach']['jump_start_x_m'],scope='Declared approach controller then native RB jump then H75 or zero-middle STTW. No planning or training.',terrain_conversion='Existing seeded terrain vertices resampled to 25mm heightfields, open trench and bridge retained; native vehicle and contacts retained, not a controlled simulator-only comparison.',pendulum='finite native position servos hold measured landing joint angles; no joint lock',observer='measured ESO initialization, empty H75 history at handoff')
+    contract=dict(terrain_model=str(a.model) if a.model else str(a.output/'terrain.mjb'),role='bounded native Playground transfer DEV, no training',skills={k:s.record for k,s in skills.items()},terrain=terrain,source_config=str(a.config),routes=a.routes,episode_s=a.seconds,episodes=n,physics_steps_max=round(a.seconds/.005)*n,backend='MuJoCo Playground mjx_env.step, MJX-Warp',heightfield_contact_workspace=512,physics_dt=.005,lower_dt=.005,upper_dt=.02,ground_model=identity,goal=hand['goal'],road_half_width_m=hand['road_half_width_m'],start_x_m=1.5,start_vx_m_s=2.,handoff='RB remains active for configured delay after first far-bank wheel contact; then next 5ms boundary',handoff_delay_s=hand.get('handoff_delay_s',0.),approach=a.approach,jump_start_x_m=hand['approach']['jump_start_x_m'],scope='Declared approach controller then native RB jump then H75 or zero-middle STTW. No planning or training.',terrain_conversion='Existing seeded terrain vertices resampled to 25mm heightfields, open trench and bridge retained; native vehicle and contacts retained, not a controlled simulator-only comparison.',pendulum='finite native position servos hold measured landing joint angles; no joint lock',observer='measured ESO initialization, empty H75 history at handoff')
     (a.output/'declaration.json').write_text(json.dumps(contract,indent=2))
     @jax.jit
     def step(data,ctrl):return mjx_env.step(mm,data,ctrl,1)
@@ -115,7 +115,7 @@ def main():
         qpos=np.array(model.key_qpos[idx.keyframe_id]); qvel=np.array(model.key_qvel[idx.keyframe_id]); qpos[0]=1.5; qvel[0]=2.
         data=mjx_env.make_data(model,qpos=jp.asarray(qpos),qvel=jp.asarray(qvel),impl='warp',naconmax=4096,njmax=256)
         data=jax.jit(mjx.forward)(mm,data)
-        history=initial_history(); last=jp.zeros(4); obs=actor_observation(history,jp.asarray(False)); active=False; airborne=False; handoff=None; rows=[]; poses=[]; reason='timeout'; clearance=False
+        history=initial_history(); last=jp.zeros(4); obs=actor_observation(history,jp.asarray(False)); active=False; airborne=False; handoff=None; far_contact_time=None; rows=[]; poses=[]; reason='timeout'; clearance=False
         policy=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],hcfg,1,'cpu'); ctl=TorchController(controller,1,'cpu')
         route=TorchPathReference({k:roads[k][route_id] if roads[k].ndim>({'xy':2}.get(k,1)) else roads[k] for k in ('s','xy','heading','curvature')},hcfg,'cpu')
         middle=TorchMiddleControl(policy,route,identity['frame_scales'],torch.tensor([.5]),torch.tensor([1.5]))
@@ -138,15 +138,18 @@ def main():
             contact=[c for c in host.contact[:host.ncon] if c.dist<=0 and any(g in wheel_ids for g in c.geom)]
             airborne |= len(contact)==0 and q[0]>terrain['front_x_m']-1.5
             far_contact=any(c.pos[0]>terrain['front_x_m']+terrain['width_m'] for c in contact)
-            if airborne and far_contact and not active and not approaching:
-                active=True; clearance=True; middle.v_user.fill_(1.5);middle.alpha.fill_(.5); target_ctrl[2:]=q[[idx.hip_qpos_address,idx.knee_qpos_address]]
+            if airborne and far_contact and far_contact_time is None and not approaching:
+                far_contact_time=tick*.005;clearance=True
+                (target/'first_far_contact.json').write_text(json.dumps(dict(time_s=far_contact_time,qpos=q.tolist(),qvel=v.tolist(),controller='RB')))
+            if far_contact_time is not None and not active and tick*.005-far_contact_time>=hand.get('handoff_delay_s',0.)-1e-9:
+                active=True; middle.v_user.fill_(1.5);middle.alpha.fill_(.5); target_ctrl[2:]=q[[idx.hip_qpos_address,idx.knee_qpos_address]]
                 target_ctrl=np.clip(target_ctrl,model.actuator_ctrlrange[:,0],model.actuator_ctrlrange[:,1])
                 ctl.reset(slice(None)); target_ctrl[0]=q[idx.steering_qpos_address]
                 ctl.eso[0,:3]=m[0,[2,0,1]]; ctl.filtered_roll_rate[0]=m[0,1]
                 raw=torch.stack((speed,m[:,2]),-1); previous=torch.stack((m[:,3],m[:,5]),-1)
                 nearest=((route.xy-pose[0,:2])**2).sum(-1).argmin().reshape(1)
                 middle.reset(m,pose,speed,raw,raw,previous,ctl,initial_progress=route.s[nearest])
-                handoff=dict(time_s=tick*.005,qpos=q.tolist(),qvel=v.tolist(),physical_reset=False)
+                handoff=dict(time_s=tick*.005,first_far_contact_s=far_contact_time,configured_delay_s=hand.get('handoff_delay_s',0.),qpos=q.tolist(),qvel=v.tolist(),physical_reset=False)
                 (target/'handoff.json').write_text(json.dumps(handoff,indent=2))
             ey=float(np.min(np.linalg.norm(np.asarray(route.xy)-q[:2],axis=1)))
             poses.append(q.copy())
@@ -173,7 +176,7 @@ def main():
                 signal=jp.logical_and(data.qpos[0]>=9.5,data.qpos[0]<=11.)
                 history,obs=frame(data,history,last,signal)
         np.savez_compressed(target/'trajectory.npz',trace=np.asarray(rows),qpos=np.asarray(poses),columns=['time','x','y','z','roll','pitch','yaw','vx','vy','vz','ground_active','path_distance','steer_target','rear_target','hip_target','knee_target','approaching'],reference_xy=np.asarray(route.xy))
-        row=dict(skill=name,route=route_id,continuation=mode,termination=reason,goal=reason=='goal',airborne=bool(airborne),far_contact=bool(clearance),handoff_s=None if handoff is None else handoff['time_s'],duration_s=tick*.005,final_xy=q[:2].tolist())
+        row=dict(skill=name,route=route_id,continuation=mode,termination=reason,goal=reason=='goal',airborne=bool(airborne),far_contact=bool(clearance),first_far_contact_s=far_contact_time,handoff_s=None if handoff is None else handoff['time_s'],duration_s=tick*.005,final_xy=q[:2].tolist())
         results.append(row); print(json.dumps(row),flush=True)
         (a.output/'status.json').write_text(json.dumps(dict(stage='running',completed=len(results),total=n,elapsed_s=time.time()-start,results=results),indent=2))
     (a.output/'status.json').write_text(json.dumps(dict(stage='complete',completed=len(results),total=n,elapsed_s=time.time()-start,results=results),indent=2))
