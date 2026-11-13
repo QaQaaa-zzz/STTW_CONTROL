@@ -39,6 +39,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
     recovery_wc=tensor([variants[i].get('recovery_wc',controller_config['wc']) for r,m,i in lanes]).float()
     body_feedback=tensor([variants[i].get('body_speed_feedback',False) for r,m,i in lanes])
     recovery_eso=tensor([variants[i].get('recovery_eso_scale',1.) for r,m,i in lanes]).float()
+    recovery_eso_delay=tensor([variants[i].get('recovery_eso_delay_s',0.) for r,m,i in lanes]).float()
     recovery_look=tensor([variants[i].get('lookahead_scale',1.) for r,m,i in lanes]).float()
     landing_damping=tensor([variants[i].get('steering_damping',.1) for r,m,i in lanes]).float()
     landing_pitch_k=tensor([variants[i].get('landing_pitch_k',0.) for r,m,i in lanes]).float()
@@ -48,6 +49,8 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
     gate_roll=tensor([variants[i].get('gate_roll_rad',.08) for r,m,i in lanes]).float()
     gate_rate=tensor([variants[i].get('gate_roll_rate',.3) for r,m,i in lanes]).float()
     gate_hold=tensor([variants[i].get('gate_hold_s',0.) for r,m,i in lanes]).float()
+    settle_joints=hand.get('require_settled_pendulum',False)
+    home_compensation=hand.get('home_bias_compensation',False)
     native_landing=hand.get('landing_control')=='native'
     rb_guidance=tensor([variants[i].get('rb_guidance_bound_rad',0.) for r,m,i in lanes]).float()
     gate_upper=hand.get('gate_recovery_upper',False)
@@ -57,6 +60,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
     saved=np.load(hand['reference_path']);route=TorchPathReference(dict(saved),hcfg,device,route_ids=[r for r,m,i in lanes])
     geometry=build_geometry_contract(model);brake_qpos=np.array([idx.hip_qpos_address,idx.knee_qpos_address])
     home_pose=tensor(model.key_qpos[idx.keyframe_id,brake_qpos]).float()
+    joint_kp=tensor(model.actuator_gainprm[2:,0]).float()
     terrain_geoms=jp.asarray(model.geom_type==mujoco.mjtGeom.mjGEOM_HFIELD)
     rb_model=mm.replace(opt=mm.opt.replace(timestep=jp.asarray(.005,dtype=mm.opt.timestep.dtype),integrator=type(mm.opt.integrator)(int(mujoco.mjtIntegrator.mjINT_RK4)))) if cfg.get('rb_physics') else mm
     rb_substeps=1 if cfg.get('rb_physics') else args.physics_substeps
@@ -166,11 +170,13 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 ready=flags[:,1]&(angles[:,0].abs()<.35)&(angles[:,1].abs()<.45)&(v[:,2].abs()<1.5)
                 if staged_native:
                     body_ready=flags[:,1]&(angles[:,0].abs()<gate_roll)&(angles[:,1].abs()<.2)&(v[:,2].abs()<.5)&(m[:,1].abs()<gate_rate)&(speed>=1.5)
+                    if settle_joints:
+                        body_ready &= (angles[:,1].abs()<.03)&(v[:,4].abs()<.3)&((q[:,brake_qpos]-home_pose).abs().amax(-1)<.15)&(v[:,[idx.hip_dof_address,idx.knee_dof_address]].abs().amax(-1)<.5)
                     stable_time=torch.where(alive&(phase==3)&body_ready,stable_time+.005,0.)
                     taking_wheels=alive&(phase==3)&body_ready&(stable_time>=gate_hold)
                     phase=torch.where(taking_wheels,4,phase)
                 if native_landing:ready &= (angles[:,0].abs()<.08)&(angles[:,1].abs()<.15)&(v[:,2].abs()<.4)&(m[:,1].abs()<.3)
-                if home_landing or native_landing:ready &= ((q[:,brake_qpos]-home_pose).abs().amax(-1)<.08)&(v[:,[idx.hip_dof_address,idx.knee_dof_address]].abs().amax(-1)<.5)&(m[:,1].abs()<1.)
+                if home_landing or native_landing:ready &= ((q[:,brake_qpos]-home_pose).abs().amax(-1)<hand.get('lock_position_tolerance_rad',.08))&(v[:,[idx.hip_dof_address,idx.knee_dof_address]].abs().amax(-1)<hand.get('lock_velocity_tolerance_rad_s',.5))&(m[:,1].abs()<1.)
                 returning=alive&(phase==(4 if staged_native else 3))&ready
                 reset_control=taking_wheels if staged_native else returning if native_landing else preparing|far|returning
             else:
@@ -201,6 +207,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
             ctl.config['wc']=torch.where(phase>=2,recovery_wc,controller_config['wc'])
             feedback_speed=torch.where((phase>=2)&body_feedback,speed,m[:,5]*.07)
             enable_eso=torch.full((n,),t>3.,device=device)
+            enable_eso &= (phase<2)|(middle.lane_ticks*.005>=recovery_eso_delay)
             if gate_eso:enable_eso &= (phase<2)|((m[:,0].abs()<.08)&(m[:,1].abs()<.4))
             command=ctl.step(torch.stack((feedback_speed,m[:,2],m[:,3],m[:,0],m[:,1],governed[:,1]),1),enable_eso,torch.where(phase>=2,recovery_eso,1.))
             steer=command[:,0].clamp(-3,3);steer=torch.maximum(((-.8-m[:,2])/.005).clamp_min(-3),torch.minimum(((.8-m[:,2])/.005).clamp_max(3),steer))
@@ -222,6 +229,9 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
             home_targets[:,0]=(home_targets[:,0]+torch.where(far_time<0,pitch_assist,0.)).clamp(lo[2],hi[2])
             ground_target[:,2:]=torch.where((phase==3)[:,None],home_targets if home_landing else target[:,2:],ground_target[:,2:])
             ground_target[:,2:]=torch.where((phase==4)[:,None],home_pose,ground_target[:,2:])
+            if home_compensation:
+                compensated=(home_pose+to_torch(data.qfrc_bias[:,[idx.hip_dof_address,idx.knee_dof_address]])/joint_kp).clamp(lo[2:],hi[2:])
+                ground_target[:,2:]=torch.where((phase==4)[:,None],compensated,ground_target[:,2:])
             target=torch.where(ground_mode[:,None],ground_target,target)
             data,jflags=advance(data,to_jax(target),to_jax(lock),to_jax(torch.where(phase>=2,landing_damping,.1)),to_jax(phase==1 if align_landing else ((phase==1)|(phase==3))),to_jax((phase==0)|(phase==2)),to_jax(alive));flags=to_torch(jflags)
             q,v,m,pose,speed,angles=map(to_torch,observe(data))
