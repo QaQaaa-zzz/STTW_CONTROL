@@ -111,6 +111,7 @@ def main():
         raise ValueError('Ground physics adaptation requires ground-only execution and a freshly built model')
     bundle=Path(hand['bundle']); identity=json.loads((bundle/'identity.json').read_text()); hcfg=json.loads((bundle/'config.json').read_text())
     controller=json.loads(Path(json.loads(Path(hand['settings']).read_text())['controller_config']).read_text())
+    if 'nominal_steer_slew_rad_s' in hand:hcfg['follower']['nominal_steer_slew_rad_s']=hand['nominal_steer_slew_rad_s']
     skills={name:PendulumSkill(a.registry,name) for name in a.skills}
     original=next(iter(skills.values())).bundle; idx=original.model_index
     model=mujoco.MjModel.from_binary_path(str(a.model)) if a.model else transplant(original,terrain,a.output,a.physics_substeps,ground_physics)
@@ -120,6 +121,11 @@ def main():
     brake_ids=np.array([mujoco.mj_name2id(model,mujoco.mjtObj.mjOBJ_EQUALITY,f'ground_brake_{joint}') for joint in ('hip_joint','knee_joint')])
     if (brake_ids<0).any():raise ValueError('Cached model lacks STTW pendulum brakes; rebuild it')
     brake_qpos=np.array([idx.hip_qpos_address,idx.knee_qpos_address])
+    if 'ground_suite' in cfg:
+        if not a.ground_only:raise ValueError('Ground suite does not execute RB')
+        from sttw_control.playground_ground_evaluation import evaluate_ground_suite
+        evaluate_ground_suite(model,mm,idx,cfg,bundle,hcfg,identity,controller,a.output,a.physics_substeps,brake_ids)
+        return
     roads=np.load(hand['reference_path']); n=len(a.routes)*len(skills)*len(a.modes)
     contract=dict(terrain_model=str(a.model) if a.model else str(a.output/'terrain.mjb'),role='bounded native Playground transfer DEV, no training',skills={k:s.record for k,s in skills.items()},terrain=terrain,source_config=str(a.config),routes=a.routes,episode_s=a.seconds,episodes=n,physics_steps_max=round(a.seconds/.005)*n*a.physics_substeps,backend='MuJoCo Playground mjx_env.step, MJX-Warp',heightfield_contact_workspace=512,physics_dt=.005/a.physics_substeps,physics_substeps=a.physics_substeps,lower_dt=.005,upper_dt=.02,ground_model=identity,goal=hand['goal'],road_half_width_m=hand['road_half_width_m'],start_x_m=hand.get('start_x_m',1.5),start_vx_m_s=hand.get('start_vx_m_s',2.),handoff='RB remains active for configured delay after first far-bank wheel contact; then next 5ms boundary',handoff_delay_s=hand.get('handoff_delay_s',0.),approach=a.approach,ground_only=a.ground_only,jump_start_x_m=hand['approach']['jump_start_x_m'],scope='Declared approach controller then native RB jump then H75 or zero-middle STTW. No planning or training.',ground_physics=ground_physics,terrain_conversion='Original Isaac rectangular patches, coordinates and heights retained without interpolation; 90-degree local grid rotation matches original triangle diagonal',pendulum='STTW hip/knee equality brakes at entry posture; released during RB, relocked at measured handoff posture; native finite servos retained',observer='measured ESO initialization, empty H75 history at handoff')
     (a.output/'declaration.json').write_text(json.dumps(contract,indent=2))
