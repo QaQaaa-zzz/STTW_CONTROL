@@ -1,5 +1,13 @@
 # STTW → RB → STTW：当前交接诊断
 
+## 当前顺序与新增覆盖（用户要求）
+
+先完成 STTW→RB→STTW 交接，再按 `/home/qy/下载/Chapter3_Execution_Outline_CN.docx` 推进第三章规划；研究任务不替换，方法可调整。现有三路线跳跃前均为直线，不能作为前弯交接证据。
+
+已准备九种组合：前段直线／左弯回正／右弯回正 × 后段直线／左弯／右弯。前弯位于x=2.5–8.3m，横向偏移峰值0.55m；沟前8.3–10.3m、沟后10.6–12.6m仍为原平地（平地不限制落地后的转弯）。地图、沟、最终目标及保持标准不变，连续运行、不重置状态。首轮每个共同checkpoint九个名义DEV回合、各最多10秒；真正初差验收另报，不与名义重复混算。
+
+配置及路线编号：`/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/approach_departure_turns/{config,protocol}.json`。已核对路线前进性、曲率有限、前弯回正与地形配置不变；**尚未执行九路线物理测试，不能称前弯交接通过**。复用现有GPU批量评测入口，交付全部实际/参考XY、失败终点以及进入RB和交回STTW的状态。
+
 **初态标签更正：本轮24车道测试的初差未生效。** 新增initial_*参数被已有start_*初始化覆盖；直接读取保存首帧确认全部y/roll/yaw为零。下列14/24、16/24等只能解释为名义批量重复，不能称扰动验收或独立成功率；原轨迹与失败保留，各run有INITIAL_STATE_CORRECTION.json。已删除重复初始化，准备复用原start_*参数，真正的24初差组合尚未执行。
 
 ![统一三模型、主动归位和锁后交STTW的名义XY](physical_homing_xy.png)
@@ -14,7 +22,7 @@
 
 **当前限定训练**：从修正75权重/fresh Adam出发，150更新训练真实部署的主动归位阶段。RB持有车轮、原权限内髋膝重力补偿归位、请求关节目标回写观测历史；RK4跳跃/implicitfast归位匹配评测，原网络、Go2随机化、奖励、严格训练成功门槛保持。8环境256步集成实际归位7次、数值有限、0优化；正式训练已核实2更新，2107次归位进入事件，尚无效果结论。预计约100分钟，按用户30分钟等待阈值暂停目标，后台固定预算/Bark保留。后续必须补真正初差测试。
 
-训练/合同/全部原始结果：`/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation`。真实初差配置true_perturbation_config.json目前只准备、未执行。用户要求续接稳定后按文件继续，文件路径待明确。
+训练/合同/全部原始结果：`/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation`。真实初差配置true_perturbation_config.json目前只准备、未执行。用户要求续接稳定后按文件继续，文件已明确为上述执行纲要；先完成交接，再推进纲要任务。
 
 ## 累计300轮复测与奖励冲突
 
