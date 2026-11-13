@@ -112,6 +112,9 @@ def main():
     bundle=Path(hand['bundle']); identity=json.loads((bundle/'identity.json').read_text()); hcfg=json.loads((bundle/'config.json').read_text())
     controller=json.loads(Path(json.loads(Path(hand['settings']).read_text())['controller_config']).read_text())
     if 'nominal_steer_slew_rad_s' in hand:hcfg['follower']['nominal_steer_slew_rad_s']=hand['nominal_steer_slew_rad_s']
+    overrides=hand.get('follower_overrides',{})
+    if set(overrides)-set(hcfg['follower']):raise ValueError('Unknown follower override')
+    hcfg['follower'].update(overrides)
     skills={name:PendulumSkill(a.registry,name) for name in a.skills}
     original=next(iter(skills.values())).bundle; idx=original.model_index
     model=mujoco.MjModel.from_binary_path(str(a.model)) if a.model else transplant(original,terrain,a.output,a.physics_substeps,ground_physics)
