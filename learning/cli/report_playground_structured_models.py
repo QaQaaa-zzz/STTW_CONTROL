@@ -73,9 +73,10 @@ first=a.previous if a.previous else a.root
 baseline=[json.loads(s) for s in (first/'residual_seed0/scalars.jsonl').read_text().splitlines()][0]['dev_mean_max_xy_m']
 (a.output/'summary.json').write_text(json.dumps(dict(M0_same_data_initial_mean=baseline,M0_windows=baseline_rows,rows=rows,cases=case_rows,source=str(a.root),previous=str(a.previous)),indent=2)+'\n')
 with (a.output/'cases.csv').open('w',newline='') as f:w=csv.DictWriter(f,fieldnames=list(case_rows[0]),lineterminator='\n');w.writeheader();w.writerows(case_rows)
-lines=['# P3同数据结构模型与直接模型','', '![全部DEV条件1秒实际/预测XY](prediction_xy_50.png)','', '![全部可用DEV条件3秒实际/预测XY](prediction_xy_150.png)','', '![三初始化训练与开发曲线](training_curves.png)','',f"同数据M0线性基线初始1秒/3秒平均最大XY误差为{baseline['1.0']:.5f}/{baseline['3.0']:.5f}m。M0用相同粗糙TRAIN阶段2转移拟合，区别于此前平地名义模型。M1为M0＋地形/历史修正，M2用相同输入、GRU64/128×128头及姿态积分直接预测动态增量；两个学习模型各三个独立初始化、相同采样和更新预算。",'', '|模型|种子|最佳已评估更新|时域s|窗/例|平均最大XY m|P95 m|最坏m|末25次相对改善|','|---|---|---|---|---|---|---|---|---|']
+phase_name='跳前STTW阶段0' if m.get('phase',2)==0 else 'RB回交后STTW阶段2'
+lines=['# P3同数据结构模型与直接模型','',f'本报告的模型训练与预测评测只覆盖{phase_name}，不代表其他阶段或RB预测模型已完成。','', '![全部DEV条件1秒实际/预测XY](prediction_xy_50.png)','', '![全部可用DEV条件3秒实际/预测XY](prediction_xy_150.png)','', '![三初始化训练与开发曲线](training_curves.png)','',f"同数据M0线性基线初始1秒/3秒平均最大XY误差为{baseline['1.0']:.5f}/{baseline['3.0']:.5f}m。M0用相同粗糙TRAIN{phase_name}转移拟合，区别于此前平地名义模型。M1为M0＋地形/历史修正，M2用相同输入、GRU64/128×128头及姿态积分直接预测动态增量；两个学习模型各三个独立初始化、相同采样和更新预算。",'', '|模型|种子|最佳已评估更新|时域s|窗/例|平均最大XY m|P95 m|最坏m|末25次相对改善|','|---|---|---|---|---|---|---|---|---|']
 for r in rows:lines.append(f"|{r['model']}|{r['seed']}|{r['best_update']}|{r['horizon_s']}|{r['windows']}/{r['cases']}|{r['mean_max_xy_m']:.5f}|{r['p95_max_xy_m']:.5f}|{r['worst_xy_m']:.5f}|{r['last25_relative_mean_reduction']:.2%}|")
-lines+=['','最佳按固定DEV1秒均值在每25次存档中选择，3秒不单独选模；不是所有更新全程最优。重叠窗口非独立样本，各时域覆盖不同；逐例最坏值保存在cases.csv。损失是监督预测损失，不是PPO，没有策略reward/KL指标。学习模型读取真实381维历史作初始化，未来只用预测状态及自身隐状态查询固定地形，不读未来真实历史。', '', '地形描述是预测位置附近15点的高度、坡度、局部高度变化及支撑mask；沟与图外未标为平地支撑。双线性栅格只是模型输入，最终碰撞几何不替换。此处同一地图、既有TRAIN/DEV初态（来源及速度以本轮manifest为准），尚无独立新地图或规划收益证明。没有用平均误差宣称全程净空合格、训练正式收敛或完整P3已完成。', '',f'原始存档/标量/逐窗口：`{a.root}`；M0、M1、M2均未修改RB/H75或物理。']
+lines+=['','最佳按固定DEV1秒均值在每25次存档中选择，3秒不单独选模；不是所有更新全程最优。重叠窗口非独立样本，各时域覆盖不同；逐例最坏值保存在cases.csv。损失是监督预测损失，不是PPO，没有策略reward/KL指标。学习模型读取真实381维历史作初始化，未来只用预测状态及自身隐状态查询固定地形，不读未来真实历史。', '', '地形描述是预测位置附近15点的高度、坡度、局部高度变化及支撑mask；沟与图外未标为平地支撑。双线性栅格只是模型输入，最终碰撞几何不替换。地图划分、初态及速度以本轮manifest为准；开发预测比较尚无独立TEST或规划收益证明。没有用平均误差宣称全程净空合格、训练正式收敛或完整P3已完成。', '',f'原始存档/标量/逐窗口：`{a.root}`；M0、M1、M2均未修改RB/H75或物理。']
 training_counts=m.get('training_counts',json.loads((first/'manifest.json').read_text()).get('training_counts',[]))
 lines+=['',f"本轮M0拟合{sum(r['transitions'] for r in training_counts)}条有效TRAIN转移；来源明细与训练预算见manifest.json。所有模型保留每25轮存档。"]
 if (a.root/'data_scope_note.json').exists():lines+=['',json.loads((a.root/'data_scope_note.json').read_text())['note']]
@@ -107,4 +108,4 @@ for geometry_root,subdir in [(a.geometry,'geometry'),(a.speed_geometry,'speed_ge
     for name,rs in [('aggregate',aggregate),('per_route',per_route),('worst_windows',worst)]:
         with (out/(name+'.csv')).open('w',newline='') as f:w=csv.DictWriter(f,fieldnames=list(rs[0]),lineterminator='\n');w.writeheader();w.writerows(rs)
     (out/'summary.json').write_text(json.dumps(aggregate,indent=2)+'\n')
-    with (a.output/'RESULTS.md').open('a') as f:f.write(f'\n[逐路线整车预测诊断：{subdir}]({subdir}/RESULTS.md)。六模型best均在600预算末端，尚未证明收敛；扩大实际数据覆盖后再训练。\n')
+    with (a.output/'RESULTS.md').open('a') as f:f.write(f'\n[逐路线整车预测诊断：{subdir}]({subdir}/RESULTS.md)。最佳存档和末25轮变化见上表，不由单个均值宣称收敛；是否续训由剩余误差和覆盖决定。\n')

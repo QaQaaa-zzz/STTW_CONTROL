@@ -1,0 +1,97 @@
+{
+  "models": [
+    {
+      "model": "M0",
+      "cases": 72,
+      "mean_max_xy_m": 0.20307486980325645,
+      "p95_max_xy_m": 0.3485390216112138,
+      "worst_xy_m": 0.3832417130470276,
+      "worst_support_xyz_m": 0.3698577880859375,
+      "min_horizon_s": 3.22,
+      "max_horizon_s": 4.0,
+      "checkpoint": "model_0000.pt",
+      "model_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/residual_seed0",
+      "checkpoint_sha256": "b0fdb3904f06979378c83a243218a84c5e45fe1e0e1e8902471afcf898934f4a"
+    },
+    {
+      "model": "residual_seed0",
+      "cases": 72,
+      "mean_max_xy_m": 0.057627767195097275,
+      "p95_max_xy_m": 0.10198362134397035,
+      "worst_xy_m": 0.1504530906677246,
+      "worst_support_xyz_m": 0.15038451552391052,
+      "min_horizon_s": 3.22,
+      "max_horizon_s": 4.0,
+      "checkpoint": "best.pt",
+      "model_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/residual_seed0",
+      "checkpoint_sha256": "202f47b7ed5b76a263d9c6f3c65f42e7750eafd2902d60a73f064c17ef1cfbd4"
+    },
+    {
+      "model": "residual_seed1",
+      "cases": 72,
+      "mean_max_xy_m": 0.056167840828291245,
+      "p95_max_xy_m": 0.10258872061967855,
+      "worst_xy_m": 0.15474185347557068,
+      "worst_support_xyz_m": 0.1545598804950714,
+      "min_horizon_s": 3.22,
+      "max_horizon_s": 4.0,
+      "checkpoint": "best.pt",
+      "model_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/residual_seed1",
+      "checkpoint_sha256": "64003a830ada4807b75e55ae10afa21a1b5c840a437b1e618798be4f803d6f30"
+    },
+    {
+      "model": "residual_seed2",
+      "cases": 72,
+      "mean_max_xy_m": 0.061005871665353574,
+      "p95_max_xy_m": 0.10709064118564134,
+      "worst_xy_m": 0.15196430683135986,
+      "worst_support_xyz_m": 0.1485220044851303,
+      "min_horizon_s": 3.22,
+      "max_horizon_s": 4.0,
+      "checkpoint": "best.pt",
+      "model_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/residual_seed2",
+      "checkpoint_sha256": "e90b96930ddb549cde6ae40390bafe66253037a6a511fc5bb2eb7b69ef5658bf"
+    },
+    {
+      "model": "direct_seed0",
+      "cases": 72,
+      "mean_max_xy_m": 0.0641256181212763,
+      "p95_max_xy_m": 0.14858598858118058,
+      "worst_xy_m": 0.16065216064453125,
+      "worst_support_xyz_m": 0.18302875757217407,
+      "min_horizon_s": 3.22,
+      "max_horizon_s": 4.0,
+      "checkpoint": "best.pt",
+      "model_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/direct_seed0",
+      "checkpoint_sha256": "adf6621aed5097e3072920cfbdd3d0e5db1ddc44c8e1f45b679e7fec9bdbc917"
+    },
+    {
+      "model": "direct_seed1",
+      "cases": 72,
+      "mean_max_xy_m": 0.07487284311921233,
+      "p95_max_xy_m": 0.1263062532991171,
+      "worst_xy_m": 0.14772003889083862,
+      "worst_support_xyz_m": 0.1684284508228302,
+      "min_horizon_s": 3.22,
+      "max_horizon_s": 4.0,
+      "checkpoint": "best.pt",
+      "model_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/direct_seed1",
+      "checkpoint_sha256": "0f72b56f8be29924d51d2fe0bacbd390f94b0567787f054759e079e0e3863903"
+    },
+    {
+      "model": "direct_seed2",
+      "cases": 72,
+      "mean_max_xy_m": 0.0864250135814978,
+      "p95_max_xy_m": 0.15693917497992518,
+      "worst_xy_m": 0.187661275267601,
+      "worst_support_xyz_m": 0.18602943420410156,
+      "min_horizon_s": 3.22,
+      "max_horizon_s": 4.0,
+      "checkpoint": "best.pt",
+      "model_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/direct_seed2",
+      "checkpoint_sha256": "1d202e4ac2d0c55f006afa20eefcc57c685ef1108b8629345833549aff78fa81"
+    }
+  ],
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_remaining_motion",
+  "role": "Two DEV maps72cases; not independent TEST"
+}

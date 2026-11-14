@@ -418,6 +418,28 @@
       "supporting_reports": [
         "docs/evidence/chapter3_playground_sttw_rb_sttw/p3_multispeed_models/geometry/RESULTS.md"
       ]
+    },
+    {
+      "id": "PG9",
+      "title": "Map-grouped structured prediction and full observed departure",
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/p3_multimap_models/RESULTS.md",
+      "sha256": "101fa77bb89b5ae7d6b8b58e1cb43eee6477f15b2c2457ce0d26e6e3c193bec7",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending",
+      "draft_role": "current_shared_plant_planning",
+      "supporting_reports": [
+        "docs/evidence/chapter3_playground_sttw_rb_sttw/p3_multimap_models/remaining_motion/RESULTS.md",
+        "docs/evidence/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/RESULTS.md"
+      ]
+    },
+    {
+      "id": "PG10",
+      "title": "Static same-candidate model-planning DEV pilot",
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/p3_model_planning/RESULTS.md",
+      "sha256": "f9ae20bfa53f234c878f8f3c835593be34cce88090a3f0ff8b1965064c645a11",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending",
+      "draft_role": "current_shared_plant_planning"
     }
   ],
   "references": [
@@ -461,7 +483,7 @@
   "scope": "Development methods/results draft, not submission ready",
   "new_physics_steps": "See frozen run manifests; paper build adds no simulation",
   "new_policy_training_updates": 0,
-  "paper_sha256": "4fad73ebd9d2c6e3c5bbbb55e11c20aacf54b5b11cc3bd2f0d592e6c82a3797d",
+  "paper_sha256": "7fcbd39eef6b723835e80843ee12470d9a8658c3195fb84d2c591c5a9c614b54",
   "revision_scope": "User execution-outline ground dynamics/full-motion planning/structured prediction; prior two-interface draft preserved in Git0c485653",
   "current_result_panels": [
     "PG1",
@@ -470,6 +492,8 @@
     "PG5",
     "PG6",
     "PG7",
-    "PG8"
+    "PG8",
+    "PG9",
+    "PG10"
   ]
 }

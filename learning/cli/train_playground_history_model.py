@@ -1,4 +1,4 @@
-"""Bounded multi-step identification from frozen phase2 trajectories, not PPO."""
+"""Bounded multi-step identification from frozen ground-phase trajectories, not PPO."""
 import argparse,json,shutil,time
 from pathlib import Path
 import numpy as np
@@ -14,6 +14,7 @@ p.add_argument('--nominal',type=Path,required=True)
 p.add_argument('--output',type=Path,required=True)
 p.add_argument('--updates',type=int,default=150)
 p.add_argument('--seed',type=int,default=0)
+p.add_argument('--phase',type=int,choices=[0,2],default=2)
 p.add_argument('--resume',type=Path)
 p.add_argument('--resume-optimizer',action='store_true')
 p.add_argument('--initial-update',type=int,default=0)
@@ -32,7 +33,7 @@ status=json.loads((a.evaluation/'status.json').read_text())
 schema=json.loads((a.evaluation/'model_state_schema.json').read_text())
 bank=np.load(cfg['ground_handoff']['reference_path'])
 hcfg=json.loads((Path(cfg['ground_handoff']['bundle'])/'config.json').read_text())
-follower=dict(hcfg['follower'],lookahead_scale=1.3)
+follower=dict(hcfg['follower'],lookahead_scale=1. if a.phase==0 else 1.3)
 nominal=dict(np.load(a.nominal))
 terrain=None;terrain_specs=[];source_map_ids=[]
 if a.terrain_features:
@@ -52,6 +53,7 @@ datasets=[];offset=0;window_rows={h:[] for h in [5,15,50,150]}
 for source_id,source in enumerate(evaluations):
     status=json.loads((source/'status.json').read_text())
     for row in status['results']:
+        if a.phase==0 and row['route']%3!=0:continue
         with np.load(source/row['case_dir']/'trajectory.npz') as data:
             pose,xi=states(data['qpos'][::4],data['qvel'][::4],schema)
             controller=data['controller_state'][::4];phase=data['trace'][::4,-1];requests=data['trace'][::4,18]
@@ -62,19 +64,19 @@ for source_id,source in enumerate(evaluations):
             datasets.append(dict(row=row,pose=pose,xi=xi,controller=controller,inputs=inputs,phase=phase,requests=requests,terrain_id=source_map_ids[source_id] if terrain is not None else 0,offset=offset))
             for h in window_rows:
                 indices=np.arange(1,len(pose)-h)
-                bad=np.r_[0,np.cumsum(phase!=2)]
+                bad=np.r_[0,np.cumsum(phase!=a.phase)]
                 indices=indices[(bad[indices+h+1]-bad[indices-1])==0]
                 if row['variant']['data_split']!='TRAIN':indices=indices[::10]
                 window_rows[h].extend(dict(index=int(i+offset),route=row['route'],case=(f'source{source_id}/' if a.additional_evaluations else '')+row['case_dir'],evaluation=str(source),source_case=row['case_dir'],split=row['variant']['data_split'],anchor_s=float(i*.02)) for i in indices)
             offset+=len(pose)
 train=[d for d in datasets if d['row']['variant']['data_split']=='TRAIN']
-controller_train=np.concatenate([d['controller'][d['phase']==2] for d in train])
-inputs_train=np.concatenate([d['inputs'][d['phase']==2] for d in train])
+controller_train=np.concatenate([d['controller'][d['phase']==a.phase] for d in train])
+inputs_train=np.concatenate([d['inputs'][d['phase']==a.phase] for d in train])
 controller_mean=controller_train.mean(0);controller_scale=controller_train.std(0);controller_scale[controller_scale<1e-4]=1.
 input_mean=inputs_train.mean(0);input_scale=inputs_train.std(0);input_scale[input_scale<1e-3]=1.
 corrections=[]
 for d in train:
-    good=(d['phase'][1:-1]==2)&(d['phase'][2:]==2)&(d['phase'][:-2]==2)
+    good=(d['phase'][1:-1]==a.phase)&(d['phase'][2:]==a.phase)&(d['phase'][:-2]==a.phase)
     x=d['xi'];eta=d['inputs'][:,9:24]
     corrections.append((x[2:]-predict(nominal,x[1:-1],x[:-2],eta[1:-1]))[good])
 correction_scale=np.maximum(np.concatenate(corrections).std(0),[.05,.05,.1,.2,.2,.2,.3,1.,1.])
@@ -97,7 +99,7 @@ for h,rows in window_rows.items():
     window_weights[h]=tensor([1./counts[r['case']] for r in train_rows])
 dev_rows={h:[r for r in window_rows[h] if r['split']!='TRAIN'] for h in [50,150]}
 shutil.copyfile(a.nominal,a.output/'nominal.npz')
-contract=dict(source=str(a.evaluation),additional_evaluations=[str(x) for x in a.additional_evaluations],nominal=str(a.nominal),updates=a.updates,seed=a.seed,batch=64,
+contract=dict(phase=a.phase,route_selection="canonical downstream0 for each approach; avoid tripling identical upstream prefixes" if a.phase==0 else "all routes",source=str(a.evaluation),additional_evaluations=[str(x) for x in a.additional_evaluations],nominal=str(a.nominal),updates=a.updates,seed=a.seed,batch=64,
               initialization='model_and_Adam_resume_new_sampling_seed' if a.resume_optimizer else 'weights_only_fresh_Adam' if a.resume else 'zero_correction',parent_checkpoint=str(a.resume),initial_update=a.initial_update,balanced_mixture=a.balanced_mixture,
               checkpoints_every=25,selection='mean maximum XY over fixed available1s DEV windows',
               training='Declared source TRAIN only, includes pre-failure observations; no future real controller states in rollout',

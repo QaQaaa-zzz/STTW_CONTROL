@@ -1,0 +1,17 @@
+map,map_role,speed_m_s,goals,episodes,termination_counts
+map00,TRAIN,1.8,18,18,{'goal': 18}
+map00,TRAIN,1.9,18,18,{'goal': 18}
+map01,TRAIN,1.8,18,18,{'goal': 18}
+map01,TRAIN,1.9,18,18,{'goal': 18}
+map02,TRAIN,1.8,18,18,{'goal': 18}
+map02,TRAIN,1.9,18,18,{'goal': 18}
+map03,TRAIN,1.8,18,18,{'goal': 18}
+map03,TRAIN,1.9,18,18,{'goal': 18}
+map04,TRAIN,1.8,18,18,{'goal': 18}
+map04,TRAIN,1.9,18,18,{'goal': 18}
+map05,TRAIN,1.8,17,18,"{'goal': 17, 'timeout': 1}"
+map05,TRAIN,1.9,17,18,"{'goal': 17, 'timeout': 1}"
+map06,DEV_MAP,1.8,18,18,{'goal': 18}
+map06,DEV_MAP,1.9,18,18,{'goal': 18}
+map07,DEV_MAP,1.8,18,18,{'goal': 18}
+map07,DEV_MAP,1.9,18,18,{'goal': 18}

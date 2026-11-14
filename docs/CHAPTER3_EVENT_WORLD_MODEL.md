@@ -1,5 +1,9 @@
 # 第三章：面向技能交接可恢复性的预测与规划
 
+**当前P3下一步：实际模型选路DEV对比。** 多地图M1/M2各600轮和完整离场72条件预测已完成，证据见`p3_multimap_models/RESULTS.md`。固定按1秒DEV选M1 seed2/best575、M2 seed0/best600，注册表`learning/configs/playground_prediction_models.json`。18个共同完整路线/速度候选，TRAIN地图入口历史和原实测跳前/RB前缀，预测当前地图离场；既有DEV按同一区域/坐标规则校准包络。两地图×三新禁行盒×两初态×三模型36方法条件，24唯一物理回合；不是在线神经重规划或P4独立TEST。冻结合同和运行状态在外盘`p3_model_planning`，25分钟停止，无3小时总上限，等待超过半小时暂停/Bark。实际收益以完整物理结果为准。
+
+**P3八张新地图采集完成：286/288，训练图214/216、开发图72/72。** 九曲线×两初态×1.8/1.9，六TRAIN图/两DEV_MAP图预先冻结；仅碎石种子及2cm/4cm脊坡x位置变化，沟两岸2m平地、RB/H75/物理/目标不变。1128.146秒物理队列。map05路线5两例超时：root3/1.8及root0/1.9，均已越沟进入目标区，但连续保持独立重算约0.255/0.010秒，未满0.5秒；路径/航向超限，速度条件未拒绝。原超时标签保留，未换失败地图。锁关节最大漂移0.000203rad，实际请求误差0；全部XY/逐例/失败重算见`docs/evidence/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/RESULTS.md`，外盘同名目录。非P4独立TEST；采集成功不作新规划器收益。阶段Bark HTTP200。
+
 **P3双速度预测的切换DEV误差改善，长时域困难例仍保留。** 35组离线整车评估288.200秒；未用于拟合的1.8→1.9切换轨迹，M1三种子1秒均值0.0199–0.0201m（旧单速度约0.086m），1秒最差整车支持0.0824–0.0912m、3秒0.0975–0.1189m。原1.8静态困难例3秒支持最差仍0.3562–0.3798m；不采用为完整长时域规划。五集合全部条件/窗口/XY与M0/M1/M2对照保留在repo `p3_multispeed_models/geometry/RESULTS.md`，原始`p3_multispeed_geometry`。这些是既有DEV根，非P4独立TEST；没有新增物理收益。
 
 **P3双速度同数据拟合完成，尚未证明收敛。** 复用108TRAIN/36DEV轨迹、18997有效TRAIN转移，同数据ARX及M1/M2各三初始化，每组600更新、每25存档，队列1026.087秒。1秒固定DEV均值M0为0.07134m，M1为0.01824–0.01923m，M2为0.02457–0.02598m；六组best均600末端，最后25次仍改善1.09%–6.56%。最差长窗口集中于旧1.8来源route7/root7的成功物理回合，不能把预测误差写成车辆失败。来源同时含8.60/8.55激活，非纯速度因果消融。全部36条件XY、训练损失、存档/逐窗口在repo `p3_multispeed_models/RESULTS.md`和外盘同名目录。无新策略训练；阶段Bark HTTP200。
@@ -423,4 +427,12 @@ Playground RB适配入口learning/cli/train_playground_rb.py已接通，配置le
 
 原1.8训练来源p1_phase2_collection的激活位置8.60m，新1.9来源为8.55m；本次双速度拟合同时覆盖这些入口变化，不能当作仅速度单因素对照。新地图采集统一8.55m，尚未执行。
 
-已准备8张新地图（6TRAIN、2DEV_MAP）×9曲线×2初态×2速度，共288物理回合配置。只改变碎石种子、2cm/4cm脊坡的x位置，沟两侧两米平地和高度范围不变。外盘p3_multimap_collection已排队，等待本会话35组预测评估退出释放GPU后执行，最多25分钟物理运行；不并发。既有两个速度数据的600轮六模型拟合已在1026.087秒完成。
+已准备8张新地图（6TRAIN、2DEV_MAP）×9曲线×2初态×2速度，共288物理回合配置。只改变碎石种子、2cm/4cm脊坡的x位置，沟两侧两米平地和高度范围不变。外盘p3_multimap_collection已完成1128.146秒，全部288条件保留。既有两个速度数据的600轮六模型拟合已在1026.087秒完成。
+
+### P3可复用执行入口
+
+`prepare_playground_structured_models.py --evaluation SOURCE --additional-evaluations SOURCE2 ... --updates 600 --output RUN` 按声明TRAIN拟合同数据M0并冻结六组模型配置；`learning/scripts/gpu_queue.sh timeout 1500 /home/qy/mujoco_playground/.venv/bin/python learning/cli/run_playground_structured_models.py RUN` 执行GPU矩阵。使用项目PYTHONPATH及既有GPU环境变量。每25轮存档，单模型结束Bark；外层终态通知仍由运行launch记录。监督预测器入口不训练或替换RB/H75。
+
+多地图采集入口`prepare_playground_multimap.py`、执行`run_playground_e1.py RUN`（外层同一GPU锁/25分钟预算），完成后`report_playground_multimap.py --root RUN --output REPORT`。地图分组在manifest中预先冻结，不能按结果换图。多地图训练只用TRAIN轨迹归一化和梯度，DEV地图的几何作为已知地图输入，地图编号只用于GPU栅格查表，不入网络。
+
+当前多地图拟合p3_multimap_models：38487 TRAIN转移、216TRAIN/72DEV轨迹，六模型各600轮、每25存档，1800秒硬上限。p3_multimap_remaining_motion排在同一GPU锁之后，七模型一次批量预测整段实测离场；3秒外明确时域外推，不用短窗口误差替代完整剩余运动。完成后进入实际规划模型对比，优先复用现有完整运动候选/共同地图/强回溯基线，不继续无界追加同图拟合。

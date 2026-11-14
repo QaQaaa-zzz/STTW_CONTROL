@@ -37,3 +37,7 @@ The three phases remain ground preparation, frozen jump execution, and H75 conti
 The requested corrections, saved-candidate tests, and RB feedback composition have now been executed and documented. The transferred source-trained predictor is not calibrated to RB. Prediction and feedback advantages unsupported by these experiments remain negative findings, not silently accepted promises from the critique. No further checkpoint or threshold tuning is scheduled for this revision.
 
 [Review corrections and prediction plots](../evidence/chapter3_review_repairs/RESULTS.md) · [all repaired joint XY](../evidence/chapter3_repaired_joint_fast/RESULTS.md) · [all RB candidate XY](../evidence/chapter3_rb_candidate_handoff/RESULTS.md).
+
+PG9 adds eight predeclared terrain maps (286/288 physical goals), six TRAIN/two DEV maps for matched M0/M1/M2 fitting, and full observed departure prediction on all 72 DEV conditions. Selected checkpoints include intermediate updates575/550; formal convergence and executed model-planner benefit remain unproven. Evidence: [multi-map report](../evidence/chapter3_playground_sttw_rb_sttw/p3_multimap_models/RESULTS.md) and its paired complete-departure XY figures. No independent P4 claim.
+
+PG10 adds a static same-candidate model-planning DEV pilot: M0 10/12, M1/M2 12/12 with identical selections,24 unique physics runs. This avoids one no-plan fallback but does not show fewer false-feasible published plans or a structural advantage over M2. Measured-state integration and independent E1–E3 remain required.

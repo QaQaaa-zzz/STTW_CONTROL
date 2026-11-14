@@ -1,0 +1,29 @@
+{
+  "status": "Frozen candidates for DEV planning, not adopted online planner",
+  "selection": "Minimum1s fixed DEV mean among saved25-step checkpoints and three initializations per model; no selection by new obstacle outcomes or full-departure tails",
+  "scope": "Post-RB STTW departure, known terrain,381D measured or explicitly declared TRAIN-template controller initialization;1.8/1.9requests; no unseen-map TEST claim",
+  "models": [
+    {
+      "name": "M0",
+      "model_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/residual_seed0",
+      "checkpoint": "model_0000.pt",
+      "update": 0,
+      "sha256": "b0fdb3904f06979378c83a243218a84c5e45fe1e0e1e8902471afcf898934f4a"
+    },
+    {
+      "name": "M1",
+      "model_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/residual_seed2",
+      "checkpoint": "best.pt",
+      "update": 575,
+      "sha256": "e90b96930ddb549cde6ae40390bafe66253037a6a511fc5bb2eb7b69ef5658bf"
+    },
+    {
+      "name": "M2",
+      "model_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/direct_seed0",
+      "checkpoint": "best.pt",
+      "update": 600,
+      "sha256": "adf6621aed5097e3072920cfbdd3d0e5db1ddc44c8e1f45b679e7fec9bdbc917"
+    }
+  ],
+  "training_source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/manifest.json"
+}

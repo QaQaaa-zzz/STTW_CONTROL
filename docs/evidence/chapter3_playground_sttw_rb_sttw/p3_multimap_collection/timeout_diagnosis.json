@@ -1,0 +1,20 @@
+[
+  {
+    "map": "map05",
+    "case": "rb_run3_route5_h75_v1",
+    "inside_goal_s": 1.115,
+    "max_reconstructed_hold_s": 0.255,
+    "heading_rejected_s": 0.305,
+    "path_rejected_s": 0.365,
+    "speed_rejected_s": 0.0
+  },
+  {
+    "map": "map05",
+    "case": "rb_run3_route5_h75_v2",
+    "inside_goal_s": 1.06,
+    "max_reconstructed_hold_s": 0.01,
+    "heading_rejected_s": 0.35000000000000003,
+    "path_rejected_s": 0.7000000000000001,
+    "speed_rejected_s": 0.0
+  }
+]
