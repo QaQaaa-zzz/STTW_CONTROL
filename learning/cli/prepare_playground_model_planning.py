@@ -9,8 +9,11 @@ from sttw_control.playground_prediction import BodyEnvelope,euler,rotate
 from sttw_control.playground_terrain_features import TerrainFeatures,raster_from_spec
 
 p=argparse.ArgumentParser(description=__doc__)
+p.add_argument('--test-catalog',type=Path);p.add_argument('--frozen-calibration',type=Path)
 p.add_argument('--predicted-terminal',action='store_true');p.add_argument('--collection',type=Path,required=True);p.add_argument('--models',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
-a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False);torch.set_num_threads(1);started=time.perf_counter()
+a=p.parse_args()
+if bool(a.test_catalog)!=bool(a.frozen_calibration) or (a.test_catalog and not a.predicted_terminal):p.error('TEST requires catalog, frozen calibration, and predicted-terminal together')
+a.output.mkdir(parents=True,exist_ok=False);torch.set_num_threads(1);started=time.perf_counter()
 source=a.collection/'map00/evaluation';cfg=json.loads((source/'resolved_config.json').read_text());schema=json.loads((source/'model_state_schema.json').read_text());bank=dict(np.load(cfg['ground_handoff']['reference_path']));tensor=lambda x:torch.as_tensor(x,device='cuda',dtype=torch.float32)
 envelope=BodyEnvelope(mujoco.MjModel.from_binary_path(str(source/'terrain.mjb')),dimensions=3)
 items=[]
@@ -26,10 +29,15 @@ plans=[];entries=[];all_calibration=[];saved=[];dynamics=[]
 keys=[(route,speed) for route in range(9) for speed in [1.8,1.9]]
 groups=[[i for i,r in enumerate(items) if r['row']['route']==route and abs(r['speed']-speed)<1e-4] for route,speed in keys]
 cost=np.array([max(items[i]['row']['duration_s'] for i in ids) for ids in groups]);eligible=np.array([all(items[i]['row']['goal'] and items[i]['row']['nonwheel_contact_steps']==0 for i in ids) for ids in groups])
-for map_id in [6,7]:
-    target=a.collection/f'map{map_id:02d}/evaluation';base=json.loads((target/'resolved_config.json').read_text());world=base['world_map_spec'];raster=raster_from_spec(base['ditch_terrain']);edges=np.array([-5.,2.,8.3,12.6,16.5,25.])
+catalog=json.loads(a.test_catalog.read_text()) if a.test_catalog else None
+frozen=json.loads(a.frozen_calibration.read_text()) if a.frozen_calibration else None
+for map_id in ([r['map_id'] for r in catalog['entries']] if catalog else [6,7]):
+    target=a.collection/f'map{(6 if catalog else map_id):02d}/evaluation';base=json.loads((target/'resolved_config.json').read_text());world=base['world_map_spec'];raster=raster_from_spec(base['ditch_terrain']);edges=np.array([-5.,2.,8.3,12.6,16.5,25.])
+    if catalog:
+        entry=next(r for r in catalog['entries'] if r['map_id']==map_id)
+        base=json.loads(Path(entry['config']).read_text());world=json.loads(Path(base['world_map']).read_text());raster=raster_from_spec(world['terrain'])
     actual=[]
-    for row in json.loads((target/'status.json').read_text())['results']:
+    for row in ([] if catalog else json.loads((target/'status.json').read_text())['results']):
         with np.load(target/row['case_dir']/'trajectory.npz') as d:
             pose,_=states(d['qpos'][::4],d['qvel'][::4],schema)
             with torch.no_grad():lo,hi=[x.cpu().numpy() for x in envelope(tensor(pose))]
@@ -72,6 +80,7 @@ for map_id in [6,7]:
                 selected=regions==region
                 if selected.any():margin[region]=np.maximum(margin[region],miss[selected].max((0,1)));counts[region]+=int(selected.sum())
         margin[counts==0]=margin.max(0);margin+=.02
+        if frozen:margin=np.array(frozen[name]['axis_margin_m']);edges=np.array(frozen[name]['edges'])
         all_calibration.append(dict(map_id=map_id,model=name,edges=edges.tolist(),axis_margin_m=margin.tolist(),counts=counts.tolist(),rule='Same DEV source, per-region per-axis max spatial support miss plus0.02m; no obstacle outcomes used'))
         candidate_bounds=[]
         for ids in groups:
@@ -81,25 +90,30 @@ for map_id in [6,7]:
             candidate_bounds.append((tensor(np.concatenate(lows)),tensor(np.concatenate(highs))))
         admitted=eligible & np.array([all(model_checks[i] for i in ids) for ids in groups]) if a.predicted_terminal else eligible
         costs=np.array([max(model_times[i] for i in ids) for ids in groups]) if a.predicted_terminal else cost
-        for layout,y in enumerate([-.08,0.,.08]):
-            rect=[13.3,13.5,y-.06,y+.06];box=tensor([rect[0],rect[2],0.,rect[1],rect[3],.5]);bounds=world['bounds_xy_m'];clear=[]
+        for layout,y in ([(0,0.)] if catalog else enumerate([-.08,0.,.08])):
+            rectangles=world['terrain']['forbidden_rectangles'] if catalog else [[13.3,13.5,y-.06,y+.06]]
+            boxes=tensor([[r[0],r[2],0.,r[1],r[3],.5] for r in rectangles]);bounds=world['bounds_xy_m'];clear=[]
             for lo,hi in candidate_bounds:
                 road=torch.stack((lo[:,0]-bounds[0],bounds[1]-hi[:,0],lo[:,1]-bounds[2],bounds[3]-hi[:,1]),1).amin()
-                obstacle=torch.maximum(box[:3]-hi,lo-box[3:]).amax(1).amin();clear.append(float(torch.minimum(road,obstacle)))
+                obstacle=torch.maximum(boxes[:,None,:3]-hi[None],lo[None]-boxes[:,None,3:]).amax(2).amin();clear.append(float(torch.minimum(road,obstacle)))
             feasible=admitted&(np.array(clear)>=0);chosen=int(np.argmin(np.where(feasible,costs,np.inf))) if feasible.any() else 0
             plans.append(dict(map_id=map_id,layout=layout,model=name,feasible=bool(feasible.any()),candidate=chosen,route=keys[chosen][0],speed=keys[chosen][1],predicted_cost_s=float(costs[chosen]) if np.isfinite(costs[chosen]) else None,all_clearance_m=clear,eligible=admitted.tolist(),checkpoint=str(a.models/folder/checkpoint)))
         saved.append(dict(map_id=map_id,model=name,checkpoint=str(a.models/folder/checkpoint)))
-    for layout,y in enumerate([-.08,0.,.08]):
-        folder=a.output/f'map{map_id:02d}_layout{layout:02d}';folder.mkdir();w=copy.deepcopy(world);w['map_id']=folder.name;w['terrain']['forbidden_rectangles']=[[13.3,13.5,y-.06,y+.06]];w['terrain']['obstacle_height_m']=.5;(folder/'world.json').write_text(json.dumps(w,indent=2)+'\n')
+    for layout,y in ([(0,0.)] if catalog else enumerate([-.08,0.,.08])):
+        folder=a.output/f'map{map_id:02d}_layout{layout:02d}';folder.mkdir();w=copy.deepcopy(world);w['map_id']=folder.name;w['terrain']['forbidden_rectangles']=world['terrain']['forbidden_rectangles'] if catalog else [[13.3,13.5,y-.06,y+.06]];w['terrain']['obstacle_height_m']=.5;(folder/'world.json').write_text(json.dumps(w,indent=2)+'\n')
         c=copy.deepcopy(base)
         for field in ['world_map_spec','ditch_terrain','snapshot_times_s']:c.pop(field,None)
         c.update(world_map=str(folder/'world.json'),task_evaluation=True,role='P3 model-specific calibrated finite-library DEV; static before initialization, no online or independent TEST claim')
+        if catalog:c['role']='Frozen new-map/new-root TEST; static selection, no TEST calibration'
         selected=[r for r in plans if r['map_id']==map_id and r['layout']==layout];lanes=[]
         for plan in selected:
             vi=[i for i,v in enumerate(c['ground_handoff']['handoff_variants']) if abs(v['requested_speed_m_s']-plan['speed'])<1e-4];plan['evaluation']=str(folder/'evaluation');plan['case_dirs']=[f"rb_run3_route{plan['route']}_h75_v{i}" for i in vi]
             lanes.extend((plan['route'],'h75',i) for i in vi)
         c['evaluation_lanes']=[list(x) for x in sorted(set(lanes))];(folder/'config.json').write_text(json.dumps(c,indent=2)+'\n');entries.append(dict(layout=folder.name,config=str(folder/'config.json'),evaluation=str(folder/'evaluation'),episodes=len(c['evaluation_lanes'])))
 manifest=dict(predicted_terminal=a.predicted_terminal,terminal_rule='First26 consecutive20ms samples meeting original goal; predicted physical/controller domain through that end; prefix elapsed plus goal time<=10s' if a.predicted_terminal else 'Original source endpoint, no predicted terminal gate',role='Static finite-candidate DEV pilot: M0/M1/M2 compare model plus same-rule calibrated envelope; not independent TEST or neural online planning',entries=entries,routes=list(range(9)),seconds=10,ground_only=False,method_conditions=36,physical_episodes=sum(e['episodes'] for e in entries),models=saved,candidates=18,source=str(source),calibration_maps=[6,7],shared='Same18 route/speed candidates, activation8.55, two TRAIN-map00 histories each, full measured approach/RB prefix, source duration cost/eligibility, physical plant/goal/boxes; only predicted departure and same-rule error expansion differ',limitations='Candidate histories are TRAIN templates, not future actual DEV handoff states. Uses observed source departure horizons3.22-4s, not a timing predictor or predicted goal-hold certificate. Retained incumbent after no-plan counts planner failure regardless physical goal. DEV used for calibration, not independent map generalization.',selection='M1seed2 update575 and M2seed0 update600 selected by prior1s DEV error, not new full-departure tails or obstacle outcomes',expected_wallclock_s=[700,1200],hard_limit_s=1500,stop='One queue, first runtime error or25min; no retries or training',terminal_limitation='Common maximum source departure horizon; after an individual source observed goal predictions are unobserved and not additional accuracy evidence. Existing DEV calibration is exploratory, not independent TEST.',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),preparation_s=time.perf_counter()-started)
+if catalog:
+    manifest.update(role='Frozen new-map/new-root TEST of static finite-candidate model-plus-calibration systems; not full P4 or online neural planning',method_conditions=len(plans)*len(catalog['roots']),calibration_maps=[6,7],test_catalog=str(a.test_catalog),frozen_calibration=str(a.frozen_calibration),expected_wallclock_s=[2400,4200],hard_limit_s=7200,stop='One queue, first runtime error or120min; no retries or training',limitations='Measured TRAIN approach/RB templates, learned departure only; frozen max-over-DEV regional margins. No new-map outcomes used in selection. No claim of online neural replanning or complete E1/E2/P4.')
+    for row in all_calibration:row['rule']='Frozen max over DEV maps06/07 regional axis margins; no TEST trajectory access'
 for name,data in [('manifest',manifest),('plans',plans),('calibration',all_calibration),('dynamics',dynamics)]: (a.output/f'{name}.json').write_text(json.dumps(data,indent=2)+'\n')
 (a.output/'source').mkdir()
 for path in [Path(__file__),Path('learning/src/sttw_control/playground_history_model.py'),Path('learning/src/sttw_control/playground_prediction.py'),Path('learning/src/sttw_control/playground_terrain_features.py')]:shutil.copyfile(path,a.output/'source'/path.name)

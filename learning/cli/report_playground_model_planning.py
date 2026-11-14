@@ -6,20 +6,26 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();a.output.mkdir(parents=True,exist_ok=True)
-m=json.loads((a.root/'manifest.json').read_text());plans=json.loads((a.root/'plans.json').read_text());rows=[];colors={'M0':'#009e73','M1':'#0072b2','M2':'#d55e00'};figure,axes=plt.subplots(3,2,figsize=(17,11),layout='constrained')
-for ax,(map_id,layout) in zip(axes.flat,sorted({(r['map_id'],r['layout']) for r in plans})):
+m=json.loads((a.root/'manifest.json').read_text());plans=json.loads((a.root/'plans.json').read_text());rows=[];colors={'M0':'#009e73','M1':'#0072b2','M2':'#d55e00'};layouts=sorted({(r['map_id'],r['layout']) for r in plans});figures=[]
+for start in range(0,len(layouts),6):
+    figure,axes=plt.subplots(3,2,figsize=(17,11),layout='constrained');figures.append((figure,axes))
+axes_all=[ax for _,axes in figures for ax in axes.flat]
+for ax,(map_id,layout) in zip(axes_all,layouts):
     selected=[r for r in plans if (r['map_id'],r['layout'])==(map_id,layout)]
     for plan in selected:
         source=Path(plan['evaluation']);status=json.loads((source/'status.json').read_text());cfg=json.loads((source/'resolved_config.json').read_text());bank=np.load(cfg['ground_handoff']['reference_path'])
         for case in plan['case_dirs']:
-            actual=next(r for r in status['results'] if r['case_dir']==case);root=actual['variant']['root_variant'];style='-' if root==6 else '--'
+            actual=next(r for r in status['results'] if r['case_dir']==case);root=actual['variant']['root_variant'];style=['-','--','-.',':'][(root-1001)%4] if root>=1001 else ('-' if root==6 else '--')
             with np.load(source/case/'trajectory.npz') as d:xy=d['qpos'][:,:2].copy()
             ax.plot(xy[:,0],xy[:,1],style,color=colors[plan['model']],alpha=.85,label=f"{plan['model']} root{root}");ax.plot(*xy[-1],marker='o' if actual['goal'] else 'x',color=colors[plan['model']]);ref=bank['xy'][actual['route']];use=(ref[:,0]>=xy[0,0])&(ref[:,0]<=xy[-1,0]);ax.plot(ref[use,0],ref[use,1],':',color=colors[plan['model']],alpha=.5)
             rows.append(dict(map_id=map_id,layout=layout,model=plan['model'],root=root,route=plan['route'],speed=plan['speed'],feasible_plan=plan['feasible'],physical_goal=actual['goal'],feasible_plan_goal=plan['feasible'] and actual['goal'],termination=actual['termination'],duration_s=actual['duration_s'],penalized_s=actual['duration_s'] if actual['goal'] else m['seconds'],clearance_m=plan['all_clearance_m'][plan['candidate']],evaluation=str(source),case=case))
     world=cfg['world_map_spec'];ax.axvspan(10.3,10.6,color='gray',alpha=.3)
     for rect in world['terrain']['forbidden_rectangles']:ax.add_patch(plt.Rectangle((rect[0],rect[2]),rect[1]-rect[0],rect[3]-rect[2],color='#cc3311',alpha=.6))
     ax.set(title=f'map{map_id:02d} layout{layout:02d}',xlabel='World x (m)',ylabel='World y (m)');ax.set_aspect('equal',adjustable='datalim');ax.grid(alpha=.2);ax.legend(fontsize=6,ncol=3)
-figure.savefig(a.output/'paired_xy.png',dpi=160);plt.close(figure)
+for i,(figure,axes) in enumerate(figures):
+    for ax in axes.flat:
+        if not ax.has_data():ax.set_visible(False)
+    figure.savefig(a.output/('paired_xy.png' if i==0 else f'paired_xy_{i:02d}.png'),dpi=160);plt.close(figure)
 summary=[]
 for name in colors:
     sub=[r for r in rows if r['model']==name];summary.append(dict(model=name,conditions=len(sub),physical_goals=sum(r['physical_goal'] for r in sub),feasible_plan_goals=sum(r['feasible_plan_goal'] for r in sub),no_plan=sum(not r['feasible_plan'] for r in sub),predicted_feasible_execution_failures=sum(r['feasible_plan'] and not r['physical_goal'] for r in sub),mean_penalized_s=float(np.mean([r['penalized_s'] for r in sub]))))
@@ -31,7 +37,20 @@ unique={(r['evaluation'],r['case']) for r in rows};lines+=['', '空间预测准�
 for r in rows:
     if not r['feasible_plan_goal']:lines.append(f"- map{r['map_id']} layout{r['layout']} {r['model']} root{r['root']}: {r['termination']}, {r['duration_s']:.3f}s, feasible={r['feasible_plan']}.")
 lines+=['', 'M1/M2选中同一配置时不能宣称结构模型胜过直接模型；物理目标改善也要区分减少假可行与避免无计划回退。','',f'原始冻结合同/选择/校准/逐步状态：`{a.root}`。所有条件见cases.csv。']
-if m.get('predicted_terminal'):
+if m.get('predicted_terminal') and not m.get('test_catalog'):
     lines=[line.replace('P3同候选M0/M1/M2实际选路开发比较','P3同候选模型：加入预测动态域和目标保持门槛').replace('原规划只筛空间包络','原空间筛选已扩展').replace('空间准入','预测约束准入').replace('预测使用来源观察时域，未实现新到达时间或目标保持预测证明；实际目标仍按原物理门槛判定。','预测按共同最长来源时域展开，在原目标条件连续保持0.5秒处终止；到该时刻检查预测姿态/跟踪域/前视/前进，且前缀耗时加预测保持时刻不超过10秒。成本为该预测总时长。个别来源真实终点之后的预测属于未观察部分，不能冒充新增精度证据或安全证明；实际目标仍按原物理门槛判定。') for line in lines]
     lines+=['',f"本轮仅新增{m['new_physical_episodes']}个物理回合，其余按相同世界/控制合同/路线/请求/初态复用旧轨迹。该规则是在已有DEV结果之后加入，仍属开发验证。"]
+if m.get('test_catalog'):
+    lines=['# Frozen new-map/new-root model planning TEST','','Static18-candidate comparison with measured TRAIN approach/RB prefixes and learned departure. All methods use the same new maps/roots and fixed physical goal. Model-specific margins were frozen from DEV before execution. This is not online neural replanning or completion of E1/E2/P4.','']
+    lines += [f'![Actual and reference XY, maps{6*i} onward]('+('paired_xy.png' if i==0 else f'paired_xy_{i:02d}.png')+')' for i in range(len(figures))]
+    lines += ['','|Model|Tasks|Physical goals|Admitted plan goals|No plan|Admitted execution failures|Penalized seconds|','|---|---:|---:|---:|---:|---:|---:|']
+    for r in summary:lines.append(f"|{r['model']}|{r['conditions']}|{r['physical_goals']}|{r['feasible_plan_goals']}|{r['no_plan']}|{r['predicted_feasible_execution_failures']}|{r['mean_penalized_s']:.5f}|")
+    paired=[];rng=np.random.default_rng(2026111402);map_ids=sorted({r['map_id'] for r in rows});draws=rng.integers(len(map_ids),size=(10000,len(map_ids)))
+    for left,right in [('M1','M0'),('M2','M1'),('M2','M0')]:
+        arows={(r['map_id'],r['root']):r for r in rows if r['model']==left};brows={(r['map_id'],r['root']):r for r in rows if r['model']==right}
+        for metric in ['physical_goal','penalized_s']:
+            values=np.array([np.mean([float(arows[key][metric])-float(brows[key][metric]) for key in arows if key[0]==mid]) for mid in map_ids]);ci=np.quantile(values[draws].mean(1),[.025,.975]);paired.append(dict(left=left,right=right,metric=metric,difference=float(values.mean()),map_bootstrap95=ci.tolist()))
+        common=[arows[key]['duration_s']-brows[key]['duration_s'] for key in arows if arows[key]['physical_goal'] and brows[key]['physical_goal']];paired.append(dict(left=left,right=right,metric='common_success_time_s',conditions=len(common),difference=float(np.mean(common)) if common else None))
+    (a.output/'paired_statistics.json').write_text(json.dumps(paired,indent=2)+'\n')
+    lines+=['',f'{len(rows)} method conditions, {len(unique)} unique physical trajectories. Failures and no-plan cases remain in cases.csv. Four starting roots are reused across maps; bootstrap resamples whole maps. Failure penalties are10s. No-plan retains the original straight1.8 candidate and remains a planning failure even if physically successful.','',f'Frozen protocol: `{m["test_catalog"]}`; raw results: `{a.root}`.','', 'Paired statistics: [JSON](paired_statistics.json). M1 versus M0 is primary; other comparisons are secondary. No safety guarantee or topology/network superiority is inferred from aggregate success alone.']
 (a.output/'RESULTS.md').write_text('\n'.join(lines)+'\n');(a.output/'summary.json').write_text(json.dumps(dict(models=summary,method_conditions=len(rows),physical_episodes=len(unique),raw_root=str(a.root)),indent=2)+'\n');print(json.dumps(summary,indent=2))
