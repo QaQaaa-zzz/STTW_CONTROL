@@ -87,6 +87,34 @@ class TorchMiddleControl:
         self.frames[:,-1]=choose(frame,self.frames[:,-1]);self.mask[:,-1]=choose(1.,self.mask[:,-1])
         self.lane_ticks=torch.where(mask,0,self.lane_ticks)
 
+    def update_plan(self, route, committed_until):
+        """Publish a same-grid route at a 20 ms boundary without a skill reset.
+
+        The caller supplies a smooth route in the original world frame. Its
+        committed prefix includes the current pursuit preview and next tick's
+        forward motion. Controller, policy, history and clock state survive.
+        """
+        if self.tick % 4:
+            raise ValueError('publish plans at a 20 ms boundary')
+        old=self.route
+        if old.batched != route.batched or not torch.equal(old.s,route.s) or (
+                old.batched and not torch.equal(old.route_ids,route.route_ids)):
+            raise ValueError('plan updates require the same progress grid and lane mapping')
+        required=self.projection['progress']+self.follower['lookahead']+self.v_user*.02
+        if not torch.all(committed_until>=required.clamp_max(old.s[-1])):
+            raise ValueError('committed prefix must cover the pursuit preview')
+        # Include the segment endpoint used when interpolating the prefix boundary.
+        end=torch.searchsorted(old.s,committed_until.contiguous()).clamp_max(len(old.s)-1)
+        prefix=torch.arange(len(old.s),device=old.s.device)[None,:]<=end[:,None]
+        for key in ('xy','heading','curvature'):
+            a=getattr(old,key);b=getattr(route,key)
+            a=a[old.route_ids] if old.batched else a[None]
+            b=b[route.route_ids] if route.batched else b[None]
+            mask=prefix[...,None] if key=='xy' else prefix
+            if not torch.all(torch.where(mask,(a-b).abs()<=1e-6,True)):
+                raise ValueError('plan update changed the committed prefix')
+        self.route=route
+
     def before(self,pose,zero_middle=False,noise_std=None,zero_mask=None,latent_override=None):
         if self.lane_ticks is not None or self.tick%4==0:
             self.obs,fault=self.observation(pose)

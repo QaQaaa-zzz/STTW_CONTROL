@@ -1,6 +1,6 @@
 {
   "schema": "chapter3_playground_handoff_task",
-  "role": "STTW-RB-STTW continuous chain DEV; adopted ground physics transferred to native RB, no training",
+  "role": "Frozen P0 engineering candidate: common implicitfast, RB225, recovery lookahead1.3; nominal9/9 and DEV offsets71/72; not independent TEST",
   "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rb_candidate_handoff/source/config.json",
   "flat_buffer_m": 2.0,
   "flat_intervals_m": [
@@ -66,7 +66,7 @@
   "ground_handoff": {
     "bundle": "runs/rb_h75_ecbc_ground/left90_R2/bundle",
     "settings": "runs/rb_h75_ecbc_ground/left90_R2/config.json",
-    "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_task_condition_collection/issued.npz",
+    "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/approach_departure_turns/routes.npz",
     "road_half_width_m": 0.6,
     "goal": {
       "x_min_m": 16.5,
@@ -90,14 +90,42 @@
     "continuation": {
       "speed_m_s": 1.8,
       "alpha": 0.0
-    }
+    },
+    "handoff_mechanism": "landing_state",
+    "handoff_variants": [
+      {
+        "landing_height_m": 0.6,
+        "swing_scale": 1.0,
+        "jump_start_x_m": 8.6,
+        "rb_far_height_offset_m": 0.0,
+        "gate_roll_rad": 0.15,
+        "gate_roll_rate": 0.6,
+        "gate_hold_s": 0.0,
+        "recovery_wc": 8.0,
+        "body_speed_feedback": true,
+        "recovery_eso_scale": 1.0,
+        "recovery_eso_delay_s": 0.0,
+        "start_y_m": 0.0,
+        "start_yaw_rad": 0.0,
+        "start_roll_rad": 0.0,
+        "lookahead_scale": 1.3
+      }
+    ],
+    "landing_control": "native",
+    "staged_native_handoff": true,
+    "require_settled_pendulum": false,
+    "home_bias_compensation": true,
+    "lock_position_tolerance_rad": 0.01,
+    "lock_velocity_tolerance_rad_s": 0.1,
+    "require_both_far_wheels": true,
+    "sttw_only_after_lock": true
   },
   "ground_physics": {
     "integrator": "implicitfast",
-    "friction": 0.8
+    "friction": 0.8,
+    "native_wheel_contacts": false
   },
-  "rb_physics": {
-    "integrator": "RK4",
-    "physics_dt_s": 0.005
+  "rb_adaptation_bundles": {
+    "shared225": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/shared_plant_checkpoint_comparison/shared225"
   }
 }

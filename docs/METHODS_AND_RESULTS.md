@@ -2004,3 +2004,10 @@ GLM端到端集成（用户2026-11-09新授权）：已配置glm-5.3从11场景�
 ## Playground多存档收敛评估与共同物理P0
 
 落地动态奖励150轮7602.236秒完成，六存档25/50/75/100/125/150各九路线分别7/6/6/6/5/5（分母各9），54回合444.505秒。后25窗口奖励较前25升约4%，但全链下降，不能认定任务收敛或采用last。冻结25真实8初差×9路线46/72，首帧偏差逐条验证；地面尾段独立起步3/3不计完整链。纲要P0共同implicitfast1ms和RK4 1ms各0/9，旧双积分器7/9不能替代该验收。新增通用训练分窗与checkpoint结果分析入口，后续存档每10阶段更新。新阶段从25权重/Adam恢复，共同implicitfast物理追加200；保持奖励/随机化/网络/执行权限，显式新物理域，统一步进避免双分支重复计算。证据、实际/参考XY与全部失败：docs/evidence/chapter3_playground_sttw_rb_sttw/{README,CONVERGENCE}.md，原始rb_adaptation/landing_dynamics_checkpoint_comparison。
+
+
+## 共同物理交接适配与地面前视修正
+
+共同implicitfast1ms×5下RB续训200（累计225，4469.033秒），六存档35/75/115/155/195/225完整目标0/0/4/3/5/6，各9条。冻结225真实初差72/72锁后回交、40/72完整；失败集中回交后的地面跟踪。保留同RB但全程zero-middle基线1/9（接近段也改变，非仅落地后因果对照）。单次将回交后前视倍率1.0→1.3后，名义9/9、同初差71/72完整，31救回0丢失；一条右→左在7.945秒越廊失败保留，不称全域验收或独立TEST。网络、物理、地形和成功条件不变；冻结工程候选进入纲要P0，不继续无针对性RB续训。训练奖励未证明收敛，六存档/全部XY/分窗见docs/evidence/chapter3_playground_sttw_rb_sttw/README.md及SHARED_PLANT_CONVERGENCE.md，原始rb_adaptation/shared_plant_checkpoint_comparison。
+
+开始P0普通路径更新：TorchMiddleControl.update_plan保留同网格承诺前缀与闭环历史，在20ms边界发布；3项CPU合同测试通过。尚非完整GroundAdapter/在线重规划验收，版本/有效期、WorldMap与完整快照仍待完成。
