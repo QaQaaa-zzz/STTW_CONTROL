@@ -1,5 +1,6 @@
 """GPU-resident batched STTW/RB/STTW inference on the native Playground chassis."""
 import json
+import pickle
 import shutil
 import sys
 from pathlib import Path
@@ -20,11 +21,12 @@ from .torch_path_policy import TorchPathPolicy
 from .torch_path_reference import TorchPathReference, wrap
 from .torch_middle_control import TorchMiddleControl
 from .playground_adapters import GroundAdapter
+from .playground_snapshot import capture as capture_snapshot, restore as restore_snapshot
 
 
 def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_config, skills, args, brake_ids):
     source=args.output/'source';source.mkdir()
-    for name in ['playground_handoff_evaluation.py','torch_controller.py','torch_path_reference.py','torch_middle_control.py','playground_adapters.py']:
+    for name in ['playground_handoff_evaluation.py','torch_controller.py','torch_path_reference.py','torch_middle_control.py','playground_adapters.py','playground_snapshot.py']:
         shutil.copy2(Path(__file__).with_name(name),source/name)
     shutil.copy2(sys.argv[0],source/Path(sys.argv[0]).name)
     started=time.perf_counter();device='cuda:0';hand=cfg['ground_handoff'];terrain=cfg['ditch_terrain']
@@ -167,125 +169,147 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         zero=tensor([mode=='zero_middle' for _,mode,i in lanes]);lo=tensor(model.actuator_ctrlrange[:,0]).float();hi=tensor(model.actuator_ctrlrange[:,1]).float()
         codes=torch.zeros(n,device=device,dtype=torch.long);durations=torch.full((n,),args.seconds,device=device)
         rows=[];poses=[];velocities=[];contact_rows=[];valid_rows=[];goal=hand['goal'];data.qpos.block_until_ready();init_s=time.perf_counter()-init_start;rollout_start=time.perf_counter()
-        for tick in range(round(args.seconds/.005)+1):
-            t=tick*.005
-            if tick in updates:
-                update,new_route=updates[tick]
-                before=ground_adapter.snapshot()
-                receipt=ground_adapter.update_plan(new_route,torch.full((n,),update['committed_until_m'],device=device),t,update['expected_previous_version'])
+        snapshot_tick=round(cfg['snapshot_replay_s']/.005) if 'snapshot_replay_s' in cfg else None
+        for replay in range(2 if snapshot_tick is not None else 1):
+            case_name=name+('_replay' if replay else '')
+            start_tick=0
+            if replay:
+                restore_started=time.perf_counter()
+                with (args.output/f'{name}_runtime_snapshot.pkl').open('rb') as stream:snapshot=pickle.load(stream)
+                data,(history,obs,last),runtime=restore_snapshot(snapshot,ground_adapter)
+                phase,alive,recovering,stable_time,upper_ready_time,airborne,flags,far_time,entry_time,handoff_time,hold,lock,target,codes,durations=(runtime[key] for key in ['phase', 'alive', 'recovering', 'stable_time', 'upper_ready_time', 'airborne', 'flags', 'far_time', 'entry_time', 'handoff_time', 'hold', 'lock', 'target', 'codes', 'durations'])
                 route=middle.route
-                receipt['state_preserved']=bool(torch.equal(before['middle']['frames'],middle.frames)
-                    and torch.equal(before['middle']['mask'],middle.mask)
-                    and torch.equal(before['middle']['lane_ticks'],middle.lane_ticks)
-                    and torch.equal(before['policy']['filtered'],policy.filtered)
-                    and torch.equal(before['policy']['offsets'],policy.offsets)
-                    and torch.equal(before['controller']['eso'],ctl.eso)
-                    and torch.equal(before['controller']['filtered_roll_rate'],ctl.filtered_roll_rate))
-                plan_receipts.append(receipt)
-            enter=alive&(phase==0)&(q[:,0]>=jump_start)&(tick%4==0)&(not args.ground_only)
-            phase=torch.where(enter,1,phase);entry_time=torch.where(enter,t,entry_time)
-            airborne |= alive&((phase==1)|(phase==3))&~flags[:,0]&(q[:,0]>terrain['front_x_m']-1.5)
-            far=alive&airborne&((phase==1)|(phase==3))&flags[:,1]&(far_time<0)
-            far_time=torch.where(far,t,far_time)
-            if event:
-                descending=(v[:,2]<-.1)&(q[:,2]-terrain['far_bank_height_m']<=landing_height)&(q[:,0]>terrain['front_x_m']+terrain['width_m']-.15)
-                preparing=alive&(phase==1)&airborne&(descending|flags[:,1])
-                phase=torch.where(preparing,3,phase)
-                landed=flags[:,2] if require_both_wheels else flags[:,1]
-                ready=landed&(angles[:,0].abs()<.35)&(angles[:,1].abs()<.45)&(v[:,2].abs()<1.5)
-                if staged_native:
-                    body_ready=landed&(angles[:,0].abs()<gate_roll)&(angles[:,1].abs()<.2)&(v[:,2].abs()<.5)&(m[:,1].abs()<gate_rate)&(speed>=1.5)
-                    if settle_joints:
-                        body_ready &= (angles[:,1].abs()<.03)&(v[:,4].abs()<.3)&((q[:,brake_qpos]-home_pose).abs().amax(-1)<.15)&(v[:,[idx.hip_dof_address,idx.knee_dof_address]].abs().amax(-1)<.5)
-                    stable_time=torch.where(alive&(phase==3)&body_ready,stable_time+.005,0.)
-                    taking_wheels=alive&(phase==3)&body_ready&(stable_time>=gate_hold)
-                    phase=torch.where(taking_wheels,4,phase)
-                if native_landing:ready &= (angles[:,0].abs()<.08)&(angles[:,1].abs()<.15)&(v[:,2].abs()<.4)&(m[:,1].abs()<.3)
-                ready &= (v[:,5].abs()<hand.get('handoff_yaw_rate_max_rad_s',float('inf')))&(m[:,3].abs()<hand.get('handoff_steer_rate_max_rad_s',float('inf')))
-                ready &= (speed-hand.get('continuation',{}).get('speed_m_s',1.5)).abs()<=hand.get('handoff_speed_error_max_m_s',float('inf'))
-                if home_landing or native_landing:ready &= ((q[:,brake_qpos]-home_pose).abs().amax(-1)<hand.get('lock_position_tolerance_rad',.08))&(v[:,[idx.hip_dof_address,idx.knee_dof_address]].abs().amax(-1)<hand.get('lock_velocity_tolerance_rad_s',.5))&(m[:,1].abs()<1.)
-                returning=alive&(phase==(4 if staged_native else 3))&ready
-                reset_control=returning if lock_first else taking_wheels if staged_native else returning if native_landing else preparing|far|returning
-            else:
-                returning=alive&(phase==1)&(far_time>=0)&(t-far_time>=hand.get('handoff_delay_s',0.)-1e-7)
-                reset_control=returning
-            phase=torch.where(returning,2,phase);handoff_time=torch.where(returning,t,handoff_time)
-            lock=torch.where(returning[:,None],q[:,brake_qpos],lock)
-            middle.v_user=torch.where(reset_control,hand.get('continuation',{}).get('speed_m_s',1.5),middle.v_user)
-            middle.alpha=torch.where(reset_control,hand.get('continuation',{}).get('alpha',.5),middle.alpha)
-            route.config['follower']['lookahead_scale']=torch.where(phase>=2,recovery_look,1.)
-            middle.reset_mask(reset_control,m,pose,speed,ctl)
-            recovering |= reset_control
-            target[:,0]=torch.where(reset_control,q[:,idx.steering_qpos_address],target[:,0]);target[:,2:]=torch.where(returning[:,None],lock,target[:,2:])
-            ey=(route.xy[route.route_ids]-q[:,None,:2]).square().sum(-1).min(-1).values.sqrt()
-            eh=wrap(middle.projection['heading']-pose[:,2]);ground_mode=((phase==0)|(phase==2)|(phase==4)) if native_landing else (phase!=1)
-            physical=~torch.isfinite(q).all(-1)|(angles[:,0].abs()>.7)|(angles[:,1].abs()>1.309)
-            outside=ground_mode&((ey>hand['road_half_width_m'])|middle.domain_exit)
-            at_goal=((phase==2)|args.ground_only)&(q[:,0]>=goal['x_min_m'])&(q[:,0]<=goal['x_max_m'])&(q[:,1].abs()<=goal['abs_y_max_m'])&(v[:,0]>=goal['min_vx_m_s'])
-            at_goal &= (ey<=goal.get('path_tolerance_m',float('inf')))&(eh.abs()<=goal.get('heading_tolerance_rad',float('inf')))&((speed-middle.v_user).abs()<=goal.get('speed_tolerance_m_s',float('inf')))
-            hold=torch.where(alive,torch.where(at_goal,hold+.005,0.),hold)
-            reached=at_goal&(hold>=goal.get('hold_s',0.))
-            stop=alive&(physical|outside|reached);codes=torch.where(stop,torch.where(physical,1,torch.where(outside,2,3)),codes);durations=torch.where(stop,t,durations)
-            rows.append(torch.cat((torch.full((n,1),t,device=device),q[:,:3],angles,v[:,:3],(phase==2)[:,None],ey[:,None],target,(phase==0)[:,None],m[:,5:6],middle.v_user[:,None],phase[:,None]),1))
-            poses.append(q);velocities.append(v);contact_rows.append(flags.clone());valid_rows.append(alive.clone());alive &= ~stop
-            if tick==round(args.seconds/.005):break
-            upper_ready=(phase==2)&(m[:,0].abs()<.05)&(m[:,1].abs()<.2)&(eh.abs()<.15)&(ey<.2)
-            upper_ready &= ((speed-middle.v_user).abs()<hand.get('upper_ready_speed_error_m_s',float('inf')))&(v[:,5].abs()<hand.get('upper_ready_yaw_rate_rad_s',float('inf')))&(m[:,3].abs()<hand.get('upper_ready_steer_rate_rad_s',float('inf')))
-            upper_ready_time=torch.where(recovering&upper_ready,upper_ready_time+.005,0.)
-            recovering &= ~(upper_ready&(upper_ready_time>=hand.get('upper_ready_hold_s',0.)))
-            governed=middle.before(pose,zero_mask=zero|(recovering if gate_upper else False))
-            ctl.config['wc']=torch.where(phase>=2,recovery_wc,controller_config['wc'])
-            feedback_speed=torch.where((phase>=2)&body_feedback,speed,m[:,5]*.07)
-            enable_eso=torch.full((n,),t>3.,device=device)
-            enable_eso &= (phase<2)|(middle.lane_ticks*.005>=recovery_eso_delay)
-            if gate_eso:enable_eso &= (phase<2)|((m[:,0].abs()<.08)&(m[:,1].abs()<.4))
-            command=ctl.step(torch.stack((feedback_speed,m[:,2],m[:,3],m[:,0],m[:,1],governed[:,1]),1),enable_eso,torch.where(phase>=2,recovery_eso,1.))
-            steer=command[:,0].clamp(-3,3);steer=torch.maximum(((-.8-m[:,2])/.005).clamp_min(-3),torch.minimum(((.8-m[:,2])/.005).clamp_max(3),steer))
-            ground_target=torch.stack(((target[:,0]+.005*steer).clamp(-.8,.8),governed[:,0]/.07,lock[:,0],lock[:,1]),1).clamp(lo,hi)
-            if tick%4==0:
-                action,rb_ctrl=infer(obs,data.qpos[:,idx.knee_qpos_address],swing_scale)
-                rb_target=to_torch(rb_ctrl).clone()
-                correction=(-.5*wrap(pose[:,2]-middle.projection['heading'])-.4*middle.projection['cross_track']).clamp(-rb_guidance,rb_guidance)
-                guide=(far_time>=0)&(m[:,0].abs()<.15)&(m[:,1].abs()<.6)
-                rb_target[:,0]=(rb_target[:,0]+torch.where(guide,correction,0.)).clamp(lo[0],hi[0])
-                delivered=to_torch(action).clone();delivered[:,0]=rb_target[:,0]/hi[0]
-                rb_controls=(phase==1)|(phase==3)|((phase==4)&lock_first)
-                last=jp.where(to_jax(rb_controls&alive)[:,None],to_jax(delivered),last)
-                target=torch.where(rb_controls[:,None],rb_target,target)
-            if align_landing:
-                aligned=target[:,0]+(middle.nominal[:,1]-target[:,0]).clamp(-.015,.015)
-                ground_target[:,0]=torch.where((phase==3)&(~flags[:,0] if home_landing else True),aligned,ground_target[:,0])
-            home_targets=home_pose.expand(n,2).clone()
-            pitch_assist=landing_pitch_k*angles[:,1]+landing_pitch_d*v[:,4]
-            home_targets[:,0]=(home_targets[:,0]+torch.where(far_time<0,pitch_assist,0.)).clamp(lo[2],hi[2])
-            ground_target[:,2:]=torch.where((phase==3)[:,None],home_targets if home_landing else target[:,2:],ground_target[:,2:])
-            ground_target[:,2:]=torch.where((phase==4)[:,None],home_pose,ground_target[:,2:])
-            if home_compensation:
-                compensated=(home_pose+to_torch(data.qfrc_bias[:,[idx.hip_dof_address,idx.knee_dof_address]])/joint_kp).clamp(lo[2:],hi[2:])
-                ground_target[:,2:]=torch.where((phase==4)[:,None],compensated,ground_target[:,2:])
-            if lock_first:
-                # RB owns wheels throughout physical homing; STTW starts only after locking.
-                ground_target[:,:2]=torch.where((phase==4)[:,None],target[:,:2],ground_target[:,:2])
-            target=torch.where(ground_mode[:,None],ground_target,target)
-            if lock_first:
-                delta=target[:,2:]-home_pose
-                span=torch.where(delta>=0,hi[2:]-home_pose,home_pose-lo[2:]).clamp_min(1e-6)
-                actual=to_torch(last).clone();actual[:,2:]=(delta/span).clamp(-1,1)
-                last=jp.where(to_jax((phase==4)&alive)[:,None],to_jax(actual),last)
-            data,jflags=advance(data,to_jax(target),to_jax(lock),to_jax(torch.where(phase>=2,landing_damping,.1)),to_jax(phase==1 if align_landing else ((phase==1)|(phase==3))),to_jax((phase==0)|(phase==2)),to_jax(alive));flags=to_torch(jflags)
-            q,v,m,pose,speed,angles=map(to_torch,observe(data))
-            middle.after(m,pose,speed,governed,torch.stack((steer,target[:,1]),1),torch.zeros(n,2,device=device),ctl)
-            if (tick+1)%4==0:history,obs=frame(data,history,last,height_offset)
-        torch.cuda.synchronize();rollout_s=time.perf_counter()-rollout_start
-        traces=torch.stack(rows).cpu().numpy();positions=torch.stack(poses).cpu().numpy();speeds=torch.stack(velocities).cpu().numpy();valid=torch.stack(valid_rows).cpu().numpy();contact_trace=torch.stack(contact_rows).cpu().numpy()
-        codes,durations,entry_time,far_time,handoff_time,hold,airborne=[x.cpu().numpy() for x in (codes,durations,entry_time,far_time,handoff_time,hold,airborne)]
-        for lane,(route_id,mode,variant) in enumerate(lanes):
-            case_dir=f'{name}_route{route_id}_{mode}'+(f'_v{variant}' if len(variants)>1 else '')
-            target_dir=args.output/case_dir;target_dir.mkdir();keep=valid[:,lane];trace=traces[keep,lane];qsave=positions[keep,lane]
-            np.savez_compressed(target_dir/'trajectory.npz',trace=trace,qpos=qsave,qvel=speeds[keep,lane],wheel_contact_flags=contact_trace[keep,lane],wheel_contact_columns=['any_terrain','any_far','both_far'],reference_xy=saved['xy'][route_id],published_reference_xy=route.xy[route_id].cpu().numpy(),columns=['time','x','y','z','roll','pitch','yaw','vx','vy','vz','ground_active','path_distance','steer_target','rear_target','hip_target','knee_target','approaching','rear_rate_rad_s','requested_speed_m_s','phase'])
-            row=dict(case_dir=case_dir,variant=variants[variant],skill=name,route=route_id,continuation=mode,termination=['timeout','physical_failure','corridor_or_domain_exit','goal'][codes[lane]],goal=bool(codes[lane]==3),rb_entry_s=None if entry_time[lane]<0 else float(entry_time[lane]),goal_hold_s=float(hold[lane]),airborne=bool(airborne[lane]),far_contact=bool(far_time[lane]>=0),first_far_contact_s=None if far_time[lane]<0 else float(far_time[lane]),handoff_s=None if handoff_time[lane]<0 else float(handoff_time[lane]),duration_s=float(durations[lane]),final_xy=qsave[-1,:2].tolist())
-            results.append(row)
-        all_timing.append(dict(skill=name,lanes=n,initialization_s=init_s,rollout_s=rollout_s,simulated_ticks_per_lane=tick))
-        (args.output/f'{name}_plan_receipts.json').write_text(json.dumps(plan_receipts,indent=2))
+                q,v,m,pose,speed,angles=map(to_torch,observe(data))
+                rows,poses,velocities,contact_rows,valid_rows,plan_receipts=[x.copy() for x in prefix]
+                start_tick=snapshot['tick']
+                data.qpos.block_until_ready()
+                (args.output/f'{name}_restore.json').write_text(json.dumps(dict(tick=start_tick,time_s=start_tick*.005,restore_s=time.perf_counter()-restore_started,runtime_fields=list(runtime),physics_leaf_count=len(jax.tree.leaves(data)),source='serialized full MJX data, RB FIFO/observation/action, ground controller and runner state'),indent=2))
+            rollout_start=time.perf_counter()
+            for tick in range(start_tick,round(args.seconds/.005)+1):
+                t=tick*.005
+                if snapshot_tick==tick and not replay:
+                    runtime=dict(phase=phase,alive=alive,recovering=recovering,stable_time=stable_time,upper_ready_time=upper_ready_time,airborne=airborne,flags=flags,far_time=far_time,entry_time=entry_time,handoff_time=handoff_time,hold=hold,lock=lock,target=target,codes=codes,durations=durations)
+                    snapshot=capture_snapshot(data,ground_adapter,(history,obs,last),runtime,tick)
+                    prefix=[rows.copy(),poses.copy(),velocities.copy(),contact_rows.copy(),valid_rows.copy(),plan_receipts.copy()]
+                if tick in updates:
+                    update,new_route=updates[tick]
+                    before=ground_adapter.snapshot()
+                    receipt=ground_adapter.update_plan(new_route,torch.full((n,),update['committed_until_m'],device=device),t,update['expected_previous_version'])
+                    route=middle.route
+                    receipt['state_preserved']=bool(torch.equal(before['middle']['frames'],middle.frames)
+                        and torch.equal(before['middle']['mask'],middle.mask)
+                        and torch.equal(before['middle']['lane_ticks'],middle.lane_ticks)
+                        and torch.equal(before['policy']['filtered'],policy.filtered)
+                        and torch.equal(before['policy']['offsets'],policy.offsets)
+                        and torch.equal(before['controller']['eso'],ctl.eso)
+                        and torch.equal(before['controller']['filtered_roll_rate'],ctl.filtered_roll_rate))
+                    plan_receipts.append(receipt)
+                enter=alive&(phase==0)&(q[:,0]>=jump_start)&(tick%4==0)&(not args.ground_only)
+                phase=torch.where(enter,1,phase);entry_time=torch.where(enter,t,entry_time)
+                airborne |= alive&((phase==1)|(phase==3))&~flags[:,0]&(q[:,0]>terrain['front_x_m']-1.5)
+                far=alive&airborne&((phase==1)|(phase==3))&flags[:,1]&(far_time<0)
+                far_time=torch.where(far,t,far_time)
+                if event:
+                    descending=(v[:,2]<-.1)&(q[:,2]-terrain['far_bank_height_m']<=landing_height)&(q[:,0]>terrain['front_x_m']+terrain['width_m']-.15)
+                    preparing=alive&(phase==1)&airborne&(descending|flags[:,1])
+                    phase=torch.where(preparing,3,phase)
+                    landed=flags[:,2] if require_both_wheels else flags[:,1]
+                    ready=landed&(angles[:,0].abs()<.35)&(angles[:,1].abs()<.45)&(v[:,2].abs()<1.5)
+                    if staged_native:
+                        body_ready=landed&(angles[:,0].abs()<gate_roll)&(angles[:,1].abs()<.2)&(v[:,2].abs()<.5)&(m[:,1].abs()<gate_rate)&(speed>=1.5)
+                        if settle_joints:
+                            body_ready &= (angles[:,1].abs()<.03)&(v[:,4].abs()<.3)&((q[:,brake_qpos]-home_pose).abs().amax(-1)<.15)&(v[:,[idx.hip_dof_address,idx.knee_dof_address]].abs().amax(-1)<.5)
+                        stable_time=torch.where(alive&(phase==3)&body_ready,stable_time+.005,0.)
+                        taking_wheels=alive&(phase==3)&body_ready&(stable_time>=gate_hold)
+                        phase=torch.where(taking_wheels,4,phase)
+                    if native_landing:ready &= (angles[:,0].abs()<.08)&(angles[:,1].abs()<.15)&(v[:,2].abs()<.4)&(m[:,1].abs()<.3)
+                    ready &= (v[:,5].abs()<hand.get('handoff_yaw_rate_max_rad_s',float('inf')))&(m[:,3].abs()<hand.get('handoff_steer_rate_max_rad_s',float('inf')))
+                    ready &= (speed-hand.get('continuation',{}).get('speed_m_s',1.5)).abs()<=hand.get('handoff_speed_error_max_m_s',float('inf'))
+                    if home_landing or native_landing:ready &= ((q[:,brake_qpos]-home_pose).abs().amax(-1)<hand.get('lock_position_tolerance_rad',.08))&(v[:,[idx.hip_dof_address,idx.knee_dof_address]].abs().amax(-1)<hand.get('lock_velocity_tolerance_rad_s',.5))&(m[:,1].abs()<1.)
+                    returning=alive&(phase==(4 if staged_native else 3))&ready
+                    reset_control=returning if lock_first else taking_wheels if staged_native else returning if native_landing else preparing|far|returning
+                else:
+                    returning=alive&(phase==1)&(far_time>=0)&(t-far_time>=hand.get('handoff_delay_s',0.)-1e-7)
+                    reset_control=returning
+                phase=torch.where(returning,2,phase);handoff_time=torch.where(returning,t,handoff_time)
+                lock=torch.where(returning[:,None],q[:,brake_qpos],lock)
+                middle.v_user=torch.where(reset_control,hand.get('continuation',{}).get('speed_m_s',1.5),middle.v_user)
+                middle.alpha=torch.where(reset_control,hand.get('continuation',{}).get('alpha',.5),middle.alpha)
+                route.config['follower']['lookahead_scale']=torch.where(phase>=2,recovery_look,1.)
+                middle.reset_mask(reset_control,m,pose,speed,ctl)
+                recovering |= reset_control
+                target[:,0]=torch.where(reset_control,q[:,idx.steering_qpos_address],target[:,0]);target[:,2:]=torch.where(returning[:,None],lock,target[:,2:])
+                ey=(route.xy[route.route_ids]-q[:,None,:2]).square().sum(-1).min(-1).values.sqrt()
+                eh=wrap(middle.projection['heading']-pose[:,2]);ground_mode=((phase==0)|(phase==2)|(phase==4)) if native_landing else (phase!=1)
+                physical=~torch.isfinite(q).all(-1)|(angles[:,0].abs()>.7)|(angles[:,1].abs()>1.309)
+                outside=ground_mode&((ey>hand['road_half_width_m'])|middle.domain_exit)
+                at_goal=((phase==2)|args.ground_only)&(q[:,0]>=goal['x_min_m'])&(q[:,0]<=goal['x_max_m'])&(q[:,1].abs()<=goal['abs_y_max_m'])&(v[:,0]>=goal['min_vx_m_s'])
+                at_goal &= (ey<=goal.get('path_tolerance_m',float('inf')))&(eh.abs()<=goal.get('heading_tolerance_rad',float('inf')))&((speed-middle.v_user).abs()<=goal.get('speed_tolerance_m_s',float('inf')))
+                hold=torch.where(alive,torch.where(at_goal,hold+.005,0.),hold)
+                reached=at_goal&(hold>=goal.get('hold_s',0.))
+                stop=alive&(physical|outside|reached);codes=torch.where(stop,torch.where(physical,1,torch.where(outside,2,3)),codes);durations=torch.where(stop,t,durations)
+                rows.append(torch.cat((torch.full((n,1),t,device=device),q[:,:3],angles,v[:,:3],(phase==2)[:,None],ey[:,None],target,(phase==0)[:,None],m[:,5:6],middle.v_user[:,None],phase[:,None]),1))
+                poses.append(q);velocities.append(v);contact_rows.append(flags.clone());valid_rows.append(alive.clone());alive &= ~stop
+                if tick==round(args.seconds/.005):break
+                upper_ready=(phase==2)&(m[:,0].abs()<.05)&(m[:,1].abs()<.2)&(eh.abs()<.15)&(ey<.2)
+                upper_ready &= ((speed-middle.v_user).abs()<hand.get('upper_ready_speed_error_m_s',float('inf')))&(v[:,5].abs()<hand.get('upper_ready_yaw_rate_rad_s',float('inf')))&(m[:,3].abs()<hand.get('upper_ready_steer_rate_rad_s',float('inf')))
+                upper_ready_time=torch.where(recovering&upper_ready,upper_ready_time+.005,0.)
+                recovering &= ~(upper_ready&(upper_ready_time>=hand.get('upper_ready_hold_s',0.)))
+                governed=middle.before(pose,zero_mask=zero|(recovering if gate_upper else False))
+                ctl.config['wc']=torch.where(phase>=2,recovery_wc,controller_config['wc'])
+                feedback_speed=torch.where((phase>=2)&body_feedback,speed,m[:,5]*.07)
+                enable_eso=torch.full((n,),t>3.,device=device)
+                enable_eso &= (phase<2)|(middle.lane_ticks*.005>=recovery_eso_delay)
+                if gate_eso:enable_eso &= (phase<2)|((m[:,0].abs()<.08)&(m[:,1].abs()<.4))
+                command=ctl.step(torch.stack((feedback_speed,m[:,2],m[:,3],m[:,0],m[:,1],governed[:,1]),1),enable_eso,torch.where(phase>=2,recovery_eso,1.))
+                steer=command[:,0].clamp(-3,3);steer=torch.maximum(((-.8-m[:,2])/.005).clamp_min(-3),torch.minimum(((.8-m[:,2])/.005).clamp_max(3),steer))
+                ground_target=torch.stack(((target[:,0]+.005*steer).clamp(-.8,.8),governed[:,0]/.07,lock[:,0],lock[:,1]),1).clamp(lo,hi)
+                if tick%4==0:
+                    action,rb_ctrl=infer(obs,data.qpos[:,idx.knee_qpos_address],swing_scale)
+                    rb_target=to_torch(rb_ctrl).clone()
+                    correction=(-.5*wrap(pose[:,2]-middle.projection['heading'])-.4*middle.projection['cross_track']).clamp(-rb_guidance,rb_guidance)
+                    guide=(far_time>=0)&(m[:,0].abs()<.15)&(m[:,1].abs()<.6)
+                    rb_target[:,0]=(rb_target[:,0]+torch.where(guide,correction,0.)).clamp(lo[0],hi[0])
+                    delivered=to_torch(action).clone();delivered[:,0]=rb_target[:,0]/hi[0]
+                    rb_controls=(phase==1)|(phase==3)|((phase==4)&lock_first)
+                    last=jp.where(to_jax(rb_controls&alive)[:,None],to_jax(delivered),last)
+                    target=torch.where(rb_controls[:,None],rb_target,target)
+                if align_landing:
+                    aligned=target[:,0]+(middle.nominal[:,1]-target[:,0]).clamp(-.015,.015)
+                    ground_target[:,0]=torch.where((phase==3)&(~flags[:,0] if home_landing else True),aligned,ground_target[:,0])
+                home_targets=home_pose.expand(n,2).clone()
+                pitch_assist=landing_pitch_k*angles[:,1]+landing_pitch_d*v[:,4]
+                home_targets[:,0]=(home_targets[:,0]+torch.where(far_time<0,pitch_assist,0.)).clamp(lo[2],hi[2])
+                ground_target[:,2:]=torch.where((phase==3)[:,None],home_targets if home_landing else target[:,2:],ground_target[:,2:])
+                ground_target[:,2:]=torch.where((phase==4)[:,None],home_pose,ground_target[:,2:])
+                if home_compensation:
+                    compensated=(home_pose+to_torch(data.qfrc_bias[:,[idx.hip_dof_address,idx.knee_dof_address]])/joint_kp).clamp(lo[2:],hi[2:])
+                    ground_target[:,2:]=torch.where((phase==4)[:,None],compensated,ground_target[:,2:])
+                if lock_first:
+                    # RB owns wheels throughout physical homing; STTW starts only after locking.
+                    ground_target[:,:2]=torch.where((phase==4)[:,None],target[:,:2],ground_target[:,:2])
+                target=torch.where(ground_mode[:,None],ground_target,target)
+                if lock_first:
+                    delta=target[:,2:]-home_pose
+                    span=torch.where(delta>=0,hi[2:]-home_pose,home_pose-lo[2:]).clamp_min(1e-6)
+                    actual=to_torch(last).clone();actual[:,2:]=(delta/span).clamp(-1,1)
+                    last=jp.where(to_jax((phase==4)&alive)[:,None],to_jax(actual),last)
+                data,jflags=advance(data,to_jax(target),to_jax(lock),to_jax(torch.where(phase>=2,landing_damping,.1)),to_jax(phase==1 if align_landing else ((phase==1)|(phase==3))),to_jax((phase==0)|(phase==2)),to_jax(alive));flags=to_torch(jflags)
+                q,v,m,pose,speed,angles=map(to_torch,observe(data))
+                middle.after(m,pose,speed,governed,torch.stack((steer,target[:,1]),1),torch.zeros(n,2,device=device),ctl)
+                if (tick+1)%4==0:history,obs=frame(data,history,last,height_offset)
+            torch.cuda.synchronize();rollout_s=time.perf_counter()-rollout_start
+            traces=torch.stack(rows).cpu().numpy();positions=torch.stack(poses).cpu().numpy();speeds=torch.stack(velocities).cpu().numpy();valid=torch.stack(valid_rows).cpu().numpy();contact_trace=torch.stack(contact_rows).cpu().numpy()
+            codes,durations,entry_time,far_time,handoff_time,hold,airborne=[x.cpu().numpy() for x in (codes,durations,entry_time,far_time,handoff_time,hold,airborne)]
+            for lane,(route_id,mode,variant) in enumerate(lanes):
+                case_dir=f'{case_name}_route{route_id}_{mode}'+(f'_v{variant}' if len(variants)>1 else '')
+                target_dir=args.output/case_dir;target_dir.mkdir();keep=valid[:,lane];trace=traces[keep,lane];qsave=positions[keep,lane]
+                np.savez_compressed(target_dir/'trajectory.npz',trace=trace,qpos=qsave,qvel=speeds[keep,lane],wheel_contact_flags=contact_trace[keep,lane],wheel_contact_columns=['any_terrain','any_far','both_far'],reference_xy=saved['xy'][route_id],published_reference_xy=route.xy[route_id].cpu().numpy(),columns=['time','x','y','z','roll','pitch','yaw','vx','vy','vz','ground_active','path_distance','steer_target','rear_target','hip_target','knee_target','approaching','rear_rate_rad_s','requested_speed_m_s','phase'])
+                row=dict(case_dir=case_dir,variant=variants[variant],skill=case_name,route=route_id,continuation=mode,termination=['timeout','physical_failure','corridor_or_domain_exit','goal'][codes[lane]],goal=bool(codes[lane]==3),rb_entry_s=None if entry_time[lane]<0 else float(entry_time[lane]),goal_hold_s=float(hold[lane]),airborne=bool(airborne[lane]),far_contact=bool(far_time[lane]>=0),first_far_contact_s=None if far_time[lane]<0 else float(far_time[lane]),handoff_s=None if handoff_time[lane]<0 else float(handoff_time[lane]),duration_s=float(durations[lane]),final_xy=qsave[-1,:2].tolist())
+                results.append(row)
+            all_timing.append(dict(skill=case_name,lanes=n,initialization_s=0. if replay else init_s,rollout_s=rollout_s,simulated_ticks_per_lane=tick-start_tick))
+            (args.output/f'{case_name}_plan_receipts.json').write_text(json.dumps(plan_receipts,indent=2))
+            if snapshot_tick is not None and not replay:
+                with (args.output/f'{name}_runtime_snapshot.pkl').open('wb') as stream:pickle.dump(snapshot,stream,protocol=pickle.HIGHEST_PROTOCOL)
     (args.output/'status.json').write_text(json.dumps(dict(stage='complete',completed=len(results),total=len(results),elapsed_s=time.perf_counter()-started,results=results),indent=2))
     (args.output/'timing.json').write_text(json.dumps(dict(total_s=time.perf_counter()-started,batches=all_timing,execution='GPU MJX-Warp vmap, GPU H75/ECBC/ESO and RB inference, DLPack, terminal-only trajectory download'),indent=2))

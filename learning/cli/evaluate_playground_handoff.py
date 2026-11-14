@@ -90,6 +90,8 @@ def main():
     p.add_argument('--ground-only',action='store_true',help='Keep ground control throughout; no RB activation')
     a=p.parse_args(); configure_compilation_cache('/home/qy/STTW_CONTROL/runs/.jax_compilation_cache'); a.output.mkdir(parents=True,exist_ok=False); torch.set_num_threads(1)
     cfg=json.loads(a.config.read_text()); hand=cfg['ground_handoff']; terrain=cfg['ditch_terrain']
+    if 'snapshot_replay_s' in cfg and not 0<=cfg['snapshot_replay_s']<a.seconds:
+        raise ValueError('snapshot time must lie within the rollout')
     ground_physics=cfg.get('ground_physics',{})
     rb_physics=cfg.get('rb_physics')
     if rb_physics and rb_physics != {'integrator':'RK4','physics_dt_s':.005}:
@@ -120,7 +122,9 @@ def main():
         evaluate_ground_suite(model,mm,idx,cfg,bundle,hcfg,identity,controller,a.output,a.physics_substeps,brake_ids)
         return
     n=len(a.routes)*len(skills)*len(a.modes)*len(hand.get('handoff_variants',[{}]))
+    if 'snapshot_replay_s' in cfg:n*=2
     contract=dict(terrain_model=str(a.model) if a.model else str(a.output/'terrain.mjb'),role='bounded native Playground transfer DEV, no training',skills={k:s.record for k,s in skills.items()},terrain=terrain,source_config=str(a.config),routes=a.routes,episode_s=a.seconds,episodes=n,physics_steps_max=round(a.seconds/.005)*n*(a.physics_substeps+(1 if rb_physics else a.physics_substeps)),backend='MJX-Warp vmap; GPU Torch H75/ECBC/ESO; JAX RB; DLPack; final-only host export',heightfield_contact_workspace=512,physics_dt=.005/a.physics_substeps,physics_substeps=a.physics_substeps,lower_dt=.005,upper_dt=.02,ground_model=identity,goal=hand['goal'],road_half_width_m=hand['road_half_width_m'],start_x_m=hand.get('start_x_m',1.5),start_vx_m_s=hand.get('start_vx_m_s',2.),handoff=hand.get('handoff_mechanism','fixed contact delay'),handoff_delay_s=hand.get('handoff_delay_s',0.),approach=a.approach,ground_only=a.ground_only,jump_start_x_m=hand['approach']['jump_start_x_m'],scope='Declared approach controller then native RB jump then H75 or zero-middle STTW. No planning or training.',ground_physics=ground_physics,rb_physics=rb_physics,terrain_conversion='Original Isaac rectangular patches, coordinates and heights retained without interpolation; 90-degree local grid rotation matches original triangle diagonal',pendulum='STTW hip/knee equality brakes at entry posture; released during RB, relocked at measured handoff posture; native finite servos retained',observer='measured ESO initialization, empty H75 history at handoff')
+    contract['snapshot_replay_s']=cfg.get('snapshot_replay_s')
     (a.output/'declaration.json').write_text(json.dumps(contract,indent=2))
     from sttw_control.playground_handoff_evaluation import evaluate_handoff
     evaluate_handoff(model,mm,idx,cfg,bundle,hcfg,identity,controller,skills,a,brake_ids)

@@ -49,4 +49,17 @@ if hand.get('sttw_only_after_lock',False):
 if d.get('ground_only',False):
  lines[0]='# Native RB chassis ground-only STTW test'
  lines += ['', f"Ground-only diagnostic: RB is never activated. Initial x={d['start_x_m']} m, requested speed={hand['approach']['speed_m_s']} m/s; frozen H75 and zero-middle share the same physical start and contact domain. This independent settled start is not a physical reset in the full chain and does not establish RB handoff success."]
+if d.get('snapshot_replay_s') is not None:
+ start=round(d['snapshot_replay_s']/.005);comparisons=[]
+ lines+=['','## Serialized full-state replay','','Original and restored branches share their recorded prefix; they are not independent initial conditions. Frozen model/weights are supplied by declaration.json.','','| Route | Initial qpos / qvel max difference | Tail XY max m | Handoff delta s | Original / restored phase order |','|---|---|---:|---:|---|']
+ for original in [r for r in s['results'] if r['skill'] in d['skills']]:
+  restored=next(r for r in s['results'] if r['skill']==original['skill']+'_replay' and r['route']==original['route'] and r['continuation']==original['continuation'] and r['variant']==original['variant'])
+  x=np.load(a.root/original['case_dir']/'trajectory.npz');y=np.load(a.root/restored['case_dir']/'trajectory.npz');end=min(len(x['trace']),len(y['trace']))
+  phases=[]
+  for z in (x,y):
+   phase=z['trace'][start:,19].astype(int);phases.append(phase[np.r_[True,phase[1:]!=phase[:-1]]].tolist())
+  row=dict(case=original['case_dir'],route=original['route'],initial_qpos_max_abs=float(np.max(abs(x['qpos'][start]-y['qpos'][start]))),initial_qvel_max_abs=float(np.max(abs(x['qvel'][start]-y['qvel'][start]))),tail_xy_max_m=float(np.max(abs(x['trace'][start:end,1:3]-y['trace'][start:end,1:3]))),phase_orders=phases,termination_match=original['termination']==restored['termination'],handoff_delta_s=None if original['handoff_s'] is None or restored['handoff_s'] is None else restored['handoff_s']-original['handoff_s'])
+  comparisons.append(row)
+  lines.append(f"|{row['route']}|{row['initial_qpos_max_abs']} / {row['initial_qvel_max_abs']}|{row['tail_xy_max_m']:.6f}|{row['handoff_delta_s']}|{phases[0]} / {phases[1]}|")
+ (a.root/'snapshot_analysis.json').write_text(json.dumps(dict(records=comparisons,scope='Same-model serialized full MJX/RB/controller state replay; not bitwise deterministic GPU dynamics.'),indent=2))
 (a.root/'RESULTS.md').write_text('\n'.join(lines)+'\n')

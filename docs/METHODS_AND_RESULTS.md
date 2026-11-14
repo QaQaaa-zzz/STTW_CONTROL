@@ -2016,3 +2016,8 @@ GLM端到端集成（用户2026-11-09新授权）：已配置glm-5.3从11场景�
 ## P0普通路径发布接线
 
 GroundAdapter在20ms边界核对版本/执行时钟，保留同网格承诺前缀与原控制状态；ControllerState快照/恢复已实现，不冒充包含MJX/RB的全运行快照。4项CPU测试通过。固定/小幅在线改路/固定重复，route0/4/8各3条，共9/9、134.259秒；发布tick400状态逐值保留。固定重复后段XY最大差1.66–2.78cm，不能作逐位因果对比或E1收益证明。两次入口失败及弧长原点/尾点补齐修复保留，WorldMap分离仍待完成。全部XY及原始证据入口：docs/evidence/chapter3_playground_sttw_rb_sttw/README.md，数据p0_plan_update/evaluation_arc_prefix。
+
+
+## P0完整名义运行快照
+
+新增playground_snapshot捕获完整MJX Data（106叶，含接触/约束/warm-start）、RB FIFO/当前观测/上一动作、H75/ESO/滤波/时钟以及锁定目标、动作、阶段标志与计时。从4.5秒跳跃状态写盘后读取重放route0/4/8，原始和恢复均3/3到达，70.578秒；初始qpos/qvel差0，阶段顺序1→3→4→2，回交差不超过10ms，后半XY差0.49–1.11cm。2.49MB快照读取恢复0.334秒，非200ms在线延迟结论。当前是同冻结模型的名义评测快照，不包含训练随机化机制。完整P0仍待动作归属与WorldMap分离。证据：p0_snapshot/evaluation，仓库现有交接README/XY。
