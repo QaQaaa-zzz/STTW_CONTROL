@@ -73,7 +73,7 @@ class PlaygroundRBEnv:
             d=d.replace(eq_active=d.eq_active.at[self.brake_ids].set(False))
             return mjx.forward(plant(mass,friction,gain,com),d)
         self.make=jax.jit(jax.vmap(make))
-        jump=jax.vmap(lambda d,c,m,f,g,o:mjx_env.step(plant(m,f,g,o),d,c,1))
+        jump=jax.vmap(lambda d,c,m,f,g,o:mjx_env.step(plant(m,f,g,o),d,c,cfg.get('physics_substeps',1)))
         home_opt=mm.opt.replace(timestep=jp.asarray(.001,dtype=mm.opt.timestep.dtype),integrator=type(mm.opt.integrator)(int(mujoco.mjtIntegrator.mjINT_IMPLICITFAST)))
         home_step=jax.vmap(lambda d,c,m,f,g,o:mjx_env.step(plant(m,f,g,o).replace(opt=home_opt),d,c,5))
         def reset_one(d,q,v,mask,m,f,g,o):
@@ -98,6 +98,8 @@ class PlaygroundRBEnv:
         def advance(d,c,homing,m,f,g,o):
             def only_jump(_):
                 out=jump(d,c,m,f,g,o);return out,*contacts(out)
+            if cfg.get('shared_physics',False):
+                return only_jump(None)
             def only_home(_):
                 out=home_step(d,c,m,f,g,o);return out,*contacts(out)
             def mixed(_):

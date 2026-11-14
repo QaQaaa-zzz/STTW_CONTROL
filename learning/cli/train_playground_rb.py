@@ -30,12 +30,12 @@ from evaluate_playground_handoff import transplant
 configure_compilation_cache('/home/qy/STTW_CONTROL/runs/.jax_compilation_cache')
 torch.set_num_threads(1);torch.manual_seed(cfg['seed'])
 skill=PendulumSkill(Path(cfg['registry']),cfg['skill'])
-model=transplant(skill.bundle,cfg['terrain'],a.output,1,cfg['ground_physics'])
+model=transplant(skill.bundle,cfg['terrain'],a.output,cfg.get('physics_substeps',1),cfg['ground_physics'])
 env=PlaygroundRBEnv(model,skill,cfg)
 actor=PhaseUActorCritic(76,106,4,cfg['bundle']).to('cuda:0')
 recipe=spring_jump_recipe(cfg['go2_checkout']);algorithm=recipe['train']['algorithm'];algorithm.update(cfg['ppo_overrides'])
 (a.output/'go2_recipe.json').write_text(json.dumps(recipe,indent=2))
-(a.output/'randomization.json').write_text(json.dumps(dict(config=cfg['randomization'],actual='MuJoCo GPU startup properties; upstream Isaac Lab DelayBuffer;5ms sensor/action delay; noise and offsets only in observations;4s velocity pushes; raw clean reward',jump_physics_dt_s=.005,homing_physics_dt_s=.001 if cfg.get('physical_homing',False) else .005,sensor_dt_s=.005,actor_dt_s=.02),indent=2))
+(a.output/'randomization.json').write_text(json.dumps(dict(config=cfg['randomization'],actual='MuJoCo GPU startup properties; upstream Isaac Lab DelayBuffer;5ms sensor/action delay; noise and offsets only in observations;4s velocity pushes; raw clean reward',jump_physics_dt_s=float(model.opt.timestep),homing_physics_dt_s=float(model.opt.timestep) if cfg.get('shared_physics',False) else .001 if cfg.get('physical_homing',False) else .005,sensor_dt_s=.005,actor_dt_s=.02),indent=2))
 if a.check_steps:
     env.length.fill_(env.max_episode_length-1)
     with torch.inference_mode():
@@ -85,6 +85,6 @@ for stage_update in range(cfg['updates']):
         if isinstance(value,(int,float)):writer.add_scalar(key,value,update+1)
     writer.flush();status.update(stage='training',completed_updates=stage_update+1,completed_global_updates=update+1,last=record,estimated_remaining_s=(sample_s+opt_s)*(cfg['updates']-stage_update-1));save_status();print(json.dumps(record),flush=True)
     if not np.isfinite([score,*loss,float(kl)]).all():raise RuntimeError('Nonfinite training statistics')
-    if (update+1)%cfg['save_interval']==0:checkpoint(training/f'model_{update+1}.pt',update+1,record)
+    if (stage_update+1)%cfg['save_interval']==0:checkpoint(training/f'model_{update+1}.pt',update+1,record)
 checkpoint(training/f'model_{start_update+cfg["updates"]}.pt',start_update+cfg['updates'],dict(final_update_unscored=True))
 status.update(stage='training_complete');save_status();writer.close()

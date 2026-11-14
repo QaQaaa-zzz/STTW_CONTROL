@@ -1999,3 +1999,8 @@ GLM端到端集成（用户2026-11-09新授权）：已配置glm-5.3从11场景�
 ## Playground锁定条件续训与落地动态奖励
 
 追加150到300完成7760.615秒，严格训练终止成功7/159117；九路线全链仍5/9，相对前150新增2丢失2，未采用更优结论。交回转向角速度部分达到16–20rad/s，成功和失败均出现，不作单因果结论。新增可配置双轮远岸接地期间横向速度/偏航角速度/转向角速度平方惩罚，缺省零保留旧奖励；逐项批均值写日志及TensorBoard。有限150轮新阶段使用300权重/fresh Adam，六入口与Go2随机化、网络、任务/锁定条件不改；同九路线原奖励300作后续物理对照，非纯单因素。证据与全覆盖XY：docs/evidence/chapter3_playground_sttw_rb_sttw/README.md；原始rb_adaptation/approach_departure_turns/turn_lock300_evaluation。
+
+
+## Playground多存档收敛评估与共同物理P0
+
+落地动态奖励150轮7602.236秒完成，六存档25/50/75/100/125/150各九路线分别7/6/6/6/5/5（分母各9），54回合444.505秒。后25窗口奖励较前25升约4%，但全链下降，不能认定任务收敛或采用last。冻结25真实8初差×9路线46/72，首帧偏差逐条验证；地面尾段独立起步3/3不计完整链。纲要P0共同implicitfast1ms和RK4 1ms各0/9，旧双积分器7/9不能替代该验收。新增通用训练分窗与checkpoint结果分析入口，后续存档每10阶段更新。新阶段从25权重/Adam恢复，共同implicitfast物理追加200；保持奖励/随机化/网络/执行权限，显式新物理域，统一步进避免双分支重复计算。证据、实际/参考XY与全部失败：docs/evidence/chapter3_playground_sttw_rb_sttw/{README,CONVERGENCE}.md，原始rb_adaptation/landing_dynamics_checkpoint_comparison。

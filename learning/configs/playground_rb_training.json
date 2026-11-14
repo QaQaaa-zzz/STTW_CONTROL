@@ -1,15 +1,15 @@
 {
   "num_envs": 4096,
-  "updates": 150,
+  "updates": 200,
   "steps_per_update": 24,
   "episode_s": 5.0,
   "seed": 20261113,
-  "save_interval": 25,
+  "save_interval": 10,
   "go2_checkout": "/home/qy/projects/My_unitree_go2_gym",
   "isaaclab_checkout": "/home/qy/projects/IsaacLab",
   "registry": "learning/configs/playground_rb_skill_sources.json",
   "skill": "rb_run3",
-  "bundle": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/approach_departure_turns/turn_lock300",
+  "bundle": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/landing_dynamics_checkpoint_comparison/dynamics25",
   "entry_bank": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/approach_departure_turns/turn_entry_bank.npz",
   "terrain": {
     "front_x_m": 10.3,
@@ -62,7 +62,7 @@
     ]
   },
   "ground_physics": {
-    "integrator": "RK4",
+    "integrator": "implicitfast",
     "friction": 0.8,
     "native_wheel_contacts": false
   },
@@ -155,7 +155,7 @@
     "gamma": 0.99,
     "lam": 0.95
   },
-  "role": "DEV fixed150 from turn_lock300 weights, fresh Adam, dense landing dynamic penalties; same six entry roots, Go2 randomization, model and strict lock goal.",
+  "role": "Outline P0 common-plant adaptation from selected dynamics25 Actor critic normalizer Adam; 200 additional updates, checkpoint every10 stage updates, one implicitfast1ms plant for all phases.",
   "stop_rule": "150updates, nonfinite or runtime failure stops; user requested pause agent if waiting estimate exceeds30min; background authorized budget remains",
   "reward": {
     "progress": 2.0,
@@ -173,7 +173,7 @@
     "landing_yaw_rate_weight": 0.5,
     "landing_steer_rate_weight": 0.05
   },
-  "acceptance": "One fixed checkpoint across nine full-chain routes then genuine initial perturbations; no adoption from train reward",
+  "acceptance": "Same nine routes on one common plant, multiple checkpoints compared; genuine perturbation bank after candidate freeze; do not infer from training reward.",
   "tensorboard_url": "http://localhost:41961",
   "physics_batch_size": 512,
   "physical_homing": true,
@@ -181,5 +181,7 @@
     "integrator": "implicitfast",
     "physics_dt_s": 0.001,
     "substeps_per_sensor": 5
-  }
+  },
+  "physics_substeps": 5,
+  "shared_physics": true
 }

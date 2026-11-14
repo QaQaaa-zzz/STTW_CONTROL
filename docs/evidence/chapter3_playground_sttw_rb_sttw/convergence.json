@@ -1,0 +1,212 @@
+{
+  "windows": [
+    {
+      "first_update": 1,
+      "last_update": 25,
+      "means": {
+        "mean_step_reward": -0.011529307765886187,
+        "loss_value": 8.89505121615529,
+        "kl_first_rollout_step": 1.7240089187957346,
+        "sample_s": 51.11977396616712,
+        "optimize_s": 0.09748419127659873
+      },
+      "terminal_flags": [
+        3.0,
+        25432.0,
+        0.0,
+        25435.0
+      ],
+      "max_kl": 38.17599868774414
+    },
+    {
+      "first_update": 26,
+      "last_update": 50,
+      "means": {
+        "mean_step_reward": 0.023555708499625325,
+        "loss_value": 0.26234392645955085,
+        "kl_first_rollout_step": 0.009320023693144322,
+        "sample_s": 50.72551253080135,
+        "optimize_s": 0.09300483748316765
+      },
+      "terminal_flags": [
+        6.0,
+        24462.0,
+        0.0,
+        24468.0
+      ],
+      "max_kl": 0.020778093487024307
+    },
+    {
+      "first_update": 51,
+      "last_update": 75,
+      "means": {
+        "mean_step_reward": 0.0258503957092762,
+        "loss_value": 0.25582099536061287,
+        "kl_first_rollout_step": 0.009026843812316656,
+        "sample_s": 50.73619779796572,
+        "optimize_s": 0.09351607612567023
+      },
+      "terminal_flags": [
+        5.0,
+        24302.0,
+        0.0,
+        24307.0
+      ],
+      "max_kl": 0.016792308539152145
+    },
+    {
+      "first_update": 76,
+      "last_update": 100,
+      "means": {
+        "mean_step_reward": 0.027459825128316878,
+        "loss_value": 0.2643932628631591,
+        "kl_first_rollout_step": 0.009060156857594847,
+        "sample_s": 50.3391288111615,
+        "optimize_s": 0.09344403231982142
+      },
+      "terminal_flags": [
+        5.0,
+        24099.0,
+        0.0,
+        24104.0
+      ],
+      "max_kl": 0.02243959531188011
+    },
+    {
+      "first_update": 101,
+      "last_update": 125,
+      "means": {
+        "mean_step_reward": 0.02833577074110508,
+        "loss_value": 0.24832244843244553,
+        "kl_first_rollout_step": 0.01011343915015459,
+        "sample_s": 50.1075487643294,
+        "optimize_s": 0.09331404747907072
+      },
+      "terminal_flags": [
+        8.0,
+        23760.0,
+        0.0,
+        23768.0
+      ],
+      "max_kl": 0.020491700619459152
+    },
+    {
+      "first_update": 126,
+      "last_update": 150,
+      "means": {
+        "mean_step_reward": 0.029470569863915445,
+        "loss_value": 0.2423464810848236,
+        "kl_first_rollout_step": 0.009612841941416263,
+        "sample_s": 50.18815673563164,
+        "optimize_s": 0.0938853609119542
+      },
+      "terminal_flags": [
+        3.0,
+        23419.0,
+        0.0,
+        23422.0
+      ],
+      "max_kl": 0.016510935500264168
+    }
+  ],
+  "last_window_reward_slope_per_update": 4.055286333912988e-05,
+  "interpretation": "Descriptive training trends, not proof of convergence; training episodes and windows are correlated. KL is the logged first-rollout-step estimate, not full-batch KL.",
+  "checkpoint_results": [
+    {
+      "skill": "dynamics25",
+      "goals": 7,
+      "evaluated": 9,
+      "routes": {
+        "0": "goal",
+        "1": "timeout",
+        "2": "goal",
+        "3": "goal",
+        "4": "goal",
+        "5": "corridor_or_domain_exit",
+        "6": "goal",
+        "7": "goal",
+        "8": "goal"
+      }
+    },
+    {
+      "skill": "dynamics50",
+      "goals": 6,
+      "evaluated": 9,
+      "routes": {
+        "0": "goal",
+        "1": "timeout",
+        "2": "goal",
+        "3": "goal",
+        "4": "timeout",
+        "5": "timeout",
+        "6": "goal",
+        "7": "goal",
+        "8": "goal"
+      }
+    },
+    {
+      "skill": "dynamics75",
+      "goals": 6,
+      "evaluated": 9,
+      "routes": {
+        "0": "goal",
+        "1": "physical_failure",
+        "2": "goal",
+        "3": "goal",
+        "4": "timeout",
+        "5": "goal",
+        "6": "goal",
+        "7": "timeout",
+        "8": "goal"
+      }
+    },
+    {
+      "skill": "dynamics100",
+      "goals": 6,
+      "evaluated": 9,
+      "routes": {
+        "0": "goal",
+        "1": "timeout",
+        "2": "goal",
+        "3": "goal",
+        "4": "goal",
+        "5": "timeout",
+        "6": "goal",
+        "7": "corridor_or_domain_exit",
+        "8": "goal"
+      }
+    },
+    {
+      "skill": "dynamics125",
+      "goals": 5,
+      "evaluated": 9,
+      "routes": {
+        "0": "goal",
+        "1": "timeout",
+        "2": "timeout",
+        "3": "goal",
+        "4": "goal",
+        "5": "timeout",
+        "6": "goal",
+        "7": "timeout",
+        "8": "goal"
+      }
+    },
+    {
+      "skill": "dynamics150",
+      "goals": 5,
+      "evaluated": 9,
+      "routes": {
+        "0": "goal",
+        "1": "timeout",
+        "2": "goal",
+        "3": "goal",
+        "4": "timeout",
+        "5": "timeout",
+        "6": "goal",
+        "7": "corridor_or_domain_exit",
+        "8": "goal"
+      }
+    }
+  ]
+}
