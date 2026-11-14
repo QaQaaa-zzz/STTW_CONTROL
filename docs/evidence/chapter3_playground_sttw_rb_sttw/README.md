@@ -26,6 +26,19 @@
 
 纲要P0现已开始实现：`TorchMiddleControl.update_plan`在20ms边界发布同网格路线，保留承诺前缀、H75历史/滤波与时钟，3项CPU合同测试通过。完整GroundAdapter、计划版本/有效期、全运行快照、WorldMap/Route分离及动作归属回归尚未完成，不能称P0或整章任务完成。
 
+冻结候选复跑入口（输出目录须为新目录；重型GPU任务持项目共享锁）：
+
+```bash
+PYTHONPATH=learning/src:/home/qy/DVGC/JIT/src XLA_PYTHON_CLIENT_PREALLOCATE=false \
+flock /home/qy/STTW_CONTROL/research-hub/.gpu-job.lock \
+/home/qy/mujoco_playground/.venv/bin/python learning/cli/evaluate_playground_handoff.py \
+  --config learning/configs/playground_sttw_rb_sttw.json --skills rb_run3 \
+  --modes h75 --routes 0 1 2 3 4 5 6 7 8 --seconds 10 --physics-substeps 5 \
+  --output <new-output-directory>
+```
+
+该入口使用注册表原rb_run3身份及配置内225适配权重，不依赖实验比较用的临时别名。
+
 [六存档训练收敛比较](SHARED_PLANT_CONVERGENCE.md)；原始结果：`rb_adaptation/shared_plant_checkpoint_comparison/{evaluation,perturbation_evaluation,ground_baseline_evaluation,lookahead_evaluation,lookahead_offsets_evaluation}`。
 
 ## 统一物理续训200完成：225档名义完整链6/9，九条均已回交

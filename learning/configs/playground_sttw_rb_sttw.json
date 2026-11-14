@@ -126,6 +126,6 @@
     "native_wheel_contacts": false
   },
   "rb_adaptation_bundles": {
-    "shared225": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/shared_plant_checkpoint_comparison/shared225"
+    "rb_run3": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/shared_plant_checkpoint_comparison/shared225"
   }
 }
