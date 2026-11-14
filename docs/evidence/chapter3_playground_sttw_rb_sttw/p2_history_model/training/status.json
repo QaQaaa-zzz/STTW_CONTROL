@@ -1,0 +1,14 @@
+{
+  "stage": "complete",
+  "updates": 150,
+  "best": {
+    "update": 150,
+    "score": 0.07594505202400291,
+    "criterion": "mean maximum XY over fixed available1s DEV windows"
+  },
+  "dev_metrics": {
+    "1.0": 0.07594505202400291,
+    "3.0": 0.0844507227247616
+  },
+  "elapsed_s": 40.14454249700066
+}

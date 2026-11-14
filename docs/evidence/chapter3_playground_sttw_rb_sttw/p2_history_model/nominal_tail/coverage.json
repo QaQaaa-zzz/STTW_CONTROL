@@ -1,0 +1,92 @@
+[
+  {
+    "case": "rb_run3_route0_h75_v6",
+    "physical_outcome": "tracking_domain_exit",
+    "windows": 38
+  },
+  {
+    "case": "rb_run3_route1_h75_v6",
+    "physical_outcome": "goal",
+    "windows": 64
+  },
+  {
+    "case": "rb_run3_route2_h75_v6",
+    "physical_outcome": "goal",
+    "windows": 59
+  },
+  {
+    "case": "rb_run3_route3_h75_v6",
+    "physical_outcome": "tracking_domain_exit",
+    "windows": 36
+  },
+  {
+    "case": "rb_run3_route4_h75_v6",
+    "physical_outcome": "goal",
+    "windows": 62
+  },
+  {
+    "case": "rb_run3_route5_h75_v6",
+    "physical_outcome": "goal",
+    "windows": 64
+  },
+  {
+    "case": "rb_run3_route6_h75_v6",
+    "physical_outcome": "goal",
+    "windows": 62
+  },
+  {
+    "case": "rb_run3_route7_h75_v6",
+    "physical_outcome": "goal",
+    "windows": 64
+  },
+  {
+    "case": "rb_run3_route8_h75_v6",
+    "physical_outcome": "goal",
+    "windows": 62
+  },
+  {
+    "case": "rb_run3_route0_h75_v7",
+    "physical_outcome": "goal",
+    "windows": 52
+  },
+  {
+    "case": "rb_run3_route1_h75_v7",
+    "physical_outcome": "goal",
+    "windows": 64
+  },
+  {
+    "case": "rb_run3_route2_h75_v7",
+    "physical_outcome": "physical_failure",
+    "windows": 0
+  },
+  {
+    "case": "rb_run3_route3_h75_v7",
+    "physical_outcome": "tracking_domain_exit",
+    "windows": 26
+  },
+  {
+    "case": "rb_run3_route4_h75_v7",
+    "physical_outcome": "goal",
+    "windows": 62
+  },
+  {
+    "case": "rb_run3_route5_h75_v7",
+    "physical_outcome": "goal",
+    "windows": 67
+  },
+  {
+    "case": "rb_run3_route6_h75_v7",
+    "physical_outcome": "goal",
+    "windows": 57
+  },
+  {
+    "case": "rb_run3_route7_h75_v7",
+    "physical_outcome": "goal",
+    "windows": 64
+  },
+  {
+    "case": "rb_run3_route8_h75_v7",
+    "physical_outcome": "goal",
+    "windows": 64
+  }
+]

@@ -1,0 +1,2692 @@
+[
+  {
+    "index": 24192,
+    "route": 0,
+    "case": "rb_run3_route0_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.26,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.09115500748157501,
+    "endpoint_xy_m": 0.08291982114315033
+  },
+  {
+    "index": 24202,
+    "route": 0,
+    "case": "rb_run3_route0_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.46,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.12488134205341339,
+    "endpoint_xy_m": 0.12488134205341339
+  },
+  {
+    "index": 24212,
+    "route": 0,
+    "case": "rb_run3_route0_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.66,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.3942224681377411,
+    "endpoint_xy_m": 0.3942224681377411
+  },
+  {
+    "index": 24222,
+    "route": 0,
+    "case": "rb_run3_route0_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.86,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.5726969838142395,
+    "endpoint_xy_m": 0.5721083879470825
+  },
+  {
+    "index": 24232,
+    "route": 0,
+    "case": "rb_run3_route0_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.0600000000000005,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.47827625274658203,
+    "endpoint_xy_m": 0.35993731021881104
+  },
+  {
+    "index": 24242,
+    "route": 0,
+    "case": "rb_run3_route0_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.26,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.4112062454223633,
+    "endpoint_xy_m": 0.4112062454223633
+  },
+  {
+    "index": 24252,
+    "route": 0,
+    "case": "rb_run3_route0_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.46,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.6253286004066467,
+    "endpoint_xy_m": 0.6253286004066467
+  },
+  {
+    "index": 24262,
+    "route": 0,
+    "case": "rb_run3_route0_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.66,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.8120371103286743,
+    "endpoint_xy_m": 0.8120371103286743
+  },
+  {
+    "index": 24272,
+    "route": 0,
+    "case": "rb_run3_route0_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.86,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.2444913685321808,
+    "endpoint_xy_m": 0.2444913685321808
+  },
+  {
+    "index": 24587,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.28,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03973911330103874,
+    "endpoint_xy_m": 0.03377092629671097
+  },
+  {
+    "index": 24597,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.48,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.01787699945271015,
+    "endpoint_xy_m": 0.01787699945271015
+  },
+  {
+    "index": 24607,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.68,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.025190088897943497,
+    "endpoint_xy_m": 0.025190088897943497
+  },
+  {
+    "index": 24617,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.88,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03874692693352699,
+    "endpoint_xy_m": 0.03874692693352699
+  },
+  {
+    "index": 24627,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.08,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.0363786518573761,
+    "endpoint_xy_m": 0.0355927050113678
+  },
+  {
+    "index": 24637,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.28,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.04090960696339607,
+    "endpoint_xy_m": 0.02791418507695198
+  },
+  {
+    "index": 24647,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.48,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.04840491712093353,
+    "endpoint_xy_m": 0.024127108976244926
+  },
+  {
+    "index": 24657,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.68,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.023948457092046738,
+    "endpoint_xy_m": 0.02388289012014866
+  },
+  {
+    "index": 24667,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.88,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.054072048515081406,
+    "endpoint_xy_m": 0.05333316698670387
+  },
+  {
+    "index": 24677,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.08,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.049471836537122726,
+    "endpoint_xy_m": 0.04490244388580322
+  },
+  {
+    "index": 24687,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.28,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03288843110203743,
+    "endpoint_xy_m": 0.03288843110203743
+  },
+  {
+    "index": 24697,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.48,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.033886853605508804,
+    "endpoint_xy_m": 0.033886853605508804
+  },
+  {
+    "index": 24707,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.68,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.025255845859646797,
+    "endpoint_xy_m": 0.025255845859646797
+  },
+  {
+    "index": 24717,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.88,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.031104959547519684,
+    "endpoint_xy_m": 0.031104959547519684
+  },
+  {
+    "index": 25045,
+    "route": 2,
+    "case": "rb_run3_route2_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.44,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.04764337092638016,
+    "endpoint_xy_m": 0.04351836070418358
+  },
+  {
+    "index": 25055,
+    "route": 2,
+    "case": "rb_run3_route2_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.64,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.0863291546702385,
+    "endpoint_xy_m": 0.0863291546702385
+  },
+  {
+    "index": 25065,
+    "route": 2,
+    "case": "rb_run3_route2_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.84,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.07703141868114471,
+    "endpoint_xy_m": 0.07703141868114471
+  },
+  {
+    "index": 25075,
+    "route": 2,
+    "case": "rb_run3_route2_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.04,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.05323971062898636,
+    "endpoint_xy_m": 0.05323971062898636
+  },
+  {
+    "index": 25085,
+    "route": 2,
+    "case": "rb_run3_route2_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.24,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03195073455572128,
+    "endpoint_xy_m": 0.02922939322888851
+  },
+  {
+    "index": 25095,
+    "route": 2,
+    "case": "rb_run3_route2_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.44,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.039569661021232605,
+    "endpoint_xy_m": 0.017781825736165047
+  },
+  {
+    "index": 25105,
+    "route": 2,
+    "case": "rb_run3_route2_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.640000000000001,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.04709293320775032,
+    "endpoint_xy_m": 0.0053291162475943565
+  },
+  {
+    "index": 25115,
+    "route": 2,
+    "case": "rb_run3_route2_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.84,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.083534836769104,
+    "endpoint_xy_m": 0.083534836769104
+  },
+  {
+    "index": 25125,
+    "route": 2,
+    "case": "rb_run3_route2_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.04,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.034618962556123734,
+    "endpoint_xy_m": 0.033228397369384766
+  },
+  {
+    "index": 25135,
+    "route": 2,
+    "case": "rb_run3_route2_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.24,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.04354233294725418,
+    "endpoint_xy_m": 0.04354233294725418
+  },
+  {
+    "index": 25145,
+    "route": 2,
+    "case": "rb_run3_route2_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.44,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.05664978548884392,
+    "endpoint_xy_m": 0.05664978548884392
+  },
+  {
+    "index": 25155,
+    "route": 2,
+    "case": "rb_run3_route2_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.640000000000001,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.05659344419836998,
+    "endpoint_xy_m": 0.05659344419836998
+  },
+  {
+    "index": 25165,
+    "route": 2,
+    "case": "rb_run3_route2_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.84,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.036214862018823624,
+    "endpoint_xy_m": 0.036214862018823624
+  },
+  {
+    "index": 25503,
+    "route": 3,
+    "case": "rb_run3_route3_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.5600000000000005,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.04528975486755371,
+    "endpoint_xy_m": 0.03363844379782677
+  },
+  {
+    "index": 25513,
+    "route": 3,
+    "case": "rb_run3_route3_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.76,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.142335444688797,
+    "endpoint_xy_m": 0.142335444688797
+  },
+  {
+    "index": 25523,
+    "route": 3,
+    "case": "rb_run3_route3_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.96,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.4054681956768036,
+    "endpoint_xy_m": 0.4054681956768036
+  },
+  {
+    "index": 25533,
+    "route": 3,
+    "case": "rb_run3_route3_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.16,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.5505841374397278,
+    "endpoint_xy_m": 0.5496476888656616
+  },
+  {
+    "index": 25543,
+    "route": 3,
+    "case": "rb_run3_route3_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.36,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.43117189407348633,
+    "endpoint_xy_m": 0.3103708326816559
+  },
+  {
+    "index": 25553,
+    "route": 3,
+    "case": "rb_run3_route3_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.5600000000000005,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.45804286003112793,
+    "endpoint_xy_m": 0.45804286003112793
+  },
+  {
+    "index": 25563,
+    "route": 3,
+    "case": "rb_run3_route3_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.76,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.49894142150878906,
+    "endpoint_xy_m": 0.49894142150878906
+  },
+  {
+    "index": 25573,
+    "route": 3,
+    "case": "rb_run3_route3_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.96,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.6931078433990479,
+    "endpoint_xy_m": 0.6931078433990479
+  },
+  {
+    "index": 25911,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.58,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.10389380902051926,
+    "endpoint_xy_m": 0.10389380902051926
+  },
+  {
+    "index": 25921,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.78,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.026078304275870323,
+    "endpoint_xy_m": 0.021381912752985954
+  },
+  {
+    "index": 25931,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.98,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.02997570112347603,
+    "endpoint_xy_m": 0.028157684952020645
+  },
+  {
+    "index": 25941,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.18,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.027356838807463646,
+    "endpoint_xy_m": 0.027356838807463646
+  },
+  {
+    "index": 25951,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.38,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03317103162407875,
+    "endpoint_xy_m": 0.03301885724067688
+  },
+  {
+    "index": 25961,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.58,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03741331398487091,
+    "endpoint_xy_m": 0.028457285836338997
+  },
+  {
+    "index": 25971,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.78,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.04734539985656738,
+    "endpoint_xy_m": 0.020745262503623962
+  },
+  {
+    "index": 25981,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.98,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.028182532638311386,
+    "endpoint_xy_m": 0.013082299381494522
+  },
+  {
+    "index": 25991,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.18,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.044423650950193405,
+    "endpoint_xy_m": 0.04237484186887741
+  },
+  {
+    "index": 26001,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.38,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.040984414517879486,
+    "endpoint_xy_m": 0.03524424135684967
+  },
+  {
+    "index": 26011,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.58,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.02368234284222126,
+    "endpoint_xy_m": 0.022639945149421692
+  },
+  {
+    "index": 26021,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.78,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.01940259337425232,
+    "endpoint_xy_m": 0.01940259337425232
+  },
+  {
+    "index": 26031,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.98,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.020777402445673943,
+    "endpoint_xy_m": 0.019445467740297318
+  },
+  {
+    "index": 26041,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 8.18,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.028045257553458214,
+    "endpoint_xy_m": 0.028045257553458214
+  },
+  {
+    "index": 26371,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.58,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.08226017653942108,
+    "endpoint_xy_m": 0.08205777406692505
+  },
+  {
+    "index": 26381,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.78,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.05078096687793732,
+    "endpoint_xy_m": 0.03946828097105026
+  },
+  {
+    "index": 26391,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.98,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.07035086303949356,
+    "endpoint_xy_m": 0.07035086303949356
+  },
+  {
+    "index": 26401,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.18,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.022576263174414635,
+    "endpoint_xy_m": 0.010401267558336258
+  },
+  {
+    "index": 26411,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.38,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03145834431052208,
+    "endpoint_xy_m": 0.03145834431052208
+  },
+  {
+    "index": 26421,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.58,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.04305269196629524,
+    "endpoint_xy_m": 0.04130920395255089
+  },
+  {
+    "index": 26431,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.78,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.05835522338747978,
+    "endpoint_xy_m": 0.03853864595293999
+  },
+  {
+    "index": 26441,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.98,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.055349867790937424,
+    "endpoint_xy_m": 0.015249847434461117
+  },
+  {
+    "index": 26451,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.18,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.07715585827827454,
+    "endpoint_xy_m": 0.07715585827827454
+  },
+  {
+    "index": 26461,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.38,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.02964305691421032,
+    "endpoint_xy_m": 0.027649585157632828
+  },
+  {
+    "index": 26471,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.58,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03837055712938309,
+    "endpoint_xy_m": 0.03837055712938309
+  },
+  {
+    "index": 26481,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.78,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.04851673170924187,
+    "endpoint_xy_m": 0.04851673170924187
+  },
+  {
+    "index": 26491,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.98,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.04825230687856674,
+    "endpoint_xy_m": 0.04825230687856674
+  },
+  {
+    "index": 26501,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 8.18,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.026366882026195526,
+    "endpoint_xy_m": 0.024975541979074478
+  },
+  {
+    "index": 26838,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.58,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.13477851450443268,
+    "endpoint_xy_m": 0.13477851450443268
+  },
+  {
+    "index": 26848,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.78,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.15941384434700012,
+    "endpoint_xy_m": 0.1465197205543518
+  },
+  {
+    "index": 26858,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.98,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.1777569204568863,
+    "endpoint_xy_m": 0.1777569204568863
+  },
+  {
+    "index": 26868,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.18,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.351661741733551,
+    "endpoint_xy_m": 0.351661741733551
+  },
+  {
+    "index": 26878,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.38,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.43530943989753723,
+    "endpoint_xy_m": 0.4352051317691803
+  },
+  {
+    "index": 26888,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.58,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.2925960123538971,
+    "endpoint_xy_m": 0.20066681504249573
+  },
+  {
+    "index": 26898,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.78,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.3815304934978485,
+    "endpoint_xy_m": 0.3815304934978485
+  },
+  {
+    "index": 26908,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.98,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.1526484191417694,
+    "endpoint_xy_m": 0.14514809846878052
+  },
+  {
+    "index": 26918,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.18,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.02959190122783184,
+    "endpoint_xy_m": 0.02959190122783184
+  },
+  {
+    "index": 26928,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.38,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.0886879563331604,
+    "endpoint_xy_m": 0.0886879563331604
+  },
+  {
+    "index": 26938,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.58,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03305628523230553,
+    "endpoint_xy_m": 0.032983530312776566
+  },
+  {
+    "index": 26948,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.78,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.008886369876563549,
+    "endpoint_xy_m": 0.008886369876563549
+  },
+  {
+    "index": 26958,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.98,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.021586157381534576,
+    "endpoint_xy_m": 0.021586157381534576
+  },
+  {
+    "index": 26968,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 8.18,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.021110137924551964,
+    "endpoint_xy_m": 0.021110137924551964
+  },
+  {
+    "index": 27299,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.58,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.0294412262737751,
+    "endpoint_xy_m": 0.028063416481018066
+  },
+  {
+    "index": 27309,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.78,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.011995697394013405,
+    "endpoint_xy_m": 0.011995697394013405
+  },
+  {
+    "index": 27319,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.98,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.012469856068491936,
+    "endpoint_xy_m": 0.007692666724324226
+  },
+  {
+    "index": 27329,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.18,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03128907084465027,
+    "endpoint_xy_m": 0.03128907084465027
+  },
+  {
+    "index": 27339,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.38,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03925337642431259,
+    "endpoint_xy_m": 0.03925337642431259
+  },
+  {
+    "index": 27349,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.58,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.042576175183057785,
+    "endpoint_xy_m": 0.03606368601322174
+  },
+  {
+    "index": 27359,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.78,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.05358137562870979,
+    "endpoint_xy_m": 0.03239760547876358
+  },
+  {
+    "index": 27369,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.98,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03562968224287033,
+    "endpoint_xy_m": 0.014805932529270649
+  },
+  {
+    "index": 27379,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.18,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.0437433235347271,
+    "endpoint_xy_m": 0.04311498627066612
+  },
+  {
+    "index": 27389,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.38,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.04541698470711708,
+    "endpoint_xy_m": 0.041049398481845856
+  },
+  {
+    "index": 27399,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.58,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03021719679236412,
+    "endpoint_xy_m": 0.026059221476316452
+  },
+  {
+    "index": 27409,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.78,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.0265059657394886,
+    "endpoint_xy_m": 0.0265059657394886
+  },
+  {
+    "index": 27419,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.98,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.017055457457900047,
+    "endpoint_xy_m": 0.015099823474884033
+  },
+  {
+    "index": 27429,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 8.18,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.02288977988064289,
+    "endpoint_xy_m": 0.02288977988064289
+  },
+  {
+    "index": 27765,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.6000000000000005,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.021533003076910973,
+    "endpoint_xy_m": 0.0075659672729671
+  },
+  {
+    "index": 27775,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.8,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.016634203493595123,
+    "endpoint_xy_m": 0.016634203493595123
+  },
+  {
+    "index": 27785,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.0,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.031778909265995026,
+    "endpoint_xy_m": 0.031778909265995026
+  },
+  {
+    "index": 27795,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.2,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03466707468032837,
+    "endpoint_xy_m": 0.03466707468032837
+  },
+  {
+    "index": 27805,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.4,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.05037776380777359,
+    "endpoint_xy_m": 0.049384281039237976
+  },
+  {
+    "index": 27815,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.6000000000000005,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.05283278971910477,
+    "endpoint_xy_m": 0.04857175797224045
+  },
+  {
+    "index": 27825,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.8,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.04386347159743309,
+    "endpoint_xy_m": 0.029611999168992043
+  },
+  {
+    "index": 27835,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.0,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.04187457263469696,
+    "endpoint_xy_m": 0.04187457263469696
+  },
+  {
+    "index": 27845,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.2,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.029014328494668007,
+    "endpoint_xy_m": 0.02773227170109749
+  },
+  {
+    "index": 27855,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.4,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.0330314002931118,
+    "endpoint_xy_m": 0.0330314002931118
+  },
+  {
+    "index": 27865,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.6000000000000005,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03787798061966896,
+    "endpoint_xy_m": 0.03787798061966896
+  },
+  {
+    "index": 27875,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.8,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03579363226890564,
+    "endpoint_xy_m": 0.03579363226890564
+  },
+  {
+    "index": 27885,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 8.0,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.019970515742897987,
+    "endpoint_xy_m": 0.018169844523072243
+  },
+  {
+    "index": 27895,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 8.2,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.026417449116706848,
+    "endpoint_xy_m": 0.020688964053988457
+  },
+  {
+    "index": 28221,
+    "route": 0,
+    "case": "rb_run3_route0_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.42,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.024642514064908028,
+    "endpoint_xy_m": 0.024642514064908028
+  },
+  {
+    "index": 28231,
+    "route": 0,
+    "case": "rb_run3_route0_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.62,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.009251955896615982,
+    "endpoint_xy_m": 0.009196270257234573
+  },
+  {
+    "index": 28241,
+    "route": 0,
+    "case": "rb_run3_route0_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.82,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.009430421516299248,
+    "endpoint_xy_m": 0.009430421516299248
+  },
+  {
+    "index": 28251,
+    "route": 0,
+    "case": "rb_run3_route0_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.0200000000000005,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.009651580825448036,
+    "endpoint_xy_m": 0.009651580825448036
+  },
+  {
+    "index": 28261,
+    "route": 0,
+    "case": "rb_run3_route0_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.22,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.006778182461857796,
+    "endpoint_xy_m": 0.006778182461857796
+  },
+  {
+    "index": 28271,
+    "route": 0,
+    "case": "rb_run3_route0_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.42,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.009224969893693924,
+    "endpoint_xy_m": 0.009224969893693924
+  },
+  {
+    "index": 28281,
+    "route": 0,
+    "case": "rb_run3_route0_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.62,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.01225820928812027,
+    "endpoint_xy_m": 0.01225820928812027
+  },
+  {
+    "index": 28291,
+    "route": 0,
+    "case": "rb_run3_route0_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.82,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.010155469179153442,
+    "endpoint_xy_m": 0.010155469179153442
+  },
+  {
+    "index": 28301,
+    "route": 0,
+    "case": "rb_run3_route0_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.0200000000000005,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.010157858021557331,
+    "endpoint_xy_m": 0.009976583532989025
+  },
+  {
+    "index": 28311,
+    "route": 0,
+    "case": "rb_run3_route0_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.22,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.01045236550271511,
+    "endpoint_xy_m": 0.010084033943712711
+  },
+  {
+    "index": 28321,
+    "route": 0,
+    "case": "rb_run3_route0_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.42,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.00944115873426199,
+    "endpoint_xy_m": 0.00866800919175148
+  },
+  {
+    "index": 28331,
+    "route": 0,
+    "case": "rb_run3_route0_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.62,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.00838353019207716,
+    "endpoint_xy_m": 0.0071802567690610886
+  },
+  {
+    "index": 28646,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.26,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.021674897521734238,
+    "endpoint_xy_m": 0.01372711081057787
+  },
+  {
+    "index": 28656,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.46,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.019956186413764954,
+    "endpoint_xy_m": 0.011972380802035332
+  },
+  {
+    "index": 28666,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.66,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.013775401748716831,
+    "endpoint_xy_m": 0.010561920702457428
+  },
+  {
+    "index": 28676,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.86,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.034320950508117676,
+    "endpoint_xy_m": 0.034320950508117676
+  },
+  {
+    "index": 28686,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.0600000000000005,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03725544363260269,
+    "endpoint_xy_m": 0.03704717755317688
+  },
+  {
+    "index": 28696,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.26,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03940368443727493,
+    "endpoint_xy_m": 0.03009561263024807
+  },
+  {
+    "index": 28706,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.46,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.04744705557823181,
+    "endpoint_xy_m": 0.01832767389714718
+  },
+  {
+    "index": 28716,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.66,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.028529316186904907,
+    "endpoint_xy_m": 0.019008856266736984
+  },
+  {
+    "index": 28726,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.86,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.053880974650382996,
+    "endpoint_xy_m": 0.053500186651945114
+  },
+  {
+    "index": 28736,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.0600000000000005,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.049210865050554276,
+    "endpoint_xy_m": 0.045034267008304596
+  },
+  {
+    "index": 28746,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.26,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.031189389526844025,
+    "endpoint_xy_m": 0.031189389526844025
+  },
+  {
+    "index": 28756,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.46,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.029844537377357483,
+    "endpoint_xy_m": 0.029844537377357483
+  },
+  {
+    "index": 28766,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.66,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.021743755787611008,
+    "endpoint_xy_m": 0.021743755787611008
+  },
+  {
+    "index": 28776,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.86,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.028453147038817406,
+    "endpoint_xy_m": 0.028453147038817406
+  },
+  {
+    "index": 29521,
+    "route": 3,
+    "case": "rb_run3_route3_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.5200000000000005,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.06351529061794281,
+    "endpoint_xy_m": 0.06351529061794281
+  },
+  {
+    "index": 29531,
+    "route": 3,
+    "case": "rb_run3_route3_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.72,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.06261686235666275,
+    "endpoint_xy_m": 0.06261686235666275
+  },
+  {
+    "index": 29541,
+    "route": 3,
+    "case": "rb_run3_route3_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.92,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.1028810441493988,
+    "endpoint_xy_m": 0.1028810441493988
+  },
+  {
+    "index": 29551,
+    "route": 3,
+    "case": "rb_run3_route3_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.12,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.14158084988594055,
+    "endpoint_xy_m": 0.13100695610046387
+  },
+  {
+    "index": 29561,
+    "route": 3,
+    "case": "rb_run3_route3_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.32,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.15479916334152222,
+    "endpoint_xy_m": 0.15479916334152222
+  },
+  {
+    "index": 29571,
+    "route": 3,
+    "case": "rb_run3_route3_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.5200000000000005,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.5180322527885437,
+    "endpoint_xy_m": 0.5180322527885437
+  },
+  {
+    "index": 29903,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.5600000000000005,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.022288644686341286,
+    "endpoint_xy_m": 0.020284421741962433
+  },
+  {
+    "index": 29913,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.76,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.01778358407318592,
+    "endpoint_xy_m": 0.010948468931019306
+  },
+  {
+    "index": 29923,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.96,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.010799585841596127,
+    "endpoint_xy_m": 0.009514199569821358
+  },
+  {
+    "index": 29933,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.16,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03441864252090454,
+    "endpoint_xy_m": 0.03441864252090454
+  },
+  {
+    "index": 29943,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.36,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.037961725145578384,
+    "endpoint_xy_m": 0.037684522569179535
+  },
+  {
+    "index": 29953,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.5600000000000005,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03874535858631134,
+    "endpoint_xy_m": 0.028041599318385124
+  },
+  {
+    "index": 29963,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.76,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.0435633659362793,
+    "endpoint_xy_m": 0.009045754559338093
+  },
+  {
+    "index": 29973,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.96,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.0248787309974432,
+    "endpoint_xy_m": 0.0248787309974432
+  },
+  {
+    "index": 29983,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.16,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.053387727588415146,
+    "endpoint_xy_m": 0.05256208777427673
+  },
+  {
+    "index": 29993,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.36,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.04862116277217865,
+    "endpoint_xy_m": 0.04431416839361191
+  },
+  {
+    "index": 30003,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.5600000000000005,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.030540231615304947,
+    "endpoint_xy_m": 0.030540231615304947
+  },
+  {
+    "index": 30013,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.76,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.028360702097415924,
+    "endpoint_xy_m": 0.028360702097415924
+  },
+  {
+    "index": 30023,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.96,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.023283302783966064,
+    "endpoint_xy_m": 0.023283302783966064
+  },
+  {
+    "index": 30033,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 8.16,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.028780480846762657,
+    "endpoint_xy_m": 0.028780480846762657
+  },
+  {
+    "index": 30365,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.54,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.05703427642583847,
+    "endpoint_xy_m": 0.0428730845451355
+  },
+  {
+    "index": 30375,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.74,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.046422865241765976,
+    "endpoint_xy_m": 0.013632562011480331
+  },
+  {
+    "index": 30385,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.94,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03247033804655075,
+    "endpoint_xy_m": 0.03247033804655075
+  },
+  {
+    "index": 30395,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.140000000000001,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03591310977935791,
+    "endpoint_xy_m": 0.015396635979413986
+  },
+  {
+    "index": 30405,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.34,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.029247382655739784,
+    "endpoint_xy_m": 0.02399015985429287
+  },
+  {
+    "index": 30415,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.54,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.050379298627376556,
+    "endpoint_xy_m": 0.04655781015753746
+  },
+  {
+    "index": 30425,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.74,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.050281766802072525,
+    "endpoint_xy_m": 0.03003677725791931
+  },
+  {
+    "index": 30435,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.94,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.04788200557231903,
+    "endpoint_xy_m": 0.010392505675554276
+  },
+  {
+    "index": 30445,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.140000000000001,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.08156751096248627,
+    "endpoint_xy_m": 0.08156751096248627
+  },
+  {
+    "index": 30455,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.34,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03167353570461273,
+    "endpoint_xy_m": 0.0287421066313982
+  },
+  {
+    "index": 30465,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.54,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.0395081602036953,
+    "endpoint_xy_m": 0.0395081602036953
+  },
+  {
+    "index": 30475,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.74,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.04958604648709297,
+    "endpoint_xy_m": 0.04958604648709297
+  },
+  {
+    "index": 30485,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.94,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.048546839505434036,
+    "endpoint_xy_m": 0.048546839505434036
+  },
+  {
+    "index": 30495,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 8.14,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.026515444740653038,
+    "endpoint_xy_m": 0.025456663221120834
+  },
+  {
+    "index": 30505,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 8.34,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.045085638761520386,
+    "endpoint_xy_m": 0.04435769468545914
+  },
+  {
+    "index": 30836,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.6000000000000005,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.018647005781531334,
+    "endpoint_xy_m": 0.018647005781531334
+  },
+  {
+    "index": 30846,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.8,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.01544155366718769,
+    "endpoint_xy_m": 0.01538592204451561
+  },
+  {
+    "index": 30856,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.0,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.004885190166532993,
+    "endpoint_xy_m": 0.0027883192524313927
+  },
+  {
+    "index": 30866,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.2,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.004725963342934847,
+    "endpoint_xy_m": 0.004036094527691603
+  },
+  {
+    "index": 30876,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.4,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.0037572262808680534,
+    "endpoint_xy_m": 0.0018782156985253096
+  },
+  {
+    "index": 30886,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.6000000000000005,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.00376389198936522,
+    "endpoint_xy_m": 0.001956349238753319
+  },
+  {
+    "index": 30896,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.8,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.0036403024569153786,
+    "endpoint_xy_m": 0.002177742077037692
+  },
+  {
+    "index": 30906,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.0,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.004950304515659809,
+    "endpoint_xy_m": 0.004950304515659809
+  },
+  {
+    "index": 30916,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.2,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.006748931482434273,
+    "endpoint_xy_m": 0.006748931482434273
+  },
+  {
+    "index": 30926,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.4,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.007749407552182674,
+    "endpoint_xy_m": 0.007749407552182674
+  },
+  {
+    "index": 30936,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.6000000000000005,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.00886745098978281,
+    "endpoint_xy_m": 0.00886745098978281
+  },
+  {
+    "index": 30946,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.8,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.009515207260847092,
+    "endpoint_xy_m": 0.009515207260847092
+  },
+  {
+    "index": 30956,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 8.0,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.009887113235890865,
+    "endpoint_xy_m": 0.009887113235890865
+  },
+  {
+    "index": 31288,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.62,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.028728734701871872,
+    "endpoint_xy_m": 0.014045094139873981
+  },
+  {
+    "index": 31298,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.82,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.023722507059574127,
+    "endpoint_xy_m": 0.016861557960510254
+  },
+  {
+    "index": 31308,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.0200000000000005,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.01878431625664234,
+    "endpoint_xy_m": 0.01150972954928875
+  },
+  {
+    "index": 31318,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.22,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03030146099627018,
+    "endpoint_xy_m": 0.03030146099627018
+  },
+  {
+    "index": 31328,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.42,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03493282571434975,
+    "endpoint_xy_m": 0.03489932417869568
+  },
+  {
+    "index": 31338,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.62,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03943820670247078,
+    "endpoint_xy_m": 0.02993151545524597
+  },
+  {
+    "index": 31348,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.82,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.05028731748461723,
+    "endpoint_xy_m": 0.027025658637285233
+  },
+  {
+    "index": 31358,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.0200000000000005,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03003392554819584,
+    "endpoint_xy_m": 0.014453274197876453
+  },
+  {
+    "index": 31368,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.22,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.04731495678424835,
+    "endpoint_xy_m": 0.04629787802696228
+  },
+  {
+    "index": 31378,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.42,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.048695363104343414,
+    "endpoint_xy_m": 0.044606298208236694
+  },
+  {
+    "index": 31388,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.62,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.02972005493938923,
+    "endpoint_xy_m": 0.027925247326493263
+  },
+  {
+    "index": 31398,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.82,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.025977546349167824,
+    "endpoint_xy_m": 0.025977546349167824
+  },
+  {
+    "index": 31408,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 8.02,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.020405923947691917,
+    "endpoint_xy_m": 0.020405923947691917
+  },
+  {
+    "index": 31418,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 8.22,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.0260317362844944,
+    "endpoint_xy_m": 0.0260317362844944
+  },
+  {
+    "index": 31754,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.6000000000000005,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.032414037734270096,
+    "endpoint_xy_m": 0.032414037734270096
+  },
+  {
+    "index": 31764,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.8,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.02301112934947014,
+    "endpoint_xy_m": 0.02301112934947014
+  },
+  {
+    "index": 31774,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.0,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.043333396315574646,
+    "endpoint_xy_m": 0.03688565269112587
+  },
+  {
+    "index": 31784,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.2,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.02841743268072605,
+    "endpoint_xy_m": 0.02841743268072605
+  },
+  {
+    "index": 31794,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.4,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.044922083616256714,
+    "endpoint_xy_m": 0.04346855357289314
+  },
+  {
+    "index": 31804,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.6000000000000005,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.04755029082298279,
+    "endpoint_xy_m": 0.03940563648939133
+  },
+  {
+    "index": 31814,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.8,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.044136203825473785,
+    "endpoint_xy_m": 0.026074284687638283
+  },
+  {
+    "index": 31824,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.0,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.04789745807647705,
+    "endpoint_xy_m": 0.04789745807647705
+  },
+  {
+    "index": 31834,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.2,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03198953717947006,
+    "endpoint_xy_m": 0.030747756361961365
+  },
+  {
+    "index": 31844,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.4,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.032300546765327454,
+    "endpoint_xy_m": 0.032300546765327454
+  },
+  {
+    "index": 31854,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.6000000000000005,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.04136088490486145,
+    "endpoint_xy_m": 0.04136088490486145
+  },
+  {
+    "index": 31864,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 7.8,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.04415507987141609,
+    "endpoint_xy_m": 0.04415507987141609
+  },
+  {
+    "index": 31874,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 8.0,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.03476396203041077,
+    "endpoint_xy_m": 0.034539587795734406
+  },
+  {
+    "index": 31884,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 8.2,
+    "horizon_s": 1.0,
+    "max_xy_m": 0.0347663052380085,
+    "endpoint_xy_m": 0.032172732055187225
+  },
+  {
+    "index": 24587,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.28,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.0824953243136406,
+    "endpoint_xy_m": 0.0531185083091259
+  },
+  {
+    "index": 24597,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.48,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.053581561893224716,
+    "endpoint_xy_m": 0.03244826942682266
+  },
+  {
+    "index": 24607,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.68,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.04258322715759277,
+    "endpoint_xy_m": 0.033737506717443466
+  },
+  {
+    "index": 24617,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.88,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.04188119247555733,
+    "endpoint_xy_m": 0.03779243677854538
+  },
+  {
+    "index": 25045,
+    "route": 2,
+    "case": "rb_run3_route2_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.44,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.09804674983024597,
+    "endpoint_xy_m": 0.05425667017698288
+  },
+  {
+    "index": 25055,
+    "route": 2,
+    "case": "rb_run3_route2_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.64,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.11472854763269424,
+    "endpoint_xy_m": 0.09732542186975479
+  },
+  {
+    "index": 25065,
+    "route": 2,
+    "case": "rb_run3_route2_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.84,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.09017068892717361,
+    "endpoint_xy_m": 0.008506261743605137
+  },
+  {
+    "index": 25911,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.58,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.11600149422883987,
+    "endpoint_xy_m": 0.09162010997533798
+  },
+  {
+    "index": 25921,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.78,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.0595654733479023,
+    "endpoint_xy_m": 0.04962493106722832
+  },
+  {
+    "index": 25931,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.98,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.07814708352088928,
+    "endpoint_xy_m": 0.07814708352088928
+  },
+  {
+    "index": 25941,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.18,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.03414543345570564,
+    "endpoint_xy_m": 0.029653241857886314
+  },
+  {
+    "index": 26371,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.58,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.1266564577817917,
+    "endpoint_xy_m": 0.07479067146778107
+  },
+  {
+    "index": 26381,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.78,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.0931849554181099,
+    "endpoint_xy_m": 0.056797854602336884
+  },
+  {
+    "index": 26391,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.98,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.12231605499982834,
+    "endpoint_xy_m": 0.08332271128892899
+  },
+  {
+    "index": 26401,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.18,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.045055508613586426,
+    "endpoint_xy_m": 0.045055508613586426
+  },
+  {
+    "index": 26838,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.58,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.4638848304748535,
+    "endpoint_xy_m": 0.3990634083747864
+  },
+  {
+    "index": 26848,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.78,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.4249042868614197,
+    "endpoint_xy_m": 0.3525647521018982
+  },
+  {
+    "index": 26858,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.98,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.44323357939720154,
+    "endpoint_xy_m": 0.32541999220848083
+  },
+  {
+    "index": 26868,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.18,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.4347701668739319,
+    "endpoint_xy_m": 0.2964833080768585
+  },
+  {
+    "index": 27299,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.58,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.06009911000728607,
+    "endpoint_xy_m": 0.027811722829937935
+  },
+  {
+    "index": 27309,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.78,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.05652463063597679,
+    "endpoint_xy_m": 0.05535449460148811
+  },
+  {
+    "index": 27319,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.98,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.03970235586166382,
+    "endpoint_xy_m": 0.03527028486132622
+  },
+  {
+    "index": 27329,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.18,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.04221094027161598,
+    "endpoint_xy_m": 0.03259199485182762
+  },
+  {
+    "index": 27765,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.6000000000000005,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.044950295239686966,
+    "endpoint_xy_m": 0.029215119779109955
+  },
+  {
+    "index": 27775,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.8,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.05370591580867767,
+    "endpoint_xy_m": 0.05370591580867767
+  },
+  {
+    "index": 27785,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.0,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.0522078201174736,
+    "endpoint_xy_m": 0.0522078201174736
+  },
+  {
+    "index": 27795,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v6",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.2,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.05367690697312355,
+    "endpoint_xy_m": 0.05196981132030487
+  },
+  {
+    "index": 28221,
+    "route": 0,
+    "case": "rb_run3_route0_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.42,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.038960665464401245,
+    "endpoint_xy_m": 0.038960665464401245
+  },
+  {
+    "index": 28231,
+    "route": 0,
+    "case": "rb_run3_route0_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.62,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.01041015237569809,
+    "endpoint_xy_m": 0.01041015237569809
+  },
+  {
+    "index": 28646,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.26,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.051839765161275864,
+    "endpoint_xy_m": 0.018826624378561974
+  },
+  {
+    "index": 28656,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.46,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.05120447650551796,
+    "endpoint_xy_m": 0.03747937083244324
+  },
+  {
+    "index": 28666,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.66,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.036228153854608536,
+    "endpoint_xy_m": 0.036228153854608536
+  },
+  {
+    "index": 28676,
+    "route": 1,
+    "case": "rb_run3_route1_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.86,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.04092008247971535,
+    "endpoint_xy_m": 0.030705126002430916
+  },
+  {
+    "index": 29903,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.5600000000000005,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.051714226603507996,
+    "endpoint_xy_m": 0.012765886262059212
+  },
+  {
+    "index": 29913,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.76,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.045398421585559845,
+    "endpoint_xy_m": 0.027237292379140854
+  },
+  {
+    "index": 29923,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.96,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.034841980785131454,
+    "endpoint_xy_m": 0.03153153136372566
+  },
+  {
+    "index": 29933,
+    "route": 4,
+    "case": "rb_run3_route4_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.16,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.03950806334614754,
+    "endpoint_xy_m": 0.02653724141418934
+  },
+  {
+    "index": 30365,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.54,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.08546194434165955,
+    "endpoint_xy_m": 0.04304922744631767
+  },
+  {
+    "index": 30375,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.74,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.061051513999700546,
+    "endpoint_xy_m": 0.02738724835216999
+  },
+  {
+    "index": 30385,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.94,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.041509535163640976,
+    "endpoint_xy_m": 0.028180165216326714
+  },
+  {
+    "index": 30395,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.140000000000001,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.042956698685884476,
+    "endpoint_xy_m": 0.042956698685884476
+  },
+  {
+    "index": 30405,
+    "route": 5,
+    "case": "rb_run3_route5_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.34,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.05001597851514816,
+    "endpoint_xy_m": 0.049533478915691376
+  },
+  {
+    "index": 30836,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.6000000000000005,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.03660205379128456,
+    "endpoint_xy_m": 0.010566048324108124
+  },
+  {
+    "index": 30846,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.8,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.01544155366718769,
+    "endpoint_xy_m": 0.011525130830705166
+  },
+  {
+    "index": 30856,
+    "route": 6,
+    "case": "rb_run3_route6_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.0,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.013503162190318108,
+    "endpoint_xy_m": 0.007748894393444061
+  },
+  {
+    "index": 31288,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.62,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.0473845973610878,
+    "endpoint_xy_m": 0.02583259902894497
+  },
+  {
+    "index": 31298,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.82,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.05070886015892029,
+    "endpoint_xy_m": 0.04653608426451683
+  },
+  {
+    "index": 31308,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.0200000000000005,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.0544389970600605,
+    "endpoint_xy_m": 0.0544389970600605
+  },
+  {
+    "index": 31318,
+    "route": 7,
+    "case": "rb_run3_route7_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.22,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.043896839022636414,
+    "endpoint_xy_m": 0.043896839022636414
+  },
+  {
+    "index": 31754,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.6000000000000005,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.03871821612119675,
+    "endpoint_xy_m": 0.03871821612119675
+  },
+  {
+    "index": 31764,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 5.8,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.039492152631282806,
+    "endpoint_xy_m": 0.039492152631282806
+  },
+  {
+    "index": 31774,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.0,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.043333396315574646,
+    "endpoint_xy_m": 0.0355285182595253
+  },
+  {
+    "index": 31784,
+    "route": 8,
+    "case": "rb_run3_route8_h75_v7",
+    "split": "DEV_ROOT",
+    "anchor_s": 6.2,
+    "horizon_s": 3.0,
+    "max_xy_m": 0.04191622510552406,
+    "endpoint_xy_m": 0.04113151878118515
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "model_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p2_history_model/continue600",
+  "checkpoint": "best.pt",
+  "example_selection": "worst available1s",
+  "checkpoint_sha256": "dfff92ddbfc15218873fa60892be2cda70ee8b9bba6c96cfa912187fe1aeac92",
+  "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p1_phase2_nominal/evaluation",
+  "role": "Existing DEV_ROOT; no policy simulation, no future true controller input, not independent TEST",
+  "elapsed_s": 6.750732877990231
+}

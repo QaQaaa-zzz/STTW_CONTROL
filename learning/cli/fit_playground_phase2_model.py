@@ -9,7 +9,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from sttw_control.playground_arx import Reference,states,design,fit,fit_local,rollout,robot_radius_bound,geometry_error_bound
 
-p=argparse.ArgumentParser(description=__doc__);p.add_argument('--evaluation',type=Path,required=True);p.add_argument('--upstream-model',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--fit-x-min',type=float,default=11.0);p.add_argument('--fit-x-max',type=float,default=12.2);p.add_argument('--model-kind',choices=['arx','local'],default='arx');a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False)
+p=argparse.ArgumentParser(description=__doc__);p.add_argument('--evaluation',type=Path,required=True);p.add_argument('--upstream-model',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--fit-x-min',type=float,default=11.0);p.add_argument('--fit-x-max',type=float,default=12.2);p.add_argument('--model-kind',choices=['arx','local'],default='arx');p.add_argument('--ridge',type=float,default=.001);p.add_argument('--identity-prior',action='store_true');p.add_argument('--reuse-upstream-results',type=Path);a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False)
 cfg=json.loads((a.evaluation/'resolved_config.json').read_text());status=json.loads((a.evaluation/'status.json').read_text());schema=json.loads((a.evaluation/'model_state_schema.json').read_text());bank=np.load(cfg['ground_handoff']['reference_path']);hcfg=json.loads((Path(cfg['ground_handoff']['bundle'])/'config.json').read_text());radius,jr=robot_radius_bound(mujoco.MjModel.from_binary_path(str(a.evaluation/'terrain.mjb')))
 datasets=[];xx=[];yy=[];fit_counts=[]
 for row in status['results']:
@@ -19,8 +19,10 @@ for row in status['results']:
     if row['variant']['data_split']=='TRAIN':xx.append(design(xi[1:-1],xi[:-2],eta[1:-1])[triple]);yy.append(xi[2:][triple])
     fit_counts.append(dict(case=row['case_dir'],split=row['variant']['data_split'],flat_transitions=int(triple.sum())))
     datasets.append(dict(row=row,pose=pose,xi=xi,trace=trace,ref=ref))
-model=(fit_local if a.model_kind=='local' else fit)(np.concatenate(xx),np.concatenate(yy));np.savez(a.output/('nominal_phase2_'+a.model_kind+'.npz'),**model)
-models={'phase0_model':dict(np.load(a.upstream_model)),'phase2_flat_model':model};records=[]
+model=fit_local(np.concatenate(xx),np.concatenate(yy)) if a.model_kind=='local' else fit(np.concatenate(xx),np.concatenate(yy),ridge=a.ridge,identity_prior=a.identity_prior);np.savez(a.output/('nominal_phase2_'+a.model_kind+'.npz'),**model)
+models={'phase2_flat_model':model};records=[]
+if a.reuse_upstream_results:records=[r for r in json.loads(a.reuse_upstream_results.read_text()) if r['model']=='phase0_model']
+else:models['phase0_model']=dict(np.load(a.upstream_model))
 fig,axes=plt.subplots(3,3,figsize=(13,8),layout='constrained');predicted_examples={}
 for data in datasets:
     row=data['row'];pose=data['pose'];xi=data['xi'];phase=data['trace'][:,-1];ref=data['ref']
@@ -37,7 +39,7 @@ for route,ax in enumerate(axes.flat):
 fig.suptitle('Phase-2 nominal fit: actual blue; free prediction orange dashed; original reference dotted')
 fig.savefig(a.output/'dev_prediction_xy.png',dpi=160);plt.close(fig);np.savez_compressed(a.output/'prediction_examples.npz',**predicted_examples)
 summary=[]
-for name in models:
+for name in sorted({r['model'] for r in records}):
     for split in ['TRAIN','DEV_ROOT']:
         for route in range(9):
             for h in [.1,.3,1.,2.,3.]:
@@ -45,7 +47,7 @@ for name in models:
                 if not rows:continue
                 e=[r['max_xy_m'] for r in rows];summary.append(dict(model=name,split=split,route=route,horizon_s=h,windows=len(rows),roots=len(set(r['variant'] for r in rows)),p95_max_xy_m=float(np.quantile(e,.95)),max_xy_m=max(e),p95_body_bound_m=float(np.quantile([r['max_body_bound_m'] for r in rows],.95))))
 (a.output/'windows.json').write_text(json.dumps(records,indent=2));(a.output/'summary.json').write_text(json.dumps(summary,indent=2));(a.output/'fit_counts.json').write_text(json.dumps(fit_counts,indent=2))
-contract=dict(training_rows=sum(len(x) for x in xx),training_region_root_x_m=[a.fit_x_min,a.fit_x_max],terrain_flat_interval_m=cfg.get('phase2_model_flat_interval_m',[10.6,12.6]),grouping='TRAIN variants0-5, DEV_ROOT6-7; downstream siblings grouped by upstream+variant; same map, not independent map TEST',physics_and_policy='Frozen successful shared runner; actual handoff histories; no RB adaptation',model=a.model_kind+' fitted only from declared nominal phase2 triples; all later rollout inputs predicted',limitation='Nominal fixture and dependent windows only; no independent-map coverage, online GPU latency or planning-safety claim')
+contract=dict(training_rows=sum(len(x) for x in xx),training_region_root_x_m=[a.fit_x_min,a.fit_x_max],terrain_flat_interval_m=cfg.get('phase2_model_flat_interval_m',[10.6,12.6]),grouping='TRAIN variants0-5, DEV_ROOT6-7; downstream siblings grouped by upstream+variant; same map, not independent map TEST',physics_and_policy='Frozen successful shared runner; actual handoff histories; no RB adaptation',ridge=a.ridge,identity_prior=a.identity_prior,model=a.model_kind+' fitted only from declared nominal phase2 triples; all later rollout inputs predicted',limitation='Nominal fixture and dependent windows only; no independent-map coverage, online GPU latency or planning-safety claim')
 (a.output/'contract.json').write_text(json.dumps(contract,indent=2))
 lines=['# Phase2 nominal flat-buffer identification','','![DEV actual and prediction XY](dev_prediction_xy.png)','',json.dumps(contract,ensure_ascii=False),'','| Model | Split | Route | Horizon s | Windows/roots | P95 max XY m | Worst XY m | P95 body bound m |','|---|---|---:|---:|---:|---:|---:|---:|']
 for r in summary:lines.append(f'|{r["model"]}|{r["split"]}|{r["route"]}|{r["horizon_s"]}|{r["windows"]}/{r["roots"]}|{r["p95_max_xy_m"]:.4f}|{r["max_xy_m"]:.4f}|{r["p95_body_bound_m"]:.4f}|')

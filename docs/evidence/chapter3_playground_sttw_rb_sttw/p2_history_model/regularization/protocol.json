@@ -1,0 +1,30 @@
+{
+  "purpose": "Finite nominal ARX conditioning diagnosis before joint planning; same previously frozen flat nominal TRAIN and DEV, no controller training",
+  "ridge": [
+    0.01,
+    0.1,
+    1.0
+  ],
+  "identity_prior": [
+    false,
+    true
+  ],
+  "models": 6,
+  "training": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p1_phase2_nominal/evaluation",
+  "training_region_m": [
+    11.0,
+    25.0
+  ],
+  "horizons_s": [
+    0.1,
+    0.3,
+    1.0,
+    2.0,
+    3.0
+  ],
+  "hard_limit_s": 1200,
+  "resource": "CPU offline numerical identification and trajectory prediction; no simulation or policy transfer",
+  "stop": "six fits or20min; no automatic expansion",
+  "code_revision": "02413f2f75080cd053bc0e2db43f2a39491d97a0",
+  "created_utc": "2026-11-14T16:14:16.682335+00:00"
+}

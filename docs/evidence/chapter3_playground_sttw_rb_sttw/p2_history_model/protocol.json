@@ -1,0 +1,28 @@
+{
+  "task": "Nominal phase2 history-dependent dynamics identification; no controller policy training",
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p1_phase2_nominal/evaluation",
+  "nominal": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p2_phase2_regularization/ridge1.0_increment0/nominal_phase2_arx.npz",
+  "train_split": "existing TRAIN variants0..5 only",
+  "dev_split": "existing DEV_ROOT6..7; all downstream siblings grouped",
+  "updates": 150,
+  "batch": 64,
+  "seed": 0,
+  "horizons_steps": [
+    5,
+    15,
+    50,
+    150
+  ],
+  "checkpoint_every": 25,
+  "hard_limit_s": 1200,
+  "expected_wallclock_s": [
+    180,
+    600
+  ],
+  "selection": "mean maximum XY on same available1s DEV windows;3s reported separately",
+  "stop": "150 updates,20min,or actual numerical/runtime error; no automatic restart or additional updates",
+  "source_revision": "02413f2f75080cd053bc0e2db43f2a39491d97a0",
+  "physics_policy": "Frozen; saved nominal fixture only, no simulation or new Go2 DR sampling",
+  "scope": "Pilot history model, not full terrain-conditioned M1 or formal P3 three-seed comparison",
+  "created_utc": "2026-11-14T16:26:20.741080+00:00"
+}

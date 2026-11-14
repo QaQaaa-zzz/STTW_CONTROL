@@ -1,0 +1,70 @@
+{
+  "selected_checkpoint": "continue600/best.pt",
+  "selected_update": 725,
+  "formal_convergence_verified": false,
+  "long_horizon_adopted": false,
+  "reason": "Lower mean but1s worst nominal error increased; late DEV means fluctuate; pure-flat continuation stopped",
+  "last_evaluated_checkpoints": [
+    {
+      "update": 625,
+      "kind": "validation",
+      "dev_mean_max_xy_m": {
+        "1.0": 0.07319463505323424,
+        "3.0": 0.07917352249178122
+      },
+      "elapsed_s": 90.76149648899445,
+      "stage": "continue600"
+    },
+    {
+      "update": 650,
+      "kind": "validation",
+      "dev_mean_max_xy_m": {
+        "1.0": 0.0693844998054879,
+        "3.0": 0.07722450269140163
+      },
+      "elapsed_s": 95.79745021398412,
+      "stage": "continue600"
+    },
+    {
+      "update": 675,
+      "kind": "validation",
+      "dev_mean_max_xy_m": {
+        "1.0": 0.07005325175554457,
+        "3.0": 0.07325056616990071
+      },
+      "elapsed_s": 100.35013306699693,
+      "stage": "continue600"
+    },
+    {
+      "update": 700,
+      "kind": "validation",
+      "dev_mean_max_xy_m": {
+        "1.0": 0.07006230844719405,
+        "3.0": 0.08459272706564867
+      },
+      "elapsed_s": 104.92062039603479,
+      "stage": "continue600"
+    },
+    {
+      "update": 725,
+      "kind": "validation",
+      "dev_mean_max_xy_m": {
+        "1.0": 0.06779390476273235,
+        "3.0": 0.07957186152771958
+      },
+      "elapsed_s": 109.63061543903314,
+      "stage": "continue600"
+    },
+    {
+      "update": 750,
+      "kind": "validation",
+      "dev_mean_max_xy_m": {
+        "1.0": 0.07108859514765856,
+        "3.0": 0.09031842227252025
+      },
+      "elapsed_s": 114.60376979602734,
+      "stage": "continue600"
+    }
+  ],
+  "scope": "One nominal-history initialization, not full terrain-conditioned M1 or P3 multi-seed comparison"
+}

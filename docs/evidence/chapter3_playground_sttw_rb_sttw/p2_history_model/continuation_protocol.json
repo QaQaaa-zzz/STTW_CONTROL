@@ -1,0 +1,20 @@
+{
+  "parent": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p2_history_model/training/best.pt",
+  "initialization": "weights_only, fresh Adam; original stage had no saved optimizer",
+  "initial_update": 150,
+  "additional_updates": 600,
+  "total_updates": 750,
+  "batch": 64,
+  "seed": 0,
+  "sampling": "uniform source-case contribution per horizon; cyclic5/15/50/150 steps includes early-failure observations at short horizons",
+  "checkpoint_every": 25,
+  "criterion": "unchanged fixed available1s DEV mean maximum XY; per-route/tail metrics remain adoption gates",
+  "hard_limit_s": 1200,
+  "expected_wallclock_s": [
+    120,
+    420
+  ],
+  "role": "same flat TRAIN/DEV diagnostic, not independent TEST or policy training",
+  "stop": "600 updates or20min or numerical/runtime error; no automatic restart",
+  "created_utc": "2026-11-14T16:32:55.354442+00:00"
+}

@@ -1,0 +1,128 @@
+[
+  {
+    "candidate": "ridge0.01_increment0",
+    "radius": 1.0251751435087046,
+    "horizon_s": 1.0,
+    "worst_route_p95_xy_m": 2.4709831497129793,
+    "max_xy_m": 4.784857720838161
+  },
+  {
+    "candidate": "ridge0.01_increment0",
+    "radius": 1.0251751435087046,
+    "horizon_s": 2.0,
+    "worst_route_p95_xy_m": 177833.08441486742,
+    "max_xy_m": 792407.5862669221
+  },
+  {
+    "candidate": "ridge0.01_increment0",
+    "radius": 1.0251751435087046,
+    "horizon_s": 3.0,
+    "worst_route_p95_xy_m": 297722197624.9056,
+    "max_xy_m": 434154818230.7012
+  },
+  {
+    "candidate": "ridge0.01_increment1",
+    "radius": 1.0585064533247623,
+    "horizon_s": 1.0,
+    "worst_route_p95_xy_m": 2.0147698853802725,
+    "max_xy_m": 5.849640307332679
+  },
+  {
+    "candidate": "ridge0.01_increment1",
+    "radius": 1.0585064533247623,
+    "horizon_s": 2.0,
+    "worst_route_p95_xy_m": 208090.43357689577,
+    "max_xy_m": 578087.1250451514
+  },
+  {
+    "candidate": "ridge0.01_increment1",
+    "radius": 1.0585064533247623,
+    "horizon_s": 3.0,
+    "worst_route_p95_xy_m": 153197820201.64636,
+    "max_xy_m": 170219241757.82175
+  },
+  {
+    "candidate": "ridge0.1_increment0",
+    "radius": 0.9639624425495649,
+    "horizon_s": 1.0,
+    "worst_route_p95_xy_m": 1.0412976594437693,
+    "max_xy_m": 1.296666434011528
+  },
+  {
+    "candidate": "ridge0.1_increment0",
+    "radius": 0.9639624425495649,
+    "horizon_s": 2.0,
+    "worst_route_p95_xy_m": 17.380781397896943,
+    "max_xy_m": 69.48362313060422
+  },
+  {
+    "candidate": "ridge0.1_increment0",
+    "radius": 0.9639624425495649,
+    "horizon_s": 3.0,
+    "worst_route_p95_xy_m": 88.00118583273542,
+    "max_xy_m": 143.4343414721616
+  },
+  {
+    "candidate": "ridge0.1_increment1",
+    "radius": 1.0477261177580588,
+    "horizon_s": 1.0,
+    "worst_route_p95_xy_m": 1.313519848813797,
+    "max_xy_m": 1.597062014813104
+  },
+  {
+    "candidate": "ridge0.1_increment1",
+    "radius": 1.0477261177580588,
+    "horizon_s": 2.0,
+    "worst_route_p95_xy_m": 655.0930999128257,
+    "max_xy_m": 2403.5536693376653
+  },
+  {
+    "candidate": "ridge0.1_increment1",
+    "radius": 1.0477261177580588,
+    "horizon_s": 3.0,
+    "worst_route_p95_xy_m": 10175509.626274735,
+    "max_xy_m": 15530335.447365804
+  },
+  {
+    "candidate": "ridge1.0_increment0",
+    "radius": 0.8294934290287217,
+    "horizon_s": 1.0,
+    "worst_route_p95_xy_m": 0.8900145540217437,
+    "max_xy_m": 1.1515193287403505
+  },
+  {
+    "candidate": "ridge1.0_increment0",
+    "radius": 0.8294934290287217,
+    "horizon_s": 2.0,
+    "worst_route_p95_xy_m": 2.1382622860625387,
+    "max_xy_m": 2.4083234147004693
+  },
+  {
+    "candidate": "ridge1.0_increment0",
+    "radius": 0.8294934290287217,
+    "horizon_s": 3.0,
+    "worst_route_p95_xy_m": 3.1093429210086763,
+    "max_xy_m": 3.391060129600771
+  },
+  {
+    "candidate": "ridge1.0_increment1",
+    "radius": 1.0325192483398955,
+    "horizon_s": 1.0,
+    "worst_route_p95_xy_m": 0.836066398975989,
+    "max_xy_m": 0.9745267156387118
+  },
+  {
+    "candidate": "ridge1.0_increment1",
+    "radius": 1.0325192483398955,
+    "horizon_s": 2.0,
+    "worst_route_p95_xy_m": 4.948989657114202,
+    "max_xy_m": 9.42544820590349
+  },
+  {
+    "candidate": "ridge1.0_increment1",
+    "radius": 1.0325192483398955,
+    "horizon_s": 3.0,
+    "worst_route_p95_xy_m": 127.56135574619329,
+    "max_xy_m": 206.43636723162143
+  }
+]

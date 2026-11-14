@@ -1,0 +1,53 @@
+{
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p1_phase2_nominal/evaluation",
+  "nominal": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p2_phase2_regularization/ridge1.0_increment0/nominal_phase2_arx.npz",
+  "updates": 150,
+  "seed": 0,
+  "batch": 64,
+  "checkpoints_every": 25,
+  "selection": "mean maximum XY over fixed available1s DEV windows",
+  "training": "flat TRAIN only, includes pre-failure observations; no future real controller states in rollout",
+  "architecture": "381D controller/history initializes64D hidden, GRU64,128x128 correction to nominal next dynamics",
+  "objective": "multi-step position/quaternion/velocity error; frozen RB/H75/physics; no policy updates",
+  "horizons_steps": [
+    5,
+    15,
+    50,
+    150
+  ],
+  "windows": {
+    "5": {
+      "TRAIN": 8671,
+      "DEV": 292
+    },
+    "15": {
+      "TRAIN": 8141,
+      "DEV": 275
+    },
+    "50": {
+      "TRAIN": 6286,
+      "DEV": 216
+    },
+    "150": {
+      "TRAIN": 1442,
+      "DEV": 53
+    }
+  },
+  "follower": {
+    "method": "pure_pursuit_with_actual_chord_denominator",
+    "lookahead_time_s": 0.7,
+    "lookahead_min_m": 0.8,
+    "lookahead_max_m": 1.8,
+    "lookahead_min_speed_m_s": 1.5,
+    "speed_reference": "external_v_user; no_curvature_speed_regulation_in_follower",
+    "steer_reference_max_rad": 0.3,
+    "nominal_speed_slew_m_s2": 0.5,
+    "nominal_steer_slew_rad_s": 0.3,
+    "wheelbase_m_expected": 0.27903,
+    "caster_deg_expected": 0.0,
+    "preview_body_x_min_m": 0.05,
+    "out_of_domain": "log_and_stop_diagnostic_if_preview_behind_or_heading_error_ge_pi_over_2; no_spin_in_place",
+    "lookahead_scale": 1.3
+  },
+  "reference": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/approach_departure_turns/routes.npz"
+}
