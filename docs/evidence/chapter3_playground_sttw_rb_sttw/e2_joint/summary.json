@@ -14,6 +14,13 @@
       "no_plan_goals": 0,
       "mean_penalized_time_s": 9.266666571299234
     },
+    "backtracking": {
+      "episodes": 12,
+      "physical_goals": 12,
+      "planned_goals": 12,
+      "no_plan_goals": 0,
+      "mean_penalized_time_s": 9.30666677157084
+    },
     "paired_gains": 9,
     "paired_losses": 0,
     "paired_mean_time_difference_s": -0.41125011444091797
@@ -35,7 +42,10 @@
       "penalized_time_s": 8.699999809265137,
       "handoff_s": 5.275000095367432,
       "forbidden_contact_steps": 0,
-      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout00/activation0/evaluation/rb_run3_route0_h75_v0/trajectory.npz"
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout00/activation0/evaluation/rb_run3_route0_h75_v0/trajectory.npz",
+      "locked_joint_max_drift_rad": 5.424022674560547e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.5667364597320557
     },
     {
       "layout": 0,
@@ -53,7 +63,10 @@
       "penalized_time_s": 8.725000381469727,
       "handoff_s": 5.304999828338623,
       "forbidden_contact_steps": 0,
-      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout00/activation0/evaluation/rb_run3_route0_h75_v1/trajectory.npz"
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout00/activation0/evaluation/rb_run3_route0_h75_v1/trajectory.npz",
+      "locked_joint_max_drift_rad": 2.9921531677246094e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.558301329612732
     },
     {
       "layout": 0,
@@ -71,7 +84,10 @@
       "penalized_time_s": 9.079999923706055,
       "handoff_s": 5.614999771118164,
       "forbidden_contact_steps": 0,
-      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout00/activation3/evaluation/rb_run3_route3_h75_v0/trajectory.npz"
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout00/activation3/evaluation/rb_run3_route3_h75_v0/trajectory.npz",
+      "locked_joint_max_drift_rad": 2.7298927307128906e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.4133243560791016
     },
     {
       "layout": 0,
@@ -89,7 +105,10 @@
       "penalized_time_s": 9.055000305175781,
       "handoff_s": 5.574999809265137,
       "forbidden_contact_steps": 0,
-      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout00/activation3/evaluation/rb_run3_route3_h75_v1/trajectory.npz"
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout00/activation3/evaluation/rb_run3_route3_h75_v1/trajectory.npz",
+      "locked_joint_max_drift_rad": 5.984306335449219e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.4248560667037964
     },
     {
       "layout": 1,
@@ -107,7 +126,10 @@
       "penalized_time_s": 10,
       "handoff_s": 5.260000228881836,
       "forbidden_contact_steps": 1,
-      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout01/activation0/evaluation/rb_run3_route0_h75_v0/trajectory.npz"
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout01/activation0/evaluation/rb_run3_route0_h75_v0/trajectory.npz",
+      "locked_joint_max_drift_rad": 5.14984130859375e-05,
+      "goal_hold_s": 0.0,
+      "min_world_forward_m_s": 1.5617941617965698
     },
     {
       "layout": 1,
@@ -125,7 +147,10 @@
       "penalized_time_s": 10,
       "handoff_s": 5.269999980926514,
       "forbidden_contact_steps": 1,
-      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout01/activation0/evaluation/rb_run3_route0_h75_v1/trajectory.npz"
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout01/activation0/evaluation/rb_run3_route0_h75_v1/trajectory.npz",
+      "locked_joint_max_drift_rad": 6.639957427978516e-05,
+      "goal_hold_s": 0.0,
+      "min_world_forward_m_s": 1.5479038953781128
     },
     {
       "layout": 1,
@@ -143,7 +168,10 @@
       "penalized_time_s": 9.289999961853027,
       "handoff_s": 5.619999885559082,
       "forbidden_contact_steps": 0,
-      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout01/activation1/evaluation/rb_run3_route4_h75_v0/trajectory.npz"
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout01/activation1/evaluation/rb_run3_route4_h75_v0/trajectory.npz",
+      "locked_joint_max_drift_rad": 2.7298927307128906e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.4132986068725586
     },
     {
       "layout": 1,
@@ -161,7 +189,10 @@
       "penalized_time_s": 9.279999732971191,
       "handoff_s": 5.585000038146973,
       "forbidden_contact_steps": 0,
-      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout01/activation1/evaluation/rb_run3_route4_h75_v1/trajectory.npz"
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout01/activation1/evaluation/rb_run3_route4_h75_v1/trajectory.npz",
+      "locked_joint_max_drift_rad": 3.0159950256347656e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.4249942302703857
     },
     {
       "layout": 2,
@@ -179,7 +210,10 @@
       "penalized_time_s": 10,
       "handoff_s": 5.289999961853027,
       "forbidden_contact_steps": 1,
-      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout02/activation0/evaluation/rb_run3_route0_h75_v0/trajectory.npz"
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout02/activation0/evaluation/rb_run3_route0_h75_v0/trajectory.npz",
+      "locked_joint_max_drift_rad": 0.00016427040100097656,
+      "goal_hold_s": 0.0,
+      "min_world_forward_m_s": 1.357312560081482
     },
     {
       "layout": 2,
@@ -197,7 +231,10 @@
       "penalized_time_s": 10,
       "handoff_s": 5.289999961853027,
       "forbidden_contact_steps": 1,
-      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout02/activation0/evaluation/rb_run3_route0_h75_v1/trajectory.npz"
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout02/activation0/evaluation/rb_run3_route0_h75_v1/trajectory.npz",
+      "locked_joint_max_drift_rad": 3.1113624572753906e-05,
+      "goal_hold_s": 0.0,
+      "min_world_forward_m_s": 1.3141615390777588
     },
     {
       "layout": 2,
@@ -215,7 +252,10 @@
       "penalized_time_s": 9.319999694824219,
       "handoff_s": 5.585000038146973,
       "forbidden_contact_steps": 0,
-      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout02/activation3/evaluation/rb_run3_route4_h75_v0/trajectory.npz"
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout02/activation3/evaluation/rb_run3_route4_h75_v0/trajectory.npz",
+      "locked_joint_max_drift_rad": 3.230571746826172e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.4136006832122803
     },
     {
       "layout": 2,
@@ -233,7 +273,10 @@
       "penalized_time_s": 9.359999656677246,
       "handoff_s": 5.625,
       "forbidden_contact_steps": 0,
-      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout02/activation3/evaluation/rb_run3_route4_h75_v1/trajectory.npz"
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout02/activation3/evaluation/rb_run3_route4_h75_v1/trajectory.npz",
+      "locked_joint_max_drift_rad": 4.172325134277344e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.4249039888381958
     },
     {
       "layout": 3,
@@ -251,7 +294,10 @@
       "penalized_time_s": 8.710000038146973,
       "handoff_s": 5.284999847412109,
       "forbidden_contact_steps": 0,
-      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout03/activation0/evaluation/rb_run3_route0_h75_v0/trajectory.npz"
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout03/activation0/evaluation/rb_run3_route0_h75_v0/trajectory.npz",
+      "locked_joint_max_drift_rad": 2.682209014892578e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.5604444742202759
     },
     {
       "layout": 3,
@@ -269,7 +315,10 @@
       "penalized_time_s": 10,
       "handoff_s": 5.295000076293945,
       "forbidden_contact_steps": 1,
-      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout03/activation0/evaluation/rb_run3_route0_h75_v1/trajectory.npz"
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout03/activation0/evaluation/rb_run3_route0_h75_v1/trajectory.npz",
+      "locked_joint_max_drift_rad": 3.5643577575683594e-05,
+      "goal_hold_s": 0.0,
+      "min_world_forward_m_s": 1.4035699367523193
     },
     {
       "layout": 3,
@@ -287,7 +336,10 @@
       "penalized_time_s": 9.319999694824219,
       "handoff_s": 5.570000171661377,
       "forbidden_contact_steps": 0,
-      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout03/activation1/evaluation/rb_run3_route4_h75_v0/trajectory.npz"
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout03/activation1/evaluation/rb_run3_route4_h75_v0/trajectory.npz",
+      "locked_joint_max_drift_rad": 2.7298927307128906e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.4139108657836914
     },
     {
       "layout": 3,
@@ -305,7 +357,10 @@
       "penalized_time_s": 9.295000076293945,
       "handoff_s": 5.585000038146973,
       "forbidden_contact_steps": 0,
-      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout03/activation1/evaluation/rb_run3_route4_h75_v1/trajectory.npz"
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout03/activation1/evaluation/rb_run3_route4_h75_v1/trajectory.npz",
+      "locked_joint_max_drift_rad": 3.0159950256347656e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.4252326488494873
     },
     {
       "layout": 4,
@@ -323,7 +378,10 @@
       "penalized_time_s": 10,
       "handoff_s": 5.315000057220459,
       "forbidden_contact_steps": 1,
-      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout04/activation0/evaluation/rb_run3_route0_h75_v0/trajectory.npz"
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout04/activation0/evaluation/rb_run3_route0_h75_v0/trajectory.npz",
+      "locked_joint_max_drift_rad": 3.540515899658203e-05,
+      "goal_hold_s": 0.0,
+      "min_world_forward_m_s": 1.33153235912323
     },
     {
       "layout": 4,
@@ -341,7 +399,10 @@
       "penalized_time_s": 10,
       "handoff_s": 5.295000076293945,
       "forbidden_contact_steps": 1,
-      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout04/activation0/evaluation/rb_run3_route0_h75_v1/trajectory.npz"
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout04/activation0/evaluation/rb_run3_route0_h75_v1/trajectory.npz",
+      "locked_joint_max_drift_rad": 2.8967857360839844e-05,
+      "goal_hold_s": 0.0,
+      "min_world_forward_m_s": 1.5209590196609497
     },
     {
       "layout": 4,
@@ -359,7 +420,10 @@
       "penalized_time_s": 9.289999961853027,
       "handoff_s": 5.605000019073486,
       "forbidden_contact_steps": 0,
-      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout04/activation1/evaluation/rb_run3_route4_h75_v0/trajectory.npz"
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout04/activation1/evaluation/rb_run3_route4_h75_v0/trajectory.npz",
+      "locked_joint_max_drift_rad": 2.944469451904297e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.4140793085098267
     },
     {
       "layout": 4,
@@ -377,7 +441,10 @@
       "penalized_time_s": 9.28499984741211,
       "handoff_s": 5.585000038146973,
       "forbidden_contact_steps": 0,
-      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout04/activation1/evaluation/rb_run3_route4_h75_v1/trajectory.npz"
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout04/activation1/evaluation/rb_run3_route4_h75_v1/trajectory.npz",
+      "locked_joint_max_drift_rad": 3.0159950256347656e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.4251360893249512
     },
     {
       "layout": 5,
@@ -395,7 +462,10 @@
       "penalized_time_s": 10,
       "handoff_s": 5.300000190734863,
       "forbidden_contact_steps": 1,
-      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout05/activation0/evaluation/rb_run3_route0_h75_v0/trajectory.npz"
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout05/activation0/evaluation/rb_run3_route0_h75_v0/trajectory.npz",
+      "locked_joint_max_drift_rad": 2.9087066650390625e-05,
+      "goal_hold_s": 0.0,
+      "min_world_forward_m_s": 1.5669662952423096
     },
     {
       "layout": 5,
@@ -413,7 +483,10 @@
       "penalized_time_s": 10,
       "handoff_s": 5.289999961853027,
       "forbidden_contact_steps": 1,
-      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout05/activation0/evaluation/rb_run3_route0_h75_v1/trajectory.npz"
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout05/activation0/evaluation/rb_run3_route0_h75_v1/trajectory.npz",
+      "locked_joint_max_drift_rad": 2.8967857360839844e-05,
+      "goal_hold_s": 0.0,
+      "min_world_forward_m_s": 1.5568690299987793
     },
     {
       "layout": 5,
@@ -431,7 +504,10 @@
       "penalized_time_s": 9.335000038146973,
       "handoff_s": 5.585000038146973,
       "forbidden_contact_steps": 0,
-      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout05/activation1/evaluation/rb_run3_route4_h75_v0/trajectory.npz"
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout05/activation1/evaluation/rb_run3_route4_h75_v0/trajectory.npz",
+      "locked_joint_max_drift_rad": 2.7298927307128906e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.413642406463623
     },
     {
       "layout": 5,
@@ -449,7 +525,262 @@
       "penalized_time_s": 9.289999961853027,
       "handoff_s": 5.585000038146973,
       "forbidden_contact_steps": 0,
-      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout05/activation1/evaluation/rb_run3_route4_h75_v1/trajectory.npz"
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout05/activation1/evaluation/rb_run3_route4_h75_v1/trajectory.npz",
+      "locked_joint_max_drift_rad": 3.0159950256347656e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.4255950450897217
+    },
+    {
+      "layout": 0,
+      "method": "backtracking",
+      "feasible": true,
+      "candidate": 4,
+      "route": 4,
+      "activation_x_m": 8.45,
+      "shared_planning_ms": 0.37482898915186524,
+      "clearance_m": 0.015258772298693657,
+      "root": 6,
+      "goal": true,
+      "termination": "goal",
+      "duration_s": 9.300000190734863,
+      "penalized_time_s": 9.300000190734863,
+      "handoff_s": 5.585000038146973,
+      "forbidden_contact_steps": 0,
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_backtracking/layout00/evaluation/rb_run3_route4_h75_v0/trajectory.npz",
+      "locked_joint_max_drift_rad": 4.8041343688964844e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.4135849475860596
+    },
+    {
+      "layout": 0,
+      "method": "backtracking",
+      "feasible": true,
+      "candidate": 4,
+      "route": 4,
+      "activation_x_m": 8.45,
+      "shared_planning_ms": 0.37482898915186524,
+      "clearance_m": 0.015258772298693657,
+      "root": 7,
+      "goal": true,
+      "termination": "goal",
+      "duration_s": 9.3100004196167,
+      "penalized_time_s": 9.3100004196167,
+      "handoff_s": 5.590000152587891,
+      "forbidden_contact_steps": 0,
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_backtracking/layout00/evaluation/rb_run3_route4_h75_v1/trajectory.npz",
+      "locked_joint_max_drift_rad": 3.5762786865234375e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.4254701137542725
+    },
+    {
+      "layout": 1,
+      "method": "backtracking",
+      "feasible": true,
+      "candidate": 31,
+      "route": 4,
+      "activation_x_m": 8.75,
+      "shared_planning_ms": 0.3163920482620597,
+      "clearance_m": 0.07267093658447266,
+      "root": 6,
+      "goal": true,
+      "termination": "goal",
+      "duration_s": 9.300000190734863,
+      "penalized_time_s": 9.300000190734863,
+      "handoff_s": 5.53000020980835,
+      "forbidden_contact_steps": 0,
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_backtracking/layout01/evaluation/rb_run3_route4_h75_v0/trajectory.npz",
+      "locked_joint_max_drift_rad": 2.7298927307128906e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.4139262437820435
+    },
+    {
+      "layout": 1,
+      "method": "backtracking",
+      "feasible": true,
+      "candidate": 31,
+      "route": 4,
+      "activation_x_m": 8.75,
+      "shared_planning_ms": 0.3163920482620597,
+      "clearance_m": 0.07267093658447266,
+      "root": 7,
+      "goal": true,
+      "termination": "goal",
+      "duration_s": 9.279999732971191,
+      "penalized_time_s": 9.279999732971191,
+      "handoff_s": 5.644999980926514,
+      "forbidden_contact_steps": 0,
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_backtracking/layout01/evaluation/rb_run3_route4_h75_v1/trajectory.npz",
+      "locked_joint_max_drift_rad": 5.900859832763672e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.4255529642105103
+    },
+    {
+      "layout": 2,
+      "method": "backtracking",
+      "feasible": true,
+      "candidate": 31,
+      "route": 4,
+      "activation_x_m": 8.75,
+      "shared_planning_ms": 0.3279880038462579,
+      "clearance_m": 0.005465641617774963,
+      "root": 6,
+      "goal": true,
+      "termination": "goal",
+      "duration_s": 9.319999694824219,
+      "penalized_time_s": 9.319999694824219,
+      "handoff_s": 5.585000038146973,
+      "forbidden_contact_steps": 0,
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout02/activation3/evaluation/rb_run3_route4_h75_v0/trajectory.npz",
+      "locked_joint_max_drift_rad": 3.230571746826172e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.4136006832122803
+    },
+    {
+      "layout": 2,
+      "method": "backtracking",
+      "feasible": true,
+      "candidate": 31,
+      "route": 4,
+      "activation_x_m": 8.75,
+      "shared_planning_ms": 0.3279880038462579,
+      "clearance_m": 0.005465641617774963,
+      "root": 7,
+      "goal": true,
+      "termination": "goal",
+      "duration_s": 9.359999656677246,
+      "penalized_time_s": 9.359999656677246,
+      "handoff_s": 5.625,
+      "forbidden_contact_steps": 0,
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope/layout02/activation3/evaluation/rb_run3_route4_h75_v1/trajectory.npz",
+      "locked_joint_max_drift_rad": 4.172325134277344e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.4249039888381958
+    },
+    {
+      "layout": 3,
+      "method": "backtracking",
+      "feasible": true,
+      "candidate": 4,
+      "route": 4,
+      "activation_x_m": 8.45,
+      "shared_planning_ms": 0.32378797186538577,
+      "clearance_m": 0.09185062348842621,
+      "root": 6,
+      "goal": true,
+      "termination": "goal",
+      "duration_s": 9.305000305175781,
+      "penalized_time_s": 9.305000305175781,
+      "handoff_s": 5.585000038146973,
+      "forbidden_contact_steps": 0,
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_backtracking/layout03/evaluation/rb_run3_route4_h75_v0/trajectory.npz",
+      "locked_joint_max_drift_rad": 2.7298927307128906e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.413796067237854
+    },
+    {
+      "layout": 3,
+      "method": "backtracking",
+      "feasible": true,
+      "candidate": 4,
+      "route": 4,
+      "activation_x_m": 8.45,
+      "shared_planning_ms": 0.32378797186538577,
+      "clearance_m": 0.09185062348842621,
+      "root": 7,
+      "goal": true,
+      "termination": "goal",
+      "duration_s": 9.300000190734863,
+      "penalized_time_s": 9.300000190734863,
+      "handoff_s": 5.565000057220459,
+      "forbidden_contact_steps": 0,
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_backtracking/layout03/evaluation/rb_run3_route4_h75_v1/trajectory.npz",
+      "locked_joint_max_drift_rad": 4.124641418457031e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.4254125356674194
+    },
+    {
+      "layout": 4,
+      "method": "backtracking",
+      "feasible": true,
+      "candidate": 4,
+      "route": 4,
+      "activation_x_m": 8.45,
+      "shared_planning_ms": 0.31704100547358394,
+      "clearance_m": 0.028565969318151474,
+      "root": 6,
+      "goal": true,
+      "termination": "goal",
+      "duration_s": 9.305000305175781,
+      "penalized_time_s": 9.305000305175781,
+      "handoff_s": 5.590000152587891,
+      "forbidden_contact_steps": 0,
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_backtracking/layout04/evaluation/rb_run3_route4_h75_v0/trajectory.npz",
+      "locked_joint_max_drift_rad": 3.0875205993652344e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.413743257522583
+    },
+    {
+      "layout": 4,
+      "method": "backtracking",
+      "feasible": true,
+      "candidate": 4,
+      "route": 4,
+      "activation_x_m": 8.45,
+      "shared_planning_ms": 0.31704100547358394,
+      "clearance_m": 0.028565969318151474,
+      "root": 7,
+      "goal": true,
+      "termination": "goal",
+      "duration_s": 9.295000076293945,
+      "penalized_time_s": 9.295000076293945,
+      "handoff_s": 5.585000038146973,
+      "forbidden_contact_steps": 0,
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_backtracking/layout04/evaluation/rb_run3_route4_h75_v1/trajectory.npz",
+      "locked_joint_max_drift_rad": 3.0159950256347656e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.4254604578018188
+    },
+    {
+      "layout": 5,
+      "method": "backtracking",
+      "feasible": true,
+      "candidate": 31,
+      "route": 4,
+      "activation_x_m": 8.75,
+      "shared_planning_ms": 0.32350700348615646,
+      "clearance_m": 0.07268558442592621,
+      "root": 6,
+      "goal": true,
+      "termination": "goal",
+      "duration_s": 9.3100004196167,
+      "penalized_time_s": 9.3100004196167,
+      "handoff_s": 5.585000038146973,
+      "forbidden_contact_steps": 0,
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_backtracking/layout05/evaluation/rb_run3_route4_h75_v0/trajectory.npz",
+      "locked_joint_max_drift_rad": 2.9325485229492188e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.4131207466125488
+    },
+    {
+      "layout": 5,
+      "method": "backtracking",
+      "feasible": true,
+      "candidate": 31,
+      "route": 4,
+      "activation_x_m": 8.75,
+      "shared_planning_ms": 0.32350700348615646,
+      "clearance_m": 0.07268558442592621,
+      "root": 7,
+      "goal": true,
+      "termination": "goal",
+      "duration_s": 9.295000076293945,
+      "penalized_time_s": 9.295000076293945,
+      "handoff_s": 5.59499979019165,
+      "forbidden_contact_steps": 0,
+      "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_backtracking/layout05/evaluation/rb_run3_route4_h75_v1/trajectory.npz",
+      "locked_joint_max_drift_rad": 3.0159950256347656e-05,
+      "goal_hold_s": 0.5049996972084045,
+      "min_world_forward_m_s": 1.4255772829055786
     }
   ],
   "pairs": [
