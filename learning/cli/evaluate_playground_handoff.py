@@ -47,6 +47,12 @@ def transplant(bundle, terrain, output, physics_substeps=1, ground_physics=None)
         ET.SubElement(world,'geom',name=f'bank{i}',type='hfield',hfield=f'bank{i}',pos=f'{(xs[-1]+xs[0])/2} {(ys[-1]+ys[0])/2} {bottom}',quat='.7071067811865476 0 0 .7071067811865476',friction='.8 .005 .0001',contype='1',conaffinity='15',rgba='.45 .38 .25 1')
         # Rotate local grid 90 degrees so MuJoCo's cell diagonal matches Isaac.
         heights.append(((zz[::-1,:]-bottom)/scale).astype(np.float32))
+    for i,(xmin,xmax,ymin,ymax) in enumerate(terrain.get('forbidden_rectangles',[])):
+        height=terrain.get('obstacle_height_m',.5)
+        ET.SubElement(world,'geom',name=f'planning_obstacle_{i}',type='box',
+            pos=f'{(xmin+xmax)/2} {(ymin+ymax)/2} {height/2}',
+            size=f'{(xmax-xmin)/2} {(ymax-ymin)/2} {height/2}',
+            contype='1',conaffinity='15',friction='.8 .005 .0001',rgba='.65 .18 .12 1')
     ground_physics = ground_physics or {}
     if ground_physics.get('native_wheel_contacts',False):
         for i in range(len(patches)):
@@ -135,11 +141,12 @@ def main():
         from sttw_control.playground_ground_evaluation import evaluate_ground_suite
         evaluate_ground_suite(model,mm,idx,cfg,bundle,hcfg,identity,controller,a.output,a.physics_substeps,brake_ids)
         return
-    n=len(a.routes)*len(skills)*len(a.modes)*len(hand.get('handoff_variants',[{}]))
+    n=len(skills)*(len(cfg['evaluation_lanes']) if 'evaluation_lanes' in cfg else len(a.routes)*len(a.modes)*len(hand.get('handoff_variants',[{}])))
     if 'snapshot_replay_s' in cfg:n*=2
     contract=dict(terrain_model=str(a.model) if a.model else str(a.output/'terrain.mjb'),role='bounded native Playground transfer DEV, no training',skills={k:s.record for k,s in skills.items()},terrain=terrain,source_config=str(a.config),routes=a.routes,episode_s=a.seconds,episodes=n,physics_steps_max=round(a.seconds/.005)*n*(a.physics_substeps+(1 if rb_physics else a.physics_substeps)),backend='MJX-Warp vmap; GPU Torch H75/ECBC/ESO; JAX RB; DLPack; final-only host export',heightfield_contact_workspace=512,physics_dt=.005/a.physics_substeps,physics_substeps=a.physics_substeps,lower_dt=.005,upper_dt=.02,ground_model=identity,goal=hand['goal'],road_half_width_m=hand['road_half_width_m'],start_x_m=hand.get('start_x_m',1.5),start_vx_m_s=hand.get('start_vx_m_s',2.),handoff=hand.get('handoff_mechanism','fixed contact delay'),handoff_delay_s=hand.get('handoff_delay_s',0.),approach=a.approach,ground_only=a.ground_only,jump_start_x_m=hand['approach']['jump_start_x_m'],scope='Declared approach controller then native RB jump then H75 or zero-middle STTW. No planning or training.',ground_physics=ground_physics,rb_physics=rb_physics,terrain_conversion='Original Isaac rectangular patches, coordinates and heights retained without interpolation; 90-degree local grid rotation matches original triangle diagonal',pendulum='STTW hip/knee equality brakes at entry posture; released during RB, relocked at measured handoff posture; native finite servos retained',observer='measured ESO initialization, empty H75 history at handoff')
     if cfg.get('collect_model_state'):
         contract.update(role=cfg['role'],scope='Bounded ground model collection; 4 s timeout denotes completed slice, not goal success. Splits are frozen in the collection manifest.',collect_model_state=True)
+    if cfg.get('task_evaluation'):contract.update(scope=cfg['role'],completed_slice_semantics=False)
     contract['contact_substep_telemetry']=cfg.get('contact_substep_telemetry',False)
     contract['contact_timing']='Each sample is a solver load during one 1 ms step; row t aggregates the preceding 5 ms, row zero has no interval and is NaN.'
     contract['snapshot_replay_s']=cfg.get('snapshot_replay_s')

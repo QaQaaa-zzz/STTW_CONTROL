@@ -1,0 +1,152 @@
+{
+  "constraint_ranking": "Dimensionless violations normalized by their frozen physical margin/limit/tolerance; feasible candidates ordered by common fixed-endpoint length and smoothness.",
+  "role": "E1 DEV pilot, not independent TEST or P1 acceptance",
+  "layouts": 12,
+  "roots_per_layout": 3,
+  "methods": [
+    "geometry",
+    "dynamic"
+  ],
+  "physical_episodes": 72,
+  "seconds": 4.5,
+  "contract": {
+    "steps": 150,
+    "iterations": 4,
+    "elites": 8,
+    "parameter_limit_m": 1.4,
+    "minimum_std_m": 0.04,
+    "margin_m": 0.36,
+    "roll_limit_rad": 0.7,
+    "pitch_limit_rad": 1.309,
+    "min_speed_m_s": 0.5,
+    "curvature_limit_per_m": 1.4,
+    "exit_x_m": 5.0,
+    "tail_distance_m": 1.8,
+    "exit_y_m": 0.0,
+    "exit_y_tolerance_m": 0.3,
+    "exit_heading_tolerance_rad": 0.2,
+    "exit_speed_tolerance_m_s": 0.4,
+    "wheelbase_m": 0.27903
+  },
+  "candidates_per_topology": 64,
+  "iterations": 4,
+  "elites": 8,
+  "topologies": [
+    "left",
+    "right"
+  ],
+  "source_model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p1_ground_collection/model/nominal_arx.npz",
+  "root_source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p1_ground_collection/flat_01_dev_root/evaluation",
+  "selection": "Static pre-execution planning from saved matching flat reset20ms histories. Run verifies measured query-state mismatch. Not live online planning. Equal frozen noise and 2 incumbent candidates within each 64 budget.",
+  "publication": "All methods/roots in a layout publish together at ceil(max measured planning time /20ms)+20ms; old straight plan continues and histories are retained.",
+  "failure": "No feasible plan is retained in denominator and runs its existing straight plan; a least-violating candidate is never published.",
+  "budget": "One 12-batch GPU queue only; 4.5s each, maximum72 episodes. No retries or training. Expected12-25min; >30min wait pauses goal with Bark. Original complete-chain terrain remains unchanged.",
+  "terrain": "Original near-bank stones and2cm ridge, original ditch and far-bank4cm ridge retained. E1 ends before ditch. Fixed forbidden boxes and road bounds per layout, independent of selected route.",
+  "entries": [
+    {
+      "layout": 0,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_graph_lifetime/layout00/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_graph_lifetime/layout00/evaluation",
+      "publish_s": 0.08,
+      "planned": 6,
+      "episodes": 6
+    },
+    {
+      "layout": 1,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_graph_lifetime/layout01/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_graph_lifetime/layout01/evaluation",
+      "publish_s": 0.08,
+      "planned": 0,
+      "episodes": 6,
+      "reused_evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_normalized/layout01/evaluation"
+    },
+    {
+      "layout": 2,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_graph_lifetime/layout02/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_graph_lifetime/layout02/evaluation",
+      "publish_s": 0.08,
+      "planned": 0,
+      "episodes": 6,
+      "reused_evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_normalized/layout02/evaluation"
+    },
+    {
+      "layout": 3,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_graph_lifetime/layout03/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_graph_lifetime/layout03/evaluation",
+      "publish_s": 0.08,
+      "planned": 0,
+      "episodes": 6,
+      "reused_evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_normalized/layout03/evaluation"
+    },
+    {
+      "layout": 4,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_graph_lifetime/layout04/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_graph_lifetime/layout04/evaluation",
+      "publish_s": 0.08,
+      "planned": 0,
+      "episodes": 6,
+      "reused_evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_normalized/layout04/evaluation"
+    },
+    {
+      "layout": 5,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_graph_lifetime/layout05/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_graph_lifetime/layout05/evaluation",
+      "publish_s": 0.08,
+      "planned": 6,
+      "episodes": 6
+    },
+    {
+      "layout": 6,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_graph_lifetime/layout06/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_graph_lifetime/layout06/evaluation",
+      "publish_s": 0.08,
+      "planned": 6,
+      "episodes": 6
+    },
+    {
+      "layout": 7,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_graph_lifetime/layout07/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_graph_lifetime/layout07/evaluation",
+      "publish_s": 0.08,
+      "planned": 0,
+      "episodes": 6,
+      "reused_evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_normalized/layout07/evaluation"
+    },
+    {
+      "layout": 8,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_graph_lifetime/layout08/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_graph_lifetime/layout08/evaluation",
+      "publish_s": 0.08,
+      "planned": 0,
+      "episodes": 6,
+      "reused_evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_normalized/layout08/evaluation"
+    },
+    {
+      "layout": 9,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_graph_lifetime/layout09/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_graph_lifetime/layout09/evaluation",
+      "publish_s": 0.08,
+      "planned": 0,
+      "episodes": 6,
+      "reused_evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_normalized/layout09/evaluation"
+    },
+    {
+      "layout": 10,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_graph_lifetime/layout10/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_graph_lifetime/layout10/evaluation",
+      "publish_s": 0.08,
+      "planned": 1,
+      "episodes": 6,
+      "reused_evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_normalized/layout10/evaluation"
+    },
+    {
+      "layout": 11,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_graph_lifetime/layout11/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_graph_lifetime/layout11/evaluation",
+      "publish_s": 0.08,
+      "planned": 6,
+      "episodes": 6
+    }
+  ],
+  "physical_execution": "48 episodes from eight exactly matched source layouts reused; four changed route discretizations (24 episodes) rerun. Geometry graph lifetime fixed; previous NaN planner labels invalid, not physical trajectory failure."
+}

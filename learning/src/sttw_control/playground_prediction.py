@@ -54,18 +54,26 @@ class NominalRollout:
             torch.stack([interp(curvature,distance+d) for d in (0.,.5,1.)],1),ey[:,None],
             torch.atan2(dh.sin(),dh.cos())[:,None],preview,torch.full_like(look[:,None],1.8),look[:,None]),1)
 
+    def step(self,pose,xi,previous,s,xy,heading,curvature):
+        eta=self.features(pose,xi,s,xy,heading,curvature)
+        x=torch.cat((xi,previous,eta),1)
+        nxt=((x-self.mean)/self.scale)@self.weight+self.bias
+        if self.identity:nxt=nxt+xi
+        mid=(xi+nxt)*.5;rv=mid[:,3:6]*.02;angle=rv.norm(dim=-1,keepdim=True)
+        dq=torch.cat(((angle*.5).cos(),rv*.5*torch.sinc(angle/(2*torch.pi))),1)
+        q=multiply(pose[:,3:7],dq);q=q/q.norm(dim=-1,keepdim=True)
+        xyz=pose[:,:3]+.01*(rotate(pose[:,3:7],xi[:,:3])+rotate(q,nxt[:,:3]))
+        pose=torch.cat((xyz,q,pose[:,7:10]+mid[:,6:9]*.02,pose[:,10:12]),1)
+        return pose,nxt
+
+    def compile_step(self):
+        self.step=torch.compile(self.step,fullgraph=True)
+
     def __call__(self,pose,xi,previous,s,xy,heading,curvature,steps=100):
+        pose=pose.contiguous();xi=xi.contiguous();previous=previous.contiguous()
         poses=[pose];velocities=[xi]
         for _ in range(steps):
-            eta=self.features(pose,xi,s,xy,heading,curvature)
-            x=torch.cat((xi,previous,eta),1)
-            nxt=((x-self.mean)/self.scale)@self.weight+self.bias
-            if self.identity:nxt=nxt+xi
-            mid=(xi+nxt)*.5;rv=mid[:,3:6]*.02;angle=rv.norm(dim=-1,keepdim=True)
-            dq=torch.cat(((angle*.5).cos(),rv*.5*torch.sinc(angle/(2*torch.pi))),1)
-            q=multiply(pose[:,3:7],dq);q=q/q.norm(dim=-1,keepdim=True)
-            xyz=pose[:,:3]+.01*(rotate(pose[:,3:7],xi[:,:3])+rotate(q,nxt[:,:3]))
-            pose=torch.cat((xyz,q,pose[:,7:10]+mid[:,6:9]*.02,pose[:,10:12]),1)
+            pose,nxt=self.step(pose,xi,previous,s,xy,heading,curvature)
             previous,xi=xi,nxt;poses.append(pose);velocities.append(xi)
         return torch.stack(poses,1),torch.stack(velocities,1)
 

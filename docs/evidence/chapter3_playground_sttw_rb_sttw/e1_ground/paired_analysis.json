@@ -1,0 +1,12 @@
+{
+  "paired_task_difference": 0.027777777777777776,
+  "layout_bootstrap_95_interval": [
+    0.0,
+    0.08333333333333333
+  ],
+  "physical_goal_difference": 0,
+  "paired_physical_duration_difference_mean_s": 1.3245476616753471e-08,
+  "query_pose_gap_max": 3.4924596548080444e-10,
+  "query_xi_gap_max": 1.564621925354004e-07,
+  "scope": "Exploratory DEV, 12 layout groups; no independent TEST or physical-success improvement. Plan acceptance differs from actual reachability."
+}

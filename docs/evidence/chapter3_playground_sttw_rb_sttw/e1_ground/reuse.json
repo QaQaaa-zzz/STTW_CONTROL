@@ -1,0 +1,146 @@
+[
+  {
+    "layout": 0,
+    "reused": false,
+    "checks": {
+      "initial_routes.npz": true,
+      "planned_routes.npz": false,
+      "world": true,
+      "config": true,
+      "runner_source": true
+    },
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_normalized/layout00/evaluation"
+  },
+  {
+    "layout": 1,
+    "reused": true,
+    "checks": {
+      "initial_routes.npz": true,
+      "planned_routes.npz": true,
+      "world": true,
+      "config": true,
+      "runner_source": true
+    },
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_normalized/layout01/evaluation"
+  },
+  {
+    "layout": 2,
+    "reused": true,
+    "checks": {
+      "initial_routes.npz": true,
+      "planned_routes.npz": true,
+      "world": true,
+      "config": true,
+      "runner_source": true
+    },
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_normalized/layout02/evaluation"
+  },
+  {
+    "layout": 3,
+    "reused": true,
+    "checks": {
+      "initial_routes.npz": true,
+      "planned_routes.npz": true,
+      "world": true,
+      "config": true,
+      "runner_source": true
+    },
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_normalized/layout03/evaluation"
+  },
+  {
+    "layout": 4,
+    "reused": true,
+    "checks": {
+      "initial_routes.npz": true,
+      "planned_routes.npz": true,
+      "world": true,
+      "config": true,
+      "runner_source": true
+    },
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_normalized/layout04/evaluation"
+  },
+  {
+    "layout": 5,
+    "reused": false,
+    "checks": {
+      "initial_routes.npz": true,
+      "planned_routes.npz": false,
+      "world": true,
+      "config": true,
+      "runner_source": true
+    },
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_normalized/layout05/evaluation"
+  },
+  {
+    "layout": 6,
+    "reused": false,
+    "checks": {
+      "initial_routes.npz": true,
+      "planned_routes.npz": false,
+      "world": true,
+      "config": true,
+      "runner_source": true
+    },
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_normalized/layout06/evaluation"
+  },
+  {
+    "layout": 7,
+    "reused": true,
+    "checks": {
+      "initial_routes.npz": true,
+      "planned_routes.npz": true,
+      "world": true,
+      "config": true,
+      "runner_source": true
+    },
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_normalized/layout07/evaluation"
+  },
+  {
+    "layout": 8,
+    "reused": true,
+    "checks": {
+      "initial_routes.npz": true,
+      "planned_routes.npz": true,
+      "world": true,
+      "config": true,
+      "runner_source": true
+    },
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_normalized/layout08/evaluation"
+  },
+  {
+    "layout": 9,
+    "reused": true,
+    "checks": {
+      "initial_routes.npz": true,
+      "planned_routes.npz": true,
+      "world": true,
+      "config": true,
+      "runner_source": true
+    },
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_normalized/layout09/evaluation"
+  },
+  {
+    "layout": 10,
+    "reused": true,
+    "checks": {
+      "initial_routes.npz": true,
+      "planned_routes.npz": true,
+      "world": true,
+      "config": true,
+      "runner_source": true
+    },
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_normalized/layout10/evaluation"
+  },
+  {
+    "layout": 11,
+    "reused": false,
+    "checks": {
+      "initial_routes.npz": true,
+      "planned_routes.npz": false,
+      "world": true,
+      "config": true,
+      "runner_source": true
+    },
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_pilot_normalized/layout11/evaluation"
+  }
+]

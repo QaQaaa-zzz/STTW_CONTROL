@@ -36,7 +36,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
     to_jax=lambda x:jax.dlpack.from_dlpack(x.detach().contiguous())
     tensor=lambda x:torch.as_tensor(x,device=device)
     variants=hand.get('handoff_variants',[{}])
-    lanes=[(r,m,i) for i in range(len(variants)) for r in args.routes for m in args.modes];n=len(lanes)
+    lanes=[tuple(lane) for lane in cfg['evaluation_lanes']] if 'evaluation_lanes' in cfg else [(r,m,i) for i in range(len(variants)) for r in args.routes for m in args.modes];n=len(lanes)
     event=hand.get('handoff_mechanism')=='landing_state'
     landing_height=tensor([variants[i].get('landing_height_m',.35) for r,m,i in lanes]).float()
     swing_scale=jp.asarray([variants[i].get('swing_scale',1.) for r,m,i in lanes],dtype=jp.float32)
@@ -69,6 +69,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
     home_pose=tensor(model.key_qpos[idx.keyframe_id,brake_qpos]).float()
     joint_kp=tensor(model.actuator_gainprm[2:,0]).float()
     terrain_geoms=jp.asarray(model.geom_type==mujoco.mjtGeom.mjGEOM_HFIELD)
+    forbidden_geoms=jp.asarray([model.geom(i).name.startswith('planning_obstacle_') for i in range(model.ngeom)])
     rb_model=mm.replace(opt=mm.opt.replace(timestep=jp.asarray(.005,dtype=mm.opt.timestep.dtype),integrator=type(mm.opt.integrator)(int(mujoco.mjtIntegrator.mjINT_RK4)))) if cfg.get('rb_physics') else mm
     rb_substeps=1 if cfg.get('rb_physics') else args.physics_substeps
 
@@ -84,7 +85,11 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         valid &= jp.any(terrain_geoms[jp.clip(g,0,model.ngeom-1)]&(g>=0),-1)
         valid &= jp.any(g[:,:,None]==geometry.body_geom_ids[None,None,:],axis=(1,2))
         body_contact=jp.any((c.contact__worldid[None,:]==jp.arange(n)[:,None])&valid,1)
-        return jp.stack((outside,body_contact),1)
+        forbidden=(jp.arange(g.shape[0])<c.nacon[0])&(c.contact__dist<=0)
+        forbidden &= jp.any(forbidden_geoms[jp.clip(g,0,model.ngeom-1)]&(g>=0),-1)
+        forbidden &= jp.any(g[:,:,None]==geometry.robot_geom_ids[None,None,:],axis=(1,2))
+        forbidden_contact=jp.any((c.contact__worldid[None,:]==jp.arange(n)[:,None])&forbidden,1)
+        return jp.stack((outside,body_contact,forbidden_contact),1)
 
     def contacts(d):
         c=d._impl;g=c.contact__geom
@@ -281,14 +286,14 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 target[:,0]=torch.where(reset_control,q[:,idx.steering_qpos_address],target[:,0]);target[:,2:]=torch.where(returning[:,None],lock,target[:,2:])
                 ey=(route.xy[route.route_ids]-q[:,None,:2]).square().sum(-1).min(-1).values.sqrt()
                 eh=wrap(middle.projection['heading']-pose[:,2]);ground_mode=((phase==0)|(phase==2)|(phase==4)) if native_landing else (phase!=1)
-                world_flags=to_torch(world_status(data));world_failure=world_flags[:,0]
+                world_flags=to_torch(world_status(data));world_failure=world_flags[:,0]|world_flags[:,2]
                 physical=~torch.isfinite(q).all(-1)|(angles[:,0].abs()>.7)|(angles[:,1].abs()>1.309)
                 outside=ground_mode&((ey>hand['road_half_width_m'])|middle.domain_exit)
                 at_goal=((phase==2)|args.ground_only)&(q[:,0]>=goal['x_min_m'])&(q[:,0]<=goal['x_max_m'])&(q[:,1].abs()<=goal['abs_y_max_m'])&(v[:,0]>=goal['min_vx_m_s'])
                 at_goal &= (ey<=goal.get('path_tolerance_m',float('inf')))&(eh.abs()<=goal.get('heading_tolerance_rad',float('inf')))&((speed-middle.v_user).abs()<=goal.get('speed_tolerance_m_s',float('inf')))
                 hold=torch.where(alive,torch.where(at_goal,hold+.005,0.),hold)
                 reached=at_goal&(hold>=goal.get('hold_s',0.))
-                stop=alive&(physical|outside|world_failure|reached);codes=torch.where(stop,torch.where(physical,1,torch.where(world_failure,4,torch.where(outside,2,3))),codes);durations=torch.where(stop,t,durations)
+                stop=alive&(physical|outside|world_failure|reached);codes=torch.where(stop,torch.where(physical,1,torch.where(world_flags[:,2],5,torch.where(world_failure,4,torch.where(outside,2,3)))),codes);durations=torch.where(stop,t,durations)
                 rows.append(torch.cat((torch.full((n,1),t,device=device),q[:,:3],angles,v[:,:3],(phase==2)[:,None],ey[:,None],target,(phase==0)[:,None],m[:,5:6],middle.v_user[:,None],phase[:,None]),1))
                 if cfg.get('collect_model_state'):
                     state=dict(frames=middle.frames,mask=middle.mask,nominal=middle.nominal,rates=middle.rates,
@@ -375,9 +380,9 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 if telemetry:
                     samples=load_trace[keep,lane]
                     contact_data.update(dict(contact_substep=samples,contact_substep_columns=['front_normal_N','rear_normal_N','body_normal_N','body_contact'],contact_physics_dt_s=.005/args.physics_substeps,contact_interval_mean_N=samples[:,:,:3].mean(1),contact_interval_peak_N=samples[:,:,:3].max(1),contact_interval_impulse_Ns=samples[:,:,:3].sum(1)*(.005/args.physics_substeps)))
-                np.savez_compressed(target_dir/'trajectory.npz',**contact_data,trace=trace,qpos=qsave,qvel=speeds[keep,lane],world_flags=world_trace[keep,lane],world_flag_columns=['physical_map_exit','nonwheel_terrain_contact'],wheel_contact_flags=contact_trace[keep,lane],wheel_contact_columns=['any_terrain','any_far','both_far'],reference_xy=saved['xy'][route_id],published_reference_xy=route.xy[route_id].cpu().numpy(),columns=['time','x','y','z','roll','pitch','yaw','vx','vy','vz','ground_active','path_distance','steer_target','rear_target','hip_target','knee_target','approaching','rear_rate_rad_s','requested_speed_m_s','phase'])
-                row=dict(case_dir=case_dir,variant=variants[variant],skill=case_name,route=route_id,continuation=mode,termination=['timeout','physical_failure','tracking_domain_exit' if world else 'corridor_or_domain_exit','goal','world_boundary_exit'][codes[lane]],actuator_owner_max_difference=float(ownership_max[lane]) if audit_owner else None,nonwheel_contact_steps=int(world_trace[keep,lane,1].sum()),goal=bool(codes[lane]==3),rb_entry_s=None if entry_time[lane]<0 else float(entry_time[lane]),goal_hold_s=float(hold[lane]),airborne=bool(airborne[lane]),far_contact=bool(far_time[lane]>=0),first_far_contact_s=None if far_time[lane]<0 else float(far_time[lane]),handoff_s=None if handoff_time[lane]<0 else float(handoff_time[lane]),duration_s=float(durations[lane]),final_xy=qsave[-1,:2].tolist())
-                if cfg.get('collect_model_state'):row['completed_slice']=bool(codes[lane]==0)
+                np.savez_compressed(target_dir/'trajectory.npz',**contact_data,trace=trace,qpos=qsave,qvel=speeds[keep,lane],world_flags=world_trace[keep,lane],world_flag_columns=['physical_map_exit','nonwheel_terrain_contact','forbidden_obstacle_contact'],wheel_contact_flags=contact_trace[keep,lane],wheel_contact_columns=['any_terrain','any_far','both_far'],reference_xy=saved['xy'][route_id],published_reference_xy=route.xy[route_id].cpu().numpy(),columns=['time','x','y','z','roll','pitch','yaw','vx','vy','vz','ground_active','path_distance','steer_target','rear_target','hip_target','knee_target','approaching','rear_rate_rad_s','requested_speed_m_s','phase'])
+                row=dict(case_dir=case_dir,variant=variants[variant],skill=case_name,route=route_id,continuation=mode,termination=['timeout','physical_failure','tracking_domain_exit' if world else 'corridor_or_domain_exit','goal','world_boundary_exit','forbidden_obstacle_contact'][codes[lane]],actuator_owner_max_difference=float(ownership_max[lane]) if audit_owner else None,nonwheel_contact_steps=int(world_trace[keep,lane,1].sum()),forbidden_contact_steps=int(world_trace[keep,lane,2].sum()),goal=bool(codes[lane]==3),rb_entry_s=None if entry_time[lane]<0 else float(entry_time[lane]),goal_hold_s=float(hold[lane]),airborne=bool(airborne[lane]),far_contact=bool(far_time[lane]>=0),first_far_contact_s=None if far_time[lane]<0 else float(far_time[lane]),handoff_s=None if handoff_time[lane]<0 else float(handoff_time[lane]),duration_s=float(durations[lane]),final_xy=qsave[-1,:2].tolist())
+                if cfg.get('collect_model_state') and not cfg.get('task_evaluation'):row['completed_slice']=bool(codes[lane]==0)
                 results.append(row)
             all_timing.append(dict(skill=case_name,lanes=n,initialization_s=0. if replay else init_s,rollout_s=rollout_s,simulated_ticks_per_lane=tick-start_tick))
             (args.output/f'{case_name}_plan_receipts.json').write_text(json.dumps(plan_receipts,indent=2))
