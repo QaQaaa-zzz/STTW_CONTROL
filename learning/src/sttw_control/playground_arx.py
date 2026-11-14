@@ -25,6 +25,7 @@ class Reference:
         ey=-np.sin(h)*delta[:,0]+np.cos(h)*delta[:,1]
         c=self.follower
         look=np.clip(c['lookahead_time_s']*np.maximum(xi[:,0],c['lookahead_min_speed_m_s']),c['lookahead_min_m'],c['lookahead_max_m'])
+        look*=c.get('lookahead_scale',1.)
         ahead=np.stack([np.interp(s+look,self.s,self.xy[:,k]) for k in (0,1)],1)-pose[:,:2]
         yaw=Rotation.from_quat(pose[:,3:7][:,[1,2,3,0]]).as_euler('xyz')
         cs=np.cos(yaw[:,2]);sn=np.sin(yaw[:,2])
