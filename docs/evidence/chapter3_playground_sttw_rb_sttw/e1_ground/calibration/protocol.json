@@ -1,0 +1,20 @@
+{
+  "role": "Calibration DEV only, no TEST, refit, policy training or new physical episodes",
+  "entries": [
+    "flat_01_dev_root",
+    "rough_04_dev_map",
+    "rough_05_dev_map"
+  ],
+  "anchor_s": 0.02,
+  "horizons_s": [
+    1.0,
+    2.0,
+    3.0,
+    3.8,
+    4.5
+  ],
+  "metric": "Maximum over time, every collision geom, lower/upper x/y support discrepancy. Inflating each predicted planar AABB by this observed error encloses actual AABBs. Applicable to current axis-aligned road/forbidden rectangles only, not general 3D geometry or probabilistic safety.",
+  "margin_rule": "For each method/horizon take maximum across DEV group P95 support error, plus .02m declared map/discretization allowance. Keep prior global3D bound for comparison; do not select by E1 success.",
+  "budget": "One saved-data evaluation with 225 free prediction steps each, no sweep or retries",
+  "scope": "Reset+20ms anchors only; no claim of rolling-state/history coverage. Partial/missing windows are reported, not padded."
+}

@@ -1,0 +1,4 @@
+{
+  "recorded_utc": "2026-11-14T14:46:36.425076+00:00",
+  "scope": "Retrospective copy while physical evaluation was running. Planner/predictor numerical code matches preparation; CLI now additionally records source snapshots at startup. Do not present this copy as a pre-run version lock. Future preparations snapshot source before any GPU evaluation."
+}

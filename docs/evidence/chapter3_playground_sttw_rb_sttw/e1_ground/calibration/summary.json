@@ -1,0 +1,302 @@
+[
+  {
+    "method": "geometry",
+    "horizon_s": 1.0,
+    "group": "flat_01_dev_root",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.08560103178024292,
+    "max_support_error_m": 0.08560143411159515,
+    "p95_global3d_bound_m": 0.15198343210203438
+  },
+  {
+    "method": "geometry",
+    "horizon_s": 1.0,
+    "group": "rough_04_dev_map",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.06631933413445949,
+    "max_support_error_m": 0.06705307960510254,
+    "p95_global3d_bound_m": 0.14691242457262585
+  },
+  {
+    "method": "geometry",
+    "horizon_s": 1.0,
+    "group": "rough_05_dev_map",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.07321313619613647,
+    "max_support_error_m": 0.07501363754272461,
+    "p95_global3d_bound_m": 0.12271087566892891
+  },
+  {
+    "method": "geometry",
+    "horizon_s": 2.0,
+    "group": "flat_01_dev_root",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.11422012299299239,
+    "max_support_error_m": 0.1442820429801941,
+    "p95_global3d_bound_m": 0.25058245555873515
+  },
+  {
+    "method": "geometry",
+    "horizon_s": 2.0,
+    "group": "rough_04_dev_map",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.1190485954284668,
+    "max_support_error_m": 0.12183475494384766,
+    "p95_global3d_bound_m": 0.25762662622339766
+  },
+  {
+    "method": "geometry",
+    "horizon_s": 2.0,
+    "group": "rough_05_dev_map",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.12173832952976225,
+    "max_support_error_m": 0.13800519704818726,
+    "p95_global3d_bound_m": 0.25898852428003144
+  },
+  {
+    "method": "geometry",
+    "horizon_s": 3.0,
+    "group": "flat_01_dev_root",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.30003646314144133,
+    "max_support_error_m": 0.311618834733963,
+    "p95_global3d_bound_m": 0.7313490034508427
+  },
+  {
+    "method": "geometry",
+    "horizon_s": 3.0,
+    "group": "rough_04_dev_map",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.33563265204429626,
+    "max_support_error_m": 0.3520183861255646,
+    "p95_global3d_bound_m": 0.7127772924464062
+  },
+  {
+    "method": "geometry",
+    "horizon_s": 3.0,
+    "group": "rough_05_dev_map",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.40446695387363435,
+    "max_support_error_m": 0.4153759777545929,
+    "p95_global3d_bound_m": 0.7936732132110704
+  },
+  {
+    "method": "geometry",
+    "horizon_s": 3.8,
+    "group": "flat_01_dev_root",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.38323540687561036,
+    "max_support_error_m": 0.5169405937194824,
+    "p95_global3d_bound_m": 0.9065260415532974
+  },
+  {
+    "method": "geometry",
+    "horizon_s": 3.8,
+    "group": "rough_04_dev_map",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.4166306972503662,
+    "max_support_error_m": 0.4439539909362793,
+    "p95_global3d_bound_m": 0.9953900792616491
+  },
+  {
+    "method": "geometry",
+    "horizon_s": 3.8,
+    "group": "rough_05_dev_map",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.44639279842376706,
+    "max_support_error_m": 0.45078325271606445,
+    "p95_global3d_bound_m": 1.0657914534459831
+  },
+  {
+    "method": "geometry",
+    "horizon_s": 4.5,
+    "group": "flat_01_dev_root",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.43363862037658685,
+    "max_support_error_m": 0.6156005859375,
+    "p95_global3d_bound_m": 0.9065260415532974
+  },
+  {
+    "method": "geometry",
+    "horizon_s": 4.5,
+    "group": "rough_04_dev_map",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.4570752143859863,
+    "max_support_error_m": 0.5202836990356445,
+    "p95_global3d_bound_m": 0.9953900792616491
+  },
+  {
+    "method": "geometry",
+    "horizon_s": 4.5,
+    "group": "rough_05_dev_map",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.4614711761474609,
+    "max_support_error_m": 0.46880245208740234,
+    "p95_global3d_bound_m": 1.0657914534459831
+  },
+  {
+    "method": "dynamic",
+    "horizon_s": 1.0,
+    "group": "flat_01_dev_root",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.03736262135207652,
+    "max_support_error_m": 0.0397227481007576,
+    "p95_global3d_bound_m": 0.07921881435833576
+  },
+  {
+    "method": "dynamic",
+    "horizon_s": 1.0,
+    "group": "rough_04_dev_map",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.030855434201657764,
+    "max_support_error_m": 0.03251976519823074,
+    "p95_global3d_bound_m": 0.09384726468149517
+  },
+  {
+    "method": "dynamic",
+    "horizon_s": 1.0,
+    "group": "rough_05_dev_map",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.03421052563935517,
+    "max_support_error_m": 0.036822475492954254,
+    "p95_global3d_bound_m": 0.07396469350410739
+  },
+  {
+    "method": "dynamic",
+    "horizon_s": 2.0,
+    "group": "flat_01_dev_root",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.06267599314451218,
+    "max_support_error_m": 0.07303737103939056,
+    "p95_global3d_bound_m": 0.1528619743021646
+  },
+  {
+    "method": "dynamic",
+    "horizon_s": 2.0,
+    "group": "rough_04_dev_map",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.0715097926557064,
+    "max_support_error_m": 0.08576381206512451,
+    "p95_global3d_bound_m": 0.13696686423785684
+  },
+  {
+    "method": "dynamic",
+    "horizon_s": 2.0,
+    "group": "rough_05_dev_map",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.06359076499938963,
+    "max_support_error_m": 0.06765890121459961,
+    "p95_global3d_bound_m": 0.15340391548522783
+  },
+  {
+    "method": "dynamic",
+    "horizon_s": 3.0,
+    "group": "flat_01_dev_root",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.16951648965477942,
+    "max_support_error_m": 0.21256424486637115,
+    "p95_global3d_bound_m": 0.32167212361709013
+  },
+  {
+    "method": "dynamic",
+    "horizon_s": 3.0,
+    "group": "rough_04_dev_map",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.1596819333732128,
+    "max_support_error_m": 0.17435353994369507,
+    "p95_global3d_bound_m": 0.3098030026931394
+  },
+  {
+    "method": "dynamic",
+    "horizon_s": 3.0,
+    "group": "rough_05_dev_map",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.18061010241508482,
+    "max_support_error_m": 0.18757927417755127,
+    "p95_global3d_bound_m": 0.3121796514497915
+  },
+  {
+    "method": "dynamic",
+    "horizon_s": 3.8,
+    "group": "flat_01_dev_root",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.17965730503201482,
+    "max_support_error_m": 0.2183637022972107,
+    "p95_global3d_bound_m": 0.3265426502381593
+  },
+  {
+    "method": "dynamic",
+    "horizon_s": 3.8,
+    "group": "rough_04_dev_map",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.16067098677158356,
+    "max_support_error_m": 0.17512688040733337,
+    "p95_global3d_bound_m": 0.3098030026931394
+  },
+  {
+    "method": "dynamic",
+    "horizon_s": 3.8,
+    "group": "rough_05_dev_map",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.2015096507966518,
+    "max_support_error_m": 0.22317539155483246,
+    "p95_global3d_bound_m": 0.4492804781636213
+  },
+  {
+    "method": "dynamic",
+    "horizon_s": 4.5,
+    "group": "flat_01_dev_root",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.1824121780693531,
+    "max_support_error_m": 0.2183637022972107,
+    "p95_global3d_bound_m": 0.3265426502381593
+  },
+  {
+    "method": "dynamic",
+    "horizon_s": 4.5,
+    "group": "rough_04_dev_map",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.17867317274212835,
+    "max_support_error_m": 0.1988363265991211,
+    "p95_global3d_bound_m": 0.3098030026931394
+  },
+  {
+    "method": "dynamic",
+    "horizon_s": 4.5,
+    "group": "rough_05_dev_map",
+    "trajectories": 64,
+    "roots": 8,
+    "p95_support_error_m": 0.22974015995860095,
+    "max_support_error_m": 0.25854015350341797,
+    "p95_global3d_bound_m": 0.4563379983243759
+  }
+]

@@ -1,0 +1,52 @@
+[
+  {
+    "method": "geometry",
+    "horizon_s": 1.0,
+    "margin_m": 0.10560103178024292
+  },
+  {
+    "method": "geometry",
+    "horizon_s": 2.0,
+    "margin_m": 0.14173832952976226
+  },
+  {
+    "method": "geometry",
+    "horizon_s": 3.0,
+    "margin_m": 0.42446695387363437
+  },
+  {
+    "method": "geometry",
+    "horizon_s": 3.8,
+    "margin_m": 0.4663927984237671
+  },
+  {
+    "method": "geometry",
+    "horizon_s": 4.5,
+    "margin_m": 0.48147117614746093
+  },
+  {
+    "method": "dynamic",
+    "horizon_s": 1.0,
+    "margin_m": 0.05736262135207652
+  },
+  {
+    "method": "dynamic",
+    "horizon_s": 2.0,
+    "margin_m": 0.0915097926557064
+  },
+  {
+    "method": "dynamic",
+    "horizon_s": 3.0,
+    "margin_m": 0.2006101024150848
+  },
+  {
+    "method": "dynamic",
+    "horizon_s": 3.8,
+    "margin_m": 0.2215096507966518
+  },
+  {
+    "method": "dynamic",
+    "horizon_s": 4.5,
+    "margin_m": 0.24974015995860094
+  }
+]

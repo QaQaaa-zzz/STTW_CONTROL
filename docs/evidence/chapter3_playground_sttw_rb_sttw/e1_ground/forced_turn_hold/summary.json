@@ -1,0 +1,40 @@
+[
+  {
+    "method": "geometry",
+    "total": 36,
+    "plan_feasible": 36,
+    "physical_goal": 31,
+    "task_success": 31,
+    "outcomes": {
+      "goal": 31,
+      "timeout": 5
+    },
+    "physical_terminations": {
+      "goal": 31,
+      "timeout": 5
+    },
+    "penalized_mean_s": 4.628194398350185,
+    "planning_median_ms": 9.761656023329124,
+    "planning_p95_ms": 10.62914525391534,
+    "planning_max_ms": 11.725978984031826,
+    "planning_over_200ms": 0
+  },
+  {
+    "method": "dynamic",
+    "total": 36,
+    "plan_feasible": 36,
+    "physical_goal": 36,
+    "task_success": 36,
+    "outcomes": {
+      "goal": 36
+    },
+    "physical_terminations": {
+      "goal": 36
+    },
+    "penalized_mean_s": 4.289444420072767,
+    "planning_median_ms": 73.71812500059605,
+    "planning_p95_ms": 74.41915351955686,
+    "planning_max_ms": 81.12295804312453,
+    "planning_over_200ms": 0
+  }
+]

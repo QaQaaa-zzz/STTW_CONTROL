@@ -1,0 +1,67 @@
+[
+  {
+    "layout": "layout03",
+    "route": 0,
+    "root": 0,
+    "method": "geometry",
+    "duration_s": 5.0,
+    "hold_s": 0.0,
+    "final_xy": [
+      9.432201385498047,
+      -0.2889842987060547
+    ],
+    "termination": "timeout"
+  },
+  {
+    "layout": "layout03",
+    "route": 4,
+    "root": 2,
+    "method": "geometry",
+    "duration_s": 5.0,
+    "hold_s": 0.0,
+    "final_xy": [
+      9.417633056640625,
+      -0.3120291233062744
+    ],
+    "termination": "timeout"
+  },
+  {
+    "layout": "layout09",
+    "route": 0,
+    "root": 0,
+    "method": "geometry",
+    "duration_s": 5.0,
+    "hold_s": 0.0,
+    "final_xy": [
+      9.418059349060059,
+      0.2211596965789795
+    ],
+    "termination": "timeout"
+  },
+  {
+    "layout": "layout09",
+    "route": 2,
+    "root": 1,
+    "method": "geometry",
+    "duration_s": 5.0,
+    "hold_s": 0.0,
+    "final_xy": [
+      9.422163963317871,
+      0.21371397376060486
+    ],
+    "termination": "timeout"
+  },
+  {
+    "layout": "layout09",
+    "route": 4,
+    "root": 2,
+    "method": "geometry",
+    "duration_s": 5.0,
+    "hold_s": 0.0,
+    "final_xy": [
+      9.395486831665039,
+      0.23680974543094635
+    ],
+    "termination": "timeout"
+  }
+]

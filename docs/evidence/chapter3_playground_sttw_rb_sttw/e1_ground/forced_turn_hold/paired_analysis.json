@@ -1,0 +1,38 @@
+{
+  "task_difference": 0.13888888888888887,
+  "task_difference_layout_bootstrap95": [
+    0.0,
+    0.3333333333333333
+  ],
+  "paired_penalized_time_difference_s": -0.3387499782774184,
+  "paired_time_layout_bootstrap95_s": [
+    -0.44000344971815736,
+    -0.25583334697617416
+  ],
+  "common_success_n": 31,
+  "common_success_paired_time_difference_mean_s": -0.2751612663269043,
+  "gained": [
+    [
+      3,
+      0
+    ],
+    [
+      3,
+      2
+    ],
+    [
+      9,
+      0
+    ],
+    [
+      9,
+      1
+    ],
+    [
+      9,
+      2
+    ]
+  ],
+  "lost": [],
+  "role": "Exploratory DEV, empirical grouping by12 layouts. No independent TEST; dynamics plus its same-rule calibrated margin, not fixed-margin single-factor ablation."
+}

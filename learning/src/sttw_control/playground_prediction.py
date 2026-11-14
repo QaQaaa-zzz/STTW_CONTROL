@@ -64,17 +64,21 @@ class NominalRollout:
         q=multiply(pose[:,3:7],dq);q=q/q.norm(dim=-1,keepdim=True)
         xyz=pose[:,:3]+.01*(rotate(pose[:,3:7],xi[:,:3])+rotate(q,nxt[:,:3]))
         pose=torch.cat((xyz,q,pose[:,7:10]+mid[:,6:9]*.02,pose[:,10:12]),1)
-        return pose,nxt
+        return pose,nxt,eta
 
     def compile_step(self):
         self.step=torch.compile(self.step,fullgraph=True)
 
-    def __call__(self,pose,xi,previous,s,xy,heading,curvature,steps=100):
+    def __call__(self,pose,xi,previous,s,xy,heading,curvature,steps=100,return_domain=False):
         pose=pose.contiguous();xi=xi.contiguous();previous=previous.contiguous()
-        poses=[pose];velocities=[xi]
+        poses=[pose];velocities=[xi];domain=[]
         for _ in range(steps):
-            pose,nxt=self.step(pose,xi,previous,s,xy,heading,curvature)
+            pose,nxt,eta=self.step(pose,xi,previous,s,xy,heading,curvature)
+            if return_domain:domain.append(eta[:,9:12])
             previous,xi=xi,nxt;poses.append(pose);velocities.append(xi)
+        if return_domain:
+            domain.append(self.features(pose,xi,s,xy,heading,curvature)[:,9:12])
+            return torch.stack(poses,1),torch.stack(velocities,1),torch.stack(domain,1)
         return torch.stack(poses,1),torch.stack(velocities,1)
 
 

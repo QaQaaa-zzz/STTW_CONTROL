@@ -1,0 +1,34 @@
+[
+  {
+    "layout": 3,
+    "root": 0,
+    "method": "geometry",
+    "final_yaw_rad": 0.345005065202713,
+    "final_tracking_m": 0.2890613377094269,
+    "final_speed_m_s": 1.8017576932907104
+  },
+  {
+    "layout": 3,
+    "root": 0,
+    "method": "dynamic",
+    "final_yaw_rad": 0.04119614139199257,
+    "final_tracking_m": 0.036261603236198425,
+    "final_speed_m_s": 1.8205031156539917
+  },
+  {
+    "layout": 9,
+    "root": 0,
+    "method": "geometry",
+    "final_yaw_rad": -0.2355799376964569,
+    "final_tracking_m": 0.2212030291557312,
+    "final_speed_m_s": 1.8549765348434448
+  },
+  {
+    "layout": 9,
+    "root": 0,
+    "method": "dynamic",
+    "final_yaw_rad": 0.048351701349020004,
+    "final_tracking_m": 0.08954332023859024,
+    "final_speed_m_s": 1.8185720443725586
+  }
+]

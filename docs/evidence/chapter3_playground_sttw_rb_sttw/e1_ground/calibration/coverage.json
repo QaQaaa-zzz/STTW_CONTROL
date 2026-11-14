@@ -1,0 +1,20 @@
+[
+  {
+    "group": "flat_01_dev_root",
+    "declared": 64,
+    "full_declared_horizon": 64,
+    "missing": 0
+  },
+  {
+    "group": "rough_04_dev_map",
+    "declared": 64,
+    "full_declared_horizon": 64,
+    "missing": 0
+  },
+  {
+    "group": "rough_05_dev_map",
+    "declared": 64,
+    "full_declared_horizon": 64,
+    "missing": 0
+  }
+]

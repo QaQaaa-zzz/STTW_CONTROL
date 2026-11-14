@@ -1,0 +1,198 @@
+{
+  "role": "E1 forced-turn DEV, same12 maps/3roots/physical5s target;4.5s predictions explicitly include0.5s goal hold. Earlier3.8s pilot retained.",
+  "spline_x": [
+    3.3,
+    8.0
+  ],
+  "seconds": 5.0,
+  "contract": {
+    "steps": 225,
+    "exit_x_m": 6.2,
+    "tail_distance_m": 1.8,
+    "controller_domain": {
+      "steer_abs_max_rad": 0.8,
+      "tracking_limit_m": 0.6,
+      "heading_limit_rad": 1.5707963267948966,
+      "preview_min_m": 0.05
+    },
+    "goal_hold_steps": 25,
+    "goal_x_min_m": 8.0,
+    "goal_x_max_m": 9.7
+  },
+  "goal": {
+    "x_min_m": 8.0,
+    "x_max_m": 9.7,
+    "abs_y_max_m": 0.3
+  },
+  "calibration": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e1_calibration_hold/model_errors/margins.json",
+  "layouts": [
+    {
+      "obstacle_rectangle": [
+        5.4,
+        5.6000000000000005,
+        -0.16,
+        0.0
+      ],
+      "bounds_xy_m": [
+        -5,
+        25,
+        -1.5,
+        1.5
+      ]
+    },
+    {
+      "obstacle_rectangle": [
+        5.4,
+        5.6000000000000005,
+        -0.2,
+        0.039999999999999994
+      ],
+      "bounds_xy_m": [
+        -5,
+        25,
+        -1.5,
+        1.5
+      ]
+    },
+    {
+      "obstacle_rectangle": [
+        5.4,
+        5.6000000000000005,
+        -0.08,
+        0.08
+      ],
+      "bounds_xy_m": [
+        -5,
+        25,
+        -1.5,
+        1.5
+      ]
+    },
+    {
+      "obstacle_rectangle": [
+        5.4,
+        5.6000000000000005,
+        -0.12,
+        0.12
+      ],
+      "bounds_xy_m": [
+        -5,
+        25,
+        -1.5,
+        1.5
+      ]
+    },
+    {
+      "obstacle_rectangle": [
+        5.4,
+        5.6000000000000005,
+        0.0,
+        0.16
+      ],
+      "bounds_xy_m": [
+        -5,
+        25,
+        -1.5,
+        1.5
+      ]
+    },
+    {
+      "obstacle_rectangle": [
+        5.4,
+        5.6000000000000005,
+        -0.039999999999999994,
+        0.2
+      ],
+      "bounds_xy_m": [
+        -5,
+        25,
+        -1.5,
+        1.5
+      ]
+    },
+    {
+      "obstacle_rectangle": [
+        5.8,
+        6.0,
+        -0.16,
+        0.0
+      ],
+      "bounds_xy_m": [
+        -5,
+        25,
+        -1.5,
+        1.5
+      ]
+    },
+    {
+      "obstacle_rectangle": [
+        5.8,
+        6.0,
+        -0.2,
+        0.039999999999999994
+      ],
+      "bounds_xy_m": [
+        -5,
+        25,
+        -1.5,
+        1.5
+      ]
+    },
+    {
+      "obstacle_rectangle": [
+        5.8,
+        6.0,
+        -0.08,
+        0.08
+      ],
+      "bounds_xy_m": [
+        -5,
+        25,
+        -1.5,
+        1.5
+      ]
+    },
+    {
+      "obstacle_rectangle": [
+        5.8,
+        6.0,
+        -0.12,
+        0.12
+      ],
+      "bounds_xy_m": [
+        -5,
+        25,
+        -1.5,
+        1.5
+      ]
+    },
+    {
+      "obstacle_rectangle": [
+        5.8,
+        6.0,
+        0.0,
+        0.16
+      ],
+      "bounds_xy_m": [
+        -5,
+        25,
+        -1.5,
+        1.5
+      ]
+    },
+    {
+      "obstacle_rectangle": [
+        5.8,
+        6.0,
+        -0.039999999999999994,
+        0.2
+      ],
+      "bounds_xy_m": [
+        -5,
+        25,
+        -1.5,
+        1.5
+      ]
+    }
+  ]
+}

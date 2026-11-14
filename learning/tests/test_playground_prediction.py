@@ -18,6 +18,11 @@ class PredictionTest(unittest.TestCase):
         actual,_=pred(t(pose),t(xi),t(xi),t(s),t(np.repeat(bank['xy'],2,0)),t(np.repeat(bank['heading'],2,0)),t(np.repeat(bank['curvature'],2,0)),20)
         expected,_=rollout(model,Reference(bank,0,follower),pose,xi,xi,20)
         np.testing.assert_allclose(actual.numpy(),expected,atol=1e-9)
+        poses,velocities,domain=pred(t(pose),t(xi),t(xi),t(s),t(np.repeat(bank['xy'],2,0)),t(np.repeat(bank['heading'],2,0)),t(np.repeat(bank['curvature'],2,0)),20,return_domain=True)
+        for step in [0,10,20]:
+            features=Reference(bank,0,follower).features(poses[:,step].numpy(),velocities[:,step].numpy())
+            np.testing.assert_allclose(domain[:,step].numpy(),features[:,9:12],atol=1e-9)
+
 
     def test_body_support_matches_mujoco_transforms(self):
         # Native topology with nonzero hinge anchors and rotated bodies/geoms.
