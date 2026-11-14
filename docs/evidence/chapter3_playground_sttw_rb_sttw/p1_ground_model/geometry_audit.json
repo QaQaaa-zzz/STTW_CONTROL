@@ -1,0 +1,486 @@
+{
+  "method": "MuJoCo kinematics, seven robot collision primitives, 26 directions. A sampled support gap is not exact surface distance. This audits the upper bound on illustrative root-0 windows, not independent validation.",
+  "cases": [
+    {
+      "group": "flat_00_train",
+      "route": 0,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.04883115567955798,
+      "max_conservative_bound_m": 0.07310130580403464,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "flat_00_train",
+      "route": 1,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.018260792249240154,
+      "max_conservative_bound_m": 0.04023966834237644,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "flat_00_train",
+      "route": 2,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.025611210906925308,
+      "max_conservative_bound_m": 0.05214417972255257,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "flat_00_train",
+      "route": 3,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.02856631385252492,
+      "max_conservative_bound_m": 0.06069808855214281,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "flat_00_train",
+      "route": 4,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.046449134071328224,
+      "max_conservative_bound_m": 0.125143717252639,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "flat_00_train",
+      "route": 5,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.02956570800521252,
+      "max_conservative_bound_m": 0.0705842305285283,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "flat_00_train",
+      "route": 6,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.028738533022956148,
+      "max_conservative_bound_m": 0.05612428927361423,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "flat_00_train",
+      "route": 7,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.05140780017678015,
+      "max_conservative_bound_m": 0.07999939718737259,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "flat_01_dev_root",
+      "route": 0,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.048663931724183485,
+      "max_conservative_bound_m": 0.07644521136327552,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "flat_01_dev_root",
+      "route": 1,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.021817588597079052,
+      "max_conservative_bound_m": 0.04570812202250556,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "flat_01_dev_root",
+      "route": 2,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.028773375677591417,
+      "max_conservative_bound_m": 0.05864760070484958,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "flat_01_dev_root",
+      "route": 3,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.046961205778285914,
+      "max_conservative_bound_m": 0.10233957622038553,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "flat_01_dev_root",
+      "route": 4,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.02270159399419036,
+      "max_conservative_bound_m": 0.08412140760772928,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "flat_01_dev_root",
+      "route": 5,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.043358916980216655,
+      "max_conservative_bound_m": 0.0975373525543658,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "flat_01_dev_root",
+      "route": 6,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.03966222296652511,
+      "max_conservative_bound_m": 0.07617031366567953,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "flat_01_dev_root",
+      "route": 7,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.04382479189104327,
+      "max_conservative_bound_m": 0.06898987503345773,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_02_train",
+      "route": 0,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.05067768657219496,
+      "max_conservative_bound_m": 0.0836235341219614,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_02_train",
+      "route": 1,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.02378426971248615,
+      "max_conservative_bound_m": 0.05265688629820596,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_02_train",
+      "route": 2,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.02718747108851627,
+      "max_conservative_bound_m": 0.05685477207606568,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_02_train",
+      "route": 3,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.02725550657309128,
+      "max_conservative_bound_m": 0.05466553594920826,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_02_train",
+      "route": 4,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.028699907921503787,
+      "max_conservative_bound_m": 0.08713357526139105,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_02_train",
+      "route": 5,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.023902567313499823,
+      "max_conservative_bound_m": 0.053028331425404515,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_02_train",
+      "route": 6,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.04654112026466617,
+      "max_conservative_bound_m": 0.08978955734630595,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_02_train",
+      "route": 7,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.05019854724427475,
+      "max_conservative_bound_m": 0.07653589953644684,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_03_train",
+      "route": 0,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.04951442637313441,
+      "max_conservative_bound_m": 0.08147854132774986,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_03_train",
+      "route": 1,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.011462806727490005,
+      "max_conservative_bound_m": 0.029866836301631654,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_03_train",
+      "route": 2,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.025767770339989227,
+      "max_conservative_bound_m": 0.07431429637824741,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_03_train",
+      "route": 3,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.021417410289870986,
+      "max_conservative_bound_m": 0.07120486959976724,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_03_train",
+      "route": 4,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.01896705504272589,
+      "max_conservative_bound_m": 0.06199000794919542,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_03_train",
+      "route": 5,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.04165381726249889,
+      "max_conservative_bound_m": 0.09554687426758621,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_03_train",
+      "route": 6,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.05069356069138742,
+      "max_conservative_bound_m": 0.10702493783954352,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_03_train",
+      "route": 7,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.049016774589421,
+      "max_conservative_bound_m": 0.07857629039335502,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_04_dev_map",
+      "route": 0,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.06664174398908607,
+      "max_conservative_bound_m": 0.09522040094683333,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_04_dev_map",
+      "route": 1,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.014715126412967017,
+      "max_conservative_bound_m": 0.037197185308858675,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_04_dev_map",
+      "route": 2,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.03891057619652827,
+      "max_conservative_bound_m": 0.10115255987954483,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_04_dev_map",
+      "route": 3,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.03200863399115997,
+      "max_conservative_bound_m": 0.06971784787815638,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_04_dev_map",
+      "route": 4,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.02208135185965876,
+      "max_conservative_bound_m": 0.08047735009229953,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_04_dev_map",
+      "route": 5,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.09584007823950902,
+      "max_conservative_bound_m": 0.20232847826084754,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_04_dev_map",
+      "route": 6,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.03055059172689134,
+      "max_conservative_bound_m": 0.05442965923031608,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_04_dev_map",
+      "route": 7,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.03957474004362993,
+      "max_conservative_bound_m": 0.06462066366093433,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_05_dev_map",
+      "route": 0,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.05305321464570767,
+      "max_conservative_bound_m": 0.06761041852934596,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_05_dev_map",
+      "route": 1,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.019486486651131507,
+      "max_conservative_bound_m": 0.029855180261591428,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_05_dev_map",
+      "route": 2,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.05758100928869769,
+      "max_conservative_bound_m": 0.10369591599133503,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_05_dev_map",
+      "route": 3,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.03169155453089609,
+      "max_conservative_bound_m": 0.06164962497248666,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_05_dev_map",
+      "route": 4,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.02517067847901,
+      "max_conservative_bound_m": 0.08202239964910342,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_05_dev_map",
+      "route": 5,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.13462975296679858,
+      "max_conservative_bound_m": 0.2862517028542136,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_05_dev_map",
+      "route": 6,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.0392950697160499,
+      "max_conservative_bound_m": 0.06357087279549066,
+      "max_bound_violation_m": 0.0
+    },
+    {
+      "group": "rough_05_dev_map",
+      "route": 7,
+      "root": 0,
+      "window_s": 1.0,
+      "frames": 51,
+      "max_directional_support_gap_m": 0.07246322291896679,
+      "max_conservative_bound_m": 0.11874846512105025,
+      "max_bound_violation_m": 0.0
+    }
+  ],
+  "maximum_violation_m": 0.0
+}

@@ -1,0 +1,77 @@
+{
+  "role": "P1 first bounded collection: 48 roots x 8 curves x 4 s; no policy optimization",
+  "entries": [
+    {
+      "name": "flat_00_train",
+      "kind": "flat",
+      "split": "TRAIN",
+      "map_id": "nominal_flat",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p1_ground_collection/flat_00_train/config.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p1_ground_collection/flat_00_train/evaluation",
+      "roots": 8,
+      "curves": 8,
+      "episode_s": 4
+    },
+    {
+      "name": "flat_01_dev_root",
+      "kind": "flat",
+      "split": "DEV_ROOT",
+      "map_id": "nominal_flat",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p1_ground_collection/flat_01_dev_root/config.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p1_ground_collection/flat_01_dev_root/evaluation",
+      "roots": 8,
+      "curves": 8,
+      "episode_s": 4
+    },
+    {
+      "name": "rough_02_train",
+      "kind": "rough",
+      "split": "TRAIN",
+      "map_id": "rough_02_train",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p1_ground_collection/rough_02_train/config.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p1_ground_collection/rough_02_train/evaluation",
+      "roots": 8,
+      "curves": 8,
+      "episode_s": 4
+    },
+    {
+      "name": "rough_03_train",
+      "kind": "rough",
+      "split": "TRAIN",
+      "map_id": "rough_03_train",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p1_ground_collection/rough_03_train/config.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p1_ground_collection/rough_03_train/evaluation",
+      "roots": 8,
+      "curves": 8,
+      "episode_s": 4
+    },
+    {
+      "name": "rough_04_dev_map",
+      "kind": "rough",
+      "split": "DEV_MAP",
+      "map_id": "rough_04_dev_map",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p1_ground_collection/rough_04_dev_map/config.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p1_ground_collection/rough_04_dev_map/evaluation",
+      "roots": 8,
+      "curves": 8,
+      "episode_s": 4
+    },
+    {
+      "name": "rough_05_dev_map",
+      "kind": "rough",
+      "split": "DEV_MAP",
+      "map_id": "rough_05_dev_map",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p1_ground_collection/rough_05_dev_map/config.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p1_ground_collection/rough_05_dev_map/evaluation",
+      "roots": 8,
+      "curves": 8,
+      "episode_s": 4
+    }
+  ],
+  "maximum_20ms_transitions": 76800,
+  "split": "Frozen before windows. Flat TRAIN/DEV share the same nominal planar geometry but disjoint roots; DEV_ROOT is not unseen-map evidence. Rough maps grouped TRAIN/DEV_MAP. No independent TEST consumed.",
+  "state": "Full initialized runtime snapshot per batch; 5 ms physics/controller history; 1 ms contact normals; 20 ms model windows. Common route prefix through world x3.5; verify actual initial equality across candidate lanes from saved data.",
+  "termination": "4 s timeout is completed collection slice if no earlier physical/domain/map exit; not task-goal success. Keep failures through actual terminal state.",
+  "model": "First fit nominal ARX only on flat TRAIN. Rough data reserved for out-of-domain diagnostics and later paired residual/black-box models.",
+  "budget": "Six batches only, no automatic retry/extension. Session pause deadline 2026-11-14T08:00:00Z."
+}

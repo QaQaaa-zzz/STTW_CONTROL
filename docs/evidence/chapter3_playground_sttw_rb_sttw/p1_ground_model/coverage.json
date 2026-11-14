@@ -1,0 +1,74 @@
+[
+  {
+    "name": "flat_00_train",
+    "split": "TRAIN",
+    "count": 64,
+    "terminations": {
+      "timeout": 64
+    },
+    "transitions_20ms": 12800,
+    "elapsed_s": 84.46863858797587,
+    "max_same_root_initial_qv_gap": 0.0,
+    "max_same_root_initial_controller_gap": 0.0
+  },
+  {
+    "name": "flat_01_dev_root",
+    "split": "DEV_ROOT",
+    "count": 64,
+    "terminations": {
+      "timeout": 64
+    },
+    "transitions_20ms": 12800,
+    "elapsed_s": 83.86719093302963,
+    "max_same_root_initial_qv_gap": 0.0,
+    "max_same_root_initial_controller_gap": 0.0
+  },
+  {
+    "name": "rough_02_train",
+    "split": "TRAIN",
+    "count": 64,
+    "terminations": {
+      "timeout": 64
+    },
+    "transitions_20ms": 12800,
+    "elapsed_s": 83.89990699698683,
+    "max_same_root_initial_qv_gap": 0.0,
+    "max_same_root_initial_controller_gap": 0.0
+  },
+  {
+    "name": "rough_03_train",
+    "split": "TRAIN",
+    "count": 64,
+    "terminations": {
+      "timeout": 64
+    },
+    "transitions_20ms": 12800,
+    "elapsed_s": 85.01358758896822,
+    "max_same_root_initial_qv_gap": 0.0,
+    "max_same_root_initial_controller_gap": 0.0
+  },
+  {
+    "name": "rough_04_dev_map",
+    "split": "DEV_MAP",
+    "count": 64,
+    "terminations": {
+      "timeout": 64
+    },
+    "transitions_20ms": 12800,
+    "elapsed_s": 85.03138071100693,
+    "max_same_root_initial_qv_gap": 0.0,
+    "max_same_root_initial_controller_gap": 0.0
+  },
+  {
+    "name": "rough_05_dev_map",
+    "split": "DEV_MAP",
+    "count": 64,
+    "terminations": {
+      "timeout": 64
+    },
+    "transitions_20ms": 12800,
+    "elapsed_s": 85.00241813797038,
+    "max_same_root_initial_qv_gap": 0.0,
+    "max_same_root_initial_controller_gap": 0.0
+  }
+]

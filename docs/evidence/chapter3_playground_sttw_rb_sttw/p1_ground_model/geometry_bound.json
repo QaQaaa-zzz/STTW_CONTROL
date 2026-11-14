@@ -1,0 +1,18 @@
+{
+  "root_radius_m": 1.0419622572824743,
+  "joint_radius_m": [
+    0.19,
+    0.0,
+    0.0,
+    0.8938096765928354,
+    0.36950760985891234
+  ],
+  "joint_order": [
+    "steer",
+    "frontwheel",
+    "rearwheel",
+    "hip",
+    "knee"
+  ],
+  "method": "Conservative kinematic radius and summed rotation displacement; exact spin invariance detected for centered axisymmetric leaf wheel ellipsoids"
+}

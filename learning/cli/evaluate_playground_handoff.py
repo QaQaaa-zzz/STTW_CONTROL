@@ -102,6 +102,8 @@ def main():
         raise ValueError('Shared adapters require the frozen native landing and lock-first completion contract')
     if 'snapshot_replay_s' in cfg and not 0<=cfg['snapshot_replay_s']<a.seconds:
         raise ValueError('snapshot time must lie within the rollout')
+    if cfg.get('contact_substep_telemetry') and (cfg.get('rb_physics') or a.physics_substeps!=5):
+        raise ValueError('Contact telemetry requires shared 1 ms physics (five substeps)')
     ground_physics=cfg.get('ground_physics',{})
     rb_physics=cfg.get('rb_physics')
     if rb_physics and rb_physics != {'integrator':'RK4','physics_dt_s':.005}:
@@ -121,6 +123,8 @@ def main():
     for name,path in cfg.get('rb_adaptation_bundles',{}).items():skills[name].load_adapted_actor(path)
     original=next(iter(skills.values())).bundle; idx=original.model_index
     model=mujoco.MjModel.from_binary_path(str(a.model)) if a.model else transplant(original,terrain,a.output,a.physics_substeps,ground_physics)
+    if cfg.get('contact_substep_telemetry') and model.opt.cone!=mujoco.mjtCone.mjCONE_ELLIPTIC:
+        raise ValueError('Contact telemetry requires the frozen elliptic cone')
     if not np.isclose(model.opt.timestep,.005/a.physics_substeps):
         raise ValueError('Cached terrain model physics dt differs from requested substeps; rebuild it')
     idx=_build_index(model); mm=mjx.put_model(model,impl='warp')
@@ -134,6 +138,10 @@ def main():
     n=len(a.routes)*len(skills)*len(a.modes)*len(hand.get('handoff_variants',[{}]))
     if 'snapshot_replay_s' in cfg:n*=2
     contract=dict(terrain_model=str(a.model) if a.model else str(a.output/'terrain.mjb'),role='bounded native Playground transfer DEV, no training',skills={k:s.record for k,s in skills.items()},terrain=terrain,source_config=str(a.config),routes=a.routes,episode_s=a.seconds,episodes=n,physics_steps_max=round(a.seconds/.005)*n*(a.physics_substeps+(1 if rb_physics else a.physics_substeps)),backend='MJX-Warp vmap; GPU Torch H75/ECBC/ESO; JAX RB; DLPack; final-only host export',heightfield_contact_workspace=512,physics_dt=.005/a.physics_substeps,physics_substeps=a.physics_substeps,lower_dt=.005,upper_dt=.02,ground_model=identity,goal=hand['goal'],road_half_width_m=hand['road_half_width_m'],start_x_m=hand.get('start_x_m',1.5),start_vx_m_s=hand.get('start_vx_m_s',2.),handoff=hand.get('handoff_mechanism','fixed contact delay'),handoff_delay_s=hand.get('handoff_delay_s',0.),approach=a.approach,ground_only=a.ground_only,jump_start_x_m=hand['approach']['jump_start_x_m'],scope='Declared approach controller then native RB jump then H75 or zero-middle STTW. No planning or training.',ground_physics=ground_physics,rb_physics=rb_physics,terrain_conversion='Original Isaac rectangular patches, coordinates and heights retained without interpolation; 90-degree local grid rotation matches original triangle diagonal',pendulum='STTW hip/knee equality brakes at entry posture; released during RB, relocked at measured handoff posture; native finite servos retained',observer='measured ESO initialization, empty H75 history at handoff')
+    if cfg.get('collect_model_state'):
+        contract.update(role=cfg['role'],scope='Bounded ground model collection; 4 s timeout denotes completed slice, not goal success. Splits are frozen in the collection manifest.',collect_model_state=True)
+    contract['contact_substep_telemetry']=cfg.get('contact_substep_telemetry',False)
+    contract['contact_timing']='Each sample is a solver load during one 1 ms step; row t aggregates the preceding 5 ms, row zero has no interval and is NaN.'
     contract['snapshot_replay_s']=cfg.get('snapshot_replay_s')
     (a.output/'resolved_config.json').write_text(json.dumps(cfg,indent=2))
     contract.update(input_config=str(a.config),source_config=str(a.output/'resolved_config.json'),world_map=cfg.get('world_map_spec'),shared_adapters=cfg.get('shared_adapters',False))

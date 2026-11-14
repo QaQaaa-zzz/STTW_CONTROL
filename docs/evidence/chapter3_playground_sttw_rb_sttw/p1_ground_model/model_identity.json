@@ -1,0 +1,20 @@
+{
+  "role": "Nominal ARX fit, not controller policy training",
+  "training_group": "flat_00_train",
+  "training_regression_rows": 12736,
+  "model_sha256": "0ada397ec6e697ad6368bf27c4ade5fc22696f85c2410f0722019d5387808e1e",
+  "collection_manifest": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p1_ground_collection/manifest.json",
+  "source_revision_at_collection": "ef6c1826 plus archived source for each batch",
+  "implementation_files": [
+    "learning/src/sttw_control/playground_arx.py",
+    "learning/cli/fit_playground_ground_model.py"
+  ],
+  "state_order": "pose xyz,wxyz,steer,front-wheel,rear-wheel,hip,knee; xi body linear velocity, body angular velocity, steer/front/rear rates",
+  "nominal_domain": {
+    "speed_m_s": 1.8,
+    "alpha": 0,
+    "ground_phase": 0,
+    "lookahead_scale": 1.0
+  },
+  "limitations": "Collection covers upstream ground only. Phase2 lookahead1.3 and post-RB initial history are not calibrated. No speed/alpha expansion, Go2-randomized policy training, independent TEST, or E1/E2/E3 claim."
+}
