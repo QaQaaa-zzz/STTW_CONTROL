@@ -100,7 +100,7 @@ def main():
     if 'world_map' in cfg:
         world=json.loads(Path(cfg['world_map']).read_text())
         cfg=dict(cfg,world_map_spec=world,ditch_terrain=world['terrain'],ground_handoff=dict(cfg['ground_handoff'],goal=world['goal']))
-        activation=world['terrain']['front_x_m']+world['forward_obstacle']['activation_offset_m']
+        activation=world['terrain']['front_x_m']+cfg.get('planned_activation_offset_m',world['forward_obstacle']['activation_offset_m'])
         cfg['ground_handoff']['approach']['jump_start_x_m']=activation
         for variant in cfg['ground_handoff'].get('handoff_variants',[]):variant['jump_start_x_m']=activation
     hand=cfg['ground_handoff']; terrain=cfg['ditch_terrain']
@@ -150,6 +150,7 @@ def main():
     contract['contact_substep_telemetry']=cfg.get('contact_substep_telemetry',False)
     contract['contact_timing']='Each sample is a solver load during one 1 ms step; row t aggregates the preceding 5 ms, row zero has no interval and is NaN.'
     contract['snapshot_replay_s']=cfg.get('snapshot_replay_s')
+    contract['planned_activation_offset_m']=cfg.get('planned_activation_offset_m')
     (a.output/'resolved_config.json').write_text(json.dumps(cfg,indent=2))
     contract.update(input_config=str(a.config),source_config=str(a.output/'resolved_config.json'),world_map=cfg.get('world_map_spec'),shared_adapters=cfg.get('shared_adapters',False))
     (a.output/'declaration.json').write_text(json.dumps(contract,indent=2))
