@@ -1,10 +1,8 @@
 {
-  "pages": 8,
+  "pages": 4,
   "format": "US Letter, official ieeeconf initial-submission template",
   "figures": [
-    "chapter3_paper/../evidence/chapter3_review_repairs/handoff_predictions.png",
-    "chapter3_paper/../evidence/chapter3_review_repairs/training.png",
-    "chapter3_paper/../evidence/chapter3_horizon_screen/xy_all.png"
+    "chapter3_paper/../evidence/chapter3_playground_sttw_rb_sttw/e2_joint/paired_xy.png"
   ],
   "overfull_boxes": false,
   "submission_ready": false,

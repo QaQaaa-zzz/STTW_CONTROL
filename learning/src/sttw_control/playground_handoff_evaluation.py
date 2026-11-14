@@ -5,6 +5,7 @@ import shutil
 import sys
 from pathlib import Path
 import time
+import math
 import numpy as np
 import jax
 import jax.numpy as jp
@@ -21,6 +22,7 @@ from .torch_path_policy import TorchPathPolicy
 from .torch_path_reference import TorchPathReference, wrap
 from .torch_middle_control import TorchMiddleControl
 from .playground_adapters import GroundAdapter, JumpAdapter
+from .playground_rolling import RollingMotionLibrary, controller_features
 from .playground_world_map import body_outside
 from .playground_contact import normal_loads
 from .playground_snapshot import capture as capture_snapshot, restore as restore_snapshot
@@ -202,6 +204,14 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         updates={round(u['time_s']/.005):(u,TorchPathReference(dict(np.load(u['reference_path'])),hcfg,device,route_ids=[r for r,m,i in lanes]))
                  for u in cfg.get('plan_updates',[]) if name in u['skills']}
         plan_receipts=[]
+        rolling_cfg=cfg.get('rolling_planner')
+        rolling=None;pending=None;rolling_events=[]
+        if rolling_cfg:
+            if cfg.get('snapshot_replay_s') is not None:
+                raise ValueError('rolling planner snapshot/replay state is not implemented')
+            rolling=RollingMotionLibrary(rolling_cfg['state_bank'],route,rolling_cfg['clearance'],device)
+            period_ticks=round(rolling_cfg['period_s']/.005)
+            first_query_tick=round(rolling_cfg['first_query_s']/.005)
         phase=torch.zeros(n,device=device,dtype=torch.long);alive=torch.ones(n,device=device,dtype=torch.bool)
         recovering=torch.zeros_like(alive)
         stable_time=torch.zeros(n,device=device);upper_ready_time=torch.zeros(n,device=device)
@@ -250,6 +260,44 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                         and torch.equal(before['controller']['eso'],ctl.eso)
                         and torch.equal(before['controller']['filtered_roll_rate'],ctl.filtered_roll_rate))
                     plan_receipts.append(receipt)
+                if rolling is not None:
+                    ground_now=alive&((phase==0)|(phase==2))
+                    if pending is not None and tick==pending['due_tick']:
+                        clock=time.perf_counter()
+                        state=controller_features(middle,ctl,recovering,stable_time,upper_ready_time,lock)
+                        history_now=torch.cat([value.reshape(n,-1).float() for value in state.values()],1)
+                        required=(middle.projection['progress']+middle.follower['lookahead']+middle.v_user*.02).clamp_max(route.s[-1])
+                        valid,ratio=rolling.screen(q,v,history_now,phase,required,route,jump_start)
+                        selected=pending['selected'];lane=torch.arange(n,device=device)
+                        accept=pending['feasible']&valid[selected,lane]&ground_now
+                        changed=accept&(rolling.active!=selected)
+                        receipt=dict(event='publication',query_tick=pending['query_tick'],tick=tick,time_s=t,accepted=accept.tolist(),changed=changed.tolist(),selected=selected.tolist(),charged_delay_s=(tick-pending['query_tick'])*.005,query_ms=pending['query_ms'])
+                        if bool(changed.any()):
+                            new_route,chosen=rolling.proposal(route,selected,changed)
+                            publication=ground_adapter.update_plan(new_route,required,t,ground_adapter.plan_version)
+                            route=middle.route;rolling.current_route=chosen
+                            jump_start=torch.where(changed,rolling.activation[selected],jump_start)
+                            rolling.active=torch.where(changed,selected,rolling.active)
+                            after=controller_features(middle,ctl,recovering,stable_time,upper_ready_time,lock)
+                            publication['state_preserved']=bool(torch.equal(history_now,torch.cat([value.reshape(n,-1).float() for value in after.values()],1)))
+                            plan_receipts.append(publication);receipt.update(publication)
+                        torch.cuda.synchronize();receipt['publication_ms']=(time.perf_counter()-clock)*1000
+                        receipt['latency_covered']=receipt['charged_delay_s']*1000>=receipt['query_ms']+receipt['publication_ms']
+                        rolling_events.append(receipt);pending=None
+                    if tick>=first_query_tick and (tick-first_query_tick)%period_ticks==0 and bool(ground_now.any()):
+                        clock=time.perf_counter()
+                        state=controller_features(middle,ctl,recovering,stable_time,upper_ready_time,lock)
+                        history_now=torch.cat([value.reshape(n,-1).float() for value in state.values()],1)
+                        required=(middle.projection['progress']+middle.follower['lookahead']+middle.v_user*.02).clamp_max(route.s[-1])
+                        selected,feasible,ratio=rolling.select(q,v,history_now,phase,required,route,jump_start)
+                        feasible &= ground_now
+                        initial_prefix=(rolling.active<0)&(q[:,0]<rolling_cfg['initial_valid_until_x_m'])
+                        rolling.failed |= ground_now&~feasible&~initial_prefix
+                        event_row=dict(event='query',tick=tick,time_s=t,selected=selected.tolist(),feasible=feasible.tolist(),active=rolling.active.tolist(),state_ratio=ratio[selected,torch.arange(n,device=device)].tolist(),planning_failed=rolling.failed.tolist())
+                        torch.cuda.synchronize();query_ms=(time.perf_counter()-clock)*1000
+                        delay_ticks=(math.ceil(query_ms/20)+1)*4
+                        pending=dict(selected=selected,feasible=feasible,query_tick=tick,due_tick=tick+delay_ticks,query_ms=query_ms)
+                        event_row.update(query_ms=query_ms,due_tick=pending['due_tick']);rolling_events.append(event_row)
                 enter=alive&(phase==0)&(q[:,0]>=jump_start)&(tick%4==0)&(not args.ground_only)
                 phase=torch.where(enter,1,phase);entry_time=torch.where(enter,t,entry_time)
                 airborne |= alive&((phase==1)|(phase==3))&~flags[:,0]&(q[:,0]>terrain['front_x_m']-1.5)
@@ -299,13 +347,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 stop=alive&(physical|outside|world_failure|reached);codes=torch.where(stop,torch.where(physical,1,torch.where(world_flags[:,2],5,torch.where(world_failure,4,torch.where(outside,2,3)))),codes);durations=torch.where(stop,t,durations)
                 rows.append(torch.cat((torch.full((n,1),t,device=device),q[:,:3],angles,v[:,:3],(phase==2)[:,None],ey[:,None],target,(phase==0)[:,None],m[:,5:6],middle.v_user[:,None],phase[:,None]),1))
                 if cfg.get('collect_model_state'):
-                    state=dict(frames=middle.frames,mask=middle.mask,nominal=middle.nominal,rates=middle.rates,
-                        latent=middle.latent,pose=middle.pose,yaw_rate=middle.yaw_rate,lane_ticks=middle.lane_ticks,
-                        policy_offsets=policy.offsets,policy_filtered=policy.filtered,eso=ctl.eso,
-                        disturbance=ctl.disturbance,gains=ctl.gains,filtered_roll_rate=ctl.filtered_roll_rate,
-                        recovering=recovering,stable_time=stable_time,upper_ready_time=upper_ready_time,lock=lock)
-                    state.update({'projection_'+k:value for k,value in middle.projection.items()})
-                    state.update({'follower_'+k:value for k,value in middle.follower.items()})
+                    state=controller_features(middle,ctl,recovering,stable_time,upper_ready_time,lock)
                     controller_rows.append(torch.cat([value.reshape(n,-1).float() for value in state.values()],1))
                     rb_state_rows.append(torch.cat([to_torch(value).reshape(n,-1).float() for value in (history.frames,history.valid_count,obs,last)],1))
                     if tick==0:controller_schema={key:list(value.shape[1:]) for key,value in state.items()}
@@ -395,11 +437,14 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 if telemetry:
                     samples=load_trace[keep,lane]
                     contact_data.update(dict(contact_substep=samples,contact_substep_columns=['front_normal_N','rear_normal_N','body_normal_N','body_contact'],contact_physics_dt_s=.005/args.physics_substeps,contact_interval_mean_N=samples[:,:,:3].mean(1),contact_interval_peak_N=samples[:,:,:3].max(1),contact_interval_impulse_Ns=samples[:,:,:3].sum(1)*(.005/args.physics_substeps)))
-                np.savez_compressed(target_dir/'trajectory.npz',**contact_data,trace=trace,qpos=qsave,qvel=speeds[keep,lane],world_flags=world_trace[keep,lane],world_flag_columns=['physical_map_exit','nonwheel_terrain_contact','forbidden_obstacle_contact'],wheel_contact_flags=contact_trace[keep,lane],wheel_contact_columns=['any_terrain','any_far','both_far'],reference_xy=saved['xy'][route_id],published_reference_xy=route.xy[route_id].cpu().numpy(),columns=['time','x','y','z','roll','pitch','yaw','vx','vy','vz','ground_active','path_distance','steer_target','rear_target','hip_target','knee_target','approaching','rear_rate_rad_s','requested_speed_m_s','phase'])
+                np.savez_compressed(target_dir/'trajectory.npz',**contact_data,trace=trace,qpos=qsave,qvel=speeds[keep,lane],world_flags=world_trace[keep,lane],world_flag_columns=['physical_map_exit','nonwheel_terrain_contact','forbidden_obstacle_contact'],wheel_contact_flags=contact_trace[keep,lane],wheel_contact_columns=['any_terrain','any_far','both_far'],reference_xy=saved['xy'][route_id],published_reference_xy=route.xy[route.route_ids[lane]].cpu().numpy(),columns=['time','x','y','z','roll','pitch','yaw','vx','vy','vz','ground_active','path_distance','steer_target','rear_target','hip_target','knee_target','approaching','rear_rate_rad_s','requested_speed_m_s','phase'])
                 row=dict(case_dir=case_dir,variant=variants[variant],skill=case_name,route=route_id,continuation=mode,termination=['timeout','physical_failure','tracking_domain_exit' if world else 'corridor_or_domain_exit','goal','world_boundary_exit','forbidden_obstacle_contact'][codes[lane]],actuator_owner_max_difference=float(ownership_max[lane]) if audit_owner else None,nonwheel_contact_steps=int(world_trace[keep,lane,1].sum()),forbidden_contact_steps=int(world_trace[keep,lane,2].sum()),goal=bool(codes[lane]==3),rb_entry_s=None if entry_time[lane]<0 else float(entry_time[lane]),goal_hold_s=float(hold[lane]),airborne=bool(airborne[lane]),far_contact=bool(far_time[lane]>=0),first_far_contact_s=None if far_time[lane]<0 else float(far_time[lane]),handoff_s=None if handoff_time[lane]<0 else float(handoff_time[lane]),duration_s=float(durations[lane]),final_xy=qsave[-1,:2].tolist())
                 if cfg.get('collect_model_state') and not cfg.get('task_evaluation'):row['completed_slice']=bool(codes[lane]==0)
+                if rolling is not None:
+                    row.update(planning_failed=bool(rolling.failed[lane]),final_candidate=int(rolling.active[lane]),final_route=int(rolling.current_route[lane]),final_activation_x_m=float(jump_start[lane]))
                 results.append(row)
             all_timing.append(dict(skill=case_name,lanes=n,initialization_s=0. if replay else init_s,rollout_s=rollout_s,simulated_ticks_per_lane=tick-start_tick))
+            if rolling is not None:(args.output/f'{case_name}_rolling_events.json').write_text(json.dumps(rolling_events,indent=2))
             (args.output/f'{case_name}_plan_receipts.json').write_text(json.dumps(plan_receipts,indent=2))
             if snapshot_tick is not None and not replay:
                 with (args.output/f'{name}_runtime_snapshot.pkl').open('wb') as stream:pickle.dump(replay_snapshot,stream,protocol=pickle.HIGHEST_PROTOCOL)

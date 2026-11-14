@@ -1,6 +1,15 @@
-# Chapter 3 English manuscript
+# Chapter 3 execution-outline manuscript
 
-**Current draft:** [PDF](MANUSCRIPT.pdf) · [editable LaTeX](MANUSCRIPT.tex). The main paper now describes the implemented two-interface model, rather than the earlier serial event-chain prototype. This is a research draft, not a submission-ready or superior-planning claim.
+Current editable draft: [PDF](MANUSCRIPT.pdf) · [LaTeX](MANUSCRIPT.tex). This revision follows the supplied execution outline: fixed physical map and goal, continuous STTW→RB→STTW, ground dynamics, joint planning, and structured prediction. It replaces the prior two-interface framing in the main text; historical prose remains in Git through0c485653 and all old evidence is retained below.
+
+The current draft binds ground36/36 versus31/36, greedy3/12 versus joint12/12, the stronger backtracking12/12 counterexample, and rejected long-horizon history prediction to PG1–PG5 evidence IDs. Both the original rolling panel and a54TRAIN-prefix support expansion are physical12/12 but coverage-qualified11/12. No independent-test, general joint-planning advantage, completed terrain M1, or formal training-convergence claim is made. P3 speed/model comparisons and P4 new-layout evidence remain required.
+
+The source manifest and claim registry retain historical records with explicit roles. All human verification remains pending. Four-page compilation/layout checks establish document rendering only. The scientific-writing skill guided this revision; its existing tooling attribution was rechecked at the primary arXiv record on2026-11-14 and appears in the draft bibliography. No external unpublished content was uploaded.
+
+## Historical manuscript and evidence
+
+
+**Historical two-interface draft (through0c485653):** [PDF](MANUSCRIPT.pdf) · [editable LaTeX](MANUSCRIPT.tex). The main paper now describes the implemented two-interface model, rather than the earlier serial event-chain prototype. This is a research draft, not a submission-ready or superior-planning claim.
 
 The scope is frozen STTW/jump composition on a known off-road map: query state and candidates → valid handoff/state distribution → conditional full-goal continuation → actual moving selection and execution. Ground routes have a separate output head sharing the upstream trunk. The extension adds task-conditioned downstream road choice at measured handoff. No empirical recoverability margin, unseen corridor-width generalization, or true-history warm start is claimed.
 
