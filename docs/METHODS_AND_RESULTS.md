@@ -2011,3 +2011,8 @@ GLM端到端集成（用户2026-11-09新授权）：已配置glm-5.3从11场景�
 共同implicitfast1ms×5下RB续训200（累计225，4469.033秒），六存档35/75/115/155/195/225完整目标0/0/4/3/5/6，各9条。冻结225真实初差72/72锁后回交、40/72完整；失败集中回交后的地面跟踪。保留同RB但全程zero-middle基线1/9（接近段也改变，非仅落地后因果对照）。单次将回交后前视倍率1.0→1.3后，名义9/9、同初差71/72完整，31救回0丢失；一条右→左在7.945秒越廊失败保留，不称全域验收或独立TEST。网络、物理、地形和成功条件不变；冻结工程候选进入纲要P0，不继续无针对性RB续训。训练奖励未证明收敛，六存档/全部XY/分窗见docs/evidence/chapter3_playground_sttw_rb_sttw/README.md及SHARED_PLANT_CONVERGENCE.md，原始rb_adaptation/shared_plant_checkpoint_comparison。
 
 开始P0普通路径更新：TorchMiddleControl.update_plan保留同网格承诺前缀与闭环历史，在20ms边界发布；3项CPU合同测试通过。尚非完整GroundAdapter/在线重规划验收，版本/有效期、WorldMap与完整快照仍待完成。
+
+
+## P0普通路径发布接线
+
+GroundAdapter在20ms边界核对版本/执行时钟，保留同网格承诺前缀与原控制状态；ControllerState快照/恢复已实现，不冒充包含MJX/RB的全运行快照。4项CPU测试通过。固定/小幅在线改路/固定重复，route0/4/8各3条，共9/9、134.259秒；发布tick400状态逐值保留。固定重复后段XY最大差1.66–2.78cm，不能作逐位因果对比或E1收益证明。两次入口失败及弧长原点/尾点补齐修复保留，WorldMap分离仍待完成。全部XY及原始证据入口：docs/evidence/chapter3_playground_sttw_rb_sttw/README.md，数据p0_plan_update/evaluation_arc_prefix。

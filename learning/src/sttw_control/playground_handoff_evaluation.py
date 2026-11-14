@@ -19,11 +19,12 @@ from .torch_controller import TorchController
 from .torch_path_policy import TorchPathPolicy
 from .torch_path_reference import TorchPathReference, wrap
 from .torch_middle_control import TorchMiddleControl
+from .playground_adapters import GroundAdapter
 
 
 def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_config, skills, args, brake_ids):
     source=args.output/'source';source.mkdir()
-    for name in ['playground_handoff_evaluation.py','torch_controller.py','torch_path_reference.py','torch_middle_control.py']:
+    for name in ['playground_handoff_evaluation.py','torch_controller.py','torch_path_reference.py','torch_middle_control.py','playground_adapters.py']:
         shutil.copy2(Path(__file__).with_name(name),source/name)
     shutil.copy2(sys.argv[0],source/Path(sys.argv[0]).name)
     started=time.perf_counter();device='cuda:0';hand=cfg['ground_handoff'];terrain=cfg['ditch_terrain']
@@ -124,6 +125,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
     frame=jax.jit(jax.vmap(frame_one))
     results=[];all_timing=[]
     for name,skill in skills.items():
+        route=TorchPathReference(dict(saved),hcfg,device,route_ids=[r for r,m,i in lanes])
         route.config['follower']['lookahead_scale']=1.
         init_start=time.perf_counter()
         qpos=np.tile(model.key_qpos[idx.keyframe_id],(n,1));qvel=np.tile(model.key_qvel[idx.keyframe_id],(n,1))
@@ -152,6 +154,10 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         nearest=(route.xy[route.route_ids]-pose[:,None,:2]).square().sum(-1).argmin(-1)
         middle.reset(m,pose,speed,raw,raw,previous,ctl,initial_progress=route.s[nearest])
         middle.lane_ticks=torch.zeros(n,device=device,dtype=torch.long);middle.latent=torch.zeros_like(raw)
+        ground_adapter=GroundAdapter(middle,ctl)
+        updates={round(u['time_s']/.005):(u,TorchPathReference(dict(np.load(u['reference_path'])),hcfg,device,route_ids=[r for r,m,i in lanes]))
+                 for u in cfg.get('plan_updates',[]) if name in u['skills']}
+        plan_receipts=[]
         phase=torch.zeros(n,device=device,dtype=torch.long);alive=torch.ones(n,device=device,dtype=torch.bool)
         recovering=torch.zeros_like(alive)
         stable_time=torch.zeros(n,device=device);upper_ready_time=torch.zeros(n,device=device)
@@ -163,6 +169,19 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         rows=[];poses=[];velocities=[];contact_rows=[];valid_rows=[];goal=hand['goal'];data.qpos.block_until_ready();init_s=time.perf_counter()-init_start;rollout_start=time.perf_counter()
         for tick in range(round(args.seconds/.005)+1):
             t=tick*.005
+            if tick in updates:
+                update,new_route=updates[tick]
+                before=ground_adapter.snapshot()
+                receipt=ground_adapter.update_plan(new_route,torch.full((n,),update['committed_until_m'],device=device),t,update['expected_previous_version'])
+                route=middle.route
+                receipt['state_preserved']=bool(torch.equal(before['middle']['frames'],middle.frames)
+                    and torch.equal(before['middle']['mask'],middle.mask)
+                    and torch.equal(before['middle']['lane_ticks'],middle.lane_ticks)
+                    and torch.equal(before['policy']['filtered'],policy.filtered)
+                    and torch.equal(before['policy']['offsets'],policy.offsets)
+                    and torch.equal(before['controller']['eso'],ctl.eso)
+                    and torch.equal(before['controller']['filtered_roll_rate'],ctl.filtered_roll_rate))
+                plan_receipts.append(receipt)
             enter=alive&(phase==0)&(q[:,0]>=jump_start)&(tick%4==0)&(not args.ground_only)
             phase=torch.where(enter,1,phase);entry_time=torch.where(enter,t,entry_time)
             airborne |= alive&((phase==1)|(phase==3))&~flags[:,0]&(q[:,0]>terrain['front_x_m']-1.5)
@@ -263,9 +282,10 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         for lane,(route_id,mode,variant) in enumerate(lanes):
             case_dir=f'{name}_route{route_id}_{mode}'+(f'_v{variant}' if len(variants)>1 else '')
             target_dir=args.output/case_dir;target_dir.mkdir();keep=valid[:,lane];trace=traces[keep,lane];qsave=positions[keep,lane]
-            np.savez_compressed(target_dir/'trajectory.npz',trace=trace,qpos=qsave,qvel=speeds[keep,lane],wheel_contact_flags=contact_trace[keep,lane],wheel_contact_columns=['any_terrain','any_far','both_far'],reference_xy=saved['xy'][route_id],columns=['time','x','y','z','roll','pitch','yaw','vx','vy','vz','ground_active','path_distance','steer_target','rear_target','hip_target','knee_target','approaching','rear_rate_rad_s','requested_speed_m_s','phase'])
+            np.savez_compressed(target_dir/'trajectory.npz',trace=trace,qpos=qsave,qvel=speeds[keep,lane],wheel_contact_flags=contact_trace[keep,lane],wheel_contact_columns=['any_terrain','any_far','both_far'],reference_xy=saved['xy'][route_id],published_reference_xy=route.xy[route_id].cpu().numpy(),columns=['time','x','y','z','roll','pitch','yaw','vx','vy','vz','ground_active','path_distance','steer_target','rear_target','hip_target','knee_target','approaching','rear_rate_rad_s','requested_speed_m_s','phase'])
             row=dict(case_dir=case_dir,variant=variants[variant],skill=name,route=route_id,continuation=mode,termination=['timeout','physical_failure','corridor_or_domain_exit','goal'][codes[lane]],goal=bool(codes[lane]==3),rb_entry_s=None if entry_time[lane]<0 else float(entry_time[lane]),goal_hold_s=float(hold[lane]),airborne=bool(airborne[lane]),far_contact=bool(far_time[lane]>=0),first_far_contact_s=None if far_time[lane]<0 else float(far_time[lane]),handoff_s=None if handoff_time[lane]<0 else float(handoff_time[lane]),duration_s=float(durations[lane]),final_xy=qsave[-1,:2].tolist())
             results.append(row)
         all_timing.append(dict(skill=name,lanes=n,initialization_s=init_s,rollout_s=rollout_s,simulated_ticks_per_lane=tick))
+        (args.output/f'{name}_plan_receipts.json').write_text(json.dumps(plan_receipts,indent=2))
     (args.output/'status.json').write_text(json.dumps(dict(stage='complete',completed=len(results),total=len(results),elapsed_s=time.perf_counter()-started,results=results),indent=2))
     (args.output/'timing.json').write_text(json.dumps(dict(total_s=time.perf_counter()-started,batches=all_timing,execution='GPU MJX-Warp vmap, GPU H75/ECBC/ESO and RB inference, DLPack, terminal-only trajectory download'),indent=2))

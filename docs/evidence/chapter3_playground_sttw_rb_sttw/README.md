@@ -1,5 +1,15 @@
 # STTW → RB → STTW：当前交接诊断
 
+## P0普通改路已接入GPU连续执行
+
+![固定、在线改路与固定重复的全部三路线XY](p0_plan_update_xy.png)
+
+同RB225、共同物理与前视1.3，route0/4/8（直→直、左→左、右→右），固定/改路/固定重复三组均3/3到达，共9条134.259秒。改路在t=2s、tick400发布version0→1，保持s≤15m前缀（原s=0位于世界x=−5m，故约到世界x=10m）；后段增加5cm平滑偏移，速度1.8、alpha0不变。入口实际检查H75 frames/mask/lane_ticks、滤波/offset、ESO与filtered_roll_rate全部逐值不变。四项CPU合同测试覆盖版本、时钟、前缀和控制器状态恢复。
+
+同固定路径重复的共同窗口XY最大差为2.12/1.66/2.78cm，改路对固定为5.27/5.37/6.25cm；发布前XY差均小于0.16mm。不能把不同运行整条轨迹当作逐位配对或把9/9当规划收益。该测试仍沿用旧路径跟踪走廊；固定WorldMap尚未分离，ControllerState快照尚不包含物理/RB缓存，完整P0未通过。
+
+已处理并保留两次入口失败：缩短后段时重采样尾点重复；把世界x误当累计弧长s导致承诺前缀不足。修复为末端切线延伸及明确s原点，不改变控制器/任务门槛。原始输入、失败日志、完整轨迹、版本回执与数值分析：`chapter3_playground_sttw_rb_sttw/p0_plan_update/`。复用入口`prepare_playground_plan_update.py`，版本发布与控制器状态捕获在`playground_adapters.py`。
+
 ## 当前冻结交接：名义9/9，真实初差71/72；进入纲要P0
 
 ![共同物理、RB225、回交后前视倍率1.3的全部72条实际/参考XY](shared_plant_lookahead_offsets_xy.png)

@@ -17,6 +17,8 @@ for ax,route in zip(axes[:,0],d['routes']):
   z=np.load(a.root/row.get('case_dir',f"{row['skill']}_route{route}_{row['continuation']}")/'trajectory.npz');t=z['trace']
   ax.plot(t[:,1],t[:,2],label=row.get('case_dir',row['skill']+' / '+row['continuation']),linestyle='-' if row['continuation']=='h75' else '--')
   ax.scatter(t[-1,1],t[-1,2],marker='x',s=20)
+  if 'published_reference_xy' in z and not np.array_equal(z['published_reference_xy'],z['reference_xy']):
+   ax.plot(z['published_reference_xy'][:,0],z['published_reference_xy'][:,1],ls='--',lw=1,label=row['skill']+' published route')
   xmin=min(xmin,float(t[:,1].min())-.2);xmax=max(xmax,float(t[:,1].max())+.2)
   ymin=min(ymin,float(t[:,2].min())-.2);ymax=max(ymax,float(t[:,2].max())+.2)
  ax.plot(z['reference_xy'][:,0],z['reference_xy'][:,1],'k:',label='original route')
@@ -38,7 +40,7 @@ for j,route in enumerate(d['routes']):
  panels[0,j].set(title=f'Route {route}',ylabel='Body forward speed (m/s)');panels[1,j].set_ylabel('Roll (deg)');panels[2,j].set_ylabel('Hip / knee (rad)')
  panels[0,j].legend(fontsize=6);panels[2,j].legend(fontsize=6)
 tracking.savefig(a.root/'stages_tracking.png',dpi=140);plt.close(tracking)
-lines=['# Native Playground RB–STTW handoff trial','','![All actual/reference XY trajectories](xy.png)','','Role: bounded integration DEV; one common nominal ground start per route, not an independent success-rate estimate.','','| Skill | Route | Variant | Continuation | RB entry s | Airborne | Far contact | Handoff s | End | Final XY m |','|---|---:|---|---|---:|---|---|---:|---|---|']
+lines=['# Native Playground RB–STTW handoff trial','','![All actual/reference XY trajectories](xy.png)','','Role: bounded integration DEV with the declared initial variants below; not an independent success-rate estimate.','','| Skill | Route | Variant | Continuation | RB entry s | Airborne | Far contact | Handoff s | End | Final XY m |','|---|---:|---|---|---:|---|---|---:|---|---|']
 for r in s['results']:
  lines.append(f"|{r['skill']}|{r['route']}|{r.get('variant',{})}|{r['continuation']}|{r.get('rb_entry_s')}|{r['airborne']}|{r['far_contact']}|{r['handoff_s']}|{r['termination']}|{r['final_xy']}|")
 lines+=['','![Stage timing, actual speed/roll and joint angles](stages_tracking.png)','',f"Completed {s['completed']}/{s['total']} episodes. The declared approach controller (see declaration.json) precedes native RB jumping; handoff mechanism is {mechanism}, landing control={hand.get('landing_control','none')}. State-triggered runs use descent/contact/posture/joint readiness; the legacy fixed delay {hand.get('handoff_delay_s',0.)} s applies only to contact_delay runs. STTW hip/knee brakes are active; RB releases them and measured handoff re-locks the actual pose. No pose reset. Final goal/hold follows declaration and source config.",'',f"Terrain uses original Isaac rectangular samples and matching triangle diagonals, without resampling. Ground physics dt={d['physics_dt']} s, RB physics={d.get('rb_physics')}, contact domain={d.get('ground_physics')}, lower dt={d['lower_dt']} s, upper dt={d['upper_dt']} s. This is a transfer feasibility trial, not a simulator-only causal comparison. H75 starts with measured ESO state and empty policy history."]

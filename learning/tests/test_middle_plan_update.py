@@ -4,6 +4,7 @@ from types import SimpleNamespace
 import torch
 from sttw_control.torch_middle_control import TorchMiddleControl
 from sttw_control.torch_path_reference import TorchPathReference
+from sttw_control.playground_adapters import GroundAdapter
 
 
 def route(turn=False):
@@ -24,7 +25,9 @@ class PlanUpdateTest(unittest.TestCase):
         self.middle.follower={'lookahead':torch.tensor([.5,.5])}
         self.middle.v_user=torch.tensor([1.8,1.8])
         self.middle.frames=torch.randn(2,16,20)
-        self.middle.policy=SimpleNamespace(filtered=torch.randn(2,2))
+        self.middle.policy=SimpleNamespace(filtered=torch.randn(2,2),weights={},config={})
+        self.controller=SimpleNamespace(eso=torch.randn(2,4))
+        self.adapter=GroundAdapter(self.middle,self.controller)
 
     def test_publish_preserves_all_other_state(self):
         state=self.middle.__dict__.copy()
@@ -50,6 +53,23 @@ class PlanUpdateTest(unittest.TestCase):
         self.middle.tick=101
         with self.assertRaisesRegex(ValueError,'20 ms'):
             self.middle.update_plan(route(True),torch.tensor([4.,4.]))
+
+    def test_adapter_version_clock_and_restore(self):
+        snapshot=self.adapter.snapshot()
+        receipt=self.adapter.update_plan(route(True),torch.tensor([4.,4.]),.5,0)
+        self.assertEqual(receipt['version'],1)
+        with self.assertRaisesRegex(ValueError,'version'):
+            self.adapter.update_plan(route(True),torch.tensor([4.,4.]),.5,0)
+        with self.assertRaisesRegex(ValueError,'clock'):
+            self.adapter.update_plan(route(True),torch.tensor([4.,4.]),.52,1)
+        self.middle.frames.zero_();self.controller.eso.zero_()
+        self.middle.policy.filtered.zero_();self.middle.tick=104
+        self.adapter.restore(snapshot)
+        torch.testing.assert_close(self.middle.frames,snapshot['middle']['frames'],rtol=0,atol=0)
+        torch.testing.assert_close(self.controller.eso,snapshot['controller']['eso'],rtol=0,atol=0)
+        torch.testing.assert_close(self.middle.policy.filtered,snapshot['policy']['filtered'],rtol=0,atol=0)
+        self.assertEqual(self.middle.tick,100)
+        self.assertEqual(self.adapter.plan_version,0)
 
 
 if __name__=='__main__':unittest.main()
