@@ -1,0 +1,54 @@
+{
+  "entries": [
+    {
+      "layout": 0,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p2_start_conditions/start_00/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p2_start_conditions/start_00/evaluation"
+    },
+    {
+      "layout": 1,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p2_start_conditions/start_01/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p2_start_conditions/start_01/evaluation"
+    },
+    {
+      "layout": 2,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p2_start_conditions/start_02/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p2_start_conditions/start_02/evaluation"
+    },
+    {
+      "layout": 3,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p2_start_conditions/start_03/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p2_start_conditions/start_03/evaluation"
+    }
+  ],
+  "routes": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "ground_only": false,
+  "seconds": 10,
+  "total_episodes": 72,
+  "source_groups": 24,
+  "optimizer_updates": 0,
+  "hard_wallclock_limit_s": 1500,
+  "expected_wallclock_s": [
+    300,
+    600
+  ],
+  "role": "TRAIN expansion; not independent TEST",
+  "common_physics": "implicitfast 1ms x5, lower5ms, upper20ms, mu0.8",
+  "budget_lane_physics_steps": 720000,
+  "source_commit": "33242bf9f69f2f4c9af02c9ba7afc2f74342048c",
+  "source_patch": "source.patch",
+  "stop_rule": "first process error or25min; no auto retry; report every termination",
+  "created_utc": "2026-11-14T15:47:37.282174+00:00",
+  "rb": "frozen shared225 plus finite homing; identity from per-evaluation declaration",
+  "acceptance": "full source library only from observed completed RB; compare duration/entry domain before adoption; no assumed success threshold"
+}

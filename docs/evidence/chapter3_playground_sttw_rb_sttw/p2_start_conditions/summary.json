@@ -1,0 +1,54 @@
+{
+  "groups": [
+    {
+      "activation_x_m": 8.45,
+      "count": 18,
+      "goals": 18,
+      "rb_complete": 18,
+      "outcomes": {
+        "goal": 18
+      },
+      "max_locked_joint_drift_rad": 9.071826934814453e-05,
+      "evaluation_s": 92.38462562201312
+    },
+    {
+      "activation_x_m": 8.55,
+      "count": 18,
+      "goals": 18,
+      "rb_complete": 18,
+      "outcomes": {
+        "goal": 18
+      },
+      "max_locked_joint_drift_rad": 0.00021159648895263672,
+      "evaluation_s": 91.37257918698015
+    },
+    {
+      "activation_x_m": 8.65,
+      "count": 18,
+      "goals": 18,
+      "rb_complete": 18,
+      "outcomes": {
+        "goal": 18
+      },
+      "max_locked_joint_drift_rad": 4.9591064453125e-05,
+      "evaluation_s": 91.25338209496113
+    },
+    {
+      "activation_x_m": 8.75,
+      "count": 18,
+      "goals": 18,
+      "rb_complete": 18,
+      "outcomes": {
+        "goal": 18
+      },
+      "max_locked_joint_drift_rad": 0.00016319751739501953,
+      "evaluation_s": 91.23364752699854
+    }
+  ],
+  "total": 72,
+  "goals": 72,
+  "rb_complete": 72,
+  "runtime_records_valid": true,
+  "role": "TRAIN motion-library expansion; 24 upstream/root/activation groups; no independent TEST",
+  "simulation_elapsed_s": 366.24423443095293
+}

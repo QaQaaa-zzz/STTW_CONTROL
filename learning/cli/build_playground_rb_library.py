@@ -16,14 +16,17 @@ from sttw_control.playground_prediction import BodyEnvelope
 
 
 p = argparse.ArgumentParser(description=__doc__)
-p.add_argument('--evaluation', type=Path, required=True)
+p.add_argument('--evaluation', type=Path, nargs='+', required=True)
 p.add_argument('--output', type=Path, required=True)
 a = p.parse_args()
 a.output.mkdir(parents=True, exist_ok=True)
-source = json.loads((a.evaluation / 'status.json').read_text())
-schema = json.loads((a.evaluation / 'controller_schema.json').read_text())
-declaration = json.loads((a.evaluation / 'declaration.json').read_text())
-model = mujoco.MjModel.from_binary_path(str(a.evaluation / 'terrain.mjb'))
+source = {'results': []}
+for batch,path in enumerate(a.evaluation):
+    for row in json.loads((path/'status.json').read_text())['results']:
+        source['results'].append(dict(row,source_evaluation=str(path),artifact_prefix='' if len(a.evaluation)==1 else f'batch{batch:02d}_'))
+schema = json.loads((a.evaluation[0] / 'controller_schema.json').read_text())
+declaration = [json.loads((path/'declaration.json').read_text()) for path in a.evaluation]
+model = mujoco.MjModel.from_binary_path(str(a.evaluation[0] / 'terrain.mjb'))
 envelope = BodyEnvelope(model, device='cpu', dtype=torch.float64, dimensions=3)
 pose_order = list(range(7)) + [int(model.jnt_qposadr[model.joint(name).id]) for name in
                              ['steering_joint','frontwheel_joint','rearwheel_joint','hip_joint','knee_joint']]
@@ -31,8 +34,9 @@ records = []
 motions = {}
 fig, axes = plt.subplots(3, 3, figsize=(15, 11), sharex=True, sharey=True)
 for row in source['results']:
-    case = row['case_dir']
-    with np.load(a.evaluation / case / 'trajectory.npz') as data:
+    source_case = row['case_dir'];case=row['artifact_prefix']+source_case
+    evaluation=Path(row['source_evaluation'])
+    with np.load(evaluation / source_case / 'trajectory.npz') as data:
         trace = data['trace']; columns = list(data['columns'])
         phase = trace[:, columns.index('phase')]
         entry = np.flatnonzero(phase == 1)
@@ -51,6 +55,8 @@ for row in source['results']:
         arrays = {key: data[key][segment] for key in
                   ['trace', 'qpos', 'qvel', 'controller_state', 'wheel_contact_flags',
                    'world_flags', 'contact_substep']}
+        for key in ['applied_targets','applied_target_valid','rb_state']:
+            if key in data:arrays[key]=data[key][segment]
         arrays.update(columns=data['columns'], time_from_entry_s=trace[segment,0]-trace[start,0],
                       geometry_lower_xyz=low, geometry_upper_xyz=high,
                       controller_history_before_entry=data['controller_state'][max(0,start-64):start+1],
@@ -59,10 +65,12 @@ for row in source['results']:
         np.savez_compressed(destination, **arrays)
         route = int(row['route']); variant = row['variant']
         observed_complete = bool(len(complete) and row['airborne'] and row['far_contact'])
-        record = dict(case=case, artifact=destination.name, source=str(a.evaluation/case/'trajectory.npz'),
+        record = dict(case=case, artifact=destination.name, source=str(evaluation/source_case/'trajectory.npz'),
                       route=route, upstream=route//3, downstream=route%3,
-                      root=variant['root_variant'], split=variant['data_split'],
-                      source_group=f"upstream{route//3}_root{variant['root_variant']}",
+                      root=variant['root_variant'], activation_id=variant.get('activation_id','original'), split=variant['data_split'],
+                      source_group=f"upstream{route//3}_root{variant['root_variant']}_activation{variant.get('activation_id','original')}",
+                      actual_targets_recorded='applied_targets' in data,rb_fifo_recorded='rb_state' in data,
+                      full_runtime_anchors=str(evaluation/'snapshot_anchors.json') if (evaluation/'snapshot_anchors.json').exists() else None,
                       complete=observed_complete, termination=row['termination'], full_chain_goal=row['goal'],
                       entry_time_s=float(trace[start,0]), end_time_s=float(trace[stop,0]),
                       duration_s=float(trace[stop,0]-trace[start,0]),
@@ -79,7 +87,7 @@ for row in source['results']:
         motions[case] = arrays
         ax = axes.flat[route]
         ax.plot(data['qpos'][:,0],data['qpos'][:,1],color='0.8',lw=.6)
-        ax.plot(q[:,0],q[:,1],lw=1,label=f"root{record['root']} {record['split']}" + (' FAILED' if not observed_complete else ''))
+        ax.plot(q[:,0],q[:,1],lw=1,label=f"root{record['root']} a{record['activation_id']} {record['split']}" + (' FAILED' if not observed_complete else ''))
         ax.scatter(q[0,0],q[0,1],s=12,color='black')
         ax.scatter(q[-1,0],q[-1,1],s=20,marker='x',color='green' if observed_complete else 'red')
         ax.plot(data['reference_xy'][:,0],data['reference_xy'][:,1],color='black',ls=':',lw=.5)
@@ -98,7 +106,7 @@ for r in records:
     with np.load(r['source']) as data:
         ax=axes.flat[r['route']];q=data['qpos'];ref=data['reference_xy']
         ax.plot(ref[:,0],ref[:,1],color='black',ls=':',lw=.5)
-        ax.plot(q[:,0],q[:,1],lw=.8,label=f"root{r['root']} {r['termination']}")
+        ax.plot(q[:,0],q[:,1],lw=.8,label=f"root{r['root']} a{r['activation_id']} {r['termination']}")
         ax.scatter(q[-1,0],q[-1,1],s=12,marker='x')
 for route,ax in enumerate(axes.flat):
     ax.set(title=f'route{route}',xlabel='World x (m)',ylabel='World y (m)',xlim=(1,19),ylim=(-2,2),aspect='equal')
@@ -109,12 +117,12 @@ groups = sorted({r['source_group'] for r in records if 'source_group' in r})
 summary = dict(total=len(records),completed_rb=sum(r['complete'] for r in records),
                source_groups=len(groups),split_records=dict(Counter(r.get('split','unknown') for r in records)),
                complete_by_split=dict(Counter(r['split'] for r in records if r['complete'])),
-               source=str(a.evaluation),source_declaration=declaration,
+               source=[str(path) for path in a.evaluation],source_declaration=declaration,
                controller_schema=schema, trace_timing='Rows are pre-control after events; four trace targets are prior-interval values with event resets. They are not exact current RB actions. Contacts refer to preceding5ms.', role='Observed TRAIN/DEV catalog; not certified legal domain or independent TEST',
-               limitations=['24 upstream/root groups, three downstream siblings per group; not 72 independent starts',
+               limitations=[f'{len(groups)} upstream/root/activation groups, three downstream siblings per group; not independent episodes',
                             'Motion templates are for prediction only; actual execution remains closed-loop frozen RB225',
                             'Per-geometry 3D supports sampled at5ms are not continuous-time clearance or exact swept-volume unions',
-                            'Controller history is available but RB FIFO/solver state at entry is not a replayable snapshot',
+                            'Per-step FIFO/actual targets availability is recorded per case; full runtime anchors are separate and precede entry',
                             'No calibrated nearest-template acceptance radius; do not publish unseen starts from this catalog'])
 (a.output/'manifest.json').write_text(json.dumps(summary,indent=2)+'\n')
 (a.output/'records.json').write_text(json.dumps(records,indent=2)+'\n')
