@@ -1,0 +1,189 @@
+[
+  {
+    "model": "M1",
+    "map_id": 6,
+    "layout": 0,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_model_planning/map06_layout00/evaluation",
+    "cases": [
+      "rb_run3_route1_h75_v2",
+      "rb_run3_route1_h75_v3"
+    ],
+    "identity": "Exact world and ground_handoff dictionaries; fixed same physics/RB stack, static plan; route/request/root matching"
+  },
+  {
+    "model": "M2",
+    "map_id": 6,
+    "layout": 0,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_model_planning/map06_layout00/evaluation",
+    "cases": [
+      "rb_run3_route1_h75_v2",
+      "rb_run3_route1_h75_v3"
+    ],
+    "identity": "Exact world and ground_handoff dictionaries; fixed same physics/RB stack, static plan; route/request/root matching"
+  },
+  {
+    "model": "M0",
+    "map_id": 6,
+    "layout": 1,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_model_planning/map06_layout01/evaluation",
+    "cases": [
+      "rb_run3_route4_h75_v2",
+      "rb_run3_route4_h75_v3"
+    ],
+    "identity": "Exact world and ground_handoff dictionaries; fixed same physics/RB stack, static plan; route/request/root matching"
+  },
+  {
+    "model": "M1",
+    "map_id": 6,
+    "layout": 1,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_model_planning/map06_layout01/evaluation",
+    "cases": [
+      "rb_run3_route1_h75_v2",
+      "rb_run3_route1_h75_v3"
+    ],
+    "identity": "Exact world and ground_handoff dictionaries; fixed same physics/RB stack, static plan; route/request/root matching"
+  },
+  {
+    "model": "M2",
+    "map_id": 6,
+    "layout": 1,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_model_planning/map06_layout01/evaluation",
+    "cases": [
+      "rb_run3_route1_h75_v2",
+      "rb_run3_route1_h75_v3"
+    ],
+    "identity": "Exact world and ground_handoff dictionaries; fixed same physics/RB stack, static plan; route/request/root matching"
+  },
+  {
+    "model": "M0",
+    "map_id": 6,
+    "layout": 2,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_model_planning/map06_layout02/evaluation",
+    "cases": [
+      "rb_run3_route4_h75_v0",
+      "rb_run3_route4_h75_v1"
+    ],
+    "identity": "Exact world and ground_handoff dictionaries; fixed same physics/RB stack, static plan; route/request/root matching"
+  },
+  {
+    "model": "M1",
+    "map_id": 6,
+    "layout": 2,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_model_planning/map06_layout02/evaluation",
+    "cases": [
+      "rb_run3_route4_h75_v2",
+      "rb_run3_route4_h75_v3"
+    ],
+    "identity": "Exact world and ground_handoff dictionaries; fixed same physics/RB stack, static plan; route/request/root matching"
+  },
+  {
+    "model": "M2",
+    "map_id": 6,
+    "layout": 2,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_model_planning/map06_layout02/evaluation",
+    "cases": [
+      "rb_run3_route4_h75_v2",
+      "rb_run3_route4_h75_v3"
+    ],
+    "identity": "Exact world and ground_handoff dictionaries; fixed same physics/RB stack, static plan; route/request/root matching"
+  },
+  {
+    "model": "M0",
+    "map_id": 7,
+    "layout": 0,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_model_planning/map07_layout00/evaluation",
+    "cases": [
+      "rb_run3_route4_h75_v2",
+      "rb_run3_route4_h75_v3"
+    ],
+    "identity": "Exact world and ground_handoff dictionaries; fixed same physics/RB stack, static plan; route/request/root matching"
+  },
+  {
+    "model": "M1",
+    "map_id": 7,
+    "layout": 0,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_model_planning/map07_layout00/evaluation",
+    "cases": [
+      "rb_run3_route1_h75_v2",
+      "rb_run3_route1_h75_v3"
+    ],
+    "identity": "Exact world and ground_handoff dictionaries; fixed same physics/RB stack, static plan; route/request/root matching"
+  },
+  {
+    "model": "M2",
+    "map_id": 7,
+    "layout": 0,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_model_planning/map07_layout00/evaluation",
+    "cases": [
+      "rb_run3_route1_h75_v2",
+      "rb_run3_route1_h75_v3"
+    ],
+    "identity": "Exact world and ground_handoff dictionaries; fixed same physics/RB stack, static plan; route/request/root matching"
+  },
+  {
+    "model": "M0",
+    "map_id": 7,
+    "layout": 1,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_model_planning/map07_layout01/evaluation",
+    "cases": [
+      "rb_run3_route4_h75_v2",
+      "rb_run3_route4_h75_v3"
+    ],
+    "identity": "Exact world and ground_handoff dictionaries; fixed same physics/RB stack, static plan; route/request/root matching"
+  },
+  {
+    "model": "M1",
+    "map_id": 7,
+    "layout": 1,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_model_planning/map07_layout01/evaluation",
+    "cases": [
+      "rb_run3_route1_h75_v2",
+      "rb_run3_route1_h75_v3"
+    ],
+    "identity": "Exact world and ground_handoff dictionaries; fixed same physics/RB stack, static plan; route/request/root matching"
+  },
+  {
+    "model": "M2",
+    "map_id": 7,
+    "layout": 1,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_model_planning/map07_layout01/evaluation",
+    "cases": [
+      "rb_run3_route1_h75_v2",
+      "rb_run3_route1_h75_v3"
+    ],
+    "identity": "Exact world and ground_handoff dictionaries; fixed same physics/RB stack, static plan; route/request/root matching"
+  },
+  {
+    "model": "M0",
+    "map_id": 7,
+    "layout": 2,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_model_planning/map07_layout02/evaluation",
+    "cases": [
+      "rb_run3_route0_h75_v0",
+      "rb_run3_route0_h75_v1"
+    ],
+    "identity": "Exact world and ground_handoff dictionaries; fixed same physics/RB stack, static plan; route/request/root matching"
+  },
+  {
+    "model": "M1",
+    "map_id": 7,
+    "layout": 2,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_model_planning/map07_layout02/evaluation",
+    "cases": [
+      "rb_run3_route4_h75_v2",
+      "rb_run3_route4_h75_v3"
+    ],
+    "identity": "Exact world and ground_handoff dictionaries; fixed same physics/RB stack, static plan; route/request/root matching"
+  },
+  {
+    "model": "M2",
+    "map_id": 7,
+    "layout": 2,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_model_planning/map07_layout02/evaluation",
+    "cases": [
+      "rb_run3_route4_h75_v2",
+      "rb_run3_route4_h75_v3"
+    ],
+    "identity": "Exact world and ground_handoff dictionaries; fixed same physics/RB stack, static plan; route/request/root matching"
+  }
+]

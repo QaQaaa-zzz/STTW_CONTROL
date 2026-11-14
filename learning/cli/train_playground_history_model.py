@@ -17,6 +17,7 @@ p.add_argument('--seed',type=int,default=0)
 p.add_argument('--phase',type=int,choices=[0,2],default=2)
 p.add_argument('--resume',type=Path)
 p.add_argument('--resume-optimizer',action='store_true')
+p.add_argument('--retain-best',type=Path,help='Parent directory best.pt/best.json under the same fixed evaluation contract')
 p.add_argument('--initial-update',type=int,default=0)
 p.add_argument('--balanced-mixture',action='store_true')
 p.add_argument('--terrain-features',action='store_true')
@@ -99,8 +100,8 @@ for h,rows in window_rows.items():
     window_weights[h]=tensor([1./counts[r['case']] for r in train_rows])
 dev_rows={h:[r for r in window_rows[h] if r['split']!='TRAIN'] for h in [50,150]}
 shutil.copyfile(a.nominal,a.output/'nominal.npz')
-contract=dict(phase=a.phase,route_selection="canonical downstream0 for each approach; avoid tripling identical upstream prefixes" if a.phase==0 else "all routes",source=str(a.evaluation),additional_evaluations=[str(x) for x in a.additional_evaluations],nominal=str(a.nominal),updates=a.updates,seed=a.seed,batch=64,
-              initialization='model_and_Adam_resume_new_sampling_seed' if a.resume_optimizer else 'weights_only_fresh_Adam' if a.resume else 'zero_correction',parent_checkpoint=str(a.resume),initial_update=a.initial_update,balanced_mixture=a.balanced_mixture,
+contract=dict(phase=a.phase,route_selection="canonical downstream0 subset for each approach; other physical executions are not exact duplicates" if a.phase==0 else "all routes",source=str(a.evaluation),additional_evaluations=[str(x) for x in a.additional_evaluations],nominal=str(a.nominal),updates=a.updates,seed=a.seed,batch=64,
+              initialization='model_and_Adam_resume_new_sampling_seed' if a.resume_optimizer else 'weights_only_fresh_Adam' if a.resume else 'zero_correction',parent_checkpoint=str(a.resume),retained_best=str(a.retain_best),initial_update=a.initial_update,balanced_mixture=a.balanced_mixture,
               checkpoints_every=25,selection='mean maximum XY over fixed available1s DEV windows',
               training='Declared source TRAIN only, includes pre-failure observations; no future real controller states in rollout',
               terrain_features=a.terrain_features,terrain_specs=terrain_specs,source_map_ids=source_map_ids,model_kind=a.model_kind,
@@ -137,6 +138,9 @@ optimizer=torch.optim.Adam(model.parameters(),lr=3e-4)
 if a.resume_optimizer:optimizer.load_state_dict(resumed['optimizer'])
 position_scale=tensor([.2,.2,.1]);velocity_scale=tensor([.3,.2,.3,.5,.5,.5,1.,5.,5.])
 best=float('inf');logs=[]
+if a.retain_best:
+    best=json.loads((a.retain_best/'best.json').read_text())['score']
+    for name in ['best.pt','best.json']:shutil.copyfile(a.retain_best/name,a.output/name)
 for update in range(a.updates+1):
     iteration=a.initial_update+update
     if update==0 or update%25==0 or update==a.updates:

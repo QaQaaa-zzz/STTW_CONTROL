@@ -16,6 +16,11 @@ class HistoryModelTest(unittest.TestCase):
         predicted,_=model.rollout(pose,velocity,velocity,torch.zeros(1,381),s,xy,heading,heading,5)
         expected,_=nominal(pose,velocity,velocity,s,xy,heading,heading,5)
         torch.testing.assert_close(predicted,expected)
+        checked,_,domain=model.rollout(pose,velocity,velocity,torch.zeros(1,381),s,xy,heading,heading,5,return_domain=True)
+        torch.testing.assert_close(checked,predicted)
+        self.assertEqual(tuple(domain.shape),(1,6,3))
+        torch.testing.assert_close(domain[:,:,:2],torch.zeros(1,6,2))
+        self.assertTrue(bool((domain[:,:,2]>0).all()))
         predicted[:,:,:3].square().mean().backward()
         gradients=[p.grad for p in model.parameters() if p.grad is not None]
         self.assertTrue(all(torch.isfinite(g).all() for g in gradients))

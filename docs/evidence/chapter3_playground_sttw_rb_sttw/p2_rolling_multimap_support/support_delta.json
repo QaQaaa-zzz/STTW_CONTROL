@@ -1,0 +1,16 @@
+{
+  "unchanged": [
+    "x",
+    "valid",
+    "phase_low",
+    "phase_high",
+    "edges",
+    "margin",
+    "routes",
+    "activation",
+    "cost"
+  ],
+  "lower_expanded_entries": 2022595,
+  "upper_expanded_entries": 2007434,
+  "added_source_count": 108
+}

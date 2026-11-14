@@ -436,7 +436,42 @@
       "id": "PG10",
       "title": "Static same-candidate model-planning DEV pilot",
       "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/p3_model_planning/RESULTS.md",
-      "sha256": "f9ae20bfa53f234c878f8f3c835593be34cce88090a3f0ff8b1965064c645a11",
+      "sha256": "7cfa1bc2b7e5b4c96eeb820a6e9a95cd511e2b715e5e8d9faf9f5d8bb0a60eaa",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending",
+      "draft_role": "current_shared_plant_planning",
+      "supporting_reports": [
+        "docs/evidence/chapter3_playground_sttw_rb_sttw/p3_model_planning/prediction_admissibility.csv"
+      ]
+    },
+    {
+      "id": "PG11",
+      "title": "Map-grouped approach predictors and full observed pre-jump horizon",
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/p3_approach_models/RESULTS.md",
+      "sha256": "8a37aac111fa891a11b3405aeb261d518ef4070cea12c5489e82ae8ff4dd6921",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending",
+      "draft_role": "current_shared_plant_planning",
+      "supporting_reports": [
+        "docs/evidence/chapter3_playground_sttw_rb_sttw/p3_approach_models/remaining_motion/RESULTS.md",
+        "docs/evidence/chapter3_playground_sttw_rb_sttw/p3_approach_models/continuation/RESULTS.md",
+        "docs/evidence/chapter3_playground_sttw_rb_sttw/p3_approach_models/continuation/remaining_motion/RESULTS.md"
+      ]
+    },
+    {
+      "id": "PG12",
+      "title": "Predicted-domain and goal-hold gate DEV revision",
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/p3_model_planning/predicted_terminal/RESULTS.md",
+      "sha256": "6fffbc84639664f5d10ac3bd907cde43e4a7c6c69bff72073f720373a8397dbc",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending",
+      "draft_role": "current_shared_plant_planning"
+    },
+    {
+      "id": "PG13",
+      "title": "Additional TRAIN-map support rolling DEV retest",
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/p2_rolling_multimap_support/RESULTS.md",
+      "sha256": "890c4ef01fe90f5244ab65c708bca97c8c186c73b2b551c5431f39cec845c665",
       "verification": "agent_source_inspected",
       "human_verification": "pending",
       "draft_role": "current_shared_plant_planning"
@@ -483,7 +518,7 @@
   "scope": "Development methods/results draft, not submission ready",
   "new_physics_steps": "See frozen run manifests; paper build adds no simulation",
   "new_policy_training_updates": 0,
-  "paper_sha256": "7fcbd39eef6b723835e80843ee12470d9a8658c3195fb84d2c591c5a9c614b54",
+  "paper_sha256": "b7d1d9dcb6a9aee7e939c96f24250eea068c531f9b13ec6aae0a44d3f54a4165",
   "revision_scope": "User execution-outline ground dynamics/full-motion planning/structured prediction; prior two-interface draft preserved in Git0c485653",
   "current_result_panels": [
     "PG1",
@@ -494,6 +529,9 @@
     "PG7",
     "PG8",
     "PG9",
-    "PG10"
+    "PG10",
+    "PG11",
+    "PG12",
+    "PG13"
   ]
 }

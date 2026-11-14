@@ -17,11 +17,12 @@ class HistoryDynamics(nn.Module):
         nn.init.zeros_(self.correction[-1].weight);nn.init.zeros_(self.correction[-1].bias)
         self.to(nominal.mean.device)
 
-    def rollout(self,pose,xi,previous,controller,s,xy,heading,curvature,steps,speed_request=None,terrain_ids=None):
+    def rollout(self,pose,xi,previous,controller,s,xy,heading,curvature,steps,speed_request=None,terrain_ids=None,return_domain=False):
         hidden=self.initial((controller-self.controller_mean)/self.controller_scale)
-        poses=[pose];velocities=[xi]
+        poses=[pose];velocities=[xi];domain=[]
         for _ in range(steps):
             eta=self.nominal.features(pose,xi,s,xy,heading,curvature)
+            if return_domain:domain.append(eta[:,9:12])
             if speed_request is not None:eta[:,13]=speed_request
             features=torch.cat((xi,eta,pose[:,10:12]),1)
             if self.terrain is not None:features=torch.cat((features,self.terrain(pose,terrain_ids)),1)
@@ -38,6 +39,9 @@ class HistoryDynamics(nn.Module):
             xyz=pose[:,:3]+.01*(rotate(pose[:,3:7],xi[:,:3])+rotate(q,nxt[:,:3]))
             pose=torch.cat((xyz,q,pose[:,7:10]+mid[:,6:9]*.02,pose[:,10:12]),1)
             previous,xi=xi,nxt;poses.append(pose);velocities.append(xi)
+        if return_domain:
+            domain.append(self.nominal.features(pose,xi,s,xy,heading,curvature)[:,9:12])
+            return torch.stack(poses,1),torch.stack(velocities,1),torch.stack(domain,1)
         return torch.stack(poses,1),torch.stack(velocities,1)
 
 

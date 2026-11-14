@@ -1,0 +1,60 @@
+{
+  "root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_approach_remaining_continue",
+  "models": [
+    "M0",
+    "residual_seed2",
+    "direct_seed0"
+  ],
+  "cases": [
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation",
+      "case": "rb_run3_route0_h75_v0",
+      "map_id": 0,
+      "route": 0,
+      "root": 6,
+      "physical_outcome": "goal",
+      "anchor_s": 0.019999999552965164,
+      "actual_terminal_s": 3.7950000762939453,
+      "request": 1.7999999523162842,
+      "steps": 188,
+      "observed_horizon_s": 3.7600000000000002,
+      "max_xy_m": 0.10120447725057602,
+      "max_support_xyz_m": 0.08685199171304703
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation",
+      "case": "rb_run3_route3_h75_v0",
+      "map_id": 0,
+      "route": 3,
+      "root": 6,
+      "physical_outcome": "goal",
+      "anchor_s": 0.019999999552965164,
+      "actual_terminal_s": 4.135000228881836,
+      "request": 1.7999999523162842,
+      "steps": 205,
+      "observed_horizon_s": 4.1,
+      "max_xy_m": 0.2618623375892639,
+      "max_support_xyz_m": 0.2673912048339844
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation",
+      "case": "rb_run3_route6_h75_v0",
+      "map_id": 0,
+      "route": 6,
+      "root": 6,
+      "physical_outcome": "goal",
+      "anchor_s": 0.019999999552965164,
+      "actual_terminal_s": 4.114999771118164,
+      "request": 1.7999999523162842,
+      "steps": 204,
+      "observed_horizon_s": 4.08,
+      "max_xy_m": 0.2718808054924011,
+      "max_support_xyz_m": 0.27897024154663086
+    }
+  ],
+  "selection": "First declared DEV map,root6,1.8m/s,one straight/left/right approach; illustrative3/24cases, not outcome-ranked",
+  "processing": "Actual5ms positions cropped at real phase0 endpoint; predictions at20ms, no smoothing. Equal XY scaling. No padded samples or post-jump actual path included.",
+  "destination": "Local manuscript draft, publisher final requirements pending verification",
+  "accessibility": "Color plus line style; scalar metrics and full24cases remain in report",
+  "alt_text": "Actual and predicted XY trajectories for straight, left and right approaches on the same development map. M0 deviates more than the learned models in these selected examples; all24cases are reported separately."
+}

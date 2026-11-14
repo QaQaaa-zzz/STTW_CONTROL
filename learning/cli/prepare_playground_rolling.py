@@ -6,6 +6,7 @@ p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('--source',type=Path,required=True)
 p.add_argument('--output',type=Path,required=True)
 p.add_argument('--prefix-training',type=Path)
+p.add_argument('--ground-training',type=Path,nargs='*',default=[])
 a=p.parse_args();a.output.mkdir(exist_ok=False,parents=True)
 cs=json.loads((a.source/'candidates.json').read_text());sources=json.loads((a.source/'sources.json').read_text());cal=json.loads((a.source/'calibration.json').read_text());original=json.loads((a.source/'manifest.json').read_text());plans=json.loads((a.source/'plans.json').read_text())
 x=np.arange(1.45,18.551,.025,dtype=np.float32);edges=np.array(cal['region_edges_x_m'],np.float32)
@@ -42,6 +43,17 @@ if a.prefix_training:
             if candidate['route']==row['route']:
                 i=candidate['index'];low[i,mask]=np.minimum(low[i,mask],sampled[mask]);high[i,mask]=np.maximum(high[i,mask],sampled[mask])
         prefix_sources.append(dict(case=row['case_dir'],route=row['route'],root=row['variant']['root_variant']))
+ground_sources=[]
+for source in a.ground_training:
+    config=json.loads((source/'resolved_config.json').read_text());activation=config['ground_handoff']['approach']['jump_start_x_m']
+    for row in json.loads((source/'status.json').read_text())['results']:
+        if row['variant']['data_split']!='TRAIN' or row['variant']['requested_speed_m_s']!=1.8:continue
+        sx,values,phase=read(source/row['case_dir']/'trajectory.npz');sampled=interp(x,sx,values);phase_at=np.interp(x,sx,phase);inside=(x>=sx[0])&(x<=sx[-1])
+        for candidate in cs:
+            if candidate['route']!=row['route']:continue
+            i=candidate['index'];mask=inside&valid[i]&(((x<=8.3)&(phase_at==0))|((abs(candidate['activation_x_m']-activation)<1e-5)&(phase_at==2)))
+            low[i,mask]=np.minimum(low[i,mask],sampled[mask]);high[i,mask]=np.maximum(high[i,mask],sampled[mask])
+        ground_sources.append(dict(evaluation=str(source),case=row['case_dir'],route=row['route'],root=row['variant']['root_variant'],activation_x_m=activation))
 np.savez(a.output/'state_bank.npz',x=x,low=low,high=high,valid=np.array(valid),phase_low=np.array(plo,np.float32),phase_high=np.array(phi,np.float32),edges=edges,margin=margin.astype(np.float32),routes=np.array([c['route'] for c in cs]),activation=np.array([c['activation_x_m'] for c in cs],np.float32),cost=np.array([c['cost_s'] for c in cs],np.float32))
 entries=[]
 for layout in range(6):
@@ -50,7 +62,7 @@ for layout in range(6):
     config['evaluation_lanes']=[[3,'h75',i] for i in range(2)]
     config['rolling_planner']=dict(state_bank=str(a.output/'state_bank.npz'),clearance=source['all_candidate_clearance_m'],period_s=.2,first_query_s=.2,initial_valid_until_x_m=8.3,role='DEV rolling finite library; measured physical/controller-state empirical screening, delayed publication, no skill reset')
     (folder/'config.json').write_text(json.dumps(config,indent=2)+'\n');entries.append(dict(layout=layout,config=str(folder/'config.json'),evaluation=str(folder/'evaluation')))
-manifest=dict(role='P2 rolling DEV integration, not independent TEST or safety guarantee',source=str(a.source),entries=entries,ground_only=False,routes=list(range(9)),seconds=10,physical_episodes=12,initial_plan='Route3 left upstream/straight downstream; only prefix throughx8.3 validated initially, activation8.55. New complete plan chosen from measured state startingt0.2.',screening='Same-x source min/max state including381 controller features; existing18DEV max excursion by fixed map region times1.2 plus1percent TRAIN feature range and1e-5. Ground phases only; RB remains frozen.',calibration=records,counts=counts.tolist(),budget='One12episode queue, no training or parameter sweep',expected_wallclock_s=[300,900],hard_limit_s=1500,stop='First runtime error or25min; preserve failures',physics='Unchanged RB225/H75, implicitfast1ms x5, fixed map/goal,2m flat buffers',prefix_training=str(a.prefix_training) if a.prefix_training else None,prefix_sources=prefix_sources,prefix_scope='Optional additional TRAIN histories only on identical ground prefix x<=8.3 before every RB activation; original calibrated margins unchanged',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip())
+manifest=dict(ground_training=[str(p) for p in a.ground_training],ground_sources=ground_sources,ground_scope='Additional1.8m/s TRAIN histories, matching route; phase0 identical reference prefix throughx8.3 may support all activations, phase2 only exact source activation. Original xvalid/phasebands/calibrated margins and geometric clearances unchanged.',role='P2 rolling DEV integration, not independent TEST or safety guarantee',source=str(a.source),entries=entries,ground_only=False,routes=list(range(9)),seconds=10,physical_episodes=12,initial_plan='Route3 left upstream/straight downstream; only prefix throughx8.3 validated initially, activation8.55. New complete plan chosen from measured state startingt0.2.',screening='Same-x source min/max state including381 controller features; existing18DEV max excursion by fixed map region times1.2 plus1percent TRAIN feature range and1e-5. Ground phases only; RB remains frozen.',calibration=records,counts=counts.tolist(),budget='One12episode queue, no training or parameter sweep',expected_wallclock_s=[300,900],hard_limit_s=1500,stop='First runtime error or25min; preserve failures',physics='Unchanged RB225/H75, implicitfast1ms x5, fixed map/goal,2m flat buffers',prefix_training=str(a.prefix_training) if a.prefix_training else None,prefix_sources=prefix_sources,prefix_scope='Optional additional TRAIN histories only on identical ground prefix x<=8.3 before every RB activation; original calibrated margins unchanged',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip())
 (a.output/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
 (a.output/'source').mkdir()
 for path in [Path(__file__),Path('learning/src/sttw_control/playground_rolling.py'),Path('learning/src/sttw_control/playground_handoff_evaluation.py')]:shutil.copyfile(path,a.output/'source'/path.name)

@@ -1,0 +1,97 @@
+{
+  "models": [
+    {
+      "model": "M0",
+      "cases": 24,
+      "mean_max_xy_m": 0.20658391310522953,
+      "p95_max_xy_m": 0.27808730155229566,
+      "worst_xy_m": 0.29469892382621765,
+      "worst_support_xyz_m": 0.28500843048095703,
+      "min_horizon_s": 3.56,
+      "max_horizon_s": 4.1,
+      "checkpoint": "model_0000.pt",
+      "model_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_approach_models/residual_seed0",
+      "checkpoint_sha256": "2b864dbc95fbd360cf7782bab076edfcd15f127b104b35d8b0a6938d55540932"
+    },
+    {
+      "model": "residual_seed0",
+      "cases": 24,
+      "mean_max_xy_m": 0.043730671517550945,
+      "p95_max_xy_m": 0.06275800913572312,
+      "worst_xy_m": 0.06567408889532089,
+      "worst_support_xyz_m": 0.06316184997558594,
+      "min_horizon_s": 3.56,
+      "max_horizon_s": 4.1,
+      "checkpoint": "best.pt",
+      "model_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_approach_models/residual_seed0",
+      "checkpoint_sha256": "ac8b869a7450004a73d14d1a0e857ceebe1534911160cd1041fd355c6c7b38a9"
+    },
+    {
+      "model": "residual_seed1",
+      "cases": 24,
+      "mean_max_xy_m": 0.03647928972107669,
+      "p95_max_xy_m": 0.056004294008016584,
+      "worst_xy_m": 0.05829152837395668,
+      "worst_support_xyz_m": 0.06107302010059357,
+      "min_horizon_s": 3.56,
+      "max_horizon_s": 4.1,
+      "checkpoint": "best.pt",
+      "model_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_approach_models/residual_seed1",
+      "checkpoint_sha256": "5d593d8e09a4489c847d3c146204d3db6db974583c6ea11f403e3cee5b9ffc82"
+    },
+    {
+      "model": "residual_seed2",
+      "cases": 24,
+      "mean_max_xy_m": 0.044063724499816694,
+      "p95_max_xy_m": 0.06282575577497482,
+      "worst_xy_m": 0.08007773756980896,
+      "worst_support_xyz_m": 0.08614040911197662,
+      "min_horizon_s": 3.56,
+      "max_horizon_s": 4.1,
+      "checkpoint": "best.pt",
+      "model_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_approach_models/residual_seed2",
+      "checkpoint_sha256": "10de5a9614f162a88e21f1c5393df87cff69d88de6b11f3ba991eeb472dd56ed"
+    },
+    {
+      "model": "direct_seed0",
+      "cases": 24,
+      "mean_max_xy_m": 0.07438285447036226,
+      "p95_max_xy_m": 0.1241446204483509,
+      "worst_xy_m": 0.13535791635513306,
+      "worst_support_xyz_m": 0.1375269889831543,
+      "min_horizon_s": 3.56,
+      "max_horizon_s": 4.1,
+      "checkpoint": "best.pt",
+      "model_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_approach_models/direct_seed0",
+      "checkpoint_sha256": "b8277391ba8e6f016e74ca6aa01f245efa7daf799a5d6e41ded5046cb1a850b2"
+    },
+    {
+      "model": "direct_seed1",
+      "cases": 24,
+      "mean_max_xy_m": 0.06802940554916859,
+      "p95_max_xy_m": 0.11158876866102219,
+      "worst_xy_m": 0.11186261475086212,
+      "worst_support_xyz_m": 0.11525440216064453,
+      "min_horizon_s": 3.56,
+      "max_horizon_s": 4.1,
+      "checkpoint": "best.pt",
+      "model_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_approach_models/direct_seed1",
+      "checkpoint_sha256": "3d8b31f7b700f0c77a6c212817c8269b300d30e3c18d61d1cd9f055c5daba1a1"
+    },
+    {
+      "model": "direct_seed2",
+      "cases": 24,
+      "mean_max_xy_m": 0.07431291424048443,
+      "p95_max_xy_m": 0.14013874419033523,
+      "worst_xy_m": 0.15921062231063843,
+      "worst_support_xyz_m": 0.15797901153564453,
+      "min_horizon_s": 3.56,
+      "max_horizon_s": 4.1,
+      "checkpoint": "best.pt",
+      "model_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_approach_models/direct_seed2",
+      "checkpoint_sha256": "fddd504365d2f4ded8d267f37fd18c2517fc7f2da329f68d67bd228852c988be"
+    }
+  ],
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_approach_remaining_motion",
+  "role": "Existing DEV_MAP approach phase0 canonical routes0/3/6,24cases per model, same20ms anchor0.02s until last observed phase0 sample; >3s extrapolation explicit; no new physical success"
+}

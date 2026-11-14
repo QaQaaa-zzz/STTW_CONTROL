@@ -25,5 +25,29 @@
       "sha256": "adf6621aed5097e3072920cfbdd3d0e5db1ddc44c8e1f45b679e7fec9bdbc917"
     }
   ],
-  "training_source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/manifest.json"
+  "training_source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/manifest.json",
+  "approach_models": [
+    {
+      "name": "M0",
+      "model_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_approach_models/residual_seed0",
+      "checkpoint": "model_0000.pt",
+      "update": 0,
+      "sha256": "2b864dbc95fbd360cf7782bab076edfcd15f127b104b35d8b0a6938d55540932"
+    },
+    {
+      "name": "M1",
+      "model_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_approach_models_continue/residual_seed2",
+      "checkpoint": "best.pt",
+      "update": 875,
+      "sha256": "60537cd938766aa9d5128344d82183c2d9821e92d8cf1a6348df269d310f1c1a"
+    },
+    {
+      "name": "M2",
+      "model_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_approach_models_continue/direct_seed0",
+      "checkpoint": "best.pt",
+      "update": 900,
+      "sha256": "f84d362119fe37db59ea5065d7d95aa0db438171911ef5e494032c117ebdbfe7"
+    }
+  ],
+  "approach_scope": "Phase0, canonical route0/3/6 subset; selected by same1sDEVcriterion over saved checkpoints through900, not best full-horizon error"
 }

@@ -2,7 +2,8 @@
   "pages": 6,
   "format": "US Letter, official ieeeconf initial-submission template",
   "figures": [
-    "chapter3_paper/../evidence/chapter3_playground_sttw_rb_sttw/e2_joint/paired_xy.png"
+    "chapter3_paper/../evidence/chapter3_playground_sttw_rb_sttw/e2_joint/paired_xy.png",
+    "chapter3_paper/figures/approach_prediction.png"
   ],
   "overfull_boxes": false,
   "submission_ready": false,

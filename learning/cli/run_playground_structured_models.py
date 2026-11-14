@@ -6,7 +6,10 @@ m=json.loads((r/'manifest.json').read_text());start=time.time();done=[]
 for e in m['entries']:
     name=f"{e['kind']}_seed{e['seed']}"
     (r/'status.json').write_text(json.dumps(dict(stage='running',model=name,completed=done,total=len(m['entries']),elapsed_s=time.time()-start),indent=2))
-    command=[sys.executable,'learning/cli/train_playground_history_model.py','--evaluation',m['evaluation'],'--nominal',m['nominal'],'--output',e['output'],'--phase',str(m.get('phase',2)),'--updates',str(m['updates_each']),'--seed',str(e['seed']),'--balanced-mixture','--terrain-features','--model-kind',e['kind'],'--additional-evaluations',*m.get('additional_evaluations',[])]
+    command=[sys.executable,'learning/cli/train_playground_history_model.py','--evaluation',m['evaluation'],'--nominal',m['nominal'],'--output',e['output'],'--phase',str(m.get('phase',2)),'--updates',str(m['updates_each']),'--seed',str(e['seed']+m.get('sampling_seed_offset',0)),'--balanced-mixture','--terrain-features','--model-kind',e['kind'],'--additional-evaluations',*m.get('additional_evaluations',[])]
+    if m.get('parent_root'):
+        parent=Path(m['parent_root'])/name
+        command+=['--resume',str(parent/'training_state.pt'),'--resume-optimizer','--initial-update',str(m['initial_update']),'--retain-best',str(parent)]
     with (r/(name+'.log')).open('w') as log:result=subprocess.run(command,stdout=log,stderr=subprocess.STDOUT)
     subprocess.Popen([sys.executable,'learning/scripts/notify_chapter3_job.py','--title','第三章预测模型阶段结束','--message',name+'退出码'+str(result.returncode)+'；预测器拟合阶段，非整体任务完成。','--receipt',str(r/(name+'_bark.json'))])
     if result.returncode:

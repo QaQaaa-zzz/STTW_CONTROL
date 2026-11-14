@@ -1,0 +1,1183 @@
+{
+  "ground_training": [
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map02/evaluation",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map03/evaluation",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map04/evaluation",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map05/evaluation"
+  ],
+  "ground_sources": [
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation",
+      "case": "rb_run3_route0_h75_v0",
+      "route": 0,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation",
+      "case": "rb_run3_route0_h75_v1",
+      "route": 0,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation",
+      "case": "rb_run3_route1_h75_v0",
+      "route": 1,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation",
+      "case": "rb_run3_route1_h75_v1",
+      "route": 1,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation",
+      "case": "rb_run3_route2_h75_v0",
+      "route": 2,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation",
+      "case": "rb_run3_route2_h75_v1",
+      "route": 2,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation",
+      "case": "rb_run3_route3_h75_v0",
+      "route": 3,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation",
+      "case": "rb_run3_route3_h75_v1",
+      "route": 3,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation",
+      "case": "rb_run3_route4_h75_v0",
+      "route": 4,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation",
+      "case": "rb_run3_route4_h75_v1",
+      "route": 4,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation",
+      "case": "rb_run3_route5_h75_v0",
+      "route": 5,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation",
+      "case": "rb_run3_route5_h75_v1",
+      "route": 5,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation",
+      "case": "rb_run3_route6_h75_v0",
+      "route": 6,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation",
+      "case": "rb_run3_route6_h75_v1",
+      "route": 6,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation",
+      "case": "rb_run3_route7_h75_v0",
+      "route": 7,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation",
+      "case": "rb_run3_route7_h75_v1",
+      "route": 7,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation",
+      "case": "rb_run3_route8_h75_v0",
+      "route": 8,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation",
+      "case": "rb_run3_route8_h75_v1",
+      "route": 8,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation",
+      "case": "rb_run3_route0_h75_v0",
+      "route": 0,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation",
+      "case": "rb_run3_route0_h75_v1",
+      "route": 0,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation",
+      "case": "rb_run3_route1_h75_v0",
+      "route": 1,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation",
+      "case": "rb_run3_route1_h75_v1",
+      "route": 1,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation",
+      "case": "rb_run3_route2_h75_v0",
+      "route": 2,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation",
+      "case": "rb_run3_route2_h75_v1",
+      "route": 2,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation",
+      "case": "rb_run3_route3_h75_v0",
+      "route": 3,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation",
+      "case": "rb_run3_route3_h75_v1",
+      "route": 3,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation",
+      "case": "rb_run3_route4_h75_v0",
+      "route": 4,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation",
+      "case": "rb_run3_route4_h75_v1",
+      "route": 4,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation",
+      "case": "rb_run3_route5_h75_v0",
+      "route": 5,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation",
+      "case": "rb_run3_route5_h75_v1",
+      "route": 5,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation",
+      "case": "rb_run3_route6_h75_v0",
+      "route": 6,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation",
+      "case": "rb_run3_route6_h75_v1",
+      "route": 6,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation",
+      "case": "rb_run3_route7_h75_v0",
+      "route": 7,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation",
+      "case": "rb_run3_route7_h75_v1",
+      "route": 7,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation",
+      "case": "rb_run3_route8_h75_v0",
+      "route": 8,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation",
+      "case": "rb_run3_route8_h75_v1",
+      "route": 8,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map02/evaluation",
+      "case": "rb_run3_route0_h75_v0",
+      "route": 0,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map02/evaluation",
+      "case": "rb_run3_route0_h75_v1",
+      "route": 0,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map02/evaluation",
+      "case": "rb_run3_route1_h75_v0",
+      "route": 1,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map02/evaluation",
+      "case": "rb_run3_route1_h75_v1",
+      "route": 1,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map02/evaluation",
+      "case": "rb_run3_route2_h75_v0",
+      "route": 2,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map02/evaluation",
+      "case": "rb_run3_route2_h75_v1",
+      "route": 2,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map02/evaluation",
+      "case": "rb_run3_route3_h75_v0",
+      "route": 3,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map02/evaluation",
+      "case": "rb_run3_route3_h75_v1",
+      "route": 3,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map02/evaluation",
+      "case": "rb_run3_route4_h75_v0",
+      "route": 4,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map02/evaluation",
+      "case": "rb_run3_route4_h75_v1",
+      "route": 4,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map02/evaluation",
+      "case": "rb_run3_route5_h75_v0",
+      "route": 5,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map02/evaluation",
+      "case": "rb_run3_route5_h75_v1",
+      "route": 5,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map02/evaluation",
+      "case": "rb_run3_route6_h75_v0",
+      "route": 6,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map02/evaluation",
+      "case": "rb_run3_route6_h75_v1",
+      "route": 6,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map02/evaluation",
+      "case": "rb_run3_route7_h75_v0",
+      "route": 7,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map02/evaluation",
+      "case": "rb_run3_route7_h75_v1",
+      "route": 7,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map02/evaluation",
+      "case": "rb_run3_route8_h75_v0",
+      "route": 8,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map02/evaluation",
+      "case": "rb_run3_route8_h75_v1",
+      "route": 8,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map03/evaluation",
+      "case": "rb_run3_route0_h75_v0",
+      "route": 0,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map03/evaluation",
+      "case": "rb_run3_route0_h75_v1",
+      "route": 0,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map03/evaluation",
+      "case": "rb_run3_route1_h75_v0",
+      "route": 1,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map03/evaluation",
+      "case": "rb_run3_route1_h75_v1",
+      "route": 1,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map03/evaluation",
+      "case": "rb_run3_route2_h75_v0",
+      "route": 2,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map03/evaluation",
+      "case": "rb_run3_route2_h75_v1",
+      "route": 2,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map03/evaluation",
+      "case": "rb_run3_route3_h75_v0",
+      "route": 3,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map03/evaluation",
+      "case": "rb_run3_route3_h75_v1",
+      "route": 3,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map03/evaluation",
+      "case": "rb_run3_route4_h75_v0",
+      "route": 4,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map03/evaluation",
+      "case": "rb_run3_route4_h75_v1",
+      "route": 4,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map03/evaluation",
+      "case": "rb_run3_route5_h75_v0",
+      "route": 5,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map03/evaluation",
+      "case": "rb_run3_route5_h75_v1",
+      "route": 5,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map03/evaluation",
+      "case": "rb_run3_route6_h75_v0",
+      "route": 6,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map03/evaluation",
+      "case": "rb_run3_route6_h75_v1",
+      "route": 6,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map03/evaluation",
+      "case": "rb_run3_route7_h75_v0",
+      "route": 7,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map03/evaluation",
+      "case": "rb_run3_route7_h75_v1",
+      "route": 7,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map03/evaluation",
+      "case": "rb_run3_route8_h75_v0",
+      "route": 8,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map03/evaluation",
+      "case": "rb_run3_route8_h75_v1",
+      "route": 8,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map04/evaluation",
+      "case": "rb_run3_route0_h75_v0",
+      "route": 0,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map04/evaluation",
+      "case": "rb_run3_route0_h75_v1",
+      "route": 0,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map04/evaluation",
+      "case": "rb_run3_route1_h75_v0",
+      "route": 1,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map04/evaluation",
+      "case": "rb_run3_route1_h75_v1",
+      "route": 1,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map04/evaluation",
+      "case": "rb_run3_route2_h75_v0",
+      "route": 2,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map04/evaluation",
+      "case": "rb_run3_route2_h75_v1",
+      "route": 2,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map04/evaluation",
+      "case": "rb_run3_route3_h75_v0",
+      "route": 3,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map04/evaluation",
+      "case": "rb_run3_route3_h75_v1",
+      "route": 3,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map04/evaluation",
+      "case": "rb_run3_route4_h75_v0",
+      "route": 4,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map04/evaluation",
+      "case": "rb_run3_route4_h75_v1",
+      "route": 4,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map04/evaluation",
+      "case": "rb_run3_route5_h75_v0",
+      "route": 5,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map04/evaluation",
+      "case": "rb_run3_route5_h75_v1",
+      "route": 5,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map04/evaluation",
+      "case": "rb_run3_route6_h75_v0",
+      "route": 6,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map04/evaluation",
+      "case": "rb_run3_route6_h75_v1",
+      "route": 6,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map04/evaluation",
+      "case": "rb_run3_route7_h75_v0",
+      "route": 7,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map04/evaluation",
+      "case": "rb_run3_route7_h75_v1",
+      "route": 7,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map04/evaluation",
+      "case": "rb_run3_route8_h75_v0",
+      "route": 8,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map04/evaluation",
+      "case": "rb_run3_route8_h75_v1",
+      "route": 8,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map05/evaluation",
+      "case": "rb_run3_route0_h75_v0",
+      "route": 0,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map05/evaluation",
+      "case": "rb_run3_route0_h75_v1",
+      "route": 0,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map05/evaluation",
+      "case": "rb_run3_route1_h75_v0",
+      "route": 1,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map05/evaluation",
+      "case": "rb_run3_route1_h75_v1",
+      "route": 1,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map05/evaluation",
+      "case": "rb_run3_route2_h75_v0",
+      "route": 2,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map05/evaluation",
+      "case": "rb_run3_route2_h75_v1",
+      "route": 2,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map05/evaluation",
+      "case": "rb_run3_route3_h75_v0",
+      "route": 3,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map05/evaluation",
+      "case": "rb_run3_route3_h75_v1",
+      "route": 3,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map05/evaluation",
+      "case": "rb_run3_route4_h75_v0",
+      "route": 4,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map05/evaluation",
+      "case": "rb_run3_route4_h75_v1",
+      "route": 4,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map05/evaluation",
+      "case": "rb_run3_route5_h75_v0",
+      "route": 5,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map05/evaluation",
+      "case": "rb_run3_route5_h75_v1",
+      "route": 5,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map05/evaluation",
+      "case": "rb_run3_route6_h75_v0",
+      "route": 6,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map05/evaluation",
+      "case": "rb_run3_route6_h75_v1",
+      "route": 6,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map05/evaluation",
+      "case": "rb_run3_route7_h75_v0",
+      "route": 7,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map05/evaluation",
+      "case": "rb_run3_route7_h75_v1",
+      "route": 7,
+      "root": 3,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map05/evaluation",
+      "case": "rb_run3_route8_h75_v0",
+      "route": 8,
+      "root": 0,
+      "activation_x_m": 8.55
+    },
+    {
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map05/evaluation",
+      "case": "rb_run3_route8_h75_v1",
+      "route": 8,
+      "root": 3,
+      "activation_x_m": 8.55
+    }
+  ],
+  "ground_scope": "Additional1.8m/s TRAIN histories, matching route; phase0 identical reference prefix throughx8.3 may support all activations, phase2 only exact source activation. Original xvalid/phasebands/calibrated margins and geometric clearances unchanged.",
+  "role": "P2 rolling DEV integration, not independent TEST or safety guarantee",
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/e2_primitive_spatial_envelope",
+  "entries": [
+    {
+      "layout": 0,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p2_rolling_multimap_support/layout00/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p2_rolling_multimap_support/layout00/evaluation"
+    },
+    {
+      "layout": 1,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p2_rolling_multimap_support/layout01/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p2_rolling_multimap_support/layout01/evaluation"
+    },
+    {
+      "layout": 2,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p2_rolling_multimap_support/layout02/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p2_rolling_multimap_support/layout02/evaluation"
+    },
+    {
+      "layout": 3,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p2_rolling_multimap_support/layout03/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p2_rolling_multimap_support/layout03/evaluation"
+    },
+    {
+      "layout": 4,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p2_rolling_multimap_support/layout04/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p2_rolling_multimap_support/layout04/evaluation"
+    },
+    {
+      "layout": 5,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p2_rolling_multimap_support/layout05/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p2_rolling_multimap_support/layout05/evaluation"
+    }
+  ],
+  "ground_only": false,
+  "routes": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "seconds": 10,
+  "physical_episodes": 12,
+  "initial_plan": "Route3 left upstream/straight downstream; only prefix throughx8.3 validated initially, activation8.55. New complete plan chosen from measured state startingt0.2.",
+  "screening": "Same-x source min/max state including381 controller features; existing18DEV max excursion by fixed map region times1.2 plus1percent TRAIN feature range and1e-5. Ground phases only; RB remains frozen.",
+  "calibration": [
+    {
+      "case": "rb_run3_route0_h75_v6",
+      "covered_ground_rows": 1451
+    },
+    {
+      "case": "rb_run3_route1_h75_v6",
+      "covered_ground_rows": 1491
+    },
+    {
+      "case": "rb_run3_route2_h75_v6",
+      "covered_ground_rows": 1532
+    },
+    {
+      "case": "rb_run3_route3_h75_v6",
+      "covered_ground_rows": 1520
+    },
+    {
+      "case": "rb_run3_route4_h75_v6",
+      "covered_ground_rows": 1580
+    },
+    {
+      "case": "rb_run3_route5_h75_v6",
+      "covered_ground_rows": 1611
+    },
+    {
+      "case": "rb_run3_route6_h75_v6",
+      "covered_ground_rows": 1508
+    },
+    {
+      "case": "rb_run3_route7_h75_v6",
+      "covered_ground_rows": 1577
+    },
+    {
+      "case": "rb_run3_route8_h75_v6",
+      "covered_ground_rows": 1575
+    },
+    {
+      "case": "rb_run3_route0_h75_v7",
+      "covered_ground_rows": 1457
+    },
+    {
+      "case": "rb_run3_route1_h75_v7",
+      "covered_ground_rows": 1499
+    },
+    {
+      "case": "rb_run3_route2_h75_v7",
+      "covered_ground_rows": 1537
+    },
+    {
+      "case": "rb_run3_route3_h75_v7",
+      "covered_ground_rows": 1520
+    },
+    {
+      "case": "rb_run3_route4_h75_v7",
+      "covered_ground_rows": 1569
+    },
+    {
+      "case": "rb_run3_route5_h75_v7",
+      "covered_ground_rows": 1606
+    },
+    {
+      "case": "rb_run3_route6_h75_v7",
+      "covered_ground_rows": 1506
+    },
+    {
+      "case": "rb_run3_route7_h75_v7",
+      "covered_ground_rows": 1608
+    },
+    {
+      "case": "rb_run3_route8_h75_v7",
+      "covered_ground_rows": 1583
+    }
+  ],
+  "counts": [
+    1914,
+    12014,
+    3586,
+    8097,
+    2119
+  ],
+  "budget": "One12episode queue, no training or parameter sweep",
+  "expected_wallclock_s": [
+    300,
+    900
+  ],
+  "hard_limit_s": 1500,
+  "stop": "First runtime error or25min; preserve failures",
+  "physics": "Unchanged RB225/H75, implicitfast1ms x5, fixed map/goal,2m flat buffers",
+  "prefix_training": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p1_phase2_collection/evaluation",
+  "prefix_sources": [
+    {
+      "case": "rb_run3_route0_h75_v0",
+      "route": 0,
+      "root": 0
+    },
+    {
+      "case": "rb_run3_route1_h75_v0",
+      "route": 1,
+      "root": 0
+    },
+    {
+      "case": "rb_run3_route2_h75_v0",
+      "route": 2,
+      "root": 0
+    },
+    {
+      "case": "rb_run3_route3_h75_v0",
+      "route": 3,
+      "root": 0
+    },
+    {
+      "case": "rb_run3_route4_h75_v0",
+      "route": 4,
+      "root": 0
+    },
+    {
+      "case": "rb_run3_route5_h75_v0",
+      "route": 5,
+      "root": 0
+    },
+    {
+      "case": "rb_run3_route6_h75_v0",
+      "route": 6,
+      "root": 0
+    },
+    {
+      "case": "rb_run3_route7_h75_v0",
+      "route": 7,
+      "root": 0
+    },
+    {
+      "case": "rb_run3_route8_h75_v0",
+      "route": 8,
+      "root": 0
+    },
+    {
+      "case": "rb_run3_route0_h75_v1",
+      "route": 0,
+      "root": 1
+    },
+    {
+      "case": "rb_run3_route1_h75_v1",
+      "route": 1,
+      "root": 1
+    },
+    {
+      "case": "rb_run3_route2_h75_v1",
+      "route": 2,
+      "root": 1
+    },
+    {
+      "case": "rb_run3_route3_h75_v1",
+      "route": 3,
+      "root": 1
+    },
+    {
+      "case": "rb_run3_route4_h75_v1",
+      "route": 4,
+      "root": 1
+    },
+    {
+      "case": "rb_run3_route5_h75_v1",
+      "route": 5,
+      "root": 1
+    },
+    {
+      "case": "rb_run3_route6_h75_v1",
+      "route": 6,
+      "root": 1
+    },
+    {
+      "case": "rb_run3_route7_h75_v1",
+      "route": 7,
+      "root": 1
+    },
+    {
+      "case": "rb_run3_route8_h75_v1",
+      "route": 8,
+      "root": 1
+    },
+    {
+      "case": "rb_run3_route0_h75_v2",
+      "route": 0,
+      "root": 2
+    },
+    {
+      "case": "rb_run3_route1_h75_v2",
+      "route": 1,
+      "root": 2
+    },
+    {
+      "case": "rb_run3_route2_h75_v2",
+      "route": 2,
+      "root": 2
+    },
+    {
+      "case": "rb_run3_route3_h75_v2",
+      "route": 3,
+      "root": 2
+    },
+    {
+      "case": "rb_run3_route4_h75_v2",
+      "route": 4,
+      "root": 2
+    },
+    {
+      "case": "rb_run3_route5_h75_v2",
+      "route": 5,
+      "root": 2
+    },
+    {
+      "case": "rb_run3_route6_h75_v2",
+      "route": 6,
+      "root": 2
+    },
+    {
+      "case": "rb_run3_route7_h75_v2",
+      "route": 7,
+      "root": 2
+    },
+    {
+      "case": "rb_run3_route8_h75_v2",
+      "route": 8,
+      "root": 2
+    },
+    {
+      "case": "rb_run3_route0_h75_v3",
+      "route": 0,
+      "root": 3
+    },
+    {
+      "case": "rb_run3_route1_h75_v3",
+      "route": 1,
+      "root": 3
+    },
+    {
+      "case": "rb_run3_route2_h75_v3",
+      "route": 2,
+      "root": 3
+    },
+    {
+      "case": "rb_run3_route3_h75_v3",
+      "route": 3,
+      "root": 3
+    },
+    {
+      "case": "rb_run3_route4_h75_v3",
+      "route": 4,
+      "root": 3
+    },
+    {
+      "case": "rb_run3_route5_h75_v3",
+      "route": 5,
+      "root": 3
+    },
+    {
+      "case": "rb_run3_route6_h75_v3",
+      "route": 6,
+      "root": 3
+    },
+    {
+      "case": "rb_run3_route7_h75_v3",
+      "route": 7,
+      "root": 3
+    },
+    {
+      "case": "rb_run3_route8_h75_v3",
+      "route": 8,
+      "root": 3
+    },
+    {
+      "case": "rb_run3_route0_h75_v4",
+      "route": 0,
+      "root": 4
+    },
+    {
+      "case": "rb_run3_route1_h75_v4",
+      "route": 1,
+      "root": 4
+    },
+    {
+      "case": "rb_run3_route2_h75_v4",
+      "route": 2,
+      "root": 4
+    },
+    {
+      "case": "rb_run3_route3_h75_v4",
+      "route": 3,
+      "root": 4
+    },
+    {
+      "case": "rb_run3_route4_h75_v4",
+      "route": 4,
+      "root": 4
+    },
+    {
+      "case": "rb_run3_route5_h75_v4",
+      "route": 5,
+      "root": 4
+    },
+    {
+      "case": "rb_run3_route6_h75_v4",
+      "route": 6,
+      "root": 4
+    },
+    {
+      "case": "rb_run3_route7_h75_v4",
+      "route": 7,
+      "root": 4
+    },
+    {
+      "case": "rb_run3_route8_h75_v4",
+      "route": 8,
+      "root": 4
+    },
+    {
+      "case": "rb_run3_route0_h75_v5",
+      "route": 0,
+      "root": 5
+    },
+    {
+      "case": "rb_run3_route1_h75_v5",
+      "route": 1,
+      "root": 5
+    },
+    {
+      "case": "rb_run3_route2_h75_v5",
+      "route": 2,
+      "root": 5
+    },
+    {
+      "case": "rb_run3_route3_h75_v5",
+      "route": 3,
+      "root": 5
+    },
+    {
+      "case": "rb_run3_route4_h75_v5",
+      "route": 4,
+      "root": 5
+    },
+    {
+      "case": "rb_run3_route5_h75_v5",
+      "route": 5,
+      "root": 5
+    },
+    {
+      "case": "rb_run3_route6_h75_v5",
+      "route": 6,
+      "root": 5
+    },
+    {
+      "case": "rb_run3_route7_h75_v5",
+      "route": 7,
+      "root": 5
+    },
+    {
+      "case": "rb_run3_route8_h75_v5",
+      "route": 8,
+      "root": 5
+    }
+  ],
+  "prefix_scope": "Optional additional TRAIN histories only on identical ground prefix x<=8.3 before every RB activation; original calibrated margins unchanged",
+  "source_revision": "d11eddc40681d2d86c32840d4a757be380e315b7"
+}

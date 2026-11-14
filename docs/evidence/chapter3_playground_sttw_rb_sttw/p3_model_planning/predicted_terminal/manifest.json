@@ -1,0 +1,116 @@
+{
+  "predicted_terminal": true,
+  "terminal_rule": "First26 consecutive20ms samples meeting original goal; predicted physical/controller domain through that end; prefix elapsed plus goal time<=10s",
+  "role": "Static finite-candidate DEV pilot: M0/M1/M2 compare model plus same-rule calibrated envelope; not independent TEST or neural online planning",
+  "entries": [
+    {
+      "layout": "map06_layout00",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_predicted_terminal_planning/map06_layout00/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_predicted_terminal_planning/map06_layout00/evaluation",
+      "episodes": 2
+    },
+    {
+      "layout": "map06_layout01",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_predicted_terminal_planning/map06_layout01/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_predicted_terminal_planning/map06_layout01/evaluation",
+      "episodes": 0,
+      "reused_evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_model_planning/map06_layout01/evaluation"
+    },
+    {
+      "layout": "map06_layout02",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_predicted_terminal_planning/map06_layout02/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_predicted_terminal_planning/map06_layout02/evaluation",
+      "episodes": 0,
+      "reused_evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_model_planning/map06_layout02/evaluation"
+    },
+    {
+      "layout": "map07_layout00",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_predicted_terminal_planning/map07_layout00/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_predicted_terminal_planning/map07_layout00/evaluation",
+      "episodes": 0,
+      "reused_evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_model_planning/map07_layout00/evaluation"
+    },
+    {
+      "layout": "map07_layout01",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_predicted_terminal_planning/map07_layout01/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_predicted_terminal_planning/map07_layout01/evaluation",
+      "episodes": 0,
+      "reused_evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_model_planning/map07_layout01/evaluation"
+    },
+    {
+      "layout": "map07_layout02",
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_predicted_terminal_planning/map07_layout02/config.json",
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_predicted_terminal_planning/map07_layout02/evaluation",
+      "episodes": 0,
+      "reused_evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_model_planning/map07_layout02/evaluation"
+    }
+  ],
+  "routes": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "seconds": 10,
+  "ground_only": false,
+  "method_conditions": 36,
+  "physical_episodes": 2,
+  "models": [
+    {
+      "map_id": 6,
+      "model": "M0",
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/residual_seed0/model_0000.pt"
+    },
+    {
+      "map_id": 6,
+      "model": "M1",
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/residual_seed2/best.pt"
+    },
+    {
+      "map_id": 6,
+      "model": "M2",
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/direct_seed0/best.pt"
+    },
+    {
+      "map_id": 7,
+      "model": "M0",
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/residual_seed0/model_0000.pt"
+    },
+    {
+      "map_id": 7,
+      "model": "M1",
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/residual_seed2/best.pt"
+    },
+    {
+      "map_id": 7,
+      "model": "M2",
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/direct_seed0/best.pt"
+    }
+  ],
+  "candidates": 18,
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation",
+  "calibration_maps": [
+    6,
+    7
+  ],
+  "shared": "Same18 route/speed candidates, activation8.55, two TRAIN-map00 histories each, full measured approach/RB prefix, source duration cost/eligibility, physical plant/goal/boxes; only predicted departure and same-rule error expansion differ",
+  "limitations": "Candidate histories are TRAIN templates, not future actual DEV handoff states. Uses observed source departure horizons3.22-4s, not a timing predictor or predicted goal-hold certificate. Retained incumbent after no-plan counts planner failure regardless physical goal. DEV used for calibration, not independent map generalization.",
+  "selection": "M1seed2 update575 and M2seed0 update600 selected by prior1s DEV error, not new full-departure tails or obstacle outcomes",
+  "expected_wallclock_s": [
+    40,
+    100
+  ],
+  "hard_limit_s": 300,
+  "stop": "One queue, first runtime error or25min; no retries or training",
+  "terminal_limitation": "Common maximum source departure horizon; after an individual source observed goal predictions are unobserved and not additional accuracy evidence. Existing DEV calibration is exploratory, not independent TEST.",
+  "source_revision": "d11eddc40681d2d86c32840d4a757be380e315b7",
+  "preparation_s": 3.605953371967189,
+  "new_physical_episodes": 2,
+  "unique_referenced_physical_episodes": 24,
+  "reuse_scope": "All exact-matched existing case trajectories reused; only new M0 map06/layout00 route3 speed1.8 roots6/7 run now"
+}

@@ -20,7 +20,7 @@ for source_id,source in enumerate(dict.fromkeys(r['evaluation'] for r in cases))
     fig,axes=plt.subplots((len(selected)+1)//2,2,figsize=(14,len(selected)),layout='constrained')
     for ax,i in zip(axes.flat,selected):
         r=cases[i];end=r['steps']+1
-        with np.load(Path(source)/r['case']/'trajectory.npz') as d:actual=d['qpos'][round(r['anchor_s']/.005):,:2]
+        with np.load(Path(source)/r['case']/'trajectory.npz') as d:actual=d['qpos'][round(r['anchor_s']/.005):round(r['actual_terminal_s']/.005)+1,:2]
         ref=bank['xy'][r['route']];keep=(ref[:,0]>=actual[:,0].min()-.1)&(ref[:,0]<=actual[:,0].max()+.1)
         ax.plot(ref[keep,0],ref[keep,1],':',color='gray',label='original reference');ax.plot(actual[:,0],actual[:,1],color='black',lw=2,label='actual 5ms');ax.plot(*actual[-1],marker='o' if r['physical_outcome']=='goal' else 'x',color='black')
         for model in models:
@@ -31,7 +31,7 @@ for source_id,source in enumerate(dict.fromkeys(r['evaluation'] for r in cases))
 for name,data in [('models',rows),('cases',case_rows)]:
     with (a.output/(name+'.csv')).open('w',newline='') as f:w=csv.DictWriter(f,fieldnames=list(data[0]),lineterminator='\n');w.writeheader();w.writerows(data)
 (a.output/'summary.json').write_text(json.dumps(dict(models=rows,source=str(a.root),role=m['role']),indent=2)+'\n')
-lines=['# 多地图模型：完整剩余离场预测配对比较','','两个既有DEV_MAP共72条件；全部模型同一个真实入口状态、历史、速度请求、路线和实际观察终点。每例3.22–4.00秒，超过训练最长3秒；不同例观察长度不同，不能把本表当共同固定4秒误差。第一/末个20ms样本与真实5ms事件端点最多相差15ms；实际XY画到真实终点，补齐区不计误差或成功。','']
+lines=['# 多地图模型：完整观察地面段预测配对比较','','声明DEV_MAP的全部所选条件；全部模型同一个真实入口状态、历史、速度请求、路线和实际观察终点。逐例实际观察时域见cases.csv，超过训练最长3秒的部分为外推；不同例观察长度不同，不能把本表当共同固定4秒误差。起点为目标阶段首个具备前一步速度的20ms样本（阶段0为0.02秒）；末个20ms样本与真实5ms阶段终点最多相差15ms。实际XY画到该阶段真实终点，补齐区不计误差或成功。','']
 for i in range(len({r['evaluation'] for r in cases})):lines+=['',f'![地图{i}全部模型同图实际/参考/预测XY](map{i:02d}_paired_xy.png)']
 lines+=['','|模型|例数|平均最大XY m|P95 m|最差XY m|最差整车支持m|','|---|---:|---:|---:|---:|---:|']
 for r in rows:lines.append(f"|{r['model']}|{r['cases']}|{r['mean_max_xy_m']:.5f}|{r['p95_max_xy_m']:.5f}|{r['worst_xy_m']:.5f}|{r['worst_support_xyz_m']:.5f}|")
