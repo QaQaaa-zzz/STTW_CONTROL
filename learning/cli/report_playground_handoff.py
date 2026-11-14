@@ -17,7 +17,7 @@ for ax,route in zip(axes[:,0],d['routes']):
   z=np.load(a.root/row.get('case_dir',f"{row['skill']}_route{route}_{row['continuation']}")/'trajectory.npz');t=z['trace']
   ax.plot(t[:,1],t[:,2],label=row.get('case_dir',row['skill']+' / '+row['continuation']),linestyle='-' if row['continuation']=='h75' else '--')
   ax.scatter(t[-1,1],t[-1,2],marker='x',s=20)
-  if 'published_reference_xy' in z and not np.array_equal(z['published_reference_xy'],z['reference_xy']):
+  if 'published_reference_xy' in z and not np.allclose(z['published_reference_xy'],z['reference_xy'],atol=2e-6,rtol=0):
    ax.plot(z['published_reference_xy'][:,0],z['published_reference_xy'][:,1],ls='--',lw=1,label=row['skill']+' published route')
   xmin=min(xmin,float(t[:,1].min())-.2);xmax=max(xmax,float(t[:,1].max())+.2)
   ymin=min(ymin,float(t[:,2].min())-.2);ymax=max(ymax,float(t[:,2].max())+.2)
