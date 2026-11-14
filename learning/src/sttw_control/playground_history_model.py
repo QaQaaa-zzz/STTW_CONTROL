@@ -17,14 +17,14 @@ class HistoryDynamics(nn.Module):
         nn.init.zeros_(self.correction[-1].weight);nn.init.zeros_(self.correction[-1].bias)
         self.to(nominal.mean.device)
 
-    def rollout(self,pose,xi,previous,controller,s,xy,heading,curvature,steps,speed_request=None):
+    def rollout(self,pose,xi,previous,controller,s,xy,heading,curvature,steps,speed_request=None,terrain_ids=None):
         hidden=self.initial((controller-self.controller_mean)/self.controller_scale)
         poses=[pose];velocities=[xi]
         for _ in range(steps):
             eta=self.nominal.features(pose,xi,s,xy,heading,curvature)
             if speed_request is not None:eta[:,13]=speed_request
             features=torch.cat((xi,eta,pose[:,10:12]),1)
-            if self.terrain is not None:features=torch.cat((features,self.terrain(pose)),1)
+            if self.terrain is not None:features=torch.cat((features,self.terrain(pose,terrain_ids)),1)
             hidden=self.memory((features-self.input_mean)/self.input_scale,hidden)
             x=torch.cat((xi,previous,eta),1)
             if self.model_kind=="direct":nxt=xi

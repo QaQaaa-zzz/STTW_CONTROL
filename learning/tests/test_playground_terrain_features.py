@@ -22,4 +22,14 @@ class TerrainFeatureTests(unittest.TestCase):
         self.assertEqual(float(values[0,4,4].detach()),0.)
         values.sum().backward();self.assertTrue(torch.isfinite(pose.grad).all())
 
+    def test_batched_map_lookup_matches_separate_maps(self):
+        x=np.linspace(-2,2,81);xx,yy=np.meshgrid(x,x)
+        heights=np.stack((.1*xx,.2*yy+.04));support=np.ones_like(heights)
+        terrain=TerrainFeatures(heights,support,[-2,2,-2,2],.05)
+        pose=torch.zeros(3,12);pose[:,3]=1;pose[:,0]=torch.tensor([.1,.2,.3]);pose.requires_grad_()
+        ids=torch.tensor([1,0,1]);actual=terrain(pose,ids)
+        separate=torch.cat([TerrainFeatures(heights[i],support[i],[-2,2,-2,2],.05)(pose[j:j+1]) for j,i in enumerate(ids)],0)
+        torch.testing.assert_close(actual,separate)
+        actual.square().sum().backward();self.assertTrue(torch.isfinite(pose.grad).all())
+
 if __name__=='__main__':unittest.main()

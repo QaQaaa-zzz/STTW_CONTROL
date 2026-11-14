@@ -1,7 +1,7 @@
 {
   "submission_ready": false,
   "author_verification": "pending",
-  "generated_utc": "2026-11-14T19:33:02.140582+00:00",
+  "generated_utc": "2026-11-14T20:30:29.654032+00:00",
   "canonical": "docs/chapter3_paper/MANUSCRIPT.tex",
   "sources": [
     {
@@ -406,18 +406,30 @@
         "docs/evidence/chapter3_playground_sttw_rb_sttw/p3_structured_models/geometry/RESULTS.md",
         "docs/evidence/chapter3_playground_sttw_rb_sttw/p3_structured_models/speed_geometry/RESULTS.md"
       ]
+    },
+    {
+      "id": "PG8",
+      "title": "Two-speed same-data predictive models",
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/p3_multispeed_models/RESULTS.md",
+      "sha256": "93978fd0205d7b8bc889704a3773337a4c937d698f243af5aa6d46572bdfeebc",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending",
+      "draft_role": "current_shared_plant_planning",
+      "supporting_reports": [
+        "docs/evidence/chapter3_playground_sttw_rb_sttw/p3_multispeed_models/geometry/RESULTS.md"
+      ]
     }
   ],
   "references": [
     {
       "id": "burridge1999",
       "url": "https://kodlab.seas.upenn.edu/uploads/Kod/Sequential1999.pdf",
-      "verification": "primary_source_opened_by_agent; human review pending"
+      "verification": "Primary author PDF title/authors/abstract visually inspected page1 on2026-11-14; human review pending"
     },
     {
       "id": "xin2020",
       "url": "https://arxiv.org/abs/2003.03678",
-      "verification": "primary_source_opened_by_agent; human review pending"
+      "verification": "Primary arXiv title/authors/abstract inspected2026-11-14; bounded qualitative claims only; human review pending"
     },
     {
       "id": "lee2024",
@@ -427,7 +439,7 @@
     {
       "id": "chua2018",
       "url": "https://arxiv.org/abs/1805.12114",
-      "verification": "primary_source_opened_by_agent; human review pending"
+      "verification": "Primary arXiv title/authors/abstract inspected2026-11-14; bounded qualitative claims only; human review pending"
     },
     {
       "id": "yang2020",
@@ -449,7 +461,7 @@
   "scope": "Development methods/results draft, not submission ready",
   "new_physics_steps": "See frozen run manifests; paper build adds no simulation",
   "new_policy_training_updates": 0,
-  "paper_sha256": "30458c44f0b740596fb0bbf18258a7957a6a73594abddb58c8092ec9226777fb",
+  "paper_sha256": "4fad73ebd9d2c6e3c5bbbb55e11c20aacf54b5b11cc3bd2f0d592e6c82a3797d",
   "revision_scope": "User execution-outline ground dynamics/full-motion planning/structured prediction; prior two-interface draft preserved in Git0c485653",
   "current_result_panels": [
     "PG1",
@@ -457,6 +469,7 @@
     "PG3",
     "PG5",
     "PG6",
-    "PG7"
+    "PG7",
+    "PG8"
   ]
 }

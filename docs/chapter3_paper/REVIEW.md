@@ -9,7 +9,7 @@ The current manuscript follows the supplied Chapter3 execution outline. The olde
 | P2 full-chain planning | Greedy3/12, backtracking12/12, joint12/12 | No independent success benefit of joint optimization |
 | P2 rolling publication |200ms queries,40ms charged delay, preserved histories; physical12/12 in each of two panels | State coverage11/12; one actual replan followed by periodic checks; full coverage unresolved |
 | P3 command domain |1.8 and1.9m/s each72/72,1.7m/s65/72 | Both ordered1.8/1.9 phase pairs also72/72; only change at measured RB handback, arbitrary ground switching remains unvalidated |
-| P3 structured model comparison | Same-data ARX plus M1/M2 with terrain/history; three initializations each;600 updates per model completed; 25 evaluated candidate checkpoints per seed | All best at600 and still improving; M1 1s mean0.0194–0.0200m but worst whole-body support0.190–0.252m; multi-map/planning validation remains |
+| P3 structured model comparison | Same-data ARX plus M1/M2 with terrain/history; three initializations each;600 updates per model completed; 25 evaluated candidate checkpoints per seed | All best at600 and still improving; M1 1s mean0.0194–0.0200m but worst whole-body support0.190–0.252m; two-speed follow-up108TRAIN/36DEV yields M1 mean0.0182–0.0192m; multi-map/planning validation remains |
 | P4 independent comparison | Original50new-layout x4initial-state requirement retained | Not performed; existing DEV panels cannot substitute |
 | Manuscript and traceability | Editable main LaTeX/PDF and evidence/claim registries, old prose retained inGit | Development draft, human verification and final literature/contribution work pending |
 

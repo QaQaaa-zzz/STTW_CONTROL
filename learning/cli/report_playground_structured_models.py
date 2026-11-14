@@ -76,12 +76,15 @@ with (a.output/'cases.csv').open('w',newline='') as f:w=csv.DictWriter(f,fieldna
 lines=['# P3同数据结构模型与直接模型','', '![全部DEV条件1秒实际/预测XY](prediction_xy_50.png)','', '![全部可用DEV条件3秒实际/预测XY](prediction_xy_150.png)','', '![三初始化训练与开发曲线](training_curves.png)','',f"同数据M0线性基线初始1秒/3秒平均最大XY误差为{baseline['1.0']:.5f}/{baseline['3.0']:.5f}m。M0用相同粗糙TRAIN阶段2转移拟合，区别于此前平地名义模型。M1为M0＋地形/历史修正，M2用相同输入、GRU64/128×128头及姿态积分直接预测动态增量；两个学习模型各三个独立初始化、相同采样和更新预算。",'', '|模型|种子|最佳已评估更新|时域s|窗/例|平均最大XY m|P95 m|最坏m|末25次相对改善|','|---|---|---|---|---|---|---|---|---|']
 for r in rows:lines.append(f"|{r['model']}|{r['seed']}|{r['best_update']}|{r['horizon_s']}|{r['windows']}/{r['cases']}|{r['mean_max_xy_m']:.5f}|{r['p95_max_xy_m']:.5f}|{r['worst_xy_m']:.5f}|{r['last25_relative_mean_reduction']:.2%}|")
 lines+=['','最佳按固定DEV1秒均值在每25次存档中选择，3秒不单独选模；不是所有更新全程最优。重叠窗口非独立样本，各时域覆盖不同；逐例最坏值保存在cases.csv。损失是监督预测损失，不是PPO，没有策略reward/KL指标。学习模型读取真实381维历史作初始化，未来只用预测状态及自身隐状态查询固定地形，不读未来真实历史。', '', '地形描述是预测位置附近15点的高度、坡度、局部高度变化及支撑mask；沟与图外未标为平地支撑。双线性栅格只是模型输入，最终碰撞几何不替换。此处同一地图、既有TRAIN/DEV初态（来源及速度以本轮manifest为准），尚无独立新地图或规划收益证明。没有用平均误差宣称全程净空合格、训练正式收敛或完整P3已完成。', '',f'原始存档/标量/逐窗口：`{a.root}`；M0、M1、M2均未修改RB/H75或物理。']
+training_counts=m.get('training_counts',json.loads((first/'manifest.json').read_text()).get('training_counts',[]))
+lines+=['',f"本轮M0拟合{sum(r['transitions'] for r in training_counts)}条有效TRAIN转移；来源明细与训练预算见manifest.json。所有模型保留每25轮存档。"]
+if (a.root/'data_scope_note.json').exists():lines+=['',json.loads((a.root/'data_scope_note.json').read_text())['note']]
 (a.output/'RESULTS.md').write_text('\n'.join(lines)+'\n');print(json.dumps(rows,indent=2))
 
 for geometry_root,subdir in [(a.geometry,'geometry'),(a.speed_geometry,'speed_geometry')]:
     if geometry_root is None:continue
     out=a.output/subdir;out.mkdir(exist_ok=True);aggregate=[];per_route=[];worst=[]
-    lines=['# 整车支持误差与滚动历史复测','','固定600轮候选；M0同数据ARX。静态18个既有DEV条件，滚动2个既有DEV条件。所有预测只使用窗口入口真实历史，之后自由展开；无新物理成功率。','', '|集合/模型|时域s|窗/例|均值XY m|P95 XY m|最差XY m|最差整车XYZ支持m|','|---|---:|---|---:|---:|---:|---:|']
+    lines=['# 整车支持误差与滚动历史复测','','固定已选存档；M0同数据ARX。各集合条件数量见表格，均为既有DEV身份。所有预测只使用窗口入口真实历史，之后自由展开；无新物理成功率。','', '|集合/模型|时域s|窗/例|均值XY m|P95 XY m|最差XY m|最差整车XYZ支持m|','|---|---:|---|---:|---:|---:|---:|']
     for folder in sorted(geometry_root.glob('*')):
         if not (folder/'windows.json').exists():continue
         name=folder.name;windows=json.loads((folder/'windows.json').read_text())
@@ -92,13 +95,13 @@ for geometry_root,subdir in [(a.geometry,'geometry'),(a.speed_geometry,'speed_ge
             r=dict(panel=name,horizon_s=h,windows=len(ws),cases=len({r['case'] for r in ws}),mean_xy_m=float(xy.mean()),p95_xy_m=float(np.quantile(xy,.95)),max_xy_m=float(xy.max()),max_support_xyz_m=max(r['max_support_xyz_m'] for r in ws));aggregate.append(r)
             worst.append(dict(panel=name,**max(ws,key=lambda r:r['max_support_xyz_m'])))
             lines.append(f"|{name}|{h}|{len(ws)}/{r['cases']}|{r['mean_xy_m']:.5f}|{r['p95_xy_m']:.5f}|{r['max_xy_m']:.5f}|{r['max_support_xyz_m']:.5f}|")
-    lines+=['','逐路线完整结果见per_route.csv；worst_windows.csv保留各模型各时域最差整车支持窗口的路线、初态和真实锚点。窗口重叠，不能把窗口数当独立样本。', '', 'M1在静态DEV的1秒整车支持最差误差为0.190–0.252m，3秒为0.357–0.365m。滚动两例1秒为0.025–0.033m，但两例不足以证明覆盖整个滚动域；原覆盖失败仍保留。M2的3秒尾部有种子优于M1，不能宣称M1在所有误差指标占优。当前没有以这些数值自动扩充安全裕量或采用长时域规划。', '', '全覆盖XY：每个模型/条件选择自己的最差1秒XY窗口，窗口锚点可不同，不能视为逐点配对误差图。原始完整轨迹及参考为底图，预测曲线仅覆盖所选有效窗口。']
+    lines+=['','逐路线完整结果见per_route.csv；worst_windows.csv保留各模型各时域最差整车支持窗口的路线、初态和真实锚点。窗口重叠，不能把窗口数当独立样本。', '', '平均误差和最差误差分别保留；不同模型/初始化可能排序不同。滚动少量实例不足以证明整个滚动域已覆盖，原覆盖失败仍保留。当前没有按结果自动放宽安全裕量或采用长时域规划。', '', '全覆盖XY：每个模型/条件选择自己的最差1秒XY窗口，窗口锚点可不同，不能视为逐点配对误差图。原始完整轨迹及参考为底图，预测曲线仅覆盖所选有效窗口。']
     for name in sorted({r['panel'] for r in aggregate}):lines+=['',f'![{name} 全路线实际与预测]({name}_xy.png)']
     lines+=['',f'原始逐窗口/模型身份/数组：`{geometry_root}`。']
     if subdir=='speed_geometry':
         lines[0]='# 速度域迁移：冻结1.8模型尚不支持1.9预测'
         lines[2]='冻结600轮候选；M0同数据ARX。三组速度条件各18个既有DEV初态；模型只训练过1.8m/s。本次使用真实phase2速度请求作未来固定命令，不读取未来物理/控制历史，无新增仿真。'
-        lines=[line for line in lines if not line.startswith('M1在静态DEV')]
+        lines=[line for line in lines if not line.startswith('平均误差和最差误差')]
         lines.insert(3,'当phase2请求1.9时，M1三种子1秒平均最大XY约0.086m、3秒约0.29m；返回1.8时为约0.015m/0.03m。所有均值及最差值保留如下。物理144/144成功不能推出旧预测器跨速度可用；下一步需要包含实际速度输入的数据拟合，不能继续只在旧1.8数据堆训练轮数。')
     (out/'RESULTS.md').write_text('\n'.join(lines)+'\n')
     for name,rs in [('aggregate',aggregate),('per_route',per_route),('worst_windows',worst)]:

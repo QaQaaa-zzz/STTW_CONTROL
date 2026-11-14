@@ -25,22 +25,31 @@ a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False)
 torch.set_num_threads(1);torch.manual_seed(a.seed);np.random.seed(a.seed)
 started=time.perf_counter();device='cuda'
 writer=SummaryWriter(str(a.output/'tensorboard'),flush_secs=10)
-cfg=json.loads((a.evaluation/'resolved_config.json').read_text())
+evaluations=[a.evaluation]+a.additional_evaluations
+configs=[json.loads((source/'resolved_config.json').read_text()) for source in evaluations]
+cfg=configs[0]
 status=json.loads((a.evaluation/'status.json').read_text())
 schema=json.loads((a.evaluation/'model_state_schema.json').read_text())
 bank=np.load(cfg['ground_handoff']['reference_path'])
 hcfg=json.loads((Path(cfg['ground_handoff']['bundle'])/'config.json').read_text())
 follower=dict(hcfg['follower'],lookahead_scale=1.3)
 nominal=dict(np.load(a.nominal))
-terrain=None
+terrain=None;terrain_specs=[];source_map_ids=[]
 if a.terrain_features:
     from sttw_control.playground_terrain_features import TerrainFeatures,raster_from_spec
-    terrain_data=raster_from_spec(cfg['ditch_terrain'])
+    for config in configs:
+        spec=config['ditch_terrain']
+        if spec not in terrain_specs:terrain_specs.append(spec)
+        source_map_ids.append(terrain_specs.index(spec))
+    rasters=[raster_from_spec(spec) for spec in terrain_specs]
+    terrain_data=dict(rasters[0])
+    if len(rasters)>1:
+        for key in ['height','support']:terrain_data[key]=np.stack([r[key] for r in rasters])
     terrain_data['spacing']=float(terrain_data['spacing'])
     np.savez(a.output/'terrain.npz',**terrain_data)
     terrain=TerrainFeatures(**terrain_data,device='cpu')
 datasets=[];offset=0;window_rows={h:[] for h in [5,15,50,150]}
-for source_id,source in enumerate([a.evaluation]+a.additional_evaluations):
+for source_id,source in enumerate(evaluations):
     status=json.loads((source/'status.json').read_text())
     for row in status['results']:
         with np.load(source/row['case_dir']/'trajectory.npz') as data:
@@ -49,8 +58,8 @@ for source_id,source in enumerate([a.evaluation]+a.additional_evaluations):
             ref=Reference(bank,row['route'],follower);eta=ref.features(pose,xi);eta[:,13]=requests
             inputs=np.column_stack((xi,eta,pose[:,10:12]))
             if terrain is not None:
-                with torch.no_grad():inputs=np.column_stack((inputs,terrain(torch.tensor(pose,dtype=torch.float32)).numpy()))
-            datasets.append(dict(row=row,pose=pose,xi=xi,controller=controller,inputs=inputs,phase=phase,requests=requests,offset=offset))
+                with torch.no_grad():inputs=np.column_stack((inputs,terrain(torch.tensor(pose,dtype=torch.float32),torch.full((len(pose),),source_map_ids[source_id],dtype=torch.long)).numpy()))
+            datasets.append(dict(row=row,pose=pose,xi=xi,controller=controller,inputs=inputs,phase=phase,requests=requests,terrain_id=source_map_ids[source_id] if terrain is not None else 0,offset=offset))
             for h in window_rows:
                 indices=np.arange(1,len(pose)-h)
                 bad=np.r_[0,np.cumsum(phase!=2)]
@@ -78,6 +87,7 @@ if a.resume:
 tensor=lambda x:torch.as_tensor(x,device=device,dtype=torch.float32)
 poses=tensor(np.concatenate([d['pose'] for d in datasets]));velocities=tensor(np.concatenate([d['xi'] for d in datasets]));controllers=tensor(np.concatenate([d['controller'] for d in datasets]))
 requests=tensor(np.concatenate([d['requests'] for d in datasets]))
+terrain_ids=torch.as_tensor(np.concatenate([np.full(len(d['pose']),d['terrain_id']) for d in datasets]),device=device,dtype=torch.long)
 path_s=tensor(bank['s']);path_xy=tensor(bank['xy']);path_h=tensor(bank['heading']);path_k=tensor(bank['curvature'])
 train_windows={h:torch.tensor([[r['index'],r['route']] for r in rows if r['split']=='TRAIN'],device=device) for h,rows in window_rows.items()}
 from collections import Counter
@@ -91,7 +101,7 @@ contract=dict(source=str(a.evaluation),additional_evaluations=[str(x) for x in a
               initialization='model_and_Adam_resume_new_sampling_seed' if a.resume_optimizer else 'weights_only_fresh_Adam' if a.resume else 'zero_correction',parent_checkpoint=str(a.resume),initial_update=a.initial_update,balanced_mixture=a.balanced_mixture,
               checkpoints_every=25,selection='mean maximum XY over fixed available1s DEV windows',
               training='Declared source TRAIN only, includes pre-failure observations; no future real controller states in rollout',
-              terrain_features=a.terrain_features,model_kind=a.model_kind,
+              terrain_features=a.terrain_features,terrain_specs=terrain_specs,source_map_ids=source_map_ids,model_kind=a.model_kind,
               terrain_descriptor='15yaw-aligned locations: height, x/y slopes, local height variation, support mask; raster model input not collision geometry' if terrain is not None else None,
               architecture='381D history initializes GRU64;128x128 head; residual adds to nominal, direct predicts full velocity increment with shared pose integration',
               objective='multi-step position/quaternion/velocity error; frozen RB/H75/physics; no policy updates',
@@ -100,7 +110,7 @@ contract=dict(source=str(a.evaluation),additional_evaluations=[str(x) for x in a
 (a.output/'contract.json').write_text(json.dumps(contract,indent=2)+'\n')
 for source in [Path(__file__),Path('learning/src/sttw_control/playground_history_model.py'),Path('learning/src/sttw_control/playground_prediction.py'),Path('learning/src/sttw_control/playground_terrain_features.py')]:shutil.copyfile(source,a.output/source.name)
 def rollout(indices,routes,h):
-    return model.rollout(poses[indices],velocities[indices],velocities[indices-1],controllers[indices],path_s,path_xy[routes],path_h[routes],path_k[routes],h,speed_request=requests[indices])
+    return model.rollout(poses[indices],velocities[indices],velocities[indices-1],controllers[indices],path_s,path_xy[routes],path_h[routes],path_k[routes],h,speed_request=requests[indices],terrain_ids=terrain_ids[indices])
 
 @torch.no_grad()
 def evaluate(save=False):
