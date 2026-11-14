@@ -310,3 +310,10 @@ RB落地恢复期间解锁，满足车身状态后STTW接管车轮并用原有�
 安装的MJX-Warp `_get_data_into_warp` 明确跳过contact复制。此前evaluation及run3_native_rb_retry调用mjx.get_data读取CPU接触，故其“无远岸接触、无回交”字段无效，也不能作为正确回交闭环的能力结论。原始状态保留。现在直接使用GPU contact__geom/dist/pos/worldid与nacon有效掩码判断，排除轮自接触；已完成的compact_corrected阶段35处独立NumPy归约一致，后续入口已删除这个重复校验选项。
 
 回放视频（真实终点保留）：[直线通过](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/flat_buffers/rb_run3_route60_h75_v0.mp4)、[左弯失败](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/flat_buffers/rb_run3_route61_h75_v0.mp4)。视频为保存状态回放，不是额外物理评测。
+
+
+## P1规划展开已迁移GPU，尚未形成规划收益证据
+
+名义ARX与候选参考、状态全程GPU批量展开，支持CUDA graph复用。64候选×100步×20ms的20次计时，中位27.968ms、P95 29.894ms、最大31.359ms，含结束同步；首次预热0.512s、捕获0.193s。8条保存DEV输入与原NumPy模型的2秒自由展开对照最大状态差3.51e-5。没有重跑物理或训练。该计时不含CEM、候选生成、整车净空及发布，不能当作200ms端到端验收。详见[原始计时和逐案例误差](p1_ground_model/gpu_prediction.json)。
+
+新增整车预测几何边界模块保留转向及锁摆姿态，通过MuJoCo非零关节锚点/旋转几何的变换对照；已实现GPU模型接口，尚未完成E1规划器和物理配对实验。

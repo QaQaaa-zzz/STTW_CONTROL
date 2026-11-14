@@ -1,0 +1,61 @@
+{
+  "contract": {
+    "role": "Engineering check, saved DEV inputs only; no simulation, policy training or planning benefit claim",
+    "batch": 64,
+    "steps": 100,
+    "dt_s": 0.02,
+    "parity_cases": 8,
+    "timing_repeats": 20,
+    "budget": "one benchmark; no retries; initial compilation/graph capture reported separately"
+  },
+  "warmup_s": 0.5119196439627558,
+  "capture_s": 0.19324724399484694,
+  "graph_ms": {
+    "median": 27.968337992206216,
+    "p95": 29.893737577367574,
+    "maximum": 31.358610023744404
+  },
+  "parity": [
+    {
+      "case": "rb_run3_route0_h75_v0",
+      "max_pose_abs": 3.50636616843758e-05,
+      "max_velocity_abs": 2.723043416352766e-05
+    },
+    {
+      "case": "rb_run3_route1_h75_v0",
+      "max_pose_abs": 2.8782657025772096e-05,
+      "max_velocity_abs": 2.195559443762818e-05
+    },
+    {
+      "case": "rb_run3_route2_h75_v0",
+      "max_pose_abs": 1.1022864185861181e-05,
+      "max_velocity_abs": 2.5869690620794472e-05
+    },
+    {
+      "case": "rb_run3_route3_h75_v0",
+      "max_pose_abs": 2.537335650742989e-05,
+      "max_velocity_abs": 2.5266041184579535e-05
+    },
+    {
+      "case": "rb_run3_route4_h75_v0",
+      "max_pose_abs": 1.0251990431697777e-05,
+      "max_velocity_abs": 2.628250997105397e-05
+    },
+    {
+      "case": "rb_run3_route5_h75_v0",
+      "max_pose_abs": 1.9696783652989325e-05,
+      "max_velocity_abs": 2.6769821925398674e-05
+    },
+    {
+      "case": "rb_run3_route6_h75_v0",
+      "max_pose_abs": 2.2587355317682523e-05,
+      "max_velocity_abs": 1.7468336316994737e-05
+    },
+    {
+      "case": "rb_run3_route7_h75_v0",
+      "max_pose_abs": 1.612062067124498e-05,
+      "max_velocity_abs": 2.6659059816580566e-05
+    }
+  ],
+  "scope": "Timing includes synchronization and 64 candidate 2s prediction; excludes candidate generation, geometry checks, CEM and publication. Not end-to-end 200ms acceptance."
+}
