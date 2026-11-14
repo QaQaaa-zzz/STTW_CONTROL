@@ -128,6 +128,8 @@ class PlaygroundRBEnv:
         self.length=torch.zeros(n,device=self.device,dtype=torch.long);self.hold=torch.zeros(n,device=self.device)
         self.airborne=torch.zeros(n,device=self.device,dtype=torch.bool)
         self.stats=torch.zeros(4,device=self.device)
+        self.capture_weights=torch.tensor([cfg['reward'].get(key,0.) for key in ('landing_lateral_speed_weight','landing_yaw_rate_weight','landing_steer_rate_weight')],device=self.device)
+        self.capture_penalties=torch.zeros(3,device=self.device)
         q,v=self.sample_initial();q,v=self.to_jax(q),self.to_jax(v)
         self.data=[self.make(q[sl],v[sl],*[x[sl] for x in self.properties]) for sl in self.slices]
         self.obs=torch.zeros(n,76,device=self.device);self.critic=torch.zeros(n,106,device=self.device)
@@ -205,6 +207,10 @@ class PlaygroundRBEnv:
         reward=2*progress+.02*(torch.exp(-4*(v[:,0]-1.8).square())-2*roll.square()-pitch.square()-2*yaw.square()-2*q[:,1].square())
         reward-=.02*reward_cfg.get('speed_error_weight',0.)*(v[:,0]-1.8).square()
         reward+=grounded*.02*(2*torch.exp(-8*pose_error)-.1*joint_speed)
+        capture_terms=torch.stack((v[:,1].square(),v[:,5].square(),v[:,self.idx.steering_dof_address].square()),-1)
+        capture_penalty=grounded[:,None]*.02*capture_terms*self.capture_weights
+        reward-=capture_penalty.sum(-1)
+        self.capture_penalties+=capture_penalty.sum(0)
         reward+=success*10.-(failure|timeout)*5.
         reward=torch.nan_to_num(reward,nan=-5.,posinf=-5.,neginf=-5.)
         self.stats+=torch.stack((success.sum(),failure.sum(),timeout.sum(),done.sum()))

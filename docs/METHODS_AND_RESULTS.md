@@ -1994,3 +1994,8 @@ GLM端到端集成（用户2026-11-09新授权）：已配置glm-5.3从11场景�
 ## Playground前弯—跳跃—后弯与训练锁定条件
 
 归位150与父75各九路线名义DEV完整链均5/9，新模型新增2丢失2；新模型九条均完成回交但两越廊两超时，未验收。归位150完成150更新/7684.585秒，事件标志存在重叠，不作独立成功率。已定位训练关节完成范数.15rad/.5rad/s与部署逐关节锁定.01rad/.1rad/s不同；新增可配置训练范数门槛，缺省保留旧语义。新的有限阶段使用两来源×三前段六个实测入口、恢复150权重/Adam追加150，门槛范数.01/.1，Go2随机化及其余奖励不变；训练历史重置仍区别完整部署，后续全链验证不可省略。研究规划延后至交接完成。全部逐路线XY、失败和入口：docs/evidence/chapter3_playground_sttw_rb_sttw/README.md；数据rb_adaptation/approach_departure_turns，当前续训turn_lock_training150。
+
+
+## Playground锁定条件续训与落地动态奖励
+
+追加150到300完成7760.615秒，严格训练终止成功7/159117；九路线全链仍5/9，相对前150新增2丢失2，未采用更优结论。交回转向角速度部分达到16–20rad/s，成功和失败均出现，不作单因果结论。新增可配置双轮远岸接地期间横向速度/偏航角速度/转向角速度平方惩罚，缺省零保留旧奖励；逐项批均值写日志及TensorBoard。有限150轮新阶段使用300权重/fresh Adam，六入口与Go2随机化、网络、任务/锁定条件不改；同九路线原奖励300作后续物理对照，非纯单因素。证据与全覆盖XY：docs/evidence/chapter3_playground_sttw_rb_sttw/README.md；原始rb_adaptation/approach_departure_turns/turn_lock300_evaluation。

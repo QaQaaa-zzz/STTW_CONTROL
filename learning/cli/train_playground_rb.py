@@ -62,7 +62,7 @@ checkpoint(training/'model_initial.pt',start_update,dict(initialization='Actor/c
 best=-float('inf');obs,critic=env.obs,env.critic
 for stage_update in range(cfg['updates']):
     update=start_update+stage_update
-    tick=time.perf_counter();env.stats.zero_();env.homing_events.zero_()
+    tick=time.perf_counter();env.stats.zero_();env.homing_events.zero_();env.capture_penalties.zero_()
     with torch.inference_mode():
         for _ in range(cfg['steps_per_update']):
             action=ppo.act(obs,critic)
@@ -79,6 +79,7 @@ for stage_update in range(cfg['updates']):
         old_mu,old_sigma=ppo.storage.mu[0],ppo.storage.sigma[0]
         kl=torch.sum(torch.log(actor.action_std/old_sigma)+(old_sigma.square()+(old_mu-actor.action_mean).square())/(2*actor.action_std.square())-.5,-1).mean()
     record=dict(update=update+1,scored_policy_update=update,mean_step_reward=score,sample_s=sample_s,optimize_s=opt_s,loss_value=loss[0],loss_surrogate=loss[1],entropy=loss[3],kl_first_rollout_step=float(kl),learning_rate=ppo.learning_rate,terminal_counts=env.stats.tolist(),homing_entries=int(env.homing_events))
+    for key,value in zip(('landing_lateral_penalty','landing_yaw_penalty','landing_steer_penalty'),(env.capture_penalties/(cfg['num_envs']*cfg['steps_per_update'])).tolist()):record[key]=value
     with (a.output/'training.jsonl').open('a') as f:f.write(json.dumps(record)+'\n')
     for key,value in record.items():
         if isinstance(value,(int,float)):writer.add_scalar(key,value,update+1)
