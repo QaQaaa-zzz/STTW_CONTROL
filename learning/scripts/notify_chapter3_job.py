@@ -7,8 +7,6 @@ import os
 from pathlib import Path
 import select
 import subprocess
-from urllib.request import Request, urlopen
-from urllib.error import URLError
 from zoneinfo import ZoneInfo
 
 parser = argparse.ArgumentParser()
@@ -41,16 +39,21 @@ if config_path.stat().st_mode & 0o077:
     raise PermissionError('Bark config permissions must remain private')
 config = json.loads(config_path.read_text())
 payload = json.dumps(dict(device_key=config['device_key'], title=title, body=body, group='STTW 第三章', level='active'), ensure_ascii=False).encode()
-request = Request(config['server'].rstrip('/') + '/push', data=payload, headers={'Content-Type': 'application/json; charset=utf-8'}, method='POST')
-try:
-    with urlopen(request, timeout=15) as response:
-        result = json.loads(response.read())
-    if response.status != 200 or result.get('code') != 200:
-        raise RuntimeError('Bark rejected the terminal notice')
-except (URLError, TimeoutError, RuntimeError) as error:
-    args.receipt.write_text(json.dumps(dict(status='failed', title=title, time=when,
-        error_type=type(error).__name__), ensure_ascii=False, indent=2) + '\n')
+# HTTP/1.1 avoids the observed TLS/HTTP2 failure on this host. One attempt only.
+response = subprocess.run(['curl', '--http1.1', '--silent', '--show-error',
+    '--connect-timeout', '10', '--max-time', '20', '-H', 'Content-Type: application/json',
+    '--data-binary', '@-', config['server'].rstrip('/') + '/push'],
+    input=payload, capture_output=True)
+result = {}
+if response.returncode == 0:
+    try:
+        result = json.loads(response.stdout)
+    except json.JSONDecodeError:
+        result = {'code': None}
+sent = response.returncode == 0 and result.get('code') == 200
+args.receipt.write_text(json.dumps(dict(status='sent' if sent else 'failed', title=title,
+    time=when, transport='curl HTTP/1.1', exit_code=response.returncode,
+    response_code=result.get('code')), ensure_ascii=False, indent=2) + '\n')
+if not sent:
     print('Bark delivery failed; receipt saved. Simulation/training status is unchanged.', flush=True)
-    # A failed stage notice must not abort the caller's training/evaluation pipeline.
     raise SystemExit(0 if args.message else 1)
-args.receipt.write_text(json.dumps(dict(status='sent', title=title, time=when, response_code=response.status), ensure_ascii=False, indent=2) + '\n')

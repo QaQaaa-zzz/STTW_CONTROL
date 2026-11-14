@@ -14,6 +14,7 @@ from sttw_control.playground_arx import Reference,states,design,fit,rollout,robo
 p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('--collection',type=Path,required=True)
 p.add_argument('--output',type=Path,required=True)
+p.add_argument('--identity-prior',action='store_true',help='Regularize the same ARX toward constant velocity rather than zero next-state response')
 a=p.parse_args();a.output.mkdir(parents=True,exist_ok=True)
 manifest=json.loads((a.collection/'manifest.json').read_text());bank=dict(np.load(a.collection/'routes.npz'))
 entries=manifest['entries'];radius,joint_radii=robot_radius_bound(mujoco.MjModel.from_binary_path(str(Path(entries[0]['output'])/'terrain.mjb')));datasets=[];train_x=[];train_y=[];coverage=[]
@@ -41,7 +42,7 @@ for entry in entries:
     fig.suptitle(entry['name']+' | H75 alpha=0, request 1.8 m/s | actual trajectories end at real termination')
     fig.savefig(a.output/(entry['name']+'_xy.png'),dpi=160);plt.close(fig)
     coverage.append(dict(name=entry['name'],split=entry['split'],count=len(group),terminations=dict(Counter(r['termination'] for r in status['results'])),transitions_20ms=sum(len(d['xi'])-1 for d in group),elapsed_s=status['elapsed_s'],max_same_root_initial_qv_gap=initial_gap,max_same_root_initial_controller_gap=controller_gap))
-x=np.concatenate(train_x);y=np.concatenate(train_y);model=fit(x,y);np.savez(a.output/'nominal_arx.npz',**model)
+x=np.concatenate(train_x);y=np.concatenate(train_y);model=fit(x,y,identity_prior=a.identity_prior);np.savez(a.output/'nominal_arx.npz',**model)
 # Every 0.2 s anchor with two observed states; never read future physical/control states.
 horizons=[5,15,50,100,150];records=[];examples=[]
 for data in datasets:
@@ -74,7 +75,7 @@ for entry,ax in zip(entries,axes.flat):
 fig.savefig(a.output/'multihorizon_errors.png',dpi=160);plt.close(fig)
 lines=['# P1 nominal closed-loop model: first bounded collection','', '## Actual/reference XY coverage','']
 for entry in entries:lines.append(f'![{entry["name"]}]({entry["name"]}_xy.png)')
-lines+=['','Fixed H75 and native locked plant, 1.8 m/s, alpha=0. Flat TRAIN only fits ARX(2), ridge=0.001 with training-only scaling. No policy training. Rough maps are out-of-domain model diagnostics. Flat DEV_ROOT is a disjoint-root split on the same planar map, not independent map validation.','', '| Batch | 4 s slices | Early failures | Actual 20 ms transitions |','|---|---:|---:|---:|']
+lines+=['',f'Identity prior: {a.identity_prior}. Fixed H75 and native locked plant, 1.8 m/s, alpha=0. Flat TRAIN only fits ARX(2), ridge=0.001 with training-only scaling. No policy training. Rough maps are out-of-domain model diagnostics. Flat DEV_ROOT is a disjoint-root split on the same planar map, not independent map validation.','', '| Batch | 4 s slices | Early failures | Actual 20 ms transitions |','|---|---:|---:|---:|']
 for r in coverage:lines.append(f'| {r["name"]} | {r["terminations"].get("timeout",0)}/{r["count"]} | {r["count"]-r["terminations"].get("timeout",0)} | {r["transitions_20ms"]} |')
 lines+=['','Four-second slices are data collection, not goal success. Failure trajectories remain through the real terminal state. Initial snapshot and all 5 ms controller states are archived. Contact normals are collected at 1 ms; row zero has no prior interval.','', '## Causal free prediction','', '![Multihorizon errors](multihorizon_errors.png)','', '| Group | Horizon s | Windows / roots | Median max XY m | P95 max XY m | Worst max XY m | P95 max body bound m |','|---|---:|---:|---:|---:|---:|---:|']
 for r in summary:lines.append(f'| {r["group"]} | {r["horizon_s"]:.1f} | {r["windows"]}/{r["roots"]} | {r["median_max_xy_m"]:.4f} | {r["p95_max_xy_m"]:.4f} | {r["max_xy_m"]:.4f} | {r["p95_max_body_bound_m"]:.4f} |')

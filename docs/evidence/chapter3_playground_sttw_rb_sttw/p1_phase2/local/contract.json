@@ -1,0 +1,15 @@
+{
+  "training_rows": 8883,
+  "training_region_root_x_m": [
+    11.0,
+    25.0
+  ],
+  "terrain_flat_interval_m": [
+    10.6,
+    25.0
+  ],
+  "grouping": "TRAIN variants0-5, DEV_ROOT6-7; downstream siblings grouped by upstream+variant; same map, not independent map TEST",
+  "physics_and_policy": "Frozen successful shared runner; actual handoff histories; no RB adaptation",
+  "model": "local fitted only from declared nominal phase2 triples; all later rollout inputs predicted",
+  "limitation": "Short flat buffer may not excite downstream curvature; does not establish whole-route coverage or planning safety"
+}

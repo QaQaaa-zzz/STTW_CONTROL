@@ -55,17 +55,32 @@ def design(xi, previous, eta):
     return np.column_stack((xi,previous,eta))
 
 
-def fit(x, y, ridge=.001):
+def fit(x, y, ridge=.001, identity_prior=False):
     mean=x.mean(0);scale=x.std(0);scale[scale<1e-6]=1.
     z=np.column_stack(((x-mean)/scale,np.ones(len(x))))
     penalty=np.eye(z.shape[1])*ridge*len(z);penalty[-1,-1]=0
-    weights=np.linalg.solve(z.T@z+penalty,z.T@y)
-    return dict(mean=mean,scale=scale,weights=weights,ridge=np.array(ridge))
+    target=y-x[:,:y.shape[1]] if identity_prior else y
+    weights=np.linalg.solve(z.T@z+penalty,z.T@target)
+    return dict(mean=mean,scale=scale,weights=weights,ridge=np.array(ridge),identity_prior=np.array(identity_prior))
+
+
+def fit_local(x, y, neighbors=16):
+    """Offline nominal identification: convex local next-state regression."""
+    mean=x.mean(0);scale=x.std(0);scale[scale<1e-6]=1.
+    return dict(mean=mean,scale=scale,training_x=(x-mean)/scale,
+                training_y=y,neighbors=np.array(min(neighbors,len(x))))
 
 
 def predict(model, xi, previous, eta):
     x=design(xi,previous,eta)
-    return np.column_stack(((x-model['mean'])/model['scale'],np.ones(len(x))))@model['weights']
+    if 'training_x' in model:
+        if '_tree' not in model:model['_tree']=cKDTree(model['training_x'])
+        distance,index=model['_tree'].query((x-model['mean'])/model['scale'],k=int(model['neighbors']))
+        distance=distance.reshape(len(x),-1);index=index.reshape(len(x),-1)
+        weight=1./(distance+1e-6);weight/=weight.sum(1,keepdims=True)
+        return (model['training_y'][index]*weight[:,:,None]).sum(1)
+    predicted=np.column_stack(((x-model['mean'])/model['scale'],np.ones(len(x))))@model['weights']
+    return predicted+xi if model.get('identity_prior',False) else predicted
 
 
 def rollout(model, reference, pose, xi, previous, steps):

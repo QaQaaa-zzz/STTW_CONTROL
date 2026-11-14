@@ -1,0 +1,13 @@
+{
+  "total_s": 222.53252666298067,
+  "batches": [
+    {
+      "skill": "rb_run3",
+      "lanes": 72,
+      "initialization_s": 1.4433720459928736,
+      "rollout_s": 218.5711476280121,
+      "simulated_ticks_per_lane": 2000
+    }
+  ],
+  "execution": "GPU MJX-Warp vmap, GPU H75/ECBC/ESO and RB inference, DLPack, terminal-only trajectory download"
+}

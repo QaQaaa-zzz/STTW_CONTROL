@@ -245,11 +245,13 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 enter=alive&(phase==0)&(q[:,0]>=jump_start)&(tick%4==0)&(not args.ground_only)
                 phase=torch.where(enter,1,phase);entry_time=torch.where(enter,t,entry_time)
                 airborne |= alive&((phase==1)|(phase==3))&~flags[:,0]&(q[:,0]>terrain['front_x_m']-1.5)
-                far=alive&airborne&((phase==1)|(phase==3))&flags[:,1]&(far_time<0)
+                supported_far=flags[:,2]&(q[:,0]>terrain['front_x_m']+terrain['width_m'])
+                crossed=airborne|(supported_far&hand.get('allow_supported_far_completion',False))
+                far=alive&crossed&((phase==1)|(phase==3))&flags[:,1]&(far_time<0)
                 far_time=torch.where(far,t,far_time)
                 if event:
                     descending=(v[:,2]<-.1)&(q[:,2]-terrain['far_bank_height_m']<=landing_height)&(q[:,0]>terrain['front_x_m']+terrain['width_m']-.15)
-                    preparing=alive&(phase==1)&airborne&(descending|flags[:,1])
+                    preparing=alive&(phase==1)&((airborne&descending)|(crossed&flags[:,1]))
                     phase=torch.where(preparing,3,phase)
                     landed=flags[:,2] if require_both_wheels else flags[:,1]
                     ready=landed&(angles[:,0].abs()<.35)&(angles[:,1].abs()<.45)&(v[:,2].abs()<1.5)
