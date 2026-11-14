@@ -20,13 +20,14 @@ from .torch_controller import TorchController
 from .torch_path_policy import TorchPathPolicy
 from .torch_path_reference import TorchPathReference, wrap
 from .torch_middle_control import TorchMiddleControl
-from .playground_adapters import GroundAdapter
+from .playground_adapters import GroundAdapter, JumpAdapter
+from .playground_world_map import body_outside
 from .playground_snapshot import capture as capture_snapshot, restore as restore_snapshot
 
 
 def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_config, skills, args, brake_ids):
     source=args.output/'source';source.mkdir()
-    for name in ['playground_handoff_evaluation.py','torch_controller.py','torch_path_reference.py','torch_middle_control.py','playground_adapters.py','playground_snapshot.py']:
+    for name in ['playground_handoff_evaluation.py','torch_controller.py','torch_path_reference.py','torch_middle_control.py','playground_adapters.py','playground_snapshot.py','playground_world_map.py']:
         shutil.copy2(Path(__file__).with_name(name),source/name)
     shutil.copy2(sys.argv[0],source/Path(sys.argv[0]).name)
     started=time.perf_counter();device='cuda:0';hand=cfg['ground_handoff'];terrain=cfg['ditch_terrain']
@@ -69,6 +70,20 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
     terrain_geoms=jp.asarray(model.geom_type==mujoco.mjtGeom.mjGEOM_HFIELD)
     rb_model=mm.replace(opt=mm.opt.replace(timestep=jp.asarray(.005,dtype=mm.opt.timestep.dtype),integrator=type(mm.opt.integrator)(int(mujoco.mjtIntegrator.mjINT_RK4)))) if cfg.get('rb_physics') else mm
     rb_substeps=1 if cfg.get('rb_physics') else args.physics_substeps
+
+    world=cfg.get('world_map_spec')
+    signal_window=[terrain['front_x_m']+v for v in world['forward_obstacle']['jump_signal_offsets_m']] if world else [9.5,11.]
+    jump_adapter=JumpAdapter(home_pose,joint_kp,tensor(model.actuator_ctrlrange[2:,0]).float(),tensor(model.actuator_ctrlrange[2:,1]).float(),home_compensation)
+
+    @jax.jit
+    def world_status(d):
+        outside=body_outside(d,geometry,world['bounds_xy_m']) if world else jp.zeros(n,dtype=jp.bool_)
+        c=d._impl;g=c.contact__geom
+        valid=(jp.arange(g.shape[0])<c.nacon[0])&(c.contact__dist<=0)
+        valid &= jp.any(terrain_geoms[jp.clip(g,0,model.ngeom-1)]&(g>=0),-1)
+        valid &= jp.any(g[:,:,None]==geometry.body_geom_ids[None,None,:],axis=(1,2))
+        body_contact=jp.any((c.contact__worldid[None,:]==jp.arange(n)[:,None])&valid,1)
+        return jp.stack((outside,body_contact),1)
 
     def contacts(d):
         c=d._impl;g=c.contact__geom
@@ -123,7 +138,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         far_fraction=jp.clip((d.qpos[0]-terrain['front_x_m'])/terrain['width_m'],0.,1.)
         geom=ObservableGeometry(g.obstacle_relative_x,d.qpos[2]+offset*far_fraction,g.roll,g.pitch,g.yaw)
         history=advance_history(history,observable_frame(d,idx,geom,last,jp.asarray(1.)))
-        return history,actor_observation(history,(d.qpos[0]>=9.5)&(d.qpos[0]<=11.))
+        return history,actor_observation(history,(d.qpos[0]>=signal_window[0])&(d.qpos[0]<=signal_window[1]))
     frame=jax.jit(jax.vmap(frame_one))
     results=[];all_timing=[]
     for name,skill in skills.items():
@@ -168,7 +183,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         lock=q[:,brake_qpos].clone();target=torch.zeros(n,4,device=device);target[:,2:]=lock
         zero=tensor([mode=='zero_middle' for _,mode,i in lanes]);lo=tensor(model.actuator_ctrlrange[:,0]).float();hi=tensor(model.actuator_ctrlrange[:,1]).float()
         codes=torch.zeros(n,device=device,dtype=torch.long);durations=torch.full((n,),args.seconds,device=device)
-        rows=[];poses=[];velocities=[];contact_rows=[];valid_rows=[];goal=hand['goal'];data.qpos.block_until_ready();init_s=time.perf_counter()-init_start;rollout_start=time.perf_counter()
+        rows=[];poses=[];velocities=[];contact_rows=[];valid_rows=[];world_rows=[];ownership_error=torch.zeros(n,device=device);goal=hand['goal'];data.qpos.block_until_ready();init_s=time.perf_counter()-init_start;rollout_start=time.perf_counter()
         snapshot_tick=round(cfg['snapshot_replay_s']/.005) if 'snapshot_replay_s' in cfg else None
         for replay in range(2 if snapshot_tick is not None else 1):
             case_name=name+('_replay' if replay else '')
@@ -177,10 +192,10 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 restore_started=time.perf_counter()
                 with (args.output/f'{name}_runtime_snapshot.pkl').open('rb') as stream:snapshot=pickle.load(stream)
                 data,(history,obs,last),runtime=restore_snapshot(snapshot,ground_adapter)
-                phase,alive,recovering,stable_time,upper_ready_time,airborne,flags,far_time,entry_time,handoff_time,hold,lock,target,codes,durations=(runtime[key] for key in ['phase', 'alive', 'recovering', 'stable_time', 'upper_ready_time', 'airborne', 'flags', 'far_time', 'entry_time', 'handoff_time', 'hold', 'lock', 'target', 'codes', 'durations'])
+                phase,alive,recovering,stable_time,upper_ready_time,airborne,flags,far_time,entry_time,handoff_time,hold,lock,target,codes,durations,ownership_error=(runtime[key] for key in ['phase', 'alive', 'recovering', 'stable_time', 'upper_ready_time', 'airborne', 'flags', 'far_time', 'entry_time', 'handoff_time', 'hold', 'lock', 'target', 'codes', 'durations', 'ownership_error'])
                 route=middle.route
                 q,v,m,pose,speed,angles=map(to_torch,observe(data))
-                rows,poses,velocities,contact_rows,valid_rows,plan_receipts=[x.copy() for x in prefix]
+                rows,poses,velocities,contact_rows,valid_rows,world_rows,plan_receipts=[x.copy() for x in prefix]
                 start_tick=snapshot['tick']
                 data.qpos.block_until_ready()
                 (args.output/f'{name}_restore.json').write_text(json.dumps(dict(tick=start_tick,time_s=start_tick*.005,restore_s=time.perf_counter()-restore_started,runtime_fields=list(runtime),physics_leaf_count=len(jax.tree.leaves(data)),source='serialized full MJX data, RB FIFO/observation/action, ground controller and runner state'),indent=2))
@@ -188,9 +203,9 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
             for tick in range(start_tick,round(args.seconds/.005)+1):
                 t=tick*.005
                 if snapshot_tick==tick and not replay:
-                    runtime=dict(phase=phase,alive=alive,recovering=recovering,stable_time=stable_time,upper_ready_time=upper_ready_time,airborne=airborne,flags=flags,far_time=far_time,entry_time=entry_time,handoff_time=handoff_time,hold=hold,lock=lock,target=target,codes=codes,durations=durations)
-                    snapshot=capture_snapshot(data,ground_adapter,(history,obs,last),runtime,tick)
-                    prefix=[rows.copy(),poses.copy(),velocities.copy(),contact_rows.copy(),valid_rows.copy(),plan_receipts.copy()]
+                    runtime=dict(phase=phase,alive=alive,recovering=recovering,stable_time=stable_time,upper_ready_time=upper_ready_time,airborne=airborne,flags=flags,far_time=far_time,entry_time=entry_time,handoff_time=handoff_time,hold=hold,lock=lock,target=target,codes=codes,durations=durations,ownership_error=ownership_error)
+                    snapshot=capture_snapshot(data,ground_adapter,(history,obs,last),runtime,tick,dict(world_map=world,terrain=terrain,ground_identity=identity,rb_identity=skill.record,physics_model=str(args.output/'terrain.mjb'),resolved_config=str(args.output/'resolved_config.json')))
+                    prefix=[rows.copy(),poses.copy(),velocities.copy(),contact_rows.copy(),valid_rows.copy(),world_rows.copy(),plan_receipts.copy()]
                 if tick in updates:
                     update,new_route=updates[tick]
                     before=ground_adapter.snapshot()
@@ -241,15 +256,16 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 target[:,0]=torch.where(reset_control,q[:,idx.steering_qpos_address],target[:,0]);target[:,2:]=torch.where(returning[:,None],lock,target[:,2:])
                 ey=(route.xy[route.route_ids]-q[:,None,:2]).square().sum(-1).min(-1).values.sqrt()
                 eh=wrap(middle.projection['heading']-pose[:,2]);ground_mode=((phase==0)|(phase==2)|(phase==4)) if native_landing else (phase!=1)
+                world_flags=to_torch(world_status(data));world_failure=world_flags[:,0]
                 physical=~torch.isfinite(q).all(-1)|(angles[:,0].abs()>.7)|(angles[:,1].abs()>1.309)
                 outside=ground_mode&((ey>hand['road_half_width_m'])|middle.domain_exit)
                 at_goal=((phase==2)|args.ground_only)&(q[:,0]>=goal['x_min_m'])&(q[:,0]<=goal['x_max_m'])&(q[:,1].abs()<=goal['abs_y_max_m'])&(v[:,0]>=goal['min_vx_m_s'])
                 at_goal &= (ey<=goal.get('path_tolerance_m',float('inf')))&(eh.abs()<=goal.get('heading_tolerance_rad',float('inf')))&((speed-middle.v_user).abs()<=goal.get('speed_tolerance_m_s',float('inf')))
                 hold=torch.where(alive,torch.where(at_goal,hold+.005,0.),hold)
                 reached=at_goal&(hold>=goal.get('hold_s',0.))
-                stop=alive&(physical|outside|reached);codes=torch.where(stop,torch.where(physical,1,torch.where(outside,2,3)),codes);durations=torch.where(stop,t,durations)
+                stop=alive&(physical|outside|world_failure|reached);codes=torch.where(stop,torch.where(physical,1,torch.where(world_failure,4,torch.where(outside,2,3))),codes);durations=torch.where(stop,t,durations)
                 rows.append(torch.cat((torch.full((n,1),t,device=device),q[:,:3],angles,v[:,:3],(phase==2)[:,None],ey[:,None],target,(phase==0)[:,None],m[:,5:6],middle.v_user[:,None],phase[:,None]),1))
-                poses.append(q);velocities.append(v);contact_rows.append(flags.clone());valid_rows.append(alive.clone());alive &= ~stop
+                poses.append(q);velocities.append(v);contact_rows.append(flags.clone());world_rows.append(world_flags.clone());valid_rows.append(alive.clone());alive &= ~stop
                 if tick==round(args.seconds/.005):break
                 upper_ready=(phase==2)&(m[:,0].abs()<.05)&(m[:,1].abs()<.2)&(eh.abs()<.15)&(ey<.2)
                 upper_ready &= ((speed-middle.v_user).abs()<hand.get('upper_ready_speed_error_m_s',float('inf')))&(v[:,5].abs()<hand.get('upper_ready_yaw_rate_rad_s',float('inf')))&(m[:,3].abs()<hand.get('upper_ready_steer_rate_rad_s',float('inf')))
@@ -288,7 +304,11 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 if lock_first:
                     # RB owns wheels throughout physical homing; STTW starts only after locking.
                     ground_target[:,:2]=torch.where((phase==4)[:,None],target[:,:2],ground_target[:,:2])
-                target=torch.where(ground_mode[:,None],ground_target,target)
+                legacy_target=torch.where(ground_mode[:,None],ground_target,target)
+                if cfg.get('shared_adapters',False):
+                    target=jump_adapter.select(phase,ground_target,target,to_torch(data.qfrc_bias[:,[idx.hip_dof_address,idx.knee_dof_address]]))
+                    ownership_error=torch.maximum(ownership_error,(target-legacy_target).abs().amax(-1))
+                else:target=legacy_target
                 if lock_first:
                     delta=target[:,2:]-home_pose
                     span=torch.where(delta>=0,hi[2:]-home_pose,home_pose-lo[2:]).clamp_min(1e-6)
@@ -299,13 +319,13 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 middle.after(m,pose,speed,governed,torch.stack((steer,target[:,1]),1),torch.zeros(n,2,device=device),ctl)
                 if (tick+1)%4==0:history,obs=frame(data,history,last,height_offset)
             torch.cuda.synchronize();rollout_s=time.perf_counter()-rollout_start
-            traces=torch.stack(rows).cpu().numpy();positions=torch.stack(poses).cpu().numpy();speeds=torch.stack(velocities).cpu().numpy();valid=torch.stack(valid_rows).cpu().numpy();contact_trace=torch.stack(contact_rows).cpu().numpy()
+            traces=torch.stack(rows).cpu().numpy();positions=torch.stack(poses).cpu().numpy();speeds=torch.stack(velocities).cpu().numpy();valid=torch.stack(valid_rows).cpu().numpy();contact_trace=torch.stack(contact_rows).cpu().numpy();world_trace=torch.stack(world_rows).cpu().numpy();ownership_max=ownership_error.cpu().numpy()
             codes,durations,entry_time,far_time,handoff_time,hold,airborne=[x.cpu().numpy() for x in (codes,durations,entry_time,far_time,handoff_time,hold,airborne)]
             for lane,(route_id,mode,variant) in enumerate(lanes):
                 case_dir=f'{case_name}_route{route_id}_{mode}'+(f'_v{variant}' if len(variants)>1 else '')
                 target_dir=args.output/case_dir;target_dir.mkdir();keep=valid[:,lane];trace=traces[keep,lane];qsave=positions[keep,lane]
-                np.savez_compressed(target_dir/'trajectory.npz',trace=trace,qpos=qsave,qvel=speeds[keep,lane],wheel_contact_flags=contact_trace[keep,lane],wheel_contact_columns=['any_terrain','any_far','both_far'],reference_xy=saved['xy'][route_id],published_reference_xy=route.xy[route_id].cpu().numpy(),columns=['time','x','y','z','roll','pitch','yaw','vx','vy','vz','ground_active','path_distance','steer_target','rear_target','hip_target','knee_target','approaching','rear_rate_rad_s','requested_speed_m_s','phase'])
-                row=dict(case_dir=case_dir,variant=variants[variant],skill=case_name,route=route_id,continuation=mode,termination=['timeout','physical_failure','corridor_or_domain_exit','goal'][codes[lane]],goal=bool(codes[lane]==3),rb_entry_s=None if entry_time[lane]<0 else float(entry_time[lane]),goal_hold_s=float(hold[lane]),airborne=bool(airborne[lane]),far_contact=bool(far_time[lane]>=0),first_far_contact_s=None if far_time[lane]<0 else float(far_time[lane]),handoff_s=None if handoff_time[lane]<0 else float(handoff_time[lane]),duration_s=float(durations[lane]),final_xy=qsave[-1,:2].tolist())
+                np.savez_compressed(target_dir/'trajectory.npz',trace=trace,qpos=qsave,qvel=speeds[keep,lane],world_flags=world_trace[keep,lane],world_flag_columns=['physical_map_exit','nonwheel_terrain_contact'],wheel_contact_flags=contact_trace[keep,lane],wheel_contact_columns=['any_terrain','any_far','both_far'],reference_xy=saved['xy'][route_id],published_reference_xy=route.xy[route_id].cpu().numpy(),columns=['time','x','y','z','roll','pitch','yaw','vx','vy','vz','ground_active','path_distance','steer_target','rear_target','hip_target','knee_target','approaching','rear_rate_rad_s','requested_speed_m_s','phase'])
+                row=dict(case_dir=case_dir,variant=variants[variant],skill=case_name,route=route_id,continuation=mode,termination=['timeout','physical_failure','tracking_domain_exit' if world else 'corridor_or_domain_exit','goal','world_boundary_exit'][codes[lane]],actuator_owner_max_difference=float(ownership_max[lane]),nonwheel_contact_steps=int(world_trace[keep,lane,1].sum()),goal=bool(codes[lane]==3),rb_entry_s=None if entry_time[lane]<0 else float(entry_time[lane]),goal_hold_s=float(hold[lane]),airborne=bool(airborne[lane]),far_contact=bool(far_time[lane]>=0),first_far_contact_s=None if far_time[lane]<0 else float(far_time[lane]),handoff_s=None if handoff_time[lane]<0 else float(handoff_time[lane]),duration_s=float(durations[lane]),final_xy=qsave[-1,:2].tolist())
                 results.append(row)
             all_timing.append(dict(skill=case_name,lanes=n,initialization_s=0. if replay else init_s,rollout_s=rollout_s,simulated_ticks_per_lane=tick-start_tick))
             (args.output/f'{case_name}_plan_receipts.json').write_text(json.dumps(plan_receipts,indent=2))

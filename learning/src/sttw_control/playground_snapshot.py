@@ -3,12 +3,12 @@ from copy import deepcopy
 import jax
 
 
-def capture(data, ground_adapter, rb_state, runtime, tick):
+def capture(data, ground_adapter, rb_state, runtime, tick, context):
     # Copy every MJX leaf, including contact/constraint and warm-start fields.
     return dict(physics=jax.tree.map(lambda x:x.copy(),data),
                 ground=ground_adapter.snapshot(),
                 rb=jax.tree.map(lambda x:x.copy(),rb_state),
-                runtime=deepcopy(runtime),tick=tick)
+                runtime=deepcopy(runtime),tick=tick,context=deepcopy(context))
 
 
 def restore(snapshot, ground_adapter):

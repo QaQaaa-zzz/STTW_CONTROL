@@ -1,6 +1,6 @@
 {
   "schema": "chapter3_playground_handoff_task",
-  "role": "Frozen P0 engineering candidate: common implicitfast, RB225, recovery lookahead1.3; nominal9/9 and DEV offsets71/72; not independent TEST",
+  "role": "Frozen shared-runner P0 engineering configuration: RB225 with its finite-servo completion, H75, common implicitfast1ms, fixed WorldMap; nominal9/9 and integrated replay3+3. Research E1-E3 not complete.",
   "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rb_candidate_handoff/source/config.json",
   "flat_buffer_m": 2.0,
   "flat_intervals_m": [
@@ -13,71 +13,11 @@
       12.6
     ]
   ],
-  "ditch_terrain": {
-    "front_x_m": 10.3,
-    "width_m": 0.3,
-    "ground_end_x_m": 25.0,
-    "stone_height_min_m": 0.001,
-    "stone_height_max_m": 0.004,
-    "stones_per_m2": 10,
-    "seed": 20261111,
-    "lateral_limit_m": 3.9,
-    "far_bank_height_m": 0.0,
-    "rough_x_intervals_m": [
-      [
-        2.5,
-        8.3
-      ],
-      [
-        12.6,
-        20.0
-      ]
-    ],
-    "land_bridge_y_interval_m": [
-      1.4,
-      4.0
-    ],
-    "full_width_rough": true,
-    "ridges": [
-      {
-        "x_interval_m": [
-          4.5,
-          5.5
-        ],
-        "y_interval_m": [
-          -4.0,
-          4.0
-        ],
-        "height_m": 0.02
-      },
-      {
-        "x_interval_m": [
-          13.0,
-          15.0
-        ],
-        "y_interval_m": [
-          -4.0,
-          4.0
-        ],
-        "height_m": 0.04
-      }
-    ]
-  },
   "ground_handoff": {
     "bundle": "runs/rb_h75_ecbc_ground/left90_R2/bundle",
     "settings": "runs/rb_h75_ecbc_ground/left90_R2/config.json",
     "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/approach_departure_turns/routes.npz",
     "road_half_width_m": 0.6,
-    "goal": {
-      "x_min_m": 16.5,
-      "x_max_m": 18.5,
-      "abs_y_max_m": 0.5,
-      "min_vx_m_s": 0.5,
-      "hold_s": 0.5,
-      "path_tolerance_m": 0.3,
-      "heading_tolerance_rad": 0.2,
-      "speed_tolerance_m_s": 0.4
-    },
     "approach": {
       "speed_m_s": 1.8,
       "alpha": 0.0,
@@ -127,5 +67,7 @@
   },
   "rb_adaptation_bundles": {
     "rb_run3": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/shared_plant_checkpoint_comparison/shared225"
-  }
+  },
+  "world_map": "learning/configs/chapter3_playground_world_map.json",
+  "shared_adapters": true
 }

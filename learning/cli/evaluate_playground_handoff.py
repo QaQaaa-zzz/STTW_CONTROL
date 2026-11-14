@@ -31,7 +31,8 @@ def transplant(bundle, terrain, output, physics_substeps=1, ground_physics=None)
     for name in ('floor', 'step'):
         geom = world.find(f"geom[@name='{name}']")
         geom.set('contype', '0'); geom.set('conaffinity', '0'); geom.set('rgba', '0 0 0 0')
-    world.find("geom[@name='step']").set('pos', f"{terrain['front_x_m']+2} 0 0")
+    anchor=world.find("geom[@name='step']")
+    anchor.set('pos', f"{terrain['front_x_m']+float(anchor.get('size').split()[0])} 0 0")
     # Explicit pairs bypass contype/conaffinity; remove the replaced ground contacts.
     contacts = root.find('contact')
     native_wheel_pairs=[dict(pair.attrib) for pair in contacts if pair.get('geom1')=='floor' and pair.get('geom2') in ('frontwheel_collision','rearwheel_collision')]
@@ -89,7 +90,16 @@ def main():
     p.add_argument('--physics-substeps',type=int,default=1,choices=[1,5,25],help='Physics substeps per unchanged 5 ms controller tick')
     p.add_argument('--ground-only',action='store_true',help='Keep ground control throughout; no RB activation')
     a=p.parse_args(); configure_compilation_cache('/home/qy/STTW_CONTROL/runs/.jax_compilation_cache'); a.output.mkdir(parents=True,exist_ok=False); torch.set_num_threads(1)
-    cfg=json.loads(a.config.read_text()); hand=cfg['ground_handoff']; terrain=cfg['ditch_terrain']
+    cfg=json.loads(a.config.read_text())
+    if 'world_map' in cfg:
+        world=json.loads(Path(cfg['world_map']).read_text())
+        cfg=dict(cfg,world_map_spec=world,ditch_terrain=world['terrain'],ground_handoff=dict(cfg['ground_handoff'],goal=world['goal']))
+        activation=world['terrain']['front_x_m']+world['forward_obstacle']['activation_offset_m']
+        cfg['ground_handoff']['approach']['jump_start_x_m']=activation
+        for variant in cfg['ground_handoff'].get('handoff_variants',[]):variant['jump_start_x_m']=activation
+    hand=cfg['ground_handoff']; terrain=cfg['ditch_terrain']
+    if cfg.get('shared_adapters') and not (hand['landing_control']=='native' and hand['sttw_only_after_lock'] and hand['staged_native_handoff']):
+        raise ValueError('Shared adapters require the frozen native landing and lock-first completion contract')
     if 'snapshot_replay_s' in cfg and not 0<=cfg['snapshot_replay_s']<a.seconds:
         raise ValueError('snapshot time must lie within the rollout')
     ground_physics=cfg.get('ground_physics',{})
@@ -125,6 +135,8 @@ def main():
     if 'snapshot_replay_s' in cfg:n*=2
     contract=dict(terrain_model=str(a.model) if a.model else str(a.output/'terrain.mjb'),role='bounded native Playground transfer DEV, no training',skills={k:s.record for k,s in skills.items()},terrain=terrain,source_config=str(a.config),routes=a.routes,episode_s=a.seconds,episodes=n,physics_steps_max=round(a.seconds/.005)*n*(a.physics_substeps+(1 if rb_physics else a.physics_substeps)),backend='MJX-Warp vmap; GPU Torch H75/ECBC/ESO; JAX RB; DLPack; final-only host export',heightfield_contact_workspace=512,physics_dt=.005/a.physics_substeps,physics_substeps=a.physics_substeps,lower_dt=.005,upper_dt=.02,ground_model=identity,goal=hand['goal'],road_half_width_m=hand['road_half_width_m'],start_x_m=hand.get('start_x_m',1.5),start_vx_m_s=hand.get('start_vx_m_s',2.),handoff=hand.get('handoff_mechanism','fixed contact delay'),handoff_delay_s=hand.get('handoff_delay_s',0.),approach=a.approach,ground_only=a.ground_only,jump_start_x_m=hand['approach']['jump_start_x_m'],scope='Declared approach controller then native RB jump then H75 or zero-middle STTW. No planning or training.',ground_physics=ground_physics,rb_physics=rb_physics,terrain_conversion='Original Isaac rectangular patches, coordinates and heights retained without interpolation; 90-degree local grid rotation matches original triangle diagonal',pendulum='STTW hip/knee equality brakes at entry posture; released during RB, relocked at measured handoff posture; native finite servos retained',observer='measured ESO initialization, empty H75 history at handoff')
     contract['snapshot_replay_s']=cfg.get('snapshot_replay_s')
+    (a.output/'resolved_config.json').write_text(json.dumps(cfg,indent=2))
+    contract.update(input_config=str(a.config),source_config=str(a.output/'resolved_config.json'),world_map=cfg.get('world_map_spec'),shared_adapters=cfg.get('shared_adapters',False))
     (a.output/'declaration.json').write_text(json.dumps(contract,indent=2))
     from sttw_control.playground_handoff_evaluation import evaluate_handoff
     evaluate_handoff(model,mm,idx,cfg,bundle,hcfg,identity,controller,skills,a,brake_ids)

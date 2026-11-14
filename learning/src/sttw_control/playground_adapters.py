@@ -1,5 +1,23 @@
 """Ground plan publication and controller-state capture for the shared runner."""
 from copy import deepcopy
+import torch
+
+
+class JumpAdapter:
+    """Adapted RB owns all targets through its validated finite-servo completion."""
+    def __init__(self, home, joint_kp, low, high, bias_compensation):
+        self.home=home;self.joint_kp=joint_kp
+        self.low=low;self.high=high;self.bias_compensation=bias_compensation
+
+    def targets(self, rb_targets, phase, joint_bias):
+        home=self.home+joint_bias/self.joint_kp if self.bias_compensation else self.home
+        home=home.clamp(self.low,self.high)
+        joints=torch.where((phase==4)[:,None],home,rb_targets[:,2:])
+        return torch.cat((rb_targets[:,:2],joints),1)
+
+    def select(self, phase, ground_targets, rb_targets, joint_bias):
+        rb=self.targets(rb_targets,phase,joint_bias)
+        return torch.where(((phase==0)|(phase==2))[:,None],ground_targets,rb)
 
 
 class GroundAdapter:
