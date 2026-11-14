@@ -28,14 +28,14 @@ with torch.no_grad():
     for row in status['results']:
         if row['variant']['data_split']=='TRAIN':continue
         with np.load(a.evaluation/row['case_dir']/'trajectory.npz') as data:
-            pose,velocity=states(data['qpos'][::4],data['qvel'][::4],schema);phase=data['trace'][::4,-1];controller=data['controller_state'][::4]
-        poses=tensor(pose);velocities=tensor(velocity);controllers=tensor(controller);route=row['route'];windows=0
+            pose,velocity=states(data['qpos'][::4],data['qvel'][::4],schema);phase=data['trace'][::4,-1];controller=data['controller_state'][::4];requests=data['trace'][::4,18]
+        poses=tensor(pose);velocities=tensor(velocity);controllers=tensor(controller);speed_requests=tensor(requests);route=row.get('final_route',row['route']);windows=0
         for h in [5,15,50,100,150]:
             best_example_error=-1.
             indices=np.arange(1,len(pose)-h);bad=np.r_[0,np.cumsum(phase!=2)];indices=indices[(bad[indices+h+1]-bad[indices-1])==0][::10]
             for start in range(0,len(indices),64):
                 anchor=torch.tensor(indices[start:start+64],device='cuda');n=len(anchor)
-                prediction,_=model.rollout(poses[anchor],velocities[anchor],velocities[anchor-1],controllers[anchor],s,xy[route:route+1].expand(n,-1,-1),heading[route:route+1].expand(n,-1),curvature[route:route+1].expand(n,-1),h)
+                prediction,_=model.rollout(poses[anchor],velocities[anchor],velocities[anchor-1],controllers[anchor],s,xy[route:route+1].expand(n,-1,-1),heading[route:route+1].expand(n,-1),curvature[route:route+1].expand(n,-1),h,speed_request=speed_requests[anchor])
                 actual=poses[anchor[:,None]+torch.arange(h+1,device='cuda')]
                 low,high=envelope(prediction);actual_low,actual_high=envelope(actual)
                 support=torch.maximum((low-actual_low).abs(),(high-actual_high).abs())

@@ -22,4 +22,30 @@ class HistoryModelTest(unittest.TestCase):
         self.assertTrue(any(g.abs().max()>0 for g in gradients))
 
 
+    def test_direct_terrain_model_does_not_apply_nominal_dynamics(self):
+        from sttw_control.playground_terrain_features import TerrainFeatures
+        follower=dict(lookahead_time_s=.7,lookahead_min_speed_m_s=.3,lookahead_min_m=.3,lookahead_max_m=2.)
+        weights=np.zeros((34,9));weights[:9]=np.eye(9)*.2
+        nominal=NominalRollout(dict(mean=np.zeros(33),scale=np.ones(33),weights=weights),follower,'cpu')
+        terrain=TerrainFeatures(np.zeros((21,101)),np.ones((21,101)),[-2,8,-1,1],.1)
+        model=HistoryDynamics(nominal,np.zeros(381),np.ones(381),np.zeros(101),np.ones(101),np.ones(9),terrain=terrain,model_kind='direct')
+        s=torch.linspace(0,6,301);xy=torch.stack((s,torch.zeros_like(s)),1)[None];heading=torch.zeros(1,301)
+        pose=torch.zeros(1,12);pose[:,3]=1;velocity=torch.zeros(1,9);velocity[:,0]=1.8
+        prediction,vel=model.rollout(pose,velocity,velocity,torch.zeros(1,381),s,xy,heading,heading,5)
+        torch.testing.assert_close(vel,velocity[:,None].expand(-1,6,-1))
+        self.assertAlmostEqual(float(prediction[0,-1,0].detach()),.18,places=5)
+        prediction[:,:,:3].square().mean().backward()
+        self.assertTrue(all(torch.isfinite(p.grad).all() for p in model.parameters() if p.grad is not None))
+
+    def test_speed_request_reaches_causal_nominal_features(self):
+        follower=dict(lookahead_time_s=.7,lookahead_min_speed_m_s=.3,lookahead_min_m=.3,lookahead_max_m=2.)
+        weights=np.zeros((34,9));weights[31,0]=1
+        nominal=NominalRollout(dict(mean=np.zeros(33),scale=np.ones(33),weights=weights),follower,'cpu')
+        model=HistoryDynamics(nominal,np.zeros(381),np.ones(381),np.zeros(26),np.ones(26),np.ones(9))
+        s=torch.linspace(0,10,501);xy=torch.stack((s,torch.zeros_like(s)),1)[None].expand(2,-1,-1);heading=torch.zeros(2,501)
+        pose=torch.zeros(2,12);pose[:,3]=1;velocity=torch.zeros(2,9)
+        _,predicted=model.rollout(pose,velocity,velocity,torch.zeros(2,381),s,xy,heading,heading,2,speed_request=torch.tensor([1.8,1.9]))
+        torch.testing.assert_close(predicted[:,1:,0],torch.tensor([[1.8,1.8],[1.9,1.9]]))
+
+
 if __name__=='__main__':unittest.main()

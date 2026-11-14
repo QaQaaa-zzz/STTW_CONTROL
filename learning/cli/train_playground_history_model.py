@@ -15,8 +15,12 @@ p.add_argument('--output',type=Path,required=True)
 p.add_argument('--updates',type=int,default=150)
 p.add_argument('--seed',type=int,default=0)
 p.add_argument('--resume',type=Path)
+p.add_argument('--resume-optimizer',action='store_true')
 p.add_argument('--initial-update',type=int,default=0)
 p.add_argument('--balanced-mixture',action='store_true')
+p.add_argument('--terrain-features',action='store_true')
+p.add_argument('--additional-evaluations',type=Path,nargs='*',default=[])
+p.add_argument('--model-kind',choices=['residual','direct'],default='residual')
 a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False)
 torch.set_num_threads(1);torch.manual_seed(a.seed);np.random.seed(a.seed)
 started=time.perf_counter();device='cuda'
@@ -28,21 +32,32 @@ bank=np.load(cfg['ground_handoff']['reference_path'])
 hcfg=json.loads((Path(cfg['ground_handoff']['bundle'])/'config.json').read_text())
 follower=dict(hcfg['follower'],lookahead_scale=1.3)
 nominal=dict(np.load(a.nominal))
+terrain=None
+if a.terrain_features:
+    from sttw_control.playground_terrain_features import TerrainFeatures,raster_from_spec
+    terrain_data=raster_from_spec(cfg['ditch_terrain'])
+    terrain_data['spacing']=float(terrain_data['spacing'])
+    np.savez(a.output/'terrain.npz',**terrain_data)
+    terrain=TerrainFeatures(**terrain_data,device='cpu')
 datasets=[];offset=0;window_rows={h:[] for h in [5,15,50,150]}
-for row in status['results']:
-    with np.load(a.evaluation/row['case_dir']/'trajectory.npz') as data:
-        pose,xi=states(data['qpos'][::4],data['qvel'][::4],schema)
-        controller=data['controller_state'][::4];phase=data['trace'][::4,-1]
-        ref=Reference(bank,row['route'],follower);eta=ref.features(pose,xi)
-        inputs=np.column_stack((xi,eta,pose[:,10:12]))
-        datasets.append(dict(row=row,pose=pose,xi=xi,controller=controller,inputs=inputs,phase=phase,offset=offset))
-        for h in window_rows:
-            indices=np.arange(1,len(pose)-h)
-            bad=np.r_[0,np.cumsum(phase!=2)]
-            indices=indices[(bad[indices+h+1]-bad[indices-1])==0]
-            if row['variant']['data_split']!='TRAIN':indices=indices[::10]
-            window_rows[h].extend(dict(index=int(i+offset),route=row['route'],case=row['case_dir'],split=row['variant']['data_split'],anchor_s=float(i*.02)) for i in indices)
-        offset+=len(pose)
+for source_id,source in enumerate([a.evaluation]+a.additional_evaluations):
+    status=json.loads((source/'status.json').read_text())
+    for row in status['results']:
+        with np.load(source/row['case_dir']/'trajectory.npz') as data:
+            pose,xi=states(data['qpos'][::4],data['qvel'][::4],schema)
+            controller=data['controller_state'][::4];phase=data['trace'][::4,-1];requests=data['trace'][::4,18]
+            ref=Reference(bank,row['route'],follower);eta=ref.features(pose,xi);eta[:,13]=requests
+            inputs=np.column_stack((xi,eta,pose[:,10:12]))
+            if terrain is not None:
+                with torch.no_grad():inputs=np.column_stack((inputs,terrain(torch.tensor(pose,dtype=torch.float32)).numpy()))
+            datasets.append(dict(row=row,pose=pose,xi=xi,controller=controller,inputs=inputs,phase=phase,requests=requests,offset=offset))
+            for h in window_rows:
+                indices=np.arange(1,len(pose)-h)
+                bad=np.r_[0,np.cumsum(phase!=2)]
+                indices=indices[(bad[indices+h+1]-bad[indices-1])==0]
+                if row['variant']['data_split']!='TRAIN':indices=indices[::10]
+                window_rows[h].extend(dict(index=int(i+offset),route=row['route'],case=(f'source{source_id}/' if a.additional_evaluations else '')+row['case_dir'],evaluation=str(source),source_case=row['case_dir'],split=row['variant']['data_split'],anchor_s=float(i*.02)) for i in indices)
+            offset+=len(pose)
 train=[d for d in datasets if d['row']['variant']['data_split']=='TRAIN']
 controller_train=np.concatenate([d['controller'][d['phase']==2] for d in train])
 inputs_train=np.concatenate([d['inputs'][d['phase']==2] for d in train])
@@ -55,10 +70,14 @@ for d in train:
     corrections.append((x[2:]-predict(nominal,x[1:-1],x[:-2],eta[1:-1]))[good])
 correction_scale=np.maximum(np.concatenate(corrections).std(0),[.05,.05,.1,.2,.2,.2,.3,1.,1.])
 base=NominalRollout(nominal,follower,device)
-model=HistoryDynamics(base,controller_mean,controller_scale,input_mean,input_scale,correction_scale)
-if a.resume:model.load_state_dict(torch.load(a.resume,weights_only=True))
+if terrain is not None:terrain.to(device)
+model=HistoryDynamics(base,controller_mean,controller_scale,input_mean,input_scale,correction_scale,terrain=terrain,model_kind=a.model_kind)
+if a.resume:
+    resumed=torch.load(a.resume,weights_only=True)
+    model.load_state_dict(resumed['model'] if a.resume_optimizer else resumed)
 tensor=lambda x:torch.as_tensor(x,device=device,dtype=torch.float32)
 poses=tensor(np.concatenate([d['pose'] for d in datasets]));velocities=tensor(np.concatenate([d['xi'] for d in datasets]));controllers=tensor(np.concatenate([d['controller'] for d in datasets]))
+requests=tensor(np.concatenate([d['requests'] for d in datasets]))
 path_s=tensor(bank['s']);path_xy=tensor(bank['xy']);path_h=tensor(bank['heading']);path_k=tensor(bank['curvature'])
 train_windows={h:torch.tensor([[r['index'],r['route']] for r in rows if r['split']=='TRAIN'],device=device) for h,rows in window_rows.items()}
 from collections import Counter
@@ -68,18 +87,20 @@ for h,rows in window_rows.items():
     window_weights[h]=tensor([1./counts[r['case']] for r in train_rows])
 dev_rows={h:[r for r in window_rows[h] if r['split']!='TRAIN'] for h in [50,150]}
 shutil.copyfile(a.nominal,a.output/'nominal.npz')
-contract=dict(source=str(a.evaluation),nominal=str(a.nominal),updates=a.updates,seed=a.seed,batch=64,
-              initialization='weights_only_fresh_Adam' if a.resume else 'zero_correction',parent_checkpoint=str(a.resume),initial_update=a.initial_update,balanced_mixture=a.balanced_mixture,
+contract=dict(source=str(a.evaluation),additional_evaluations=[str(x) for x in a.additional_evaluations],nominal=str(a.nominal),updates=a.updates,seed=a.seed,batch=64,
+              initialization='model_and_Adam_resume_new_sampling_seed' if a.resume_optimizer else 'weights_only_fresh_Adam' if a.resume else 'zero_correction',parent_checkpoint=str(a.resume),initial_update=a.initial_update,balanced_mixture=a.balanced_mixture,
               checkpoints_every=25,selection='mean maximum XY over fixed available1s DEV windows',
-              training='flat TRAIN only, includes pre-failure observations; no future real controller states in rollout',
-              architecture='381D controller/history initializes64D hidden, GRU64,128x128 correction to nominal next dynamics',
+              training='Declared source TRAIN only, includes pre-failure observations; no future real controller states in rollout',
+              terrain_features=a.terrain_features,model_kind=a.model_kind,
+              terrain_descriptor='15yaw-aligned locations: height, x/y slopes, local height variation, support mask; raster model input not collision geometry' if terrain is not None else None,
+              architecture='381D history initializes GRU64;128x128 head; residual adds to nominal, direct predicts full velocity increment with shared pose integration',
               objective='multi-step position/quaternion/velocity error; frozen RB/H75/physics; no policy updates',
               horizons_steps=[5,15,50,150],windows={str(h):dict(TRAIN=len(train_windows[h]),DEV=len([r for r in rows if r['split']!='TRAIN'])) for h,rows in window_rows.items()},
               follower=follower,reference=str(cfg['ground_handoff']['reference_path']))
 (a.output/'contract.json').write_text(json.dumps(contract,indent=2)+'\n')
-for source in [Path(__file__),Path('learning/src/sttw_control/playground_history_model.py'),Path('learning/src/sttw_control/playground_prediction.py')]:shutil.copyfile(source,a.output/source.name)
+for source in [Path(__file__),Path('learning/src/sttw_control/playground_history_model.py'),Path('learning/src/sttw_control/playground_prediction.py'),Path('learning/src/sttw_control/playground_terrain_features.py')]:shutil.copyfile(source,a.output/source.name)
 def rollout(indices,routes,h):
-    return model.rollout(poses[indices],velocities[indices],velocities[indices-1],controllers[indices],path_s,path_xy[routes],path_h[routes],path_k[routes],h)
+    return model.rollout(poses[indices],velocities[indices],velocities[indices-1],controllers[indices],path_s,path_xy[routes],path_h[routes],path_k[routes],h,speed_request=requests[indices])
 
 @torch.no_grad()
 def evaluate(save=False):
@@ -101,6 +122,7 @@ def evaluate(save=False):
     return metrics
 
 optimizer=torch.optim.Adam(model.parameters(),lr=3e-4)
+if a.resume_optimizer:optimizer.load_state_dict(resumed['optimizer'])
 position_scale=tensor([.2,.2,.1]);velocity_scale=tensor([.3,.2,.3,.5,.5,.5,1.,5.,5.])
 best=float('inf');logs=[]
 for update in range(a.updates+1):
@@ -118,7 +140,7 @@ for update in range(a.updates+1):
         (a.output/'status.json').write_text(json.dumps(dict(stage='training',update=iteration,total=a.initial_update+a.updates,last_validation=metrics,elapsed_s=time.perf_counter()-started),indent=2)+'\n')
         model.train()
     if update==a.updates:break
-    h=[5,15,50,150][update%4] if a.balanced_mixture else 5 if iteration<25 else 15 if iteration<50 else 50 if iteration<100 else 150
+    h=[5,15,50,150][iteration%4] if a.balanced_mixture else 5 if iteration<25 else 15 if iteration<50 else 50 if iteration<100 else 150
     candidates=train_windows[h]
     selection=torch.multinomial(window_weights[h],64,replacement=True) if a.balanced_mixture else torch.randint(len(candidates),(64,),device=device)
     sample=candidates[selection];ids=sample[:,0];routes=sample[:,1]

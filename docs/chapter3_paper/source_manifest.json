@@ -1,7 +1,7 @@
 {
   "submission_ready": false,
   "author_verification": "pending",
-  "generated_utc": "2026-11-14T18:18:12.265008+00:00",
+  "generated_utc": "2026-11-14T19:33:02.140582+00:00",
   "canonical": "docs/chapter3_paper/MANUSCRIPT.tex",
   "sources": [
     {
@@ -368,7 +368,7 @@
       "id": "PG4",
       "title": "playground_handoff_evaluation.py",
       "path": "learning/src/sttw_control/playground_handoff_evaluation.py",
-      "sha256": "5c21ef3c13a1e5e41bc022f7956ca93472cb4c399c341783afcd5ff6519caf5b",
+      "sha256": "4e5d0f0a2905265aefe237e1886fa0c072b9d3275d456d5c09b0d6302532e12a",
       "verification": "agent_source_inspected",
       "human_verification": "pending",
       "draft_role": "current_shared_plant_planning"
@@ -381,6 +381,31 @@
       "verification": "agent_source_inspected",
       "human_verification": "pending",
       "draft_role": "current_shared_plant_planning"
+    },
+    {
+      "id": "PG6",
+      "title": "p3_speed_domain",
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/p3_speed_domain/RESULTS.md",
+      "sha256": "3974749fb054b4050bdbe41c75a5ad15018eed94faa0f8eef0c85a6b7eb1b897",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending",
+      "draft_role": "current_shared_plant_planning",
+      "supporting_reports": [
+        "docs/evidence/chapter3_playground_sttw_rb_sttw/p3_speed_phase_switch/RESULTS.md"
+      ]
+    },
+    {
+      "id": "PG7",
+      "title": "p3_structured_models",
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/p3_structured_models/RESULTS.md",
+      "sha256": "aff680a7911a04f54a490b410221e18f343db1f4115a697f0ea4d6b4442a9d64",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending",
+      "draft_role": "current_shared_plant_planning",
+      "supporting_reports": [
+        "docs/evidence/chapter3_playground_sttw_rb_sttw/p3_structured_models/geometry/RESULTS.md",
+        "docs/evidence/chapter3_playground_sttw_rb_sttw/p3_structured_models/speed_geometry/RESULTS.md"
+      ]
     }
   ],
   "references": [
@@ -421,15 +446,17 @@
     }
   ],
   "template_source": "https://ras.papercept.net/conferences/support/files/ieeeconf.zip",
-  "scope": "Four-page development methods/results draft, not submission ready",
+  "scope": "Development methods/results draft, not submission ready",
   "new_physics_steps": "See frozen run manifests; paper build adds no simulation",
   "new_policy_training_updates": 0,
-  "paper_sha256": "4c2785e5cab12d1c48c2fa69c33a84e07ea66374fdb93ca3169394c3e8e044fa",
+  "paper_sha256": "30458c44f0b740596fb0bbf18258a7957a6a73594abddb58c8092ec9226777fb",
   "revision_scope": "User execution-outline ground dynamics/full-motion planning/structured prediction; prior two-interface draft preserved in Git0c485653",
   "current_result_panels": [
     "PG1",
     "PG2",
     "PG3",
-    "PG5"
+    "PG5",
+    "PG6",
+    "PG7"
   ]
 }

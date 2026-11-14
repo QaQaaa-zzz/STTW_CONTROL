@@ -1,3 +1,22 @@
+# Current execution-outline audit
+
+The current manuscript follows the supplied Chapter3 execution outline. The older two-interface critique and its numerical evidence are retained below as historical work, not current acceptance criteria.
+
+| Required stage | Current evidence | Remaining boundary |
+|---|---|---|
+| P0 shared physical execution and STTW/RB ownership | Shared adapter and complete chains; same physical plant, measured relock, retained histories | Validated domain only; no hardware claim |
+| P1 ground dynamics and path update | Calibrated dynamic36/36 versus geometric31/36 on12 DEV maps | No independent new-map claim; calibrated-system comparison |
+| P2 full-chain planning | Greedy3/12, backtracking12/12, joint12/12 | No independent success benefit of joint optimization |
+| P2 rolling publication |200ms queries,40ms charged delay, preserved histories; physical12/12 in each of two panels | State coverage11/12; one actual replan followed by periodic checks; full coverage unresolved |
+| P3 command domain |1.8 and1.9m/s each72/72,1.7m/s65/72 | Both ordered1.8/1.9 phase pairs also72/72; only change at measured RB handback, arbitrary ground switching remains unvalidated |
+| P3 structured model comparison | Same-data ARX plus M1/M2 with terrain/history; three initializations each;600 updates per model completed; 25 evaluated candidate checkpoints per seed | All best at600 and still improving; M1 1s mean0.0194–0.0200m but worst whole-body support0.190–0.252m; multi-map/planning validation remains |
+| P4 independent comparison | Original50new-layout x4initial-state requirement retained | Not performed; existing DEV panels cannot substitute |
+| Manuscript and traceability | Editable main LaTeX/PDF and evidence/claim registries, old prose retained inGit | Development draft, human verification and final literature/contribution work pending |
+
+Neither physical survival, lower prediction mean, nor a weak comparator establishes the full research contribution. Failures, same-identity trajectory reuse, and different horizon coverage remain explicit. Prior flat-only prediction losses and lack of joint advantage against backtracking are retained.
+
+## Historical review-directed audit
+
 # Review-directed completion audit
 
 This audit concerns the user's four concrete corrections and the latest request to test saved RB candidates. Expected numerical gains in the critique are hypotheses, not acceptance labels. Original experiments remain in Git and raw run directories.

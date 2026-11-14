@@ -1,0 +1,20 @@
+"""Prepare a same-data ARX/M1/M2 development comparison; no policy training."""
+import argparse,json,shutil,subprocess
+from pathlib import Path
+import numpy as np
+from sttw_control.playground_arx import Reference,states,design,fit
+p=argparse.ArgumentParser(description=__doc__);p.add_argument('--evaluation',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--additional-evaluations',type=Path,nargs='*',default=[]);p.add_argument('--updates',type=int,default=150);a=p.parse_args();a.output.mkdir(exist_ok=False,parents=True)
+c=json.loads((a.evaluation/'resolved_config.json').read_text());status=json.loads((a.evaluation/'status.json').read_text());schema=json.loads((a.evaluation/'model_state_schema.json').read_text());routes=np.load(c['ground_handoff']['reference_path']);hcfg=json.loads((Path(c['ground_handoff']['bundle'])/'config.json').read_text());follower=dict(hcfg['follower'],lookahead_scale=1.3);xx=[];yy=[];counts=[]
+for source in [a.evaluation]+a.additional_evaluations:
+    status=json.loads((source/'status.json').read_text())
+    for row in status['results']:
+        if row['variant']['data_split']!='TRAIN':continue
+        with np.load(source/row['case_dir']/'trajectory.npz') as d:
+            pose,xi=states(d['qpos'][::4],d['qvel'][::4],schema);phase=d['trace'][::4,-1];valid=(phase[:-2]==2)&(phase[1:-1]==2)&(phase[2:]==2);eta=Reference(routes,row['route'],follower).features(pose,xi);eta[:,13]=d['trace'][::4,18]
+            xx.append(design(xi[1:-1],xi[:-2],eta[1:-1])[valid]);yy.append(xi[2:][valid]);counts.append(dict(evaluation=str(source),case=row['case_dir'],transitions=int(valid.sum())))
+model=fit(np.concatenate(xx),np.concatenate(yy),ridge=1.,identity_prior=False);np.savez(a.output/'nominal_same_data.npz',**model)
+entries=[dict(kind=kind,seed=seed,output=str(a.output/f'{kind}_seed{seed}')) for kind in ['residual','direct'] for seed in [0,1,2]]
+contract=dict(evaluation=str(a.evaluation),additional_evaluations=[str(x) for x in a.additional_evaluations],nominal=str(a.output/'nominal_same_data.npz'),entries=entries,updates_each=a.updates,total_updates=a.updates*6,checkpoints_every=25,batch=64,optimizer='Adam3e-4,gradientclip1',horizons=[5,15,50,150],initialization='Three independent initializations per learned model; paired seeds/data/batches/architecture',role='One-map TRAIN/DEV-root pilot, not independent-map TEST or completedP3',M0='Ridge1 linear ARX fit to the same rough TRAIN phase2 transitions; this empirical baseline is distinct from the prior flat-only nominal model',M1='Same-data M0 plus terrain/history correction',M2='Same input/GRU/head/integration, predicts full dynamic increment without ARX contribution',training_counts=counts,terrain='15local yaw-aligned samples with height/slopes/variation/support; fixedmap raster queried at predicted future states, no future physical history',policy='RB225/H75/physics unchanged; supervised predictor identification only, not controller PPO or domain-randomized policy training',selection='Mean max1sXY on fixed DEV windows; report all saved checkpoints and tails, not convergence from loss plateau',expected_wallclock_s=[400,1200],hard_limit_s=1500,stop='One six-run queue, first error or25min; no automatic continuation or threshold changes',acceptance='No long-horizon adoption until full relevant horizon/geometry errors fit task clearance; compare all seeds and retain failures',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip())
+(a.output/'manifest.json').write_text(json.dumps(contract,indent=2)+'\n');(a.output/'source').mkdir()
+for path in [Path(__file__),Path('learning/cli/train_playground_history_model.py'),Path('learning/src/sttw_control/playground_history_model.py'),Path('learning/src/sttw_control/playground_terrain_features.py')]:shutil.copyfile(path,a.output/'source'/path.name)
+print(json.dumps(dict(transitions=sum(len(x) for x in xx),runs=len(entries),updates=a.updates*6)))

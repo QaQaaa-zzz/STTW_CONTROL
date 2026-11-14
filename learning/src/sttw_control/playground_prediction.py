@@ -54,8 +54,9 @@ class NominalRollout:
             torch.stack([interp(curvature,distance+d) for d in (0.,.5,1.)],1),ey[:,None],
             torch.atan2(dh.sin(),dh.cos())[:,None],preview,torch.full_like(look[:,None],1.8),look[:,None]),1)
 
-    def step(self,pose,xi,previous,s,xy,heading,curvature):
+    def step(self,pose,xi,previous,s,xy,heading,curvature,speed_request=None):
         eta=self.features(pose,xi,s,xy,heading,curvature)
+        if speed_request is not None:eta[:,13]=speed_request
         x=torch.cat((xi,previous,eta),1)
         nxt=((x-self.mean)/self.scale)@self.weight+self.bias
         if self.identity:nxt=nxt+xi
@@ -69,11 +70,11 @@ class NominalRollout:
     def compile_step(self):
         self.step=torch.compile(self.step,fullgraph=True)
 
-    def __call__(self,pose,xi,previous,s,xy,heading,curvature,steps=100,return_domain=False):
+    def __call__(self,pose,xi,previous,s,xy,heading,curvature,steps=100,return_domain=False,speed_request=None):
         pose=pose.contiguous();xi=xi.contiguous();previous=previous.contiguous()
         poses=[pose];velocities=[xi];domain=[]
         for _ in range(steps):
-            pose,nxt,eta=self.step(pose,xi,previous,s,xy,heading,curvature)
+            pose,nxt,eta=self.step(pose,xi,previous,s,xy,heading,curvature,speed_request)
             if return_domain:domain.append(eta[:,9:12])
             previous,xi=xi,nxt;poses.append(pose);velocities.append(xi)
         if return_domain:

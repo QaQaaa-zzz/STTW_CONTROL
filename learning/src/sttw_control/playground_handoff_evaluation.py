@@ -39,6 +39,8 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
     tensor=lambda x:torch.as_tensor(x,device=device)
     variants=hand.get('handoff_variants',[{}])
     lanes=[tuple(lane) for lane in cfg['evaluation_lanes']] if 'evaluation_lanes' in cfg else [(r,m,i) for i in range(len(variants)) for r in args.routes for m in args.modes];n=len(lanes)
+    approach_speed=tensor([variants[i].get('approach_speed_m_s',variants[i].get('requested_speed_m_s',hand['approach']['speed_m_s'])) for r,m,i in lanes]).float()
+    continuation_speed=tensor([variants[i].get('continuation_speed_m_s',variants[i].get('requested_speed_m_s',hand.get('continuation',{}).get('speed_m_s',1.5))) for r,m,i in lanes]).float()
     event=hand.get('handoff_mechanism')=='landing_state'
     landing_height=tensor([variants[i].get('landing_height_m',.35) for r,m,i in lanes]).float()
     swing_scale=jp.asarray([variants[i].get('swing_scale',1.) for r,m,i in lanes],dtype=jp.float32)
@@ -195,7 +197,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         last=jp.zeros((n,4));obs=jax.vmap(lambda h:actor_observation(h,jp.asarray(False)))(history)
         policy=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],hcfg,n,device)
         ctl=TorchController(controller_config,n,device)
-        middle=TorchMiddleControl(policy,route,identity['frame_scales'],torch.full((n,),hand['approach']['alpha'],device=device),torch.full((n,),hand['approach']['speed_m_s'],device=device))
+        middle=TorchMiddleControl(policy,route,identity['frame_scales'],torch.full((n,),hand['approach']['alpha'],device=device),approach_speed)
         q,v,m,pose,speed,angles=map(to_torch,observe(data));raw=torch.stack((speed,m[:,2]),1);previous=torch.stack((m[:,3],m[:,5]),1)
         nearest=(route.xy[route.route_ids]-pose[:,None,:2]).square().sum(-1).argmin(-1)
         middle.reset(m,pose,speed,raw,raw,previous,ctl,initial_progress=route.s[nearest])
@@ -320,7 +322,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                         phase=torch.where(taking_wheels,4,phase)
                     if native_landing:ready &= (angles[:,0].abs()<.08)&(angles[:,1].abs()<.15)&(v[:,2].abs()<.4)&(m[:,1].abs()<.3)
                     ready &= (v[:,5].abs()<hand.get('handoff_yaw_rate_max_rad_s',float('inf')))&(m[:,3].abs()<hand.get('handoff_steer_rate_max_rad_s',float('inf')))
-                    ready &= (speed-hand.get('continuation',{}).get('speed_m_s',1.5)).abs()<=hand.get('handoff_speed_error_max_m_s',float('inf'))
+                    ready &= (speed-continuation_speed).abs()<=hand.get('handoff_speed_error_max_m_s',float('inf'))
                     if home_landing or native_landing:ready &= ((q[:,brake_qpos]-home_pose).abs().amax(-1)<hand.get('lock_position_tolerance_rad',.08))&(v[:,[idx.hip_dof_address,idx.knee_dof_address]].abs().amax(-1)<hand.get('lock_velocity_tolerance_rad_s',.5))&(m[:,1].abs()<1.)
                     returning=alive&(phase==(4 if staged_native else 3))&ready
                     reset_control=returning if lock_first else taking_wheels if staged_native else returning if native_landing else preparing|far|returning
@@ -329,7 +331,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                     reset_control=returning
                 phase=torch.where(returning,2,phase);handoff_time=torch.where(returning,t,handoff_time)
                 lock=torch.where(returning[:,None],q[:,brake_qpos],lock)
-                middle.v_user=torch.where(reset_control,hand.get('continuation',{}).get('speed_m_s',1.5),middle.v_user)
+                middle.v_user=torch.where(reset_control,continuation_speed,middle.v_user)
                 middle.alpha=torch.where(reset_control,hand.get('continuation',{}).get('alpha',.5),middle.alpha)
                 route.config['follower']['lookahead_scale']=torch.where(phase>=2,recovery_look,1.)
                 middle.reset_mask(reset_control,m,pose,speed,ctl)

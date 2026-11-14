@@ -1,3 +1,23 @@
+## Current speed input and fit scope
+
+Both ordered phase-speed pairs (1.8→1.9 and1.9→1.8) complete72/72; the runner changes request on actual RB handback. Physical initial speed magnitude is1.8m/s, rotated by initial yaw. A preparation manifest's2m/s description was incorrect and has a separate correction record; the physics was unchanged.
+
+The supervised predictor now reads each trajectory's actual phase2 request in both training features and free rollout. Additional datasets keep source-prefixed case IDs and their existing TRAIN/DEV roots. The new two-speed fit uses18,997TRAIN transitions from108trajectories and36DEV cases, matchedM0/M1/M2;600updates per seed and25min total cap. Its outcomes remain pending in the run manifest. The earlier six600-update models and all failed speed transfers are retained.
+
+# Current shared-plant planning implementation
+
+Current entry: `learning/cli/evaluate_playground_handoff.py`, with GPU shared execution in `playground_handoff_evaluation.py`; route publication in `playground_adapters.py`/`torch_middle_control.py`; finite bank screening in `playground_joint_planner.py` and `playground_rolling.py`. Configurations and checkpoints are frozen per run; the detailed current record is `research-hub/CHAPTER3_PROJECT_STATE.md`.
+
+STTW uses frozen H75/ECBC/ESO with hip/knee equality brakes; RB225 owns all four targets through native execution and finite completion, then relocks at measured posture. Physics remains implicitfast1ms x5; lower5ms and skill20ms. Periodic planning uses measured state/controller history and the same-grid committed preview prefix. Query and publication delay is charged to continued old-plan physics. Empirical state/support envelopes are not safety proofs.
+
+The adjacent-speed validation changes only requested ground speed, including after handback. Initial forward speed remains2m/s, native RB does not receive a new speed command, and the two-meter flat buffers remain fixed. Registry: `learning/configs/playground_validated_command_domain.json`; it does not authorize arbitrary within-episode switching.
+
+Predictor entry: `train_playground_history_model.py`, shared model `playground_history_model.py`, terrain descriptor `playground_terrain_features.py`. M0 uses same-data linear ARX; M1 adds a GRU history/terrain correction; M2 uses the same inputs/head and integration but directly predicts dynamic increments. Three seeds share source split and update budget. Continuation restores model and Adam but restarts sampling RNG from the declared paired seed; it is not exact sampling-stream replay. No controller weights are changed.
+
+The following sections describe historical simulator/interface work and are not the current shared-plant model schema.
+
+## Historical two-interface implementation
+
 Current revision: see [implemented review corrections](../evidence/chapter3_review_repairs/RESULTS.md). New models use55D compact upstream and19D Frenet context; original582D/world-x implementations and evidence remain supported. Joint retest26/30/27; shared horizon43/35/36. Earlier assessments below are historical where superseded.
 
 # Two-interface model reproduction entry
