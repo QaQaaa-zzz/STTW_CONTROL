@@ -1,0 +1,7 @@
+{
+  "samples": 4,
+  "collision_geometries": 7,
+  "max_support_difference_m": 4.018626675872383e-08,
+  "reference": "MuJoCo mj_forward world geom transforms; native joint order mapped explicitly",
+  "coverage": "axis supports, not continuous-time collision"
+}

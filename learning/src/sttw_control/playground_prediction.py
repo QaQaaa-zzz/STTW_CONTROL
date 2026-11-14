@@ -88,7 +88,8 @@ class BodyEnvelope:
     MuJoCo model topology is read once; joint coordinates come from each
     predicted pose. Bounds are exact axis supports, not root-point checks.
     """
-    def __init__(self,model,device='cuda',dtype=torch.float32):
+    def __init__(self,model,device='cuda',dtype=torch.float32,dimensions=2):
+        self.dimensions=dimensions
         import numpy as np
         names=['steering_joint','frontwheel_joint','rearwheel_joint','hip_joint','knee_joint']
         coordinate={model.joint(name).id:7+i for i,name in enumerate(names)}
@@ -117,10 +118,11 @@ class BodyEnvelope:
             q=orientation[body];center=position[body]+rotate(q,offset.expand(n,-1));q=multiply(q,localq.expand(n,-1))
             w,x,y,z=q.unbind(-1)
             directions=torch.stack((torch.stack((1-2*(y*y+z*z),2*(x*y-w*z),2*(x*z+w*y)),1),
-                                    torch.stack((2*(x*y+w*z),1-2*(x*x+z*z),2*(y*z-w*x)),1)),1)
+                                    torch.stack((2*(x*y+w*z),1-2*(x*x+z*z),2*(y*z-w*x)),1),
+                                    torch.stack((2*(x*z-w*y),2*(y*z+w*x),1-2*(x*x+y*y)),1)),1)[:,:self.dimensions]
             if kind==6:extent=(directions.abs()*size).sum(-1)
             elif kind==4:extent=(directions*size).square().sum(-1).sqrt()
             elif kind==5:extent=directions[:,:,:2].square().sum(-1).sqrt()*size[0]+directions[:,:,2].abs()*size[1]
-            else:extent=torch.full_like(center[:,:2],radius)
-            lower.append(center[:,:2]-extent);upper.append(center[:,:2]+extent)
-        return torch.stack(lower,1).reshape(*shape,len(lower),2),torch.stack(upper,1).reshape(*shape,len(upper),2)
+            else:extent=torch.full_like(center[:,:self.dimensions],radius)
+            lower.append(center[:,:self.dimensions]-extent);upper.append(center[:,:self.dimensions]+extent)
+        return torch.stack(lower,1).reshape(*shape,len(lower),self.dimensions),torch.stack(upper,1).reshape(*shape,len(upper),self.dimensions)

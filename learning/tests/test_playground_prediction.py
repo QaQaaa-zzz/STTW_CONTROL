@@ -36,4 +36,9 @@ class PredictionTest(unittest.TestCase):
         lo,hi=BodyEnvelope(m,'cpu',torch.float64)(torch.tensor(p[None]));rot=d.geom_xmat.reshape(-1,3,3);extent=(abs(rot[:,:2,:])*m.geom_size[:,None,:]).sum(-1)
         np.testing.assert_allclose(lo[0].numpy(),d.geom_xpos[:,:2]-extent,atol=1e-12);np.testing.assert_allclose(hi[0].numpy(),d.geom_xpos[:,:2]+extent,atol=1e-12)
 
+        lo3,hi3=BodyEnvelope(m,'cpu',torch.float64,dimensions=3)(torch.tensor(p[None]))
+        extent3=(abs(rot)*m.geom_size[:,None,:]).sum(-1)
+        np.testing.assert_allclose(lo3[0].numpy(),d.geom_xpos-extent3,atol=1e-12)
+        np.testing.assert_allclose(hi3[0].numpy(),d.geom_xpos+extent3,atol=1e-12)
+
 if __name__=='__main__':unittest.main()
