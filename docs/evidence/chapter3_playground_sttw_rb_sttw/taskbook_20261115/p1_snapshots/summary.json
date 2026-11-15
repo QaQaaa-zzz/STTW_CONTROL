@@ -1,0 +1,120 @@
+{
+  "repeat_max_abs": {
+    "qpos": 0.6400604248046875,
+    "qvel": 13.314177513122559,
+    "applied_targets": 4.175085067749023,
+    "controller_state": 1083.0,
+    "rb_state": 51.090240478515625
+  },
+  "cases": [
+    {
+      "label": "before_jump",
+      "snapshot_time_s": 3.92,
+      "pre_control_capture": true,
+      "phase_after_events_at_capture": 0.0,
+      "handoff_s": 5.429999828338623,
+      "max_abs_by_field": {
+        "qpos": 0.2981414794921875,
+        "qvel": 8.101934432983398,
+        "applied_targets": 0.5746173858642578,
+        "controller_state": 10.083684921264648,
+        "rb_state": 27.1850528717041
+      },
+      "at_capture": {
+        "qpos": 0.0,
+        "qvel": 0.0,
+        "applied_targets": 0.0,
+        "controller_state": 0.0,
+        "rb_state": 0.0
+      },
+      "within_repeat_max": {
+        "qpos": true,
+        "qvel": true,
+        "applied_targets": true,
+        "controller_state": true,
+        "rb_state": true
+      },
+      "durations_s": [
+        8.984999656677246,
+        8.975000381469727
+      ],
+      "goals": [
+        true,
+        true
+      ]
+    },
+    {
+      "label": "after_contact",
+      "snapshot_time_s": 5.1,
+      "pre_control_capture": true,
+      "phase_after_events_at_capture": 3.0,
+      "handoff_s": 5.414999961853027,
+      "max_abs_by_field": {
+        "qpos": 0.4135894775390625,
+        "qvel": 9.449081420898438,
+        "applied_targets": 4.510509490966797,
+        "controller_state": 1083.0,
+        "rb_state": 27.0911865234375
+      },
+      "at_capture": {
+        "qpos": 0.0,
+        "qvel": 0.0,
+        "applied_targets": 0.0,
+        "controller_state": 0.0,
+        "rb_state": 0.0
+      },
+      "within_repeat_max": {
+        "qpos": true,
+        "qvel": true,
+        "applied_targets": false,
+        "controller_state": true,
+        "rb_state": true
+      },
+      "durations_s": [
+        8.989999771118164,
+        8.979999542236328
+      ],
+      "goals": [
+        true,
+        true
+      ]
+    },
+    {
+      "label": "after_handoff",
+      "snapshot_time_s": 5.4,
+      "pre_control_capture": true,
+      "phase_after_events_at_capture": 2.0,
+      "handoff_s": 5.400000095367432,
+      "max_abs_by_field": {
+        "qpos": 0.010406494140625,
+        "qvel": 0.15325546264648438,
+        "applied_targets": 0.011013031005859375,
+        "controller_state": 0.15474557876586914,
+        "rb_state": 3.6423606872558594
+      },
+      "at_capture": {
+        "qpos": 0.0,
+        "qvel": 0.0,
+        "applied_targets": 0.0,
+        "controller_state": 0.0,
+        "rb_state": 0.0
+      },
+      "within_repeat_max": {
+        "qpos": true,
+        "qvel": true,
+        "applied_targets": true,
+        "controller_state": true,
+        "rb_state": true
+      },
+      "durations_s": [
+        8.970000267028809,
+        8.970000267028809
+      ],
+      "goals": [
+        true,
+        true
+      ]
+    }
+  ],
+  "scope": "Three continuous repeats; fieldwise max is diagnostic, not a universal statistical tolerance;5.40s capture occurs before ground transition event"
+}

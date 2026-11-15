@@ -34,6 +34,13 @@ class RollingMotionLibrary:
                 for key in ('heading','curvature'):same &= (self.route_bank[key][i]-self.route_bank[key][j]).abs()<=1e-6
                 self.common_end[i,j]=same.long().cumprod(0).sum()-1
 
+    def snapshot(self):
+        """Mutable planner state; candidate bank and calibration remain frozen."""
+        return {key:getattr(self,key).clone() for key in ('current_route','active','failed')}
+
+    def restore(self, state):
+        for key,value in state.items():setattr(self,key,value.clone())
+
     def screen(self,q,v,history,phase,required,route,jump_start):
         features=torch.cat((q[:,1:7],q[:,8:9],q[:,10:12],v,history),1)
         index=(torch.searchsorted(self.x,q[:,0].contiguous(),right=True)-1).clamp(0,len(self.x)-2)
