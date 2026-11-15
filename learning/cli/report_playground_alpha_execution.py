@@ -10,12 +10,16 @@ from sttw_control.playground_arx import Reference,states
 p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('--run',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
 a=p.parse_args();manifest=json.loads((a.run/'manifest.json').read_text());a.output.mkdir(parents=True,exist_ok=True)
-stage_pairs=[(0.,0.),(.5,.5),(1.,1.)]
-if any('diagonal_baseline' in e for e in manifest['entries']):stage_pairs += [(.5,0.),(1.,0.)]
-colors=dict(zip(stage_pairs,['#0072B2','#D55E00','#009E73','#CC79A7','#E69F00']));records=[];identities=[];paired=[];traces={}
+entries=manifest.get('existing_entries',[])+manifest['entries']
+stage_pairs={(0.,0.)}
+for entry in entries:
+ ai=entry.get('approach_alpha',entry['alpha']);ao=entry.get('departure_alpha',entry['alpha']);stage_pairs.add((ai,ao))
+ if 'diagonal_baseline' in entry:stage_pairs.add((ai,ai))
+stage_pairs=sorted(stage_pairs)
+colors=dict(zip(stage_pairs,['#0072B2','#D55E00','#009E73','#CC79A7','#E69F00','#56B4E9','#000000','#777777','#882255']));records=[];identities=[];paired=[];traces={}
 for reused in manifest['reused']:
  mapid=reused['map'];baseline=Path(reused['evaluation']);sources={(0.,0.):baseline}
- for entry in manifest['entries']:
+ for entry in entries:
   if entry['map']!=mapid:continue
   ai=entry.get('approach_alpha',entry['alpha']);ao=entry.get('departure_alpha',entry['alpha'])
   sources[ai,ao]=Path(entry['output'])
@@ -37,7 +41,8 @@ for reused in manifest['reused']:
    records.append(dict(map=mapid,root=key[1],route=key[2],speed_request_m_s=key[3],approach_alpha=alpha[0],departure_alpha=alpha[1],goal=row['goal'],termination=row['termination'],failure_stage='complete' if row['goal'] else 'before_RB' if row['rb_entry_s'] is None else 'RB_or_handoff' if row['handoff_s'] is None else 'departure',far_contact=row['far_contact'],handoff_s=row['handoff_s'],duration_s=row['duration_s'],goal_hold_s=row['goal_hold_s'],final_x_m=float(q[-1,0]),final_y_m=float(q[-1,1]),ground_speed_mean_m_s=float(xi[ground,0].mean()),ground_speed_rmse_m_s=float(np.sqrt(np.mean((xi[ground,0]-trace[ground,18])**2))),ground_lateral_rmse_m=float(np.sqrt(np.mean(features[ground,9]**2))),ground_heading_rmse_rad=float(np.sqrt(np.mean(features[ground,10]**2))),max_roll_rad=float(abs(trace[:,4]).max()),goal_x_window_samples=int(inside.sum()),**{f'goal_window_{name}_violations':int((inside&~gate).sum()) for name,gate in gates.items()},source=str(source/row['case_dir']/'trajectory.npz')))
  keys=sorted(k for k,alpha in traces if k[0]==mapid and alpha==(0.,0.))
  comparisons=[(alpha,(0.,0.)) for alpha in colors if alpha!=(0.,0.)]
- comparisons += [(alpha,(alpha[0],alpha[0])) for alpha in colors if alpha[1]==0 and alpha[0]!=0]
+ comparisons += [(alpha,(alpha[0],alpha[0])) for alpha in colors if alpha[0]!=alpha[1] and alpha[0]!=0]
+ comparisons=list(dict.fromkeys(comparisons))
  for key in keys:
   for alpha,base_alpha in comparisons:
    b=traces[key,base_alpha];t=traces[key,alpha];n=min(len(b['time']),len(t['time']));same=(b['phase'][:n]==t['phase'][:n])&np.isin(b['phase'][:n],[0,2]);xy=np.linalg.norm(t['xy'][:n]-b['xy'][:n],axis=1)

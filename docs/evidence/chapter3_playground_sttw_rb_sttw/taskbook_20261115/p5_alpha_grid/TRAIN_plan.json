@@ -1,0 +1,11 @@
+{
+  "status": "prepared_not_started",
+  "cohorts": [
+    "map00",
+    "map01"
+  ],
+  "new_physical_cases": 576,
+  "reused_cases": 72,
+  "reason": "Use existing TRAIN-only map groups; all9alpha pairs,2speeds,2roots,9routes. No relabeling DEV. Each cohort separately bounded below30min, no automatic chained launch.",
+  "next": "After knownDEV9pair completion, collect one declared TRAIN cohort at a time; then three-seed paired direct/residual ground fitting with explicit alpha, compare best/last."
+}

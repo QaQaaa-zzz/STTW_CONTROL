@@ -1,0 +1,220 @@
+[
+  {
+    "map": "map06",
+    "approach_alpha": 0.0,
+    "departure_alpha": 0.0,
+    "cases": 36,
+    "goals": 36,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {}
+  },
+  {
+    "map": "map06",
+    "approach_alpha": 0.0,
+    "departure_alpha": 0.5,
+    "cases": 36,
+    "goals": 25,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 8,
+      "tracking_domain_exit": 3
+    }
+  },
+  {
+    "map": "map06",
+    "approach_alpha": 0.0,
+    "departure_alpha": 1.0,
+    "cases": 36,
+    "goals": 10,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 13,
+      "tracking_domain_exit": 13
+    }
+  },
+  {
+    "map": "map06",
+    "approach_alpha": 0.5,
+    "departure_alpha": 0.0,
+    "cases": 36,
+    "goals": 36,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {}
+  },
+  {
+    "map": "map06",
+    "approach_alpha": 0.5,
+    "departure_alpha": 0.5,
+    "cases": 36,
+    "goals": 24,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 12
+    }
+  },
+  {
+    "map": "map06",
+    "approach_alpha": 0.5,
+    "departure_alpha": 1.0,
+    "cases": 36,
+    "goals": 8,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 14,
+      "tracking_domain_exit": 14
+    }
+  },
+  {
+    "map": "map06",
+    "approach_alpha": 1.0,
+    "departure_alpha": 0.0,
+    "cases": 36,
+    "goals": 34,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "tracking_domain_exit": 2
+    }
+  },
+  {
+    "map": "map06",
+    "approach_alpha": 1.0,
+    "departure_alpha": 0.5,
+    "cases": 36,
+    "goals": 20,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 11,
+      "tracking_domain_exit": 5
+    }
+  },
+  {
+    "map": "map06",
+    "approach_alpha": 1.0,
+    "departure_alpha": 1.0,
+    "cases": 36,
+    "goals": 6,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 12,
+      "tracking_domain_exit": 18
+    }
+  },
+  {
+    "map": "map07",
+    "approach_alpha": 0.0,
+    "departure_alpha": 0.0,
+    "cases": 36,
+    "goals": 36,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {}
+  },
+  {
+    "map": "map07",
+    "approach_alpha": 0.0,
+    "departure_alpha": 0.5,
+    "cases": 36,
+    "goals": 30,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 6
+    }
+  },
+  {
+    "map": "map07",
+    "approach_alpha": 0.0,
+    "departure_alpha": 1.0,
+    "cases": 36,
+    "goals": 6,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 14,
+      "tracking_domain_exit": 16
+    }
+  },
+  {
+    "map": "map07",
+    "approach_alpha": 0.5,
+    "departure_alpha": 0.0,
+    "cases": 36,
+    "goals": 36,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {}
+  },
+  {
+    "map": "map07",
+    "approach_alpha": 0.5,
+    "departure_alpha": 0.5,
+    "cases": 36,
+    "goals": 29,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 5,
+      "tracking_domain_exit": 2
+    }
+  },
+  {
+    "map": "map07",
+    "approach_alpha": 0.5,
+    "departure_alpha": 1.0,
+    "cases": 36,
+    "goals": 6,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 16,
+      "tracking_domain_exit": 14
+    }
+  },
+  {
+    "map": "map07",
+    "approach_alpha": 1.0,
+    "departure_alpha": 0.0,
+    "cases": 36,
+    "goals": 29,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "tracking_domain_exit": 7
+    }
+  },
+  {
+    "map": "map07",
+    "approach_alpha": 1.0,
+    "departure_alpha": 0.5,
+    "cases": 36,
+    "goals": 23,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 4,
+      "tracking_domain_exit": 9
+    }
+  },
+  {
+    "map": "map07",
+    "approach_alpha": 1.0,
+    "departure_alpha": 1.0,
+    "cases": 36,
+    "goals": 5,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 15,
+      "tracking_domain_exit": 16
+    }
+  }
+]

@@ -17,9 +17,9 @@ from .playground_prediction import multiply,rotate
 
 
 class HistoryDynamics(nn.Module):
-    def __init__(self,nominal,controller_mean,controller_scale,input_mean,input_scale,correction_scale,terrain=None,model_kind="residual"):
+    def __init__(self,nominal,controller_mean,controller_scale,input_mean,input_scale,correction_scale,terrain=None,model_kind="residual",alpha_conditioned=False):
         super().__init__()
-        self.nominal=nominal;self.terrain=terrain;self.model_kind=model_kind
+        self.nominal=nominal;self.terrain=terrain;self.model_kind=model_kind;self.alpha_conditioned=alpha_conditioned
         for name,value in [('controller_mean',controller_mean),('controller_scale',controller_scale),
                            ('input_mean',input_mean),('input_scale',input_scale),('correction_scale',correction_scale)]:
             self.register_buffer(name,torch.as_tensor(value,device=nominal.mean.device,dtype=nominal.mean.dtype))
@@ -33,13 +33,15 @@ class HistoryDynamics(nn.Module):
         return GroundPredictionState(pose,velocity,previous_velocity,
             self.initial((controller-self.controller_mean)/self.controller_scale))
 
-    def rollout_state(self,state,s,xy,heading,curvature,steps,speed_request=None,terrain_ids=None):
+    def rollout_state(self,state,s,xy,heading,curvature,steps,speed_request=None,terrain_ids=None,alpha_request=None):
         pose,velocity,domain,next_state=self.rollout(state.pose,state.velocity,state.previous_velocity,None,
-            s,xy,heading,curvature,steps,speed_request,terrain_ids,True,state.hidden,True)
+            s,xy,heading,curvature,steps,speed_request,terrain_ids,True,state.hidden,True,alpha_request)
         next_state.elapsed_steps=state.elapsed_steps+steps
         return dict(pose=pose,velocity=velocity,domain=domain,duration_s=steps*.02,next_state=next_state)
 
-    def rollout(self,pose,xi,previous,controller,s,xy,heading,curvature,steps,speed_request=None,terrain_ids=None,return_domain=False,hidden=None,return_state=False):
+    def rollout(self,pose,xi,previous,controller,s,xy,heading,curvature,steps,speed_request=None,terrain_ids=None,return_domain=False,hidden=None,return_state=False,alpha_request=None):
+        if not self.alpha_conditioned and alpha_request is not None:raise ValueError("Unconditioned ground model does not support alpha queries")
+        if self.alpha_conditioned and alpha_request is None:raise ValueError("Conditional ground prediction requires explicit stage alpha")
         if hidden is None:hidden=self.initial((controller-self.controller_mean)/self.controller_scale)
         poses=[pose];velocities=[xi];domain=[]
         for _ in range(steps):
@@ -48,6 +50,7 @@ class HistoryDynamics(nn.Module):
             if speed_request is not None:eta[:,13]=speed_request
             features=torch.cat((xi,eta,pose[:,10:12]),1)
             if self.terrain is not None:features=torch.cat((features,self.terrain(pose,terrain_ids)),1)
+            if self.alpha_conditioned:features=torch.cat((features,alpha_request[:,None]),1)
             hidden=self.memory((features-self.input_mean)/self.input_scale,hidden)
             x=torch.cat((xi,previous,eta),1)
             if self.model_kind=="direct":nxt=xi
@@ -81,6 +84,6 @@ def load_history_model(root,checkpoint='best.pt',device='cuda'):
         from .playground_terrain_features import TerrainFeatures
         terrain=TerrainFeatures(**dict(np.load(root/"terrain.npz")),device=device)
     model=HistoryDynamics(nominal,*[state[key] for key in
-        ['controller_mean','controller_scale','input_mean','input_scale','correction_scale']],terrain=terrain,model_kind=contract.get('model_kind','residual'))
+        ['controller_mean','controller_scale','input_mean','input_scale','correction_scale']],terrain=terrain,model_kind=contract.get('model_kind','residual'),alpha_conditioned=contract.get('alpha_conditioned',False))
     model.load_state_dict(state);model.eval()
     return model

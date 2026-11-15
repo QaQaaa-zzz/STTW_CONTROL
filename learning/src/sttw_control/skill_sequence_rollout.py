@@ -70,7 +70,7 @@ def ground_to_native(pose,velocity,schema):
 
 def predict_skill_sequence(approach,bridge,jump,departure,qpos,qvel,initial_history,
                            schema,path_s,path_xy,path_heading,path_curvature,speed,
-                           jump_x,context,ground_steps=250,jump_steps=125,departure_steps=250,typical=None,diagnostic_entry=None,handoff_reset=None,handoff_guard=None,diagnostic_departure=None):
+                           jump_x,context,ground_steps=250,jump_steps=125,departure_steps=250,typical=None,diagnostic_entry=None,handoff_reset=None,handoff_guard=None,diagnostic_departure=None,approach_alpha=None,departure_alpha=None):
     """C uses initial real state only; I uses TRAIN-only typical interfaces.
 
     diagnostic_entry is an explicitly offline true-interface intervention, never
@@ -84,7 +84,7 @@ def predict_skill_sequence(approach,bridge,jump,departure,qpos,qvel,initial_hist
     state.elapsed_steps=torch.zeros(len(pose),device=pose.device,dtype=torch.long)
     found=pose[:,0]>=jump_x;poses=[pose];velocities=[velocity];domains=[]
     for _ in range(ground_steps):
-        prediction=approach.rollout_state(state,path_s,path_xy,path_heading,path_curvature,1,speed_request=speed)
+        prediction=approach.rollout_state(state,path_s,path_xy,path_heading,path_curvature,1,speed_request=speed,alpha_request=approach_alpha)
         domains.append(prediction['domain'][:,0]);proposed=prediction['next_state']
         state=GroundPredictionState(**{name:torch.where(found[:,None],getattr(state,name),getattr(proposed,name)) for name in ['pose','velocity','previous_velocity','hidden']},elapsed_steps=torch.where(found,state.elapsed_steps,proposed.elapsed_steps))
         found=found|(state.pose[:,0]>=jump_x);poses.append(state.pose);velocities.append(state.velocity)
@@ -118,6 +118,6 @@ def predict_skill_sequence(approach,bridge,jump,departure,qpos,qvel,initial_hist
             _,previous_velocity=native_to_ground(diagnostic_departure['previous_qpos'],diagnostic_departure['previous_qvel'],schema)
         tail_history=diagnostic_departure.get('history',tail_history)
     end=departure.initialize(tail_pose,tail_velocity,previous_velocity,tail_history)
-    tail=departure.rollout_state(end,path_s,path_xy,path_heading,path_curvature,departure_steps,speed_request=speed)
+    tail=departure.rollout_state(end,path_s,path_xy,path_heading,path_curvature,departure_steps,speed_request=speed,alpha_request=departure_alpha)
     return dict(approach_domain=torch.stack(domains,1),approach_pose=torch.stack(poses,1),approach_velocity=torch.stack(velocities,1),entry_found=found,entry_time_s=state.elapsed_steps*.02,entry_qpos=entry_q,entry_qvel=entry_v,entry_history=history,
                 jump=rb,departure=tail,departure_history=tail_history,departure_previous_velocity=previous_velocity,handoff_time_s=state.elapsed_steps*.02+rb['duration_s'],supported=found&rb['event_found'])

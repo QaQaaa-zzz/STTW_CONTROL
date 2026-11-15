@@ -21,6 +21,7 @@ p.add_argument('--retain-best',type=Path,help='Parent directory best.pt/best.jso
 p.add_argument('--initial-update',type=int,default=0)
 p.add_argument('--balanced-mixture',action='store_true')
 p.add_argument('--terrain-features',action='store_true')
+p.add_argument('--alpha-conditioned',action='store_true')
 p.add_argument('--additional-evaluations',type=Path,nargs='*',default=[])
 p.add_argument('--model-kind',choices=['residual','direct'],default='residual')
 a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False)
@@ -62,7 +63,9 @@ for source_id,source in enumerate(evaluations):
             inputs=np.column_stack((xi,eta,pose[:,10:12]))
             if terrain is not None:
                 with torch.no_grad():inputs=np.column_stack((inputs,terrain(torch.tensor(pose,dtype=torch.float32),torch.full((len(pose),),source_map_ids[source_id],dtype=torch.long)).numpy()))
-            datasets.append(dict(row=row,pose=pose,xi=xi,controller=controller,inputs=inputs,phase=phase,requests=requests,terrain_id=source_map_ids[source_id] if terrain is not None else 0,offset=offset))
+            stage_alpha=(configs[source_id]['ground_handoff']['approach']['alpha'] if a.phase==0 else row.get('continuation_alpha',configs[source_id]['ground_handoff']['continuation']['alpha'])) if a.alpha_conditioned else 0.
+            if a.alpha_conditioned:inputs=np.column_stack((inputs,np.full(len(pose),stage_alpha)))
+            datasets.append(dict(alpha=stage_alpha,row=row,pose=pose,xi=xi,controller=controller,inputs=inputs,phase=phase,requests=requests,terrain_id=source_map_ids[source_id] if terrain is not None else 0,offset=offset))
             for h in window_rows:
                 indices=np.arange(1,len(pose)-h)
                 bad=np.r_[0,np.cumsum(phase!=a.phase)]
@@ -83,13 +86,14 @@ for d in train:
 correction_scale=np.maximum(np.concatenate(corrections).std(0),[.05,.05,.1,.2,.2,.2,.3,1.,1.])
 base=NominalRollout(nominal,follower,device)
 if terrain is not None:terrain.to(device)
-model=HistoryDynamics(base,controller_mean,controller_scale,input_mean,input_scale,correction_scale,terrain=terrain,model_kind=a.model_kind)
+model=HistoryDynamics(base,controller_mean,controller_scale,input_mean,input_scale,correction_scale,terrain=terrain,model_kind=a.model_kind,alpha_conditioned=a.alpha_conditioned)
 if a.resume:
     resumed=torch.load(a.resume,weights_only=True)
     model.load_state_dict(resumed['model'] if a.resume_optimizer else resumed)
 tensor=lambda x:torch.as_tensor(x,device=device,dtype=torch.float32)
 poses=tensor(np.concatenate([d['pose'] for d in datasets]));velocities=tensor(np.concatenate([d['xi'] for d in datasets]));controllers=tensor(np.concatenate([d['controller'] for d in datasets]))
 requests=tensor(np.concatenate([d['requests'] for d in datasets]))
+alphas=tensor(np.concatenate([np.full(len(d['pose']),d['alpha']) for d in datasets]))
 terrain_ids=torch.as_tensor(np.concatenate([np.full(len(d['pose']),d['terrain_id']) for d in datasets]),device=device,dtype=torch.long)
 path_s=tensor(bank['s']);path_xy=tensor(bank['xy']);path_h=tensor(bank['heading']);path_k=tensor(bank['curvature'])
 train_windows={h:torch.tensor([[r['index'],r['route']] for r in rows if r['split']=='TRAIN'],device=device) for h,rows in window_rows.items()}
@@ -104,7 +108,7 @@ contract=dict(phase=a.phase,route_selection="canonical downstream0 subset for ea
               initialization='model_and_Adam_resume_new_sampling_seed' if a.resume_optimizer else 'weights_only_fresh_Adam' if a.resume else 'zero_correction',parent_checkpoint=str(a.resume),retained_best=str(a.retain_best),initial_update=a.initial_update,balanced_mixture=a.balanced_mixture,
               checkpoints_every=25,selection='mean maximum XY over fixed available1s DEV windows',
               training='Declared source TRAIN only, includes pre-failure observations; no future real controller states in rollout',
-              terrain_features=a.terrain_features,terrain_specs=terrain_specs,source_map_ids=source_map_ids,model_kind=a.model_kind,
+              alpha_conditioned=a.alpha_conditioned,alpha_train_values=sorted({d['alpha'] for d in train}) if a.alpha_conditioned else None,terrain_features=a.terrain_features,terrain_specs=terrain_specs,source_map_ids=source_map_ids,model_kind=a.model_kind,
               terrain_descriptor='15yaw-aligned locations: height, x/y slopes, local height variation, support mask; raster model input not collision geometry' if terrain is not None else None,
               architecture='381D history initializes GRU64;128x128 head; residual adds to nominal, direct predicts full velocity increment with shared pose integration',
               objective='multi-step position/quaternion/velocity error; frozen RB/H75/physics; no policy updates',
@@ -113,7 +117,7 @@ contract=dict(phase=a.phase,route_selection="canonical downstream0 subset for ea
 (a.output/'contract.json').write_text(json.dumps(contract,indent=2)+'\n')
 for source in [Path(__file__),Path('learning/src/sttw_control/playground_history_model.py'),Path('learning/src/sttw_control/playground_prediction.py'),Path('learning/src/sttw_control/playground_terrain_features.py')]:shutil.copyfile(source,a.output/source.name)
 def rollout(indices,routes,h):
-    return model.rollout(poses[indices],velocities[indices],velocities[indices-1],controllers[indices],path_s,path_xy[routes],path_h[routes],path_k[routes],h,speed_request=requests[indices],terrain_ids=terrain_ids[indices])
+    return model.rollout(poses[indices],velocities[indices],velocities[indices-1],controllers[indices],path_s,path_xy[routes],path_h[routes],path_k[routes],h,speed_request=requests[indices],terrain_ids=terrain_ids[indices],alpha_request=alphas[indices] if a.alpha_conditioned else None)
 
 @torch.no_grad()
 def evaluate(save=False):
