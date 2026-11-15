@@ -1,3 +1,5 @@
+> 当前执行依据已由用户替换为[2026-11-15任务书](evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/STTW_第三章_Codex任务书.md)。下列旧阶段设计与记录保留为历史，不定义新P0–P7验收。当前进度见[首页](evidence/chapter3_playground_sttw_rb_sttw/README.md)。
+
 # 第三章：面向技能交接可恢复性的预测与规划
 
 **用户最新纠正：严格依纲要顺序推进。** P4静态组件结果不得替代P1–P3。先补地面实际规划时域误差/净空域与在线更新验收，再完成绕行与跨越同出口、合法启动域、滚动完整约束和速度节点；停止提前扩大P4。当前逐项状态以[精简交接首页](evidence/chapter3_playground_sttw_rb_sttw/README.md)为准，下文旧“下一步/运行中”均为历史阶段记录。

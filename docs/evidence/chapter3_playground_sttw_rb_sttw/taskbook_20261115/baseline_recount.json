@@ -1,0 +1,31 @@
+{
+  "taskbook_sha256": "037b42964d1cf688fb7a760d89342dfdb42e60a81d82603d1f4cee040aa7dc99",
+  "code_sha": "256ebfcb22d358605834ae34c051a727a847f283",
+  "dirty_worktree": true,
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p4_model_test",
+  "models": {
+    "M0": {
+      "conditions": 200,
+      "success": 156,
+      "no_plan": 44,
+      "admitted_failure": 0
+    },
+    "M1": {
+      "conditions": 200,
+      "success": 200,
+      "no_plan": 0,
+      "admitted_failure": 0
+    },
+    "M2": {
+      "conditions": 200,
+      "success": 200,
+      "no_plan": 0,
+      "admitted_failure": 0
+    }
+  },
+  "unique_physical_runs": 312,
+  "all_trajectory_files_present": true,
+  "verification": "recomputed from plans and physical status; not trajectory-level success reconstruction",
+  "smoke": "not_started",
+  "asset_identity_audit": "pending"
+}

@@ -1,0 +1,112 @@
+{
+  "stage": "P0",
+  "budget": {
+    "episodes": 1,
+    "seconds_per_episode": 10,
+    "training_updates": 0,
+    "wall_timeout_s": 900
+  },
+  "code_sha": "256ebfcb22d358605834ae34c051a727a847f283",
+  "dirty_source_snapshot": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p0/source",
+  "original_evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p4_model_test/map00_layout00/evaluation",
+  "original_case": "rb_run3_route4_h75_v1",
+  "lane": [
+    4,
+    "h75",
+    1
+  ],
+  "assets": {
+    "rb_actor_effective": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/shared_plant_checkpoint_comparison/shared225/actor.npz",
+      "sha256": "17a28f02a8fb3c3348510ecb9d45c05886a1bef0879633e2bf0864b494ca6684",
+      "bytes": 1256850
+    },
+    "rb_identity": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/shared_plant_checkpoint_comparison/shared225/identity.json",
+      "sha256": "eba5f798337d3ac8c4d14f97d8ad76c50db7ff9010857f9e353c7e20c7799e14",
+      "bytes": 4162
+    },
+    "ground_actor": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/rb_h75_ecbc_ground/left90_R2/bundle/actor.npz",
+      "sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+      "bytes": 284418
+    },
+    "ground_identity": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/rb_h75_ecbc_ground/left90_R2/bundle/identity.json",
+      "sha256": "3e93bc39db9a772885b92f84ee24d53b33d827f0f489fa2f4964f662db0dc5d1",
+      "bytes": 1184
+    },
+    "ground_config": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/rb_h75_ecbc_ground/left90_R2/bundle/config.json",
+      "sha256": "582274a63d6cb24c396b1d4d6020337c61f92dc56e72ed1ba285f1bdd5ff6c54",
+      "bytes": 13842
+    },
+    "settings": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/rb_h75_ecbc_ground/left90_R2/config.json",
+      "sha256": "54d7503b36471311552b9ac1c2a7c794ba470fa86036fd79a1d932c371ef61f3",
+      "bytes": 1989
+    },
+    "controller": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/learning/configs/rb_sttw_rounded_controller.json",
+      "sha256": "d8e86b096b04d68345e4d187de4bae754ee1497234af9fb19f4e136b3c13fa82",
+      "bytes": 411
+    },
+    "world": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p4_model_test/map00_layout00/world.json",
+      "sha256": "bbccb6c6ca4126a9f86e5d5f8991a215661ae030b7ffb948fccd45ba1eeeaa2b",
+      "bytes": 2374
+    },
+    "routes": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/approach_departure_turns/routes.npz",
+      "sha256": "d5d79d950c76ae48907b5b0d1c10f6af7b0febf21d9d38fec38335c8fcadce0e",
+      "bytes": 44617
+    },
+    "robot_xml": {
+      "path": "/home/qy/DVGC/assets/orange_bike_4kg_horizontal.xml",
+      "sha256": "0b56d3672773ef05a2b5982117fa53a7fdffcaf2b7f3f04a7a7941233d6e9c8a",
+      "bytes": 10325
+    },
+    "registry": {
+      "path": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/learning/configs/playground_rb_skill_sources.json",
+      "sha256": "9b2e723ccdd56ac62a5a2507874004b1ea136df79030c580b8e5d63aca9f20dd",
+      "bytes": 13670
+    },
+    "calibration": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p4_model_test/calibration.json",
+      "sha256": "5a9e2e46cd0b43defe8e36e313016596ba2c393bc63dcf445dab5816c4b96311",
+      "bytes": 126473
+    },
+    "nominal_model": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p4_model_test/dynamics.json",
+      "sha256": "b2bda3fbaea9687c3e3842becf99c521e6db63893eb724fabe67ad590bb9f889",
+      "bytes": 5432067
+    },
+    "smoke_config": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p0/config.json",
+      "sha256": "974ba30b39fa4f28c48259bc94dbbeac026f0da523ec15c3a78ee6337287ecba",
+      "bytes": 11883
+    }
+  },
+  "contract": {
+    "physics_dt_s": 0.001,
+    "control_dt_s": 0.005,
+    "skill_dt_s": 0.02,
+    "goal": {
+      "x_min_m": 16.5,
+      "x_max_m": 18.5,
+      "abs_y_max_m": 0.5,
+      "min_vx_m_s": 0.5,
+      "hold_s": 0.5,
+      "path_tolerance_m": 0.3,
+      "heading_tolerance_rad": 0.2,
+      "speed_tolerance_m_s": 0.4
+    },
+    "ground_physics": {
+      "integrator": "implicitfast",
+      "friction": 0.8,
+      "native_wheel_contacts": false
+    }
+  },
+  "scope": "One original lane; identical physics, map, policies, initial state and task; new batch size may change numerical results",
+  "status": "prepared"
+}
