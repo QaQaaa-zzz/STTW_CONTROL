@@ -1,0 +1,9 @@
+{
+  "change": "Stop only at predicted phase2 AND joint/support/body/geometric conditions; no state projection or model update",
+  "budget": "Original model plus3 displacement shortlist;90 conditions each; one18-case legacy compatibility query; max300s",
+  "horizon": "Same125steps=2.5s RB,20ms model,10s task",
+  "roles": "Known DEV original72 and mechanism18; reuse physical trajectories",
+  "acceptance": "Inspect event_found/lock states and whole-chain outcomes without changing margins or task thresholds; no adoption solely on event detection",
+  "code_sha": "30fd55a98d77e607f9fd94d53eb853d9ed681a09",
+  "limits": "qvel roll rate proxy, predicted contact threshold0.5, necessary geometric support; does not simulate complete phase3/4 controller history"
+}

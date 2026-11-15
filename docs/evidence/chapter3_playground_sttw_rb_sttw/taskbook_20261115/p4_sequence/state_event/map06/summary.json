@@ -1,0 +1,38 @@
+{
+  "Original guarded": {
+    "cases": 36,
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 36,
+    "true_reject": 0,
+    "scope": "C continuous predicted interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.6240700680064037
+  },
+  "S1 2600 guarded": {
+    "cases": 36,
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 36,
+    "true_reject": 0,
+    "scope": "C continuous predicted interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.2212163580115885
+  },
+  "S1 2550 guarded": {
+    "cases": 36,
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 36,
+    "true_reject": 0,
+    "scope": "C continuous predicted interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.2212258020881563
+  },
+  "S1 2325 guarded": {
+    "cases": 36,
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 36,
+    "true_reject": 0,
+    "scope": "C continuous predicted interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.2377752320608124
+  }
+}

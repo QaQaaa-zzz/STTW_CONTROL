@@ -1,0 +1,17 @@
+{
+  "approach": 0.0,
+  "jump": 0.0,
+  "departure": 0.0,
+  "entry_steps": 0.0,
+  "jump_steps": 0.0,
+  "departure_steps": 0.0,
+  "entry_history": 0.0,
+  "entry_qpos": 0.0,
+  "entry_qvel": 0.0,
+  "handoff_qpos": 0.0,
+  "handoff_contact": 0.0,
+  "handoff_phase": 0.0,
+  "handoff_qvel": 0.0,
+  "handoff_history": 0.0,
+  "departure_history": 0.0
+}

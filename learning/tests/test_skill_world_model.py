@@ -66,6 +66,15 @@ class SkillWorldModelTest(unittest.TestCase):
             self.assertTrue(result['event_found'].all())
             self.assertTrue((result['event_step']==1).all())
             self.assertEqual(int(result['valid'].sum()),2)
+            def delayed_guard(values):
+                valid=torch.zeros(values['qpos'].shape[:2],dtype=torch.bool)
+                valid[0,3:]=True
+                return valid
+            guarded=model.rollout_until(state,context,10,stop_guard=delayed_guard)
+            self.assertEqual(guarded['event_found'].tolist(),[True,False])
+            self.assertEqual(guarded['event_step'].tolist(),[4,10])
+            self.assertEqual(guarded['valid'].sum(-1).tolist(),[4,10])
+            torch.testing.assert_close(guarded['next_state'].qpos[0],guarded['qpos'][0,3],rtol=0,atol=0)
             model.decoder[-1].bias[-3]=0;model.decoder[-1].bias[-4]=10
             missing=model.rollout_until(state,context,10)
             self.assertFalse(missing['event_found'].any())

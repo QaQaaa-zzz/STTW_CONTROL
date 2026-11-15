@@ -1,7 +1,7 @@
 """Causal ground->RB->ground predictions from one real initial state."""
 import torch
 from .playground_history_model import GroundPredictionState
-from .playground_prediction import rotate,euler
+from .playground_prediction import rotate,euler,BodyEnvelope
 from .skill_history_bridge import bridge_features
 
 
@@ -26,6 +26,29 @@ def handoff_body_ready(qpos,qvel,contact,speed_request,hand,schema):
     return supported,body
 
 
+class HandoffEventGuard:
+    """GPU trace checks for the frozen handoff, not a contact certificate."""
+    def __init__(self,physics,schema,hand,world,speeds):
+        self.schema=schema;self.hand=hand;self.speeds=speeds
+        self.home=speeds.new_tensor(physics.key('initial_state').qpos[[schema['qpos_names'].index(n) for n in ['hip_joint','knee_joint']]])
+        self.geometry=BodyEnvelope(physics,device=speeds.device,dimensions=3)
+        geoms=[g for g in range(physics.ngeom) if physics.geom_bodyid[g]>0 and (physics.geom_contype[g] or physics.geom_conaffinity[g])]
+        self.wheels=[geoms.index(physics.geom(n).id) for n in ['rearwheel_collision','frontwheel_collision']]
+        self.far_x=world['terrain']['front_x_m']+world['terrain']['width_m']
+
+    def __call__(self,values):
+        shape=values['qpos'].shape[:2];q=values['qpos'].reshape(-1,12);v=values['qvel'].reshape(-1,11)
+        contact=values['contact'].reshape(-1,3);speeds=self.speeds[:,None].expand(shape).reshape(-1)
+        error,rate=handoff_joint_errors(q,v,self.home,self.schema)
+        lock=(error<self.hand.get('lock_position_tolerance_rad',.08))&(rate<self.hand.get('lock_velocity_tolerance_rad_s',.5))
+        support,body=handoff_body_ready(q,v,contact,speeds,self.hand,self.schema)
+        pose,_=native_to_ground(q,v,self.schema);_,upper=self.geometry(pose)
+        far=upper[:,self.wheels,0]>=self.far_x
+        geometry=far.all(-1) if self.hand.get('require_both_far_wheels',False) else far.any(-1)
+        self.diagnostics={k:x.reshape(shape) for k,x in dict(handoff_joints_ready=lock,handoff_joint_error_rad=error,handoff_joint_speed_rad_s=rate,handoff_support_ready=support,handoff_body_ready=body,handoff_support_geometry=geometry).items()}
+        return (lock&support&body&geometry).reshape(shape)
+
+
 def native_to_ground(qpos,qvel,schema):
     order=[schema['qpos_names'].index(n) for n in ['steering_joint','frontwheel_joint','rearwheel_joint','hip_joint','knee_joint']]
     inv=qpos[:,3:7]*qpos.new_tensor([1,-1,-1,-1])
@@ -47,7 +70,7 @@ def ground_to_native(pose,velocity,schema):
 
 def predict_skill_sequence(approach,bridge,jump,departure,qpos,qvel,initial_history,
                            schema,path_s,path_xy,path_heading,path_curvature,speed,
-                           jump_x,context,ground_steps=250,jump_steps=125,departure_steps=250,typical=None,diagnostic_entry=None,handoff_reset=None):
+                           jump_x,context,ground_steps=250,jump_steps=125,departure_steps=250,typical=None,diagnostic_entry=None,handoff_reset=None,handoff_guard=None):
     """C uses initial real state only; I uses TRAIN-only typical interfaces.
 
     diagnostic_entry is an explicitly offline true-interface intervention, never
@@ -77,7 +100,7 @@ def predict_skill_sequence(approach,bridge,jump,departure,qpos,qvel,initial_hist
     contact=entry_q.new_tensor([1.,0.,0.]).expand(len(pose),-1)
     phase=entry_q.new_tensor([0.,1.,0.,0.,0.]).expand(len(pose),-1)
     rb_state=jump.initialize(entry_q,entry_v,history[:,:381],history[:,381:],contact,phase,context)
-    rb=jump.rollout_until(rb_state,context,jump_steps)
+    rb=jump.rollout_until(rb_state,context,jump_steps,stop_guard=handoff_guard)
     terminal=rb['next_state'];tail_pose,tail_velocity=native_to_ground(terminal.qpos,terminal.qvel,schema)
     lane=torch.arange(len(pose),device=pose.device);index=rb['event_step']-1
     previous_q=torch.where((index>0)[:,None],rb['qpos'][lane,(index-1).clamp_min(0)],entry_q)
