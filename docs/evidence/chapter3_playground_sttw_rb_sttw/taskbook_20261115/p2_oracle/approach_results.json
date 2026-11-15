@@ -1,0 +1,154 @@
+{
+  "cases": [
+    {
+      "map_id": 0,
+      "upstream": 0,
+      "root": 1001,
+      "goal": false,
+      "handoff_s": null,
+      "termination": "forbidden_obstacle_contact",
+      "duration_s": 1.975000023841858
+    },
+    {
+      "map_id": 0,
+      "upstream": 1,
+      "root": 1001,
+      "goal": true,
+      "handoff_s": 5.585000038146973,
+      "termination": "goal",
+      "duration_s": 9.0600004196167
+    },
+    {
+      "map_id": 0,
+      "upstream": 2,
+      "root": 1001,
+      "goal": false,
+      "handoff_s": 5.590000152587891,
+      "termination": "forbidden_obstacle_contact",
+      "duration_s": 6.579999923706055
+    },
+    {
+      "map_id": 0,
+      "upstream": 0,
+      "root": 1002,
+      "goal": false,
+      "handoff_s": null,
+      "termination": "forbidden_obstacle_contact",
+      "duration_s": 1.934999942779541
+    },
+    {
+      "map_id": 0,
+      "upstream": 1,
+      "root": 1002,
+      "goal": true,
+      "handoff_s": 5.585000038146973,
+      "termination": "goal",
+      "duration_s": 9.0649995803833
+    },
+    {
+      "map_id": 0,
+      "upstream": 2,
+      "root": 1002,
+      "goal": false,
+      "handoff_s": 5.605000019073486,
+      "termination": "forbidden_obstacle_contact",
+      "duration_s": 6.585000038146973
+    },
+    {
+      "map_id": 47,
+      "upstream": 0,
+      "root": 1001,
+      "goal": false,
+      "handoff_s": null,
+      "termination": "forbidden_obstacle_contact",
+      "duration_s": 2.0299999713897705
+    },
+    {
+      "map_id": 47,
+      "upstream": 1,
+      "root": 1001,
+      "goal": true,
+      "handoff_s": 5.605000019073486,
+      "termination": "goal",
+      "duration_s": 9.029999732971191
+    },
+    {
+      "map_id": 47,
+      "upstream": 2,
+      "root": 1001,
+      "goal": false,
+      "handoff_s": 5.525000095367432,
+      "termination": "forbidden_obstacle_contact",
+      "duration_s": 6.614999771118164
+    },
+    {
+      "map_id": 47,
+      "upstream": 0,
+      "root": 1002,
+      "goal": false,
+      "handoff_s": null,
+      "termination": "forbidden_obstacle_contact",
+      "duration_s": 2.0350000858306885
+    },
+    {
+      "map_id": 47,
+      "upstream": 1,
+      "root": 1002,
+      "goal": true,
+      "handoff_s": 5.559999942779541,
+      "termination": "goal",
+      "duration_s": 9.029999732971191
+    },
+    {
+      "map_id": 47,
+      "upstream": 2,
+      "root": 1002,
+      "goal": false,
+      "handoff_s": 5.539999961853027,
+      "termination": "forbidden_obstacle_contact",
+      "duration_s": 6.730000019073486
+    }
+  ],
+  "identity_checks": [
+    {
+      "map_id": 0,
+      "variant": 0,
+      "initial_equal": {
+        "qpos": true,
+        "qvel": true,
+        "controller_state": true,
+        "rb_state": true
+      }
+    },
+    {
+      "map_id": 0,
+      "variant": 2,
+      "initial_equal": {
+        "qpos": true,
+        "qvel": true,
+        "controller_state": true,
+        "rb_state": true
+      }
+    },
+    {
+      "map_id": 47,
+      "variant": 0,
+      "initial_equal": {
+        "qpos": true,
+        "qvel": true,
+        "controller_state": true,
+        "rb_state": true
+      }
+    },
+    {
+      "map_id": 47,
+      "variant": 2,
+      "initial_equal": {
+        "qpos": true,
+        "qvel": true,
+        "controller_state": true,
+        "rb_state": true
+      }
+    }
+  ]
+}
