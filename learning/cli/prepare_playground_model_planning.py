@@ -3,6 +3,7 @@ import argparse,copy,json,time,shutil,subprocess
 from pathlib import Path
 import numpy as np
 import torch,mujoco
+from sttw_control.playground_constraint_log import clearance_witness
 from sttw_control.playground_arx import states
 from sttw_control.playground_history_model import load_history_model
 from sttw_control.playground_prediction import BodyEnvelope,euler,rotate
@@ -15,16 +16,18 @@ a=p.parse_args()
 if bool(a.test_catalog)!=bool(a.frozen_calibration) or (a.test_catalog and not a.predicted_terminal):p.error('TEST requires catalog, frozen calibration, and predicted-terminal together')
 a.output.mkdir(parents=True,exist_ok=False);torch.set_num_threads(1);started=time.perf_counter()
 source=a.collection/'map00/evaluation';cfg=json.loads((source/'resolved_config.json').read_text());schema=json.loads((source/'model_state_schema.json').read_text());bank=dict(np.load(cfg['ground_handoff']['reference_path']));tensor=lambda x:torch.as_tensor(x,device='cuda',dtype=torch.float32)
-envelope=BodyEnvelope(mujoco.MjModel.from_binary_path(str(source/'terrain.mjb')),dimensions=3)
+body_model=mujoco.MjModel.from_binary_path(str(source/'terrain.mjb'))
+envelope=BodyEnvelope(body_model,dimensions=3)
+geom_names=[body_model.geom(i).name for i in range(body_model.ngeom) if body_model.geom_bodyid[i]>0 and (body_model.geom_contype[i] or body_model.geom_conaffinity[i])]
 items=[]
 for row in json.loads((source/'status.json').read_text())['results']:
     with np.load(source/row['case_dir']/'trajectory.npz') as d:
         pose,xi=states(d['qpos'][::4],d['qvel'][::4],schema);tr=d['trace'][::4];anchor=int(np.flatnonzero(tr[:,-1]==2)[0]);steps=len(pose)-1-anchor
         with torch.no_grad():lo,hi=[x.cpu().numpy() for x in envelope(tensor(pose))]
-        items.append(dict(row=row,pose=pose,lo=lo,hi=hi,xi=xi[anchor],previous=xi[anchor-1],controller=d['controller_state'][::4][anchor],anchor=anchor,steps=steps,speed=float(tr[anchor,18])))
+        items.append(dict(row=row,phase=tr[:,-1],pose=pose,lo=lo,hi=hi,xi=xi[anchor],previous=xi[anchor-1],controller=d['controller_state'][::4][anchor],anchor=anchor,steps=steps,speed=float(tr[anchor,18])))
 steps=max(x['steps'] for x in items);s=tensor(bank['s']);xy=tensor(np.stack([bank['xy'][r['row']['route']] for r in items]));h=tensor(np.stack([bank['heading'][r['row']['route']] for r in items]));k=tensor(np.stack([bank['curvature'][r['row']['route']] for r in items]))
 models=[('M0','residual_seed0','model_0000.pt'),('M1','residual_seed2','best.pt'),('M2','direct_seed0','best.pt')]
-plans=[];entries=[];all_calibration=[];saved=[];dynamics=[]
+plans=[];entries=[];all_calibration=[];saved=[];dynamics=[];constraint_records=[]
 # Same candidate identity, source cost and eligibility for every model.
 keys=[(route,speed) for route in range(9) for speed in [1.8,1.9]]
 groups=[[i for i,r in enumerate(items) if r['row']['route']==route and abs(r['speed']-speed)<1e-4] for route,speed in keys]
@@ -96,6 +99,19 @@ for map_id in ([r['map_id'] for r in catalog['entries']] if catalog else [6,7]):
             for lo,hi in candidate_bounds:
                 road=torch.stack((lo[:,0]-bounds[0],bounds[1]-hi[:,0],lo[:,1]-bounds[2],bounds[3]-hi[:,1]),1).amin()
                 obstacle=torch.maximum(boxes[:,None,:3]-hi[None],lo[None]-boxes[:,None,3:]).amax(2).amin();clear.append(float(torch.minimum(road,obstacle)))
+            for candidate,ids in enumerate(groups):
+                witnesses=[]
+                for i in ids:
+                    motion=motions[i];region=np.clip(np.searchsorted(edges,motion['x'],side='right')-1,0,len(margin)-1)
+                    witness=clearance_witness(motion['lo'],motion['hi'],margin[region],bounds,
+                        np.array([[r[0],r[2],0.,r[1],r[3],.5] for r in rectangles]),geom_names)
+                    witness.update(time_s=witness['step']*.02,source_case=items[i]['row']['case_dir'],
+                        phase=2 if witness['step']>=items[i]['anchor'] else int(items[i]['phase'][witness['step']]),
+                        margin_source=str(a.output/'calibration.json'),margin_rule=all_calibration[-1]['rule'])
+                    witnesses.append(witness)
+                constraint_records.append(dict(map_id=map_id,layout=layout,model=name,candidate=candidate,
+                    admitted=bool(admitted[candidate] and clear[candidate]>=0),domain_and_goal_eligible=bool(admitted[candidate]),
+                    witnesses=witnesses,limiting=min(witnesses,key=lambda r:r['expanded_clearance_m'])))
             feasible=admitted&(np.array(clear)>=0);chosen=int(np.argmin(np.where(feasible,costs,np.inf))) if feasible.any() else 0
             plans.append(dict(map_id=map_id,layout=layout,model=name,feasible=bool(feasible.any()),candidate=chosen,route=keys[chosen][0],speed=keys[chosen][1],predicted_cost_s=float(costs[chosen]) if np.isfinite(costs[chosen]) else None,all_clearance_m=clear,eligible=admitted.tolist(),checkpoint=str(a.models/folder/checkpoint)))
         saved.append(dict(map_id=map_id,model=name,checkpoint=str(a.models/folder/checkpoint)))
@@ -114,7 +130,7 @@ manifest=dict(predicted_terminal=a.predicted_terminal,terminal_rule='First26 con
 if catalog:
     manifest.update(role='Frozen new-map/new-root TEST of static finite-candidate model-plus-calibration systems; not full P4 or online neural planning',method_conditions=len(plans)*len(catalog['roots']),calibration_maps=[6,7],test_catalog=str(a.test_catalog),frozen_calibration=str(a.frozen_calibration),expected_wallclock_s=[2400,4200],hard_limit_s=7200,stop='One queue, first runtime error or120min; no retries or training',limitations='Measured TRAIN approach/RB templates, learned departure only; frozen max-over-DEV regional margins. No new-map outcomes used in selection. No claim of online neural replanning or complete E1/E2/P4.')
     for row in all_calibration:row['rule']='Frozen max over DEV maps06/07 regional axis margins; no TEST trajectory access'
-for name,data in [('manifest',manifest),('plans',plans),('calibration',all_calibration),('dynamics',dynamics)]: (a.output/f'{name}.json').write_text(json.dumps(data,indent=2)+'\n')
+for name,data in [('manifest',manifest),('plans',plans),('calibration',all_calibration),('dynamics',dynamics),('candidate_constraints',constraint_records)]: (a.output/f'{name}.json').write_text(json.dumps(data,indent=2)+'\n')
 (a.output/'source').mkdir()
 for path in [Path(__file__),Path('learning/src/sttw_control/playground_history_model.py'),Path('learning/src/sttw_control/playground_prediction.py'),Path('learning/src/sttw_control/playground_terrain_features.py')]:shutil.copyfile(path,a.output/'source'/path.name)
 print(json.dumps(dict(physical_episodes=manifest['physical_episodes'],feasible={name:sum(r['feasible'] for r in plans if r['model']==name) for name,_,_ in models},preparation_s=manifest['preparation_s']),indent=2))
