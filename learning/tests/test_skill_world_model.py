@@ -28,4 +28,22 @@ class SkillWorldModelTest(unittest.TestCase):
         self.assertEqual(tuple(full['contact_logits'].shape),(2,100,3))
         self.assertEqual(tuple(full['phase_logits'].shape),(2,100,5))
 
+    def test_predicted_stop_without_true_event_time(self):
+        size=12+11+7+3+5+4
+        model=SkillWorldModel(7,4,torch.zeros(size),torch.ones(size),torch.ones(11)*.01,torch.ones(7)*.01)
+        pose=torch.zeros(2,12);pose[:,3]=1
+        context=torch.zeros(2,4)
+        state=model.initialize(pose,torch.zeros(2,11),torch.zeros(2,4),torch.zeros(2,3),torch.zeros(2,3),torch.nn.functional.one_hot(torch.ones(2,dtype=torch.long),5).float(),context)
+        with torch.no_grad():
+            model.decoder[-1].weight.zero_();model.decoder[-1].bias.zero_();model.decoder[-1].bias[-3]=10
+            result=model.rollout_until(state,context,10)
+            self.assertTrue(result['event_found'].all())
+            self.assertTrue((result['event_step']==1).all())
+            self.assertEqual(int(result['valid'].sum()),2)
+            model.decoder[-1].bias[-3]=0;model.decoder[-1].bias[-4]=10
+            missing=model.rollout_until(state,context,10)
+            self.assertFalse(missing['event_found'].any())
+            self.assertTrue((missing['event_step']==10).all())
+            self.assertTrue((missing['next_state'].elapsed_steps==10).all())
+
 if __name__=='__main__':unittest.main()

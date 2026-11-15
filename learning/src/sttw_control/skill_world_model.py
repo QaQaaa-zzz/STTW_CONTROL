@@ -69,3 +69,24 @@ class SkillWorldModel(nn.Module):
         return dict(qpos=torch.stack(poses,1),qvel=torch.stack(velocities,1),
                     history=torch.stack(histories,1),contact_logits=torch.stack(contacts,1),
                     phase_logits=torch.stack(phases,1),duration_s=steps*self.dt,next_state=state)
+
+    def rollout_until(self,state,context,max_steps,stop_phase=2):
+        """GPU-batched predicted event stop; no actual event time supplied.
+
+        A lane without a predicted event keeps the max-horizon state and is
+        explicitly marked unsupported. The full fixed-size trace has a mask.
+        """
+        states=[];contacts=[];phases=[]
+        initial_steps=state.elapsed_steps
+        for _ in range(max_steps):
+            state,contact,phase=self.step(state,context)
+            states.append(state);contacts.append(contact);phases.append(phase)
+        phase_logits=torch.stack(phases,1)
+        hit=phase_logits.argmax(-1)==stop_phase
+        found=hit.any(-1)
+        index=torch.where(found,hit.to(torch.int64).argmax(-1),torch.full_like(found,max_steps-1,dtype=torch.int64))
+        lane=torch.arange(len(index),device=index.device)
+        values={name:torch.stack([getattr(s,name) for s in states],1) for name in ['qpos','qvel','history','contact','phase','hidden']}
+        next_state=SkillWorldState(**{name:value[lane,index] for name,value in values.items()},elapsed_steps=initial_steps+index+1)
+        return dict(qpos=values['qpos'],qvel=values['qvel'],history=values['history'],contact_logits=torch.stack(contacts,1),phase_logits=phase_logits,
+                    valid=torch.arange(max_steps,device=index.device)[None,:]<=index[:,None],event_found=found,event_step=index+1,duration_s=(index+1)*self.dt,next_state=next_state)

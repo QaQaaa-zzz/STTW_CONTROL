@@ -1,0 +1,38 @@
+[
+  {
+    "cases": 72,
+    "predicted_handoffs": 72,
+    "event_mae_s": 0.07388889127307469,
+    "event_max_abs_s": 0.17500019073486328,
+    "handoff_position_mean_m": 0.14682413720422322,
+    "handoff_position_max_m": 0.36027130484580994,
+    "occupancy_mean_m": 0.1769782084730348,
+    "scope": "125-step max query; GPU predicted phase selects handoff, never actual future event time. Compare event-selected state to actual handoff, includes timing error. AABB corner metric is conservative geometric discrepancy, not safety proof.",
+    "model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p3_world_fullentry/seed0/best.pt",
+    "seed": 0
+  },
+  {
+    "cases": 72,
+    "predicted_handoffs": 72,
+    "event_mae_s": 0.09027775128682454,
+    "event_max_abs_s": 0.7050004005432129,
+    "handoff_position_mean_m": 0.21582579409651872,
+    "handoff_position_max_m": 1.3021451234817505,
+    "occupancy_mean_m": 0.24743518475845694,
+    "scope": "125-step max query; GPU predicted phase selects handoff, never actual future event time. Compare event-selected state to actual handoff, includes timing error. AABB corner metric is conservative geometric discrepancy, not safety proof.",
+    "model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p3_world_fullentry/seed1/best.pt",
+    "seed": 1
+  },
+  {
+    "cases": 72,
+    "predicted_handoffs": 72,
+    "event_mae_s": 0.03805550601747301,
+    "event_max_abs_s": 0.19000005722045898,
+    "handoff_position_mean_m": 0.09838506696461183,
+    "handoff_position_max_m": 0.35148653388023376,
+    "occupancy_mean_m": 0.14275413681008922,
+    "scope": "125-step max query; GPU predicted phase selects handoff, never actual future event time. Compare event-selected state to actual handoff, includes timing error. AABB corner metric is conservative geometric discrepancy, not safety proof.",
+    "model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p3_world_fullentry/seed2/best.pt",
+    "seed": 2
+  }
+]

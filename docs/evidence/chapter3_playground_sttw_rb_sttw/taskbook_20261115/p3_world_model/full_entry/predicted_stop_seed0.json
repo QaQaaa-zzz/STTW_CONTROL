@@ -1,0 +1,1442 @@
+[
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route0_h75_v0",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.03000020980834961,
+    "position_error_m": 0.02763434126973152,
+    "rotation_error_rad": 0.1592487096786499,
+    "joint_abs_error_rad": [
+      0.2997283935546875,
+      0.40271440148353577,
+      0.4300079345703125,
+      0.29173988103866577,
+      0.012471914291381836
+    ],
+    "controller_normalized_rmse": 2.6204655170440674,
+    "rb_history_normalized_rmse": 2.665133237838745,
+    "collision_geom_aabb_corner_max_error_m": 0.05775615392453505,
+    "actual_source_index": 18241
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route0_h75_v1",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.03000020980834961,
+    "position_error_m": 0.06766655296087265,
+    "rotation_error_rad": 0.13861878216266632,
+    "joint_abs_error_rad": [
+      1.35498046875,
+      0.3805023431777954,
+      0.7130126953125,
+      0.3211771845817566,
+      0.011411428451538086
+    ],
+    "controller_normalized_rmse": 2.593341588973999,
+    "rb_history_normalized_rmse": 2.6213979721069336,
+    "collision_geom_aabb_corner_max_error_m": 0.09356605593824117,
+    "actual_source_index": 18324
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route0_h75_v2",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.04999971389770508,
+    "position_error_m": 0.0897131934762001,
+    "rotation_error_rad": 0.14329606294631958,
+    "joint_abs_error_rad": [
+      1.5149688720703125,
+      0.32127100229263306,
+      1.3648681640625,
+      0.26204973459243774,
+      0.0054111480712890625
+    ],
+    "controller_normalized_rmse": 3.3160104751586914,
+    "rb_history_normalized_rmse": 2.701478958129883,
+    "collision_geom_aabb_corner_max_error_m": 0.1108677045484912,
+    "actual_source_index": 18409
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route0_h75_v3",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.05499982833862305,
+    "position_error_m": 0.12755733728408813,
+    "rotation_error_rad": 0.12225525081157684,
+    "joint_abs_error_rad": [
+      1.856597900390625,
+      0.29963818192481995,
+      1.833099365234375,
+      0.2974802851676941,
+      5.555152893066406e-05
+    ],
+    "controller_normalized_rmse": 2.65323805809021,
+    "rb_history_normalized_rmse": 2.740243434906006,
+    "collision_geom_aabb_corner_max_error_m": 0.15057353248621874,
+    "actual_source_index": 18493
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route1_h75_v0",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.04999971389770508,
+    "position_error_m": 0.04652827978134155,
+    "rotation_error_rad": 0.16292032599449158,
+    "joint_abs_error_rad": [
+      0.6619110107421875,
+      0.4251991808414459,
+      0.904632568359375,
+      0.2804836630821228,
+      0.007638454437255859
+    ],
+    "controller_normalized_rmse": 3.2998812198638916,
+    "rb_history_normalized_rmse": 2.7732555866241455,
+    "collision_geom_aabb_corner_max_error_m": 0.10132882356055718,
+    "actual_source_index": 18576
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route1_h75_v1",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.03000020980834961,
+    "position_error_m": 0.09113851934671402,
+    "rotation_error_rad": 0.13750752806663513,
+    "joint_abs_error_rad": [
+      1.645233154296875,
+      0.38039931654930115,
+      1.02197265625,
+      0.3187428116798401,
+      0.010799884796142578
+    ],
+    "controller_normalized_rmse": 2.6140449047088623,
+    "rb_history_normalized_rmse": 2.61037015914917,
+    "collision_geom_aabb_corner_max_error_m": 0.1150774246171553,
+    "actual_source_index": 18658
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route1_h75_v2",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.07499980926513672,
+    "position_error_m": 0.15438875555992126,
+    "rotation_error_rad": 0.14602935314178467,
+    "joint_abs_error_rad": [
+      2.4001007080078125,
+      0.3183037340641022,
+      2.32342529296875,
+      0.25991201400756836,
+      0.00042700767517089844
+    ],
+    "controller_normalized_rmse": 2.6145520210266113,
+    "rb_history_normalized_rmse": 2.7572736740112305,
+    "collision_geom_aabb_corner_max_error_m": 0.1754691176714321,
+    "actual_source_index": 18741
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route1_h75_v3",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.07999992370605469,
+    "position_error_m": 0.16552476584911346,
+    "rotation_error_rad": 0.1457791030406952,
+    "joint_abs_error_rad": [
+      1.91668701171875,
+      0.32323578000068665,
+      2.486663818359375,
+      0.2645108103752136,
+      0.0026161670684814453
+    ],
+    "controller_normalized_rmse": 3.4905200004577637,
+    "rb_history_normalized_rmse": 2.8204662799835205,
+    "collision_geom_aabb_corner_max_error_m": 0.17701174941871897,
+    "actual_source_index": 18825
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route2_h75_v0",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.015000343322753906,
+    "position_error_m": 0.014715995639562607,
+    "rotation_error_rad": 0.15992619097232819,
+    "joint_abs_error_rad": [
+      0.070556640625,
+      0.40768417716026306,
+      0.2935333251953125,
+      0.28933238983154297,
+      0.011826753616333008
+    ],
+    "controller_normalized_rmse": 3.280925989151001,
+    "rb_history_normalized_rmse": 2.6941640377044678,
+    "collision_geom_aabb_corner_max_error_m": 0.052301344005043056,
+    "actual_source_index": 18911
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route2_h75_v1",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.05500030517578125,
+    "position_error_m": 0.10317084938287735,
+    "rotation_error_rad": 0.13844138383865356,
+    "joint_abs_error_rad": [
+      1.960296630859375,
+      0.38171565532684326,
+      1.286712646484375,
+      0.3195568919181824,
+      0.008657693862915039
+    ],
+    "controller_normalized_rmse": 2.6338627338409424,
+    "rb_history_normalized_rmse": 2.624150037765503,
+    "collision_geom_aabb_corner_max_error_m": 0.13563599245440128,
+    "actual_source_index": 18992
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route2_h75_v2",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.06999969482421875,
+    "position_error_m": 0.1224769726395607,
+    "rotation_error_rad": 0.14560876786708832,
+    "joint_abs_error_rad": [
+      1.844207763671875,
+      0.31867897510528564,
+      1.8246917724609375,
+      0.25535035133361816,
+      0.0011513233184814453
+    ],
+    "controller_normalized_rmse": 3.3128368854522705,
+    "rb_history_normalized_rmse": 2.707348346710205,
+    "collision_geom_aabb_corner_max_error_m": 0.13739629775145445,
+    "actual_source_index": 19076
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route2_h75_v3",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.09499979019165039,
+    "position_error_m": 0.19039292633533478,
+    "rotation_error_rad": 0.14776107668876648,
+    "joint_abs_error_rad": [
+      2.30340576171875,
+      0.30965614318847656,
+      2.7745208740234375,
+      0.2558167576789856,
+      0.005994081497192383
+    ],
+    "controller_normalized_rmse": 2.6911253929138184,
+    "rb_history_normalized_rmse": 2.730071783065796,
+    "collision_geom_aabb_corner_max_error_m": 0.21071330540479494,
+    "actual_source_index": 19158
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route3_h75_v0",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.16500043869018555,
+    "position_error_m": 0.306970477104187,
+    "rotation_error_rad": 0.2738553583621979,
+    "joint_abs_error_rad": [
+      3.326202392578125,
+      0.4478721618652344,
+      4.1171875,
+      0.4096488952636719,
+      0.014134645462036133
+    ],
+    "controller_normalized_rmse": 2.392469882965088,
+    "rb_history_normalized_rmse": 2.537696123123169,
+    "collision_geom_aabb_corner_max_error_m": 0.341503969196182,
+    "actual_source_index": 19242
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route3_h75_v1",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.16500043869018555,
+    "position_error_m": 0.3094106912612915,
+    "rotation_error_rad": 0.27890151739120483,
+    "joint_abs_error_rad": [
+      3.40655517578125,
+      0.46974971890449524,
+      4.0751190185546875,
+      0.42916232347488403,
+      0.016571044921875
+    ],
+    "controller_normalized_rmse": 2.4345335960388184,
+    "rb_history_normalized_rmse": 2.560553550720215,
+    "collision_geom_aabb_corner_max_error_m": 0.3441808342890984,
+    "actual_source_index": 19327
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route3_h75_v2",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.1099996566772461,
+    "position_error_m": 0.17448586225509644,
+    "rotation_error_rad": 0.26465854048728943,
+    "joint_abs_error_rad": [
+      2.15521240234375,
+      0.4603269100189209,
+      2.31585693359375,
+      0.41655218601226807,
+      0.011937379837036133
+    ],
+    "controller_normalized_rmse": 2.590001106262207,
+    "rb_history_normalized_rmse": 2.6566829681396484,
+    "collision_geom_aabb_corner_max_error_m": 0.20843218507252956,
+    "actual_source_index": 19412
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route3_h75_v3",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.09499979019165039,
+    "position_error_m": 0.18641053140163422,
+    "rotation_error_rad": 0.22742043435573578,
+    "joint_abs_error_rad": [
+      2.066741943359375,
+      0.3853062391281128,
+      2.5361175537109375,
+      0.38042551279067993,
+      0.017073392868041992
+    ],
+    "controller_normalized_rmse": 3.1832098960876465,
+    "rb_history_normalized_rmse": 2.579125165939331,
+    "collision_geom_aabb_corner_max_error_m": 0.21796333152197556,
+    "actual_source_index": 19496
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route4_h75_v0",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.13000059127807617,
+    "position_error_m": 0.284907728433609,
+    "rotation_error_rad": 0.2686527371406555,
+    "joint_abs_error_rad": [
+      2.9962921142578125,
+      0.44377681612968445,
+      3.6924896240234375,
+      0.404943585395813,
+      0.01846933364868164
+    ],
+    "controller_normalized_rmse": 3.1115550994873047,
+    "rb_history_normalized_rmse": 2.435124635696411,
+    "collision_geom_aabb_corner_max_error_m": 0.31867905998788787,
+    "actual_source_index": 19578
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route4_h75_v1",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.1700000762939453,
+    "position_error_m": 0.3592716455459595,
+    "rotation_error_rad": 0.27707311511039734,
+    "joint_abs_error_rad": [
+      3.7624053955078125,
+      0.4321945607662201,
+      4.7292327880859375,
+      0.4427638053894043,
+      0.014777898788452148
+    ],
+    "controller_normalized_rmse": 3.142469882965088,
+    "rb_history_normalized_rmse": 2.5644423961639404,
+    "collision_geom_aabb_corner_max_error_m": 0.39374030745070066,
+    "actual_source_index": 19662
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route4_h75_v2",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.1099996566772461,
+    "position_error_m": 0.2025831639766693,
+    "rotation_error_rad": 0.2652343511581421,
+    "joint_abs_error_rad": [
+      2.072113037109375,
+      0.46046575903892517,
+      2.718170166015625,
+      0.41378045082092285,
+      0.010779380798339844
+    ],
+    "controller_normalized_rmse": 2.587066888809204,
+    "rb_history_normalized_rmse": 2.7147040367126465,
+    "collision_geom_aabb_corner_max_error_m": 0.23582231241784804,
+    "actual_source_index": 19746
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route4_h75_v3",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.08999967575073242,
+    "position_error_m": 0.15188471972942352,
+    "rotation_error_rad": 0.23053427040576935,
+    "joint_abs_error_rad": [
+      1.636138916015625,
+      0.38289058208465576,
+      2.033721923828125,
+      0.37807732820510864,
+      0.018646240234375
+    ],
+    "controller_normalized_rmse": 2.487541437149048,
+    "rb_history_normalized_rmse": 2.577580451965332,
+    "collision_geom_aabb_corner_max_error_m": 0.18479867529486907,
+    "actual_source_index": 19829
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route5_h75_v0",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.16000032424926758,
+    "position_error_m": 0.308351993560791,
+    "rotation_error_rad": 0.273216187953949,
+    "joint_abs_error_rad": [
+      3.30364990234375,
+      0.4460803270339966,
+      4.1451873779296875,
+      0.4083879590034485,
+      0.014570236206054688
+    ],
+    "controller_normalized_rmse": 3.2483630180358887,
+    "rb_history_normalized_rmse": 2.5117619037628174,
+    "collision_geom_aabb_corner_max_error_m": 0.34321874783628,
+    "actual_source_index": 19913
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route5_h75_v1",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.15000057220458984,
+    "position_error_m": 0.3131727874279022,
+    "rotation_error_rad": 0.27821630239486694,
+    "joint_abs_error_rad": [
+      3.36029052734375,
+      0.4855078160762787,
+      4.19696044921875,
+      0.4315152168273926,
+      0.015659332275390625
+    ],
+    "controller_normalized_rmse": 3.1852216720581055,
+    "rb_history_normalized_rmse": 2.5775279998779297,
+    "collision_geom_aabb_corner_max_error_m": 0.3475896839329623,
+    "actual_source_index": 19998
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route5_h75_v2",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.125,
+    "position_error_m": 0.22196809947490692,
+    "rotation_error_rad": 0.2627953588962555,
+    "joint_abs_error_rad": [
+      2.5570068359375,
+      0.4537842869758606,
+      2.9954681396484375,
+      0.41684597730636597,
+      0.009958982467651367
+    ],
+    "controller_normalized_rmse": 2.6181130409240723,
+    "rb_history_normalized_rmse": 2.697679281234741,
+    "collision_geom_aabb_corner_max_error_m": 0.2548765007849484,
+    "actual_source_index": 20083
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route5_h75_v3",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.10500001907348633,
+    "position_error_m": 0.18487687408924103,
+    "rotation_error_rad": 0.23830309510231018,
+    "joint_abs_error_rad": [
+      1.9691619873046875,
+      0.3893607258796692,
+      2.522796630859375,
+      0.37288540601730347,
+      0.015681028366088867
+    ],
+    "controller_normalized_rmse": 2.495007038116455,
+    "rb_history_normalized_rmse": 2.594414710998535,
+    "collision_geom_aabb_corner_max_error_m": 0.2171415761498037,
+    "actual_source_index": 20167
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route6_h75_v0",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.11499977111816406,
+    "position_error_m": 0.18483972549438477,
+    "rotation_error_rad": 0.20598597824573517,
+    "joint_abs_error_rad": [
+      2.2669830322265625,
+      0.2523276209831238,
+      2.8407440185546875,
+      0.33370763063430786,
+      0.007906436920166016
+    ],
+    "controller_normalized_rmse": 2.687072992324829,
+    "rb_history_normalized_rmse": 2.7441141605377197,
+    "collision_geom_aabb_corner_max_error_m": 0.21801076032964725,
+    "actual_source_index": 20251
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route6_h75_v1",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.09499979019165039,
+    "position_error_m": 0.15215599536895752,
+    "rotation_error_rad": 0.17501594126224518,
+    "joint_abs_error_rad": [
+      1.9776458740234375,
+      0.20212918519973755,
+      2.3462066650390625,
+      0.38499486446380615,
+      0.014047384262084961
+    ],
+    "controller_normalized_rmse": 2.6544244289398193,
+    "rb_history_normalized_rmse": 2.6274218559265137,
+    "collision_geom_aabb_corner_max_error_m": 0.1938889645648926,
+    "actual_source_index": 20335
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route6_h75_v2",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.059999942779541016,
+    "position_error_m": 0.14845745265483856,
+    "rotation_error_rad": 0.17079541087150574,
+    "joint_abs_error_rad": [
+      1.2622833251953125,
+      0.01607411913573742,
+      2.4114227294921875,
+      0.32893484830856323,
+      0.011428594589233398
+    ],
+    "controller_normalized_rmse": 3.384990692138672,
+    "rb_history_normalized_rmse": 2.6168558597564697,
+    "collision_geom_aabb_corner_max_error_m": 0.17401789718581862,
+    "actual_source_index": 20418
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route6_h75_v3",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.03000020980834961,
+    "position_error_m": 0.10142558068037033,
+    "rotation_error_rad": 0.1657266467809677,
+    "joint_abs_error_rad": [
+      0.94427490234375,
+      0.07984069734811783,
+      1.6918792724609375,
+      0.23258709907531738,
+      0.014982461929321289
+    ],
+    "controller_normalized_rmse": 2.5146541595458984,
+    "rb_history_normalized_rmse": 2.6300411224365234,
+    "collision_geom_aabb_corner_max_error_m": 0.11663259356840432,
+    "actual_source_index": 20502
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route7_h75_v0",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.12999963760375977,
+    "position_error_m": 0.1976531744003296,
+    "rotation_error_rad": 0.1844029575586319,
+    "joint_abs_error_rad": [
+      2.66448974609375,
+      0.24303847551345825,
+      2.9930572509765625,
+      0.32941246032714844,
+      0.009439945220947266
+    ],
+    "controller_normalized_rmse": 3.4127607345581055,
+    "rb_history_normalized_rmse": 2.840543270111084,
+    "collision_geom_aabb_corner_max_error_m": 0.23014837289815157,
+    "actual_source_index": 20586
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route7_h75_v1",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.07499980926513672,
+    "position_error_m": 0.11359040439128876,
+    "rotation_error_rad": 0.18326134979724884,
+    "joint_abs_error_rad": [
+      1.33367919921875,
+      0.16799472272396088,
+      1.924530029296875,
+      0.4073830246925354,
+      0.01140594482421875
+    ],
+    "controller_normalized_rmse": 2.5907251834869385,
+    "rb_history_normalized_rmse": 2.8141379356384277,
+    "collision_geom_aabb_corner_max_error_m": 0.15080366722614794,
+    "actual_source_index": 20669
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route7_h75_v2",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.05000019073486328,
+    "position_error_m": 0.15567201375961304,
+    "rotation_error_rad": 0.16809768974781036,
+    "joint_abs_error_rad": [
+      0.8919219970703125,
+      0.008111026138067245,
+      2.5424957275390625,
+      0.3220745325088501,
+      0.011121034622192383
+    ],
+    "controller_normalized_rmse": 2.4777109622955322,
+    "rb_history_normalized_rmse": 2.608806610107422,
+    "collision_geom_aabb_corner_max_error_m": 0.18115080816903073,
+    "actual_source_index": 20752
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route7_h75_v3",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.034999847412109375,
+    "position_error_m": 0.10527949035167694,
+    "rotation_error_rad": 0.16622136533260345,
+    "joint_abs_error_rad": [
+      0.8241729736328125,
+      0.08323019742965698,
+      1.78936767578125,
+      0.2235066294670105,
+      0.01535654067993164
+    ],
+    "controller_normalized_rmse": 2.5347251892089844,
+    "rb_history_normalized_rmse": 2.592994451522827,
+    "collision_geom_aabb_corner_max_error_m": 0.11826116083144099,
+    "actual_source_index": 20836
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route8_h75_v0",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.08999967575073242,
+    "position_error_m": 0.1165761947631836,
+    "rotation_error_rad": 0.2008291333913803,
+    "joint_abs_error_rad": [
+      1.361785888671875,
+      0.24487987160682678,
+      1.884368896484375,
+      0.3359397053718567,
+      0.010133504867553711
+    ],
+    "controller_normalized_rmse": 3.4029171466827393,
+    "rb_history_normalized_rmse": 2.789353370666504,
+    "collision_geom_aabb_corner_max_error_m": 0.1400939772407284,
+    "actual_source_index": 20922
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route8_h75_v1",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.1099996566772461,
+    "position_error_m": 0.14856669306755066,
+    "rotation_error_rad": 0.1822606772184372,
+    "joint_abs_error_rad": [
+      1.9898223876953125,
+      0.20659823715686798,
+      2.345855712890625,
+      0.3919772505760193,
+      0.011365413665771484
+    ],
+    "controller_normalized_rmse": 3.3599693775177,
+    "rb_history_normalized_rmse": 2.7011256217956543,
+    "collision_geom_aabb_corner_max_error_m": 0.18975340118949496,
+    "actual_source_index": 21005
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route8_h75_v2",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.02500009536743164,
+    "position_error_m": 0.07407279312610626,
+    "rotation_error_rad": 0.1613762080669403,
+    "joint_abs_error_rad": [
+      0.124786376953125,
+      0.0052682142704725266,
+      1.34771728515625,
+      0.306448757648468,
+      0.01318216323852539
+    ],
+    "controller_normalized_rmse": 3.2611191272735596,
+    "rb_history_normalized_rmse": 2.594804286956787,
+    "collision_geom_aabb_corner_max_error_m": 0.09981406898313758,
+    "actual_source_index": 21089
+  },
+  {
+    "map": "map06",
+    "case_dir": "rb_run3_route8_h75_v3",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.010000228881835938,
+    "position_error_m": 0.07273805141448975,
+    "rotation_error_rad": 0.1637401431798935,
+    "joint_abs_error_rad": [
+      0.01800537109375,
+      0.09063158184289932,
+      1.2679290771484375,
+      0.23494982719421387,
+      0.022553205490112305
+    ],
+    "controller_normalized_rmse": 2.561103582382202,
+    "rb_history_normalized_rmse": 2.640547275543213,
+    "collision_geom_aabb_corner_max_error_m": 0.0881178344181503,
+    "actual_source_index": 21173
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route0_h75_v0",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.0,
+    "position_error_m": 0.0345335528254509,
+    "rotation_error_rad": 0.14732275903224945,
+    "joint_abs_error_rad": [
+      0.041015625,
+      0.37070268392562866,
+      0.1366119384765625,
+      0.2874448299407959,
+      0.0011279582977294922
+    ],
+    "controller_normalized_rmse": 3.370683193206787,
+    "rb_history_normalized_rmse": 2.6792330741882324,
+    "collision_geom_aabb_corner_max_error_m": 0.06097303690352323,
+    "actual_source_index": 21256
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route0_h75_v1",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.024999618530273438,
+    "position_error_m": 0.02142300084233284,
+    "rotation_error_rad": 0.14715906977653503,
+    "joint_abs_error_rad": [
+      0.1574554443359375,
+      0.4063284695148468,
+      0.200439453125,
+      0.310422420501709,
+      0.011373043060302734
+    ],
+    "controller_normalized_rmse": 2.5993707180023193,
+    "rb_history_normalized_rmse": 2.6675848960876465,
+    "collision_geom_aabb_corner_max_error_m": 0.046899325334764284,
+    "actual_source_index": 21342
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route0_h75_v2",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.09499979019165039,
+    "position_error_m": 0.18391816318035126,
+    "rotation_error_rad": 0.16797979176044464,
+    "joint_abs_error_rad": [
+      2.37445068359375,
+      0.3738747835159302,
+      2.830535888671875,
+      0.27846652269363403,
+      0.0028700828552246094
+    ],
+    "controller_normalized_rmse": 2.6909570693969727,
+    "rb_history_normalized_rmse": 2.816347122192383,
+    "collision_geom_aabb_corner_max_error_m": 0.21268874861243822,
+    "actual_source_index": 21425
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route0_h75_v3",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.009999752044677734,
+    "position_error_m": 0.025568991899490356,
+    "rotation_error_rad": 0.15519563853740692,
+    "joint_abs_error_rad": [
+      0.5270538330078125,
+      0.31025373935699463,
+      0.5033721923828125,
+      0.23852956295013428,
+      0.0007581710815429688
+    ],
+    "controller_normalized_rmse": 3.3073036670684814,
+    "rb_history_normalized_rmse": 2.7210500240325928,
+    "collision_geom_aabb_corner_max_error_m": 0.04645737402713684,
+    "actual_source_index": 21512
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route1_h75_v0",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.005000114440917969,
+    "position_error_m": 0.017783261835575104,
+    "rotation_error_rad": 0.15216432511806488,
+    "joint_abs_error_rad": [
+      0.6929779052734375,
+      0.40356913208961487,
+      0.0879669189453125,
+      0.28049731254577637,
+      0.001318216323852539
+    ],
+    "controller_normalized_rmse": 2.557725429534912,
+    "rb_history_normalized_rmse": 2.592949628829956,
+    "collision_geom_aabb_corner_max_error_m": 0.04794842273238544,
+    "actual_source_index": 21595
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route1_h75_v1",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.010000228881835938,
+    "position_error_m": 0.05687253922224045,
+    "rotation_error_rad": 0.1353810727596283,
+    "joint_abs_error_rad": [
+      0.9127655029296875,
+      0.39566436409950256,
+      0.6654510498046875,
+      0.3062870502471924,
+      0.005709171295166016
+    ],
+    "controller_normalized_rmse": 2.600285291671753,
+    "rb_history_normalized_rmse": 2.6320853233337402,
+    "collision_geom_aabb_corner_max_error_m": 0.0857690112446553,
+    "actual_source_index": 21679
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route1_h75_v2",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.06999969482421875,
+    "position_error_m": 0.11867278069257736,
+    "rotation_error_rad": 0.16242292523384094,
+    "joint_abs_error_rad": [
+      1.4997100830078125,
+      0.38049840927124023,
+      1.934967041015625,
+      0.28644847869873047,
+      0.0005161762237548828
+    ],
+    "controller_normalized_rmse": 3.345153570175171,
+    "rb_history_normalized_rmse": 2.745262384414673,
+    "collision_geom_aabb_corner_max_error_m": 0.1363508737045571,
+    "actual_source_index": 21764
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route1_h75_v3",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.034999847412109375,
+    "position_error_m": 0.10490942746400833,
+    "rotation_error_rad": 0.15987694263458252,
+    "joint_abs_error_rad": [
+      0.9573822021484375,
+      0.3114658296108246,
+      1.6721343994140625,
+      0.2427096962928772,
+      0.0004398822784423828
+    ],
+    "controller_normalized_rmse": 2.6091325283050537,
+    "rb_history_normalized_rmse": 2.7071313858032227,
+    "collision_geom_aabb_corner_max_error_m": 0.12649713376607385,
+    "actual_source_index": 21848
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route2_h75_v0",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.010000228881835938,
+    "position_error_m": 0.018617330119013786,
+    "rotation_error_rad": 0.15886758267879486,
+    "joint_abs_error_rad": [
+      0.0173492431640625,
+      0.4141457974910736,
+      0.083740234375,
+      0.28020280599594116,
+      0.0020818710327148438
+    ],
+    "controller_normalized_rmse": 2.613877534866333,
+    "rb_history_normalized_rmse": 2.725904941558838,
+    "collision_geom_aabb_corner_max_error_m": 0.04955708510073805,
+    "actual_source_index": 21932
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route2_h75_v1",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.009999752044677734,
+    "position_error_m": 0.027695363387465477,
+    "rotation_error_rad": 0.14341092109680176,
+    "joint_abs_error_rad": [
+      0.4691162109375,
+      0.41401320695877075,
+      0.2085418701171875,
+      0.3054423928260803,
+      0.00840449333190918
+    ],
+    "controller_normalized_rmse": 2.592172384262085,
+    "rb_history_normalized_rmse": 2.629865884780884,
+    "collision_geom_aabb_corner_max_error_m": 0.05457935761292385,
+    "actual_source_index": 22017
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route2_h75_v2",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.039999961853027344,
+    "position_error_m": 0.08596397936344147,
+    "rotation_error_rad": 0.1667761653661728,
+    "joint_abs_error_rad": [
+      1.1048126220703125,
+      0.38080164790153503,
+      1.4342041015625,
+      0.27765530347824097,
+      0.0037703514099121094
+    ],
+    "controller_normalized_rmse": 3.515516519546509,
+    "rb_history_normalized_rmse": 2.760885715484619,
+    "collision_geom_aabb_corner_max_error_m": 0.10943458541093373,
+    "actual_source_index": 22103
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route2_h75_v3",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.029999732971191406,
+    "position_error_m": 0.05746057629585266,
+    "rotation_error_rad": 0.14493200182914734,
+    "joint_abs_error_rad": [
+      0.3891448974609375,
+      0.3125098645687103,
+      1.0455780029296875,
+      0.24741840362548828,
+      0.003233194351196289
+    ],
+    "controller_normalized_rmse": 3.3159375190734863,
+    "rb_history_normalized_rmse": 2.766838788986206,
+    "collision_geom_aabb_corner_max_error_m": 0.09570255135942116,
+    "actual_source_index": 22189
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route3_h75_v0",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.13500022888183594,
+    "position_error_m": 0.30409806966781616,
+    "rotation_error_rad": 0.2609042823314667,
+    "joint_abs_error_rad": [
+      2.386199951171875,
+      0.5667312145233154,
+      3.7174835205078125,
+      0.4808468818664551,
+      0.019824981689453125
+    ],
+    "controller_normalized_rmse": 3.178738832473755,
+    "rb_history_normalized_rmse": 2.655059814453125,
+    "collision_geom_aabb_corner_max_error_m": 0.3364462233128769,
+    "actual_source_index": 22272
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route3_h75_v1",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.14500045776367188,
+    "position_error_m": 0.29149046540260315,
+    "rotation_error_rad": 0.2779161036014557,
+    "joint_abs_error_rad": [
+      2.78668212890625,
+      0.5445430874824524,
+      3.5549774169921875,
+      0.4069334864616394,
+      0.012099266052246094
+    ],
+    "controller_normalized_rmse": 2.4355173110961914,
+    "rb_history_normalized_rmse": 2.586212635040283,
+    "collision_geom_aabb_corner_max_error_m": 0.32631703925286604,
+    "actual_source_index": 22355
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route3_h75_v2",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.04500007629394531,
+    "position_error_m": 0.06361999362707138,
+    "rotation_error_rad": 0.21504274010658264,
+    "joint_abs_error_rad": [
+      0.6922760009765625,
+      0.5494663715362549,
+      0.96124267578125,
+      0.5118138790130615,
+      0.01307988166809082
+    ],
+    "controller_normalized_rmse": 2.5943844318389893,
+    "rb_history_normalized_rmse": 2.7054531574249268,
+    "collision_geom_aabb_corner_max_error_m": 0.12153916220411838,
+    "actual_source_index": 22438
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route3_h75_v3",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.10500001907348633,
+    "position_error_m": 0.19594421982765198,
+    "rotation_error_rad": 0.230524942278862,
+    "joint_abs_error_rad": [
+      1.70013427734375,
+      0.45906323194503784,
+      2.6184844970703125,
+      0.4428887963294983,
+      0.017704010009765625
+    ],
+    "controller_normalized_rmse": 2.518390655517578,
+    "rb_history_normalized_rmse": 2.5716278553009033,
+    "collision_geom_aabb_corner_max_error_m": 0.2243774860967865,
+    "actual_source_index": 22522
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route4_h75_v0",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.14500045776367188,
+    "position_error_m": 0.297515332698822,
+    "rotation_error_rad": 0.26395291090011597,
+    "joint_abs_error_rad": [
+      2.5057220458984375,
+      0.5587302446365356,
+      3.7068939208984375,
+      0.4750407934188843,
+      0.017025232315063477
+    ],
+    "controller_normalized_rmse": 2.4388723373413086,
+    "rb_history_normalized_rmse": 2.5832343101501465,
+    "collision_geom_aabb_corner_max_error_m": 0.3297878013025594,
+    "actual_source_index": 22606
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route4_h75_v1",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.16000032424926758,
+    "position_error_m": 0.32323744893074036,
+    "rotation_error_rad": 0.2764759659767151,
+    "joint_abs_error_rad": [
+      2.8251800537109375,
+      0.5370022058486938,
+      4.0544586181640625,
+      0.4019932150840759,
+      0.010039329528808594
+    ],
+    "controller_normalized_rmse": 3.3052024841308594,
+    "rb_history_normalized_rmse": 2.553079843521118,
+    "collision_geom_aabb_corner_max_error_m": 0.3577036518086581,
+    "actual_source_index": 22691
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route4_h75_v2",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.1099996566772461,
+    "position_error_m": 0.1733420193195343,
+    "rotation_error_rad": 0.20888184010982513,
+    "joint_abs_error_rad": [
+      1.8963470458984375,
+      0.5584057569503784,
+      2.51593017578125,
+      0.5216249823570251,
+      0.006623268127441406
+    ],
+    "controller_normalized_rmse": 2.5823817253112793,
+    "rb_history_normalized_rmse": 2.6824631690979004,
+    "collision_geom_aabb_corner_max_error_m": 0.2108987732513245,
+    "actual_source_index": 22777
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route4_h75_v3",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.08500003814697266,
+    "position_error_m": 0.1617158204317093,
+    "rotation_error_rad": 0.2307559847831726,
+    "joint_abs_error_rad": [
+      1.3124542236328125,
+      0.457691490650177,
+      2.126861572265625,
+      0.4438518285751343,
+      0.020946264266967773
+    ],
+    "controller_normalized_rmse": 2.5353353023529053,
+    "rb_history_normalized_rmse": 2.585232973098755,
+    "collision_geom_aabb_corner_max_error_m": 0.191006156053289,
+    "actual_source_index": 22860
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route5_h75_v0",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.14500045776367188,
+    "position_error_m": 0.2987782657146454,
+    "rotation_error_rad": 0.26481661200523376,
+    "joint_abs_error_rad": [
+      2.423370361328125,
+      0.5616782307624817,
+      3.7339019775390625,
+      0.4801369905471802,
+      0.018355846405029297
+    ],
+    "controller_normalized_rmse": 2.443270444869995,
+    "rb_history_normalized_rmse": 2.561539888381958,
+    "collision_geom_aabb_corner_max_error_m": 0.3312303585683258,
+    "actual_source_index": 22944
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route5_h75_v1",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.17500019073486328,
+    "position_error_m": 0.36027130484580994,
+    "rotation_error_rad": 0.2938459515571594,
+    "joint_abs_error_rad": [
+      3.0554962158203125,
+      0.5407508611679077,
+      4.505828857421875,
+      0.36771082878112793,
+      0.0011076927185058594
+    ],
+    "controller_normalized_rmse": 3.2080039978027344,
+    "rb_history_normalized_rmse": 2.626094102859497,
+    "collision_geom_aabb_corner_max_error_m": 0.3994683896899179,
+    "actual_source_index": 23031
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route5_h75_v2",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.06999969482421875,
+    "position_error_m": 0.1073540523648262,
+    "rotation_error_rad": 0.21464134752750397,
+    "joint_abs_error_rad": [
+      0.6151580810546875,
+      0.5728127956390381,
+      1.6070709228515625,
+      0.5216716527938843,
+      0.007928609848022461
+    ],
+    "controller_normalized_rmse": 2.6178090572357178,
+    "rb_history_normalized_rmse": 2.682307004928589,
+    "collision_geom_aabb_corner_max_error_m": 0.15455631387342197,
+    "actual_source_index": 23114
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route5_h75_v3",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.12999963760375977,
+    "position_error_m": 0.2470708191394806,
+    "rotation_error_rad": 0.2276546061038971,
+    "joint_abs_error_rad": [
+      2.71337890625,
+      0.464103639125824,
+      3.2209930419921875,
+      0.4481850266456604,
+      0.015879154205322266
+    ],
+    "controller_normalized_rmse": 2.5636661052703857,
+    "rb_history_normalized_rmse": 2.601263999938965,
+    "collision_geom_aabb_corner_max_error_m": 0.27535518693615124,
+    "actual_source_index": 23199
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route6_h75_v0",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.05499982833862305,
+    "position_error_m": 0.12203824520111084,
+    "rotation_error_rad": 0.18113723397254944,
+    "joint_abs_error_rad": [
+      1.443603515625,
+      0.23467496037483215,
+      1.823455810546875,
+      0.36811763048171997,
+      0.021596670150756836
+    ],
+    "controller_normalized_rmse": 2.640080213546753,
+    "rb_history_normalized_rmse": 2.6676924228668213,
+    "collision_geom_aabb_corner_max_error_m": 0.15414814528531628,
+    "actual_source_index": 23284
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route6_h75_v1",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.04999971389770508,
+    "position_error_m": 0.08162159472703934,
+    "rotation_error_rad": 0.17495182156562805,
+    "joint_abs_error_rad": [
+      0.9761505126953125,
+      0.2320765256881714,
+      1.23663330078125,
+      0.3638092875480652,
+      0.022185564041137695
+    ],
+    "controller_normalized_rmse": 3.3252429962158203,
+    "rb_history_normalized_rmse": 2.7004292011260986,
+    "collision_geom_aabb_corner_max_error_m": 0.1192963759278261,
+    "actual_source_index": 23370
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route6_h75_v2",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.03500032424926758,
+    "position_error_m": 0.11734180897474289,
+    "rotation_error_rad": 0.20078988373279572,
+    "joint_abs_error_rad": [
+      0.5686187744140625,
+      0.00028234533965587616,
+      1.8595428466796875,
+      0.29693591594696045,
+      0.012782096862792969
+    ],
+    "controller_normalized_rmse": 2.4873814582824707,
+    "rb_history_normalized_rmse": 2.64686918258667,
+    "collision_geom_aabb_corner_max_error_m": 0.14377169541423554,
+    "actual_source_index": 23453
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route6_h75_v3",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.03500032424926758,
+    "position_error_m": 0.11595609784126282,
+    "rotation_error_rad": 0.1758270114660263,
+    "joint_abs_error_rad": [
+      0.3944091796875,
+      0.014590460807085037,
+      1.8962249755859375,
+      0.30211490392684937,
+      0.010350942611694336
+    ],
+    "controller_normalized_rmse": 2.464539051055908,
+    "rb_history_normalized_rmse": 2.7265303134918213,
+    "collision_geom_aabb_corner_max_error_m": 0.1436295314849364,
+    "actual_source_index": 23537
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route7_h75_v0",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.059999942779541016,
+    "position_error_m": 0.12650664150714874,
+    "rotation_error_rad": 0.17412708699703217,
+    "joint_abs_error_rad": [
+      1.394256591796875,
+      0.23530812561511993,
+      1.891937255859375,
+      0.36027848720550537,
+      0.02154231071472168
+    ],
+    "controller_normalized_rmse": 3.458575963973999,
+    "rb_history_normalized_rmse": 2.6020891666412354,
+    "collision_geom_aabb_corner_max_error_m": 0.16004462290641952,
+    "actual_source_index": 23622
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route7_h75_v1",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.03000020980834961,
+    "position_error_m": 0.061813775449991226,
+    "rotation_error_rad": 0.17306962609291077,
+    "joint_abs_error_rad": [
+      0.67340087890625,
+      0.20895476639270782,
+      0.749786376953125,
+      0.35421353578567505,
+      0.026643991470336914
+    ],
+    "controller_normalized_rmse": 3.322467088699341,
+    "rb_history_normalized_rmse": 2.6782984733581543,
+    "collision_geom_aabb_corner_max_error_m": 0.09421817468555209,
+    "actual_source_index": 23712
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route7_h75_v2",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.010000228881835938,
+    "position_error_m": 0.07536925375461578,
+    "rotation_error_rad": 0.17805053293704987,
+    "joint_abs_error_rad": [
+      0.074859619140625,
+      0.029772423207759857,
+      1.25128173828125,
+      0.28649985790252686,
+      0.011918783187866211
+    ],
+    "controller_normalized_rmse": 2.4352965354919434,
+    "rb_history_normalized_rmse": 2.593597412109375,
+    "collision_geom_aabb_corner_max_error_m": 0.0981077418581829,
+    "actual_source_index": 23795
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route7_h75_v3",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.039999961853027344,
+    "position_error_m": 0.10954410582780838,
+    "rotation_error_rad": 0.17315925657749176,
+    "joint_abs_error_rad": [
+      0.459930419921875,
+      0.019206032156944275,
+      1.7912750244140625,
+      0.2939436435699463,
+      0.010858297348022461
+    ],
+    "controller_normalized_rmse": 3.4038186073303223,
+    "rb_history_normalized_rmse": 2.646604537963867,
+    "collision_geom_aabb_corner_max_error_m": 0.13397725332985666,
+    "actual_source_index": 23879
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route8_h75_v0",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.059999942779541016,
+    "position_error_m": 0.12069936096668243,
+    "rotation_error_rad": 0.18298102915287018,
+    "joint_abs_error_rad": [
+      1.4883880615234375,
+      0.23831506073474884,
+      1.81646728515625,
+      0.3749842047691345,
+      0.018285274505615234
+    ],
+    "controller_normalized_rmse": 3.4655330181121826,
+    "rb_history_normalized_rmse": 2.6448235511779785,
+    "collision_geom_aabb_corner_max_error_m": 0.1536835673785269,
+    "actual_source_index": 23964
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route8_h75_v1",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.06500005722045898,
+    "position_error_m": 0.11912690103054047,
+    "rotation_error_rad": 0.17912931740283966,
+    "joint_abs_error_rad": [
+      1.3931884765625,
+      0.2244267463684082,
+      1.7220001220703125,
+      0.3512599468231201,
+      0.021307945251464844
+    ],
+    "controller_normalized_rmse": 3.330690622329712,
+    "rb_history_normalized_rmse": 2.69686222076416,
+    "collision_geom_aabb_corner_max_error_m": 0.14787914289516785,
+    "actual_source_index": 24049
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route8_h75_v2",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": -0.009999752044677734,
+    "position_error_m": 0.050650257617235184,
+    "rotation_error_rad": 0.19381336867809296,
+    "joint_abs_error_rad": [
+      0.233795166015625,
+      0.009850515983998775,
+      0.8724822998046875,
+      0.28205227851867676,
+      0.01737666130065918
+    ],
+    "controller_normalized_rmse": 2.545398235321045,
+    "rb_history_normalized_rmse": 2.643120050430298,
+    "collision_geom_aabb_corner_max_error_m": 0.09407835259934293,
+    "actual_source_index": 24134
+  },
+  {
+    "map": "map07",
+    "case_dir": "rb_run3_route8_h75_v3",
+    "actual_handoff": true,
+    "predicted_handoff": true,
+    "event_error_s": 0.04500007629394531,
+    "position_error_m": 0.11658242344856262,
+    "rotation_error_rad": 0.18413475155830383,
+    "joint_abs_error_rad": [
+      0.5122833251953125,
+      0.015446247532963753,
+      1.8668670654296875,
+      0.2968234419822693,
+      0.00922536849975586
+    ],
+    "controller_normalized_rmse": 3.3155198097229004,
+    "rb_history_normalized_rmse": 2.708930730819702,
+    "collision_geom_aabb_corner_max_error_m": 0.14171416581212007,
+    "actual_source_index": 24219
+  }
+]

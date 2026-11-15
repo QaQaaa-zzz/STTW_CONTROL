@@ -1,0 +1,15 @@
+{
+  "counts": {
+    "TRAIN": 216,
+    "DEV": 72
+  },
+  "train_maps": 6,
+  "dev_maps": 2,
+  "same_rb_bundle": [
+    "{'rb_run3': '/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/shared_plant_checkpoint_comparison/shared225'}"
+  ],
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p3_world_data",
+  "timing": "Actual RB entry, then each fourth lower tick; contact row t summarizes prior5ms; no future action/contact inputs. Future action retained only as labels. Full history read only at initial model state.",
+  "grouping": "Entire generated terrain layouts, full rollouts and original snapshot sources stay in one split; old frozen roles preserved. All maps share rough/ridge/gap topology; no novel-terrain-type TEST claim.",
+  "normalization": "TRAIN rows and within-rollout transitions only"
+}

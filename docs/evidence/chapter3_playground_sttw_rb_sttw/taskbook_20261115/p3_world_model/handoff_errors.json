@@ -1,0 +1,17 @@
+[
+  {
+    "seed": 0,
+    "predicted_handoffs": 0,
+    "mean_signed_handoff_error_s": null
+  },
+  {
+    "seed": 1,
+    "predicted_handoffs": 72,
+    "mean_signed_handoff_error_s": -0.9641666809717814
+  },
+  {
+    "seed": 2,
+    "predicted_handoffs": 54,
+    "mean_signed_handoff_error_s": -0.637592598243996
+  }
+]
