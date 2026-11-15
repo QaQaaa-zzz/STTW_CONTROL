@@ -1,0 +1,22 @@
+{
+  "role": "Direct ground models chosen by existing1s DEV scores before new full-chain comparison; frozen RB identical",
+  "models": {
+    "approach": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_approach_models_continue/direct_seed0/best.pt",
+      "sha256": "f84d362119fe37db59ea5065d7d95aa0db438171911ef5e494032c117ebdbfe7"
+    },
+    "jump": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p3_world_handoffloss/seed0/best.pt",
+      "sha256": "f2a03bf2af765d3e945f895cb500b283b4626d6c00343ad4c5ba692c875cee70"
+    },
+    "departure": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/direct_seed0/best.pt",
+      "sha256": "adf6621aed5097e3072920cfbdd3d0e5db1ddc44c8e1f45b679e7fec9bdbc917"
+    },
+    "events": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p3_events/seed1/best.pt",
+      "sha256": "7c4c9028a890f54519d7ff20d384d75fbd3b711d7bb05989bac1028ab80ea24e"
+    }
+  },
+  "missing": "Matching history bridge training and full-chain evaluation pending"
+}

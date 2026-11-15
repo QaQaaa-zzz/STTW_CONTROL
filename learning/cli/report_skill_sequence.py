@@ -17,7 +17,8 @@ else:world=json.loads((Path(contract['oracle'])/'map48/world.json').read_text())
 paths={contract.get('method','C'):a.run}
 if a.compare:paths[json.loads((a.compare/'contract.json').read_text())['method']]=a.compare
 records={k:json.loads((v/'cases.json').read_text()) for k,v in paths.items()};arrays={k:np.load(v/'predictions.npz') for k,v in paths.items()};rows=next(iter(records.values()));bank=np.load(a.routes)
-fig,axes=plt.subplots(math.ceil(len(rows)/3),3,figsize=(18,math.ceil(len(rows)/3)*1.7),layout='constrained',squeeze=False)
+y_limit=max(1.6,max(float(np.abs(z[k][:,:,1]).max()) for z in arrays.values() for k in ['approach','jump','departure'])+.1)
+fig,axes=plt.subplots(math.ceil(len(rows)/3),3,figsize=(18,math.ceil(len(rows)/3)*max(1.7,y_limit*.65)),layout='constrained',squeeze=False)
 for i,(row,ax) in enumerate(zip(rows,axes.flat)):
  prefix=np.load(row['prefix']);actual=prefix['qpos'][:,:2]
  if row['suffix']:
@@ -30,7 +31,7 @@ for i,(row,ax) in enumerate(zip(rows,axes.flat)):
  for x0,x1,y0,y1 in world['terrain'].get('forbidden_rectangles',[]):ax.add_patch(Rectangle((x0,y0),x1-x0,y1-y0,color='.5',alpha=.25))
  front=world['terrain']['front_x_m'];ax.axvspan(front,front+world['terrain']['width_m'],color='#56B4E9',alpha=.15)
  ax.set_title(f'root{row["root"]} route{row["route"]} v{row.get("speed",1.8):.1f} | actual{int(row["actual_success"])} '+ ' '.join(f'{m}{int(records[m][i]["admitted"])}' for m in paths),fontsize=8)
- ax.set_xlim(1.5,20.5);ax.set_ylim(-1.6,1.6);ax.set_aspect('equal',adjustable='box');ax.set_xlabel('World x (m)',fontsize=7);ax.set_ylabel('World y (m)',fontsize=7);ax.tick_params(labelsize=7);ax.grid(alpha=.2)
+ ax.set_xlim(1.5,20.5);ax.set_ylim(-y_limit,y_limit);ax.set_aspect('equal',adjustable='box');ax.set_xlabel('World x (m)',fontsize=7);ax.set_ylabel('World y (m)',fontsize=7);ax.tick_params(labelsize=7);ax.grid(alpha=.2)
 for ax in list(axes.flat)[len(rows):]:ax.set_visible(False)
 axes[0,0].legend(fontsize=6,ncol=2);fig.suptitle(f'Known DEV: all{len(rows)} trajectories; travel +x\nActual stops at failure/goal; prediction stops at predicted events/goal or max horizon; stage gaps retained.',fontsize=11);fig.savefig(a.output/'xy.png',dpi=160);plt.close(fig)
 summaries={}

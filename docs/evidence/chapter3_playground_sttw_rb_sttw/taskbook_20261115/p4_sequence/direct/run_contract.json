@@ -1,0 +1,20 @@
+{
+  "change": "Train matched bridge for frozen direct approach seed0; do not reuse residual latent bridge",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "updates": 600,
+  "batch": 64,
+  "lr": 0.0003,
+  "clip": 1,
+  "train_sequences": 72,
+  "dev_sequences": 24,
+  "selection": "DEV entry normalized history RMSE, same as residual bridge",
+  "controller_updates": 0,
+  "world_models_updates": 0,
+  "budget": "Original matched bridge took12.7s; expected<2min, max25min",
+  "stop": "nonzero exit or budget; no automatic extension",
+  "data_role": "Existing TRAIN/DEV; no independent TEST"
+}

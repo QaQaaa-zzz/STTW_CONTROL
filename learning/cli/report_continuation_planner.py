@@ -8,7 +8,8 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('--run',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();a.output.mkdir(parents=True,exist_ok=True)
 c=json.loads((a.run/'contract.json').read_text());cases=json.loads((a.run/'cases.json').read_text());summary=json.loads((a.run/'summary.json').read_text());bank=np.load(c['routes']);pred={k:np.load(Path(c[v])/'predictions.npz') for k,v in [('C','continuous'),('I','independent')]};source=json.loads((Path(c['continuous'])/'contract.json').read_text());world=json.loads((Path(source['oracle'])/'map48/world.json').read_text())
-fig,axes=plt.subplots(6,3,figsize=(18,10),layout='constrained')
+y_limit=max(1.6,max(float(np.abs(z[k][:,:,1]).max()) for z in pred.values() for k in ['approach','jump','departure'])+.1)
+fig,axes=plt.subplots(6,3,figsize=(18,6*max(1.7,y_limit*.65)),layout='constrained')
 for i,(row,ax) in enumerate(zip(cases['C'],axes.flat)):
  z=np.load(row['prefix']);actual=z['qpos'][:,:2]
  if row['suffix']:
@@ -20,7 +21,7 @@ for i,(row,ax) in enumerate(zip(cases['C'],axes.flat)):
   for j,(name,steps) in enumerate([('approach',int(z['entry_steps'][i])+1),('jump',int(z['jump_steps'][i])),('departure',int(z['departure_steps'][i])+1)]):
    points=z[name][i,:steps,:2];ax.plot(points[:,0],points[:,1],style,color=color,lw=1,label=method if j==0 else None)
  for x0,x1,y0,y1 in world['terrain']['forbidden_rectangles']:ax.add_patch(Rectangle((x0,y0),x1-x0,y1-y0,color='.5',alpha=.25))
- ax.axvspan(10.3,10.6,color='#56B4E9',alpha=.15);ax.set_xlim(1.5,20.5);ax.set_ylim(-1.6,1.6);ax.set_aspect('equal',adjustable='box');ax.grid(alpha=.2)
+ ax.axvspan(10.3,10.6,color='#56B4E9',alpha=.15);ax.set_xlim(1.5,20.5);ax.set_ylim(-y_limit,y_limit);ax.set_aspect('equal',adjustable='box');ax.grid(alpha=.2)
  ax.set_title(f'root{row["root"]} up{row["upstream"]} down{row["downstream"]} | actual{int(row["actual_success"])} I{int(cases["I"][i]["admitted"])} C{int(row["admitted"])}',fontsize=8);ax.tick_params(labelsize=7);ax.set_xlabel('World x (m)',fontsize=7);ax.set_ylabel('World y (m)',fontsize=7)
 axes[0,0].legend(fontsize=6,ncol=2);fig.suptitle('Known DEV map48, all18 candidates; travel +x. Actual stops at failure/goal.\nIndependent stage resets shown as gaps; equal XY scales; raw envelopes, no new calibration.',fontsize=11);fig.savefig(a.output/'xy.png',dpi=160);plt.close(fig)
 for file in ['summary.json','contract.json','decisions.json']:shutil.copyfile(a.run/file,a.output/file)
