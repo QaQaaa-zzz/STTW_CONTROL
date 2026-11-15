@@ -85,6 +85,21 @@
       "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p0/config.json",
       "sha256": "974ba30b39fa4f28c48259bc94dbbeac026f0da523ec15c3a78ee6337287ecba",
       "bytes": 11883
+    },
+    "terrain.mjb": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p0/evaluation/terrain.mjb",
+      "sha256": "da025c34fd1238c650645c5f05e8fcce0f6b2c5762ec50de34b25129a2326740",
+      "bytes": 30125903
+    },
+    "resolved_config.json": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p0/evaluation/resolved_config.json",
+      "sha256": "5d22bcb750277b61c1dc801f27eb7627cb0f7ff24711696b3350169a0584b008",
+      "bytes": 11882
+    },
+    "declaration.json": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p0/evaluation/declaration.json",
+      "sha256": "b9908fa135e844678be7f3208b2c7a94c4afef841be8122e4630d0a2dd135fb4",
+      "bytes": 15204
     }
   },
   "contract": {
@@ -108,5 +123,14 @@
     }
   },
   "scope": "One original lane; identical physics, map, policies, initial state and task; new batch size may change numerical results",
-  "status": "prepared"
+  "status": "smoke_complete_P0_acceptance_pending",
+  "dependencies": {
+    "torch": "2.9.1",
+    "jax": "0.6.2",
+    "jaxlib": "0.6.2",
+    "mujoco": "3.6.0",
+    "mujoco-mjx": "3.6.0",
+    "warp-lang": "1.11.0",
+    "numpy": "2.4.0"
+  }
 }

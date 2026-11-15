@@ -11,3 +11,9 @@
 源码审查：playground_snapshot.capture保存全部MJX叶子（含约束/warm start）、GroundAdapter、RB状态、runtime、tick与context。runner仍显式拒绝rolling planner快照恢复，尚不满足新P1。HistoryDynamics.rollout每次用控制历史初始化hidden、不返回记忆，且髋膝保持不变，不能作为RB全关节预测器。接触子步row t对应之前5ms；控制历史在阶段事件后、control前采集，后续数据管线须保留该方向。
 
 P0仍缺：真实smoke结果与XY、依赖版本/生成模型身份补录，以及阶段/时刻/几何体/约束/原始与扩张净空/裕量来源的逐候选拒绝日志。旧净空数组不等于这些字段全部齐备。
+
+## 已完成的真实smoke
+
+![历史与本次实际/原参考XY](smoke_xy.png)
+
+1/1完成，目标8.995秒、保持0.505秒；RB进入3.940秒，远岸触地5.080秒，交回5.390秒。禁行碰撞/非轮接触均0。单车道与历史批量逐例结果及共同窗口差保存在smoke_result.json，该差不是同引擎重复运行噪声基准。依赖和新生成模型hash已补录。P0仍需补齐逐候选拒绝日志，不称整阶段验收。
