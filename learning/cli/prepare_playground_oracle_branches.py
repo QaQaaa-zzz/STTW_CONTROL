@@ -9,6 +9,8 @@ for m in manifest['entries']:
   if a.stage=='approach':sources=[(0,folder/'base'/'rb_run3_initial_snapshot.pkl',0.)]
   else:
    source=folder/f'approach{upstream}'/'evaluation';anchors=source/'snapshot_anchors.json';ticks=json.loads(anchors.read_text())['ticks']
+   results=json.loads((source/'status.json').read_text())['results']
+   if not any(r['handoff_s'] is not None for r in results):ticks=[]
    if not ticks:
     failed.append(dict(map_id=m['map_id'],upstream=upstream,reason='no complete ground handoff snapshot',status=str(source/'status.json')));continue
    tick=ticks[0];sources=[(downstream,source/f'rb_run3_anchor_{tick:05d}.pkl',tick*.005) for downstream in range(3)]
