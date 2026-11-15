@@ -1,0 +1,82 @@
+{
+  "raw_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p1_same_state",
+  "memory_repeats": 4,
+  "cases": [
+    {
+      "route": 4,
+      "root": 1001,
+      "metrics": {
+        "qpos": {
+          "repeat_max": 0.1548919677734375,
+          "disk_vs_continuous": 0.0070953369140625,
+          "within_repeat": true,
+          "at_capture": 0.0
+        },
+        "qvel": {
+          "repeat_max": 13.001741409301758,
+          "disk_vs_continuous": 0.1769084930419922,
+          "within_repeat": true,
+          "at_capture": 0.0
+        },
+        "applied_targets": {
+          "repeat_max": 3.171476364135742,
+          "disk_vs_continuous": 0.0111846923828125,
+          "within_repeat": true,
+          "at_capture": 0.0
+        },
+        "controller_state": {
+          "repeat_max": 1081.0,
+          "disk_vs_continuous": 0.0975799560546875,
+          "within_repeat": true,
+          "at_capture": 0.0
+        },
+        "rb_state": {
+          "repeat_max": 22.096912384033203,
+          "disk_vs_continuous": 1.4793004989624023,
+          "within_repeat": true,
+          "at_capture": 0.0
+        }
+      },
+      "events": {
+        "rb_entry_s": {
+          "repeat_max_s": 0.0,
+          "disk_vs_continuous_s": 0.0,
+          "within_repeat": true
+        },
+        "first_far_contact_s": {
+          "repeat_max_s": 0.0,
+          "disk_vs_continuous_s": 0.0,
+          "within_repeat": true
+        },
+        "handoff_s": {
+          "repeat_max_s": 0.004999637603759766,
+          "disk_vs_continuous_s": 0.0,
+          "within_repeat": true
+        },
+        "duration_s": {
+          "repeat_max_s": 0.024999618530273438,
+          "disk_vs_continuous_s": 0.0,
+          "within_repeat": true
+        }
+      },
+      "terminations": [
+        "goal",
+        "goal",
+        "goal",
+        "goal",
+        "goal",
+        "goal"
+      ],
+      "planning_failed": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "passed_numerical": true
+    }
+  ],
+  "scope": "Fixed finite-repeat engineering comparison of fieldwise maxima; not exact determinism or a statistical safety bound"
+}
