@@ -1,0 +1,8 @@
+{
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha",
+  "scope": "Two stage pairs(.5,0),(1,0),2knownDEV maps x2roots x2speeds x9routes;144new physical. Compare matched diagonal(.5,.5),(1,1) and alpha0 baseline.",
+  "baseline": "Alpha0 frozen H75, not pure ECBC; physical/actor/config identity checked per source before reuse",
+  "metrics": "Task outcomes from runner. Ground error means use each actual ground window; paired differences use common actual duration and equal phase0/2 samples, no extrapolation after goal/failure. Same-approach comparisons measure raw qpos/qvel maximum differences strictly before the earlier measured handback; mixed component units, not a physical norm. Body-forward3D rotation; controller goal speed is planar heading projection. Lateral normal=(-sin,cos).",
+  "goal_diagnostics": "Goal-window violation counts are overlapping diagnostic counts; do not replace actual status or attribute a unique cause",
+  "no_reward": "No reward is defined by this physical coverage protocol; no fabricated reward curves"
+}
