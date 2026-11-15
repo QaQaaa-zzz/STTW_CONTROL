@@ -8,6 +8,7 @@ from sttw_control.playground_prediction import BodyEnvelope
 from sttw_control.playground_joint_planner import MotionLibraryPlanner
 
 p=argparse.ArgumentParser(description=__doc__)
+p.add_argument('--test-catalog',type=Path)
 p.add_argument('--sweep',type=Path,required=True)
 p.add_argument('--calibration',type=Path,required=True)
 p.add_argument('--output',type=Path,required=True)
@@ -68,6 +69,7 @@ for i,row in enumerate(candidate_rows):
     low[i,:n]=row.pop('lower')-region_margin[regions];high[i,:n]=row.pop('upper')+region_margin[regions];valid[i,:n]=True;prefix[i,:n]=row.pop('prefix')
 tensor=lambda x:torch.as_tensor(x,device='cuda')
 planner=MotionLibraryPlanner(tensor(low),tensor(high),tensor(valid),tensor(prefix),tensor(np.array([[r['activation_id'],r['upstream'],r['downstream']] for r in candidate_rows])),tensor(np.array([r['cost_s'] for r in candidate_rows],np.float32)),tensor(np.array([r['prefix_cost_s'] for r in candidate_rows],np.float32)),tensor(np.array([r['eligible'] for r in candidate_rows])),margin)
+catalog=json.loads(a.test_catalog.read_text()) if a.test_catalog else None
 layout_specs=[dict(rectangle=[x,x+.2,y-.06,y+.06],height_m=.5) for x in [12.9,13.3] for y in [-.08,0.,.08]]
 (a.output/'calibration.json').write_text(json.dumps(dict(records=calibration,margin_m=margin,original_isotropic_margin_m=isotropic_margin,region_edges_x_m=region_edges.tolist(),region_counts=region_counts.tolist(),region_axis_expansion_m=region_margin.tolist(),rule='Per-axis maximum observed support miss in fixed physical map regions plus0.02m; expand each geometry before clearance' ,scope='Same-map DEV spatial comparison at common body x, with boundary support held only for measuring envelope miss; no timing prediction or probability guarantee'),indent=2)+'\n')
 source_rows=[]
@@ -75,32 +77,44 @@ for i,sources in enumerate(motions):
     source_rows.extend(dict(candidate=i,**{k:v for k,v in s.items() if k not in ['x','lower','upper']}) for s in sources)
 (a.output/'candidates.json').write_text(json.dumps(candidate_rows,indent=2)+'\n');(a.output/'sources.json').write_text(json.dumps(source_rows,indent=2)+'\n')
 dev_variants=[copy.deepcopy(next(r['variant'] for r in cal_status['results'] if r['variant']['root_variant']==root)) for root in sorted({r['variant']['root_variant'] for r in cal_status['results'] if r['variant']['data_split']!='TRAIN'})]
+if catalog:layout_specs=catalog['entries']
+# Canonical prefix ordering used by the previously evaluated strong comparator.
+group_order=np.argsort([r['prefix_cost_s'] for r in candidate_rows if r['downstream']==0],kind='stable');group_ranks=np.empty(len(group_order),int);group_ranks[group_order]=np.arange(len(group_order));rank_tensor=tensor(np.repeat(group_ranks,3))
 plans=[];entries=[]
 for layout,spec in enumerate(layout_specs):
-    folder=a.output/f'layout{layout:02d}';folder.mkdir();rect=spec['rectangle']
-    w=copy.deepcopy(world);w['map_id']=f'e2_dev_{layout:02d}';w['terrain']['forbidden_rectangles']=[rect];w['terrain']['obstacle_height_m']=spec['height_m']
+    folder=a.output/f'layout{layout:02d}';folder.mkdir();rect=spec.get('rectangle')
+    w=copy.deepcopy(world);w['map_id']=f'e2_dev_{layout:02d}'
+    if catalog:
+        test_config=json.loads(Path(spec['config']).read_text());w=json.loads(Path(test_config['world_map']).read_text());dev_variants=[copy.deepcopy(v) for v in test_config['ground_handoff']['handoff_variants'] if v['requested_speed_m_s']==1.8]
+    else:w['terrain']['forbidden_rectangles']=[rect];w['terrain']['obstacle_height_m']=spec['height_m']
     (folder/'world.json').write_text(json.dumps(w,indent=2)+'\n')
-    boxes=tensor(np.array([[rect[0],rect[2],0.,rect[1],rect[3],spec['height_m']]],np.float32));bounds=tensor(np.array(w['bounds_xy_m'],np.float32))
+    boxes=tensor(np.array([[r[0],r[2],0.,r[1],r[3],w['terrain']['obstacle_height_m']] for r in w['terrain']['forbidden_rectangles']],np.float32));bounds=tensor(np.array(w['bounds_xy_m'],np.float32))
     planner(bounds,boxes);torch.cuda.synchronize();clock=time.perf_counter();indices,feasible,clearance,prefix_clearance,first_choice=planner(bounds,boxes);torch.cuda.synchronize();elapsed=time.perf_counter()-clock
+    methods=['segmented','joint']
+    if catalog:
+        eligible=(clearance>=0)&planner.eligible;first_rank=torch.where(eligible,rank_tensor,torch.inf).amin();back=torch.where(eligible&(rank_tensor==first_rank),planner.cost,torch.inf).argmin();indices=torch.cat((indices,torch.where(eligible.any(),back,torch.zeros_like(back))[None]));feasible=torch.cat((feasible,eligible.any()[None]));methods.append('backtracking')
     indices=indices.cpu().tolist();feasible=feasible.cpu().tolist();clearance=clearance.cpu().tolist()
     selected=[candidate_rows[i] for i in indices]
-    for method_index,method in enumerate(['segmented','joint']):
+    for method_index,method in enumerate(methods):
         choice=selected[method_index]
         plans.append(dict(layout=layout,method=method,feasible=feasible[method_index],candidate=indices[method_index],activation_id=choice['activation_id'],activation_x_m=choice['activation_x_m'],route=choice['route'],predicted_full_cost_s=choice['cost_s'],clearance_m=clearance[indices[method_index]],margin_m=margin,shared_planning_ms=elapsed*1000,segmented_prefix_candidate=int(first_choice),all_candidate_clearance_m=clearance))
     for activation in sorted({r['activation_id'] for r in selected}):
         sub=folder/f'activation{activation}';sub.mkdir();c=copy.deepcopy(base)
         for key in ['world_map_spec','ditch_terrain','snapshot_times_s']:c.pop(key,None)
         c.update(world_map=str(folder/'world.json'),planned_activation_offset_m=next(r['activation_x_m'] for r in selected if r['activation_id']==activation)-w['terrain']['front_x_m'],task_evaluation=True,role='E2 static initial-plan DEV; no rolling publication or online latency claim',audit_actuator_owner=False)
+        if catalog:c['role']='Frozen new-map E2; same prior DEV algorithms and margins; E3 outcomes previously inspected'
         c['ground_handoff']['handoff_variants']=copy.deepcopy(dev_variants)
         routes=sorted({r['route'] for r in selected if r['activation_id']==activation})
-        c['evaluation_lanes']=[[route,'h75',root] for root in range(2) for route in routes]
+        c['evaluation_lanes']=[[route,'h75',root] for root in range(len(dev_variants)) for route in routes]
         (sub/'config.json').write_text(json.dumps(c,indent=2)+'\n')
         key=f'layout{layout:02d}_activation{activation}'
         entries.append(dict(layout=key,config=str(sub/'config.json'),evaluation=str(sub/'evaluation'),episodes=len(c['evaluation_lanes'])))
         for plan in plans:
             if plan['layout']==layout and plan['activation_id']==activation:
-                plan['evaluation']=str(sub/'evaluation');plan['case_dirs']=[f"rb_run3_route{plan['route']}_h75_v{i}" for i in range(2)]
+                plan['evaluation']=str(sub/'evaluation');plan['case_dirs']=[f"rb_run3_route{plan['route']}_h75_v{i}" for i in range(len(dev_variants))]
 protocol=dict(role='E2 finite-motion DEV pilot, not continuous CEM, rolling publication or independent TEST',methods=['segmented','joint'],selection='H0 canonical straight-downstream prefix then conditional continuation; H1 complete-motion minimization; both use the same36 frozen candidate evaluations',cost='Worst full-chain completion time across two TRAIN sources',source_sweep=str(a.sweep),calibration=str(a.calibration),margin_m=margin,uncertainty='Geometry already expanded by fixed-region per-axis DEV maximum plus0.02m; clearance must remain nonnegative',candidates=36,initial_states='Existing DEV roots6/7, not optimizer variables',goal=world['goal'],seconds=10,ground_only=False,routes=list(range(9)),layouts=layout_specs,entries=entries,paired_conditions=12,method_episodes=24,physical_episodes=sum(r['episodes'] for r in entries),physics_budget_max_lane_steps=240000,expected_wallclock_s=[300,900],hard_limit_s=1500,stop='One frozen queue, first runtime error or25min; no retries or training',publication='Static complete plan before initialization; planning clock separate from physical episode. Actual controller history never reset mid-route.',no_plan='Keep original straight incumbent at first validated activation; count planner failure even if physical goal occurs',physical_map='Same terrain, ditch and2m flat buffers; new forbidden boxes start beyond12.6m; activation is a plan parameter, not a terrain change',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),preparation_s=time.perf_counter()-started)
+if catalog:
+    protocol.update(role='New-map E2 comparison on frozen E3 map/root catalog; protocol frozen after E3 outcomes were inspected; no E2 outcome-dependent tuning',test_catalog=str(a.test_catalog),methods=methods,paired_conditions=len(layout_specs)*4,method_episodes=len(layout_specs)*4*len(methods),physical_episodes=sum(r['episodes'] for r in entries),physics_budget_max_lane_steps=sum(r['episodes'] for r in entries)*2000,initial_states='New roots1001-1004 from catalog, shared with E3;1.8 request only',primary='Joint versus strong backtracking: all-condition full goal and paired penalized time; greedy secondary',selection='Same36 candidate full-envelope evaluations. Strong segmented comparator scans groups in canonical prefix-cost order, chooses minimum full cost in first feasible group; joint minimizes all feasible full costs.',calibration_scope='Existing DEV calibration and TRAIN motion templates unchanged; new terrain changes are physical tests, not new calibration. E3 outcomes already inspected; no algorithm/threshold change for E2.',expected_wallclock_s=[3600,6600],hard_limit_s=9000,stop='One frozen queue; first runtime error or150min budget; no retries/training; assistant waits over30min pause independently')
 (a.output/'manifest.json').write_text(json.dumps(protocol,indent=2)+'\n');(a.output/'plans.json').write_text(json.dumps(plans,indent=2)+'\n')
 (a.output/'source').mkdir()
 for path in [Path(__file__),Path('learning/src/sttw_control/playground_joint_planner.py'),Path('learning/cli/evaluate_playground_handoff.py')]:shutil.copyfile(path,a.output/'source'/path.name)

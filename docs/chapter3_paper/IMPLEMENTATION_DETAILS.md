@@ -74,3 +74,6 @@ PG10 adds a static same-candidate model-planning DEV pilot: M0 10/12, M1/M2 12/1
 PG11 adds the canonical approach subset (72TRAIN/24DEV) with full observed3.56–4.10s predictions. The three illustrative XY panels use fixed map/root/speed and all three approach directions; full24conditions remain linked. PG10 now explicitly records the missing predicted terminal-hold gate; physical success is retained without calling it full dynamic admissibility.
 
 Current PG11 includes600→900 continuation and retained intermediate best checkpoints; PG12 adds explicit predicted terminal/domain screening with only2new physics runs. PG13 retains the rolling coverage limitation after108new TRAIN histories: physical12/12, coverage11/12 with a different failure. Independent P4 E1–E3 remains pending; no full-coverage or structural-dominance claim.
+
+
+PG14已加入：50新布局×4根，M0 156/200，M1/M2各200/200；收益来自减少无计划，非假可行下降或M1胜过M2。完整逐例/XY见p4_model_test；静态组件TEST与既有DEV分开，E1/E2和滚动验收仍待完成，作者核验待办。

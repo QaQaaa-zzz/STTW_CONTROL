@@ -1,0 +1,4 @@
+model,conditions,physical_goals,feasible_plan_goals,no_plan,predicted_feasible_execution_failures,mean_penalized_s
+M0,200,156,156,44,0,9.311650013923645
+M1,200,200,200,0,0,8.999225015640258
+M2,200,200,200,0,0,8.998050017356872

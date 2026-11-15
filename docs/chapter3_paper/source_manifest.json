@@ -475,6 +475,19 @@
       "verification": "agent_source_inspected",
       "human_verification": "pending",
       "draft_role": "current_shared_plant_planning"
+    },
+    {
+      "id": "PG14",
+      "title": "Frozen50-map four-root model planning TEST",
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/p4_model_test/RESULTS.md",
+      "sha256": "26fab3f7e3e6131e2a108e62f0df435c48094de65477da068520e4312314bca0",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending",
+      "draft_role": "frozen_static_test",
+      "supporting_sources": [
+        "docs/evidence/chapter3_playground_sttw_rb_sttw/p4_model_test/cases.csv",
+        "docs/evidence/chapter3_playground_sttw_rb_sttw/p4_model_test/paired_statistics.json"
+      ]
     }
   ],
   "references": [
@@ -518,7 +531,7 @@
   "scope": "Development methods/results draft, not submission ready",
   "new_physics_steps": "See frozen run manifests; paper build adds no simulation",
   "new_policy_training_updates": 0,
-  "paper_sha256": "b7d1d9dcb6a9aee7e939c96f24250eea068c531f9b13ec6aae0a44d3f54a4165",
+  "paper_sha256": "ff0c941509443447573774eb0da95ae4694034b1ed018aa82f7afa413c4151da",
   "revision_scope": "User execution-outline ground dynamics/full-motion planning/structured prediction; prior two-interface draft preserved in Git0c485653",
   "current_result_panels": [
     "PG1",
@@ -532,6 +545,7 @@
     "PG10",
     "PG11",
     "PG12",
-    "PG13"
+    "PG13",
+    "PG14"
   ]
 }

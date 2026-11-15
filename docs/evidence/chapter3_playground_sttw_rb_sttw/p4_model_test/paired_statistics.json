@@ -1,0 +1,83 @@
+[
+  {
+    "left": "M1",
+    "right": "M0",
+    "metric": "physical_goal",
+    "difference": 0.22,
+    "map_bootstrap95": [
+      0.12,
+      0.34
+    ]
+  },
+  {
+    "left": "M1",
+    "right": "M0",
+    "metric": "penalized_s",
+    "difference": -0.3124249982833862,
+    "map_bootstrap95": [
+      -0.4258562599420547,
+      -0.2093987321853638
+    ]
+  },
+  {
+    "left": "M1",
+    "right": "M0",
+    "metric": "common_success_time_s",
+    "conditions": 156,
+    "difference": -0.11426281929016113
+  },
+  {
+    "left": "M2",
+    "right": "M1",
+    "metric": "physical_goal",
+    "difference": 0.0,
+    "map_bootstrap95": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "left": "M2",
+    "right": "M1",
+    "metric": "penalized_s",
+    "difference": -0.0011749982833862305,
+    "map_bootstrap95": [
+      -0.0035249948501586913,
+      0.0
+    ]
+  },
+  {
+    "left": "M2",
+    "right": "M1",
+    "metric": "common_success_time_s",
+    "conditions": 200,
+    "difference": -0.0011749982833862305
+  },
+  {
+    "left": "M2",
+    "right": "M0",
+    "metric": "physical_goal",
+    "difference": 0.22,
+    "map_bootstrap95": [
+      0.12,
+      0.34
+    ]
+  },
+  {
+    "left": "M2",
+    "right": "M0",
+    "metric": "penalized_s",
+    "difference": -0.31359999656677245,
+    "map_bootstrap95": [
+      -0.42671255230903626,
+      -0.21132000148296365
+    ]
+  },
+  {
+    "left": "M2",
+    "right": "M0",
+    "metric": "common_success_time_s",
+    "conditions": 156,
+    "difference": -0.1157692273457845
+  }
+]

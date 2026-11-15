@@ -1,0 +1,34 @@
+{
+  "models": [
+    {
+      "model": "M0",
+      "conditions": 200,
+      "physical_goals": 156,
+      "feasible_plan_goals": 156,
+      "no_plan": 44,
+      "predicted_feasible_execution_failures": 0,
+      "mean_penalized_s": 9.311650013923645
+    },
+    {
+      "model": "M1",
+      "conditions": 200,
+      "physical_goals": 200,
+      "feasible_plan_goals": 200,
+      "no_plan": 0,
+      "predicted_feasible_execution_failures": 0,
+      "mean_penalized_s": 8.999225015640258
+    },
+    {
+      "model": "M2",
+      "conditions": 200,
+      "physical_goals": 200,
+      "feasible_plan_goals": 200,
+      "no_plan": 0,
+      "predicted_feasible_execution_failures": 0,
+      "mean_penalized_s": 8.998050017356872
+    }
+  ],
+  "method_conditions": 600,
+  "physical_episodes": 312,
+  "raw_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p4_model_test"
+}

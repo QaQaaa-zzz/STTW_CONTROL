@@ -1,5 +1,8 @@
-#!/usr/bin/env python3
-"""Wait for one chapter-three queue process and send one Bark terminal notice."""
+#!/usr/bin/python3
+"""Wait for one chapter-three queue process and send one Bark terminal notice.
+
+Invoke with /usr/bin/python3: the Playground venv lacks os.pidfd_open.
+"""
 import argparse
 import datetime
 import json
