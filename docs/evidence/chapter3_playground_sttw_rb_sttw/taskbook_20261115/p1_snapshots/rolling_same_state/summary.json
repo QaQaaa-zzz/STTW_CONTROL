@@ -1,0 +1,157 @@
+{
+  "raw_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p1_rolling_same_state",
+  "memory_repeats": 4,
+  "cases": [
+    {
+      "route": 3,
+      "root": 6,
+      "metrics": {
+        "qpos": {
+          "repeat_max": 0.48492431640625,
+          "disk_vs_continuous": 0.5769805908203125,
+          "within_repeat": false,
+          "at_capture": 0.0
+        },
+        "qvel": {
+          "repeat_max": 15.138710975646973,
+          "disk_vs_continuous": 13.743955612182617,
+          "within_repeat": true,
+          "at_capture": 0.0
+        },
+        "applied_targets": {
+          "repeat_max": 4.713647842407227,
+          "disk_vs_continuous": 4.420711517333984,
+          "within_repeat": true,
+          "at_capture": 0.0
+        },
+        "controller_state": {
+          "repeat_max": 1121.0,
+          "disk_vs_continuous": 1115.0,
+          "within_repeat": true,
+          "at_capture": 0.0
+        },
+        "rb_state": {
+          "repeat_max": 48.183326721191406,
+          "disk_vs_continuous": 51.383872985839844,
+          "within_repeat": false,
+          "at_capture": 0.0
+        }
+      },
+      "events": {
+        "rb_entry_s": {
+          "repeat_max_s": 0.019999980926513672,
+          "disk_vs_continuous_s": 0.0,
+          "within_repeat": true
+        },
+        "first_far_contact_s": {
+          "repeat_max_s": 0.010000228881835938,
+          "disk_vs_continuous_s": 0.005000114440917969,
+          "within_repeat": true
+        },
+        "handoff_s": {
+          "repeat_max_s": 0.015000343322753906,
+          "disk_vs_continuous_s": 0.005000114440917969,
+          "within_repeat": true
+        },
+        "duration_s": {
+          "repeat_max_s": 0.015000343322753906,
+          "disk_vs_continuous_s": 0.010000228881835938,
+          "within_repeat": true
+        }
+      },
+      "terminations": [
+        "goal",
+        "goal",
+        "goal",
+        "goal",
+        "goal",
+        "goal"
+      ],
+      "planning_failed": [
+        false,
+        false,
+        true,
+        false,
+        false,
+        false
+      ],
+      "passed_numerical": false
+    },
+    {
+      "route": 3,
+      "root": 7,
+      "metrics": {
+        "qpos": {
+          "repeat_max": 0.5759429931640625,
+          "disk_vs_continuous": 0.61322021484375,
+          "within_repeat": false,
+          "at_capture": 0.0
+        },
+        "qvel": {
+          "repeat_max": 13.081464767456055,
+          "disk_vs_continuous": 13.092428207397461,
+          "within_repeat": false,
+          "at_capture": 0.0
+        },
+        "applied_targets": {
+          "repeat_max": 4.615724563598633,
+          "disk_vs_continuous": 4.470058441162109,
+          "within_repeat": true,
+          "at_capture": 0.0
+        },
+        "controller_state": {
+          "repeat_max": 1119.0,
+          "disk_vs_continuous": 1115.0,
+          "within_repeat": true,
+          "at_capture": 0.0
+        },
+        "rb_state": {
+          "repeat_max": 32.29911804199219,
+          "disk_vs_continuous": 31.48857307434082,
+          "within_repeat": true,
+          "at_capture": 0.0
+        }
+      },
+      "events": {
+        "rb_entry_s": {
+          "repeat_max_s": 0.0,
+          "disk_vs_continuous_s": 0.0,
+          "within_repeat": true
+        },
+        "first_far_contact_s": {
+          "repeat_max_s": 0.0,
+          "disk_vs_continuous_s": 0.0,
+          "within_repeat": true
+        },
+        "handoff_s": {
+          "repeat_max_s": 0.039999961853027344,
+          "disk_vs_continuous_s": 0.08000040054321289,
+          "within_repeat": false
+        },
+        "duration_s": {
+          "repeat_max_s": 0.009999275207519531,
+          "disk_vs_continuous_s": 0.0049991607666015625,
+          "within_repeat": true
+        }
+      },
+      "terminations": [
+        "goal",
+        "goal",
+        "goal",
+        "goal",
+        "goal",
+        "goal"
+      ],
+      "planning_failed": [
+        true,
+        false,
+        false,
+        false,
+        true,
+        false
+      ],
+      "passed_numerical": false
+    }
+  ],
+  "scope": "Fixed finite-repeat engineering comparison of fieldwise maxima; not exact determinism or a statistical safety bound"
+}
