@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/residual_seed2",
+  "case": "rb_run3_route0_h75_v0",
+  "errors": {
+    "pose": 0.0,
+    "velocity": 0.0,
+    "domain": 0.0
+  },
+  "steps": 100,
+  "legacy_api_exact": true,
+  "device": "cuda",
+  "scope": "Ground model only; no RB full-joint model and no predicted real-controller-history claim"
+}

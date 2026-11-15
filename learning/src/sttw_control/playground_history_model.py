@@ -1,6 +1,18 @@
 """History-initialized nominal dynamics correction; never controls the robot."""
 import torch
 from torch import nn
+from dataclasses import dataclass
+
+
+@dataclass
+class GroundPredictionState:
+    """Predicted ground state; hidden is model memory, not real controller history."""
+    pose: torch.Tensor
+    velocity: torch.Tensor
+    previous_velocity: torch.Tensor
+    hidden: torch.Tensor
+    elapsed_steps: int = 0
+
 from .playground_prediction import multiply,rotate
 
 
@@ -17,8 +29,18 @@ class HistoryDynamics(nn.Module):
         nn.init.zeros_(self.correction[-1].weight);nn.init.zeros_(self.correction[-1].bias)
         self.to(nominal.mean.device)
 
-    def rollout(self,pose,xi,previous,controller,s,xy,heading,curvature,steps,speed_request=None,terrain_ids=None,return_domain=False):
-        hidden=self.initial((controller-self.controller_mean)/self.controller_scale)
+    def initialize(self, pose, velocity, previous_velocity, controller):
+        return GroundPredictionState(pose,velocity,previous_velocity,
+            self.initial((controller-self.controller_mean)/self.controller_scale))
+
+    def rollout_state(self,state,s,xy,heading,curvature,steps,speed_request=None,terrain_ids=None):
+        pose,velocity,domain,next_state=self.rollout(state.pose,state.velocity,state.previous_velocity,None,
+            s,xy,heading,curvature,steps,speed_request,terrain_ids,True,state.hidden,True)
+        next_state.elapsed_steps=state.elapsed_steps+steps
+        return dict(pose=pose,velocity=velocity,domain=domain,duration_s=steps*.02,next_state=next_state)
+
+    def rollout(self,pose,xi,previous,controller,s,xy,heading,curvature,steps,speed_request=None,terrain_ids=None,return_domain=False,hidden=None,return_state=False):
+        if hidden is None:hidden=self.initial((controller-self.controller_mean)/self.controller_scale)
         poses=[pose];velocities=[xi];domain=[]
         for _ in range(steps):
             eta=self.nominal.features(pose,xi,s,xy,heading,curvature)
@@ -41,8 +63,10 @@ class HistoryDynamics(nn.Module):
             previous,xi=xi,nxt;poses.append(pose);velocities.append(xi)
         if return_domain:
             domain.append(self.nominal.features(pose,xi,s,xy,heading,curvature)[:,9:12])
-            return torch.stack(poses,1),torch.stack(velocities,1),torch.stack(domain,1)
-        return torch.stack(poses,1),torch.stack(velocities,1)
+            result=(torch.stack(poses,1),torch.stack(velocities,1),torch.stack(domain,1))
+        else:result=(torch.stack(poses,1),torch.stack(velocities,1))
+        if return_state:return (*result,GroundPredictionState(pose,xi,previous,hidden,steps))
+        return result
 
 
 def load_history_model(root,checkpoint='best.pt',device='cuda'):
