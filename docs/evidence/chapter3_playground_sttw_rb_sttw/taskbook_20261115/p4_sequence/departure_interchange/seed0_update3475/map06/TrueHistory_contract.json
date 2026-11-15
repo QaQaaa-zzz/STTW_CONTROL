@@ -1,0 +1,15 @@
+{
+  "handoff_event": "state",
+  "method": "diagnostic_departure_history",
+  "diagnostic_entry": null,
+  "diagnostic_departure": "history",
+  "handoff_history": "execution",
+  "jump_start_x_m": 8.55,
+  "typical": null,
+  "selection": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_low_lr/seed0_update3475_models.json",
+  "history": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+  "oracle": null,
+  "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation",
+  "true_data_access": "OFFLINE intervention reads actual future first phase2 state/history; previous physical velocity is20ms earlier; predicted event and clock unchanged, not deployment",
+  "limits": "Predicted phase2 additionally requires frozen joint lock tolerances; predicted far-wheel contact uses probability>=0.5 and body checks mirror frozen native tolerances with qvel roll-rate proxy. Wheel AABBs must reach the far bank to make predicted far contact geometrically possible. These checks do not certify physical contact or full phase-transition history. Ground locked hip/knee rates assumed zero, flat supported RB entry contract; estimates never modify real controls"
+}

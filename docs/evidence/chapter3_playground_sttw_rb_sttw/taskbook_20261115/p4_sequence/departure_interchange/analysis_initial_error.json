@@ -1,0 +1,1 @@
+{"error":"Unsupported predicted departure has no spatial overlap with recorded phase2; original analyzer reduced an empty array.","repair":"Keep case with null spatial metrics and uncovered sample count; report supported overlap denominator separately. No GPU rerun."}

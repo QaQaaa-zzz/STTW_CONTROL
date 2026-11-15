@@ -1,0 +1,35 @@
+{
+  "C": {
+    "true_admit": 26,
+    "false_admit": 0,
+    "false_reject": 10,
+    "true_reject": 0
+  },
+  "TruePhysical": {
+    "cases": 36,
+    "true_admit": 27,
+    "false_admit": 0,
+    "false_reject": 9,
+    "true_reject": 0,
+    "scope": "OFFLINE true-departure physical intervention; predicted prefix/event/clock unchanged; NOT causal planning raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.224167959066108
+  },
+  "TrueHistory": {
+    "cases": 36,
+    "true_admit": 24,
+    "false_admit": 0,
+    "false_reject": 12,
+    "true_reject": 0,
+    "scope": "OFFLINE true-departure history intervention; predicted prefix/event/clock unchanged; NOT causal planning raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.2973687240155414
+  },
+  "TrueBoth": {
+    "cases": 36,
+    "true_admit": 27,
+    "false_admit": 0,
+    "false_reject": 9,
+    "true_reject": 0,
+    "scope": "OFFLINE true-departure both intervention; predicted prefix/event/clock unchanged; NOT causal planning raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.3186881740111858
+  }
+}

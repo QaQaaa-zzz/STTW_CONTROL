@@ -70,7 +70,7 @@ def ground_to_native(pose,velocity,schema):
 
 def predict_skill_sequence(approach,bridge,jump,departure,qpos,qvel,initial_history,
                            schema,path_s,path_xy,path_heading,path_curvature,speed,
-                           jump_x,context,ground_steps=250,jump_steps=125,departure_steps=250,typical=None,diagnostic_entry=None,handoff_reset=None,handoff_guard=None):
+                           jump_x,context,ground_steps=250,jump_steps=125,departure_steps=250,typical=None,diagnostic_entry=None,handoff_reset=None,handoff_guard=None,diagnostic_departure=None):
     """C uses initial real state only; I uses TRAIN-only typical interfaces.
 
     diagnostic_entry is an explicitly offline true-interface intervention, never
@@ -112,7 +112,12 @@ def predict_skill_sequence(approach,bridge,jump,departure,qpos,qvel,initial_hist
         tail_pose,tail_velocity=native_to_ground(typical['departure_qpos'],typical['departure_qvel'],schema)
         _,previous_velocity=native_to_ground(typical['departure_previous_qpos'],typical['departure_previous_qvel'],schema)
         tail_history=typical['departure_history'][:,:381]
+    if diagnostic_departure is not None:
+        if 'qpos' in diagnostic_departure:
+            tail_pose,tail_velocity=native_to_ground(diagnostic_departure['qpos'],diagnostic_departure['qvel'],schema)
+            _,previous_velocity=native_to_ground(diagnostic_departure['previous_qpos'],diagnostic_departure['previous_qvel'],schema)
+        tail_history=diagnostic_departure.get('history',tail_history)
     end=departure.initialize(tail_pose,tail_velocity,previous_velocity,tail_history)
     tail=departure.rollout_state(end,path_s,path_xy,path_heading,path_curvature,departure_steps,speed_request=speed)
     return dict(approach_domain=torch.stack(domains,1),approach_pose=torch.stack(poses,1),approach_velocity=torch.stack(velocities,1),entry_found=found,entry_time_s=state.elapsed_steps*.02,entry_qpos=entry_q,entry_qvel=entry_v,entry_history=history,
-                jump=rb,departure=tail,departure_history=tail_history,handoff_time_s=state.elapsed_steps*.02+rb['duration_s'],supported=found&rb['event_found'])
+                jump=rb,departure=tail,departure_history=tail_history,departure_previous_velocity=previous_velocity,handoff_time_s=state.elapsed_steps*.02+rb['duration_s'],supported=found&rb['event_found'])

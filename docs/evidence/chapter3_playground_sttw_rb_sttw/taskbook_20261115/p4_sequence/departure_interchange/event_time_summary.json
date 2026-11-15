@@ -1,0 +1,52 @@
+[
+  {
+    "model": "seed0_update3475",
+    "maps": [
+      "map06",
+      "map07"
+    ],
+    "n": 72,
+    "event_dt_s": 0.1048611733648512,
+    "event_x_error_m": 0.18841507699754503,
+    "event_y_error_m": 0.058223870013737015,
+    "time_grid_x_error_m": 0.022053586112128362,
+    "time_grid_y_error_m": 0.05809149596219262
+  },
+  {
+    "model": "seed0_update3475",
+    "maps": [
+      "map48"
+    ],
+    "n": 6,
+    "event_dt_s": 0.21249985694885254,
+    "event_x_error_m": 0.38040733337402344,
+    "event_y_error_m": 0.03619867563247681,
+    "time_grid_x_error_m": 0.03015899658203125,
+    "time_grid_y_error_m": 0.04893770068883896
+  },
+  {
+    "model": "seed1_update3450",
+    "maps": [
+      "map06",
+      "map07"
+    ],
+    "n": 54,
+    "event_dt_s": 0.15148147830256709,
+    "event_x_error_m": 0.27543954496030454,
+    "event_y_error_m": 0.07222265163781466,
+    "time_grid_x_error_m": 0.024481914661548757,
+    "time_grid_y_error_m": 0.04923855913458047
+  },
+  {
+    "model": "seed1_update3450",
+    "maps": [
+      "map48"
+    ],
+    "n": 12,
+    "event_dt_s": 0.15125036239624023,
+    "event_x_error_m": 0.278486967086792,
+    "event_y_error_m": 0.03119382355362177,
+    "time_grid_x_error_m": 0.010762691497802734,
+    "time_grid_y_error_m": 0.025574947707355022
+  }
+]

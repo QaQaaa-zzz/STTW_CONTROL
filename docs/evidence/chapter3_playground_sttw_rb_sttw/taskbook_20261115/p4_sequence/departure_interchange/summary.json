@@ -1,0 +1,266 @@
+[
+  {
+    "model": "seed0_update3475",
+    "maps": [
+      "map06",
+      "map07"
+    ],
+    "mode": "baseline",
+    "cases": 72,
+    "supported": 72,
+    "supported_spatial_overlap": 72,
+    "true_admit": 68,
+    "false_admit": 0,
+    "mean_spatial_y_rmse_m": 0.07944844567189316,
+    "max_spatial_y_m": 0.19453767871007482,
+    "max_near_obstacle_y_m": 0.19453767871007482,
+    "mean_temporal_xy_rmse_m": 0.22557235749080362
+  },
+  {
+    "model": "seed0_update3475",
+    "maps": [
+      "map06",
+      "map07"
+    ],
+    "mode": "physical",
+    "cases": 72,
+    "supported": 72,
+    "supported_spatial_overlap": 72,
+    "true_admit": 72,
+    "false_admit": 0,
+    "mean_spatial_y_rmse_m": 0.03135038146460619,
+    "max_spatial_y_m": 0.14110230259207962,
+    "max_near_obstacle_y_m": 0.12085408389321735,
+    "mean_temporal_xy_rmse_m": 0.050129739885312684
+  },
+  {
+    "model": "seed0_update3475",
+    "maps": [
+      "map06",
+      "map07"
+    ],
+    "mode": "history",
+    "cases": 72,
+    "supported": 72,
+    "supported_spatial_overlap": 72,
+    "true_admit": 67,
+    "false_admit": 0,
+    "mean_spatial_y_rmse_m": 0.07420165983947219,
+    "max_spatial_y_m": 0.19911521759584488,
+    "max_near_obstacle_y_m": 0.19911521759584488,
+    "mean_temporal_xy_rmse_m": 0.21894317966936128
+  },
+  {
+    "model": "seed0_update3475",
+    "maps": [
+      "map06",
+      "map07"
+    ],
+    "mode": "both",
+    "cases": 72,
+    "supported": 72,
+    "supported_spatial_overlap": 72,
+    "true_admit": 72,
+    "false_admit": 0,
+    "mean_spatial_y_rmse_m": 0.028243583261642984,
+    "max_spatial_y_m": 0.1528243581045022,
+    "max_near_obstacle_y_m": 0.13305646007933813,
+    "mean_temporal_xy_rmse_m": 0.04137076440313328
+  },
+  {
+    "model": "seed0_update3475",
+    "maps": [
+      "map48"
+    ],
+    "mode": "baseline",
+    "cases": 12,
+    "supported": 6,
+    "supported_spatial_overlap": 6,
+    "true_admit": 2,
+    "false_admit": 0,
+    "mean_spatial_y_rmse_m": 0.07856967484594478,
+    "max_spatial_y_m": 0.1285318194861521,
+    "max_near_obstacle_y_m": 0.1285318194861521,
+    "mean_temporal_xy_rmse_m": 0.38305188875500473
+  },
+  {
+    "model": "seed0_update3475",
+    "maps": [
+      "map48"
+    ],
+    "mode": "physical",
+    "cases": 12,
+    "supported": 6,
+    "supported_spatial_overlap": 6,
+    "true_admit": 2,
+    "false_admit": 0,
+    "mean_spatial_y_rmse_m": 0.03003904148825273,
+    "max_spatial_y_m": 0.09648778910332466,
+    "max_near_obstacle_y_m": 0.09648778910332466,
+    "mean_temporal_xy_rmse_m": 0.0437935103209789
+  },
+  {
+    "model": "seed0_update3475",
+    "maps": [
+      "map48"
+    ],
+    "mode": "history",
+    "cases": 12,
+    "supported": 6,
+    "supported_spatial_overlap": 6,
+    "true_admit": 2,
+    "false_admit": 0,
+    "mean_spatial_y_rmse_m": 0.07680077606914575,
+    "max_spatial_y_m": 0.12685587020490596,
+    "max_near_obstacle_y_m": 0.12685587020490596,
+    "mean_temporal_xy_rmse_m": 0.3870925812800574
+  },
+  {
+    "model": "seed0_update3475",
+    "maps": [
+      "map48"
+    ],
+    "mode": "both",
+    "cases": 12,
+    "supported": 6,
+    "supported_spatial_overlap": 6,
+    "true_admit": 2,
+    "false_admit": 0,
+    "mean_spatial_y_rmse_m": 0.031899778718262405,
+    "max_spatial_y_m": 0.11493291676813286,
+    "max_near_obstacle_y_m": 0.11493291676813286,
+    "mean_temporal_xy_rmse_m": 0.03767170316584756
+  },
+  {
+    "model": "seed1_update3450",
+    "maps": [
+      "map06",
+      "map07"
+    ],
+    "mode": "baseline",
+    "cases": 72,
+    "supported": 54,
+    "supported_spatial_overlap": 54,
+    "true_admit": 53,
+    "false_admit": 0,
+    "mean_spatial_y_rmse_m": 0.08211903265565697,
+    "max_spatial_y_m": 0.31118171205867895,
+    "max_near_obstacle_y_m": 0.31118171205867895,
+    "mean_temporal_xy_rmse_m": 0.293525241283002
+  },
+  {
+    "model": "seed1_update3450",
+    "maps": [
+      "map06",
+      "map07"
+    ],
+    "mode": "physical",
+    "cases": 72,
+    "supported": 54,
+    "supported_spatial_overlap": 54,
+    "true_admit": 54,
+    "false_admit": 0,
+    "mean_spatial_y_rmse_m": 0.030396858794407174,
+    "max_spatial_y_m": 0.11636279115842607,
+    "max_near_obstacle_y_m": 0.11636279115842607,
+    "mean_temporal_xy_rmse_m": 0.047665671745216444
+  },
+  {
+    "model": "seed1_update3450",
+    "maps": [
+      "map06",
+      "map07"
+    ],
+    "mode": "history",
+    "cases": 72,
+    "supported": 54,
+    "supported_spatial_overlap": 54,
+    "true_admit": 48,
+    "false_admit": 0,
+    "mean_spatial_y_rmse_m": 0.08032019592091434,
+    "max_spatial_y_m": 0.31269395219178064,
+    "max_near_obstacle_y_m": 0.31269395219178064,
+    "mean_temporal_xy_rmse_m": 0.2857230151286374
+  },
+  {
+    "model": "seed1_update3450",
+    "maps": [
+      "map06",
+      "map07"
+    ],
+    "mode": "both",
+    "cases": 72,
+    "supported": 54,
+    "supported_spatial_overlap": 54,
+    "true_admit": 54,
+    "false_admit": 0,
+    "mean_spatial_y_rmse_m": 0.02784633660660408,
+    "max_spatial_y_m": 0.13305646007933813,
+    "max_near_obstacle_y_m": 0.13305646007933813,
+    "mean_temporal_xy_rmse_m": 0.039317100739774256
+  },
+  {
+    "model": "seed1_update3450",
+    "maps": [
+      "map48"
+    ],
+    "mode": "baseline",
+    "cases": 12,
+    "supported": 12,
+    "supported_spatial_overlap": 12,
+    "true_admit": 4,
+    "false_admit": 0,
+    "mean_spatial_y_rmse_m": 0.066032079530895,
+    "max_spatial_y_m": 0.16712457852299045,
+    "max_near_obstacle_y_m": 0.16712457852299045,
+    "mean_temporal_xy_rmse_m": 0.3023120063949902
+  },
+  {
+    "model": "seed1_update3450",
+    "maps": [
+      "map48"
+    ],
+    "mode": "physical",
+    "cases": 12,
+    "supported": 12,
+    "supported_spatial_overlap": 12,
+    "true_admit": 4,
+    "false_admit": 0,
+    "mean_spatial_y_rmse_m": 0.03250909959116483,
+    "max_spatial_y_m": 0.12554492724692504,
+    "max_near_obstacle_y_m": 0.12554492724692504,
+    "mean_temporal_xy_rmse_m": 0.045115400569816826
+  },
+  {
+    "model": "seed1_update3450",
+    "maps": [
+      "map48"
+    ],
+    "mode": "history",
+    "cases": 12,
+    "supported": 12,
+    "supported_spatial_overlap": 12,
+    "true_admit": 4,
+    "false_admit": 0,
+    "mean_spatial_y_rmse_m": 0.06626798322375343,
+    "max_spatial_y_m": 0.179374620358061,
+    "max_near_obstacle_y_m": 0.179374620358061,
+    "mean_temporal_xy_rmse_m": 0.2956140514329965
+  },
+  {
+    "model": "seed1_update3450",
+    "maps": [
+      "map48"
+    ],
+    "mode": "both",
+    "cases": 12,
+    "supported": 12,
+    "supported_spatial_overlap": 12,
+    "true_admit": 4,
+    "false_admit": 0,
+    "mean_spatial_y_rmse_m": 0.03365269263109037,
+    "max_spatial_y_m": 0.13025087699565396,
+    "max_near_obstacle_y_m": 0.13025087699565396,
+    "mean_temporal_xy_rmse_m": 0.041557681610240156
+  }
+]

@@ -20,6 +20,7 @@ paths={a.label or contract.get('method','C'):a.run}
 if a.compare:paths[a.compare_label or json.loads((a.compare/'contract.json').read_text())['method']]=a.compare
 for label,path in zip(a.extra_label,a.extra):paths[label]=path
 records={k:json.loads((v/'cases.json').read_text()) for k,v in paths.items()};arrays={k:np.load(v/'predictions.npz') for k,v in paths.items()};rows=next(iter(records.values()));bank=np.load(a.routes)
+offline=any(json.loads((v/'contract.json').read_text()).get('diagnostic_departure') or json.loads((v/'contract.json').read_text()).get('diagnostic_entry') for v in paths.values())
 y_limit=max(1.6,max(float(np.abs(z[k][:,:,1]).max()) for z in arrays.values() for k in ['approach','jump','departure'])+.1)
 fig,axes=plt.subplots(math.ceil(len(rows)/3),3,figsize=(18,math.ceil(len(rows)/3)*max(1.7,y_limit*.65)),layout='constrained',squeeze=False)
 for i,(row,ax) in enumerate(zip(rows,axes.flat)):
@@ -36,7 +37,7 @@ for i,(row,ax) in enumerate(zip(rows,axes.flat)):
  ax.set_title(f'root{row["root"]} route{row["route"]} v{row.get("speed",1.8):.1f} | actual{int(row["actual_success"])} '+ 'admit['+','.join(str(int(records[m][i]['admitted'])) for m in paths)+']',fontsize=8)
  ax.set_xlim(1.5,20.5);ax.set_ylim(-y_limit,y_limit);ax.set_aspect('equal',adjustable='box');ax.set_xlabel('World x (m)',fontsize=7);ax.set_ylabel('World y (m)',fontsize=7);ax.tick_params(labelsize=7);ax.grid(alpha=.2)
 for ax in list(axes.flat)[len(rows):]:ax.set_visible(False)
-axes[0,0].legend(fontsize=6,ncol=2);fig.suptitle(f'Known DEV: all{len(rows)} trajectories; travel +x\nActual stops at failure/goal; prediction stops at predicted events/goal or max horizon; stage gaps retained. Admit vector follows prediction legend order.',fontsize=11);fig.savefig(a.output/'xy.png',dpi=160);plt.close(fig)
+axes[0,0].legend(fontsize=6,ncol=2);fig.suptitle(('OFFLINE true-interface interventions; not causal planning. ' if offline else '')+f'Known DEV: all{len(rows)} trajectories; travel +x\nActual stops at failure/goal; prediction stops at predicted events/goal or max horizon; stage gaps retained. Admit vector follows prediction legend order.',fontsize=11);fig.savefig(a.output/'xy.png',dpi=160);plt.close(fig)
 summaries={}
 for method,path in paths.items():
  summaries[method]=json.loads((path/'summary.json').read_text());shutil.copyfile(path/'contract.json',a.output/f'{method}_contract.json')
@@ -45,5 +46,6 @@ for method,path in paths.items():
 (a.output/'summary.json').write_text(json.dumps(summaries,indent=2)+'\n')
 text=f'# P4 full-chain DEV diagnostic\n\n[All{len(rows)} actual/reference/predicted XY](xy.png).\n\n|Method|True admit|False admit|False reject|True reject|\n|---|---:|---:|---:|---:|\n'
 for method,s in summaries.items():text+='|'+method+'|'+ '|'.join(str(s[k]) for k in ['true_admit','false_admit','false_reject','true_reject'])+'|\n'
-text+='\nSame frozen skills, original task gates and raw envelopes; no new calibration or physical episodes. C propagates predicted states/history from real initial state; I uses route/speed-conditioned TRAIN interfaces. These are known DEV conditions, not independent TEST. All future actual data are only offline labels. Empty forbidden-box terrain still checks world bounds; absence of negatives cannot establish obstacle rejection quality. P4 remains incomplete.\n'
+text+=('\nOFFLINE true-interface interventions explicitly read actual future state/history. Predicted prefix, event and clock stay unchanged; this is neither causal planning nor measured-state replanning. ' if offline else '\nC propagates predicted states/history from real initial state; I uses route/speed-conditioned TRAIN interfaces. All future actual data are only offline labels. ')
+text+='Same frozen skills, original task gates and raw envelopes; no new calibration or physical episodes. These are known DEV conditions, not independent TEST. Empty forbidden-box terrain still checks world bounds; absence of negatives cannot establish obstacle rejection quality. P4 remains incomplete.\n'
 (a.output/'README.md').write_text(text)

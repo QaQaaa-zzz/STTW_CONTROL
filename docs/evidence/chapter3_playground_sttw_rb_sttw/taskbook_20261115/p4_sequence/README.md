@@ -19,3 +19,5 @@ History bridge: 72 TRAIN and 24 DEV approach sequences, three seeds with 600 upd
 P4 remains open. Next: compare G/I/C/Oracle with the same candidates, predictor and constraints, including strong backtracking; diagnose stage occupancy errors and calibrate using declared DEV rules; verify selected-plan outcomes. P5/P6 do not start before this stage is assessed.
 
 **Trigger-contract correction:** these historical predictions used hardcoded8.60m; the executed frozen configuration uses8.55m. Corrected prediction results are in [trigger_fix](trigger_fix/README.md). Original artifacts remain unchanged as evidence of the error.
+
+[Current departure-input diagnosis](departure_interchange/README.md): true physical exits reduce downstream lateral error substantially; actual-history-only swaps do little. Timing accounts for most longitudinal exit error but leaves lateral bias. No model adopted; P4 remains incomplete.

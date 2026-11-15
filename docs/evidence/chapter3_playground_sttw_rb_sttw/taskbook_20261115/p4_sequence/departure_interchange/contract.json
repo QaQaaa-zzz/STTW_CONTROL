@@ -1,0 +1,18 @@
+{
+  "question": "Separate predicted RB exit physical state from reset controller history in downstream lateral error",
+  "models": [
+    "seed0_update3475",
+    "seed1_update3450"
+  ],
+  "interventions": [
+    "physical: actual first-phase2 qpos/qvel and previous20ms velocity, predicted reset history",
+    "history: predicted physical input with actual first-phase2 controller history",
+    "both: actual physical and history"
+  ],
+  "unchanged": "Predicted approach, RB trace, handoff event/gates and clock; frozen skills, map, physical parameters, task and success criteria",
+  "role": "Offline future-state intervention, never causal planning or P6 replan; all maps known DEV",
+  "budget": "18 batched GPU queries over3 maps x2 fixed models x3 interventions plus2 exact baseline parity queries;0 physics/optimizer. Max25min, shared GPU job lock.",
+  "denominator": "Each intervention has72 DEV and12 mechanism cases with real handoff;6 approach failures remain in original18 C comparison.",
+  "acceptance": "Locate center-error source using matched spatial/time metrics; no model adoption from oracle-input success",
+  "code_base": "02903036"
+}
