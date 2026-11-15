@@ -1,0 +1,41 @@
+{
+  "rows": 18,
+  "classification_identical": true,
+  "first_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall",
+  "repeat_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall_repeat",
+  "role": "Same-root frozen technical repeat, not independent samples",
+  "videos": [
+    {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall/paired_media/up1_down0_root1001.mp4",
+      "probe": {
+        "programs": [],
+        "streams": [
+          {
+            "width": 1920,
+            "height": 540,
+            "nb_frames": "576"
+          }
+        ],
+        "format": {
+          "duration": "19.200000"
+        }
+      }
+    },
+    {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall/paired_media/up2_down0_root1001.mp4",
+      "probe": {
+        "programs": [],
+        "streams": [
+          {
+            "width": 1920,
+            "height": 540,
+            "nb_frames": "409"
+          }
+        ],
+        "format": {
+          "duration": "13.634000"
+        }
+      }
+    }
+  ]
+}

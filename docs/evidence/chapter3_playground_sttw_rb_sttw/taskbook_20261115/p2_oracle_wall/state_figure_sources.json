@@ -1,0 +1,38 @@
+{
+  "sources": [
+    {
+      "root": 1001,
+      "upstream": 1,
+      "prefix": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall/map48/approach1/evaluation/rb_run3_route0_h75_v0/trajectory.npz",
+      "suffix": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall/map48/departure1_0/evaluation/rb_run3_route0_h75_v0/trajectory.npz",
+      "handoff_s": 5.599999904632568,
+      "first_far_contact_s": 5.275000095367432
+    },
+    {
+      "root": 1001,
+      "upstream": 2,
+      "prefix": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall/map48/approach2/evaluation/rb_run3_route0_h75_v0/trajectory.npz",
+      "suffix": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall/map48/departure2_0/evaluation/rb_run3_route0_h75_v0/trajectory.npz",
+      "handoff_s": 5.590000152587891,
+      "first_far_contact_s": 5.264999866485596
+    },
+    {
+      "root": 1002,
+      "upstream": 1,
+      "prefix": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall/map48/approach1/evaluation/rb_run3_route0_h75_v2/trajectory.npz",
+      "suffix": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall/map48/departure1_0/evaluation/rb_run3_route0_h75_v2/trajectory.npz",
+      "handoff_s": 5.605000019073486,
+      "first_far_contact_s": 5.264999866485596
+    },
+    {
+      "root": 1002,
+      "upstream": 2,
+      "prefix": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall/map48/approach2/evaluation/rb_run3_route0_h75_v2/trajectory.npz",
+      "suffix": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall/map48/departure2_0/evaluation/rb_run3_route0_h75_v2/trajectory.npz",
+      "handoff_s": 5.590000152587891,
+      "first_far_contact_s": 5.269999980926514
+    }
+  ],
+  "transformations": "No smoothing; exact recorded prefix before suffix start, then actual suffix; angles converted rad to deg. XY boxes use transformed local geom_aabb; full terminal states retained.",
+  "role": "Known-map DEV diagnostic; no uncertainty or generalization claim"
+}
