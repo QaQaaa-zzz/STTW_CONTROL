@@ -1,0 +1,14 @@
+{
+  "change": "Original objective only; cosine lr3e-5 to1e-6 over2000 updates, resume three control loss-best checkpoints with Adam",
+  "parents": [
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/training/control/seed0/best.pt",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/training/control/seed1/best.pt",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/training/control/seed2/best.pt"
+  ],
+  "budget": "3x2000 supervised updates, save25; max1500s training; no automatic extension; no physics/policy training",
+  "data": "Original216TRAIN/72DEV, known mechanism18DEV",
+  "selection": "Compare best and last for all seeds, plus common DEV/event metrics; record last10-checkpoint range and final learning rate. Loss plateau alone is not task convergence.",
+  "unchanged": "Architecture, loss weights, data and normalizers, frozen skills, geometry, guard, task and calibration rules",
+  "code_base": "144d3a82",
+  "interpretation": "Continuation plus scheduling, not matched-budget proof that schedule alone caused improvement"
+}

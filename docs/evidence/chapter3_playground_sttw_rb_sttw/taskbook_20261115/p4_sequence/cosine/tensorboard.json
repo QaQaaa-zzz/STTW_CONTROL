@@ -1,0 +1,9 @@
+{
+  "url": "http://localhost:6006",
+  "pid": 969435,
+  "loaded": {
+    "chapter3_cosine/seed2/tensorboard": 41,
+    "chapter3_cosine/seed0/tensorboard": 41,
+    "chapter3_cosine/seed1/tensorboard": 41
+  }
+}

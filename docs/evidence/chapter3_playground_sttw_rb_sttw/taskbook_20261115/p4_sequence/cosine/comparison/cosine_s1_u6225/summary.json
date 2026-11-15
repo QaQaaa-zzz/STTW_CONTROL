@@ -1,0 +1,155 @@
+{
+  "confusion": {
+    "G": {
+      "true_admit": 0,
+      "false_admit": 0,
+      "false_reject": 4,
+      "true_reject": 14
+    },
+    "I": {
+      "true_admit": 4,
+      "false_admit": 1,
+      "false_reject": 0,
+      "true_reject": 13
+    },
+    "C": {
+      "true_admit": 2,
+      "false_admit": 1,
+      "false_reject": 2,
+      "true_reject": 13
+    },
+    "Oracle": {
+      "true_admit": 4,
+      "false_admit": 0,
+      "false_reject": 0,
+      "true_reject": 14
+    }
+  },
+  "decisions": [
+    {
+      "method": "G",
+      "root": 1001,
+      "route": null,
+      "no_plan": true,
+      "actual_success": false,
+      "admitted_failure": false,
+      "actual_duration_s": null,
+      "actual_clearance_m": null,
+      "failure_stage": null,
+      "candidate_queries": 9,
+      "joint_selection_ms": 0.0014060642570257187,
+      "backtracking_selection_ms": 0.006092945113778114,
+      "backtracking_same": true
+    },
+    {
+      "method": "G",
+      "root": 1002,
+      "route": null,
+      "no_plan": true,
+      "actual_success": false,
+      "admitted_failure": false,
+      "actual_duration_s": null,
+      "actual_clearance_m": null,
+      "failure_stage": null,
+      "candidate_queries": 9,
+      "joint_selection_ms": 0.00041106250137090683,
+      "backtracking_selection_ms": 0.0029159709811210632,
+      "backtracking_same": true
+    },
+    {
+      "method": "I",
+      "root": 1001,
+      "route": 3,
+      "no_plan": false,
+      "actual_success": true,
+      "admitted_failure": false,
+      "actual_duration_s": 9.074999809265137,
+      "actual_clearance_m": 0.0,
+      "failure_stage": "complete",
+      "candidate_queries": 9,
+      "joint_selection_ms": 0.002020038664340973,
+      "backtracking_selection_ms": 0.003502005711197853,
+      "backtracking_same": true
+    },
+    {
+      "method": "I",
+      "root": 1002,
+      "route": 1,
+      "no_plan": false,
+      "actual_success": false,
+      "admitted_failure": true,
+      "actual_duration_s": 1.9299999475479126,
+      "actual_clearance_m": -0.003451804182655962,
+      "failure_stage": "approach_or_jump",
+      "candidate_queries": 9,
+      "joint_selection_ms": 0.001093023456633091,
+      "backtracking_selection_ms": 0.003017950803041458,
+      "backtracking_same": true
+    },
+    {
+      "method": "C",
+      "root": 1001,
+      "route": null,
+      "no_plan": true,
+      "actual_success": false,
+      "admitted_failure": false,
+      "actual_duration_s": null,
+      "actual_clearance_m": null,
+      "failure_stage": null,
+      "candidate_queries": 9,
+      "joint_selection_ms": 0.00035297125577926636,
+      "backtracking_selection_ms": 0.0023829052224755287,
+      "backtracking_same": true
+    },
+    {
+      "method": "C",
+      "root": 1002,
+      "route": 1,
+      "no_plan": false,
+      "actual_success": false,
+      "admitted_failure": true,
+      "actual_duration_s": 1.9299999475479126,
+      "actual_clearance_m": -0.003451804182655962,
+      "failure_stage": "approach_or_jump",
+      "candidate_queries": 9,
+      "joint_selection_ms": 0.0009200302883982658,
+      "backtracking_selection_ms": 0.002696993760764599,
+      "backtracking_same": true
+    },
+    {
+      "method": "Oracle",
+      "root": 1001,
+      "route": 3,
+      "no_plan": false,
+      "actual_success": true,
+      "admitted_failure": false,
+      "actual_duration_s": 9.074999809265137,
+      "actual_clearance_m": 0.0,
+      "failure_stage": "complete",
+      "candidate_queries": 9,
+      "joint_selection_ms": 0.00072503462433815,
+      "backtracking_selection_ms": 0.002691056579351425,
+      "backtracking_same": true
+    },
+    {
+      "method": "Oracle",
+      "root": 1002,
+      "route": 3,
+      "no_plan": false,
+      "actual_success": true,
+      "admitted_failure": false,
+      "actual_duration_s": 9.074999809265137,
+      "actual_clearance_m": 0.0,
+      "failure_stage": "complete",
+      "candidate_queries": 9,
+      "joint_selection_ms": 0.0006190966814756393,
+      "backtracking_selection_ms": 0.0024329638108611107,
+      "backtracking_same": true
+    }
+  ],
+  "geometry_query_s": 0.06670007202774286,
+  "query_s": {
+    "C": 2.0860219160094857,
+    "I": 2.1100369739579037
+  }
+}

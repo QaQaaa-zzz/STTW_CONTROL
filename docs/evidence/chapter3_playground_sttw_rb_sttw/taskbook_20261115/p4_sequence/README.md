@@ -1,4 +1,21 @@
-# P4 first C-only full-chain diagnostic
+# P4 全链预测：当前结论与证据索引
+
+**当前仍未采用可靠规划器。** 最新[余弦学习率续训](cosine/README.md)完成3×2000监督更新和243存档筛查，loss改善但交回事件未稳定；按DEV选出的C在机制图选路0/2，各类标定后C/I均无计划。不能认定任务收敛。
+- [余弦续训、全部XY与失败](cosine/README.md)
+- [此前配对训练、全部XY与失败](handoff_focus/README.md)
+- [物理状态/历史互换与事件时刻诊断](departure_interchange/README.md)
+- [中心误差与条件标定归因](low_lr/geometry_audit/README.md)
+- [低学习率续训与全存档筛选](low_lr/README.md)
+- [原G/I/C/Oracle和强回溯比较](comparison/README.md)、[直接/残差结构对照](direct/README.md)
+- [历史重置](history_reset/README.md)、[关节门槛](joint_gate/README.md)、[积分表示](trace_audit/README.md)、[状态条件事件](state_event/README.md)
+
+当前因果查询使用真实起点，其后传递预测状态/历史；离线互换诊断明确使用真实未来，不能混入因果规划成绩。各报告的门槛、模型及数据角色以各自合同为准；历史未检查锁定/远岸支持的成绩不当作当前有效交接。
+
+## 原始首轮记录（历史快照，非当前结论）
+
+下面保留首轮诊断及当时缺项。G/I/Oracle、标定和结构对照后来已实现，参见上面的索引；原始数组和数值未改写。
+
+### First C-only full-chain diagnostic
 
 [All18 actual/reference/predicted XY](xy.png).
 

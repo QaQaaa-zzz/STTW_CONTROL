@@ -1,0 +1,6 @@
+{
+  "purpose": "Assess event readiness of all saved checkpoints, especially last10; do not infer convergence from minimum loss",
+  "budget": "243 saved checkpoints x90 frozen causal entries, GPU only;0 training/physics;max300s",
+  "selection": "Keep prespecified best/last full-chain evaluation; screening does not add new candidates or use mechanism labels for selection",
+  "metrics": "DEV72 state-event readiness count per checkpoint, late-window min/max per seed; all unsupported samples retained"
+}

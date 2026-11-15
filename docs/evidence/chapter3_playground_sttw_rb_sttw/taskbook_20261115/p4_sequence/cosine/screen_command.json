@@ -1,0 +1,15 @@
+[
+  "/home/qy/mujoco_playground/.venv/bin/python",
+  "learning/cli/screen_skill_joint_checkpoints.py",
+  "--state-event",
+  "--training",
+  "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_cosine/training",
+  "--output",
+  "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_cosine/screen",
+  "--prediction",
+  "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_low_lr/calibration_input/seed0_update3475/map06/C",
+  "--prediction",
+  "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_low_lr/calibration_input/seed0_update3475/map07/C",
+  "--prediction",
+  "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_low_lr/calibration_eval/seed0_update3475/C"
+]

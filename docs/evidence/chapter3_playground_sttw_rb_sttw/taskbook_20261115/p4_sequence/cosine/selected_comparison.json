@@ -1,0 +1,15 @@
+[
+  {
+    "name": "cosine_s1_u6225",
+    "arm": "cosine",
+    "seed": 1,
+    "update": 6225,
+    "best": true,
+    "last": true,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_cosine/training/seed1/model_6225.pt",
+    "sha256": "a716eb5c3f742a4a6d3d0d316ed4107d98177637c33ebf90ec8558e420e6d0c4",
+    "dev_admitted": 67,
+    "dev_handoffs": 72,
+    "dev_position_mae_m": 0.11405307786642677
+  }
+]

@@ -1,0 +1,8 @@
+{
+  "state_event": true,
+  "checkpoints": 243,
+  "conditions": 90,
+  "runtime_s": 11.731621838989668,
+  "ranking": "Original DEV72 lock-ready count descending, then mean joint error ascending; mechanism outcomes excluded from ranking",
+  "limits": "State guard includes predicted support/body and geometric possibility when --state-event; no physical safety or full-chain success claim"
+}

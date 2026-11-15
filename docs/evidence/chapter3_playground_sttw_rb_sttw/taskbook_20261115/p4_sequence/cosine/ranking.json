@@ -1,0 +1,67 @@
+[
+  {
+    "name": "cosine_s0_u6075",
+    "arm": "cosine",
+    "seed": 0,
+    "update": 6075,
+    "best": true,
+    "last": false,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_cosine/training/seed0/model_6075.pt",
+    "sha256": "6f17fa3d5d2d5f759b4ae762b73b775696cda03b21266d88ba77eb5e84f8ed15",
+    "dev_admitted": 63,
+    "dev_handoffs": 72,
+    "dev_position_mae_m": 0.0972953281727516
+  },
+  {
+    "name": "cosine_s0_u6300",
+    "arm": "cosine",
+    "seed": 0,
+    "update": 6300,
+    "best": false,
+    "last": true,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_cosine/training/seed0/model_6300.pt",
+    "sha256": "3897cf850b55fc41434fb9a7942336a6c8b6202920bf71f428a10d28d3ecb773",
+    "dev_admitted": 63,
+    "dev_handoffs": 72,
+    "dev_position_mae_m": 0.09813282834107263
+  },
+  {
+    "name": "cosine_s1_u6225",
+    "arm": "cosine",
+    "seed": 1,
+    "update": 6225,
+    "best": true,
+    "last": true,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_cosine/training/seed1/model_6225.pt",
+    "sha256": "a716eb5c3f742a4a6d3d0d316ed4107d98177637c33ebf90ec8558e420e6d0c4",
+    "dev_admitted": 67,
+    "dev_handoffs": 72,
+    "dev_position_mae_m": 0.11405307786642677
+  },
+  {
+    "name": "cosine_s2_u5200",
+    "arm": "cosine",
+    "seed": 2,
+    "update": 5200,
+    "best": true,
+    "last": false,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_cosine/training/seed2/model_5200.pt",
+    "sha256": "7c6618ba7747b0aa5a076db0efa4a1297142c7089de0d0907e84e84f36bca301",
+    "dev_admitted": 16,
+    "dev_handoffs": 18,
+    "dev_position_mae_m": 0.22492864169180393
+  },
+  {
+    "name": "cosine_s2_u5525",
+    "arm": "cosine",
+    "seed": 2,
+    "update": 5525,
+    "best": false,
+    "last": true,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_cosine/training/seed2/model_5525.pt",
+    "sha256": "35164846ee73c4fb656d12587834236d727612373cc57c4fb15aa8108d181733",
+    "dev_admitted": 14,
+    "dev_handoffs": 15,
+    "dev_position_mae_m": 0.18485788156588873
+  }
+]
