@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 import time
 import math
+from copy import deepcopy
 import numpy as np
 import jax
 import jax.numpy as jp
@@ -209,8 +210,6 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         rolling_cfg=cfg.get('rolling_planner')
         rolling=None;pending=None;rolling_events=[]
         if rolling_cfg:
-            if cfg.get('snapshot_replay_s') is not None:
-                raise ValueError('rolling planner snapshot/replay state is not implemented')
             rolling=RollingMotionLibrary(rolling_cfg['state_bank'],route,rolling_cfg['clearance'],device)
             period_ticks=round(rolling_cfg['period_s']/.005)
             first_query_tick=round(rolling_cfg['first_query_s']/.005)
@@ -225,25 +224,34 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         applied_rows=[];applied_masks=[];rb_state_rows=[];collected_snapshots={};rows=[];poses=[];velocities=[];contact_rows=[];valid_rows=[];world_rows=[];load_rows=[];controller_rows=[];substep_loads=torch.full((n,args.physics_substeps,4),torch.nan,device=device);ownership_error=torch.zeros(n,device=device);goal=hand['goal'];data.qpos.block_until_ready();init_s=time.perf_counter()-init_start;rollout_start=time.perf_counter()
         snapshot_tick=round(cfg['snapshot_replay_s']/.005) if 'snapshot_replay_s' in cfg else None
         collection_ticks={round(t/.005) for t in cfg.get('snapshot_times_s',[])}
-        for replay in range(2 if snapshot_tick is not None else 1):
-            case_name=name+('_replay' if replay else '')
+        memory_repeats=cfg.get('snapshot_memory_repeats',0)
+        for replay in range(2+memory_repeats if snapshot_tick is not None else 1):
+            case_name=name+(f'_memory{replay}' if 0<replay<=memory_repeats else ('_replay' if replay else ''))
             start_tick=0
             if replay:
                 restore_started=time.perf_counter()
-                with (args.output/f'{name}_runtime_snapshot.pkl').open('rb') as stream:snapshot=pickle.load(stream)
+                if replay<=memory_repeats:snapshot=replay_snapshot
+                else:
+                    with (args.output/f'{name}_runtime_snapshot.pkl').open('rb') as stream:snapshot=pickle.load(stream)
                 data,(history,obs,last),runtime=restore_snapshot(snapshot,ground_adapter)
                 phase,alive,recovering,stable_time,upper_ready_time,airborne,flags,far_time,entry_time,handoff_time,hold,lock,target,codes,durations,ownership_error,substep_loads=(runtime[key] for key in ['phase', 'alive', 'recovering', 'stable_time', 'upper_ready_time', 'airborne', 'flags', 'far_time', 'entry_time', 'handoff_time', 'hold', 'lock', 'target', 'codes', 'durations', 'ownership_error', 'substep_loads'])
+                if rolling is not None:
+                    rolling.restore(runtime['planner']['library'])
+                    pending=deepcopy(runtime['planner']['pending']);rolling_events=deepcopy(runtime['planner']['events'])
+                    jump_start=runtime['planner']['jump_start'].clone()
                 route=middle.route
                 q,v,m,pose,speed,angles=map(to_torch,observe(data))
                 rows,poses,velocities,contact_rows,valid_rows,world_rows,plan_receipts,load_rows,controller_rows,applied_rows,applied_masks,rb_state_rows=[x.copy() for x in prefix]
                 start_tick=snapshot['tick']
                 data.qpos.block_until_ready()
-                (args.output/f'{name}_restore.json').write_text(json.dumps(dict(tick=start_tick,time_s=start_tick*.005,restore_s=time.perf_counter()-restore_started,runtime_fields=list(runtime),physics_leaf_count=len(jax.tree.leaves(data)),source='serialized full MJX data, RB FIFO/observation/action, ground controller and runner state'),indent=2))
+                (args.output/f'{case_name}_restore.json').write_text(json.dumps(dict(tick=start_tick,time_s=start_tick*.005,restore_s=time.perf_counter()-restore_started,runtime_fields=list(runtime),physics_leaf_count=len(jax.tree.leaves(data)),source=('in-memory' if replay<=memory_repeats else 'serialized')+' full MJX data, RB FIFO/observation/action, ground controller and runner state'),indent=2))
             rollout_start=time.perf_counter()
             for tick in range(start_tick,round(args.seconds/.005)+1):
                 t=tick*.005
                 if (snapshot_tick==tick or tick in collection_ticks or (tick==0 and cfg.get('collect_model_state'))) and not replay:
                     runtime=dict(phase=phase,alive=alive,recovering=recovering,stable_time=stable_time,upper_ready_time=upper_ready_time,airborne=airborne,flags=flags,far_time=far_time,entry_time=entry_time,handoff_time=handoff_time,hold=hold,lock=lock,target=target,codes=codes,durations=durations,ownership_error=ownership_error,substep_loads=substep_loads)
+                    if rolling is not None:
+                        runtime['planner']=dict(library=rolling.snapshot(),pending=deepcopy(pending),events=deepcopy(rolling_events),jump_start=jump_start.clone())
                     snapshot=capture_snapshot(data,ground_adapter,(history,obs,last),runtime,tick,dict(world_map=world,terrain=terrain,ground_identity=identity,rb_identity=skill.record,physics_model=str(args.output/'terrain.mjb'),resolved_config=str(args.output/'resolved_config.json')))
                     if tick==0 and cfg.get('collect_model_state'):initial_snapshot=snapshot
                     if tick in collection_ticks:collected_snapshots[tick]=snapshot
