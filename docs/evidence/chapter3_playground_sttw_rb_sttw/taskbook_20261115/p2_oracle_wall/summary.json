@@ -1,0 +1,23 @@
+{
+  "cells": 18,
+  "success": 4,
+  "mechanism_candidates": [
+    {
+      "map_id": 48,
+      "root": 1001,
+      "continuation_exists": {
+        "1": true,
+        "2": false
+      }
+    },
+    {
+      "map_id": 48,
+      "root": 1002,
+      "continuation_exists": {
+        "1": true,
+        "2": false
+      }
+    }
+  ],
+  "scope": "Known-map DEV oracle only; mechanism candidates require repeat confirmation and paired videos; sampled native obstacle distances included"
+}
