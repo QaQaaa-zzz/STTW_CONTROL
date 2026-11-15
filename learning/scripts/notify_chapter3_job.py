@@ -25,10 +25,14 @@ if args.message:
     title = args.title
     body = f'{when}\n{args.message}'
 else:
-    fd = os.pidfd_open(args.pid)
-    select.select([fd], [], [])
-    os.close(fd)
-    state = json.loads(args.status.read_text())
+    try:
+        fd = os.pidfd_open(args.pid)
+    except ProcessLookupError:
+        fd = None  # The observed job may finish before this watcher starts.
+    if fd is not None:
+        select.select([fd], [], [])
+        os.close(fd)
+    state = json.loads(args.status.read_text()) if args.status.exists() else {'status': 'no_status_written', 'stage': 'unknown'}
     unit = subprocess.run(['systemctl', '--user', 'show', args.unit, '-p', 'ExecMainStatus', '-p', 'Result'], capture_output=True, text=True).stdout
     fields = dict(line.split('=', 1) for line in unit.splitlines() if '=' in line)
     finished = state.get('status', state.get('stage')) in ('completed_analysis_pending', 'complete', 'completed_slice', 'completed', 'training_complete') and fields.get('Result') == 'success'

@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 import time
 import math
+import hashlib
 from copy import deepcopy
 import numpy as np
 import jax
@@ -224,13 +225,24 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         applied_rows=[];applied_masks=[];rb_state_rows=[];collected_snapshots={};rows=[];poses=[];velocities=[];contact_rows=[];valid_rows=[];world_rows=[];load_rows=[];controller_rows=[];substep_loads=torch.full((n,args.physics_substeps,4),torch.nan,device=device);ownership_error=torch.zeros(n,device=device);goal=hand['goal'];data.qpos.block_until_ready();init_s=time.perf_counter()-init_start;rollout_start=time.perf_counter()
         snapshot_tick=round(cfg['snapshot_replay_s']/.005) if 'snapshot_replay_s' in cfg else None
         collection_ticks={round(t/.005) for t in cfg.get('snapshot_times_s',[])}
+        handoff_snapshot_saved=False
         memory_repeats=cfg.get('snapshot_memory_repeats',0)
         for replay in range(2+memory_repeats if snapshot_tick is not None else 1):
             case_name=name+(f'_memory{replay}' if 0<replay<=memory_repeats else ('_replay' if replay else ''))
             start_tick=0
-            if replay:
+            if replay or cfg.get('initial_snapshot_path'):
                 restore_started=time.perf_counter()
-                if replay<=memory_repeats:snapshot=replay_snapshot
+                if not replay:
+                    with Path(cfg['initial_snapshot_path']).open('rb') as stream:snapshot=pickle.load(stream)
+                    context=snapshot['context']
+                    if context['ground_identity']!=identity or context['rb_identity']!=skill.record:
+                        raise ValueError('Initial snapshot skill identity differs from active frozen skills')
+                    if hashlib.sha256(Path(context['physics_model']).read_bytes()).digest()!=hashlib.sha256((args.output/'terrain.mjb').read_bytes()).digest():
+                        raise ValueError('Initial snapshot physics model differs from active model')
+                    if snapshot['physics'].qpos.shape!=data.qpos.shape:
+                        raise ValueError('Initial snapshot lane shape differs from this run')
+                    initial_snapshot=snapshot
+                elif replay<=memory_repeats:snapshot=replay_snapshot
                 else:
                     with (args.output/f'{name}_runtime_snapshot.pkl').open('rb') as stream:snapshot=pickle.load(stream)
                 data,(history,obs,last),runtime=restore_snapshot(snapshot,ground_adapter)
@@ -240,21 +252,34 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                     pending=deepcopy(runtime['planner']['pending']);rolling_events=deepcopy(runtime['planner']['events'])
                     jump_start=runtime['planner']['jump_start'].clone()
                 route=middle.route
+                if not replay and cfg.get('oracle_branch_reference'):
+                    # Offline counterfactual command, not an online committed-preview update.
+                    # Keep all control/ESO/history/held-command tensors; next scheduled update
+                    # consumes the new route using the unchanged slew and actuator contracts.
+                    proposal=TorchPathReference(dict(np.load(cfg['oracle_branch_reference'])),hcfg,device,route_ids=[r for r,m,i in lanes])
+                    end=torch.searchsorted(route.s,middle.projection['progress']).clamp_max(len(route.s)-1)
+                    mask=torch.arange(len(route.s),device=device)[None,:]<=end[:,None]
+                    old_xy=route.xy[route.route_ids];new_xy=proposal.xy[proposal.route_ids]
+                    if not torch.all(torch.where(mask[...,None],(old_xy-new_xy).abs()<=1e-6,True)):
+                        raise ValueError('Oracle route changes the executed geometric prefix')
+                    middle.route=proposal;route=proposal;ground_adapter.plan_version+=1
                 q,v,m,pose,speed,angles=map(to_torch,observe(data))
-                rows,poses,velocities,contact_rows,valid_rows,world_rows,plan_receipts,load_rows,controller_rows,applied_rows,applied_masks,rb_state_rows=[x.copy() for x in prefix]
+                if replay:rows,poses,velocities,contact_rows,valid_rows,world_rows,plan_receipts,load_rows,controller_rows,applied_rows,applied_masks,rb_state_rows=[x.copy() for x in prefix]
                 start_tick=snapshot['tick']
                 data.qpos.block_until_ready()
-                (args.output/f'{case_name}_restore.json').write_text(json.dumps(dict(tick=start_tick,time_s=start_tick*.005,restore_s=time.perf_counter()-restore_started,runtime_fields=list(runtime),physics_leaf_count=len(jax.tree.leaves(data)),source=('in-memory' if replay<=memory_repeats else 'serialized')+' full MJX data, RB FIFO/observation/action, ground controller and runner state'),indent=2))
+                (args.output/f'{case_name}_restore.json').write_text(json.dumps(dict(tick=start_tick,time_s=start_tick*.005,restore_s=time.perf_counter()-restore_started,runtime_fields=list(runtime),physics_leaf_count=len(jax.tree.leaves(data)),source=('in-memory' if replay and replay<=memory_repeats else 'serialized')+' full MJX data, RB FIFO/observation/action, ground controller and runner state'),indent=2))
             rollout_start=time.perf_counter()
             for tick in range(start_tick,round(args.seconds/.005)+1):
                 t=tick*.005
-                if (snapshot_tick==tick or tick in collection_ticks or (tick==0 and cfg.get('collect_model_state'))) and not replay:
+                collect_handoff=cfg.get('snapshot_ground_handoff',False) and not handoff_snapshot_saved and tick%4==0 and bool(((phase==2)|~alive).all())
+                if (snapshot_tick==tick or tick in collection_ticks or collect_handoff or (tick==0 and cfg.get('collect_model_state'))) and not replay:
                     runtime=dict(phase=phase,alive=alive,recovering=recovering,stable_time=stable_time,upper_ready_time=upper_ready_time,airborne=airborne,flags=flags,far_time=far_time,entry_time=entry_time,handoff_time=handoff_time,hold=hold,lock=lock,target=target,codes=codes,durations=durations,ownership_error=ownership_error,substep_loads=substep_loads)
                     if rolling is not None:
                         runtime['planner']=dict(library=rolling.snapshot(),pending=deepcopy(pending),events=deepcopy(rolling_events),jump_start=jump_start.clone())
                     snapshot=capture_snapshot(data,ground_adapter,(history,obs,last),runtime,tick,dict(world_map=world,terrain=terrain,ground_identity=identity,rb_identity=skill.record,physics_model=str(args.output/'terrain.mjb'),resolved_config=str(args.output/'resolved_config.json')))
                     if tick==0 and cfg.get('collect_model_state'):initial_snapshot=snapshot
-                    if tick in collection_ticks:collected_snapshots[tick]=snapshot
+                    if tick in collection_ticks or collect_handoff:collected_snapshots[tick]=snapshot
+                    if collect_handoff:handoff_snapshot_saved=True
                     if snapshot_tick==tick:replay_snapshot=snapshot
                     if snapshot_tick==tick:prefix=[rows.copy(),poses.copy(),velocities.copy(),contact_rows.copy(),valid_rows.copy(),world_rows.copy(),plan_receipts.copy(),load_rows.copy(),controller_rows.copy(),applied_rows.copy(),applied_masks.copy(),rb_state_rows.copy()]
                 if tick in updates:
@@ -360,7 +385,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                     state=controller_features(middle,ctl,recovering,stable_time,upper_ready_time,lock)
                     controller_rows.append(torch.cat([value.reshape(n,-1).float() for value in state.values()],1))
                     rb_state_rows.append(torch.cat([to_torch(value).reshape(n,-1).float() for value in (history.frames,history.valid_count,obs,last)],1))
-                    if tick==0:controller_schema={key:list(value.shape[1:]) for key,value in state.items()}
+                    if tick==start_tick:controller_schema={key:list(value.shape[1:]) for key,value in state.items()}
                 if telemetry:load_rows.append(substep_loads)
                 poses.append(q);velocities.append(v);contact_rows.append(flags.clone());world_rows.append(world_flags.clone());valid_rows.append(alive.clone());alive &= ~stop
                 if tick==round(args.seconds/.005):break
