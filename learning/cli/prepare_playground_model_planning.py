@@ -3,7 +3,7 @@ import argparse,copy,json,time,shutil,subprocess
 from pathlib import Path
 import numpy as np
 import torch,mujoco
-from sttw_control.playground_constraint_log import clearance_witness
+from sttw_control.playground_constraint_log import clearance_witness,dynamic_witnesses
 from sttw_control.playground_arx import states
 from sttw_control.playground_history_model import load_history_model
 from sttw_control.playground_prediction import BodyEnvelope,euler,rotate
@@ -66,6 +66,7 @@ for map_id in ([r['map_id'] for r in catalog['entries']] if catalog else [6,7]):
                 checks=dict(finite=bool(np.isfinite(prediction[i,:end]).all()),roll=bool(np.abs(angles[i,:end,0]).max()<=.7),pitch=bool(np.abs(angles[i,:end,1]).max()<=1.309),tracking=bool(np.abs(domains[i,:end,0]).max()<=base['ground_handoff']['road_half_width_m']),heading_domain=bool(np.abs(domains[i,:end,1]).max()<np.pi/2),preview=bool(domains[i,:end,2].min()>.05),forward=bool(velocities[i,:end,0].min()>=.5))
             model_checks.append(all(checks.values()) and goal_time is not None and anchor*.02+goal_time<=10.)
             model_times.append(anchor*.02+goal_time if goal_time is not None else np.inf)
+            dynamics[-1]['diagnostics']=dynamic_witnesses(prediction[i],velocities[i],angles[i],domains[i],world_vx[i],r['speed'],goal,base['ground_handoff']['road_half_width_m'],anchor)
             dynamics[-1].update(terminal_gate_checks=checks,terminal_gate_valid=model_checks[-1],selection_enforced=a.predicted_terminal)
             motions.append(dict(x=np.r_[r['pose'][:anchor,0],prediction[i,:end,0]],lo=np.concatenate([r['lo'][:anchor],low[i,:end]]),hi=np.concatenate([r['hi'][:anchor],high[i,:end]])))
         # Spatial DEV calibration is explicit, uses no obstacle outcome, and is not TEST evidence.

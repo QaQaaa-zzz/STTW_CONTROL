@@ -1,9 +1,9 @@
 {
-  "candidates": 54,
-  "admitted": 6,
-  "rejected": 48,
-  "raw_records": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p0/constraint_audit/candidate_constraints.json",
+  "candidates": 2700,
+  "admitted": 300,
+  "rejected": 2400,
+  "raw_records": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p0/constraint_audit_all/candidate_constraints.json",
   "clearance_parity_atol_m": 2e-06,
-  "physics_runs": 0,
-  "pending": "dynamic and goal failure timestamps; full P0 acceptance remains pending"
+  "all_dynamic_gate_flags_match": true,
+  "physics_runs": 0
 }

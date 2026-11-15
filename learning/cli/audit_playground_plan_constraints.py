@@ -4,8 +4,8 @@ from pathlib import Path
 import numpy as np
 import torch,mujoco
 from sttw_control.playground_arx import states
-from sttw_control.playground_prediction import BodyEnvelope
-from sttw_control.playground_constraint_log import clearance_witness
+from sttw_control.playground_prediction import BodyEnvelope,euler
+from sttw_control.playground_constraint_log import clearance_witness,dynamic_witnesses
 
 p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
@@ -26,7 +26,8 @@ for plan in plans:
     mid,name=plan['map_id'],plan['model'];world=json.loads((a.root/f'map{mid:02d}_layout{plan["layout"]:02d}'/'world.json').read_text())
     cal=next(r for r in calibration if r['map_id']==mid and r['model']==name);edges=np.array(cal['edges']);margins=np.array(cal['axis_margin_m'])
     boxes=np.array([[r[0],r[2],0.,r[1],r[3],.5] for r in world['terrain']['forbidden_rectangles']])
-    predictions=np.load(a.root/f'predictions_map{mid:02d}_{name}.npz')['pose'];details=[]
+    saved=np.load(a.root/f'predictions_map{mid:02d}_{name}.npz');predictions=saved['pose'];details=[]
+    cfg=json.loads((Path(plan['evaluation'])/'resolved_config.json').read_text())
     for i,item in enumerate(items):
         dyn=next(r for r in dynamics if r['map_id']==mid and r['model']==name and r['source_case']==item['row']['case_dir'])
         end=round(dyn['predicted_goal_time_s']/.02)+1 if dyn['predicted_goal_time_s'] is not None else predictions.shape[1]
@@ -34,7 +35,11 @@ for plan in plans:
         with torch.no_grad():lo,hi=[v.numpy() for v in envelope(torch.as_tensor(poses,dtype=torch.float32))]
         witness=clearance_witness(lo,hi,margins[region],world['bounds_xy_m'],boxes,names)
         step=witness['step'];witness.update(time_s=step*.02,phase=int(item['phase'][step]) if step<item['anchor'] else 2,source_case=item['row']['case_dir'],margin_source=str(a.root/'calibration.json'),margin_rule=cal['rule'],prediction_kind='measured_TRAIN_prefix' if step<item['anchor'] else 'predicted_departure')
-        details.append(dict(route=item['row']['route'],speed=item['speed'],witness=witness,domain_checks=dyn['terminal_gate_checks'],terminal_gate_valid=dyn['terminal_gate_valid'],predicted_goal_time_s=dyn['predicted_goal_time_s']))
+        with torch.no_grad():angles=euler(torch.as_tensor(predictions[i,:,3:7])).numpy()
+        diagnostic=dynamic_witnesses(predictions[i],saved['velocity'][i],angles,saved['domain'][i],saved['world_vx'][i],item['speed'],world['goal'],cfg['ground_handoff']['road_half_width_m'],item['anchor'])
+        assert diagnostic['checks']==dyn['terminal_gate_checks']
+        assert diagnostic['valid']==dyn['terminal_gate_valid']
+        details.append(dict(dynamic_diagnostics=diagnostic,source_eligible=bool(item['row']['goal'] and item['row']['nonwheel_contact_steps']==0),route=item['row']['route'],speed=item['speed'],witness=witness,domain_checks=dyn['terminal_gate_checks'],terminal_gate_valid=dyn['terminal_gate_valid'],predicted_goal_time_s=dyn['predicted_goal_time_s']))
     for candidate,(route,speed) in enumerate(( (r,v) for r in range(9) for v in (1.8,1.9))):
         matched=[d for d in details if d['route']==route and abs(d['speed']-speed)<1e-4]
         limiting=min(matched,key=lambda d:d['witness']['expanded_clearance_m'])['witness']
@@ -45,4 +50,4 @@ for plan in plans:
         if not plan['eligible'][candidate]:reasons.append('source_eligibility_or_predicted_domain_or_goal')
         records.append(dict(map_id=mid,model=name,candidate=candidate,route=route,speed=speed,admitted=bool(admitted),selected=bool(plan['feasible'] and plan['candidate']==candidate),reasons=reasons,limiting=limiting,source_diagnostics=matched))
 (a.output/'candidate_constraints.json').write_text(json.dumps(records,indent=2)+'\n')
-print(json.dumps(dict(candidates=len(records),admitted=sum(r['admitted'] for r in records),rejected=sum(not r['admitted'] for r in records),clearance_parity='all within 2e-6 m',scope='sampled AABB clearance; not continuous collision proof; dynamic flags have no extremum timestamp yet')))
+print(json.dumps(dict(candidates=len(records),admitted=sum(r['admitted'] for r in records),rejected=sum(not r['admitted'] for r in records),clearance_parity='all within 2e-6 m',scope='sampled AABB clearance; not continuous collision proof; dynamic and goal witnesses reconstructed with unchanged gates')))
