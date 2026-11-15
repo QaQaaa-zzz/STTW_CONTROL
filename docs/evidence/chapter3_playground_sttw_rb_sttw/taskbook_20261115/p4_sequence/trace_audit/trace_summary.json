@@ -1,0 +1,114 @@
+{
+  "groups": [
+    {
+      "group": 0,
+      "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_reset/residual/map06/C",
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p3_world_handoffloss/seed0/best.pt",
+      "cases": 36,
+      "phase_and_joint_ready": 3,
+      "later_joint_ready": 3,
+      "terminal_replay_error": 0.0
+    },
+    {
+      "group": 1,
+      "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/evaluation/seed0/map06",
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/training/seed0/best.pt",
+      "cases": 36,
+      "phase_and_joint_ready": 0,
+      "later_joint_ready": 0,
+      "terminal_replay_error": 0.0
+    },
+    {
+      "group": 2,
+      "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/evaluation/seed1/map06",
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/training/seed1/best.pt",
+      "cases": 36,
+      "phase_and_joint_ready": 0,
+      "later_joint_ready": 0,
+      "terminal_replay_error": 0.0
+    },
+    {
+      "group": 3,
+      "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/evaluation/seed2/map06",
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/training/seed2/best.pt",
+      "cases": 36,
+      "phase_and_joint_ready": 0,
+      "later_joint_ready": 0,
+      "terminal_replay_error": 0.0
+    },
+    {
+      "group": 4,
+      "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_reset/residual/map07/C",
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p3_world_handoffloss/seed0/best.pt",
+      "cases": 36,
+      "phase_and_joint_ready": 3,
+      "later_joint_ready": 3,
+      "terminal_replay_error": 0.0
+    },
+    {
+      "group": 5,
+      "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/evaluation/seed0/map07",
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/training/seed0/best.pt",
+      "cases": 36,
+      "phase_and_joint_ready": 0,
+      "later_joint_ready": 0,
+      "terminal_replay_error": 0.0
+    },
+    {
+      "group": 6,
+      "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/evaluation/seed1/map07",
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/training/seed1/best.pt",
+      "cases": 36,
+      "phase_and_joint_ready": 0,
+      "later_joint_ready": 0,
+      "terminal_replay_error": 0.0
+    },
+    {
+      "group": 7,
+      "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/evaluation/seed2/map07",
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/training/seed2/best.pt",
+      "cases": 36,
+      "phase_and_joint_ready": 0,
+      "later_joint_ready": 0,
+      "terminal_replay_error": 0.0
+    },
+    {
+      "group": 8,
+      "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_reset/residual/map48/C",
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p3_world_handoffloss/seed0/best.pt",
+      "cases": 18,
+      "phase_and_joint_ready": 0,
+      "later_joint_ready": 0,
+      "terminal_replay_error": 0.0
+    },
+    {
+      "group": 9,
+      "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/evaluation/seed0/map48",
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/training/seed0/best.pt",
+      "cases": 18,
+      "phase_and_joint_ready": 0,
+      "later_joint_ready": 0,
+      "terminal_replay_error": 0.0
+    },
+    {
+      "group": 10,
+      "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/evaluation/seed1/map48",
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/training/seed1/best.pt",
+      "cases": 18,
+      "phase_and_joint_ready": 0,
+      "later_joint_ready": 0,
+      "terminal_replay_error": 0.0
+    },
+    {
+      "group": 11,
+      "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/evaluation/seed2/map48",
+      "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/training/seed2/best.pt",
+      "cases": 18,
+      "phase_and_joint_ready": 0,
+      "later_joint_ready": 0,
+      "terminal_replay_error": 0.0
+    }
+  ],
+  "runtime_s": 2.350531303905882,
+  "scope": "Known DEV, fixed125-step/2.5s horizon. Post-classifier model steps are diagnostic extrapolation, not verified actual RB continuation. No controls, weights or phase timing changed."
+}

@@ -1,0 +1,2594 @@
+[
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route0_h75_v0",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.023281574249267578,
+    "fine_error_rad": 0.002922654151916504,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route0_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.009468793869018555,
+    "fine_error_rad": 0.003383636474609375,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route0_h75_v2",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.00962066650390625,
+    "fine_error_rad": 0.003265976905822754,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route0_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.015897512435913086,
+    "fine_error_rad": 0.004034638404846191,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route1_h75_v0",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.009932279586791992,
+    "fine_error_rad": 0.0030978918075561523,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route1_h75_v1",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.008222579956054688,
+    "fine_error_rad": 0.0028973817825317383,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route1_h75_v2",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.009503364562988281,
+    "fine_error_rad": 0.002832651138305664,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route1_h75_v3",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.009188175201416016,
+    "fine_error_rad": 0.003521442413330078,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route2_h75_v0",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.013544082641601562,
+    "fine_error_rad": 0.0031452178955078125,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route2_h75_v1",
+    "handoff_sample": 76,
+    "coarse_error_rad": 0.016680121421813965,
+    "fine_error_rad": 0.0015397071838378906,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route2_h75_v2",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.011307001113891602,
+    "fine_error_rad": 0.0027947425842285156,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route2_h75_v3",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.01422572135925293,
+    "fine_error_rad": 0.004518628120422363,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route3_h75_v0",
+    "handoff_sample": 72,
+    "coarse_error_rad": 0.028473973274230957,
+    "fine_error_rad": 0.0034748315811157227,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route3_h75_v1",
+    "handoff_sample": 76,
+    "coarse_error_rad": 0.017924904823303223,
+    "fine_error_rad": 0.0035011768341064453,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route3_h75_v2",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.03242921829223633,
+    "fine_error_rad": 0.004456758499145508,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route3_h75_v3",
+    "handoff_sample": 72,
+    "coarse_error_rad": 0.013769388198852539,
+    "fine_error_rad": 0.0011820793151855469,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route4_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.008875608444213867,
+    "fine_error_rad": 0.002453327178955078,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route4_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.010993599891662598,
+    "fine_error_rad": 0.0035469532012939453,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route4_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.01189577579498291,
+    "fine_error_rad": 0.0036429166793823242,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route4_h75_v3",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.00730133056640625,
+    "fine_error_rad": 0.003946781158447266,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route5_h75_v0",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.007448434829711914,
+    "fine_error_rad": 0.003451704978942871,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route5_h75_v1",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.03003835678100586,
+    "fine_error_rad": 0.003740549087524414,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route5_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.030148863792419434,
+    "fine_error_rad": 0.0038470029830932617,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route5_h75_v3",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.008887052536010742,
+    "fine_error_rad": 0.002353191375732422,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route6_h75_v0",
+    "handoff_sample": 77,
+    "coarse_error_rad": 0.012919187545776367,
+    "fine_error_rad": 0.0039023160934448242,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route6_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.015717506408691406,
+    "fine_error_rad": 0.0023088455200195312,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route6_h75_v2",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.02018558979034424,
+    "fine_error_rad": 0.002935171127319336,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route6_h75_v3",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.004666566848754883,
+    "fine_error_rad": 0.0019910335540771484,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route7_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.01861703395843506,
+    "fine_error_rad": 0.003330826759338379,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route7_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.00869607925415039,
+    "fine_error_rad": 0.0035560131072998047,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route7_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.007065296173095703,
+    "fine_error_rad": 0.002404928207397461,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route7_h75_v3",
+    "handoff_sample": 76,
+    "coarse_error_rad": 0.012329816818237305,
+    "fine_error_rad": 0.0015387535095214844,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route8_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.008682727813720703,
+    "fine_error_rad": 0.00514984130859375,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route8_h75_v1",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.017221927642822266,
+    "fine_error_rad": 0.0029772520065307617,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route8_h75_v2",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.007297515869140625,
+    "fine_error_rad": 0.0038704872131347656,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map00",
+    "case": "rb_run3_route8_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.021799087524414062,
+    "fine_error_rad": 0.0014766454696655273,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route0_h75_v0",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.01154470443725586,
+    "fine_error_rad": 0.00305783748626709,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route0_h75_v1",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.021424174308776855,
+    "fine_error_rad": 0.0024493932723999023,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route0_h75_v2",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.0168917179107666,
+    "fine_error_rad": 0.003353714942932129,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route0_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.010382890701293945,
+    "fine_error_rad": 0.0032390356063842773,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route1_h75_v0",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.015091896057128906,
+    "fine_error_rad": 0.004691600799560547,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route1_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.008166313171386719,
+    "fine_error_rad": 0.0033379793167114258,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route1_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.029396533966064453,
+    "fine_error_rad": 0.005334615707397461,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route1_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.008511543273925781,
+    "fine_error_rad": 0.0036684274673461914,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route2_h75_v0",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.007287144660949707,
+    "fine_error_rad": 0.004185795783996582,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route2_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.02432107925415039,
+    "fine_error_rad": 0.0035740137100219727,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route2_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.014789462089538574,
+    "fine_error_rad": 0.0011241436004638672,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route2_h75_v3",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.006975054740905762,
+    "fine_error_rad": 0.002354860305786133,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route3_h75_v0",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.013892769813537598,
+    "fine_error_rad": 0.0036649703979492188,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route3_h75_v1",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.010968446731567383,
+    "fine_error_rad": 0.0033005475997924805,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route3_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.01724553108215332,
+    "fine_error_rad": 0.0032973289489746094,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route3_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.008192777633666992,
+    "fine_error_rad": 0.0037424564361572266,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route4_h75_v0",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.006524085998535156,
+    "fine_error_rad": 0.0028104782104492188,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route4_h75_v1",
+    "handoff_sample": 76,
+    "coarse_error_rad": 0.037989020347595215,
+    "fine_error_rad": 0.0028249025344848633,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route4_h75_v2",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.024032235145568848,
+    "fine_error_rad": 0.004835247993469238,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route4_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.03374814987182617,
+    "fine_error_rad": 0.00481414794921875,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route5_h75_v0",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.016750574111938477,
+    "fine_error_rad": 0.00425410270690918,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route5_h75_v1",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.011702775955200195,
+    "fine_error_rad": 0.0035361051559448242,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route5_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.022834181785583496,
+    "fine_error_rad": 0.006776571273803711,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route5_h75_v3",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.015122652053833008,
+    "fine_error_rad": 0.005069851875305176,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route6_h75_v0",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.016588211059570312,
+    "fine_error_rad": 0.0017647743225097656,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route6_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.0077321529388427734,
+    "fine_error_rad": 0.00270688533782959,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route6_h75_v2",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.017737984657287598,
+    "fine_error_rad": 0.003101944923400879,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route6_h75_v3",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.012126684188842773,
+    "fine_error_rad": 0.0036118030548095703,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route7_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.006877899169921875,
+    "fine_error_rad": 0.002222776412963867,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route7_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.006863594055175781,
+    "fine_error_rad": 0.003798842430114746,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route7_h75_v2",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.019844412803649902,
+    "fine_error_rad": 0.0035223960876464844,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route7_h75_v3",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.019698500633239746,
+    "fine_error_rad": 0.0037360191345214844,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route8_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.013023734092712402,
+    "fine_error_rad": 0.0022734403610229492,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route8_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.013245701789855957,
+    "fine_error_rad": 0.0012345314025878906,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route8_h75_v2",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.013466119766235352,
+    "fine_error_rad": 0.002507448196411133,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map01",
+    "case": "rb_run3_route8_h75_v3",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.010306596755981445,
+    "fine_error_rad": 0.0030132532119750977,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route0_h75_v0",
+    "handoff_sample": 72,
+    "coarse_error_rad": 0.012268781661987305,
+    "fine_error_rad": 0.003347635269165039,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route0_h75_v1",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.034649014472961426,
+    "fine_error_rad": 0.004805445671081543,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route0_h75_v2",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.009579181671142578,
+    "fine_error_rad": 0.0035752058029174805,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route0_h75_v3",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.00957179069519043,
+    "fine_error_rad": 0.0024154186248779297,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route1_h75_v0",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.009534358978271484,
+    "fine_error_rad": 0.002447843551635742,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route1_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.013160347938537598,
+    "fine_error_rad": 0.002276301383972168,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route1_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.010200738906860352,
+    "fine_error_rad": 0.0024826526641845703,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route1_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.0178678035736084,
+    "fine_error_rad": 0.004633784294128418,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route2_h75_v0",
+    "handoff_sample": 72,
+    "coarse_error_rad": 0.018390297889709473,
+    "fine_error_rad": 0.002311110496520996,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route2_h75_v1",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.01111912727355957,
+    "fine_error_rad": 0.004279732704162598,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route2_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.025746583938598633,
+    "fine_error_rad": 0.0031964778900146484,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route2_h75_v3",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.009163618087768555,
+    "fine_error_rad": 0.0034410953521728516,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route3_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.02332770824432373,
+    "fine_error_rad": 0.003641486167907715,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route3_h75_v1",
+    "handoff_sample": 72,
+    "coarse_error_rad": 0.03741109371185303,
+    "fine_error_rad": 0.0069168806076049805,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route3_h75_v2",
+    "handoff_sample": 72,
+    "coarse_error_rad": 0.016634702682495117,
+    "fine_error_rad": 0.002951979637145996,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route3_h75_v3",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.010633707046508789,
+    "fine_error_rad": 0.0045239925384521484,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route4_h75_v0",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.029945969581604004,
+    "fine_error_rad": 0.0016121864318847656,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route4_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.0138092041015625,
+    "fine_error_rad": 0.004189729690551758,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route4_h75_v2",
+    "handoff_sample": 72,
+    "coarse_error_rad": 0.006626605987548828,
+    "fine_error_rad": 0.003342747688293457,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route4_h75_v3",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.0073871612548828125,
+    "fine_error_rad": 0.001476883888244629,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route5_h75_v0",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.013199210166931152,
+    "fine_error_rad": 0.0017771720886230469,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route5_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.01720261573791504,
+    "fine_error_rad": 0.0018590688705444336,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route5_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.008391618728637695,
+    "fine_error_rad": 0.003697037696838379,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route5_h75_v3",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.007189750671386719,
+    "fine_error_rad": 0.0035065412521362305,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route6_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.009974002838134766,
+    "fine_error_rad": 0.002594470977783203,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route6_h75_v1",
+    "handoff_sample": 77,
+    "coarse_error_rad": 0.019965410232543945,
+    "fine_error_rad": 0.002055048942565918,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route6_h75_v2",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.011611580848693848,
+    "fine_error_rad": 0.0032559633255004883,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route6_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.0060045719146728516,
+    "fine_error_rad": 0.00323331356048584,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route7_h75_v0",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.015630483627319336,
+    "fine_error_rad": 0.0019402503967285156,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route7_h75_v1",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.007596254348754883,
+    "fine_error_rad": 0.002066493034362793,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route7_h75_v2",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.013086557388305664,
+    "fine_error_rad": 0.002802133560180664,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route7_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.012824416160583496,
+    "fine_error_rad": 0.0022488832473754883,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route8_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.019908905029296875,
+    "fine_error_rad": 0.003782510757446289,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route8_h75_v1",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.009148359298706055,
+    "fine_error_rad": 0.0037349462509155273,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route8_h75_v2",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.016346096992492676,
+    "fine_error_rad": 0.0016379356384277344,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map02",
+    "case": "rb_run3_route8_h75_v3",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.016139507293701172,
+    "fine_error_rad": 0.002666473388671875,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route0_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.012764453887939453,
+    "fine_error_rad": 0.0015015602111816406,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route0_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.02201402187347412,
+    "fine_error_rad": 0.003397822380065918,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route0_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.02355217933654785,
+    "fine_error_rad": 0.0041724443435668945,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route0_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.015289545059204102,
+    "fine_error_rad": 0.0026810169219970703,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route1_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.008691549301147461,
+    "fine_error_rad": 0.0027457475662231445,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route1_h75_v1",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.012682318687438965,
+    "fine_error_rad": 0.0031168460845947266,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route1_h75_v2",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.028236865997314453,
+    "fine_error_rad": 0.002730250358581543,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route1_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.008461475372314453,
+    "fine_error_rad": 0.002042412757873535,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route2_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.012169122695922852,
+    "fine_error_rad": 0.0030442476272583008,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route2_h75_v1",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.011642694473266602,
+    "fine_error_rad": 0.0037364959716796875,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route2_h75_v2",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.01237785816192627,
+    "fine_error_rad": 0.003464818000793457,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route2_h75_v3",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.014717340469360352,
+    "fine_error_rad": 0.00311124324798584,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route3_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.010692715644836426,
+    "fine_error_rad": 0.003131270408630371,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route3_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.020659327507019043,
+    "fine_error_rad": 0.002599477767944336,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route3_h75_v2",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.018852949142456055,
+    "fine_error_rad": 0.004608631134033203,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route3_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.00562286376953125,
+    "fine_error_rad": 0.005160689353942871,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route4_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.015451431274414062,
+    "fine_error_rad": 0.0039006471633911133,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route4_h75_v1",
+    "handoff_sample": 76,
+    "coarse_error_rad": 0.025365233421325684,
+    "fine_error_rad": 0.002507448196411133,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route4_h75_v2",
+    "handoff_sample": 76,
+    "coarse_error_rad": 0.03154301643371582,
+    "fine_error_rad": 0.0032072067260742188,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route4_h75_v3",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.02611064910888672,
+    "fine_error_rad": 0.0036319494247436523,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route5_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.027002453804016113,
+    "fine_error_rad": 0.00496673583984375,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route5_h75_v1",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.016403675079345703,
+    "fine_error_rad": 0.0027251243591308594,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route5_h75_v2",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.00945591926574707,
+    "fine_error_rad": 0.0023407936096191406,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route5_h75_v3",
+    "handoff_sample": 76,
+    "coarse_error_rad": 0.012072324752807617,
+    "fine_error_rad": 0.0034949779510498047,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route6_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.013070106506347656,
+    "fine_error_rad": 0.0011301040649414062,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route6_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.006896495819091797,
+    "fine_error_rad": 0.002855062484741211,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route6_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.018118619918823242,
+    "fine_error_rad": 0.0040493011474609375,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route6_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.012030482292175293,
+    "fine_error_rad": 0.003327608108520508,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route7_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.012786149978637695,
+    "fine_error_rad": 0.0014176368713378906,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route7_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.008692741394042969,
+    "fine_error_rad": 0.0025888681411743164,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route7_h75_v2",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.023352503776550293,
+    "fine_error_rad": 0.0023146867752075195,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route7_h75_v3",
+    "handoff_sample": 76,
+    "coarse_error_rad": 0.02375006675720215,
+    "fine_error_rad": 0.0032747983932495117,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route8_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.021520137786865234,
+    "fine_error_rad": 0.0014979839324951172,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route8_h75_v1",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.031707763671875,
+    "fine_error_rad": 0.005115151405334473,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route8_h75_v2",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.011336922645568848,
+    "fine_error_rad": 0.004184365272521973,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map03",
+    "case": "rb_run3_route8_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.00831747055053711,
+    "fine_error_rad": 0.0018557310104370117,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route0_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.008668661117553711,
+    "fine_error_rad": 0.002395153045654297,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route0_h75_v1",
+    "handoff_sample": 76,
+    "coarse_error_rad": 0.031006693840026855,
+    "fine_error_rad": 0.005762934684753418,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route0_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.010818958282470703,
+    "fine_error_rad": 0.002285599708557129,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route0_h75_v3",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.012602090835571289,
+    "fine_error_rad": 0.002791285514831543,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route1_h75_v0",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.010243415832519531,
+    "fine_error_rad": 0.002330183982849121,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route1_h75_v1",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.029044270515441895,
+    "fine_error_rad": 0.0025649070739746094,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route1_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.0345609188079834,
+    "fine_error_rad": 0.004815459251403809,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route1_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.004975795745849609,
+    "fine_error_rad": 0.002944350242614746,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route2_h75_v0",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.011985540390014648,
+    "fine_error_rad": 0.0016872882843017578,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route2_h75_v1",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.012343168258666992,
+    "fine_error_rad": 0.0032613277435302734,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route2_h75_v2",
+    "handoff_sample": 72,
+    "coarse_error_rad": 0.013697981834411621,
+    "fine_error_rad": 0.0021393299102783203,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route2_h75_v3",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.00912022590637207,
+    "fine_error_rad": 0.005533933639526367,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route3_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.011532783508300781,
+    "fine_error_rad": 0.0037102699279785156,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route3_h75_v1",
+    "handoff_sample": 76,
+    "coarse_error_rad": 0.008099794387817383,
+    "fine_error_rad": 0.004671692848205566,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route3_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.010401487350463867,
+    "fine_error_rad": 0.0042296648025512695,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route3_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.0059702396392822266,
+    "fine_error_rad": 0.0041408538818359375,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route4_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.011528253555297852,
+    "fine_error_rad": 0.0025141239166259766,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route4_h75_v1",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.03201305866241455,
+    "fine_error_rad": 0.0010673999786376953,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route4_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.010784626007080078,
+    "fine_error_rad": 0.003316044807434082,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route4_h75_v3",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.04328465461730957,
+    "fine_error_rad": 0.005229473114013672,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route5_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.017186880111694336,
+    "fine_error_rad": 0.0031430721282958984,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route5_h75_v1",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.009884119033813477,
+    "fine_error_rad": 0.002601146697998047,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route5_h75_v2",
+    "handoff_sample": 76,
+    "coarse_error_rad": 0.03165936470031738,
+    "fine_error_rad": 0.0034307241439819336,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route5_h75_v3",
+    "handoff_sample": 72,
+    "coarse_error_rad": 0.023822903633117676,
+    "fine_error_rad": 0.004629969596862793,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route6_h75_v0",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.007071733474731445,
+    "fine_error_rad": 0.0018714666366577148,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route6_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.022081375122070312,
+    "fine_error_rad": 0.004562854766845703,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route6_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.007229804992675781,
+    "fine_error_rad": 0.0038182735443115234,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route6_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.010579586029052734,
+    "fine_error_rad": 0.0017951726913452148,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route7_h75_v0",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.011019229888916016,
+    "fine_error_rad": 0.005914449691772461,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route7_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.014523863792419434,
+    "fine_error_rad": 0.005202174186706543,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route7_h75_v2",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.013828754425048828,
+    "fine_error_rad": 0.0032193660736083984,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route7_h75_v3",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.023671388626098633,
+    "fine_error_rad": 0.005893826484680176,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route8_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.019275307655334473,
+    "fine_error_rad": 0.0024007558822631836,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route8_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.0276259183883667,
+    "fine_error_rad": 0.0037549734115600586,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route8_h75_v2",
+    "handoff_sample": 72,
+    "coarse_error_rad": 0.020555853843688965,
+    "fine_error_rad": 0.0026922225952148438,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map04",
+    "case": "rb_run3_route8_h75_v3",
+    "handoff_sample": 72,
+    "coarse_error_rad": 0.009429693222045898,
+    "fine_error_rad": 0.002251863479614258,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route0_h75_v0",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.019910335540771484,
+    "fine_error_rad": 0.005196332931518555,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route0_h75_v1",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.009580612182617188,
+    "fine_error_rad": 0.002583622932434082,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route0_h75_v2",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.011739969253540039,
+    "fine_error_rad": 0.0038036108016967773,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route0_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.0064792633056640625,
+    "fine_error_rad": 0.0022819042205810547,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route1_h75_v0",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.011285901069641113,
+    "fine_error_rad": 0.005585193634033203,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route1_h75_v1",
+    "handoff_sample": 72,
+    "coarse_error_rad": 0.010265588760375977,
+    "fine_error_rad": 0.0012378692626953125,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route1_h75_v2",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.010838747024536133,
+    "fine_error_rad": 0.0031452178955078125,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route1_h75_v3",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.012374639511108398,
+    "fine_error_rad": 0.002444624900817871,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route2_h75_v0",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.01380014419555664,
+    "fine_error_rad": 0.002728104591369629,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route2_h75_v1",
+    "handoff_sample": 71,
+    "coarse_error_rad": 0.01995253562927246,
+    "fine_error_rad": 0.0014646053314208984,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route2_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.02721703052520752,
+    "fine_error_rad": 0.0031404495239257812,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route2_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.008352994918823242,
+    "fine_error_rad": 0.003265380859375,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route3_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.006521463394165039,
+    "fine_error_rad": 0.00308990478515625,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route3_h75_v1",
+    "handoff_sample": 76,
+    "coarse_error_rad": 0.013335704803466797,
+    "fine_error_rad": 0.0026665925979614258,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route3_h75_v2",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.036273837089538574,
+    "fine_error_rad": 0.004859328269958496,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route3_h75_v3",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.010993719100952148,
+    "fine_error_rad": 0.003298044204711914,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route4_h75_v0",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.008979082107543945,
+    "fine_error_rad": 0.0023697614669799805,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route4_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.009057044982910156,
+    "fine_error_rad": 0.0031867027282714844,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route4_h75_v2",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.028286099433898926,
+    "fine_error_rad": 0.005110502243041992,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route4_h75_v3",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.009573936462402344,
+    "fine_error_rad": 0.0028609037399291992,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route5_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.02506864070892334,
+    "fine_error_rad": 0.003439784049987793,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route5_h75_v1",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.017727255821228027,
+    "fine_error_rad": 0.0025141239166259766,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route5_h75_v2",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.012164115905761719,
+    "fine_error_rad": 0.003325819969177246,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route5_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.012401938438415527,
+    "fine_error_rad": 0.0013719797134399414,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route6_h75_v0",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.02347707748413086,
+    "fine_error_rad": 0.0022699832916259766,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route6_h75_v1",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.0296633243560791,
+    "fine_error_rad": 0.0029810667037963867,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route6_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.009845852851867676,
+    "fine_error_rad": 0.0032883882522583008,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route6_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.015187382698059082,
+    "fine_error_rad": 0.0039626359939575195,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route7_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.030637025833129883,
+    "fine_error_rad": 0.002072930335998535,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route7_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.01737964153289795,
+    "fine_error_rad": 0.0028276443481445312,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route7_h75_v2",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.02155160903930664,
+    "fine_error_rad": 0.002644062042236328,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route7_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.01809084415435791,
+    "fine_error_rad": 0.0018466711044311523,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route8_h75_v0",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.014870285987854004,
+    "fine_error_rad": 0.0017383098602294922,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route8_h75_v1",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.015144109725952148,
+    "fine_error_rad": 0.000944972038269043,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route8_h75_v2",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.007157325744628906,
+    "fine_error_rad": 0.0011050701141357422,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "TRAIN",
+    "map": "map05",
+    "case": "rb_run3_route8_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.01752007007598877,
+    "fine_error_rad": 0.003007054328918457,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route0_h75_v0",
+    "handoff_sample": 76,
+    "coarse_error_rad": 0.013407468795776367,
+    "fine_error_rad": 0.0047942399978637695,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route0_h75_v1",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.016211628913879395,
+    "fine_error_rad": 0.0019441843032836914,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route0_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.02328777313232422,
+    "fine_error_rad": 0.002453327178955078,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route0_h75_v3",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.02421128749847412,
+    "fine_error_rad": 0.0037692785263061523,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route1_h75_v0",
+    "handoff_sample": 72,
+    "coarse_error_rad": 0.0234907865524292,
+    "fine_error_rad": 0.00416111946105957,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route1_h75_v1",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.008272886276245117,
+    "fine_error_rad": 0.003950715065002441,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route1_h75_v2",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.008654117584228516,
+    "fine_error_rad": 0.005924105644226074,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route1_h75_v3",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.013675212860107422,
+    "fine_error_rad": 0.0020651817321777344,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route2_h75_v0",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.008298397064208984,
+    "fine_error_rad": 0.001528024673461914,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route2_h75_v1",
+    "handoff_sample": 72,
+    "coarse_error_rad": 0.015347003936767578,
+    "fine_error_rad": 0.0027872323989868164,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route2_h75_v2",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.013401508331298828,
+    "fine_error_rad": 0.004191398620605469,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route2_h75_v3",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.016081809997558594,
+    "fine_error_rad": 0.003142714500427246,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route3_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.010715007781982422,
+    "fine_error_rad": 0.0032749176025390625,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route3_h75_v1",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.006911754608154297,
+    "fine_error_rad": 0.0036984682083129883,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route3_h75_v2",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.009519577026367188,
+    "fine_error_rad": 0.004477024078369141,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route3_h75_v3",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.018151521682739258,
+    "fine_error_rad": 0.002506256103515625,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route4_h75_v0",
+    "handoff_sample": 72,
+    "coarse_error_rad": 0.012027144432067871,
+    "fine_error_rad": 0.004346966743469238,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route4_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.008653879165649414,
+    "fine_error_rad": 0.0020422935485839844,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route4_h75_v2",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.009967803955078125,
+    "fine_error_rad": 0.0026235580444335938,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route4_h75_v3",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.013283133506774902,
+    "fine_error_rad": 0.0026023387908935547,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route5_h75_v0",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.011004209518432617,
+    "fine_error_rad": 0.004435420036315918,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route5_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.025554180145263672,
+    "fine_error_rad": 0.0033617019653320312,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route5_h75_v2",
+    "handoff_sample": 76,
+    "coarse_error_rad": 0.011252164840698242,
+    "fine_error_rad": 0.004056334495544434,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route5_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.020647883415222168,
+    "fine_error_rad": 0.006015181541442871,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route6_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.007120609283447266,
+    "fine_error_rad": 0.0024842023849487305,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route6_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.020338058471679688,
+    "fine_error_rad": 0.0012781620025634766,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route6_h75_v2",
+    "handoff_sample": 72,
+    "coarse_error_rad": 0.012188434600830078,
+    "fine_error_rad": 0.00313413143157959,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route6_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.010961055755615234,
+    "fine_error_rad": 0.003956317901611328,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route7_h75_v0",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.02111661434173584,
+    "fine_error_rad": 0.0018950700759887695,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route7_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.012317061424255371,
+    "fine_error_rad": 0.002019643783569336,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route7_h75_v2",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.010925769805908203,
+    "fine_error_rad": 0.0018576383590698242,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route7_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.010076284408569336,
+    "fine_error_rad": 0.004026889801025391,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route8_h75_v0",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.010271310806274414,
+    "fine_error_rad": 0.003017425537109375,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route8_h75_v1",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.01943039894104004,
+    "fine_error_rad": 0.001885056495666504,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route8_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.011246919631958008,
+    "fine_error_rad": 0.0015969276428222656,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map06",
+    "case": "rb_run3_route8_h75_v3",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.007062196731567383,
+    "fine_error_rad": 0.005292534828186035,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route0_h75_v0",
+    "handoff_sample": 72,
+    "coarse_error_rad": 0.010138750076293945,
+    "fine_error_rad": 0.0018385648727416992,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route0_h75_v1",
+    "handoff_sample": 76,
+    "coarse_error_rad": 0.006281614303588867,
+    "fine_error_rad": 0.0017240047454833984,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route0_h75_v2",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.009548664093017578,
+    "fine_error_rad": 0.003358602523803711,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route0_h75_v3",
+    "handoff_sample": 76,
+    "coarse_error_rad": 0.03349339962005615,
+    "fine_error_rad": 0.004383444786071777,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route1_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.009639978408813477,
+    "fine_error_rad": 0.004423260688781738,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route1_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.00941455364227295,
+    "fine_error_rad": 0.0025675296783447266,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route1_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.014334917068481445,
+    "fine_error_rad": 0.0024874210357666016,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route1_h75_v3",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.008745074272155762,
+    "fine_error_rad": 0.0037032365798950195,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route2_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.009872198104858398,
+    "fine_error_rad": 0.001936793327331543,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route2_h75_v1",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.009174346923828125,
+    "fine_error_rad": 0.003487825393676758,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route2_h75_v2",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.004700183868408203,
+    "fine_error_rad": 0.002381563186645508,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route2_h75_v3",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.016106486320495605,
+    "fine_error_rad": 0.002532958984375,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route3_h75_v0",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.01569056510925293,
+    "fine_error_rad": 0.0028133392333984375,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route3_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.008069276809692383,
+    "fine_error_rad": 0.0031456947326660156,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route3_h75_v2",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.01344144344329834,
+    "fine_error_rad": 0.0008196830749511719,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route3_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.011652469635009766,
+    "fine_error_rad": 0.004385709762573242,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route4_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.014384269714355469,
+    "fine_error_rad": 0.0023632049560546875,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route4_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.026357054710388184,
+    "fine_error_rad": 0.006332516670227051,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route4_h75_v2",
+    "handoff_sample": 76,
+    "coarse_error_rad": 0.006916046142578125,
+    "fine_error_rad": 0.005270600318908691,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route4_h75_v3",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.011176824569702148,
+    "fine_error_rad": 0.0018122196197509766,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route5_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.013034820556640625,
+    "fine_error_rad": 0.0024938583374023438,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route5_h75_v1",
+    "handoff_sample": 76,
+    "coarse_error_rad": 0.021094202995300293,
+    "fine_error_rad": 0.00304412841796875,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route5_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.017127513885498047,
+    "fine_error_rad": 0.002791166305541992,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route5_h75_v3",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.009811162948608398,
+    "fine_error_rad": 0.004008054733276367,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route6_h75_v0",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.004274606704711914,
+    "fine_error_rad": 0.00442659854888916,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route6_h75_v1",
+    "handoff_sample": 75,
+    "coarse_error_rad": 0.017176032066345215,
+    "fine_error_rad": 0.00398409366607666,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route6_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.032474517822265625,
+    "fine_error_rad": 0.002878546714782715,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route6_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.008916139602661133,
+    "fine_error_rad": 0.0036039352416992188,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route7_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.021570205688476562,
+    "fine_error_rad": 0.002637147903442383,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route7_h75_v1",
+    "handoff_sample": 79,
+    "coarse_error_rad": 0.00773310661315918,
+    "fine_error_rad": 0.002687692642211914,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route7_h75_v2",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.019970297813415527,
+    "fine_error_rad": 0.003792285919189453,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route7_h75_v3",
+    "handoff_sample": 73,
+    "coarse_error_rad": 0.0030372142791748047,
+    "fine_error_rad": 0.004292726516723633,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route8_h75_v0",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.03117382526397705,
+    "fine_error_rad": 0.004227280616760254,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route8_h75_v1",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.02272975444793701,
+    "fine_error_rad": 0.0035371780395507812,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route8_h75_v2",
+    "handoff_sample": 76,
+    "coarse_error_rad": 0.015180230140686035,
+    "fine_error_rad": 0.001651167869567871,
+    "matched_endpoint_error_rad": 0.0
+  },
+  {
+    "split": "DEV",
+    "map": "map07",
+    "case": "rb_run3_route8_h75_v3",
+    "handoff_sample": 74,
+    "coarse_error_rad": 0.00556635856628418,
+    "fine_error_rad": 0.00403904914855957,
+    "matched_endpoint_error_rad": 0.0
+  }
+]

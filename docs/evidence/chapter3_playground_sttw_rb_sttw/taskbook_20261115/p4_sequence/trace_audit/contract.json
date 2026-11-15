@@ -1,0 +1,6 @@
+{
+  "change": "RB-only replay full125steps from saved causal entry",
+  "budget": "4 retained models x90 DEV cases; zero training and physics; max180s GPU lock",
+  "decision": "If no joint-ready step after classifier event, do not fix by delaying event alone",
+  "data_role": "known DEV; no TEST"
+}
