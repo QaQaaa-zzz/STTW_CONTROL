@@ -28,6 +28,12 @@ class SkillWorldModelTest(unittest.TestCase):
         self.assertEqual(tuple(full['contact_logits'].shape),(2,100,3))
         self.assertEqual(tuple(full['phase_logits'].shape),(2,100,5))
 
+    def test_native_joint_loss_scale_mapping(self):
+        from sttw_control.skill_world_model import JOINT_POSITION_SCALES,JOINT_VELOCITY_SCALES
+        native=['rearwheel_joint','steering_joint','frontwheel_joint','hip_joint','knee_joint']
+        self.assertEqual([JOINT_POSITION_SCALES[n] for n in native],[1.,.2,1.,.3,.3])
+        self.assertEqual([JOINT_VELOCITY_SCALES[n] for n in native],[5.,1.,5.,1.,1.])
+
     def test_predicted_stop_without_true_event_time(self):
         size=12+11+7+3+5+4
         model=SkillWorldModel(7,4,torch.zeros(size),torch.ones(size),torch.ones(11)*.01,torch.ones(7)*.01)

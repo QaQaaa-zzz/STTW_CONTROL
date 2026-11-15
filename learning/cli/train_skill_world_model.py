@@ -5,7 +5,7 @@ import numpy as np
 import torch
 from torch.nn import functional as F
 from torch.utils.tensorboard import SummaryWriter
-from sttw_control.skill_world_model import SkillWorldModel
+from sttw_control.skill_world_model import SkillWorldModel,JOINT_POSITION_SCALES,JOINT_VELOCITY_SCALES
 
 p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('--data',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
@@ -33,10 +33,13 @@ for split in ['TRAIN','DEV']:
   if row['split']==split:full_groups[split].setdefault(row['length']-1,[]).append(row['start'])
  full_groups[split]={h:torch.tensor(ids,device=device) for h,ids in full_groups[split].items()}
 full_lengths=sorted(full_groups['TRAIN'])
-hscale=tensor(normal['history_state_scale']);vscale=tensor([.3,.3,.3,.5,.5,.5,1.,5.,5.,1.,1.]);jscale=tensor([.2,1.,1.,.3,.3]);pscale=tensor([.2,.2,.1])
+schema_path=Path(manifest['rows'][0]['evaluation'])/'model_state_schema.json';schema=json.loads(schema_path.read_text())
+vscale_values=[.3,.3,.3,.5,.5,.5]+[JOINT_VELOCITY_SCALES[name] for name in schema['qvel_names'][6:]]
+jscale_values=[JOINT_POSITION_SCALES[name] for name in schema['qpos_names'][7:]]
+hscale=tensor(normal['history_state_scale']);vscale=tensor(vscale_values);jscale=tensor(jscale_values);pscale=tensor([.2,.2,.1])
 train_indices=torch.tensor([i for r in manifest['rows'] if r['split']=='TRAIN' for i in range(r['start'],r['start']+r['length'])],device=device)
 counts=torch.bincount(phase[train_indices],minlength=5).float();phase_weights=torch.where(counts>0,counts.sum()/counts.clamp_min(1),torch.zeros_like(counts));phase_weights=phase_weights/phase_weights[phase_weights>0].mean() if a.balance_phases else torch.ones_like(counts)
-contract=dict(full_entry=a.full_entry,resume=str(a.resume),initial_update=initial_update,balance_phases=a.balance_phases,phase_weights=phase_weights.cpu().tolist(),seed=a.seed,updates=a.updates,data=str(a.data),batch=64,lr=3e-4,gradient_clip=1.,horizons_steps=horizons,checkpoint_every=25,selection='DEV mean normalized multistep physical/history/contact/phase loss, including transition and endpoint weighting; decision-quality evaluation still required',loss_weights=dict(position=1,rotation=1,velocity=1,joints=1,history=.1,contact=.2,phase=.2,endpoint_position=1),transition_weight=3,normalization='TRAIN only',initialization='model and Adam resume; new sampling RNG' if a.resume else 'random model; no control policy training',device='GPU model and resident tensors; scalar/trajectory transfers only at checkpoint evaluation',stop='finite updates or outer25min wall budget; no automatic extension',history='Predicted controller/RB estimates after initial state; no measured future injected')
+contract=dict(rotation_scale_rad=.2,handoff_loss='Mean normalized physical error at actual phase2 transition, weight1; labels only, not rollout inputs',state_schema=str(schema_path),velocity_loss_scale=vscale_values,joint_loss_scale=jscale_values,full_entry=a.full_entry,resume=str(a.resume),initial_update=initial_update,balance_phases=a.balance_phases,phase_weights=phase_weights.cpu().tolist(),seed=a.seed,updates=a.updates,data=str(a.data),batch=64,lr=3e-4,gradient_clip=1.,horizons_steps=horizons,checkpoint_every=25,selection='DEV mean normalized multistep physical/history/contact/phase loss, including transition and endpoint weighting; decision-quality evaluation still required',loss_weights=dict(position=1,rotation=1,velocity=1,joints=1,history=.1,contact=.2,phase=.2,endpoint_position=1),transition_weight=3,normalization='TRAIN only',initialization='model and Adam resume; new sampling RNG' if a.resume else 'random model; no control policy training',device='GPU model and resident tensors; scalar/trajectory transfers only at checkpoint evaluation',stop='finite updates or outer25min wall budget; no automatic extension',history='Predicted controller/RB estimates after initial state; no measured future injected')
 (a.output/'contract.json').write_text(json.dumps(contract,indent=2)+'\n')
 
 def predict(ids,h):
@@ -48,15 +51,19 @@ def losses(pred,ids,h):
  transition=(phase[idx]!=phase[idx-1])|((data['contact'][idx]-data['contact'][idx-1]).abs().sum(-1)>0)
  weight=1+2*transition.float()
  xyz=(((pq[:,:,:3]-q[:,:,:3])/pscale).square().mean(-1)*weight).mean()
- rotation=((1-(pq[:,:,3:7]*q[:,:,3:7]).sum(-1).square())*weight).mean()
+ rotation_error=(1-(pq[:,:,3:7]*q[:,:,3:7]).sum(-1).square())*100.
+ rotation=(rotation_error*weight).mean()
  velocity=(((pv-v)/vscale).square().mean(-1)*weight).mean()
  joints=(((pq[:,:,7:]-q[:,:,7:])/jscale).square().mean(-1)*weight).mean()
  history=((pred['history'][:,1:]-data['history'][idx])/hscale).square().mean()
  contact=(F.binary_cross_entropy_with_logits(pred['contact_logits'],data['contact'][idx],reduction='none').mean(-1)*weight).mean()
  skill=(F.cross_entropy(pred['phase_logits'].flatten(0,1),phase[idx].flatten(),weight=phase_weights,reduction='none').reshape_as(weight)*weight).mean()
  endpoint=((pq[:,-1,:3]-q[:,-1,:3])/pscale).square().mean()
- total=xyz+rotation+velocity+joints+.1*history+.2*contact+.2*skill+endpoint
- return total,dict(position=xyz,rotation=rotation,velocity=velocity,joints=joints,history=history,contact=contact,phase=skill,endpoint=endpoint)
+ handoff_mask=((phase[idx]==2)&(phase[idx-1]!=2)).float()
+ handoff_error=((pq[:,:,:3]-q[:,:,:3])/pscale).square().mean(-1)+rotation_error+((pv-v)/vscale).square().mean(-1)+((pq[:,:,7:]-q[:,:,7:])/jscale).square().mean(-1)
+ handoff=(handoff_error*handoff_mask).sum()/handoff_mask.sum().clamp_min(1)
+ total=xyz+rotation+velocity+joints+.1*history+.2*contact+.2*skill+endpoint+handoff
+ return total,dict(position=xyz,rotation=rotation,velocity=velocity,joints=joints,history=history,contact=contact,phase=skill,endpoint=endpoint,handoff=handoff)
 
 @torch.no_grad()
 def evaluate():

@@ -9,6 +9,10 @@ from torch import nn
 from .playground_prediction import multiply
 
 
+JOINT_POSITION_SCALES = {'steering_joint': .2, 'frontwheel_joint': 1., 'rearwheel_joint': 1., 'hip_joint': .3, 'knee_joint': .3}
+JOINT_VELOCITY_SCALES = {'steering_joint': 1., 'frontwheel_joint': 5., 'rearwheel_joint': 5., 'hip_joint': 1., 'knee_joint': 1.}
+
+
 @dataclass
 class SkillWorldState:
     qpos: torch.Tensor

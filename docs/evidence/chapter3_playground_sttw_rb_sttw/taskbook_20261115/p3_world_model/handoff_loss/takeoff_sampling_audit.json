@@ -1,0 +1,437 @@
+{
+  "rows": [
+    {
+      "case": "map06/rb_run3_route0_h75_v0",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 4.934999942779541,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route0_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route0_h75_v1",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 4.940000057220459,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route0_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route0_h75_v2",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 4.735000133514404,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route0_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route0_h75_v3",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 4.760000228881836,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route0_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route1_h75_v0",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 4.914999961853027,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route1_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route1_h75_v1",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 4.954999923706055,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route1_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route1_h75_v2",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 4.735000133514404,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route1_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route1_h75_v3",
+      "samples_without_contact": 2,
+      "takeoff_5ms_s": 4.75,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route1_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route2_h75_v0",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 4.945000171661377,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route2_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route2_h75_v1",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 4.940000057220459,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route2_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route2_h75_v2",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 4.735000133514404,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route2_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route2_h75_v3",
+      "samples_without_contact": 2,
+      "takeoff_5ms_s": 4.744999885559082,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route2_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route3_h75_v0",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.269999980926514,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route3_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route3_h75_v1",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.264999866485596,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route3_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route3_h75_v2",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.110000133514404,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route3_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route3_h75_v3",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.105000019073486,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route3_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route4_h75_v0",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.269999980926514,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route4_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route4_h75_v1",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.260000228881836,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route4_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route4_h75_v2",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.105000019073486,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route4_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route4_h75_v3",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.105000019073486,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route4_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route5_h75_v0",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.269999980926514,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route5_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route5_h75_v1",
+      "samples_without_contact": 2,
+      "takeoff_5ms_s": 5.264999866485596,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route5_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route5_h75_v2",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.105000019073486,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route5_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route5_h75_v3",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.105000019073486,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route5_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route6_h75_v0",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.25,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route6_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route6_h75_v1",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.264999866485596,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route6_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route6_h75_v2",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.039999961853027,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route6_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route6_h75_v3",
+      "samples_without_contact": 2,
+      "takeoff_5ms_s": 5.059999942779541,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route6_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route7_h75_v0",
+      "samples_without_contact": 2,
+      "takeoff_5ms_s": 5.255000114440918,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route7_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route7_h75_v1",
+      "samples_without_contact": 2,
+      "takeoff_5ms_s": 5.264999866485596,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route7_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route7_h75_v2",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.045000076293945,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route7_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route7_h75_v3",
+      "samples_without_contact": 2,
+      "takeoff_5ms_s": 5.059999942779541,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route7_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route8_h75_v0",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.25,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route8_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route8_h75_v1",
+      "samples_without_contact": 2,
+      "takeoff_5ms_s": 5.260000228881836,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route8_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route8_h75_v2",
+      "samples_without_contact": 2,
+      "takeoff_5ms_s": 5.034999847412109,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route8_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "map06/rb_run3_route8_h75_v3",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.070000171661377,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route8_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route0_h75_v0",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 4.914999961853027,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route0_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route0_h75_v1",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 4.925000190734863,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route0_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route0_h75_v2",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 4.730000019073486,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route0_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route0_h75_v3",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 4.735000133514404,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route0_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route1_h75_v0",
+      "samples_without_contact": 2,
+      "takeoff_5ms_s": 4.929999828338623,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route1_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route1_h75_v1",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 4.929999828338623,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route1_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route1_h75_v2",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 4.730000019073486,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route1_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route1_h75_v3",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 4.739999771118164,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route1_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route2_h75_v0",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 4.929999828338623,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route2_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route2_h75_v1",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 4.929999828338623,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route2_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route2_h75_v2",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 4.730000019073486,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route2_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route2_h75_v3",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 4.730000019073486,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route2_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route3_h75_v0",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.255000114440918,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route3_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route3_h75_v1",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.25,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route3_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route3_h75_v2",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.085000038146973,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route3_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route3_h75_v3",
+      "samples_without_contact": 2,
+      "takeoff_5ms_s": 5.070000171661377,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route3_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route4_h75_v0",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.255000114440918,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route4_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route4_h75_v1",
+      "samples_without_contact": 2,
+      "takeoff_5ms_s": 5.25,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route4_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route4_h75_v2",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.079999923706055,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route4_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route4_h75_v3",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.074999809265137,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route4_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route5_h75_v0",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.255000114440918,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route5_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route5_h75_v1",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.255000114440918,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route5_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route5_h75_v2",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.079999923706055,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route5_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route5_h75_v3",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.065000057220459,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route5_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route6_h75_v0",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.255000114440918,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route6_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route6_h75_v1",
+      "samples_without_contact": 2,
+      "takeoff_5ms_s": 5.25,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route6_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route6_h75_v2",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.03000020980835,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route6_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route6_h75_v3",
+      "samples_without_contact": 2,
+      "takeoff_5ms_s": 5.025000095367432,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route6_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route7_h75_v0",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.255000114440918,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route7_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route7_h75_v1",
+      "samples_without_contact": 2,
+      "takeoff_5ms_s": 5.25,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route7_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route7_h75_v2",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.025000095367432,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route7_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route7_h75_v3",
+      "samples_without_contact": 2,
+      "takeoff_5ms_s": 5.025000095367432,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route7_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route8_h75_v0",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.255000114440918,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route8_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route8_h75_v1",
+      "samples_without_contact": 1,
+      "takeoff_5ms_s": 5.255000114440918,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route8_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route8_h75_v2",
+      "samples_without_contact": 2,
+      "takeoff_5ms_s": 5.03000020980835,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route8_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "map07/rb_run3_route8_h75_v3",
+      "samples_without_contact": 2,
+      "takeoff_5ms_s": 5.025000095367432,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route8_h75_v3/trajectory.npz"
+    }
+  ],
+  "scope": "Native5ms contact flags with actual runner x>front-1.5 gate; compared with20ms learning samples"
+}

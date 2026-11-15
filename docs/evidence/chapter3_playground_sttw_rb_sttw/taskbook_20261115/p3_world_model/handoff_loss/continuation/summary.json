@@ -1,0 +1,74 @@
+[
+  {
+    "source": "measured",
+    "margin": "raw",
+    "cases": 12,
+    "true_admit": 4,
+    "false_admit": 0,
+    "false_reject": 0,
+    "true_reject": 8
+  },
+  {
+    "source": "measured",
+    "margin": "frozen_M1",
+    "cases": 12,
+    "true_admit": 2,
+    "false_admit": 0,
+    "false_reject": 2,
+    "true_reject": 8
+  },
+  {
+    "source": "seed0",
+    "margin": "raw",
+    "cases": 12,
+    "true_admit": 4,
+    "false_admit": 0,
+    "false_reject": 0,
+    "true_reject": 8
+  },
+  {
+    "source": "seed0",
+    "margin": "frozen_M1",
+    "cases": 12,
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 4,
+    "true_reject": 8
+  },
+  {
+    "source": "seed1",
+    "margin": "raw",
+    "cases": 12,
+    "true_admit": 1,
+    "false_admit": 0,
+    "false_reject": 3,
+    "true_reject": 8
+  },
+  {
+    "source": "seed1",
+    "margin": "frozen_M1",
+    "cases": 12,
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 4,
+    "true_reject": 8
+  },
+  {
+    "source": "seed2",
+    "margin": "raw",
+    "cases": 12,
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 4,
+    "true_reject": 8
+  },
+  {
+    "source": "seed2",
+    "margin": "frozen_M1",
+    "cases": 12,
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 4,
+    "true_reject": 8
+  }
+]

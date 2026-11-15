@@ -21,3 +21,6 @@ All72 DEV sequences per seed retained. Same-domain generated terrain layouts; no
 
 
 后续完整入口训练及预测事件停止评测见 [完整入口结果](full_entry/README.md)。旧窗口训练失败不覆盖；新数据集/物理/网络结构不变，改变训练窗口采样与DEV选存档范围。
+
+
+[损失尺度及交回损失修正结果](handoff_loss/README.md)：种子0原始几何4/4可行准入，但旧冻结裕量仍0/4，短接触事件抽样缺口尚待修正。P3未完整验收。

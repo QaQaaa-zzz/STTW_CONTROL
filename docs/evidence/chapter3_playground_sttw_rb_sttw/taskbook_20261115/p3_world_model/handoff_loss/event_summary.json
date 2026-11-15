@@ -1,0 +1,38 @@
+[
+  {
+    "cases": 72,
+    "predicted_handoffs": 72,
+    "event_mae_s": 0.03638886080847846,
+    "event_max_abs_s": 0.09499979019165039,
+    "handoff_position_mean_m": 0.0674161538740413,
+    "handoff_position_max_m": 0.19238024950027466,
+    "occupancy_mean_m": 0.08707183059024233,
+    "scope": "125-step max query; GPU predicted phase selects handoff, never actual future event time. Compare event-selected state to actual handoff, includes timing error. AABB corner metric is conservative geometric discrepancy, not safety proof.",
+    "model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p3_world_handoffloss/seed0/best.pt",
+    "seed": 0
+  },
+  {
+    "cases": 72,
+    "predicted_handoffs": 72,
+    "event_mae_s": 0.6355555786026849,
+    "event_max_abs_s": 0.755000114440918,
+    "handoff_position_mean_m": 1.1997230798006058,
+    "handoff_position_max_m": 1.4188586473464966,
+    "occupancy_mean_m": 1.2156304771829218,
+    "scope": "125-step max query; GPU predicted phase selects handoff, never actual future event time. Compare event-selected state to actual handoff, includes timing error. AABB corner metric is conservative geometric discrepancy, not safety proof.",
+    "model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p3_world_handoffloss/seed1/best.pt",
+    "seed": 1
+  },
+  {
+    "cases": 72,
+    "predicted_handoffs": 72,
+    "event_mae_s": 0.06277777751286824,
+    "event_max_abs_s": 0.19000005722045898,
+    "handoff_position_mean_m": 0.12838898454275396,
+    "handoff_position_max_m": 0.38338807225227356,
+    "occupancy_mean_m": 0.15126709342240074,
+    "scope": "125-step max query; GPU predicted phase selects handoff, never actual future event time. Compare event-selected state to actual handoff, includes timing error. AABB corner metric is conservative geometric discrepancy, not safety proof.",
+    "model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p3_world_handoffloss/seed2/best.pt",
+    "seed": 2
+  }
+]

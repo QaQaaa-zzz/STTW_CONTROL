@@ -1,0 +1,23 @@
+{
+  "role": "P3 known DEV map48 handoff interchange diagnosis, not full-chain or TEST",
+  "oracle": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall",
+  "ground": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/residual_seed2",
+  "rb_models": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p3_world_fullentry",
+  "calibration": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p4_model_test/calibration.json",
+  "rows": 12,
+  "upstream": [
+    1,
+    2
+  ],
+  "roots": [
+    1001,
+    1002
+  ],
+  "downstream": [
+    0,
+    1,
+    2
+  ],
+  "notes": "Measured source uses actual shared suffix snapshot (up to20ms after event); predicted source uses only real RB entry then predicted event/history. Same ground model, same original10s goal. No new physics. Raw and pre-frozen margins both retained; no post-hoc calibration.",
+  "runtime_s": 4.275950690032914
+}

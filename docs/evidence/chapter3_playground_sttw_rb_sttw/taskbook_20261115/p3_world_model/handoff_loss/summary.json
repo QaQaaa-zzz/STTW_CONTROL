@@ -1,0 +1,38 @@
+[
+  {
+    "seed": 0,
+    "cases": 72,
+    "model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p3_world_handoffloss/seed0/best.pt",
+    "update": 2275,
+    "mean_max_xyz_m": 0.04236306327705582,
+    "worst_max_xyz_m": 0.07865584641695023,
+    "mean_endpoint_xyz_m": 0.0365091773823628,
+    "missing_predicted_handoff": 0,
+    "actual_handoffs": 72,
+    "scope": "True entry, then free full RB segment through actual record duration; fixed horizon is evaluation only, never supplied to predictor as an input; no full-chain or decision benefit claim"
+  },
+  {
+    "seed": 1,
+    "cases": 72,
+    "model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p3_world_handoffloss/seed1/best.pt",
+    "update": 2300,
+    "mean_max_xyz_m": 0.05629665528734525,
+    "worst_max_xyz_m": 0.09059667587280273,
+    "mean_endpoint_xyz_m": 0.05493168816125641,
+    "missing_predicted_handoff": 0,
+    "actual_handoffs": 72,
+    "scope": "True entry, then free full RB segment through actual record duration; fixed horizon is evaluation only, never supplied to predictor as an input; no full-chain or decision benefit claim"
+  },
+  {
+    "seed": 2,
+    "cases": 72,
+    "model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p3_world_handoffloss/seed2/best.pt",
+    "update": 2175,
+    "mean_max_xyz_m": 0.04273262218986121,
+    "worst_max_xyz_m": 0.07951533794403076,
+    "mean_endpoint_xyz_m": 0.03774764474170903,
+    "missing_predicted_handoff": 0,
+    "actual_handoffs": 72,
+    "scope": "True entry, then free full RB segment through actual record duration; fixed horizon is evaluation only, never supplied to predictor as an input; no full-chain or decision benefit claim"
+  }
+]

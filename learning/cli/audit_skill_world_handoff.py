@@ -12,7 +12,7 @@ m=json.loads((a.data/'manifest.json').read_text());z=np.load(a.data/'sequences.n
 with torch.no_grad():
  history=tensor(z['history'][starts]);context=tensor(z['context'][starts]);state=model.initialize(tensor(z['qpos'][starts]),tensor(z['qvel'][starts]),history[:,:381],history[:,381:],tensor(z['contact'][starts]),F.one_hot(torch.as_tensor(z['phase'][starts],device=device,dtype=torch.long),5).float(),context)
  pred=model.rollout_until(state,context,125)
- final={k:getattr(pred['next_state'],k).cpu().numpy() for k in ['qpos','qvel','history','hidden','contact','phase']};duration=pred['duration_s'].cpu().numpy();found=pred['event_found'].cpu().numpy();trace=pred['qpos'].cpu().numpy()
+ final={k:getattr(pred['next_state'],k).cpu().numpy() for k in ['qpos','qvel','history','hidden','contact','phase']};duration=pred['duration_s'].cpu().numpy();found=pred['event_found'].cpu().numpy();trace=pred['qpos'].cpu().numpy();contact_trace=pred['contact_logits'].sigmoid().cpu().numpy();steps=pred['event_step'].cpu().numpy()
 records=[];models={}
 def boxes(physics,q):
  d=mujoco.MjData(physics);d.qpos[:]=q;mujoco.mj_kinematics(physics,d);out=[]
@@ -28,7 +28,9 @@ for lane,row in enumerate(rows):
  if row['terrain_model'] not in models:models[row['terrain_model']]=mujoco.MjModel.from_binary_path(row['terrain_model'])
  physics=models[row['terrain_model']];occupancy=np.linalg.norm(boxes(physics,prediction)-boxes(physics,truth),axis=-1).max()
  history_error=(final['history'][lane]-z['history'][index])/n['history_state_scale']
- records.append(dict(map=row['map'],case_dir=row['case_dir'],actual_handoff=True,predicted_handoff=bool(found[lane]),event_error_s=float(z['time'][row['start']]+duration[lane]-row['handoff_s']) if found[lane] else None,position_error_m=float(np.linalg.norm(prediction[:3]-truth[:3])),rotation_error_rad=float(2*np.arccos(np.clip(abs(prediction[3:7]@truth[3:7]),0,1))),joint_abs_error_rad=np.abs(prediction[7:]-truth[7:]).tolist(),controller_normalized_rmse=float(np.sqrt(np.mean(history_error[:381]**2))),rb_history_normalized_rmse=float(np.sqrt(np.mean(history_error[381:]**2))),collision_geom_aabb_corner_max_error_m=float(occupancy),actual_source_index=int(index)))
+ observed=z['contact'][indices];takeoff_actual=np.flatnonzero(observed[:,0]<.5);takeoff_pred=np.flatnonzero(contact_trace[lane,:steps[lane],0]<.5);far_pred=np.flatnonzero(contact_trace[lane,:steps[lane],1]>=.5)
+ event=dict(takeoff_actual_s=float(times[takeoff_actual[0]]) if len(takeoff_actual) else None,takeoff_predicted_s=float(times[0]+.02*(takeoff_pred[0]+1)) if len(takeoff_pred) else None,far_contact_actual_s=row['first_far_contact_s'],far_contact_predicted_s=float(times[0]+.02*(far_pred[0]+1)) if len(far_pred) else None)
+ records.append(dict(**event,map=row['map'],case_dir=row['case_dir'],actual_handoff=True,predicted_handoff=bool(found[lane]),event_error_s=float(z['time'][row['start']]+duration[lane]-row['handoff_s']) if found[lane] else None,position_error_m=float(np.linalg.norm(prediction[:3]-truth[:3])),rotation_error_rad=float(2*np.arccos(np.clip(abs(prediction[3:7]@truth[3:7]),0,1))),joint_abs_error_rad=np.abs(prediction[7:]-truth[7:]).tolist(),controller_normalized_rmse=float(np.sqrt(np.mean(history_error[:381]**2))),rb_history_normalized_rmse=float(np.sqrt(np.mean(history_error[381:]**2))),collision_geom_aabb_corner_max_error_m=float(occupancy),actual_source_index=int(index)))
 np.savez_compressed(a.output/'predicted_handoff.npz',**final,duration_s=duration,event_found=found,case_ids=np.array([r['map']+'/'+r['case_dir'] for r in rows]))
 (a.output/'cases.json').write_text(json.dumps(records,indent=2)+'\n')
 success=[r for r in records if r['actual_handoff'] and r['predicted_handoff']]
