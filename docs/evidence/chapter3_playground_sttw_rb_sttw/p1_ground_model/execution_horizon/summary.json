@@ -1,0 +1,24 @@
+{
+  "dynamic": {
+    "cases": 36,
+    "physical_goals": 36,
+    "within_support_margin": 36,
+    "observed_horizon_range_s": [
+      4.2,
+      4.46
+    ],
+    "maximum_support_error_m": 0.20688663804902974,
+    "margin_m": 0.24974015995860094
+  },
+  "geometry": {
+    "cases": 36,
+    "physical_goals": 31,
+    "within_support_margin": 28,
+    "observed_horizon_range_s": [
+      4.46,
+      4.5
+    ],
+    "maximum_support_error_m": 0.7193256510261019,
+    "margin_m": 0.48147117614746093
+  }
+}

@@ -32,6 +32,7 @@ E2/E3同50张冻结新布局、四新初态；分别600方法条件、484/312条
 H75＋ECBC/ESO（无Local300）、RB225；STTW锁髋膝，RB独占四通道并按实测状态交回。implicitfast、摩擦0.8、物理1ms/底层5ms/策略20ms。碎石1–4mm、脊坡2/4cm、沟宽0.3m；沟前后各2m平地。跳前、跳后均有转弯。
 
 - [地面恢复与越野证据](../chapter3_playground_isaac_recovery/README.md)
+- [P1已有执行时域核查](p1_ground_model/execution_horizon/RESULTS.md)
 - [E1已有DEV与负结果](e1_ground/forced_turn_hold/RESULTS.md)
 - [滚动覆盖未通过的证据](p2_rolling_multimap_support/RESULTS.md)
 - [预测模型及训练存档](p3_multimap_models/RESULTS.md) · [跳前续训比较](p3_approach_models/continuation/RESULTS.md)
