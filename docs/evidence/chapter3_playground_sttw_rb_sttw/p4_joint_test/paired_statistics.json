@@ -1,0 +1,50 @@
+[
+  {
+    "comparison": "joint-backtracking",
+    "metric": "goal",
+    "difference": 0.0,
+    "map_bootstrap95": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "comparison": "joint-backtracking",
+    "metric": "penalized_time_s",
+    "difference": -0.0014499425888061523,
+    "map_bootstrap95": [
+      -0.006274895906448364,
+      0.0032507021427154448
+    ]
+  },
+  {
+    "comparison": "joint-backtracking",
+    "metric": "common_success_time_s",
+    "conditions": 200,
+    "difference": -0.0014499425888061523
+  },
+  {
+    "comparison": "joint-segmented",
+    "metric": "goal",
+    "difference": 0.48,
+    "map_bootstrap95": [
+      0.34,
+      0.62
+    ]
+  },
+  {
+    "comparison": "joint-segmented",
+    "metric": "penalized_time_s",
+    "difference": -0.34629992961883543,
+    "map_bootstrap95": [
+      -0.4444761805534363,
+      -0.24812249517440801
+    ]
+  },
+  {
+    "comparison": "joint-segmented",
+    "metric": "common_success_time_s",
+    "conditions": 104,
+    "difference": -0.004615334364084097
+  }
+]
