@@ -18,7 +18,7 @@ for group,path in enumerate(a.prediction):
  world=json.loads(((physical.parent/'world.json') if contract['oracle'] else Path(cfg['world_map'])).read_text())
  checkpoint=json.loads(Path(contract['selection']).read_text())['models']['jump']['path']
  saved=torch.load(checkpoint,map_location='cuda',weights_only=True)['model']
- model=SkillWorldModel(537,5,*[saved[k] for k in ['input_mean','input_scale','velocity_scale','history_scale']]).cuda();model.load_state_dict(saved);model.eval()
+ model=SkillWorldModel.from_weights(saved);model.eval()
  q,v,h=[tensor(z[k]) for k in ['entry_qpos','entry_qvel','entry_history']];n=len(q)
  context=tensor([[world['terrain']['front_x_m'],world['terrain']['width_m'],world['terrain'].get('far_bank_height_m',0.),c['speed'],0.] for c in cases])
  native=mujoco.MjModel.from_binary_path(str(physical/'terrain.mjb'));home=tensor(native.key('initial_state').qpos[[schema['qpos_names'].index(k) for k in ['hip_joint','knee_joint']]])

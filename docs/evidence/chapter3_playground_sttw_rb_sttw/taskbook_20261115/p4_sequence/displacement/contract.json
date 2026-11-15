@@ -1,0 +1,13 @@
+{
+  "change": "Add zero-initialized five-joint interval-displacement head; TRAIN RMS quadrature-defect scaling",
+  "budget": "Three seeds x300 supervised updates; checkpoints every25; max1500s whole stage; no automatic extension",
+  "parent": "p3_world_handoffloss seed0..2 best; same parents as entry_exposure control",
+  "control": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure",
+  "sampling": "Same seed,batch64,50percent predicted-entry exposure,full-entry alternation,horizons1/5/15/50/75",
+  "loss": "Unchanged prior entry_exposure loss incl lock weight1",
+  "roles": "maps00..05 TRAIN216;06..07 DEV72; known mechanism map48 DEV18",
+  "acceptance": "Compare locked event readiness and full-chain admissions on all90 cases, retain last and best; do not adopt based solely on loss",
+  "code_sha": "c63956dad05e1cf509d3455b4802a8daf59b237e",
+  "code_patch": "code.patch",
+  "tensorboard": "Existing PID969435 port6006 linked chapter3_displacement"
+}

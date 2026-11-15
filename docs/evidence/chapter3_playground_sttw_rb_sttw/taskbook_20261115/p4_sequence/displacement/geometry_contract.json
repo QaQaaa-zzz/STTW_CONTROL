@@ -1,0 +1,5 @@
+{
+  "change": "Predicted far contact must be geometrically possible: both wheel AABBs must reach far bank; no true state inputs",
+  "budget": "Three shortlist x90; max180s; zero training/physics",
+  "reason": "Learned far contacts asserted while predicted whole vehicle remains before gap"
+}

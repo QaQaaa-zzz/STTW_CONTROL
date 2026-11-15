@@ -16,7 +16,7 @@ for row in rows:
  labels.append(event_labels(elapsed,relative));event_times.append(relative);valid.append(elapsed<=float(z['time'][row['start']+row['length']-1])-origin+1e-5)
  provenance.append(dict(case=row['map']+'/'+row['case_dir'],split=row['split'],source=row['path'],entry_s=origin,takeoff_5ms_s=raw_takeoff if np.isfinite(raw_takeoff) else None,far_contact_s=far if np.isfinite(far) else None))
 event_times=np.asarray(event_times);valid=tensor(valid);target=tensor(labels);train=torch.tensor([i for i,r in enumerate(rows) if r['split']=='TRAIN'],device=device);dev=torch.tensor([i for i,r in enumerate(rows) if r['split']=='DEV'],device=device)
-world=SkillWorldModel(537,5,*[n[k] for k in ['input_mean','input_scale','velocity_scale','history_scale']]).to(device);world.load_state_dict(torch.load(a.world_model,map_location=device,weights_only=True)['model']);world.eval()
+world=SkillWorldModel.from_weights(torch.load(a.world_model,map_location=device,weights_only=True)['model']);world.eval()
 with torch.no_grad():
  history=tensor(z['history'][starts]);context=tensor(z['context'][starts]);state=world.initialize(tensor(z['qpos'][starts]),tensor(z['qvel'][starts]),history[:,:381],history[:,381:],tensor(z['contact'][starts]),F.one_hot(torch.as_tensor(z['phase'][starts],device=device,dtype=torch.long),5).float(),context)
  prediction=world.rollout_until(state,context,horizon)

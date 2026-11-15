@@ -1,0 +1,38 @@
+[
+  {
+    "seed": 0,
+    "checkpoint": "best",
+    "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_displacement/training/seed0/best.pt",
+    "sha256": "f391902d10bef46b674ae8793b1b9ffac6a51a2bf9f642654ba78a661e94ab99"
+  },
+  {
+    "seed": 0,
+    "checkpoint": "last",
+    "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_displacement/training/seed0/last.pt",
+    "sha256": "2507fd7aaa7b0fde5095efcc54a95622d7037efd37f2d8ec80a2d9c2deadbb40"
+  },
+  {
+    "seed": 1,
+    "checkpoint": "best",
+    "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_displacement/training/seed1/best.pt",
+    "sha256": "acd4a2537999d33b9058ebccdf8538e014d5527f8f92ebf1d8682b7d81c676eb"
+  },
+  {
+    "seed": 1,
+    "checkpoint": "last",
+    "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_displacement/training/seed1/last.pt",
+    "sha256": "311aeb925f20b6c11724f80b6c6c5830adcb13a9ba959e8efa5db190c7491451"
+  },
+  {
+    "seed": 2,
+    "checkpoint": "best",
+    "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_displacement/training/seed2/best.pt",
+    "sha256": "2f520be292bbc309f28f3424f1db3581c3d4198d1b5d421666a25f2a5268dede"
+  },
+  {
+    "seed": 2,
+    "checkpoint": "last",
+    "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_displacement/training/seed2/last.pt",
+    "sha256": "d5d59e5eb813219f6d4c92ee62571418bf8cc821b9a1ce91bce743d1e5b0bd61"
+  }
+]

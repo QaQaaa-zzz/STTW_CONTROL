@@ -8,7 +8,7 @@ from torch.nn import functional as F
 from sttw_control.skill_world_model import SkillWorldModel
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('--data',type=Path,required=True);p.add_argument('--model',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False)
 torch.set_num_threads(1);device='cuda';tensor=lambda x:torch.as_tensor(x,device=device,dtype=torch.float32)
-m=json.loads((a.data/'manifest.json').read_text());z=np.load(a.data/'sequences.npz');n=np.load(a.data/'normalization.npz');rows=[r for r in m['rows'] if r['split']=='DEV'];starts=np.array([r['start'] for r in rows]);model=SkillWorldModel(537,5,*[n[k] for k in ['input_mean','input_scale','velocity_scale','history_scale']]).to(device);saved=torch.load(a.model,map_location=device,weights_only=True);model.load_state_dict(saved['model']);model.eval()
+m=json.loads((a.data/'manifest.json').read_text());z=np.load(a.data/'sequences.npz');n=np.load(a.data/'normalization.npz');rows=[r for r in m['rows'] if r['split']=='DEV'];starts=np.array([r['start'] for r in rows]);saved=torch.load(a.model,map_location=device,weights_only=True);model=SkillWorldModel.from_weights(saved['model']);model.eval()
 with torch.no_grad():
  history=tensor(z['history'][starts]);context=tensor(z['context'][starts]);state=model.initialize(tensor(z['qpos'][starts]),tensor(z['qvel'][starts]),history[:,:381],history[:,381:],tensor(z['contact'][starts]),F.one_hot(torch.as_tensor(z['phase'][starts],device=device,dtype=torch.long),5).float(),context)
  pred=model.rollout_until(state,context,125)

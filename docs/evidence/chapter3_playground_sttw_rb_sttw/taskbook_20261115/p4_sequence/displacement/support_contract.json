@@ -1,0 +1,5 @@
+{
+  "change": "Add existing native support/body conditions to predictor admission after observed pre-gap false handoff; contact probability threshold0.5; qvel as gyro proxy",
+  "budget": "Three shortlisted checkpoints x90 conditions; no training or physics; max180s",
+  "scope": "Same predictions with stricter faithful event checks; no claim of full phase4 history consistency"
+}

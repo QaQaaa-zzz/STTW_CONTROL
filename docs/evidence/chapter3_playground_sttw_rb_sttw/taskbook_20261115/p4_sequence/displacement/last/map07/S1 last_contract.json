@@ -1,0 +1,13 @@
+{
+  "method": "C",
+  "diagnostic_entry": null,
+  "handoff_history": "execution",
+  "jump_start_x_m": 8.55,
+  "typical": null,
+  "selection": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_displacement/seed1_last_models.json",
+  "history": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+  "oracle": null,
+  "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation",
+  "true_data_access": "Only first qpos/qvel/controller/RB history used by predictor; future trajectories/status used only as offline labels",
+  "limits": "Predicted phase2 additionally requires frozen joint lock tolerances; this necessary check does not certify all contact/body event conditions. Ground locked hip/knee rates assumed zero, flat supported RB entry contract; estimates never modify real controls"
+}

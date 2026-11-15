@@ -1,0 +1,5 @@
+{
+  "budget": "All39 already saved model checkpoints; fixed90 predicted entries; zero updates; max180s",
+  "ranking": "DEV72 predicted event+joint readiness count then lower joint position error; do not use map48 outcome in shortlist",
+  "followup": "Top3 at most, evaluate all90 full-chain conditions; no auto training; preserve best/last negative cases"
+}

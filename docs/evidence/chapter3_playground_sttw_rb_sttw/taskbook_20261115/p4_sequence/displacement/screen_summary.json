@@ -1,0 +1,7 @@
+{
+  "checkpoints": 39,
+  "conditions": 90,
+  "runtime_s": 3.3641066409181803,
+  "ranking": "Original DEV72 lock-ready count descending, then mean joint error ascending; mechanism outcomes excluded from ranking",
+  "limits": "Necessary joints/events only, not whole-body/contact safety or whole-chain success"
+}

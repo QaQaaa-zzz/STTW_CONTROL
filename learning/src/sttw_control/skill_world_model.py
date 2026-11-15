@@ -38,6 +38,23 @@ class SkillWorldModel(nn.Module):
         self.memory=nn.GRUCell(size,hidden_dim)
         self.decoder=nn.Sequential(nn.Linear(hidden_dim,128),nn.SiLU(),nn.Linear(128,11+history_dim+3+5))
 
+    def enable_joint_displacement(self,scale):
+        """Learn interval displacement omitted by endpoint-velocity quadrature."""
+        self.register_buffer('joint_displacement_scale',torch.as_tensor(scale,device=self.input_mean.device,dtype=torch.float32))
+        # Preserve the sampling RNG when adding a zero-initialized head.
+        with torch.random.fork_rng(devices=[]):
+            self.joint_displacement=nn.Linear(self.memory.hidden_size,5)
+        self.joint_displacement.to(self.input_mean.device)
+        nn.init.zeros_(self.joint_displacement.weight);nn.init.zeros_(self.joint_displacement.bias)
+
+    @classmethod
+    def from_weights(cls,saved):
+        history_dim=len(saved['history_scale']);context_dim=len(saved['input_mean'])-12-11-history_dim-3-5
+        model=cls(history_dim,context_dim,*[saved[k] for k in ['input_mean','input_scale','velocity_scale','history_scale']],hidden_dim=saved['initial.0.weight'].shape[0]).to(saved['input_mean'].device)
+        if 'joint_displacement_scale' in saved:model.enable_joint_displacement(saved['joint_displacement_scale'])
+        model.load_state_dict(saved)
+        return model
+
     def features(self,qpos,qvel,history,contact,phase,context):
         return (torch.cat((qpos,qvel,history,contact,phase,context),-1)-self.input_mean)/self.input_scale
 
@@ -57,8 +74,10 @@ class SkillWorldModel(nn.Module):
         dq=torch.cat(((angle*.5).cos(),rv*.5*torch.sinc(angle/(2*torch.pi))),-1)
         quaternion=multiply(state.qpos[:,3:7],dq)
         quaternion=quaternion/quaternion.norm(dim=-1,keepdim=True)
-        pose=torch.cat((state.qpos[:,:3]+mid[:,:3]*self.dt,quaternion,
-                        state.qpos[:,7:]+mid[:,6:]*self.dt),-1)
+        joints=state.qpos[:,7:]+mid[:,6:]*self.dt
+        if hasattr(self,'joint_displacement'):
+            joints=joints+self.joint_displacement(hidden)*self.joint_displacement_scale
+        pose=torch.cat((state.qpos[:,:3]+mid[:,:3]*self.dt,quaternion,joints),-1)
         nxt=SkillWorldState(pose,velocity,state.history+dh*self.history_scale,
                             contact_logits.sigmoid(),phase_logits.softmax(-1),hidden,state.elapsed_steps+1)
         return nxt,contact_logits,phase_logits

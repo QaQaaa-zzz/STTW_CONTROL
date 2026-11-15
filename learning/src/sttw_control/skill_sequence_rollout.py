@@ -1,7 +1,7 @@
 """Causal ground->RB->ground predictions from one real initial state."""
 import torch
 from .playground_history_model import GroundPredictionState
-from .playground_prediction import rotate
+from .playground_prediction import rotate,euler
 from .skill_history_bridge import bridge_features
 
 
@@ -11,6 +11,19 @@ def handoff_joint_errors(qpos,qvel,home,schema):
     qi=[schema['qpos_names'].index(n) for n in joints]
     vi=[schema['qvel_names'].index(n) for n in joints]
     return (qpos[...,qi]-home).abs().amax(-1),qvel[...,vi].abs().amax(-1)
+
+
+def handoff_body_ready(qpos,qvel,contact,speed_request,hand,schema):
+    """Predicted support/body conditions; qvel roll rate approximates the gyro."""
+    angles=euler(qpos[:,3:7]);roll,pitch,yaw=angles.unbind(-1)
+    supported=contact[:,2 if hand.get('require_both_far_wheels',False) else 1]>=.5
+    body=(roll.abs()<.35)&(pitch.abs()<.45)&(qvel[:,2].abs()<1.5)
+    if hand.get('landing_control')=='native':
+        body &= (roll.abs()<.08)&(pitch.abs()<.15)&(qvel[:,2].abs()<.4)&(qvel[:,3].abs()<.3)
+    speed=qvel[:,0]*yaw.cos()+qvel[:,1]*yaw.sin()
+    body &= (qvel[:,5].abs()<hand.get('handoff_yaw_rate_max_rad_s',float('inf')))&(qvel[:,schema['steer_dof']].abs()<hand.get('handoff_steer_rate_max_rad_s',float('inf')))
+    body &= (speed-speed_request).abs()<=hand.get('handoff_speed_error_max_m_s',float('inf'))
+    return supported,body
 
 
 def native_to_ground(qpos,qvel,schema):

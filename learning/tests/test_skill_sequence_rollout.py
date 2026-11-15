@@ -1,8 +1,16 @@
 import unittest
 import torch
-from sttw_control.skill_sequence_rollout import native_to_ground,ground_to_native,handoff_joint_errors
+from sttw_control.skill_sequence_rollout import native_to_ground,ground_to_native,handoff_joint_errors,handoff_body_ready
 
 class SkillSequenceTest(unittest.TestCase):
+    def test_handoff_requires_far_support_and_native_body_readiness(self):
+        q=torch.zeros(3,12);q[:,3]=1
+        q[2,3]=torch.cos(torch.tensor(.05));q[2,4]=torch.sin(torch.tensor(.05))
+        v=torch.zeros(3,11);v[:,0]=1.8
+        contacts=torch.tensor([[1.,0.,0.],[1.,1.,1.],[1.,1.,1.]])
+        supported,body=handoff_body_ready(q,v,contacts,torch.full((3,),1.8),dict(landing_control='native',require_both_far_wheels=True),dict(steer_dof=7))
+        self.assertEqual((supported&body).tolist(),[False,True,False])
+
     def test_lock_errors_use_joint_schema_and_reject_false_phase_event(self):
         schema=dict(qpos_names=['hip_joint','other','knee_joint'],qvel_names=['other','knee_joint','hip_joint'])
         q=torch.tensor([[0.,99.,0.],[.02,99.,0.],[0.,99.,0.]])

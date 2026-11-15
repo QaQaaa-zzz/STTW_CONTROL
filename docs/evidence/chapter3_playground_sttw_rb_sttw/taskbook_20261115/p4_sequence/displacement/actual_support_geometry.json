@@ -1,0 +1,506 @@
+[
+  {
+    "map": "map06",
+    "root": 6,
+    "route": 0,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 7,
+    "route": 0,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 6,
+    "route": 0,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 7,
+    "route": 0,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 6,
+    "route": 1,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 7,
+    "route": 1,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 6,
+    "route": 1,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 7,
+    "route": 1,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 6,
+    "route": 2,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 7,
+    "route": 2,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 6,
+    "route": 2,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 7,
+    "route": 2,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 6,
+    "route": 3,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 7,
+    "route": 3,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 6,
+    "route": 3,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 7,
+    "route": 3,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 6,
+    "route": 4,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 7,
+    "route": 4,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 6,
+    "route": 4,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 7,
+    "route": 4,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 6,
+    "route": 5,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 7,
+    "route": 5,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 6,
+    "route": 5,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 7,
+    "route": 5,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 6,
+    "route": 6,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 7,
+    "route": 6,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 6,
+    "route": 6,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 7,
+    "route": 6,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 6,
+    "route": 7,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 7,
+    "route": 7,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 6,
+    "route": 7,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 7,
+    "route": 7,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 6,
+    "route": 8,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 7,
+    "route": 8,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 6,
+    "route": 8,
+    "support_possible": true
+  },
+  {
+    "map": "map06",
+    "root": 7,
+    "route": 8,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 6,
+    "route": 0,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 7,
+    "route": 0,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 6,
+    "route": 0,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 7,
+    "route": 0,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 6,
+    "route": 1,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 7,
+    "route": 1,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 6,
+    "route": 1,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 7,
+    "route": 1,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 6,
+    "route": 2,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 7,
+    "route": 2,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 6,
+    "route": 2,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 7,
+    "route": 2,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 6,
+    "route": 3,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 7,
+    "route": 3,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 6,
+    "route": 3,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 7,
+    "route": 3,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 6,
+    "route": 4,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 7,
+    "route": 4,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 6,
+    "route": 4,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 7,
+    "route": 4,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 6,
+    "route": 5,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 7,
+    "route": 5,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 6,
+    "route": 5,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 7,
+    "route": 5,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 6,
+    "route": 6,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 7,
+    "route": 6,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 6,
+    "route": 6,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 7,
+    "route": 6,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 6,
+    "route": 7,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 7,
+    "route": 7,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 6,
+    "route": 7,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 7,
+    "route": 7,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 6,
+    "route": 8,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 7,
+    "route": 8,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 6,
+    "route": 8,
+    "support_possible": true
+  },
+  {
+    "map": "map07",
+    "root": 7,
+    "route": 8,
+    "support_possible": true
+  },
+  {
+    "map": "map48",
+    "root": 1001,
+    "route": 3,
+    "support_possible": true
+  },
+  {
+    "map": "map48",
+    "root": 1001,
+    "route": 4,
+    "support_possible": true
+  },
+  {
+    "map": "map48",
+    "root": 1001,
+    "route": 5,
+    "support_possible": true
+  },
+  {
+    "map": "map48",
+    "root": 1002,
+    "route": 3,
+    "support_possible": true
+  },
+  {
+    "map": "map48",
+    "root": 1002,
+    "route": 4,
+    "support_possible": true
+  },
+  {
+    "map": "map48",
+    "root": 1002,
+    "route": 5,
+    "support_possible": true
+  },
+  {
+    "map": "map48",
+    "root": 1001,
+    "route": 6,
+    "support_possible": true
+  },
+  {
+    "map": "map48",
+    "root": 1001,
+    "route": 7,
+    "support_possible": true
+  },
+  {
+    "map": "map48",
+    "root": 1001,
+    "route": 8,
+    "support_possible": true
+  },
+  {
+    "map": "map48",
+    "root": 1002,
+    "route": 6,
+    "support_possible": true
+  },
+  {
+    "map": "map48",
+    "root": 1002,
+    "route": 7,
+    "support_possible": true
+  },
+  {
+    "map": "map48",
+    "root": 1002,
+    "route": 8,
+    "support_possible": true
+  }
+]

@@ -5,6 +5,26 @@ from sttw_control.skill_world_model import SkillWorldModel
 
 
 class SkillWorldModelTest(unittest.TestCase):
+    def test_joint_displacement_preserves_zero_and_serialized_continuation(self):
+        torch.manual_seed(7)
+        size=12+11+7+3+5+4
+        old=SkillWorldModel(7,4,torch.zeros(size),torch.ones(size),torch.ones(11)*.01,torch.ones(7)*.01)
+        model=SkillWorldModel.from_weights(old.state_dict());model.enable_joint_displacement(torch.ones(5)*.002)
+        pose=torch.zeros(2,12);pose[:,3]=1;context=torch.zeros(2,4)
+        state=old.initialize(pose,torch.zeros(2,11),torch.zeros(2,4),torch.zeros(2,3),torch.zeros(2,3),torch.zeros(2,5),context)
+        with torch.no_grad():
+            baseline=old.rollout(state,context,100);zero=model.rollout(state,context,100)
+            torch.testing.assert_close(baseline['qpos'],zero['qpos'],rtol=0,atol=0)
+            model.joint_displacement.bias.fill_(1.)
+            moved=model.rollout(state,context,1)
+            torch.testing.assert_close(moved['qpos'][:,1,7:]-baseline['qpos'][:,1,7:],torch.full((2,5),.002))
+            torch.testing.assert_close(moved['qvel'][:,1],baseline['qvel'][:,1],rtol=0,atol=0)
+            full=model.rollout(state,context,100);first=model.rollout(state,context,40)
+            buffer=io.BytesIO();torch.save((model.state_dict(),first['next_state']),buffer);buffer.seek(0)
+            weights,resumed=torch.load(buffer,weights_only=False);restored=SkillWorldModel.from_weights(weights)
+            last=restored.rollout(resumed,context,60)
+            torch.testing.assert_close(full['qpos'],torch.cat((first['qpos'],last['qpos'][:,1:]),1),rtol=0,atol=0)
+
     def test_full_joints_rotation_and_serialized_continuation(self):
         torch.manual_seed(3)
         history_dim=7;context_dim=4;size=12+11+history_dim+3+5+context_dim
