@@ -111,6 +111,8 @@ def main():
         raise ValueError('Shared adapters require the frozen native landing and lock-first completion contract')
     if 'snapshot_replay_s' in cfg and not 0<=cfg['snapshot_replay_s']<a.seconds:
         raise ValueError('snapshot time must lie within the rollout')
+    if 'snapshot_branch_continuation_alpha' in cfg and ('snapshot_replay_s' not in cfg or not 0<=cfg['snapshot_branch_continuation_alpha']<=1):
+        raise ValueError('Snapshot alpha branch requires a replay anchor and alpha in [0,1]')
     if cfg.get('contact_substep_telemetry') and (cfg.get('rb_physics') or a.physics_substeps!=5):
         raise ValueError('Contact telemetry requires shared 1 ms physics (five substeps)')
     ground_physics=cfg.get('ground_physics',{})

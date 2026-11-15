@@ -1,0 +1,85 @@
+{
+  "source": {
+    "actor_sha256": "a06acbc81aead7120a291cf82359189bff36ccfecde132615ae0f264ee3126e8",
+    "formal_config": "/home/qy/DVGC/JIT/runs/experiments/generative_bridge_v1_2_20260928/audit/runtime_config.json",
+    "recovery_training_contract": null,
+    "coefficients": {},
+    "current_formal_config_sha256": "c135ef71f5d5907274c08ef1692705bcf3ffe0f3695674f1ef11b5f2d3bcc51f",
+    "registry_formal_config_sha256": "c135ef71f5d5907274c08ef1692705bcf3ffe0f3695674f1ef11b5f2d3bcc51f",
+    "registry_hash_matches_current": true
+  },
+  "rb_run1": {
+    "actor_sha256": "c3eae39c7c116d5db56122d5aff4f29a6f95b8971a51c4c46864754ecb58b040",
+    "formal_config": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_pi0_scratchG_100_candidates12_20261019/training_initial_source_policy_recovery/round_0009/students/student/config.json",
+    "recovery_training_contract": {
+      "demo_batch_size": 256,
+      "demo_coefficient": 1.0,
+      "ppo_coefficient": 0.4,
+      "retention_batch_size": 512,
+      "retention_coefficient": 1.0,
+      "schema": "jit_teacher_recovery_training_v2",
+      "student_learning_rate": 0.0001,
+      "student_transitions": 128000,
+      "value_loss_coefficient": 1.0
+    },
+    "coefficients": {
+      "demo_coefficient_start": 1.0,
+      "demo_coefficient_end": 1.0,
+      "ppo_coefficient": 0.4,
+      "retention_coefficient": 1.0
+    },
+    "current_formal_config_sha256": "caf486f6f0587a9acc8a86061999272309cb1df0dfb4b666b00c17780efd3e51",
+    "registry_formal_config_sha256": "caf486f6f0587a9acc8a86061999272309cb1df0dfb4b666b00c17780efd3e51",
+    "registry_hash_matches_current": true
+  },
+  "rb_run2": {
+    "actor_sha256": "0704230af3c91adbb4c2881c5a138b100c83dc56a5e855ca7c15cc9069a41abb",
+    "formal_config": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_optimized_ablation_queue_20261020/seed_8114001/full/round_0009/students/student/config.json",
+    "recovery_training_contract": {
+      "ablation": "no_retention",
+      "demo_batch_size": 256,
+      "demo_coefficient": 1.0,
+      "ppo_coefficient": 0.4,
+      "retention_batch_size": 512,
+      "retention_coefficient": 0.0,
+      "schema": "jit_teacher_recovery_training_v2",
+      "student_learning_rate": 0.0001,
+      "student_transitions": 128000,
+      "value_loss_coefficient": 1.0
+    },
+    "coefficients": {
+      "demo_coefficient_start": 1.0,
+      "demo_coefficient_end": 1.0,
+      "ppo_coefficient": 0.4,
+      "retention_coefficient": 0.0
+    },
+    "current_formal_config_sha256": "972f0e9063af3b05885267b6aeb22b05a35d8b1b8718d4bdd0f5679b7790d284",
+    "registry_formal_config_sha256": "972f0e9063af3b05885267b6aeb22b05a35d8b1b8718d4bdd0f5679b7790d284",
+    "registry_hash_matches_current": true
+  },
+  "rb_run3": {
+    "actor_sha256": "ffe98cc0c497d820b15500d89589bafac9f1a4b92979ac790f753304760c8487",
+    "formal_config": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_optimized_ablation_queue_20261020/seed_8115001/ppo_only/round_0009/students/student/config.json",
+    "recovery_training_contract": {
+      "ablation": "ppo_only",
+      "demo_batch_size": 256,
+      "demo_coefficient": 0.0,
+      "ppo_coefficient": 0.4,
+      "retention_batch_size": 512,
+      "retention_coefficient": 0.0,
+      "schema": "jit_teacher_recovery_training_v2",
+      "student_learning_rate": 0.0001,
+      "student_transitions": 128000,
+      "value_loss_coefficient": 1.0
+    },
+    "coefficients": {
+      "demo_coefficient_start": 0.0,
+      "demo_coefficient_end": 0.0,
+      "ppo_coefficient": 0.4,
+      "retention_coefficient": 0.0
+    },
+    "current_formal_config_sha256": "9f06a3141a06828892ad5b531be512bea093a870f1aa2f5de3b898aecaaf4a76",
+    "registry_formal_config_sha256": "9f06a3141a06828892ad5b531be512bea093a870f1aa2f5de3b898aecaaf4a76",
+    "registry_hash_matches_current": true
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "rb_run3": {
+    "cases": 36,
+    "goals": 5,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 14,
+      "tracking_domain_exit": 17
+    }
+  },
+  "rb_run3_memory1": {
+    "cases": 36,
+    "goals": 5,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 15,
+      "tracking_domain_exit": 16
+    }
+  },
+  "rb_run3_replay": {
+    "cases": 36,
+    "goals": 29,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "tracking_domain_exit": 7
+    }
+  }
+}

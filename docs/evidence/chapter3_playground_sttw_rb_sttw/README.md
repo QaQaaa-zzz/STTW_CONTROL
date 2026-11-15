@@ -43,3 +43,5 @@ H75＋ECBC/ESO（无Local300）、RB225；STTW锁髋膝，RB独占四通道并�
 原始权重、逐步NPZ和冻结配置在数据盘`STTW_runs/chapter3_playground_sttw_rb_sttw/`，未作为此次Git上传内容；远端报告含逐例数值、全部XY图和源数据路径。旧400行首页完整保留于Git提交`5e3fd90a`，各历史报告及失败记录保留。
 
 取消三小时总限制；预计等待超过半小时暂停并等待“继续”。完成、暂停或停止均Bark；通知器使用`/usr/bin/python3`，以真实回执为准。
+
+跳跃技能身份说明：[训练合同核对](taskbook_20261115/p5_snapshot_alpha/README.md#跳跃技能来源更正)。当前shared225初始化来自注册名rb_run3的PPO-only配方，工程名RB不等于完整RecoveryBridge方法；既有数值不变，P5方法比较须单独匹配。

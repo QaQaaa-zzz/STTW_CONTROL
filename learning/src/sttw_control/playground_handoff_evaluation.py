@@ -229,6 +229,9 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         memory_repeats=cfg.get('snapshot_memory_repeats',0)
         for replay in range(2+memory_repeats if snapshot_tick is not None else 1):
             case_name=name+(f'_memory{replay}' if 0<replay<=memory_repeats else ('_replay' if replay else ''))
+            continuation_alpha=hand.get('continuation',{}).get('alpha',.5)
+            if replay==memory_repeats+1 and 'snapshot_branch_continuation_alpha' in cfg:
+                continuation_alpha=cfg['snapshot_branch_continuation_alpha']
             start_tick=0
             if replay or cfg.get('initial_snapshot_path'):
                 restore_started=time.perf_counter()
@@ -365,7 +368,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 phase=torch.where(returning,2,phase);handoff_time=torch.where(returning,t,handoff_time)
                 lock=torch.where(returning[:,None],q[:,brake_qpos],lock)
                 middle.v_user=torch.where(reset_control,continuation_speed,middle.v_user)
-                middle.alpha=torch.where(reset_control,hand.get('continuation',{}).get('alpha',.5),middle.alpha)
+                middle.alpha=torch.where(reset_control,continuation_alpha,middle.alpha)
                 route.config['follower']['lookahead_scale']=torch.where(phase>=2,recovery_look,1.)
                 middle.reset_mask(reset_control,m,pose,speed,ctl)
                 recovering |= reset_control
@@ -473,7 +476,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                     samples=load_trace[keep,lane]
                     contact_data.update(dict(contact_substep=samples,contact_substep_columns=['front_normal_N','rear_normal_N','body_normal_N','body_contact'],contact_physics_dt_s=.005/args.physics_substeps,contact_interval_mean_N=samples[:,:,:3].mean(1),contact_interval_peak_N=samples[:,:,:3].max(1),contact_interval_impulse_Ns=samples[:,:,:3].sum(1)*(.005/args.physics_substeps)))
                 np.savez_compressed(target_dir/'trajectory.npz',**contact_data,trace=trace,qpos=qsave,qvel=speeds[keep,lane],world_flags=world_trace[keep,lane],world_flag_columns=['physical_map_exit','nonwheel_terrain_contact','forbidden_obstacle_contact'],wheel_contact_flags=contact_trace[keep,lane],wheel_contact_columns=['any_terrain','any_far','both_far'],reference_xy=saved['xy'][route_id],published_reference_xy=route.xy[route.route_ids[lane]].cpu().numpy(),columns=['time','x','y','z','roll','pitch','yaw','vx','vy','vz','ground_active','path_distance','steer_target','rear_target','hip_target','knee_target','approaching','rear_rate_rad_s','requested_speed_m_s','phase'])
-                row=dict(case_dir=case_dir,variant=variants[variant],skill=case_name,route=route_id,continuation=mode,termination=['timeout','physical_failure','tracking_domain_exit' if world else 'corridor_or_domain_exit','goal','world_boundary_exit','forbidden_obstacle_contact'][codes[lane]],actuator_owner_max_difference=float(ownership_max[lane]) if audit_owner else None,nonwheel_contact_steps=int(world_trace[keep,lane,1].sum()),forbidden_contact_steps=int(world_trace[keep,lane,2].sum()),goal=bool(codes[lane]==3),rb_entry_s=None if entry_time[lane]<0 else float(entry_time[lane]),goal_hold_s=float(hold[lane]),airborne=bool(airborne[lane]),far_contact=bool(far_time[lane]>=0),first_far_contact_s=None if far_time[lane]<0 else float(far_time[lane]),handoff_s=None if handoff_time[lane]<0 else float(handoff_time[lane]),duration_s=float(durations[lane]),final_xy=qsave[-1,:2].tolist())
+                row=dict(continuation_alpha=continuation_alpha,case_dir=case_dir,variant=variants[variant],skill=case_name,route=route_id,continuation=mode,termination=['timeout','physical_failure','tracking_domain_exit' if world else 'corridor_or_domain_exit','goal','world_boundary_exit','forbidden_obstacle_contact'][codes[lane]],actuator_owner_max_difference=float(ownership_max[lane]) if audit_owner else None,nonwheel_contact_steps=int(world_trace[keep,lane,1].sum()),forbidden_contact_steps=int(world_trace[keep,lane,2].sum()),goal=bool(codes[lane]==3),rb_entry_s=None if entry_time[lane]<0 else float(entry_time[lane]),goal_hold_s=float(hold[lane]),airborne=bool(airborne[lane]),far_contact=bool(far_time[lane]>=0),first_far_contact_s=None if far_time[lane]<0 else float(far_time[lane]),handoff_s=None if handoff_time[lane]<0 else float(handoff_time[lane]),duration_s=float(durations[lane]),final_xy=qsave[-1,:2].tolist())
                 if cfg.get('collect_model_state') and not cfg.get('task_evaluation'):row['completed_slice']=bool(codes[lane]==0)
                 if rolling is not None:
                     row.update(planning_failed=bool(rolling.failed[lane]),final_candidate=int(rolling.active[lane]),final_route=int(rolling.current_route[lane]),final_activation_x_m=float(jump_start[lane]))

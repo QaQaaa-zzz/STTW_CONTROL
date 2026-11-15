@@ -1,0 +1,11 @@
+{
+  "question": "Does changing departure alpha preserve benefit from one complete pre-handoff snapshot?",
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_execution/map07_alpha1/config.json",
+  "code_revision": "11b1f699eabbf245e69a9ca6856d081921a07091",
+  "budget": "36 lanes original10s + two6s suffixes, max700s wall,0training",
+  "role": "knownDEV map07 all2roots x2speeds x9routes, no independentTEST",
+  "comparison": "Original vs memory same-alpha for engine replay baseline; serialized alpha0 branch. Compare full state/actions/events before measured handback against repeated alpha1.",
+  "stop": "Original budget only; no extension on failure",
+  "invariants": "same physics, controller, snapshot and goal. Only continuation alpha on final replay; actual reset_control event applies switch",
+  "acceptance": "Report all outcomes and pre-handback differences; do not infer causal preference benefit unless branch prefix comparable to same-alpha replay baseline."
+}

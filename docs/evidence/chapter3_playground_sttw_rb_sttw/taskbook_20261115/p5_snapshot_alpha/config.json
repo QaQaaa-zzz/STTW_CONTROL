@@ -1,0 +1,500 @@
+{
+  "schema": "chapter3_playground_handoff_task",
+  "role": "P5 knownDEV same full snapshot continuation-alpha branching; original and memory replay alpha1; serialized replay alpha0",
+  "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_rb_candidate_handoff/source/config.json",
+  "flat_buffer_m": 2.0,
+  "flat_intervals_m": [
+    [
+      8.3,
+      10.3
+    ],
+    [
+      10.6,
+      12.6
+    ]
+  ],
+  "ground_handoff": {
+    "bundle": "runs/rb_h75_ecbc_ground/left90_R2/bundle",
+    "settings": "runs/rb_h75_ecbc_ground/left90_R2/config.json",
+    "reference_path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/approach_departure_turns/routes.npz",
+    "road_half_width_m": 0.6,
+    "approach": {
+      "speed_m_s": 1.8,
+      "alpha": 1.0,
+      "jump_start_x_m": 8.55
+    },
+    "handoff_delay_s": 0.5,
+    "start_x_m": 1.5,
+    "nominal_steer_slew_rad_s": 0.6,
+    "start_vx_m_s": 1.8,
+    "continuation": {
+      "speed_m_s": 1.8,
+      "alpha": 1.0
+    },
+    "handoff_mechanism": "landing_state",
+    "handoff_variants": [
+      {
+        "landing_height_m": 0.6,
+        "swing_scale": 1.0,
+        "jump_start_x_m": 8.55,
+        "rb_far_height_offset_m": 0.0,
+        "gate_roll_rad": 0.15,
+        "gate_roll_rate": 0.6,
+        "gate_hold_s": 0.0,
+        "recovery_wc": 8.0,
+        "body_speed_feedback": true,
+        "recovery_eso_scale": 1.0,
+        "recovery_eso_delay_s": 0.0,
+        "start_y_m": 0.05,
+        "start_yaw_rad": -0.03,
+        "start_roll_rad": 0.015,
+        "lookahead_scale": 1.3,
+        "root_variant": 6,
+        "data_split": "DEV",
+        "requested_speed_m_s": 1.8,
+        "approach_speed_m_s": 1.8,
+        "continuation_speed_m_s": 1.8
+      },
+      {
+        "landing_height_m": 0.6,
+        "swing_scale": 1.0,
+        "jump_start_x_m": 8.55,
+        "rb_far_height_offset_m": 0.0,
+        "gate_roll_rad": 0.15,
+        "gate_roll_rate": 0.6,
+        "gate_hold_s": 0.0,
+        "recovery_wc": 8.0,
+        "body_speed_feedback": true,
+        "recovery_eso_scale": 1.0,
+        "recovery_eso_delay_s": 0.0,
+        "start_y_m": 0.05,
+        "start_yaw_rad": 0.03,
+        "start_roll_rad": 0.015,
+        "lookahead_scale": 1.3,
+        "root_variant": 7,
+        "data_split": "DEV",
+        "requested_speed_m_s": 1.8,
+        "approach_speed_m_s": 1.8,
+        "continuation_speed_m_s": 1.8
+      },
+      {
+        "landing_height_m": 0.6,
+        "swing_scale": 1.0,
+        "jump_start_x_m": 8.55,
+        "rb_far_height_offset_m": 0.0,
+        "gate_roll_rad": 0.15,
+        "gate_roll_rate": 0.6,
+        "gate_hold_s": 0.0,
+        "recovery_wc": 8.0,
+        "body_speed_feedback": true,
+        "recovery_eso_scale": 1.0,
+        "recovery_eso_delay_s": 0.0,
+        "start_y_m": 0.05,
+        "start_yaw_rad": -0.03,
+        "start_roll_rad": 0.015,
+        "lookahead_scale": 1.3,
+        "root_variant": 6,
+        "data_split": "DEV",
+        "requested_speed_m_s": 1.9,
+        "approach_speed_m_s": 1.9,
+        "continuation_speed_m_s": 1.9
+      },
+      {
+        "landing_height_m": 0.6,
+        "swing_scale": 1.0,
+        "jump_start_x_m": 8.55,
+        "rb_far_height_offset_m": 0.0,
+        "gate_roll_rad": 0.15,
+        "gate_roll_rate": 0.6,
+        "gate_hold_s": 0.0,
+        "recovery_wc": 8.0,
+        "body_speed_feedback": true,
+        "recovery_eso_scale": 1.0,
+        "recovery_eso_delay_s": 0.0,
+        "start_y_m": 0.05,
+        "start_yaw_rad": 0.03,
+        "start_roll_rad": 0.015,
+        "lookahead_scale": 1.3,
+        "root_variant": 7,
+        "data_split": "DEV",
+        "requested_speed_m_s": 1.9,
+        "approach_speed_m_s": 1.9,
+        "continuation_speed_m_s": 1.9
+      }
+    ],
+    "landing_control": "native",
+    "staged_native_handoff": true,
+    "require_settled_pendulum": false,
+    "home_bias_compensation": true,
+    "lock_position_tolerance_rad": 0.01,
+    "lock_velocity_tolerance_rad_s": 0.1,
+    "require_both_far_wheels": true,
+    "sttw_only_after_lock": true,
+    "goal": {
+      "x_min_m": 16.5,
+      "x_max_m": 18.5,
+      "abs_y_max_m": 0.5,
+      "min_vx_m_s": 0.5,
+      "hold_s": 0.5,
+      "path_tolerance_m": 0.3,
+      "heading_tolerance_rad": 0.2,
+      "speed_tolerance_m_s": 0.4
+    }
+  },
+  "ground_physics": {
+    "integrator": "implicitfast",
+    "friction": 0.8,
+    "native_wheel_contacts": false
+  },
+  "rb_adaptation_bundles": {
+    "rb_run3": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/shared_plant_checkpoint_comparison/shared225"
+  },
+  "world_map": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/world_map.json",
+  "shared_adapters": true,
+  "contact_substep_telemetry": true,
+  "collect_model_state": true,
+  "audit_actuator_owner": false,
+  "planned_activation_offset_m": -1.75,
+  "task_evaluation": true,
+  "evaluation_lanes": [
+    [
+      0,
+      "h75",
+      0
+    ],
+    [
+      0,
+      "h75",
+      1
+    ],
+    [
+      0,
+      "h75",
+      2
+    ],
+    [
+      0,
+      "h75",
+      3
+    ],
+    [
+      1,
+      "h75",
+      0
+    ],
+    [
+      1,
+      "h75",
+      1
+    ],
+    [
+      1,
+      "h75",
+      2
+    ],
+    [
+      1,
+      "h75",
+      3
+    ],
+    [
+      2,
+      "h75",
+      0
+    ],
+    [
+      2,
+      "h75",
+      1
+    ],
+    [
+      2,
+      "h75",
+      2
+    ],
+    [
+      2,
+      "h75",
+      3
+    ],
+    [
+      3,
+      "h75",
+      0
+    ],
+    [
+      3,
+      "h75",
+      1
+    ],
+    [
+      3,
+      "h75",
+      2
+    ],
+    [
+      3,
+      "h75",
+      3
+    ],
+    [
+      4,
+      "h75",
+      0
+    ],
+    [
+      4,
+      "h75",
+      1
+    ],
+    [
+      4,
+      "h75",
+      2
+    ],
+    [
+      4,
+      "h75",
+      3
+    ],
+    [
+      5,
+      "h75",
+      0
+    ],
+    [
+      5,
+      "h75",
+      1
+    ],
+    [
+      5,
+      "h75",
+      2
+    ],
+    [
+      5,
+      "h75",
+      3
+    ],
+    [
+      6,
+      "h75",
+      0
+    ],
+    [
+      6,
+      "h75",
+      1
+    ],
+    [
+      6,
+      "h75",
+      2
+    ],
+    [
+      6,
+      "h75",
+      3
+    ],
+    [
+      7,
+      "h75",
+      0
+    ],
+    [
+      7,
+      "h75",
+      1
+    ],
+    [
+      7,
+      "h75",
+      2
+    ],
+    [
+      7,
+      "h75",
+      3
+    ],
+    [
+      8,
+      "h75",
+      0
+    ],
+    [
+      8,
+      "h75",
+      1
+    ],
+    [
+      8,
+      "h75",
+      2
+    ],
+    [
+      8,
+      "h75",
+      3
+    ]
+  ],
+  "world_map_spec": {
+    "map_id": "p3_dev_map_07",
+    "frame_id": "world",
+    "bounds_xy_m": [
+      -5.0,
+      25.0,
+      -3.9,
+      3.9
+    ],
+    "terrain": {
+      "front_x_m": 10.3,
+      "width_m": 0.3,
+      "ground_end_x_m": 25.0,
+      "stone_height_min_m": 0.001,
+      "stone_height_max_m": 0.004,
+      "stones_per_m2": 10,
+      "seed": 20261127,
+      "lateral_limit_m": 3.9,
+      "far_bank_height_m": 0.0,
+      "rough_x_intervals_m": [
+        [
+          2.5,
+          8.3
+        ],
+        [
+          12.6,
+          20.0
+        ]
+      ],
+      "land_bridge_y_interval_m": [
+        1.4,
+        4.0
+      ],
+      "full_width_rough": true,
+      "ridges": [
+        {
+          "x_interval_m": [
+            4.7,
+            5.7
+          ],
+          "y_interval_m": [
+            -4.0,
+            4.0
+          ],
+          "height_m": 0.02
+        },
+        {
+          "x_interval_m": [
+            12.8,
+            14.8
+          ],
+          "y_interval_m": [
+            -4.0,
+            4.0
+          ],
+          "height_m": 0.04
+        }
+      ]
+    },
+    "goal": {
+      "x_min_m": 16.5,
+      "x_max_m": 18.5,
+      "abs_y_max_m": 0.5,
+      "min_vx_m_s": 0.5,
+      "hold_s": 0.5,
+      "path_tolerance_m": 0.3,
+      "heading_tolerance_rad": 0.2,
+      "speed_tolerance_m_s": 0.4
+    },
+    "support_regions": [
+      [
+        -5.0,
+        10.3,
+        -4.0,
+        4.0
+      ],
+      [
+        10.6,
+        25.0,
+        -4.0,
+        4.0
+      ],
+      [
+        10.3,
+        10.6,
+        1.4,
+        4.0
+      ]
+    ],
+    "semantics": "Fixed physical map and target; reference tracking distance and controller domain are separate task metrics. Heightfields are generated once from terrain and saved in terrain.mjb/terrain_source.npz.",
+    "forward_obstacle": {
+      "obstacle_id": "ditch030",
+      "forward_world_xyz": [
+        1,
+        0,
+        0
+      ],
+      "activation_offset_m": -1.7,
+      "jump_signal_offsets_m": [
+        -0.8,
+        0.7
+      ],
+      "observation_anchor": "terrain.front_x_m",
+      "scope": "Validated forward direction only; no arbitrary jump rotation or landing target"
+    }
+  },
+  "ditch_terrain": {
+    "front_x_m": 10.3,
+    "width_m": 0.3,
+    "ground_end_x_m": 25.0,
+    "stone_height_min_m": 0.001,
+    "stone_height_max_m": 0.004,
+    "stones_per_m2": 10,
+    "seed": 20261127,
+    "lateral_limit_m": 3.9,
+    "far_bank_height_m": 0.0,
+    "rough_x_intervals_m": [
+      [
+        2.5,
+        8.3
+      ],
+      [
+        12.6,
+        20.0
+      ]
+    ],
+    "land_bridge_y_interval_m": [
+      1.4,
+      4.0
+    ],
+    "full_width_rough": true,
+    "ridges": [
+      {
+        "x_interval_m": [
+          4.7,
+          5.7
+        ],
+        "y_interval_m": [
+          -4.0,
+          4.0
+        ],
+        "height_m": 0.02
+      },
+      {
+        "x_interval_m": [
+          12.8,
+          14.8
+        ],
+        "y_interval_m": [
+          -4.0,
+          4.0
+        ],
+        "height_m": 0.04
+      }
+    ]
+  },
+  "snapshot_replay_s": 4.0,
+  "snapshot_memory_repeats": 1,
+  "snapshot_branch_continuation_alpha": 0.0
+}
