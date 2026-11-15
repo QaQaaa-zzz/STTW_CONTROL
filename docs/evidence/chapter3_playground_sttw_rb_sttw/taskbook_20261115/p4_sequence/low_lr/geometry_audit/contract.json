@@ -1,0 +1,8 @@
+{
+  "question": "Does pooling different approach commands dominate rejection, and do command-conditioned bounds cover a different known DEV map?",
+  "change": "Three upstream-command groups; identical regionwise maximum support miss plus2cm. No model, physics, criteria, candidate or threshold changes.",
+  "selection": "Both previously fixed S0/3475 and S1/3450; no new checkpoint selection",
+  "budget": "For each model: pooled parity, upstream two-map fit, map06 fit/map07 holdout, map07 fit/map06 holdout.8 CPU calibrations,0 physics or training,stop25min.",
+  "role": "Known DEV method diagnostic. Two maps previously used in development, neither independent TEST. Shared-prefix cases correlated.",
+  "acceptance": "Do not adopt if unseen-in-fit map exceeds bounds. Report all exclusions and failures. Missing conditional support falls back to pooled fitted bounds."
+}
