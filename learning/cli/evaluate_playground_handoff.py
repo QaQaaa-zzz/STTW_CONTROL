@@ -97,6 +97,9 @@ def main():
     p.add_argument('--ground-only',action='store_true',help='Keep ground control throughout; no RB activation')
     a=p.parse_args(); configure_compilation_cache('/home/qy/STTW_CONTROL/runs/.jax_compilation_cache'); a.output.mkdir(parents=True,exist_ok=False); torch.set_num_threads(1)
     cfg=json.loads(a.config.read_text())
+    if cfg.get('fixed_order_tree_reductions',False):
+        from sttw_control.playground_tree_reductions import enable
+        enable()
     if 'world_map' in cfg:
         world=json.loads(Path(cfg['world_map']).read_text())
         cfg=dict(cfg,world_map_spec=world,ditch_terrain=world['terrain'],ground_handoff=dict(cfg['ground_handoff'],goal=world['goal']))
@@ -147,6 +150,7 @@ def main():
     if cfg.get('collect_model_state'):
         contract.update(role=cfg['role'],scope='Bounded ground model collection; 4 s timeout denotes completed slice, not goal success. Splits are frozen in the collection manifest.',collect_model_state=True)
     if cfg.get('task_evaluation'):contract.update(scope=cfg['role'],completed_slice_semantics=False)
+    contract['fixed_order_tree_reductions']=cfg.get('fixed_order_tree_reductions',False)
     contract['contact_substep_telemetry']=cfg.get('contact_substep_telemetry',False)
     contract['contact_timing']='Each sample is a solver load during one 1 ms step; row t aggregates the preceding 5 ms, row zero has no interval and is NaN.'
     contract['snapshot_replay_s']=cfg.get('snapshot_replay_s')
