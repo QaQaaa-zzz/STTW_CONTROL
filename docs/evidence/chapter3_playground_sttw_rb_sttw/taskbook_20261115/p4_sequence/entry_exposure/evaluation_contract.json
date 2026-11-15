@@ -1,0 +1,6 @@
+{
+  "role": "KnownDEV, compare three retained best plus seed0/2 last on mechanism map",
+  "conditions": "3x90 best +2x18 last;0physical",
+  "budget": "11batchedqueries expected<1min,max25min",
+  "semantics": "Execution history reset active; classifier-based event stop retained; physical lock mismatch reported, not projected away"
+}

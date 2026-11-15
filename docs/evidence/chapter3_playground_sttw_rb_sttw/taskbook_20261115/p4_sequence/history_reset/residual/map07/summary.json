@@ -1,0 +1,20 @@
+{
+  "C_execution_reset": {
+    "cases": 36,
+    "true_admit": 22,
+    "false_admit": 0,
+    "false_reject": 14,
+    "true_reject": 0,
+    "scope": "C continuous predicted interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 3.018091164994985
+  },
+  "C_learned_history": {
+    "cases": 36,
+    "true_admit": 24,
+    "false_admit": 0,
+    "false_reject": 12,
+    "true_reject": 0,
+    "scope": "C continuous predicted interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.9129118729615584
+  }
+}

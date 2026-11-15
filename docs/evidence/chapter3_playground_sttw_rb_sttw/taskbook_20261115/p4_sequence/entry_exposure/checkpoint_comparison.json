@@ -1,0 +1,26 @@
+[
+  {
+    "seed": 0,
+    "best_update": 2425,
+    "best_score": 39.516427993774414,
+    "initial_score": 77.41910171508789,
+    "last_score": 358.70591735839844,
+    "last25_change": 147.87421417236328
+  },
+  {
+    "seed": 1,
+    "best_update": 2600,
+    "best_score": 25.48704433441162,
+    "initial_score": 56.36376953125,
+    "last_score": 25.48704433441162,
+    "last25_change": -2.7737207412719727
+  },
+  {
+    "seed": 2,
+    "best_update": 2175,
+    "best_score": 44.109928131103516,
+    "initial_score": 44.109928131103516,
+    "last_score": 845.9836730957031,
+    "last25_change": 465.7826690673828
+  }
+]

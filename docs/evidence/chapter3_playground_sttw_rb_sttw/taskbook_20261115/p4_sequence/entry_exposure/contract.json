@@ -1,0 +1,16 @@
+{
+  "role": "Supervised RB predictor continuation; frozen robot controllers",
+  "hypothesis": "Training on true entry alone misses upstream physical/history errors; predicted hip/knee state at return violates original0.01rad and0.1rad/s lock tolerances",
+  "source": "Frozen residual approach and bridge; all8 TRAIN/DEV maps grouped unchanged",
+  "updates_per_seed": 300,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "entry_mix": 0.5,
+  "lock_loss_weight": 1.0,
+  "physics_runs": 0,
+  "controller_updates": 0,
+  "budget": "8 frozen batch queries plus3x300 supervision; historical600update~40s perseed, expect<5min,max25min; no automatic extension"
+}

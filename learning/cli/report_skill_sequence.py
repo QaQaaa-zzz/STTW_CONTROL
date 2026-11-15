@@ -8,14 +8,17 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 p=argparse.ArgumentParser(description=__doc__)
 for name in ['run','routes','output']:p.add_argument('--'+name,type=Path,required=True)
-p.add_argument('--compare',type=Path)
-a=p.parse_args();a.output.mkdir(parents=True,exist_ok=True)
+p.add_argument('--extra',type=Path,action='append',default=[]);p.add_argument('--extra-label',action='append',default=[]);p.add_argument('--compare',type=Path);p.add_argument('--label');p.add_argument('--compare-label')
+a=p.parse_args();
+if len(a.extra)!=len(a.extra_label):p.error('Each extra comparison requires one label')
+a.output.mkdir(parents=True,exist_ok=True)
 contract=json.loads((a.run/'contract.json').read_text())
 if contract.get('evaluation'):
  config=json.loads((Path(contract['evaluation'])/'resolved_config.json').read_text());world=json.loads(Path(config['world_map']).read_text())
 else:world=json.loads((Path(contract['oracle'])/'map48/world.json').read_text())
-paths={contract.get('method','C'):a.run}
-if a.compare:paths[json.loads((a.compare/'contract.json').read_text())['method']]=a.compare
+paths={a.label or contract.get('method','C'):a.run}
+if a.compare:paths[a.compare_label or json.loads((a.compare/'contract.json').read_text())['method']]=a.compare
+for label,path in zip(a.extra_label,a.extra):paths[label]=path
 records={k:json.loads((v/'cases.json').read_text()) for k,v in paths.items()};arrays={k:np.load(v/'predictions.npz') for k,v in paths.items()};rows=next(iter(records.values()));bank=np.load(a.routes)
 y_limit=max(1.6,max(float(np.abs(z[k][:,:,1]).max()) for z in arrays.values() for k in ['approach','jump','departure'])+.1)
 fig,axes=plt.subplots(math.ceil(len(rows)/3),3,figsize=(18,math.ceil(len(rows)/3)*max(1.7,y_limit*.65)),layout='constrained',squeeze=False)
@@ -24,7 +27,7 @@ for i,(row,ax) in enumerate(zip(rows,axes.flat)):
  if row['suffix']:
   tail=np.load(row['suffix']);mask=prefix['trace'][:,0]<tail['trace'][0,0]-1e-6;actual=np.r_[prefix['qpos'][mask,:2],tail['qpos'][:,:2]]
  reference=bank['xy'][row['route']];ax.plot(reference[:,0],reference[:,1],':',color='.6',label='Original reference');ax.plot(actual[:,0],actual[:,1],color='#0072B2',label='Actual');ax.scatter(*actual[-1],color='#0072B2',marker='x',s=16)
- for method,color,style in zip(paths,['#D55E00','#009E73'],['--','-.']):
+ for method,color,style in zip(paths,['#D55E00','#009E73','#CC79A7','#E69F00','#222222','#56B4E9'],['--','-.',':','--','-.',':']):
   z=arrays[method]
   for j,(stage,stop) in enumerate([('approach',int(z['entry_steps'][i])+1),('jump',int(z['jump_steps'][i])),('departure',int(z['departure_steps'][i])+1)]):
    points=z[stage][i,:stop,:2];ax.plot(points[:,0],points[:,1],style,color=color,lw=1,label=method if j==0 else None)

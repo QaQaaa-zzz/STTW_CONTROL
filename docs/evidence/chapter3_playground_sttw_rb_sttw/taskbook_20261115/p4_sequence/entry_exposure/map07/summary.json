@@ -1,0 +1,38 @@
+{
+  "S0": {
+    "cases": 36,
+    "true_admit": 27,
+    "false_admit": 0,
+    "false_reject": 9,
+    "true_reject": 0,
+    "scope": "C continuous predicted interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.220414670999162
+  },
+  "S1": {
+    "cases": 36,
+    "true_admit": 16,
+    "false_admit": 0,
+    "false_reject": 20,
+    "true_reject": 0,
+    "scope": "C continuous predicted interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.1930664679966867
+  },
+  "S2": {
+    "cases": 36,
+    "true_admit": 13,
+    "false_admit": 0,
+    "false_reject": 23,
+    "true_reject": 0,
+    "scope": "C continuous predicted interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.1614184009376913
+  },
+  "Before": {
+    "cases": 36,
+    "true_admit": 22,
+    "false_admit": 0,
+    "false_reject": 14,
+    "true_reject": 0,
+    "scope": "C continuous predicted interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 3.018091164994985
+  }
+}

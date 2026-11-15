@@ -1,0 +1,18 @@
+{
+  "change": "At predicted RB return, apply existing TorchMiddleControl.reset_mask to predicted state/history; real runtime unchanged",
+  "source": "Frozen sttw_only_after_lock return resets history, lane_ticks,policy filters,ESO; preserving predicted pre-reset history was incorrect",
+  "methods": [
+    "residualC",
+    "directC"
+  ],
+  "maps": [
+    "map06",
+    "map07",
+    "map48"
+  ],
+  "new_training": 0,
+  "new_physics": 0,
+  "budget": "6 GPU queries expected<1min,max25min",
+  "parity": "12 saved actual handoff states; maximum controller feature difference0.00095849 in gyro-derived roll-rate terms; other fields within1e-5. qvel angular velocity used as predicted gyro proxy",
+  "limits": "Predicted physical joint lock error not projected away; same task criteria and checkpoints; no true future used"
+}

@@ -10,12 +10,17 @@ from sttw_control.skill_world_model import SkillWorldModel,JOINT_POSITION_SCALES
 p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('--data',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
 p.add_argument('--seed',type=int,required=True);p.add_argument('--updates',type=int,default=150)
-p.add_argument('--resume',type=Path);p.add_argument('--horizons',type=int,nargs='+',default=[1,5,15,50]);p.add_argument('--balance-phases',action='store_true');p.add_argument('--full-entry',action='store_true')
+p.add_argument('--entry-predictions',type=Path);p.add_argument('--lock-loss-weight',type=float,default=0.);p.add_argument('--resume',type=Path);p.add_argument('--horizons',type=int,nargs='+',default=[1,5,15,50]);p.add_argument('--balance-phases',action='store_true');p.add_argument('--full-entry',action='store_true')
 a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False)
 torch.set_num_threads(1);torch.manual_seed(a.seed);device='cuda';started=time.perf_counter()
 manifest=json.loads((a.data/'manifest.json').read_text());raw=np.load(a.data/'sequences.npz');normal=np.load(a.data/'normalization.npz')
 tensor=lambda x:torch.as_tensor(x,device=device,dtype=torch.float32)
 data={k:tensor(raw[k]) for k in ['qpos','qvel','history','contact','context']};phase=torch.as_tensor(raw['phase'],device=device,dtype=torch.long)
+predicted_data={};is_entry=torch.zeros(len(phase),device=device,dtype=torch.bool)
+if a.entry_predictions:
+ predicted=np.load(a.entry_predictions);starts=torch.as_tensor(predicted['start'],device=device,dtype=torch.long);is_entry[starts]=True
+ for key in ['qpos','qvel','history']:
+  predicted_data[key]=data[key].clone();predicted_data[key][starts]=tensor(predicted[key])
 model=SkillWorldModel(537,5,*[normal[k] for k in ['input_mean','input_scale','velocity_scale','history_scale']]).to(device)
 optimizer=torch.optim.Adam(model.parameters(),lr=3e-4);writer=SummaryWriter(str(a.output/'tensorboard'))
 initial_update=0
@@ -39,11 +44,15 @@ jscale_values=[JOINT_POSITION_SCALES[name] for name in schema['qpos_names'][7:]]
 hscale=tensor(normal['history_state_scale']);vscale=tensor(vscale_values);jscale=tensor(jscale_values);pscale=tensor([.2,.2,.1])
 train_indices=torch.tensor([i for r in manifest['rows'] if r['split']=='TRAIN' for i in range(r['start'],r['start']+r['length'])],device=device)
 counts=torch.bincount(phase[train_indices],minlength=5).float();phase_weights=torch.where(counts>0,counts.sum()/counts.clamp_min(1),torch.zeros_like(counts));phase_weights=phase_weights/phase_weights[phase_weights>0].mean() if a.balance_phases else torch.ones_like(counts)
-contract=dict(rotation_scale_rad=.2,handoff_loss='Mean normalized physical error at actual phase2 transition, weight1; labels only, not rollout inputs',state_schema=str(schema_path),velocity_loss_scale=vscale_values,joint_loss_scale=jscale_values,full_entry=a.full_entry,resume=str(a.resume),initial_update=initial_update,balance_phases=a.balance_phases,phase_weights=phase_weights.cpu().tolist(),seed=a.seed,updates=a.updates,data=str(a.data),batch=64,lr=3e-4,gradient_clip=1.,horizons_steps=horizons,checkpoint_every=25,selection='DEV mean normalized multistep physical/history/contact/phase loss, including transition and endpoint weighting; decision-quality evaluation still required',loss_weights=dict(position=1,rotation=1,velocity=1,joints=1,history=.1,contact=.2,phase=.2,endpoint_position=1),transition_weight=3,normalization='TRAIN only',initialization='model and Adam resume; new sampling RNG' if a.resume else 'random model; no control policy training',device='GPU model and resident tensors; scalar/trajectory transfers only at checkpoint evaluation',stop='finite updates or outer25min wall budget; no automatic extension',history='Predicted controller/RB estimates after initial state; no measured future injected')
+contract=dict(entry_predictions=str(a.entry_predictions) if a.entry_predictions else None,entry_exposure='50percent TRAIN true-start batches replaced by frozen upstream estimated physical/history; DEV true and predicted starts both scored' if a.entry_predictions else None,lock_loss_weight=a.lock_loss_weight,lock_scales='hip/knee0.01rad and0.1rad/s at actual transition labels',rotation_scale_rad=.2,handoff_loss='Mean normalized physical error at actual phase2 transition, weight1; labels only, not rollout inputs',state_schema=str(schema_path),velocity_loss_scale=vscale_values,joint_loss_scale=jscale_values,full_entry=a.full_entry,resume=str(a.resume),initial_update=initial_update,balance_phases=a.balance_phases,phase_weights=phase_weights.cpu().tolist(),seed=a.seed,updates=a.updates,data=str(a.data),batch=64,lr=3e-4,gradient_clip=1.,horizons_steps=horizons,checkpoint_every=25,selection='DEV mean normalized multistep physical/history/contact/phase loss, including transition and endpoint weighting; decision-quality evaluation still required',loss_weights=dict(position=1,rotation=1,velocity=1,joints=1,history=.1,contact=.2,phase=.2,endpoint_position=1),transition_weight=3,normalization='TRAIN only',initialization='model and Adam resume; new sampling RNG' if a.resume else 'random model; no control policy training',device='GPU model and resident tensors; scalar/trajectory transfers only at checkpoint evaluation',stop='finite updates or outer25min wall budget; no automatic extension',history='Predicted controller/RB estimates after initial state; no measured future injected')
 (a.output/'contract.json').write_text(json.dumps(contract,indent=2)+'\n')
 
-def predict(ids,h):
- state=model.initialize(data['qpos'][ids],data['qvel'][ids],data['history'][ids,:381],data['history'][ids,381:],data['contact'][ids],F.one_hot(phase[ids],5).float(),data['context'][ids])
+def predict(ids,h,use_predicted=False):
+ initial={key:data[key][ids] for key in ['qpos','qvel','history']}
+ if a.entry_predictions:
+  mask=is_entry[ids] & (torch.rand(len(ids),device=device)<.5 if model.training else torch.full_like(is_entry[ids],use_predicted))
+  for key in initial:initial[key]=torch.where(mask[:,None],predicted_data[key][ids],initial[key])
+ state=model.initialize(initial['qpos'],initial['qvel'],initial['history'][:,:381],initial['history'][:,381:],data['contact'][ids],F.one_hot(phase[ids],5).float(),data['context'][ids])
  return model.rollout(state,data['context'][ids],h)
 
 def losses(pred,ids,h):
@@ -62,8 +71,11 @@ def losses(pred,ids,h):
  handoff_mask=((phase[idx]==2)&(phase[idx-1]!=2)).float()
  handoff_error=((pq[:,:,:3]-q[:,:,:3])/pscale).square().mean(-1)+rotation_error+((pv-v)/vscale).square().mean(-1)+((pq[:,:,7:]-q[:,:,7:])/jscale).square().mean(-1)
  handoff=(handoff_error*handoff_mask).sum()/handoff_mask.sum().clamp_min(1)
- total=xyz+rotation+velocity+joints+.1*history+.2*contact+.2*skill+endpoint+handoff
- return total,dict(position=xyz,rotation=rotation,velocity=velocity,joints=joints,history=history,contact=contact,phase=skill,endpoint=endpoint,handoff=handoff)
+ joint_ids=[schema['qpos_names'].index(k) for k in ['hip_joint','knee_joint']];rate_ids=[schema['qvel_names'].index(k) for k in ['hip_joint','knee_joint']]
+ lock_error=((pq[:,:,joint_ids]-q[:,:,joint_ids])/.01).square().mean(-1)+((pv[:,:,rate_ids]-v[:,:,rate_ids])/.1).square().mean(-1)
+ lock=(lock_error*handoff_mask).sum()/handoff_mask.sum().clamp_min(1)
+ total=xyz+rotation+velocity+joints+.1*history+.2*contact+.2*skill+endpoint+handoff+a.lock_loss_weight*lock
+ return total,dict(position=xyz,rotation=rotation,velocity=velocity,joints=joints,history=history,contact=contact,phase=skill,endpoint=endpoint,handoff=handoff,lock=lock)
 
 @torch.no_grad()
 def evaluate():
@@ -83,7 +95,14 @@ def evaluate():
   for h,ids in full_groups['DEV'].items():
    for batch in ids.split(64):
     pred=predict(batch,h);loss,_=losses(pred,batch,h);accum.append(loss*len(batch));count+=len(batch)
-  full_score=float((torch.stack(accum).sum()/count).cpu());metrics['full_entry']={'loss':full_score};return full_score,metrics
+  full_score=float((torch.stack(accum).sum()/count).cpu());metrics['full_entry']={'loss':full_score}
+  if a.entry_predictions:
+   accum=[]
+   for h,ids in full_groups['DEV'].items():
+    for batch in ids.split(64):
+     pred=predict(batch,h,use_predicted=True);loss,_=losses(pred,batch,h);accum.append(loss*len(batch))
+   predicted_score=float((torch.stack(accum).sum()/count).cpu());metrics['predicted_entry']={'loss':predicted_score};full_score=(full_score+predicted_score)*.5
+  return full_score,metrics
  return float(np.mean(scores)),metrics
 
 logs=[];best=float('inf')
