@@ -9,7 +9,7 @@ from sttw_control.playground_prediction import BodyEnvelope,euler,rotate
 from sttw_control.skill_world_model import SkillWorldModel
 from sttw_control.skill_history_bridge import SkillHistoryBridge
 from sttw_control.skill_sequence_rollout import predict_skill_sequence,native_to_ground
-p=argparse.ArgumentParser(description=__doc__);p.add_argument('--oracle',type=Path,required=True);p.add_argument('--selection',type=Path,required=True);p.add_argument('--history',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False);torch.set_num_threads(1);started=time.perf_counter();tensor=lambda x:torch.as_tensor(np.asarray(x),device='cuda',dtype=torch.float32)
+p=argparse.ArgumentParser(description=__doc__);p.add_argument('--typical',type=Path);p.add_argument('--oracle',type=Path,required=True);p.add_argument('--selection',type=Path,required=True);p.add_argument('--history',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False);torch.set_num_threads(1);started=time.perf_counter();tensor=lambda x:torch.as_tensor(np.asarray(x),device='cuda',dtype=torch.float32)
 selection=json.loads(a.selection.read_text())['models'];base=a.oracle/'map48';cfg=json.loads((base/'base/resolved_config.json').read_text());schema=json.loads((base/'base/model_state_schema.json').read_text());world=json.loads((base/'world.json').read_text());bank=np.load('/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/approach_departure_turns/routes.npz')
 approach=load_history_model(Path(selection['approach']['path']).parent);departure=load_history_model(Path(selection['departure']['path']).parent)
 for model in [approach,departure]:
@@ -25,8 +25,14 @@ for up in range(3):
    label_source=source if up==0 else base/f'departure{up}_{down}/evaluation';actual=next(r for r in json.loads((label_source/'status.json').read_text())['results'] if r['case_dir']==name)
    rows.append(dict(upstream=up,root=root,downstream=down,route=3*up+down,actual_success=actual['goal'],actual_termination=actual['termination'],prefix=str(source/name/'trajectory.npz'),suffix=None if up==0 else str(label_source/name/'trajectory.npz')))
 route=[r['route'] for r in rows];n=len(rows)
+typical=None
+if a.typical:
+ frozen=np.load(a.typical);typical={}
+ for stage,phase in [('entry',1),('departure',2)]:
+  for name in ['qpos','qvel','previous_qpos','previous_qvel','history']:
+   typical[stage+'_'+name]=tensor([frozen[f'up{r["upstream"]}_v1.800_phase{phase}_{name}'] for r in rows])
 with torch.no_grad():
- result=predict_skill_sequence(approach,bridge,jump,departure,tensor(q),tensor(v),tensor(history),schema,tensor(bank['s']),tensor(bank['xy'][route]),tensor(bank['heading'][route]),tensor(bank['curvature'][route]),tensor([1.8]*n),8.6,tensor([[10.3,.3,0.,1.8,0.]]*n))
+ result=predict_skill_sequence(approach,bridge,jump,departure,tensor(q),tensor(v),tensor(history),schema,tensor(bank['s']),tensor(bank['xy'][route]),tensor(bank['heading'][route]),tensor(bank['curvature'][route]),tensor([1.8]*n),8.6,tensor([[10.3,.3,0.,1.8,0.]]*n),typical=typical)
  tail=result['departure'];pose=tail['pose'];vel=tail['velocity'];domain=tail['domain'];goal=world['goal'];wv=rotate(pose[:,:,3:7].reshape(-1,4),vel[:,:,:3].reshape(-1,3))[:,0].reshape(n,-1)
  hold=(pose[:,:,0]>=goal['x_min_m'])&(pose[:,:,0]<=goal['x_max_m'])&(pose[:,:,1].abs()<=goal['abs_y_max_m'])&(wv>=goal['min_vx_m_s'])&(domain[:,:,0].abs()<=goal['path_tolerance_m'])&(domain[:,:,1].abs()<=goal['heading_tolerance_rad'])&((vel[:,:,0]-1.8).abs()<=goal['speed_tolerance_m_s'])
  valid_hold=hold.unfold(1,26,1).all(-1);has_goal=valid_hold.any(-1);stop=torch.where(has_goal,valid_hold.long().argmax(-1)+25,torch.full((n,),250,device='cuda'));goal_time=result['handoff_time_s']+stop*.02
@@ -44,5 +50,5 @@ with torch.no_grad():
 for row,metric in zip(rows,metrics):
  row.update(dict(zip(['admitted','has_goal','clearance_m','entry_time_s','handoff_time_s','goal_time_s','posture_valid','departure_domain_valid','events_found','approach_domain_valid'],map(float,metric))))
 (a.output/'cases.json').write_text(json.dumps(rows,indent=2)+'\n')
-summary=dict(cases=n,true_admit=sum(bool(r['admitted']) and r['actual_success'] for r in rows),false_admit=sum(bool(r['admitted']) and not r['actual_success'] for r in rows),false_reject=sum(not r['admitted'] and r['actual_success'] for r in rows),true_reject=sum(not r['admitted'] and not r['actual_success'] for r in rows),scope='First C-only raw-envelope DEV diagnostic; no I/G/strong-backtracking comparison or new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included',runtime_s=time.perf_counter()-started)
-(a.output/'summary.json').write_text(json.dumps(summary,indent=2)+'\n');(a.output/'contract.json').write_text(json.dumps(dict(selection=str(a.selection),history=str(a.history),oracle=str(a.oracle),true_data_access='Only first qpos/qvel/controller/RB history used by predictor; future trajectories/status used only as offline labels',limits='Ground locked hip/knee rates assumed zero, flat supported RB entry contract; estimates never modify real controls'),indent=2)+'\n');print(json.dumps(summary))
+summary=dict(cases=n,true_admit=sum(bool(r['admitted']) and r['actual_success'] for r in rows),false_admit=sum(bool(r['admitted']) and not r['actual_success'] for r in rows),false_reject=sum(not r['admitted'] and r['actual_success'] for r in rows),true_reject=sum(not r['admitted'] and not r['actual_success'] for r in rows),scope=('I independent TRAIN-typical interfaces' if a.typical else 'C continuous predicted interfaces')+' raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included',runtime_s=time.perf_counter()-started)
+(a.output/'summary.json').write_text(json.dumps(summary,indent=2)+'\n');(a.output/'contract.json').write_text(json.dumps(dict(method='I' if a.typical else 'C',typical=str(a.typical) if a.typical else None,selection=str(a.selection),history=str(a.history),oracle=str(a.oracle),true_data_access='Only first qpos/qvel/controller/RB history used by predictor; future trajectories/status used only as offline labels',limits='Ground locked hip/knee rates assumed zero, flat supported RB entry contract; estimates never modify real controls'),indent=2)+'\n');print(json.dumps(summary))

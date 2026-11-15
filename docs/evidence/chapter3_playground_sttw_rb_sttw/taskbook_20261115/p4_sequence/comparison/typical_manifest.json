@@ -1,0 +1,115 @@
+{
+  "role": "TRAIN only; independent typical state per upstream/speed/phase",
+  "selection": "Nearest observed state to coordinatewise median of xyz and full qvel, normalized TRAIN group std floor0.1; keeps coherent history and quaternion",
+  "source_contract": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/contract.json",
+  "states": [
+    {
+      "key": "up0_v1.800_phase1",
+      "upstream": 0,
+      "speed": 1.8,
+      "phase": 1,
+      "candidates": 12,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map04/evaluation/rb_run3_route0_h75_v0/trajectory.npz",
+      "tick": 764
+    },
+    {
+      "key": "up0_v1.800_phase2",
+      "upstream": 0,
+      "speed": 1.8,
+      "phase": 2,
+      "candidates": 12,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map03/evaluation/rb_run3_route0_h75_v0/trajectory.npz",
+      "tick": 1057
+    },
+    {
+      "key": "up0_v1.900_phase1",
+      "upstream": 0,
+      "speed": 1.9,
+      "phase": 1,
+      "candidates": 12,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation/rb_run3_route0_h75_v3/trajectory.npz",
+      "tick": 724
+    },
+    {
+      "key": "up0_v1.900_phase2",
+      "upstream": 0,
+      "speed": 1.9,
+      "phase": 2,
+      "candidates": 12,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map02/evaluation/rb_run3_route0_h75_v2/trajectory.npz",
+      "tick": 1013
+    },
+    {
+      "key": "up1_v1.800_phase1",
+      "upstream": 1,
+      "speed": 1.8,
+      "phase": 1,
+      "candidates": 12,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation/rb_run3_route3_h75_v1/trajectory.npz",
+      "tick": 820
+    },
+    {
+      "key": "up1_v1.800_phase2",
+      "upstream": 1,
+      "speed": 1.8,
+      "phase": 2,
+      "candidates": 12,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map05/evaluation/rb_run3_route3_h75_v0/trajectory.npz",
+      "tick": 1114
+    },
+    {
+      "key": "up1_v1.900_phase1",
+      "upstream": 1,
+      "speed": 1.9,
+      "phase": 1,
+      "candidates": 12,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation/rb_run3_route3_h75_v3/trajectory.npz",
+      "tick": 788
+    },
+    {
+      "key": "up1_v1.900_phase2",
+      "upstream": 1,
+      "speed": 1.9,
+      "phase": 2,
+      "candidates": 12,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map02/evaluation/rb_run3_route3_h75_v3/trajectory.npz",
+      "tick": 1077
+    },
+    {
+      "key": "up2_v1.800_phase1",
+      "upstream": 2,
+      "speed": 1.8,
+      "phase": 1,
+      "candidates": 12,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map03/evaluation/rb_run3_route6_h75_v0/trajectory.npz",
+      "tick": 824
+    },
+    {
+      "key": "up2_v1.800_phase2",
+      "upstream": 2,
+      "speed": 1.8,
+      "phase": 2,
+      "candidates": 12,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map05/evaluation/rb_run3_route6_h75_v1/trajectory.npz",
+      "tick": 1115
+    },
+    {
+      "key": "up2_v1.900_phase1",
+      "upstream": 2,
+      "speed": 1.9,
+      "phase": 1,
+      "candidates": 12,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map03/evaluation/rb_run3_route6_h75_v3/trajectory.npz",
+      "tick": 784
+    },
+    {
+      "key": "up2_v1.900_phase2",
+      "upstream": 2,
+      "speed": 1.9,
+      "phase": 2,
+      "candidates": 12,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map04/evaluation/rb_run3_route6_h75_v3/trajectory.npz",
+      "tick": 1065
+    }
+  ]
+}

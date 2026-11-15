@@ -1,0 +1,14 @@
+{
+  "methods": [
+    "I",
+    "C"
+  ],
+  "cases": 18,
+  "role": "known DEV map48 two roots",
+  "physics_episodes": 0,
+  "training_updates": 0,
+  "change": "I replaces each skill interface with coherent TRAIN medoid conditioned on upstream route and speed; C unchanged",
+  "constraints": "Same raw-envelope and original domain/goal gates; no new calibration",
+  "budget": "Two batched GPU queries, expected under 2min; stop at 25min",
+  "next": "All-case decision errors then same-candidate planner comparison"
+}

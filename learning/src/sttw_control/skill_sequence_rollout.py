@@ -26,7 +26,7 @@ def ground_to_native(pose,velocity,schema):
 
 def predict_skill_sequence(approach,bridge,jump,departure,qpos,qvel,initial_history,
                            schema,path_s,path_xy,path_heading,path_curvature,speed,
-                           jump_x,context,ground_steps=250,jump_steps=125,departure_steps=250):
+                           jump_x,context,ground_steps=250,jump_steps=125,departure_steps=250,typical=None):
     """No trajectory/status/future data accepted by this interface.
 
     Constant contact=[supported,not far,not both far] is the declared flat
@@ -44,6 +44,8 @@ def predict_skill_sequence(approach,bridge,jump,departure,qpos,qvel,initial_hist
     domains.append(prediction['domain'][:,1])
     history=bridge(bridge_features(state,initial_history))
     entry_q,entry_v=ground_to_native(state.pose,state.velocity,schema)
+    if typical is not None:
+        entry_q,entry_v,history=typical['entry_qpos'],typical['entry_qvel'],typical['entry_history']
     contact=entry_q.new_tensor([1.,0.,0.]).expand(len(pose),-1)
     phase=entry_q.new_tensor([0.,1.,0.,0.,0.]).expand(len(pose),-1)
     rb_state=jump.initialize(entry_q,entry_v,history[:,:381],history[:,381:],contact,phase,context)
@@ -53,7 +55,12 @@ def predict_skill_sequence(approach,bridge,jump,departure,qpos,qvel,initial_hist
     previous_q=torch.where((index>0)[:,None],rb['qpos'][lane,(index-1).clamp_min(0)],entry_q)
     previous_v=torch.where((index>0)[:,None],rb['qvel'][lane,(index-1).clamp_min(0)],entry_v)
     _,previous_velocity=native_to_ground(previous_q,previous_v,schema)
-    end=departure.initialize(tail_pose,tail_velocity,previous_velocity,terminal.history[:,:381])
+    tail_history=terminal.history[:,:381]
+    if typical is not None:
+        tail_pose,tail_velocity=native_to_ground(typical['departure_qpos'],typical['departure_qvel'],schema)
+        _,previous_velocity=native_to_ground(typical['departure_previous_qpos'],typical['departure_previous_qvel'],schema)
+        tail_history=typical['departure_history'][:,:381]
+    end=departure.initialize(tail_pose,tail_velocity,previous_velocity,tail_history)
     tail=departure.rollout_state(end,path_s,path_xy,path_heading,path_curvature,departure_steps,speed_request=speed)
     return dict(approach_domain=torch.stack(domains,1),approach_pose=torch.stack(poses,1),approach_velocity=torch.stack(velocities,1),entry_found=found,entry_time_s=state.elapsed_steps*.02,entry_qpos=entry_q,entry_qvel=entry_v,entry_history=history,
                 jump=rb,departure=tail,handoff_time_s=state.elapsed_steps*.02+rb['duration_s'],supported=found&rb['event_found'])
