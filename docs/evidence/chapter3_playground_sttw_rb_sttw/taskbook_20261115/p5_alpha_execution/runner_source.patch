@@ -1,0 +1,41 @@
+diff --git a/learning/src/sttw_control/playground_handoff_evaluation.py b/learning/src/sttw_control/playground_handoff_evaluation.py
+index e7a190ce..9315efe6 100644
+--- a/learning/src/sttw_control/playground_handoff_evaluation.py
++++ b/learning/src/sttw_control/playground_handoff_evaluation.py
+@@ -25,6 +25,7 @@ from .torch_path_reference import TorchPathReference, wrap
+ from .torch_middle_control import TorchMiddleControl
+ from .playground_adapters import GroundAdapter, JumpAdapter
+ from .playground_rolling import RollingMotionLibrary, controller_features
++from .playground_live_ground import LiveGroundCEM
+ from .playground_world_map import body_outside
+ from .playground_contact import normal_loads
+ from .playground_snapshot import capture as capture_snapshot, restore as restore_snapshot
+@@ -208,6 +209,11 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
+         updates={round(u['time_s']/.005):(u,TorchPathReference(dict(np.load(u['reference_path'])),hcfg,device,route_ids=[r for r,m,i in lanes]))
+                  for u in cfg.get('plan_updates',[]) if name in u['skills']}
+         plan_receipts=[]
++        live_ground=None
++        if cfg.get('live_ground_cem'):
++            if n!=1 or not args.ground_only or cfg.get('snapshot_replay_s') is not None or cfg.get('rolling_planner'):
++                raise ValueError('live ground CEM integration requires one ground-only lane without rolling library or snapshot replay')
++            live_ground=LiveGroundCEM(cfg['live_ground_cem'],model,route,route.config['follower'],q,v)
+         rolling_cfg=cfg.get('rolling_planner')
+         rolling=None;pending=None;rolling_events=[]
+         if rolling_cfg:
+@@ -282,6 +288,8 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
+                     if collect_handoff:handoff_snapshot_saved=True
+                     if snapshot_tick==tick:replay_snapshot=snapshot
+                     if snapshot_tick==tick:prefix=[rows.copy(),poses.copy(),velocities.copy(),contact_rows.copy(),valid_rows.copy(),world_rows.copy(),plan_receipts.copy(),load_rows.copy(),controller_rows.copy(),applied_rows.copy(),applied_masks.copy(),rb_state_rows.copy()]
++                if live_ground is not None:
++                    live_ground.step(tick,q,v,alive,ground_adapter);route=middle.route
+                 if tick in updates:
+                     update,new_route=updates[tick]
+                     before=ground_adapter.snapshot()
+@@ -447,6 +455,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
+                 middle.after(m,pose,speed,governed,torch.stack((steer,target[:,1]),1),torch.zeros(n,2,device=device),ctl)
+                 if (tick+1)%4==0:history,obs=frame(data,history,last,height_offset)
+             torch.cuda.synchronize();rollout_s=time.perf_counter()-rollout_start
++            if live_ground is not None:live_ground.save(args.output)
+             traces=torch.stack(rows).cpu().numpy();positions=torch.stack(poses).cpu().numpy();speeds=torch.stack(velocities).cpu().numpy();valid=torch.stack(valid_rows).cpu().numpy();contact_trace=torch.stack(contact_rows).cpu().numpy();world_trace=torch.stack(world_rows).cpu().numpy();ownership_max=ownership_error.cpu().numpy()
+             if cfg.get('collect_model_state'):
+                 controller_trace=torch.stack(controller_rows).cpu().numpy()

@@ -1,0 +1,17 @@
+margin,method,roots,no_plan,admitted_failure,completed,physical_executions_added,candidate_checks,strong_backtracking_matches,true_admit,false_admit,false_reject,true_reject
+raw,G,2,2,0,0,0,18,True,0,0,4,14
+raw,I,2,0,1,1,0,18,True,4,1,0,13
+raw,C,2,0,0,2,0,18,True,4,1,0,13
+raw,Oracle,2,0,0,2,0,18,True,4,0,0,14
+own,G,2,2,0,0,0,18,True,0,0,4,14
+own,I,2,2,0,0,0,18,True,0,0,4,14
+own,C,2,2,0,0,0,18,True,0,0,4,14
+own,Oracle,2,0,0,2,0,18,True,4,0,0,14
+shared,G,2,2,0,0,0,18,True,0,0,4,14
+shared,I,2,2,0,0,0,18,True,0,0,4,14
+shared,C,2,2,0,0,0,18,True,0,0,4,14
+shared,Oracle,2,0,0,2,0,18,True,4,0,0,14
+cross,G,2,2,0,0,0,18,True,0,0,4,14
+cross,I,2,2,0,0,0,18,True,0,0,4,14
+cross,C,2,2,0,0,0,18,True,0,0,4,14
+cross,Oracle,2,0,0,2,0,18,True,4,0,0,14

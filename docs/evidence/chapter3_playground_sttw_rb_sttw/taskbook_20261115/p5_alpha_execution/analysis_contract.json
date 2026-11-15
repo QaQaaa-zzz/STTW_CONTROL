@@ -1,0 +1,8 @@
+{
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_execution",
+  "scope": "Diagonal fixed stage alpha only;144new physical plus72reused. Known DEV, not new training or alpha-planning validation",
+  "baseline": "Alpha0 frozen H75, not pure ECBC; physical/actor/config identity checked per source before reuse",
+  "metrics": "Task outcomes from runner. Ground error means use each actual ground window; paired differences use common actual duration and equal phase0/2 samples, no extrapolation after goal/failure. Body-forward3D rotation; controller goal speed is planar heading projection. Lateral normal=(-sin,cos).",
+  "goal_diagnostics": "Goal-window violation counts are overlapping diagnostic counts; do not replace actual status or attribute a unique cause",
+  "no_reward": "No reward is defined by this physical coverage protocol; no fabricated reward curves"
+}

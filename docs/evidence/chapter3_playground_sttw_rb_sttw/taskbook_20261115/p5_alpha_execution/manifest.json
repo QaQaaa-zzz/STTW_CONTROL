@@ -1,0 +1,912 @@
+{
+  "stage": "P5 first diagonal-alpha executability cohort",
+  "entries": [
+    {
+      "map": "map06",
+      "alpha": 0.5,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_execution/map06_alpha0.5/config.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_execution/map06_alpha0.5/evaluation",
+      "baseline": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation",
+      "conditions": 36
+    },
+    {
+      "map": "map06",
+      "alpha": 1.0,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_execution/map06_alpha1/config.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_execution/map06_alpha1/evaluation",
+      "baseline": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation",
+      "conditions": 36
+    },
+    {
+      "map": "map07",
+      "alpha": 0.5,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_execution/map07_alpha0.5/config.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_execution/map07_alpha0.5/evaluation",
+      "baseline": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation",
+      "conditions": 36
+    },
+    {
+      "map": "map07",
+      "alpha": 1.0,
+      "config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_execution/map07_alpha1/config.json",
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_execution/map07_alpha1/evaluation",
+      "baseline": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation",
+      "conditions": 36
+    }
+  ],
+  "reused": [
+    {
+      "map": "map06",
+      "alpha": 0.0,
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation",
+      "conditions": 36,
+      "config_sha256": "9a6e973e588235c071b3da0f0eb8f13f684dcbe29a0c31fb5062d72c353863cb",
+      "terrain_sha256": "d075207cfa0d2dd56d015923ac998b3572fcee00881a8462db3afd840686dbdb",
+      "identity": {
+        "terrain_model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/terrain.mjb",
+        "role": "P3 map-grouped DEV_MAP, not P4 independent TEST",
+        "skills": {
+          "rb_run3": {
+            "source_frozen_policy": {
+              "action_order": [
+                "steer",
+                "rear_wheel_drive",
+                "hip",
+                "knee"
+              ],
+              "actor_frame_fields": [
+                "gravity_x",
+                "gravity_y",
+                "gravity_z",
+                "angular_velocity_x",
+                "angular_velocity_y",
+                "angular_velocity_z",
+                "acceleration_x",
+                "acceleration_y",
+                "acceleration_z",
+                "steering_position",
+                "hip_position",
+                "knee_position",
+                "steering_velocity",
+                "hip_velocity",
+                "knee_velocity",
+                "front_wheel_velocity",
+                "rear_wheel_velocity",
+                "last_action_steer",
+                "last_action_rear_wheel_drive",
+                "last_action_hip",
+                "last_action_knee",
+                "estimated_forward_velocity",
+                "obstacle_relative_x",
+                "root_height",
+                "history_valid"
+              ],
+              "actor_sha256": "ffe98cc0c497d820b15500d89589bafac9f1a4b92979ac790f753304760c8487",
+              "actor_task_fields": [
+                "jump_signal"
+              ],
+              "checkpoint": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_optimized_ablation_queue_20261020/seed_8115001/ppo_only/round_0009/students/student/training/round_0009_student/checkpoints/transition_128000",
+              "checkpoint_identity_sha256": "f2c1b73f8ff19217334e96912ad9e96bdb6c07e4566ccec24266f90967ee5eab",
+              "critic_sha256": "66bcc34399026f836fbcc054d9555a41ae01359140c383a92c2d8007083e02d7",
+              "data_role": "train",
+              "formal_config": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_optimized_ablation_queue_20261020/seed_8115001/ppo_only/round_0009/students/student/config.json",
+              "formal_config_file_sha256": "9f06a3141a06828892ad5b531be512bea093a870f1aa2f5de3b898aecaaf4a76",
+              "formal_config_sha256": "5e31be4dc1636a41ad5713b7079794783ef07a5afc49e53e3e0769f6016b2eee",
+              "iteration": 1,
+              "name": "round_0009_student",
+              "normalizer_sha256": "db84aad7750991d6b720e9f065ed7e49f862893c7753f9839c593d7951b6ea86",
+              "payload_sha256": "40177faae581466330b49f7376e86a5ded78b104a6f5ac8b2d9049a922549897",
+              "policy_role": "development_checkpoint",
+              "source_formal_report": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_optimized_ablation_queue_20261020/seed_8115001/ppo_only/round_0009/students/student/training/round_0009_student/formal_report.json",
+              "source_formal_report_sha256": "a614ef84a085210a107c3a3688dbf88ef750525fc0a65fefb672674b954427ab",
+              "source_requested_training_transitions": 128000,
+              "source_reset_mixture": {
+                "natural_reset_probability": 0.6,
+                "selection": "complete_start_60pct_current_teacher_30pct_historical_success_10pct",
+                "soft_tube_probability": 0.4
+              },
+              "source_training_run_id": "round_0009_student",
+              "source_training_transitions": 128000,
+              "xml_sha256": "0b56d3672773ef05a2b5982117fa53a7fdffcaf2b7f3f04a7a7941233d6e9c8a"
+            },
+            "adaptation": {
+              "skill_id": "shared225",
+              "source": {
+                "action_order": [
+                  "steer",
+                  "rear_wheel_drive",
+                  "hip",
+                  "knee"
+                ],
+                "actor_frame_fields": [
+                  "gravity_x",
+                  "gravity_y",
+                  "gravity_z",
+                  "angular_velocity_x",
+                  "angular_velocity_y",
+                  "angular_velocity_z",
+                  "acceleration_x",
+                  "acceleration_y",
+                  "acceleration_z",
+                  "steering_position",
+                  "hip_position",
+                  "knee_position",
+                  "steering_velocity",
+                  "hip_velocity",
+                  "knee_velocity",
+                  "front_wheel_velocity",
+                  "rear_wheel_velocity",
+                  "last_action_steer",
+                  "last_action_rear_wheel_drive",
+                  "last_action_hip",
+                  "last_action_knee",
+                  "estimated_forward_velocity",
+                  "obstacle_relative_x",
+                  "root_height",
+                  "history_valid"
+                ],
+                "actor_sha256": "ffe98cc0c497d820b15500d89589bafac9f1a4b92979ac790f753304760c8487",
+                "actor_task_fields": [
+                  "jump_signal"
+                ],
+                "checkpoint": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_optimized_ablation_queue_20261020/seed_8115001/ppo_only/round_0009/students/student/training/round_0009_student/checkpoints/transition_128000",
+                "checkpoint_identity_sha256": "f2c1b73f8ff19217334e96912ad9e96bdb6c07e4566ccec24266f90967ee5eab",
+                "critic_sha256": "66bcc34399026f836fbcc054d9555a41ae01359140c383a92c2d8007083e02d7",
+                "data_role": "train",
+                "formal_config": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_optimized_ablation_queue_20261020/seed_8115001/ppo_only/round_0009/students/student/config.json",
+                "formal_config_file_sha256": "9f06a3141a06828892ad5b531be512bea093a870f1aa2f5de3b898aecaaf4a76",
+                "formal_config_sha256": "5e31be4dc1636a41ad5713b7079794783ef07a5afc49e53e3e0769f6016b2eee",
+                "iteration": 1,
+                "name": "round_0009_student",
+                "normalizer_sha256": "db84aad7750991d6b720e9f065ed7e49f862893c7753f9839c593d7951b6ea86",
+                "payload_sha256": "40177faae581466330b49f7376e86a5ded78b104a6f5ac8b2d9049a922549897",
+                "policy_role": "development_checkpoint",
+                "source_formal_report": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_optimized_ablation_queue_20261020/seed_8115001/ppo_only/round_0009/students/student/training/round_0009_student/formal_report.json",
+                "source_formal_report_sha256": "a614ef84a085210a107c3a3688dbf88ef750525fc0a65fefb672674b954427ab",
+                "source_requested_training_transitions": 128000,
+                "source_reset_mixture": {
+                  "natural_reset_probability": 0.6,
+                  "selection": "complete_start_60pct_current_teacher_30pct_historical_success_10pct",
+                  "soft_tube_probability": 0.4
+                },
+                "source_training_run_id": "round_0009_student",
+                "source_training_transitions": 128000,
+                "xml_sha256": "0b56d3672773ef05a2b5982117fa53a7fdffcaf2b7f3f04a7a7941233d6e9c8a"
+              },
+              "artifact_sha256": "17a28f02a8fb3c3348510ecb9d45c05886a1bef0879633e2bf0864b494ca6684",
+              "mapping": {
+                "ctrl_min": [
+                  -0.800000011920929,
+                  -5.0,
+                  -1.2999999523162842,
+                  -1.5
+                ],
+                "ctrl_max": [
+                  0.800000011920929,
+                  40.0,
+                  0.5,
+                  2.5
+                ],
+                "hip_initial": -1.2,
+                "knee_initial": 2.5,
+                "base_rear_speed": 12.0,
+                "rear_speed_delta": 12.0,
+                "joint_target_semantics": "keyframe_centered_absolute",
+                "knee_target_delta": 0.0
+              },
+              "network": "76-256-256-256-8 SiLU; tanh first four logits, deterministic",
+              "conversion": "exact selected Torch actor/critic/normalizer arrays; no extra optimization",
+              "source_bundle": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/landing_dynamics_checkpoint_comparison/dynamics25",
+              "training_checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/shared_plant200/training/model_225.pt",
+              "training_checkpoint_sha256": "751edd779fdac0fc6774a6ed1657879f5796a11ce8d1f52b5b967a61263e9de3",
+              "stored_checkpoint_iter": 225,
+              "scored_policy_update": null,
+              "selection_evidence": {
+                "final_update_unscored": true
+              },
+              "source_note": "source records identify original Phase U initialization; training_checkpoint identifies current weights",
+              "selection_evidence_policy_update": null
+            }
+          }
+        },
+        "terrain": {
+          "front_x_m": 10.3,
+          "width_m": 0.3,
+          "ground_end_x_m": 25.0,
+          "stone_height_min_m": 0.001,
+          "stone_height_max_m": 0.004,
+          "stones_per_m2": 10,
+          "seed": 20261126,
+          "lateral_limit_m": 3.9,
+          "far_bank_height_m": 0.0,
+          "rough_x_intervals_m": [
+            [
+              2.5,
+              8.3
+            ],
+            [
+              12.6,
+              20.0
+            ]
+          ],
+          "land_bridge_y_interval_m": [
+            1.4,
+            4.0
+          ],
+          "full_width_rough": true,
+          "ridges": [
+            {
+              "x_interval_m": [
+                4.3,
+                5.3
+              ],
+              "y_interval_m": [
+                -4.0,
+                4.0
+              ],
+              "height_m": 0.02
+            },
+            {
+              "x_interval_m": [
+                13.2,
+                15.2
+              ],
+              "y_interval_m": [
+                -4.0,
+                4.0
+              ],
+              "height_m": 0.04
+            }
+          ]
+        },
+        "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/resolved_config.json",
+        "routes": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "episode_s": 10.0,
+        "episodes": 36,
+        "physics_steps_max": 720000,
+        "backend": "MJX-Warp vmap; GPU Torch H75/ECBC/ESO; JAX RB; DLPack; final-only host export",
+        "heightfield_contact_workspace": 512,
+        "physics_dt": 0.001,
+        "physics_substeps": 5,
+        "lower_dt": 0.005,
+        "upper_dt": 0.02,
+        "ground_model": {
+          "source_actor": {
+            "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+            "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+            "artifact": "actor.npz",
+            "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+            "conversion": "exact arrays, no optimization or architecture change"
+          },
+          "route_name": "left90_R2",
+          "world_anchor": [
+            8.045238494873047,
+            -0.001819610595703125,
+            -0.00033139364677481353
+          ],
+          "frame_scales": [
+            0.3,
+            1.5,
+            0.35,
+            3.0,
+            3.0,
+            2.0,
+            3.0,
+            3.0,
+            3.0,
+            0.35,
+            0.8,
+            0.45,
+            3.0,
+            0.35,
+            3.0,
+            60.0,
+            1.5,
+            10.0,
+            0.3,
+            0.3
+          ],
+          "files": {
+            "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+            "config.json": "582274a63d6cb24c396b1d4d6020337c61f92dc56e72ed1ba285f1bdd5ff6c54",
+            "route.npz": "5fe434f692345998c556bdf870cc496132b0b87ca814520c2c3a06e8ecbd8af4"
+          },
+          "adaptation": "Same frozen H75; current RB follower geometry; route rigidly anchored once at warmup state"
+        },
+        "goal": {
+          "x_min_m": 16.5,
+          "x_max_m": 18.5,
+          "abs_y_max_m": 0.5,
+          "min_vx_m_s": 0.5,
+          "hold_s": 0.5,
+          "path_tolerance_m": 0.3,
+          "heading_tolerance_rad": 0.2,
+          "speed_tolerance_m_s": 0.4
+        },
+        "road_half_width_m": 0.6,
+        "start_x_m": 1.5,
+        "start_vx_m_s": 1.8,
+        "handoff": "landing_state",
+        "handoff_delay_s": 0.5,
+        "approach": "h75",
+        "ground_only": false,
+        "jump_start_x_m": 8.55,
+        "scope": "P3 map-grouped DEV_MAP, not P4 independent TEST",
+        "ground_physics": {
+          "integrator": "implicitfast",
+          "friction": 0.8,
+          "native_wheel_contacts": false
+        },
+        "rb_physics": null,
+        "terrain_conversion": "Original Isaac rectangular patches, coordinates and heights retained without interpolation; 90-degree local grid rotation matches original triangle diagonal",
+        "pendulum": "STTW hip/knee equality brakes at entry posture; released during RB, relocked at measured handoff posture; native finite servos retained",
+        "observer": "measured ESO initialization, empty H75 history at handoff",
+        "collect_model_state": true,
+        "completed_slice_semantics": false,
+        "contact_substep_telemetry": true,
+        "contact_timing": "Each sample is a solver load during one 1 ms step; row t aggregates the preceding 5 ms, row zero has no interval and is NaN.",
+        "snapshot_replay_s": null,
+        "planned_activation_offset_m": -1.75,
+        "input_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/config.json",
+        "world_map": {
+          "map_id": "p3_dev_map_06",
+          "frame_id": "world",
+          "bounds_xy_m": [
+            -5.0,
+            25.0,
+            -3.9,
+            3.9
+          ],
+          "terrain": {
+            "front_x_m": 10.3,
+            "width_m": 0.3,
+            "ground_end_x_m": 25.0,
+            "stone_height_min_m": 0.001,
+            "stone_height_max_m": 0.004,
+            "stones_per_m2": 10,
+            "seed": 20261126,
+            "lateral_limit_m": 3.9,
+            "far_bank_height_m": 0.0,
+            "rough_x_intervals_m": [
+              [
+                2.5,
+                8.3
+              ],
+              [
+                12.6,
+                20.0
+              ]
+            ],
+            "land_bridge_y_interval_m": [
+              1.4,
+              4.0
+            ],
+            "full_width_rough": true,
+            "ridges": [
+              {
+                "x_interval_m": [
+                  4.3,
+                  5.3
+                ],
+                "y_interval_m": [
+                  -4.0,
+                  4.0
+                ],
+                "height_m": 0.02
+              },
+              {
+                "x_interval_m": [
+                  13.2,
+                  15.2
+                ],
+                "y_interval_m": [
+                  -4.0,
+                  4.0
+                ],
+                "height_m": 0.04
+              }
+            ]
+          },
+          "goal": {
+            "x_min_m": 16.5,
+            "x_max_m": 18.5,
+            "abs_y_max_m": 0.5,
+            "min_vx_m_s": 0.5,
+            "hold_s": 0.5,
+            "path_tolerance_m": 0.3,
+            "heading_tolerance_rad": 0.2,
+            "speed_tolerance_m_s": 0.4
+          },
+          "support_regions": [
+            [
+              -5.0,
+              10.3,
+              -4.0,
+              4.0
+            ],
+            [
+              10.6,
+              25.0,
+              -4.0,
+              4.0
+            ],
+            [
+              10.3,
+              10.6,
+              1.4,
+              4.0
+            ]
+          ],
+          "semantics": "Fixed physical map and target; reference tracking distance and controller domain are separate task metrics. Heightfields are generated once from terrain and saved in terrain.mjb/terrain_source.npz.",
+          "forward_obstacle": {
+            "obstacle_id": "ditch030",
+            "forward_world_xyz": [
+              1,
+              0,
+              0
+            ],
+            "activation_offset_m": -1.7,
+            "jump_signal_offsets_m": [
+              -0.8,
+              0.7
+            ],
+            "observation_anchor": "terrain.front_x_m",
+            "scope": "Validated forward direction only; no arbitrary jump rotation or landing target"
+          }
+        },
+        "shared_adapters": true
+      }
+    },
+    {
+      "map": "map07",
+      "alpha": 0.0,
+      "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation",
+      "conditions": 36,
+      "config_sha256": "644c13bcd9be858e6a1befef10d58bb38482a5e8647caceaca1636d2e7a13487",
+      "terrain_sha256": "e1281fc803ce615d82773a11cbea095b9529baa73c6705f60ab9974b882e5f04",
+      "identity": {
+        "terrain_model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/terrain.mjb",
+        "role": "P3 map-grouped DEV_MAP, not P4 independent TEST",
+        "skills": {
+          "rb_run3": {
+            "source_frozen_policy": {
+              "action_order": [
+                "steer",
+                "rear_wheel_drive",
+                "hip",
+                "knee"
+              ],
+              "actor_frame_fields": [
+                "gravity_x",
+                "gravity_y",
+                "gravity_z",
+                "angular_velocity_x",
+                "angular_velocity_y",
+                "angular_velocity_z",
+                "acceleration_x",
+                "acceleration_y",
+                "acceleration_z",
+                "steering_position",
+                "hip_position",
+                "knee_position",
+                "steering_velocity",
+                "hip_velocity",
+                "knee_velocity",
+                "front_wheel_velocity",
+                "rear_wheel_velocity",
+                "last_action_steer",
+                "last_action_rear_wheel_drive",
+                "last_action_hip",
+                "last_action_knee",
+                "estimated_forward_velocity",
+                "obstacle_relative_x",
+                "root_height",
+                "history_valid"
+              ],
+              "actor_sha256": "ffe98cc0c497d820b15500d89589bafac9f1a4b92979ac790f753304760c8487",
+              "actor_task_fields": [
+                "jump_signal"
+              ],
+              "checkpoint": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_optimized_ablation_queue_20261020/seed_8115001/ppo_only/round_0009/students/student/training/round_0009_student/checkpoints/transition_128000",
+              "checkpoint_identity_sha256": "f2c1b73f8ff19217334e96912ad9e96bdb6c07e4566ccec24266f90967ee5eab",
+              "critic_sha256": "66bcc34399026f836fbcc054d9555a41ae01359140c383a92c2d8007083e02d7",
+              "data_role": "train",
+              "formal_config": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_optimized_ablation_queue_20261020/seed_8115001/ppo_only/round_0009/students/student/config.json",
+              "formal_config_file_sha256": "9f06a3141a06828892ad5b531be512bea093a870f1aa2f5de3b898aecaaf4a76",
+              "formal_config_sha256": "5e31be4dc1636a41ad5713b7079794783ef07a5afc49e53e3e0769f6016b2eee",
+              "iteration": 1,
+              "name": "round_0009_student",
+              "normalizer_sha256": "db84aad7750991d6b720e9f065ed7e49f862893c7753f9839c593d7951b6ea86",
+              "payload_sha256": "40177faae581466330b49f7376e86a5ded78b104a6f5ac8b2d9049a922549897",
+              "policy_role": "development_checkpoint",
+              "source_formal_report": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_optimized_ablation_queue_20261020/seed_8115001/ppo_only/round_0009/students/student/training/round_0009_student/formal_report.json",
+              "source_formal_report_sha256": "a614ef84a085210a107c3a3688dbf88ef750525fc0a65fefb672674b954427ab",
+              "source_requested_training_transitions": 128000,
+              "source_reset_mixture": {
+                "natural_reset_probability": 0.6,
+                "selection": "complete_start_60pct_current_teacher_30pct_historical_success_10pct",
+                "soft_tube_probability": 0.4
+              },
+              "source_training_run_id": "round_0009_student",
+              "source_training_transitions": 128000,
+              "xml_sha256": "0b56d3672773ef05a2b5982117fa53a7fdffcaf2b7f3f04a7a7941233d6e9c8a"
+            },
+            "adaptation": {
+              "skill_id": "shared225",
+              "source": {
+                "action_order": [
+                  "steer",
+                  "rear_wheel_drive",
+                  "hip",
+                  "knee"
+                ],
+                "actor_frame_fields": [
+                  "gravity_x",
+                  "gravity_y",
+                  "gravity_z",
+                  "angular_velocity_x",
+                  "angular_velocity_y",
+                  "angular_velocity_z",
+                  "acceleration_x",
+                  "acceleration_y",
+                  "acceleration_z",
+                  "steering_position",
+                  "hip_position",
+                  "knee_position",
+                  "steering_velocity",
+                  "hip_velocity",
+                  "knee_velocity",
+                  "front_wheel_velocity",
+                  "rear_wheel_velocity",
+                  "last_action_steer",
+                  "last_action_rear_wheel_drive",
+                  "last_action_hip",
+                  "last_action_knee",
+                  "estimated_forward_velocity",
+                  "obstacle_relative_x",
+                  "root_height",
+                  "history_valid"
+                ],
+                "actor_sha256": "ffe98cc0c497d820b15500d89589bafac9f1a4b92979ac790f753304760c8487",
+                "actor_task_fields": [
+                  "jump_signal"
+                ],
+                "checkpoint": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_optimized_ablation_queue_20261020/seed_8115001/ppo_only/round_0009/students/student/training/round_0009_student/checkpoints/transition_128000",
+                "checkpoint_identity_sha256": "f2c1b73f8ff19217334e96912ad9e96bdb6c07e4566ccec24266f90967ee5eab",
+                "critic_sha256": "66bcc34399026f836fbcc054d9555a41ae01359140c383a92c2d8007083e02d7",
+                "data_role": "train",
+                "formal_config": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_optimized_ablation_queue_20261020/seed_8115001/ppo_only/round_0009/students/student/config.json",
+                "formal_config_file_sha256": "9f06a3141a06828892ad5b531be512bea093a870f1aa2f5de3b898aecaaf4a76",
+                "formal_config_sha256": "5e31be4dc1636a41ad5713b7079794783ef07a5afc49e53e3e0769f6016b2eee",
+                "iteration": 1,
+                "name": "round_0009_student",
+                "normalizer_sha256": "db84aad7750991d6b720e9f065ed7e49f862893c7753f9839c593d7951b6ea86",
+                "payload_sha256": "40177faae581466330b49f7376e86a5ded78b104a6f5ac8b2d9049a922549897",
+                "policy_role": "development_checkpoint",
+                "source_formal_report": "/media/qy/6A7E3DB07E3D75C3/JIT_runs/experiments/jit_optimized_ablation_queue_20261020/seed_8115001/ppo_only/round_0009/students/student/training/round_0009_student/formal_report.json",
+                "source_formal_report_sha256": "a614ef84a085210a107c3a3688dbf88ef750525fc0a65fefb672674b954427ab",
+                "source_requested_training_transitions": 128000,
+                "source_reset_mixture": {
+                  "natural_reset_probability": 0.6,
+                  "selection": "complete_start_60pct_current_teacher_30pct_historical_success_10pct",
+                  "soft_tube_probability": 0.4
+                },
+                "source_training_run_id": "round_0009_student",
+                "source_training_transitions": 128000,
+                "xml_sha256": "0b56d3672773ef05a2b5982117fa53a7fdffcaf2b7f3f04a7a7941233d6e9c8a"
+              },
+              "artifact_sha256": "17a28f02a8fb3c3348510ecb9d45c05886a1bef0879633e2bf0864b494ca6684",
+              "mapping": {
+                "ctrl_min": [
+                  -0.800000011920929,
+                  -5.0,
+                  -1.2999999523162842,
+                  -1.5
+                ],
+                "ctrl_max": [
+                  0.800000011920929,
+                  40.0,
+                  0.5,
+                  2.5
+                ],
+                "hip_initial": -1.2,
+                "knee_initial": 2.5,
+                "base_rear_speed": 12.0,
+                "rear_speed_delta": 12.0,
+                "joint_target_semantics": "keyframe_centered_absolute",
+                "knee_target_delta": 0.0
+              },
+              "network": "76-256-256-256-8 SiLU; tanh first four logits, deterministic",
+              "conversion": "exact selected Torch actor/critic/normalizer arrays; no extra optimization",
+              "source_bundle": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/landing_dynamics_checkpoint_comparison/dynamics25",
+              "training_checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/shared_plant200/training/model_225.pt",
+              "training_checkpoint_sha256": "751edd779fdac0fc6774a6ed1657879f5796a11ce8d1f52b5b967a61263e9de3",
+              "stored_checkpoint_iter": 225,
+              "scored_policy_update": null,
+              "selection_evidence": {
+                "final_update_unscored": true
+              },
+              "source_note": "source records identify original Phase U initialization; training_checkpoint identifies current weights",
+              "selection_evidence_policy_update": null
+            }
+          }
+        },
+        "terrain": {
+          "front_x_m": 10.3,
+          "width_m": 0.3,
+          "ground_end_x_m": 25.0,
+          "stone_height_min_m": 0.001,
+          "stone_height_max_m": 0.004,
+          "stones_per_m2": 10,
+          "seed": 20261127,
+          "lateral_limit_m": 3.9,
+          "far_bank_height_m": 0.0,
+          "rough_x_intervals_m": [
+            [
+              2.5,
+              8.3
+            ],
+            [
+              12.6,
+              20.0
+            ]
+          ],
+          "land_bridge_y_interval_m": [
+            1.4,
+            4.0
+          ],
+          "full_width_rough": true,
+          "ridges": [
+            {
+              "x_interval_m": [
+                4.7,
+                5.7
+              ],
+              "y_interval_m": [
+                -4.0,
+                4.0
+              ],
+              "height_m": 0.02
+            },
+            {
+              "x_interval_m": [
+                12.8,
+                14.8
+              ],
+              "y_interval_m": [
+                -4.0,
+                4.0
+              ],
+              "height_m": 0.04
+            }
+          ]
+        },
+        "source_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/resolved_config.json",
+        "routes": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "episode_s": 10.0,
+        "episodes": 36,
+        "physics_steps_max": 720000,
+        "backend": "MJX-Warp vmap; GPU Torch H75/ECBC/ESO; JAX RB; DLPack; final-only host export",
+        "heightfield_contact_workspace": 512,
+        "physics_dt": 0.001,
+        "physics_substeps": 5,
+        "lower_dt": 0.005,
+        "upper_dt": 0.02,
+        "ground_model": {
+          "source_actor": {
+            "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+            "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+            "artifact": "actor.npz",
+            "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+            "conversion": "exact arrays, no optimization or architecture change"
+          },
+          "route_name": "left90_R2",
+          "world_anchor": [
+            8.045238494873047,
+            -0.001819610595703125,
+            -0.00033139364677481353
+          ],
+          "frame_scales": [
+            0.3,
+            1.5,
+            0.35,
+            3.0,
+            3.0,
+            2.0,
+            3.0,
+            3.0,
+            3.0,
+            0.35,
+            0.8,
+            0.45,
+            3.0,
+            0.35,
+            3.0,
+            60.0,
+            1.5,
+            10.0,
+            0.3,
+            0.3
+          ],
+          "files": {
+            "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+            "config.json": "582274a63d6cb24c396b1d4d6020337c61f92dc56e72ed1ba285f1bdd5ff6c54",
+            "route.npz": "5fe434f692345998c556bdf870cc496132b0b87ca814520c2c3a06e8ecbd8af4"
+          },
+          "adaptation": "Same frozen H75; current RB follower geometry; route rigidly anchored once at warmup state"
+        },
+        "goal": {
+          "x_min_m": 16.5,
+          "x_max_m": 18.5,
+          "abs_y_max_m": 0.5,
+          "min_vx_m_s": 0.5,
+          "hold_s": 0.5,
+          "path_tolerance_m": 0.3,
+          "heading_tolerance_rad": 0.2,
+          "speed_tolerance_m_s": 0.4
+        },
+        "road_half_width_m": 0.6,
+        "start_x_m": 1.5,
+        "start_vx_m_s": 1.8,
+        "handoff": "landing_state",
+        "handoff_delay_s": 0.5,
+        "approach": "h75",
+        "ground_only": false,
+        "jump_start_x_m": 8.55,
+        "scope": "P3 map-grouped DEV_MAP, not P4 independent TEST",
+        "ground_physics": {
+          "integrator": "implicitfast",
+          "friction": 0.8,
+          "native_wheel_contacts": false
+        },
+        "rb_physics": null,
+        "terrain_conversion": "Original Isaac rectangular patches, coordinates and heights retained without interpolation; 90-degree local grid rotation matches original triangle diagonal",
+        "pendulum": "STTW hip/knee equality brakes at entry posture; released during RB, relocked at measured handoff posture; native finite servos retained",
+        "observer": "measured ESO initialization, empty H75 history at handoff",
+        "collect_model_state": true,
+        "completed_slice_semantics": false,
+        "contact_substep_telemetry": true,
+        "contact_timing": "Each sample is a solver load during one 1 ms step; row t aggregates the preceding 5 ms, row zero has no interval and is NaN.",
+        "snapshot_replay_s": null,
+        "planned_activation_offset_m": -1.75,
+        "input_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/config.json",
+        "world_map": {
+          "map_id": "p3_dev_map_07",
+          "frame_id": "world",
+          "bounds_xy_m": [
+            -5.0,
+            25.0,
+            -3.9,
+            3.9
+          ],
+          "terrain": {
+            "front_x_m": 10.3,
+            "width_m": 0.3,
+            "ground_end_x_m": 25.0,
+            "stone_height_min_m": 0.001,
+            "stone_height_max_m": 0.004,
+            "stones_per_m2": 10,
+            "seed": 20261127,
+            "lateral_limit_m": 3.9,
+            "far_bank_height_m": 0.0,
+            "rough_x_intervals_m": [
+              [
+                2.5,
+                8.3
+              ],
+              [
+                12.6,
+                20.0
+              ]
+            ],
+            "land_bridge_y_interval_m": [
+              1.4,
+              4.0
+            ],
+            "full_width_rough": true,
+            "ridges": [
+              {
+                "x_interval_m": [
+                  4.7,
+                  5.7
+                ],
+                "y_interval_m": [
+                  -4.0,
+                  4.0
+                ],
+                "height_m": 0.02
+              },
+              {
+                "x_interval_m": [
+                  12.8,
+                  14.8
+                ],
+                "y_interval_m": [
+                  -4.0,
+                  4.0
+                ],
+                "height_m": 0.04
+              }
+            ]
+          },
+          "goal": {
+            "x_min_m": 16.5,
+            "x_max_m": 18.5,
+            "abs_y_max_m": 0.5,
+            "min_vx_m_s": 0.5,
+            "hold_s": 0.5,
+            "path_tolerance_m": 0.3,
+            "heading_tolerance_rad": 0.2,
+            "speed_tolerance_m_s": 0.4
+          },
+          "support_regions": [
+            [
+              -5.0,
+              10.3,
+              -4.0,
+              4.0
+            ],
+            [
+              10.6,
+              25.0,
+              -4.0,
+              4.0
+            ],
+            [
+              10.3,
+              10.6,
+              1.4,
+              4.0
+            ]
+          ],
+          "semantics": "Fixed physical map and target; reference tracking distance and controller domain are separate task metrics. Heightfields are generated once from terrain and saved in terrain.mjb/terrain_source.npz.",
+          "forward_obstacle": {
+            "obstacle_id": "ditch030",
+            "forward_world_xyz": [
+              1,
+              0,
+              0
+            ],
+            "activation_offset_m": -1.7,
+            "jump_signal_offsets_m": [
+              -0.8,
+              0.7
+            ],
+            "observation_anchor": "terrain.front_x_m",
+            "scope": "Validated forward direction only; no arbitrary jump rotation or landing target"
+          }
+        },
+        "shared_adapters": true
+      }
+    }
+  ],
+  "scope": "2knownDEV maps x2roots x2speeds x9routes x3alpha =216conditions;144new physical,72reused alpha0. Fixed equal alpha in both stages; off-diagonal stage combinations pending.",
+  "budget": "4GPU batches36lanes,10s each, max330s each/1500s pipeline; no automatic repeat, no training",
+  "roles": "Known DEV; raw stage3/4 failures and ground-only failures retained",
+  "invariants": "H75 plus ECBC/ESO without lower residual; shared225 RB; identical physics, initial cases, terrain, routes, task gates and speed requests. Only approach/continuation alpha change.",
+  "alpha_semantics": "H75 upper network context alpha; not R196_ALPHA1 lower alpha. Frozen H75 supports alpha input; physical transfer of nonzero alpha is being evaluated, not assumed.",
+  "code_revision": "b4216f530c486fd263f7ad763797a65f024a29b4",
+  "patch_note": "Existing unrelated live-ground CEM patch is inactive because live_ground_cem absent; preserved, not adopted by this run",
+  "stop": "First runtime failure or finite budget. If expected remaining wait exceeds30min, notify and pause goal; no silent expansion",
+  "startup_correction": "Initial import failed before model/output creation: jit_dvgc module absent from PYTHONPATH. Add existing /home/qy/DVGC/JIT/src read-only and disable bytecode writes; no install or DVGC mutation.0physicalepisodes in failed attempt; same finite144episode budget."
+}

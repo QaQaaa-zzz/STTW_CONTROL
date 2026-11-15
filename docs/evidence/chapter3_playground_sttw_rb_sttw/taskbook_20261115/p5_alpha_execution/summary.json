@@ -1,0 +1,67 @@
+[
+  {
+    "map": "map06",
+    "alpha": 0.0,
+    "cases": 36,
+    "goals": 36,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {}
+  },
+  {
+    "map": "map06",
+    "alpha": 0.5,
+    "cases": 36,
+    "goals": 24,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 12
+    }
+  },
+  {
+    "map": "map06",
+    "alpha": 1.0,
+    "cases": 36,
+    "goals": 6,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 12,
+      "tracking_domain_exit": 18
+    }
+  },
+  {
+    "map": "map07",
+    "alpha": 0.0,
+    "cases": 36,
+    "goals": 36,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {}
+  },
+  {
+    "map": "map07",
+    "alpha": 0.5,
+    "cases": 36,
+    "goals": 29,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 5,
+      "tracking_domain_exit": 2
+    }
+  },
+  {
+    "map": "map07",
+    "alpha": 1.0,
+    "cases": 36,
+    "goals": 5,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 15,
+      "tracking_domain_exit": 16
+    }
+  }
+]

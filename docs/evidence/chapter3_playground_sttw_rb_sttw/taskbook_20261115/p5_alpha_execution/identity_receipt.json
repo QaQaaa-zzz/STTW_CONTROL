@@ -1,0 +1,74 @@
+[
+  {
+    "map": "map06",
+    "alpha": 0.0,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation",
+    "checks": {
+      "config": true,
+      "ground_actor": true,
+      "jump_actor": true,
+      "terrain": true
+    },
+    "terrain_sha256": "d075207cfa0d2dd56d015923ac998b3572fcee00881a8462db3afd840686dbdb"
+  },
+  {
+    "map": "map06",
+    "alpha": 0.5,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_execution/map06_alpha0.5/evaluation",
+    "checks": {
+      "config": true,
+      "ground_actor": true,
+      "jump_actor": true,
+      "terrain": true
+    },
+    "terrain_sha256": "d075207cfa0d2dd56d015923ac998b3572fcee00881a8462db3afd840686dbdb"
+  },
+  {
+    "map": "map06",
+    "alpha": 1.0,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_execution/map06_alpha1/evaluation",
+    "checks": {
+      "config": true,
+      "ground_actor": true,
+      "jump_actor": true,
+      "terrain": true
+    },
+    "terrain_sha256": "d075207cfa0d2dd56d015923ac998b3572fcee00881a8462db3afd840686dbdb"
+  },
+  {
+    "map": "map07",
+    "alpha": 0.0,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation",
+    "checks": {
+      "config": true,
+      "ground_actor": true,
+      "jump_actor": true,
+      "terrain": true
+    },
+    "terrain_sha256": "e1281fc803ce615d82773a11cbea095b9529baa73c6705f60ab9974b882e5f04"
+  },
+  {
+    "map": "map07",
+    "alpha": 0.5,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_execution/map07_alpha0.5/evaluation",
+    "checks": {
+      "config": true,
+      "ground_actor": true,
+      "jump_actor": true,
+      "terrain": true
+    },
+    "terrain_sha256": "e1281fc803ce615d82773a11cbea095b9529baa73c6705f60ab9974b882e5f04"
+  },
+  {
+    "map": "map07",
+    "alpha": 1.0,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_execution/map07_alpha1/evaluation",
+    "checks": {
+      "config": true,
+      "ground_actor": true,
+      "jump_actor": true,
+      "terrain": true
+    },
+    "terrain_sha256": "e1281fc803ce615d82773a11cbea095b9529baa73c6705f60ab9974b882e5f04"
+  }
+]
