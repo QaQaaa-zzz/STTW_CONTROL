@@ -1,0 +1,5 @@
+{
+  "selection": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/selected_comparison.json",
+  "budget": "One DEV-selected candidate x3 independent-interface maps;3 GPU queries then CPU raw G/I/C/Oracle, own/shared/cross supported calibration.0 training/physics;stop15min",
+  "roles": "Known DEV; same candidates/predictor/constraints strong backtracking retained"
+}

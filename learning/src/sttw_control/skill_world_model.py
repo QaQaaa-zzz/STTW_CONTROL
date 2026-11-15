@@ -62,11 +62,16 @@ class SkillWorldModel(nn.Module):
         self.joint_displacement.to(self.input_mean.device)
         nn.init.zeros_(self.joint_displacement.weight);nn.init.zeros_(self.joint_displacement.bias)
 
+    def enable_ordered_phases(self):
+        """Constrain the predicted skill graph, without asserting physical readiness."""
+        self.register_buffer('phase_successor',torch.tensor([1,3,2,4,2],device=self.input_mean.device))
+
     @classmethod
     def from_weights(cls,saved):
         history_dim=len(saved['history_scale']);context_dim=len(saved['input_mean'])-12-11-history_dim-3-5
         model=cls(history_dim,context_dim,*[saved[k] for k in ['input_mean','input_scale','velocity_scale','history_scale']],hidden_dim=saved['initial.0.weight'].shape[0]).to(saved['input_mean'].device)
         if 'joint_displacement_scale' in saved:model.enable_joint_displacement(saved['joint_displacement_scale'])
+        if 'phase_successor' in saved:model.enable_ordered_phases()
         model.load_state_dict(saved)
         return model
 
@@ -78,10 +83,16 @@ class SkillWorldModel(nn.Module):
         features=self.features(qpos,qvel,history,contact,phase,context)
         return SkillWorldState(qpos,qvel,history,contact,phase,self.initial(features))
 
-    def step(self,state,context):
+    def step(self,state,context,return_raw_phase=False):
         hidden=self.memory(self.features(state.qpos,state.qvel,state.history,state.contact,state.phase,context),state.hidden)
         output=self.decoder(hidden)
         dv,dh,contact_logits,phase_logits=torch.split(output,[11,self.history_dim,3,5],-1)
+        raw_phase_logits=phase_logits
+        if hasattr(self,'phase_successor'):
+            current=state.phase.argmax(-1)
+            labels=torch.arange(5,device=phase_logits.device)[None,:]
+            allowed=(labels==current[:,None])|(labels==self.phase_successor[current,None])
+            phase_logits=phase_logits.masked_fill(~allowed,-1e4)
         velocity=state.qvel+dv*self.velocity_scale
         mid=(state.qvel+velocity)*.5
         rv=mid[:,3:6]*self.dt
@@ -95,18 +106,19 @@ class SkillWorldModel(nn.Module):
         pose=torch.cat((state.qpos[:,:3]+mid[:,:3]*self.dt,quaternion,joints),-1)
         nxt=SkillWorldState(pose,velocity,state.history+dh*self.history_scale,
                             contact_logits.sigmoid(),phase_logits.softmax(-1),hidden,state.elapsed_steps+1)
-        return nxt,contact_logits,phase_logits
+        result=(nxt,contact_logits,phase_logits)
+        return (*result,raw_phase_logits) if return_raw_phase else result
 
     def rollout(self,state,context,steps):
         poses=[state.qpos];velocities=[state.qvel];histories=[state.history]
-        contacts=[];phases=[]
+        contacts=[];phases=[];raw_phases=[]
         for _ in range(steps):
-            state,contact,phase=self.step(state,context)
+            state,contact,phase,raw_phase=self.step(state,context,return_raw_phase=True)
             poses.append(state.qpos);velocities.append(state.qvel);histories.append(state.history)
-            contacts.append(contact);phases.append(phase)
+            contacts.append(contact);phases.append(phase);raw_phases.append(raw_phase)
         return dict(qpos=torch.stack(poses,1),qvel=torch.stack(velocities,1),
                     history=torch.stack(histories,1),contact_logits=torch.stack(contacts,1),
-                    phase_logits=torch.stack(phases,1),duration_s=steps*self.dt,next_state=state)
+                    phase_logits=torch.stack(phases,1),raw_phase_logits=torch.stack(raw_phases,1),duration_s=steps*self.dt,next_state=state)
 
     def rollout_until(self,state,context,max_steps,stop_phase=2,stop_guard=None):
         """GPU-batched predicted event stop; no actual event time supplied.

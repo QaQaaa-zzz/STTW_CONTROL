@@ -1,0 +1,207 @@
+diff --git a/learning/cli/audit_skill_handoff_trace.py b/learning/cli/audit_skill_handoff_trace.py
+index fff2910d..d14d87b1 100644
+--- a/learning/cli/audit_skill_handoff_trace.py
++++ b/learning/cli/audit_skill_handoff_trace.py
+@@ -4,10 +4,11 @@ from pathlib import Path
+ import numpy as np
+ import torch,mujoco
+ from sttw_control.skill_world_model import SkillWorldModel
+-from sttw_control.skill_sequence_rollout import handoff_joint_errors
++from sttw_control.skill_sequence_rollout import handoff_joint_errors,HandoffEventGuard
+ p=argparse.ArgumentParser(description=__doc__)
+ p.add_argument('--prediction',type=Path,action='append',required=True)
+ p.add_argument('--output',type=Path,required=True)
++p.add_argument('--state-event',action='store_true',help='Replay current state-guarded event; keep full phase trace for diagnosis')
+ a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False);torch.set_num_threads(1)
+ tensor=lambda x:torch.as_tensor(np.asarray(x),device='cuda',dtype=torch.float32)
+ rows=[];groups=[];started=time.perf_counter()
+@@ -19,12 +20,14 @@ for group,path in enumerate(a.prediction):
+  checkpoint=json.loads(Path(contract['selection']).read_text())['models']['jump']['path']
+  saved=torch.load(checkpoint,map_location='cuda',weights_only=True)['model']
+  model=SkillWorldModel.from_weights(saved);model.eval()
++ if contract.get('ordered_phases',False):model.enable_ordered_phases()
+  q,v,h=[tensor(z[k]) for k in ['entry_qpos','entry_qvel','entry_history']];n=len(q)
+  context=tensor([[world['terrain']['front_x_m'],world['terrain']['width_m'],world['terrain'].get('far_bank_height_m',0.),c['speed'],0.] for c in cases])
+  native=mujoco.MjModel.from_binary_path(str(physical/'terrain.mjb'));home=tensor(native.key('initial_state').qpos[[schema['qpos_names'].index(k) for k in ['hip_joint','knee_joint']]])
+  with torch.no_grad():
+   state=model.initialize(q,v,h[:,:381],h[:,381:],tensor([1,0,0]).expand(n,-1),tensor([0,1,0,0,0]).expand(n,-1),context)
+-  pred=model.rollout_until(state,context,125)
++  guard=HandoffEventGuard(native,schema,hand,world,tensor([c['speed'] for c in cases])) if a.state_event else None
++  pred=model.rollout_until(state,context,125,stop_guard=guard)
+   error,rate=handoff_joint_errors(pred['qpos'],pred['qvel'],home,schema)
+   ready=(error<hand['lock_position_tolerance_rad'])&(rate<hand['lock_velocity_tolerance_rad_s'])
+   phase=pred['phase_logits'].argmax(-1);after=torch.arange(125,device='cuda')[None,:]>=pred['event_step'][:,None]-1
+@@ -37,7 +40,11 @@ for group,path in enumerate(a.prediction):
+  phase_np=phase.cpu().numpy();first=pred['event_step'].cpu().numpy()
+  for i,c in enumerate(cases):
+   hit=np.flatnonzero(data['phase_ready'][i]);late=np.flatnonzero(data['later_ready'][i]);mask=phase_np[i]==2
+-  rows.append(dict(group=group,index=i,root=c['root'],route=c['route'],actual_success=c['actual_success'],classifier_step=int(first[i]),phase_and_joint_step=int(hit[0]+1) if len(hit) else None,later_joint_step=int(late[0]+1) if len(late) else None,min_phase2_tolerance_ratio=float(data['ratio'][i,mask].min()) if mask.any() else None))
++  observed=phase_np[i,:int(first[i])]
++  compressed=observed[np.r_[True,observed[1:]!=observed[:-1]]].tolist()
++  stage3=np.flatnonzero(observed==3);stage4=np.flatnonzero(observed==4)
++  ordered=bool(len(stage3) and len(stage4) and stage3[0]<stage4[-1] and observed[-1]==2)
++  rows.append(dict(phase_sequence=compressed,ordered_stages=ordered,event_found=bool(pred['event_found'][i]),group=group,index=i,root=c['root'],route=c['route'],actual_success=c['actual_success'],classifier_step=int(first[i]),phase_and_joint_step=int(hit[0]+1) if len(hit) else None,later_joint_step=int(late[0]+1) if len(late) else None,min_phase2_tolerance_ratio=float(data['ratio'][i,mask].min()) if mask.any() else None))
+  groups.append(dict(group=group,prediction=str(path),checkpoint=checkpoint,cases=n,phase_and_joint_ready=int(data['phase_ready'].any(-1).sum()),later_joint_ready=int(data['later_ready'].any(-1).sum()),terminal_replay_error=terminal_error))
+-(a.output/'cases.json').write_text(json.dumps(rows,indent=2)+'\n');(a.output/'summary.json').write_text(json.dumps(dict(groups=groups,runtime_s=time.perf_counter()-started,scope='Known DEV, fixed125-step/2.5s horizon. Post-classifier model steps are diagnostic extrapolation, not verified actual RB continuation. No controls, weights or phase timing changed.'),indent=2)+'\n')
++(a.output/'cases.json').write_text(json.dumps(rows,indent=2)+'\n');(a.output/'summary.json').write_text(json.dumps(dict(groups=groups,runtime_s=time.perf_counter()-started,event_mode='state' if a.state_event else 'classifier',scope='Known DEV, fixed125-step/2.5s horizon. Post-classifier model steps are diagnostic extrapolation, not verified actual RB continuation. No controls, weights or phase timing changed.'),indent=2)+'\n')
+ print(json.dumps(groups,indent=2))
+diff --git a/learning/cli/evaluate_skill_sequence.py b/learning/cli/evaluate_skill_sequence.py
+index 46a3eb89..290b0ecd 100644
+--- a/learning/cli/evaluate_skill_sequence.py
++++ b/learning/cli/evaluate_skill_sequence.py
+@@ -10,7 +10,7 @@ from sttw_control.skill_world_model import SkillWorldModel
+ from sttw_control.skill_history_bridge import SkillHistoryBridge
+ from sttw_control.skill_handoff_history import HandoffHistoryReset
+ from sttw_control.skill_sequence_rollout import predict_skill_sequence,native_to_ground,HandoffEventGuard
+-p=argparse.ArgumentParser(description=__doc__);p.add_argument('--handoff-event',choices=['classifier','state'],default='state');p.add_argument('--handoff-history',choices=['learned','execution'],default='execution');p.add_argument('--typical',type=Path);p.add_argument('--diagnostic-entry',choices=['physical','history','both']);p.add_argument('--diagnostic-departure',choices=['physical','history','both']);source=p.add_mutually_exclusive_group(required=True);source.add_argument('--oracle',type=Path);source.add_argument('--evaluation',type=Path);p.add_argument('--selection',type=Path,required=True);p.add_argument('--history',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();
++p=argparse.ArgumentParser(description=__doc__);p.add_argument('--ordered-phases',action='store_true');p.add_argument('--handoff-event',choices=['classifier','state'],default='state');p.add_argument('--handoff-history',choices=['learned','execution'],default='execution');p.add_argument('--typical',type=Path);p.add_argument('--diagnostic-entry',choices=['physical','history','both']);p.add_argument('--diagnostic-departure',choices=['physical','history','both']);source=p.add_mutually_exclusive_group(required=True);source.add_argument('--oracle',type=Path);source.add_argument('--evaluation',type=Path);p.add_argument('--selection',type=Path,required=True);p.add_argument('--history',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();
+ if sum(bool(x) for x in [a.typical,a.diagnostic_entry,a.diagnostic_departure])>1:p.error('Typical, true-entry and true-departure are separate modes')
+ a.output.mkdir(parents=True,exist_ok=False);torch.set_num_threads(1);started=time.perf_counter();tensor=lambda x:torch.as_tensor(np.asarray(x),device='cuda',dtype=torch.float32)
+ selection=json.loads(a.selection.read_text())['models']
+@@ -22,6 +22,7 @@ approach=load_history_model(Path(selection['approach']['path']).parent);departur
+ for model in [approach,departure]:
+  if model.terrain is not None:model.terrain=TerrainFeatures(**raster_from_spec(world['terrain']),device='cuda')
+ saved=torch.load(selection['jump']['path'],map_location='cuda',weights_only=True)['model'];jump=SkillWorldModel.from_weights(saved);jump.eval()
++if a.ordered_phases:jump.enable_ordered_phases()
+ h=torch.load(a.history,map_location='cuda',weights_only=True)['model'];bridge=SkillHistoryBridge(*[h[k] for k in ['mean','scale','target_mean','target_scale']]).cuda();bridge.load_state_dict(h);bridge.eval()
+ q=[];v=[];history=[];rows=[]
+ if a.evaluation:
+@@ -97,4 +98,4 @@ for row,metric in zip(rows,metrics):
+  row.update(dict(zip(['admitted','has_goal','clearance_m','entry_time_s','handoff_time_s','goal_time_s','posture_valid','departure_domain_valid','events_found','approach_domain_valid','handoff_joints_ready','handoff_joint_error_rad','handoff_joint_speed_rad_s','handoff_support_ready','handoff_body_ready','handoff_support_geometry'],map(float,metric))))
+ (a.output/'cases.json').write_text(json.dumps(rows,indent=2)+'\n')
+ summary=dict(cases=n,true_admit=sum(bool(r['admitted']) and r['actual_success'] for r in rows),false_admit=sum(bool(r['admitted']) and not r['actual_success'] for r in rows),false_reject=sum(not r['admitted'] and r['actual_success'] for r in rows),true_reject=sum(not r['admitted'] and not r['actual_success'] for r in rows),scope=('OFFLINE true-departure '+a.diagnostic_departure+' intervention; predicted prefix/event/clock unchanged; NOT causal planning' if a.diagnostic_departure else 'OFFLINE true-entry '+a.diagnostic_entry+' intervention; NOT causal planning' if a.diagnostic_entry else 'I independent TRAIN-typical interfaces' if a.typical else 'C continuous predicted interfaces')+' raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included',runtime_s=time.perf_counter()-started)
+-(a.output/'summary.json').write_text(json.dumps(summary,indent=2)+'\n');(a.output/'contract.json').write_text(json.dumps(dict(handoff_event=a.handoff_event,method='diagnostic_departure_'+a.diagnostic_departure if a.diagnostic_departure else 'diagnostic_'+a.diagnostic_entry if a.diagnostic_entry else 'I' if a.typical else 'C',diagnostic_entry=a.diagnostic_entry,diagnostic_departure=a.diagnostic_departure,handoff_history=a.handoff_history,jump_start_x_m=cfg['ground_handoff']['approach']['jump_start_x_m'],typical=str(a.typical) if a.typical else None,selection=str(a.selection),history=str(a.history),oracle=str(a.oracle) if a.oracle else None,evaluation=str(a.evaluation) if a.evaluation else None,true_data_access='OFFLINE intervention reads actual future first phase2 state/history; previous physical velocity is20ms earlier; predicted event and clock unchanged, not deployment' if a.diagnostic_departure else 'OFFLINE intervention reads actual future RB entry; predicted entry clock unchanged; never a deployment result' if a.diagnostic_entry else 'Only first qpos/qvel/controller/RB history used by predictor; future trajectories/status used only as offline labels',limits='Predicted phase2 additionally requires frozen joint lock tolerances; predicted far-wheel contact uses probability>=0.5 and body checks mirror frozen native tolerances with qvel roll-rate proxy. Wheel AABBs must reach the far bank to make predicted far contact geometrically possible. These checks do not certify physical contact or full phase-transition history. Ground locked hip/knee rates assumed zero, flat supported RB entry contract; estimates never modify real controls'),indent=2)+'\n');print(json.dumps(summary))
++(a.output/'summary.json').write_text(json.dumps(summary,indent=2)+'\n');(a.output/'contract.json').write_text(json.dumps(dict(ordered_phases=hasattr(jump,'phase_successor'),handoff_event=a.handoff_event,method='diagnostic_departure_'+a.diagnostic_departure if a.diagnostic_departure else 'diagnostic_'+a.diagnostic_entry if a.diagnostic_entry else 'I' if a.typical else 'C',diagnostic_entry=a.diagnostic_entry,diagnostic_departure=a.diagnostic_departure,handoff_history=a.handoff_history,jump_start_x_m=cfg['ground_handoff']['approach']['jump_start_x_m'],typical=str(a.typical) if a.typical else None,selection=str(a.selection),history=str(a.history),oracle=str(a.oracle) if a.oracle else None,evaluation=str(a.evaluation) if a.evaluation else None,true_data_access='OFFLINE intervention reads actual future first phase2 state/history; previous physical velocity is20ms earlier; predicted event and clock unchanged, not deployment' if a.diagnostic_departure else 'OFFLINE intervention reads actual future RB entry; predicted entry clock unchanged; never a deployment result' if a.diagnostic_entry else 'Only first qpos/qvel/controller/RB history used by predictor; future trajectories/status used only as offline labels',limits='Predicted phase2 additionally requires frozen joint lock tolerances; predicted far-wheel contact uses probability>=0.5 and body checks mirror frozen native tolerances with qvel roll-rate proxy. Wheel AABBs must reach the far bank to make predicted far contact geometrically possible. These checks do not certify physical contact or full phase-transition history. Ground locked hip/knee rates assumed zero, flat supported RB entry contract; estimates never modify real controls'),indent=2)+'\n');print(json.dumps(summary))
+diff --git a/learning/cli/train_skill_world_model.py b/learning/cli/train_skill_world_model.py
+index 756d2901..45931aee 100644
+--- a/learning/cli/train_skill_world_model.py
++++ b/learning/cli/train_skill_world_model.py
+@@ -10,7 +10,7 @@ from sttw_control.skill_world_model import SkillWorldModel,JOINT_POSITION_SCALES
+ p=argparse.ArgumentParser(description=__doc__)
+ p.add_argument('--data',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
+ p.add_argument('--seed',type=int,required=True);p.add_argument('--updates',type=int,default=150)
+-p.add_argument('--final-learning-rate',type=float);p.add_argument('--handoff-focus-weight',type=float,default=0.);p.add_argument('--learning-rate',type=float);p.add_argument('--joint-displacement',action='store_true');p.add_argument('--entry-predictions',type=Path);p.add_argument('--lock-loss-weight',type=float,default=0.);p.add_argument('--resume',type=Path);p.add_argument('--horizons',type=int,nargs='+',default=[1,5,15,50]);p.add_argument('--balance-phases',action='store_true');p.add_argument('--full-entry',action='store_true')
++p.add_argument('--ordered-phases',action='store_true');p.add_argument('--final-learning-rate',type=float);p.add_argument('--handoff-focus-weight',type=float,default=0.);p.add_argument('--learning-rate',type=float);p.add_argument('--joint-displacement',action='store_true');p.add_argument('--entry-predictions',type=Path);p.add_argument('--lock-loss-weight',type=float,default=0.);p.add_argument('--resume',type=Path);p.add_argument('--horizons',type=int,nargs='+',default=[1,5,15,50]);p.add_argument('--balance-phases',action='store_true');p.add_argument('--full-entry',action='store_true')
+ a=p.parse_args()
+ if a.final_learning_rate is not None and a.updates<2:p.error('Cosine decay requires at least2 updates')
+ a.output.mkdir(parents=True,exist_ok=False)
+@@ -38,6 +38,7 @@ if a.joint_displacement and not hasattr(model,'joint_displacement'):
+  model.enable_joint_displacement(scale);optimizer.add_param_group(dict(params=model.joint_displacement.parameters()))
+ if a.learning_rate is not None:
+  for group in optimizer.param_groups:group['lr']=a.learning_rate
++if a.ordered_phases:model.enable_ordered_phases()
+ initial_lrs=[group['lr'] for group in optimizer.param_groups]
+ writer=SummaryWriter(str(a.output/'tensorboard'))
+ horizons=a.horizons;train={};dev={}
+@@ -58,7 +59,7 @@ jscale_values=[JOINT_POSITION_SCALES[name] for name in schema['qpos_names'][7:]]
+ hscale=tensor(normal['history_state_scale']);vscale=tensor(vscale_values);jscale=tensor(jscale_values);pscale=tensor([.2,.2,.1])
+ train_indices=torch.tensor([i for r in manifest['rows'] if r['split']=='TRAIN' for i in range(r['start'],r['start']+r['length'])],device=device)
+ counts=torch.bincount(phase[train_indices],minlength=5).float();phase_weights=torch.where(counts>0,counts.sum()/counts.clamp_min(1),torch.zeros_like(counts));phase_weights=phase_weights/phase_weights[phase_weights>0].mean() if a.balance_phases else torch.ones_like(counts)
+-contract=dict(final_learning_rate=a.final_learning_rate,learning_rate_schedule='cosine over this continuation' if a.final_learning_rate is not None else 'constant',handoff_focus_weight=a.handoff_focus_weight,handoff_focus='Balanced phase2-vs-rest BCE plus actual-onset mean squared world-y/.05m, yaw/.05rad, world-vy/.1m_s; unchanged stopping thresholds',joint_displacement=hasattr(model,'joint_displacement'),joint_displacement_scale=model.joint_displacement_scale.cpu().tolist() if hasattr(model,'joint_displacement') else None,joint_displacement_normalization='RMS one-step quadrature defect from within-rollout TRAIN pairs only; zero initialized head',entry_predictions=str(a.entry_predictions) if a.entry_predictions else None,entry_exposure='50percent TRAIN true-start batches replaced by frozen upstream estimated physical/history; DEV true and predicted starts both scored' if a.entry_predictions else None,lock_loss_weight=a.lock_loss_weight,lock_scales='hip/knee0.01rad and0.1rad/s at actual transition labels',rotation_scale_rad=.2,handoff_loss='Mean normalized physical error at actual phase2 transition, weight1; labels only, not rollout inputs',state_schema=str(schema_path),velocity_loss_scale=vscale_values,joint_loss_scale=jscale_values,full_entry=a.full_entry,resume=str(a.resume),initial_update=initial_update,balance_phases=a.balance_phases,phase_weights=phase_weights.cpu().tolist(),seed=a.seed,updates=a.updates,data=str(a.data),batch=64,lr=optimizer.param_groups[0]['lr'],gradient_clip=1.,horizons_steps=horizons,checkpoint_every=25,selection='DEV mean normalized multistep physical/history/contact/phase loss, including transition and endpoint weighting; decision-quality evaluation still required',loss_weights=dict(position=1,rotation=1,velocity=1,joints=1,history=.1,contact=.2,phase=.2,endpoint_position=1),transition_weight=3,normalization='TRAIN only',initialization='model and Adam resume; new sampling RNG' if a.resume else 'random model; no control policy training',device='GPU model and resident tensors; scalar/trajectory transfers only at checkpoint evaluation',stop='finite updates or outer25min wall budget; no automatic extension',history='Predicted controller/RB estimates after initial state; no measured future injected')
++contract=dict(ordered_phases=hasattr(model,'phase_successor'),phase_supervision='Raw logits CE; constrained probabilities feed next state when ordered',final_learning_rate=a.final_learning_rate,learning_rate_schedule='cosine over this continuation' if a.final_learning_rate is not None else 'constant',handoff_focus_weight=a.handoff_focus_weight,handoff_focus='Balanced phase2-vs-rest BCE plus actual-onset mean squared world-y/.05m, yaw/.05rad, world-vy/.1m_s; unchanged stopping thresholds',joint_displacement=hasattr(model,'joint_displacement'),joint_displacement_scale=model.joint_displacement_scale.cpu().tolist() if hasattr(model,'joint_displacement') else None,joint_displacement_normalization='RMS one-step quadrature defect from within-rollout TRAIN pairs only; zero initialized head',entry_predictions=str(a.entry_predictions) if a.entry_predictions else None,entry_exposure='50percent TRAIN true-start batches replaced by frozen upstream estimated physical/history; DEV true and predicted starts both scored' if a.entry_predictions else None,lock_loss_weight=a.lock_loss_weight,lock_scales='hip/knee0.01rad and0.1rad/s at actual transition labels',rotation_scale_rad=.2,handoff_loss='Mean normalized physical error at actual phase2 transition, weight1; labels only, not rollout inputs',state_schema=str(schema_path),velocity_loss_scale=vscale_values,joint_loss_scale=jscale_values,full_entry=a.full_entry,resume=str(a.resume),initial_update=initial_update,balance_phases=a.balance_phases,phase_weights=phase_weights.cpu().tolist(),seed=a.seed,updates=a.updates,data=str(a.data),batch=64,lr=optimizer.param_groups[0]['lr'],gradient_clip=1.,horizons_steps=horizons,checkpoint_every=25,selection='DEV mean normalized multistep physical/history/contact/phase loss, including transition and endpoint weighting; decision-quality evaluation still required',loss_weights=dict(position=1,rotation=1,velocity=1,joints=1,history=.1,contact=.2,phase=.2,endpoint_position=1),transition_weight=3,normalization='TRAIN only',initialization='model and Adam resume; new sampling RNG' if a.resume else 'random model; no control policy training',device='GPU model and resident tensors; scalar/trajectory transfers only at checkpoint evaluation',stop='finite updates or outer25min wall budget; no automatic extension',history='Predicted controller/RB estimates after initial state; no measured future injected')
+ (a.output/'contract.json').write_text(json.dumps(contract,indent=2)+'\n')
+ 
+ def predict(ids,h,use_predicted=False):
+@@ -80,7 +81,7 @@ def losses(pred,ids,h):
+  joints=(((pq[:,:,7:]-q[:,:,7:])/jscale).square().mean(-1)*weight).mean()
+  history=((pred['history'][:,1:]-data['history'][idx])/hscale).square().mean()
+  contact=(F.binary_cross_entropy_with_logits(pred['contact_logits'],data['contact'][idx],reduction='none').mean(-1)*weight).mean()
+- skill=(F.cross_entropy(pred['phase_logits'].flatten(0,1),phase[idx].flatten(),weight=phase_weights,reduction='none').reshape_as(weight)*weight).mean()
++ skill=(F.cross_entropy(pred['raw_phase_logits'].flatten(0,1),phase[idx].flatten(),weight=phase_weights,reduction='none').reshape_as(weight)*weight).mean()
+  endpoint=((pq[:,-1,:3]-q[:,-1,:3])/pscale).square().mean()
+  handoff_mask=((phase[idx]==2)&(phase[idx-1]!=2)).float()
+  handoff_error=((pq[:,:,:3]-q[:,:,:3])/pscale).square().mean(-1)+rotation_error+((pv-v)/vscale).square().mean(-1)+((pq[:,:,7:]-q[:,:,7:])/jscale).square().mean(-1)
+diff --git a/learning/src/sttw_control/skill_world_model.py b/learning/src/sttw_control/skill_world_model.py
+index 28a681c6..24f1c7ae 100644
+--- a/learning/src/sttw_control/skill_world_model.py
++++ b/learning/src/sttw_control/skill_world_model.py
+@@ -62,11 +62,16 @@ class SkillWorldModel(nn.Module):
+         self.joint_displacement.to(self.input_mean.device)
+         nn.init.zeros_(self.joint_displacement.weight);nn.init.zeros_(self.joint_displacement.bias)
+ 
++    def enable_ordered_phases(self):
++        """Constrain the predicted skill graph, without asserting physical readiness."""
++        self.register_buffer('phase_successor',torch.tensor([1,3,2,4,2],device=self.input_mean.device))
++
+     @classmethod
+     def from_weights(cls,saved):
+         history_dim=len(saved['history_scale']);context_dim=len(saved['input_mean'])-12-11-history_dim-3-5
+         model=cls(history_dim,context_dim,*[saved[k] for k in ['input_mean','input_scale','velocity_scale','history_scale']],hidden_dim=saved['initial.0.weight'].shape[0]).to(saved['input_mean'].device)
+         if 'joint_displacement_scale' in saved:model.enable_joint_displacement(saved['joint_displacement_scale'])
++        if 'phase_successor' in saved:model.enable_ordered_phases()
+         model.load_state_dict(saved)
+         return model
+ 
+@@ -78,10 +83,16 @@ class SkillWorldModel(nn.Module):
+         features=self.features(qpos,qvel,history,contact,phase,context)
+         return SkillWorldState(qpos,qvel,history,contact,phase,self.initial(features))
+ 
+-    def step(self,state,context):
++    def step(self,state,context,return_raw_phase=False):
+         hidden=self.memory(self.features(state.qpos,state.qvel,state.history,state.contact,state.phase,context),state.hidden)
+         output=self.decoder(hidden)
+         dv,dh,contact_logits,phase_logits=torch.split(output,[11,self.history_dim,3,5],-1)
++        raw_phase_logits=phase_logits
++        if hasattr(self,'phase_successor'):
++            current=state.phase.argmax(-1)
++            labels=torch.arange(5,device=phase_logits.device)[None,:]
++            allowed=(labels==current[:,None])|(labels==self.phase_successor[current,None])
++            phase_logits=phase_logits.masked_fill(~allowed,-1e4)
+         velocity=state.qvel+dv*self.velocity_scale
+         mid=(state.qvel+velocity)*.5
+         rv=mid[:,3:6]*self.dt
+@@ -95,18 +106,19 @@ class SkillWorldModel(nn.Module):
+         pose=torch.cat((state.qpos[:,:3]+mid[:,:3]*self.dt,quaternion,joints),-1)
+         nxt=SkillWorldState(pose,velocity,state.history+dh*self.history_scale,
+                             contact_logits.sigmoid(),phase_logits.softmax(-1),hidden,state.elapsed_steps+1)
+-        return nxt,contact_logits,phase_logits
++        result=(nxt,contact_logits,phase_logits)
++        return (*result,raw_phase_logits) if return_raw_phase else result
+ 
+     def rollout(self,state,context,steps):
+         poses=[state.qpos];velocities=[state.qvel];histories=[state.history]
+-        contacts=[];phases=[]
++        contacts=[];phases=[];raw_phases=[]
+         for _ in range(steps):
+-            state,contact,phase=self.step(state,context)
++            state,contact,phase,raw_phase=self.step(state,context,return_raw_phase=True)
+             poses.append(state.qpos);velocities.append(state.qvel);histories.append(state.history)
+-            contacts.append(contact);phases.append(phase)
++            contacts.append(contact);phases.append(phase);raw_phases.append(raw_phase)
+         return dict(qpos=torch.stack(poses,1),qvel=torch.stack(velocities,1),
+                     history=torch.stack(histories,1),contact_logits=torch.stack(contacts,1),
+-                    phase_logits=torch.stack(phases,1),duration_s=steps*self.dt,next_state=state)
++                    phase_logits=torch.stack(phases,1),raw_phase_logits=torch.stack(raw_phases,1),duration_s=steps*self.dt,next_state=state)
+ 
+     def rollout_until(self,state,context,max_steps,stop_phase=2,stop_guard=None):
+         """GPU-batched predicted event stop; no actual event time supplied.
+diff --git a/learning/tests/test_skill_world_model.py b/learning/tests/test_skill_world_model.py
+index 34e61032..0b554c70 100644
+--- a/learning/tests/test_skill_world_model.py
++++ b/learning/tests/test_skill_world_model.py
+@@ -48,6 +48,25 @@ class SkillWorldModelTest(unittest.TestCase):
+         self.assertEqual(tuple(full['contact_logits'].shape),(2,100,3))
+         self.assertEqual(tuple(full['phase_logits'].shape),(2,100,5))
+ 
++    def test_ordered_phases_reject_regression_and_resume(self):
++        size=12+11+7+3+5+4
++        model=SkillWorldModel(7,4,torch.zeros(size),torch.ones(size),torch.ones(11)*.01,torch.ones(7)*.01)
++        model.enable_ordered_phases()
++        pose=torch.zeros(1,12);pose[:,3]=1;context=torch.zeros(1,4)
++        state=model.initialize(pose,torch.zeros(1,11),torch.zeros(1,4),torch.zeros(1,3),torch.zeros(1,3),torch.tensor([[0.,1.,0.,0.,0.]]),context)
++        with torch.no_grad():
++            model.decoder[-1].weight.zero_();model.decoder[-1].bias.zero_()
++            model.decoder[-1].bias[-5:]=torch.tensor([100.,0.,30.,10.,20.])
++            full=model.rollout(state,context,5)
++            self.assertEqual(full['phase_logits'].argmax(-1).tolist(),[[3,4,2,2,2]])
++            self.assertEqual(full['raw_phase_logits'].argmax(-1).tolist(),[[0,0,0,0,0]])
++            first=model.rollout(state,context,2)
++            buffer=io.BytesIO();torch.save((model.state_dict(),first['next_state']),buffer);buffer.seek(0)
++            weights,resumed=torch.load(buffer,weights_only=False);restored=SkillWorldModel.from_weights(weights)
++            last=restored.rollout(resumed,context,3)
++            torch.testing.assert_close(full['qpos'],torch.cat((first['qpos'],last['qpos'][:,1:]),1),rtol=0,atol=0)
++            torch.testing.assert_close(full['phase_logits'][:,2:],last['phase_logits'],rtol=0,atol=0)
++
+     def test_native_joint_loss_scale_mapping(self):
+         from sttw_control.skill_world_model import JOINT_POSITION_SCALES,JOINT_VELOCITY_SCALES
+         native=['rearwheel_joint','steering_joint','frontwheel_joint','hip_joint','knee_joint']

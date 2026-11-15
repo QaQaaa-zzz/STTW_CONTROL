@@ -1,0 +1,8 @@
+{
+  "question": "Does causal phase-graph restriction improve state propagation?",
+  "change": "Mask predicted phase logits to current or successor in0->1->3->4->2;2absorbing. Feed constrained probabilities to next recurrent step. Same weights and physical guard; optional defaultoff.",
+  "data_audit": "288 actual sequences:288each transitions1->3,3->4,4->2; all predicted successful exits visited3/4 but every trajectory had spurious0, seed1 also premature2.",
+  "budget": "3 frozen best models x3maps C plus selected I x3maps;0training/physics;max15min",
+  "selection": "Original DEV72 admissions then smaller state-position error; map48 excluded",
+  "limits": "Inference distribution differs from training soft-phase feedback; graph alone does not imply contact, event timing or safety; original candidates retained"
+}

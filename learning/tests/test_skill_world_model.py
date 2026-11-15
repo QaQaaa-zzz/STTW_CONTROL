@@ -48,6 +48,29 @@ class SkillWorldModelTest(unittest.TestCase):
         self.assertEqual(tuple(full['contact_logits'].shape),(2,100,3))
         self.assertEqual(tuple(full['phase_logits'].shape),(2,100,5))
 
+    def test_ordered_phases_reject_regression_and_resume(self):
+        size=12+11+7+3+5+4
+        model=SkillWorldModel(7,4,torch.zeros(size),torch.ones(size),torch.ones(11)*.01,torch.ones(7)*.01)
+        model.enable_ordered_phases()
+        pose=torch.zeros(1,12);pose[:,3]=1;context=torch.zeros(1,4)
+        state=model.initialize(pose,torch.zeros(1,11),torch.zeros(1,4),torch.zeros(1,3),torch.zeros(1,3),torch.tensor([[0.,1.,0.,0.,0.]]),context)
+        with torch.no_grad():
+            model.decoder[-1].weight.zero_();model.decoder[-1].bias.zero_()
+            model.decoder[-1].bias[-5:]=torch.tensor([100.,0.,30.,10.,20.])
+            full=model.rollout(state,context,5)
+            self.assertEqual(full['phase_logits'].argmax(-1).tolist(),[[3,4,2,2,2]])
+            self.assertEqual(full['raw_phase_logits'].argmax(-1).tolist(),[[0,0,0,0,0]])
+            first=model.rollout(state,context,2)
+            buffer=io.BytesIO();torch.save((model.state_dict(),first['next_state']),buffer);buffer.seek(0)
+            weights,resumed=torch.load(buffer,weights_only=False);restored=SkillWorldModel.from_weights(weights)
+            last=restored.rollout(resumed,context,3)
+            torch.testing.assert_close(full['qpos'],torch.cat((first['qpos'],last['qpos'][:,1:]),1),rtol=0,atol=0)
+            torch.testing.assert_close(full['phase_logits'][:,2:],last['phase_logits'],rtol=0,atol=0)
+        predicted=model.rollout(state,context,2)
+        loss=torch.nn.functional.cross_entropy(predicted['raw_phase_logits'].flatten(0,1),torch.tensor([3,4]))
+        loss.backward()
+        self.assertGreater(float(model.decoder[-1].bias.grad[-5]),0.)
+
     def test_native_joint_loss_scale_mapping(self):
         from sttw_control.skill_world_model import JOINT_POSITION_SCALES,JOINT_VELOCITY_SCALES
         native=['rearwheel_joint','steering_joint','frontwheel_joint','hip_joint','knee_joint']

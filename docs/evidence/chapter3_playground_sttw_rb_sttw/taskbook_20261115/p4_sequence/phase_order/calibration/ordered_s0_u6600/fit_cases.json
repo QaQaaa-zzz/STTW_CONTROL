@@ -1,0 +1,1298 @@
+[
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 6,
+    "route": 0,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 7,
+    "route": 0,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 6,
+    "route": 0,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 7,
+    "route": 0,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 6,
+    "route": 1,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 7,
+    "route": 1,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 6,
+    "route": 1,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 7,
+    "route": 1,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 6,
+    "route": 2,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 7,
+    "route": 2,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 6,
+    "route": 2,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 7,
+    "route": 2,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 6,
+    "route": 3,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 7,
+    "route": 3,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 6,
+    "route": 3,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 7,
+    "route": 3,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 6,
+    "route": 4,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 7,
+    "route": 4,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 6,
+    "route": 4,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 7,
+    "route": 4,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 6,
+    "route": 5,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 7,
+    "route": 5,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 6,
+    "route": 5,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 7,
+    "route": 5,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 6,
+    "route": 6,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 7,
+    "route": 6,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 6,
+    "route": 6,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 7,
+    "route": 6,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 6,
+    "route": 7,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 7,
+    "route": 7,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 6,
+    "route": 7,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 7,
+    "route": 7,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 6,
+    "route": 8,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 7,
+    "route": 8,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 6,
+    "route": 8,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map06",
+    "root": 7,
+    "route": 8,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 6,
+    "route": 0,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 7,
+    "route": 0,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 6,
+    "route": 0,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 7,
+    "route": 0,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 6,
+    "route": 1,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 7,
+    "route": 1,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 6,
+    "route": 1,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 7,
+    "route": 1,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 6,
+    "route": 2,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 7,
+    "route": 2,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 6,
+    "route": 2,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 7,
+    "route": 2,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 6,
+    "route": 3,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 7,
+    "route": 3,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 6,
+    "route": 3,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 7,
+    "route": 3,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 6,
+    "route": 4,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 7,
+    "route": 4,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 6,
+    "route": 4,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 7,
+    "route": 4,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 6,
+    "route": 5,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 7,
+    "route": 5,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 6,
+    "route": 5,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 7,
+    "route": 5,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 6,
+    "route": 6,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 7,
+    "route": 6,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 6,
+    "route": 6,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 7,
+    "route": 6,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 6,
+    "route": 7,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 7,
+    "route": 7,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 6,
+    "route": 7,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 7,
+    "route": 7,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 6,
+    "route": 8,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 7,
+    "route": 8,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 6,
+    "route": 8,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "C",
+    "map": "map07",
+    "root": 7,
+    "route": 8,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 6,
+    "route": 0,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 7,
+    "route": 0,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 6,
+    "route": 0,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 7,
+    "route": 0,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 6,
+    "route": 1,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 7,
+    "route": 1,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 6,
+    "route": 1,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 7,
+    "route": 1,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 6,
+    "route": 2,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 7,
+    "route": 2,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 6,
+    "route": 2,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 7,
+    "route": 2,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 6,
+    "route": 3,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 7,
+    "route": 3,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 6,
+    "route": 3,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 7,
+    "route": 3,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 6,
+    "route": 4,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 7,
+    "route": 4,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 6,
+    "route": 4,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 7,
+    "route": 4,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 6,
+    "route": 5,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 7,
+    "route": 5,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 6,
+    "route": 5,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 7,
+    "route": 5,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 6,
+    "route": 6,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 7,
+    "route": 6,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 6,
+    "route": 6,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 7,
+    "route": 6,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 6,
+    "route": 7,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 7,
+    "route": 7,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 6,
+    "route": 7,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 7,
+    "route": 7,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 6,
+    "route": 8,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 7,
+    "route": 8,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 6,
+    "route": 8,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map06",
+    "root": 7,
+    "route": 8,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 6,
+    "route": 0,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 7,
+    "route": 0,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 6,
+    "route": 0,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 7,
+    "route": 0,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 6,
+    "route": 1,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 7,
+    "route": 1,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 6,
+    "route": 1,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 7,
+    "route": 1,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 6,
+    "route": 2,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 7,
+    "route": 2,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 6,
+    "route": 2,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 7,
+    "route": 2,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 6,
+    "route": 3,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 7,
+    "route": 3,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 6,
+    "route": 3,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 7,
+    "route": 3,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 6,
+    "route": 4,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 7,
+    "route": 4,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 6,
+    "route": 4,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 7,
+    "route": 4,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 6,
+    "route": 5,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 7,
+    "route": 5,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 6,
+    "route": 5,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 7,
+    "route": 5,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 6,
+    "route": 6,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 7,
+    "route": 6,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 6,
+    "route": 6,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 7,
+    "route": 6,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 6,
+    "route": 7,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 7,
+    "route": 7,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 6,
+    "route": 7,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 7,
+    "route": 7,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 6,
+    "route": 8,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 7,
+    "route": 8,
+    "speed": 1.8,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 6,
+    "route": 8,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  },
+  {
+    "method": "I",
+    "map": "map07",
+    "root": 7,
+    "route": 8,
+    "speed": 1.9,
+    "included": true,
+    "reason": "included"
+  }
+]

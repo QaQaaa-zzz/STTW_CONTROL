@@ -1,0 +1,15 @@
+[
+  {
+    "name": "ordered_s0_u6600",
+    "arm": "ordered",
+    "seed": 0,
+    "update": 6600,
+    "best": true,
+    "last": false,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6600.pt",
+    "sha256": "a940bfa58928cd6369ec8ebf566126c42ee447b65acdc67b26249c861b7fde1c",
+    "dev_admitted": 69,
+    "dev_handoffs": 72,
+    "dev_position_mae_m": 0.09098187140706512
+  }
+]

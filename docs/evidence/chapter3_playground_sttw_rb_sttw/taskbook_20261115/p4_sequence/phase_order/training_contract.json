@@ -1,0 +1,8 @@
+{
+  "change": "Matched training/inference ordered phase feedback; raw phase CE retains gradients for excluded class errors",
+  "budget": "3x1000supervised updates,save25,best/last,900s overall;0physical/PPO;no automatic extension",
+  "parents": "Cosine three best models and Adam states",
+  "schedule": "3e-5 cosine to1e-6 over1000; original state/history/contact and transition losses, focus0, entryexposure unchanged",
+  "selection": "DEV loss chooses best within seed; compare best/last on originalDEV then mechanism; no map48 selection",
+  "stop": "runtime error or budget; preserve negative cases; no deployment adoption by loss alone"
+}

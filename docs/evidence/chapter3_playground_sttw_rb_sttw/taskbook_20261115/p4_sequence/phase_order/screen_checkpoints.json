@@ -1,0 +1,1232 @@
+[
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6075.pt",
+    "seed": 0,
+    "update": 6075,
+    "dev_ready": 6,
+    "dev_cases": 72,
+    "mechanism_ready": 3,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.1953520029783249
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6100.pt",
+    "seed": 0,
+    "update": 6100,
+    "dev_ready": 72,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.004423836711794138
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6125.pt",
+    "seed": 0,
+    "update": 6125,
+    "dev_ready": 51,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.08771216869354248
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6150.pt",
+    "seed": 0,
+    "update": 6150,
+    "dev_ready": 0,
+    "dev_cases": 72,
+    "mechanism_ready": 9,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.2553444504737854
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6175.pt",
+    "seed": 0,
+    "update": 6175,
+    "dev_ready": 3,
+    "dev_cases": 72,
+    "mechanism_ready": 0,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.2705957293510437
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6200.pt",
+    "seed": 0,
+    "update": 6200,
+    "dev_ready": 0,
+    "dev_cases": 72,
+    "mechanism_ready": 0,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.1415620595216751
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6225.pt",
+    "seed": 0,
+    "update": 6225,
+    "dev_ready": 60,
+    "dev_cases": 72,
+    "mechanism_ready": 12,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.03018542192876339
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6250.pt",
+    "seed": 0,
+    "update": 6250,
+    "dev_ready": 72,
+    "dev_cases": 72,
+    "mechanism_ready": 12,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.007838408462703228
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6275.pt",
+    "seed": 0,
+    "update": 6275,
+    "dev_ready": 57,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.06450789421796799
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6300.pt",
+    "seed": 0,
+    "update": 6300,
+    "dev_ready": 15,
+    "dev_cases": 72,
+    "mechanism_ready": 3,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.1429060846567154
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6325.pt",
+    "seed": 0,
+    "update": 6325,
+    "dev_ready": 24,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.1036427915096283
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6350.pt",
+    "seed": 0,
+    "update": 6350,
+    "dev_ready": 27,
+    "dev_cases": 72,
+    "mechanism_ready": 3,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.11572122573852539
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6375.pt",
+    "seed": 0,
+    "update": 6375,
+    "dev_ready": 0,
+    "dev_cases": 72,
+    "mechanism_ready": 3,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.2141960710287094
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6400.pt",
+    "seed": 0,
+    "update": 6400,
+    "dev_ready": 15,
+    "dev_cases": 72,
+    "mechanism_ready": 12,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.08863438665866852
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6425.pt",
+    "seed": 0,
+    "update": 6425,
+    "dev_ready": 0,
+    "dev_cases": 72,
+    "mechanism_ready": 3,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.10738588869571686
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6450.pt",
+    "seed": 0,
+    "update": 6450,
+    "dev_ready": 36,
+    "dev_cases": 72,
+    "mechanism_ready": 12,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.10067567974328995
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6475.pt",
+    "seed": 0,
+    "update": 6475,
+    "dev_ready": 0,
+    "dev_cases": 72,
+    "mechanism_ready": 0,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.13710662722587585
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6500.pt",
+    "seed": 0,
+    "update": 6500,
+    "dev_ready": 72,
+    "dev_cases": 72,
+    "mechanism_ready": 6,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.008391504175961018
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6525.pt",
+    "seed": 0,
+    "update": 6525,
+    "dev_ready": 72,
+    "dev_cases": 72,
+    "mechanism_ready": 9,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.007619351148605347
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6550.pt",
+    "seed": 0,
+    "update": 6550,
+    "dev_ready": 36,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.07442161440849304
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6575.pt",
+    "seed": 0,
+    "update": 6575,
+    "dev_ready": 60,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.024365657940506935
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6600.pt",
+    "seed": 0,
+    "update": 6600,
+    "dev_ready": 72,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.0049436637200415134
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6625.pt",
+    "seed": 0,
+    "update": 6625,
+    "dev_ready": 54,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.03441494703292847
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6650.pt",
+    "seed": 0,
+    "update": 6650,
+    "dev_ready": 72,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.0055572339333593845
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6675.pt",
+    "seed": 0,
+    "update": 6675,
+    "dev_ready": 42,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.06886095553636551
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6700.pt",
+    "seed": 0,
+    "update": 6700,
+    "dev_ready": 69,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.014801369979977608
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6725.pt",
+    "seed": 0,
+    "update": 6725,
+    "dev_ready": 72,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.004461755510419607
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6750.pt",
+    "seed": 0,
+    "update": 6750,
+    "dev_ready": 54,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.03420989587903023
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6775.pt",
+    "seed": 0,
+    "update": 6775,
+    "dev_ready": 60,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.028747716918587685
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6800.pt",
+    "seed": 0,
+    "update": 6800,
+    "dev_ready": 42,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.0586257129907608
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6825.pt",
+    "seed": 0,
+    "update": 6825,
+    "dev_ready": 60,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.025051742792129517
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6850.pt",
+    "seed": 0,
+    "update": 6850,
+    "dev_ready": 42,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.0655895322561264
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6875.pt",
+    "seed": 0,
+    "update": 6875,
+    "dev_ready": 72,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.004431476350873709
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6900.pt",
+    "seed": 0,
+    "update": 6900,
+    "dev_ready": 72,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.004808247089385986
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6925.pt",
+    "seed": 0,
+    "update": 6925,
+    "dev_ready": 69,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.013427011668682098
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6950.pt",
+    "seed": 0,
+    "update": 6950,
+    "dev_ready": 66,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.020437709987163544
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6975.pt",
+    "seed": 0,
+    "update": 6975,
+    "dev_ready": 72,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.004570484161376953
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_7000.pt",
+    "seed": 0,
+    "update": 7000,
+    "dev_ready": 69,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.0135847432538867
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_7025.pt",
+    "seed": 0,
+    "update": 7025,
+    "dev_ready": 72,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.004877428058534861
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_7050.pt",
+    "seed": 0,
+    "update": 7050,
+    "dev_ready": 72,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.004857460502535105
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_7075.pt",
+    "seed": 0,
+    "update": 7075,
+    "dev_ready": 69,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.01347217708826065
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6225.pt",
+    "seed": 1,
+    "update": 6225,
+    "dev_ready": 57,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.039538972079753876
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6250.pt",
+    "seed": 1,
+    "update": 6250,
+    "dev_ready": 0,
+    "dev_cases": 72,
+    "mechanism_ready": 0,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.16606394946575165
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6275.pt",
+    "seed": 1,
+    "update": 6275,
+    "dev_ready": 54,
+    "dev_cases": 72,
+    "mechanism_ready": 12,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.045127224177122116
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6300.pt",
+    "seed": 1,
+    "update": 6300,
+    "dev_ready": 69,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.011821831576526165
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6325.pt",
+    "seed": 1,
+    "update": 6325,
+    "dev_ready": 18,
+    "dev_cases": 72,
+    "mechanism_ready": 6,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.07848957180976868
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6350.pt",
+    "seed": 1,
+    "update": 6350,
+    "dev_ready": 45,
+    "dev_cases": 72,
+    "mechanism_ready": 9,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.0335843563079834
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6375.pt",
+    "seed": 1,
+    "update": 6375,
+    "dev_ready": 42,
+    "dev_cases": 72,
+    "mechanism_ready": 12,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.04150864854454994
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6400.pt",
+    "seed": 1,
+    "update": 6400,
+    "dev_ready": 36,
+    "dev_cases": 72,
+    "mechanism_ready": 9,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.045963484793901443
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6425.pt",
+    "seed": 1,
+    "update": 6425,
+    "dev_ready": 36,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.06607367098331451
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6450.pt",
+    "seed": 1,
+    "update": 6450,
+    "dev_ready": 42,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.059851400554180145
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6475.pt",
+    "seed": 1,
+    "update": 6475,
+    "dev_ready": 72,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.00830163061618805
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6500.pt",
+    "seed": 1,
+    "update": 6500,
+    "dev_ready": 36,
+    "dev_cases": 72,
+    "mechanism_ready": 12,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.05123600736260414
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6525.pt",
+    "seed": 1,
+    "update": 6525,
+    "dev_ready": 66,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.013875146396458149
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6550.pt",
+    "seed": 1,
+    "update": 6550,
+    "dev_ready": 0,
+    "dev_cases": 72,
+    "mechanism_ready": 0,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.1613636612892151
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6575.pt",
+    "seed": 1,
+    "update": 6575,
+    "dev_ready": 0,
+    "dev_cases": 72,
+    "mechanism_ready": 0,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.11768698692321777
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6600.pt",
+    "seed": 1,
+    "update": 6600,
+    "dev_ready": 30,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.06277874112129211
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6625.pt",
+    "seed": 1,
+    "update": 6625,
+    "dev_ready": 54,
+    "dev_cases": 72,
+    "mechanism_ready": 12,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.04001455754041672
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6650.pt",
+    "seed": 1,
+    "update": 6650,
+    "dev_ready": 63,
+    "dev_cases": 72,
+    "mechanism_ready": 12,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.02481105923652649
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6675.pt",
+    "seed": 1,
+    "update": 6675,
+    "dev_ready": 36,
+    "dev_cases": 72,
+    "mechanism_ready": 9,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.06822879612445831
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6700.pt",
+    "seed": 1,
+    "update": 6700,
+    "dev_ready": 24,
+    "dev_cases": 72,
+    "mechanism_ready": 6,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.09411266446113586
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6725.pt",
+    "seed": 1,
+    "update": 6725,
+    "dev_ready": 72,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.007678752299398184
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6750.pt",
+    "seed": 1,
+    "update": 6750,
+    "dev_ready": 18,
+    "dev_cases": 72,
+    "mechanism_ready": 3,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.11224954575300217
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6775.pt",
+    "seed": 1,
+    "update": 6775,
+    "dev_ready": 54,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.02716662548482418
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6800.pt",
+    "seed": 1,
+    "update": 6800,
+    "dev_ready": 45,
+    "dev_cases": 72,
+    "mechanism_ready": 9,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.05752022936940193
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6825.pt",
+    "seed": 1,
+    "update": 6825,
+    "dev_ready": 63,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.026865145191550255
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6850.pt",
+    "seed": 1,
+    "update": 6850,
+    "dev_ready": 54,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.044030316174030304
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6875.pt",
+    "seed": 1,
+    "update": 6875,
+    "dev_ready": 72,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.007004216313362122
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6900.pt",
+    "seed": 1,
+    "update": 6900,
+    "dev_ready": 63,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.017594531178474426
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6925.pt",
+    "seed": 1,
+    "update": 6925,
+    "dev_ready": 54,
+    "dev_cases": 72,
+    "mechanism_ready": 9,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.04551131650805473
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6950.pt",
+    "seed": 1,
+    "update": 6950,
+    "dev_ready": 45,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.041240036487579346
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_6975.pt",
+    "seed": 1,
+    "update": 6975,
+    "dev_ready": 66,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.014309351332485676
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_7000.pt",
+    "seed": 1,
+    "update": 7000,
+    "dev_ready": 72,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.007223551627248526
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_7025.pt",
+    "seed": 1,
+    "update": 7025,
+    "dev_ready": 66,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.014494453556835651
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_7050.pt",
+    "seed": 1,
+    "update": 7050,
+    "dev_ready": 72,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.007919241674244404
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_7075.pt",
+    "seed": 1,
+    "update": 7075,
+    "dev_ready": 72,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.0071321032010018826
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_7100.pt",
+    "seed": 1,
+    "update": 7100,
+    "dev_ready": 66,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.015479038469493389
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_7125.pt",
+    "seed": 1,
+    "update": 7125,
+    "dev_ready": 69,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.010996018536388874
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_7150.pt",
+    "seed": 1,
+    "update": 7150,
+    "dev_ready": 69,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.011331017129123211
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_7175.pt",
+    "seed": 1,
+    "update": 7175,
+    "dev_ready": 69,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.011566082946956158
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_7200.pt",
+    "seed": 1,
+    "update": 7200,
+    "dev_ready": 69,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.011506800539791584
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_7225.pt",
+    "seed": 1,
+    "update": 7225,
+    "dev_ready": 72,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.007669722195714712
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5200.pt",
+    "seed": 2,
+    "update": 5200,
+    "dev_ready": 0,
+    "dev_cases": 72,
+    "mechanism_ready": 0,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.22392667829990387
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5225.pt",
+    "seed": 2,
+    "update": 5225,
+    "dev_ready": 36,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.15985992550849915
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5250.pt",
+    "seed": 2,
+    "update": 5250,
+    "dev_ready": 0,
+    "dev_cases": 72,
+    "mechanism_ready": 0,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.17849211394786835
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5275.pt",
+    "seed": 2,
+    "update": 5275,
+    "dev_ready": 36,
+    "dev_cases": 72,
+    "mechanism_ready": 12,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.11955367028713226
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5300.pt",
+    "seed": 2,
+    "update": 5300,
+    "dev_ready": 0,
+    "dev_cases": 72,
+    "mechanism_ready": 0,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.2948053181171417
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5325.pt",
+    "seed": 2,
+    "update": 5325,
+    "dev_ready": 0,
+    "dev_cases": 72,
+    "mechanism_ready": 9,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.31939151883125305
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5350.pt",
+    "seed": 2,
+    "update": 5350,
+    "dev_ready": 0,
+    "dev_cases": 72,
+    "mechanism_ready": 0,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.23231495916843414
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5375.pt",
+    "seed": 2,
+    "update": 5375,
+    "dev_ready": 0,
+    "dev_cases": 72,
+    "mechanism_ready": 0,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.36049535870552063
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5400.pt",
+    "seed": 2,
+    "update": 5400,
+    "dev_ready": 0,
+    "dev_cases": 72,
+    "mechanism_ready": 0,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.22822676599025726
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5425.pt",
+    "seed": 2,
+    "update": 5425,
+    "dev_ready": 0,
+    "dev_cases": 72,
+    "mechanism_ready": 9,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.25040265917778015
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5450.pt",
+    "seed": 2,
+    "update": 5450,
+    "dev_ready": 3,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.23817048966884613
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5475.pt",
+    "seed": 2,
+    "update": 5475,
+    "dev_ready": 45,
+    "dev_cases": 72,
+    "mechanism_ready": 12,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.0987640768289566
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5500.pt",
+    "seed": 2,
+    "update": 5500,
+    "dev_ready": 39,
+    "dev_cases": 72,
+    "mechanism_ready": 18,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.09157118946313858
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5525.pt",
+    "seed": 2,
+    "update": 5525,
+    "dev_ready": 0,
+    "dev_cases": 72,
+    "mechanism_ready": 0,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.16851088404655457
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5550.pt",
+    "seed": 2,
+    "update": 5550,
+    "dev_ready": 0,
+    "dev_cases": 72,
+    "mechanism_ready": 3,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.20717176795005798
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5575.pt",
+    "seed": 2,
+    "update": 5575,
+    "dev_ready": 12,
+    "dev_cases": 72,
+    "mechanism_ready": 0,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.14112231135368347
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5600.pt",
+    "seed": 2,
+    "update": 5600,
+    "dev_ready": 0,
+    "dev_cases": 72,
+    "mechanism_ready": 0,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.17491132020950317
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5625.pt",
+    "seed": 2,
+    "update": 5625,
+    "dev_ready": 12,
+    "dev_cases": 72,
+    "mechanism_ready": 0,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.15913046896457672
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5650.pt",
+    "seed": 2,
+    "update": 5650,
+    "dev_ready": 0,
+    "dev_cases": 72,
+    "mechanism_ready": 0,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.1765691339969635
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5675.pt",
+    "seed": 2,
+    "update": 5675,
+    "dev_ready": 12,
+    "dev_cases": 72,
+    "mechanism_ready": 12,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.23637284338474274
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5700.pt",
+    "seed": 2,
+    "update": 5700,
+    "dev_ready": 3,
+    "dev_cases": 72,
+    "mechanism_ready": 9,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.23881594836711884
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5725.pt",
+    "seed": 2,
+    "update": 5725,
+    "dev_ready": 24,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.1563926488161087
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5750.pt",
+    "seed": 2,
+    "update": 5750,
+    "dev_ready": 24,
+    "dev_cases": 72,
+    "mechanism_ready": 12,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.12452014535665512
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5775.pt",
+    "seed": 2,
+    "update": 5775,
+    "dev_ready": 0,
+    "dev_cases": 72,
+    "mechanism_ready": 6,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.19063594937324524
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5800.pt",
+    "seed": 2,
+    "update": 5800,
+    "dev_ready": 0,
+    "dev_cases": 72,
+    "mechanism_ready": 9,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.164279505610466
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5825.pt",
+    "seed": 2,
+    "update": 5825,
+    "dev_ready": 27,
+    "dev_cases": 72,
+    "mechanism_ready": 12,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.1271103173494339
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5850.pt",
+    "seed": 2,
+    "update": 5850,
+    "dev_ready": 36,
+    "dev_cases": 72,
+    "mechanism_ready": 12,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.1104067862033844
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5875.pt",
+    "seed": 2,
+    "update": 5875,
+    "dev_ready": 0,
+    "dev_cases": 72,
+    "mechanism_ready": 6,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.17578159272670746
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5900.pt",
+    "seed": 2,
+    "update": 5900,
+    "dev_ready": 27,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.13019143044948578
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5925.pt",
+    "seed": 2,
+    "update": 5925,
+    "dev_ready": 0,
+    "dev_cases": 72,
+    "mechanism_ready": 0,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.17547424137592316
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5950.pt",
+    "seed": 2,
+    "update": 5950,
+    "dev_ready": 3,
+    "dev_cases": 72,
+    "mechanism_ready": 6,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.19682928919792175
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_5975.pt",
+    "seed": 2,
+    "update": 5975,
+    "dev_ready": 24,
+    "dev_cases": 72,
+    "mechanism_ready": 12,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.1472976803779602
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_6000.pt",
+    "seed": 2,
+    "update": 6000,
+    "dev_ready": 6,
+    "dev_cases": 72,
+    "mechanism_ready": 6,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.17347243428230286
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_6025.pt",
+    "seed": 2,
+    "update": 6025,
+    "dev_ready": 9,
+    "dev_cases": 72,
+    "mechanism_ready": 6,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.18426889181137085
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_6050.pt",
+    "seed": 2,
+    "update": 6050,
+    "dev_ready": 18,
+    "dev_cases": 72,
+    "mechanism_ready": 9,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.16636674106121063
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_6075.pt",
+    "seed": 2,
+    "update": 6075,
+    "dev_ready": 18,
+    "dev_cases": 72,
+    "mechanism_ready": 9,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.17108994722366333
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_6100.pt",
+    "seed": 2,
+    "update": 6100,
+    "dev_ready": 24,
+    "dev_cases": 72,
+    "mechanism_ready": 12,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.14360059797763824
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_6125.pt",
+    "seed": 2,
+    "update": 6125,
+    "dev_ready": 12,
+    "dev_cases": 72,
+    "mechanism_ready": 6,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.17116986215114594
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_6150.pt",
+    "seed": 2,
+    "update": 6150,
+    "dev_ready": 18,
+    "dev_cases": 72,
+    "mechanism_ready": 9,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.16543136537075043
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_6175.pt",
+    "seed": 2,
+    "update": 6175,
+    "dev_ready": 18,
+    "dev_cases": 72,
+    "mechanism_ready": 9,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.16582243144512177
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_6200.pt",
+    "seed": 2,
+    "update": 6200,
+    "dev_ready": 3,
+    "dev_cases": 72,
+    "mechanism_ready": 6,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.19310630857944489
+  }
+]

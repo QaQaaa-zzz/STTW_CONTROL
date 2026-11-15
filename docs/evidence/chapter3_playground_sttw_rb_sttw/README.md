@@ -22,7 +22,7 @@ E2/E3同50张冻结新布局、四新初态；分别600方法条件、484/312条
 |P1 完整快照与续接|完整snapshot/planner续接与地面100=40+60已实测；固定顺序数值版本通过有限重复基准，原生版本超界保留；[边界与证据](taskbook_20261115/p1_snapshots/RESULTS.md)|
 |P2 真实跨阶段案例|原两图36格未找到机制；DEV地图48两根发现并冻结重复确认，配对视频/状态/占据图完成；[证据与范围](taskbook_20261115/p2_oracle_wall/README.md)|
 |P3 单段世界模型|单段训练与诊断完成：RB三种子累计2400、短事件读出、真实GPU续接及决策误差齐备；保留固定时序更优/旧裕量无计划负结果；[证据与P4入口](taskbook_20261115/p3_world_model/README.md)|
-|P4 全链预测规划|全链C/I/G/Oracle、同候选强回溯、直接/残差对照和DEV标定均已实现并实测，但可靠规划仍未验收。[最新余弦续训](taskbook_20261115/p4_sequence/cosine/README.md)改善loss但未改善自标定规划；[交回互换诊断](taskbook_20261115/p4_sequence/departure_interchange/README.md)定位物理状态及事件时刻误差。[阶段索引与历史负结果](taskbook_20261115/p4_sequence/README.md)|
+|P4 全链预测规划|全链C/I/G/Oracle、同候选强回溯、直接/残差对照和DEV标定均已实现并实测，但可靠规划仍未验收。[最新阶段顺序续训](taskbook_20261115/p4_sequence/phase_order/README.md)原始包络选路2/2，但仍误准入且自标定无计划；[交回互换诊断](taskbook_20261115/p4_sequence/departure_interchange/README.md)定位物理状态及事件时刻误差。[阶段索引与历史负结果](taskbook_20261115/p4_sequence/README.md)|
 |P5 α与RB融合|先采集验证，再比较固定α/选速/选速+α及源跳跃/RB；未完成|
 |P6 落地更新与任务重配置|保留历史与承诺前缀；C-R及任务组合泛化未完成|
 |P7 可选LLM|仅P0–P6稳定且确需复杂任务结构时考虑|

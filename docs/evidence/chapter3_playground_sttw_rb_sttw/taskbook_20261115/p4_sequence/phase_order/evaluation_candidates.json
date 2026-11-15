@@ -1,0 +1,62 @@
+[
+  {
+    "name": "ordered_s0_u6600",
+    "arm": "ordered",
+    "seed": 0,
+    "update": 6600,
+    "best": true,
+    "last": false,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6600.pt",
+    "sha256": "a940bfa58928cd6369ec8ebf566126c42ee447b65acdc67b26249c861b7fde1c"
+  },
+  {
+    "name": "ordered_s0_u7075",
+    "arm": "ordered",
+    "seed": 0,
+    "update": 7075,
+    "best": false,
+    "last": true,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_7075.pt",
+    "sha256": "12ae70b2c9991437e6d3a9126927f8a84791bf5b4b2236df7f9460f04a939cdb"
+  },
+  {
+    "name": "ordered_s1_u7175",
+    "arm": "ordered",
+    "seed": 1,
+    "update": 7175,
+    "best": true,
+    "last": false,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_7175.pt",
+    "sha256": "32fff0d03881fa5a846e1a823d0735f8d692eff0371115709348267a040b06b2"
+  },
+  {
+    "name": "ordered_s1_u7225",
+    "arm": "ordered",
+    "seed": 1,
+    "update": 7225,
+    "best": false,
+    "last": true,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed1/model_7225.pt",
+    "sha256": "be03f0c4c36644768543bd91fd00441d3a0a4d8572c0563d4ef79320ad0743e3"
+  },
+  {
+    "name": "ordered_s2_u6100",
+    "arm": "ordered",
+    "seed": 2,
+    "update": 6100,
+    "best": true,
+    "last": false,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_6100.pt",
+    "sha256": "f3f2ccac3dccc64c4913426f08b38bb657f10eb9a2fe9b82ce643643a3aa8ad2"
+  },
+  {
+    "name": "ordered_s2_u6200",
+    "arm": "ordered",
+    "seed": 2,
+    "update": 6200,
+    "best": false,
+    "last": true,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed2/model_6200.pt",
+    "sha256": "3183a37ea1c13723dbf2f360434e3f873da3be363ee7f3b2881356367405bdaf"
+  }
+]

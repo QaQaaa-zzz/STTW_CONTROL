@@ -1,0 +1,5 @@
+{
+  "budget": "123saved checkpoints x90cached entries;0training/physics;5min max",
+  "purpose": "Convergence diagnostics only; no replacement of prespecified best/last candidate selection",
+  "identities": "Same physical schema/geometry/gap/lock configuration across batch; originalcosine saved causal entries"
+}

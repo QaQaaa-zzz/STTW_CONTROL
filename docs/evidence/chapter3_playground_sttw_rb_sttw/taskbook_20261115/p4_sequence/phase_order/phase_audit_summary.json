@@ -1,0 +1,101 @@
+[
+  {
+    "group": 0,
+    "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_cosine/evaluation/cosine_s0_u6075/map06",
+    "cases": 36,
+    "events": 36,
+    "strict_sequence": 0,
+    "sequences": {
+      "[1, 0, 3, 4, 2]": 36
+    },
+    "replay_error": 0.0
+  },
+  {
+    "group": 1,
+    "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_cosine/evaluation/cosine_s0_u6075/map07",
+    "cases": 36,
+    "events": 36,
+    "strict_sequence": 0,
+    "sequences": {
+      "[1, 0, 3, 4, 2]": 36
+    },
+    "replay_error": 0.0
+  },
+  {
+    "group": 2,
+    "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_cosine/evaluation/cosine_s0_u6075/map48",
+    "cases": 18,
+    "events": 18,
+    "strict_sequence": 0,
+    "sequences": {
+      "[1, 0, 3, 4, 2]": 18
+    },
+    "replay_error": 0.0
+  },
+  {
+    "group": 3,
+    "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_cosine/evaluation/cosine_s1_u6225/map06",
+    "cases": 36,
+    "events": 36,
+    "strict_sequence": 0,
+    "sequences": {
+      "[1, 0, 2, 3, 4, 2]": 36
+    },
+    "replay_error": 0.0
+  },
+  {
+    "group": 4,
+    "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_cosine/evaluation/cosine_s1_u6225/map07",
+    "cases": 36,
+    "events": 36,
+    "strict_sequence": 0,
+    "sequences": {
+      "[1, 0, 2, 3, 4, 2]": 36
+    },
+    "replay_error": 0.0
+  },
+  {
+    "group": 5,
+    "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_cosine/evaluation/cosine_s1_u6225/map48",
+    "cases": 18,
+    "events": 15,
+    "strict_sequence": 0,
+    "sequences": {
+      "[1, 0, 2, 3, 4, 2]": 15
+    },
+    "replay_error": 0.0
+  },
+  {
+    "group": 6,
+    "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_cosine/evaluation/cosine_s2_u5200/map06",
+    "cases": 36,
+    "events": 9,
+    "strict_sequence": 0,
+    "sequences": {
+      "[1, 0, 3, 4, 2]": 9
+    },
+    "replay_error": 0.0
+  },
+  {
+    "group": 7,
+    "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_cosine/evaluation/cosine_s2_u5200/map07",
+    "cases": 36,
+    "events": 9,
+    "strict_sequence": 0,
+    "sequences": {
+      "[1, 0, 3, 4, 2]": 9
+    },
+    "replay_error": 0.0
+  },
+  {
+    "group": 8,
+    "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_cosine/evaluation/cosine_s2_u5200/map48",
+    "cases": 18,
+    "events": 15,
+    "strict_sequence": 0,
+    "sequences": {
+      "[1, 0, 3, 4, 2]": 15
+    },
+    "replay_error": 0.0
+  }
+]

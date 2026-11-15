@@ -1,0 +1,7 @@
+{
+  "question": "Do current accepted handoffs follow predicted phase1->3->4->2?",
+  "budget": "Replay3 best models x3maps,270knownDEV conditions, 0training/physics;max5min",
+  "change": "Diagnostics only; no gate, model, or physical changes",
+  "baseline": "Cosine best checkpoints with unchanged state guard; compare replay terminal to cached result",
+  "scope": "20ms predicted labels; not native5ms transition equivalence"
+}
