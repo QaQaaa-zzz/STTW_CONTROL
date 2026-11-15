@@ -1,0 +1,13 @@
+{
+  "question": "Does direct-ground structure fix current causal P4 failures under identical RB and guards?",
+  "budget": "6 GPU batched queries, 180 method conditions, no new training or physics; timeout15min",
+  "maps": [
+    "map06",
+    "map07",
+    "map48"
+  ],
+  "roles": "Known DEV; reused actual outcomes, not independent TEST",
+  "residual_reference": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_cosine",
+  "selection": "Frozen existing direct ground models and matching history bridge; no new selection",
+  "invariants": "Same task, candidates, physics, frozen controllers, typical interfaces, RB, and handoff thresholds; ground models and matching bridge differ"
+}

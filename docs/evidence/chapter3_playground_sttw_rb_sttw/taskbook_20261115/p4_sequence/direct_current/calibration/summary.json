@@ -1,0 +1,98 @@
+[
+  {
+    "method": "C",
+    "margin": "raw",
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 4,
+    "true_reject": 14
+  },
+  {
+    "method": "C",
+    "margin": "own",
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 4,
+    "true_reject": 14
+  },
+  {
+    "method": "C",
+    "margin": "shared",
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 4,
+    "true_reject": 14
+  },
+  {
+    "method": "C",
+    "margin": "cross",
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 4,
+    "true_reject": 14
+  },
+  {
+    "method": "C",
+    "margin": "structure_cross",
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 4,
+    "true_reject": 14
+  },
+  {
+    "method": "C",
+    "margin": "shared_all",
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 4,
+    "true_reject": 14
+  },
+  {
+    "method": "I",
+    "margin": "raw",
+    "true_admit": 4,
+    "false_admit": 0,
+    "false_reject": 0,
+    "true_reject": 14
+  },
+  {
+    "method": "I",
+    "margin": "own",
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 4,
+    "true_reject": 14
+  },
+  {
+    "method": "I",
+    "margin": "shared",
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 4,
+    "true_reject": 14
+  },
+  {
+    "method": "I",
+    "margin": "cross",
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 4,
+    "true_reject": 14
+  },
+  {
+    "method": "I",
+    "margin": "structure_cross",
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 4,
+    "true_reject": 14
+  },
+  {
+    "method": "I",
+    "margin": "shared_all",
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 4,
+    "true_reject": 14
+  }
+]

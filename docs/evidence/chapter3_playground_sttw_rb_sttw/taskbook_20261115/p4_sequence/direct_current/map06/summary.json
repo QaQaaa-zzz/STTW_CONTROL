@@ -1,0 +1,38 @@
+{
+  "DirectC": {
+    "cases": 36,
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 36,
+    "true_reject": 0,
+    "scope": "C continuous predicted interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 4.122715765959583
+  },
+  "DirectI": {
+    "cases": 36,
+    "true_admit": 36,
+    "false_admit": 0,
+    "false_reject": 0,
+    "true_reject": 0,
+    "scope": "I independent TRAIN-typical interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.207452789065428
+  },
+  "ResidualC": {
+    "cases": 36,
+    "true_admit": 33,
+    "false_admit": 0,
+    "false_reject": 3,
+    "true_reject": 0,
+    "scope": "C continuous predicted interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.156055646017194
+  },
+  "ResidualI": {
+    "cases": 36,
+    "true_admit": 36,
+    "false_admit": 0,
+    "false_reject": 0,
+    "true_reject": 0,
+    "scope": "I independent TRAIN-typical interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.2348349950043485
+  }
+}

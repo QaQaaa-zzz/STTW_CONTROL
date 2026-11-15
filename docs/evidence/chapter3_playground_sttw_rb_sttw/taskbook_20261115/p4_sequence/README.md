@@ -1,6 +1,7 @@
 # P4 全链预测：当前结论与证据索引
 
 **当前仍未采用可靠规划器。** 最新[余弦学习率续训](cosine/README.md)完成3×2000监督更新和243存档筛查，loss改善但交回事件未稳定；按DEV选出的C在机制图选路0/2，各类标定后C/I均无计划。不能认定任务收敛。
+- [当前RB与门槛下直接/残差比较](direct_current/README.md)
 - [余弦续训、全部XY与失败](cosine/README.md)
 - [此前配对训练、全部XY与失败](handoff_focus/README.md)
 - [物理状态/历史互换与事件时刻诊断](departure_interchange/README.md)

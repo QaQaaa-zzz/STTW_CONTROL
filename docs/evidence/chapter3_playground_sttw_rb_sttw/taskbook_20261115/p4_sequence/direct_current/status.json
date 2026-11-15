@@ -1,0 +1,116 @@
+[
+  {
+    "map": "map06",
+    "method": "C",
+    "command": [
+      "/home/qy/mujoco_playground/.venv/bin/python",
+      "learning/cli/evaluate_skill_sequence.py",
+      "--selection",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_direct_current/selected_models.json",
+      "--history",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_direct/history_bridge/seed1/best.pt",
+      "--output",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_direct_current/map06/C",
+      "--evaluation",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation"
+    ],
+    "returncode": 0,
+    "seconds": 5.064345121383667
+  },
+  {
+    "map": "map06",
+    "method": "I",
+    "command": [
+      "/home/qy/mujoco_playground/.venv/bin/python",
+      "learning/cli/evaluate_skill_sequence.py",
+      "--selection",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_direct_current/selected_models.json",
+      "--history",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_direct/history_bridge/seed1/best.pt",
+      "--output",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_direct_current/map06/I",
+      "--evaluation",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation",
+      "--typical",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_typical/states.npz"
+    ],
+    "returncode": 0,
+    "seconds": 3.106623649597168
+  },
+  {
+    "map": "map07",
+    "method": "C",
+    "command": [
+      "/home/qy/mujoco_playground/.venv/bin/python",
+      "learning/cli/evaluate_skill_sequence.py",
+      "--selection",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_direct_current/selected_models.json",
+      "--history",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_direct/history_bridge/seed1/best.pt",
+      "--output",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_direct_current/map07/C",
+      "--evaluation",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation"
+    ],
+    "returncode": 0,
+    "seconds": 3.1907143592834473
+  },
+  {
+    "map": "map07",
+    "method": "I",
+    "command": [
+      "/home/qy/mujoco_playground/.venv/bin/python",
+      "learning/cli/evaluate_skill_sequence.py",
+      "--selection",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_direct_current/selected_models.json",
+      "--history",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_direct/history_bridge/seed1/best.pt",
+      "--output",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_direct_current/map07/I",
+      "--evaluation",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation",
+      "--typical",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_typical/states.npz"
+    ],
+    "returncode": 0,
+    "seconds": 3.0468482971191406
+  },
+  {
+    "map": "map48",
+    "method": "C",
+    "command": [
+      "/home/qy/mujoco_playground/.venv/bin/python",
+      "learning/cli/evaluate_skill_sequence.py",
+      "--selection",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_direct_current/selected_models.json",
+      "--history",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_direct/history_bridge/seed1/best.pt",
+      "--output",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_direct_current/map48/C",
+      "--oracle",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall"
+    ],
+    "returncode": 0,
+    "seconds": 3.469844341278076
+  },
+  {
+    "map": "map48",
+    "method": "I",
+    "command": [
+      "/home/qy/mujoco_playground/.venv/bin/python",
+      "learning/cli/evaluate_skill_sequence.py",
+      "--selection",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_direct_current/selected_models.json",
+      "--history",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_direct/history_bridge/seed1/best.pt",
+      "--output",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_direct_current/map48/I",
+      "--oracle",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall",
+      "--typical",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_typical/states.npz"
+    ],
+    "returncode": 0,
+    "seconds": 2.950899362564087
+  }
+]

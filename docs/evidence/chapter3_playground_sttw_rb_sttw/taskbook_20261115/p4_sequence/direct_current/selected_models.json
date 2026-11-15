@@ -1,0 +1,21 @@
+{
+  "role": "Known DEV direct-ground versus residual-ground comparison; same latest RB, current event guard; each ground architecture has its own frozen matching history bridge",
+  "models": {
+    "approach": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_approach_models_continue/direct_seed0/best.pt",
+      "sha256": "f84d362119fe37db59ea5065d7d95aa0db438171911ef5e494032c117ebdbfe7"
+    },
+    "jump": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_cosine/training/seed1/model_6225.pt",
+      "sha256": "a716eb5c3f742a4a6d3d0d316ed4107d98177637c33ebf90ec8558e420e6d0c4"
+    },
+    "departure": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/direct_seed0/best.pt",
+      "sha256": "adf6621aed5097e3072920cfbdd3d0e5db1ddc44c8e1f45b679e7fec9bdbc917"
+    },
+    "events": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p3_events/seed1/best.pt",
+      "sha256": "7c4c9028a890f54519d7ff20d384d75fbd3b711d7bb05989bac1028ab80ea24e"
+    }
+  }
+}
