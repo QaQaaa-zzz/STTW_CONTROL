@@ -1,0 +1,90 @@
+[
+  {
+    "map_id": 0,
+    "upstream": 1,
+    "variant": 0,
+    "equal": {
+      "qpos": true,
+      "qvel": true,
+      "controller_state": true,
+      "rb_state": true
+    }
+  },
+  {
+    "map_id": 0,
+    "upstream": 1,
+    "variant": 2,
+    "equal": {
+      "qpos": true,
+      "qvel": true,
+      "controller_state": true,
+      "rb_state": true
+    }
+  },
+  {
+    "map_id": 0,
+    "upstream": 2,
+    "variant": 0,
+    "equal": {
+      "qpos": true,
+      "qvel": true,
+      "controller_state": true,
+      "rb_state": true
+    }
+  },
+  {
+    "map_id": 0,
+    "upstream": 2,
+    "variant": 2,
+    "equal": {
+      "qpos": true,
+      "qvel": true,
+      "controller_state": true,
+      "rb_state": true
+    }
+  },
+  {
+    "map_id": 47,
+    "upstream": 1,
+    "variant": 0,
+    "equal": {
+      "qpos": true,
+      "qvel": true,
+      "controller_state": true,
+      "rb_state": true
+    }
+  },
+  {
+    "map_id": 47,
+    "upstream": 1,
+    "variant": 2,
+    "equal": {
+      "qpos": true,
+      "qvel": true,
+      "controller_state": true,
+      "rb_state": true
+    }
+  },
+  {
+    "map_id": 47,
+    "upstream": 2,
+    "variant": 0,
+    "equal": {
+      "qpos": true,
+      "qvel": true,
+      "controller_state": true,
+      "rb_state": true
+    }
+  },
+  {
+    "map_id": 47,
+    "upstream": 2,
+    "variant": 2,
+    "equal": {
+      "qpos": true,
+      "qvel": true,
+      "controller_state": true,
+      "rb_state": true
+    }
+  }
+]

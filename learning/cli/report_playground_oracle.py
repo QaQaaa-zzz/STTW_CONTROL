@@ -8,7 +8,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('--root',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();a.output.mkdir(exist_ok=True,parents=True)
-manifest=json.loads((a.root/'manifest.json').read_text());departures=json.loads((a.root/'departure_branches.json').read_text())['entries'];rows=[];clearance_cache={};fig,axes=plt.subplots(2,2,figsize=(15,8),layout='constrained')
+manifest=json.loads((a.root/'manifest.json').read_text());departures=json.loads((a.root/'departure_branches.json').read_text())['entries'];rows=[];clearance_cache={};fig,axes=plt.subplots(2*len(manifest['entries']),1,figsize=(14,5*len(manifest['entries'])),squeeze=False,layout='constrained');axes=axes.reshape(len(manifest['entries']),2)
 for mi,map_entry in enumerate(manifest['entries']):
  mid=map_entry['map_id'];folder=a.root/f'map{mid:02d}';model=mujoco.MjModel.from_binary_path(str(folder/'base/terrain.mjb'))
  for up in range(3):
@@ -31,12 +31,12 @@ for mi,map_entry in enumerate(manifest['entries']):
      witnesses.append(clearance_cache[suffix_path])
     witness=min((w for w in witnesses if w is not None),key=lambda w:w['distance_m'],default=None)
     rows.append(dict(map_id=mid,root=root,upstream=up,downstream=down,approach_handoff=parent['handoff_s'] is not None,success=actual['goal'],failure_stage=phase,termination=actual['termination'],duration_s=actual['duration_s'],prefix_trajectory=str(source/parent['case_dir']/'trajectory.npz'),suffix_trajectory=suffix_path or '',min_obstacle_distance_m=witness['distance_m'] if witness else None,clearance_time_s=witness['time_s'] if witness else None,clearance_geometry=witness['geometry'] if witness else None,clearance_obstacle=witness['obstacle'] if witness else None,clearance_status='native geometry at recorded 5ms poses; obstacle-only, not continuous bound'))
-    line,=ax.plot(xy[:,0],xy[:,1],alpha=.7,label=f'{up}→{down}: {"OK" if actual["goal"] else actual["termination"]}');ax.plot(reference[:,0],reference[:,1],':',color=line.get_color(),alpha=.3);ax.plot(*xy[-1],marker='o' if actual['goal'] else 'x',ms=3)
-   ax.set(title=f'DEV map{mid:02d} root{root}',xlabel='World x (m), travel →',ylabel='World y (m)');ax.set_aspect('equal',adjustable='datalim')
+    line,=ax.plot(xy[:,0],xy[:,1],alpha=.7,label=f'{up}→{down}: {"OK" if actual["goal"] else 'FAIL'}');ax.plot(reference[:,0],reference[:,1],':',color=line.get_color(),alpha=.3);ax.plot(*xy[-1],marker='o' if actual['goal'] else 'x',ms=3)
+   ax.set(title=f'DEV map{mid:02d} root{root}',xlabel='World x (m), travel →',ylabel='World y (m)');ax.set(xlim=(1,19),ylim=(-1.,1.1));ax.set_aspect('equal',adjustable='box')
  for ri in range(2):
   ax=axes[mi,ri];world=json.loads(Path(json.loads(Path(map_entry['config']).read_text())['world_map']).read_text());ax.axvspan(10.3,10.6,color='gray',alpha=.2)
   for x0,x1,y0,y1 in world['terrain']['forbidden_rectangles']:ax.add_patch(plt.Rectangle((x0,y0),x1-x0,y1-y0,color='red',alpha=.4))
-  ax.legend(fontsize=6,ncol=2)
+  ax.legend(fontsize=7,ncol=3,loc='upper left')
 fig.savefig(a.output/'oracle_xy.png',dpi=160)
 with (a.output/'oracle_matrix.csv').open('w') as f:
  w=csv.DictWriter(f,fieldnames=list(rows[0]));w.writeheader();w.writerows(rows)
