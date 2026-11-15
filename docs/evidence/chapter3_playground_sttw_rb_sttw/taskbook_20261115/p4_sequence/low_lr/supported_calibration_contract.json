@@ -1,0 +1,5 @@
+{
+  "change": "Exclude unsupported synthetic suffixes from calibration fit; keep no-event candidates rejected; preserve all previous calibration evidence",
+  "budget": "Two model pairs, same72 DEV fit conditions and18 mechanism evaluation; zero training/physics",
+  "margin_rule": "Unchanged maximum spatial-support miss+0.02m on valid-domain cases, exclusions explicitly reported; no manual reduction"
+}

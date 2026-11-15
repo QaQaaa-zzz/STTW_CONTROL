@@ -1,0 +1,152 @@
+[
+  {
+    "model": "seed0_update3475",
+    "dev_admit": 68,
+    "mechanism": {
+      "cases": 18,
+      "true_admit": 2,
+      "false_admit": 1,
+      "false_reject": 2,
+      "true_reject": 13,
+      "scope": "C continuous predicted interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+      "runtime_s": 2.1113839159952477
+    },
+    "decisions": [
+      {
+        "root": 1001,
+        "route": null,
+        "actual_success": false
+      },
+      {
+        "root": 1002,
+        "route": 1,
+        "actual_success": false
+      }
+    ]
+  },
+  {
+    "model": "seed0_update3425",
+    "dev_admit": 67,
+    "mechanism": {
+      "cases": 18,
+      "true_admit": 4,
+      "false_admit": 1,
+      "false_reject": 0,
+      "true_reject": 13,
+      "scope": "C continuous predicted interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+      "runtime_s": 2.1021014760481194
+    },
+    "decisions": [
+      {
+        "root": 1001,
+        "route": 3,
+        "actual_success": true
+      },
+      {
+        "root": 1002,
+        "route": 1,
+        "actual_success": false
+      }
+    ]
+  },
+  {
+    "model": "seed1_update2725",
+    "dev_admit": 69,
+    "mechanism": {
+      "cases": 18,
+      "true_admit": 2,
+      "false_admit": 1,
+      "false_reject": 2,
+      "true_reject": 13,
+      "scope": "C continuous predicted interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+      "runtime_s": 2.093185104895383
+    },
+    "decisions": [
+      {
+        "root": 1001,
+        "route": null,
+        "actual_success": false
+      },
+      {
+        "root": 1002,
+        "route": 3,
+        "actual_success": true
+      }
+    ]
+  },
+  {
+    "model": "seed1_update3450",
+    "dev_admit": 53,
+    "mechanism": {
+      "cases": 18,
+      "true_admit": 4,
+      "false_admit": 0,
+      "false_reject": 0,
+      "true_reject": 14,
+      "scope": "C continuous predicted interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+      "runtime_s": 2.0961209560045972
+    },
+    "decisions": [
+      {
+        "root": 1001,
+        "route": 3,
+        "actual_success": true
+      },
+      {
+        "root": 1002,
+        "route": 3,
+        "actual_success": true
+      }
+    ]
+  },
+  {
+    "model": "seed2_update2625",
+    "dev_admit": 11,
+    "mechanism": {
+      "cases": 18,
+      "true_admit": 0,
+      "false_admit": 0,
+      "false_reject": 4,
+      "true_reject": 14,
+      "scope": "C continuous predicted interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+      "runtime_s": 2.0864350060001016
+    },
+    "decisions": [
+      {
+        "root": 1001,
+        "route": null,
+        "actual_success": false
+      },
+      {
+        "root": 1002,
+        "route": null,
+        "actual_success": false
+      }
+    ]
+  },
+  {
+    "model": "seed2_update3250",
+    "dev_admit": 13,
+    "mechanism": {
+      "cases": 18,
+      "true_admit": 0,
+      "false_admit": 0,
+      "false_reject": 4,
+      "true_reject": 14,
+      "scope": "C continuous predicted interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+      "runtime_s": 2.1044920859858394
+    },
+    "decisions": [
+      {
+        "root": 1001,
+        "route": null,
+        "actual_success": false
+      },
+      {
+        "root": 1002,
+        "route": null,
+        "actual_success": false
+      }
+    ]
+  }
+]

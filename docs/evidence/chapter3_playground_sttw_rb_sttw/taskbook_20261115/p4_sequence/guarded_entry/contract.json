@@ -1,0 +1,8 @@
+{
+  "change": "Extend offline true-entry diagnostic to original DEV maps, compare with TRAIN-typical I under same state-event guard",
+  "models": "Original frozen RB; displacement S1/2550",
+  "budget": "2 models x3 maps x(true entry and I), 12 queries; max300s, zero training/physics",
+  "roles": "Known DEV; true entry is offline future-state intervention only, never planner input",
+  "clock": "Predicted approach clock retained in true-entry diagnostic; isolate state/history only",
+  "decision": "If true-entry also fails event check, RB modeling is independently insufficient; do not blame all error on upstream"
+}

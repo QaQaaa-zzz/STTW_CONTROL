@@ -1,0 +1,38 @@
+[
+  {
+    "seed": 0,
+    "update": 3475,
+    "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_low_lr/training/seed0/model_3475.pt",
+    "sha256": "02bcfea7e01c238bde13ef06cc0b2631fe5f478da4155bcc904876d0a3a84e92"
+  },
+  {
+    "seed": 0,
+    "update": 3425,
+    "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_low_lr/training/seed0/model_3425.pt",
+    "sha256": "2fbb1b9ac9deb7bd011fa798c5074d2d9ee13d859339da1a30fde2dcfe8ce5ef"
+  },
+  {
+    "seed": 1,
+    "update": 2725,
+    "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_low_lr/training/seed1/model_2725.pt",
+    "sha256": "bfbb8fb2cfa5b42d808c3920fedbac4085d01f66ac044e56215c5a5d9c6df197"
+  },
+  {
+    "seed": 1,
+    "update": 3450,
+    "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_low_lr/training/seed1/model_3450.pt",
+    "sha256": "c0d602052e162aa4e42f30bc42e7918cc42f6f68a7dbcf2ac8dfb9e65ae1318b"
+  },
+  {
+    "seed": 2,
+    "update": 2625,
+    "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_low_lr/training/seed2/model_2625.pt",
+    "sha256": "5170618d8d53fd1349de88d5c803d27c74d4eabf41daef312def6e87de423e3d"
+  },
+  {
+    "seed": 2,
+    "update": 3250,
+    "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_low_lr/training/seed2/model_3250.pt",
+    "sha256": "6f5b1c4c0282ea74840bde7ad04a310616108a1f276d011f50202bc096c8d75e"
+  }
+]

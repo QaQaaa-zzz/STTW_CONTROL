@@ -1,0 +1,10 @@
+{
+  "continuous": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_low_lr/evaluation/seed0_update3475/map48",
+  "independent": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_low_lr/independent/seed0_update3475/map48",
+  "oracle_matrix": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p2_oracle_wall/oracle_matrix.csv",
+  "routes": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/approach_departure_turns/routes.npz",
+  "scope": "Known DEV map48 18 candidate conditions, two task roots, no new physics. All G/I/C selection sees predicted gates/time only; true future solely scoring. Oracle uses actual outcomes as offline upper bound.",
+  "geometry": "Exact reference at1.8m/s, yaw tangent, level posture, initial locked joints and constant height; original goal hold and obstacle/world envelope gates. No dynamic prediction.",
+  "backtracking": "Full same-candidate/predictor/gate traversal, no greedy truncation; selection time excludes cached model queries.",
+  "calibration": "Raw envelopes, no newly calibrated margins; not formal P4 acceptance"
+}

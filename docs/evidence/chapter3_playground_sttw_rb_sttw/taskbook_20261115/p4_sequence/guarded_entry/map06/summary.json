@@ -1,0 +1,56 @@
+{
+  "C original": {
+    "cases": 36,
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 36,
+    "true_reject": 0,
+    "scope": "C continuous predicted interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.6240700680064037
+  },
+  "I original": {
+    "cases": 36,
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 36,
+    "true_reject": 0,
+    "scope": "I independent TRAIN-typical interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.2481349870795384
+  },
+  "True original": {
+    "cases": 36,
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 36,
+    "true_reject": 0,
+    "scope": "OFFLINE true-entry both intervention; NOT causal planning raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 4.1978590888902545
+  },
+  "C displacement": {
+    "cases": 36,
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 36,
+    "true_reject": 0,
+    "scope": "C continuous predicted interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.2212258020881563
+  },
+  "I displacement": {
+    "cases": 36,
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 36,
+    "true_reject": 0,
+    "scope": "I independent TRAIN-typical interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.1613333609420806
+  },
+  "True displacement": {
+    "cases": 36,
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 36,
+    "true_reject": 0,
+    "scope": "OFFLINE true-entry both intervention; NOT causal planning raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.386917272931896
+  }
+}

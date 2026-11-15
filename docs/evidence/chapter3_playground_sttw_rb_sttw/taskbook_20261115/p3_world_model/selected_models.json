@@ -15,8 +15,9 @@
     },
     "events": {
       "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p3_events/seed1/best.pt",
-      "sha256": "7c4c9028a890f54519d7ff20d384d75fbd3b711d7bb05989bac1028ab80ea24e"
+      "sha256": "7c4c9028a890f54519d7ff20d384d75fbd3b711d7bb05989bac1028ab80ea24e",
+      "usage": "P3 event diagnostic only; full-chain stopping uses world-model phase plus state-event guard"
     }
   },
-  "missing": "Ground latent-to-controller-history bridge, full-chain calibration and G/I/C/Oracle validation"
+  "missing": "Reliable state-consistent full-chain prediction and planner adoption; history bridge, calibration and G/I/C/Oracle diagnostics have been implemented but did not establish reliability"
 }

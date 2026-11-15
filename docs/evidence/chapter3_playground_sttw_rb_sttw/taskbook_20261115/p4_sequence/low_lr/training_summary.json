@@ -1,0 +1,38 @@
+[
+  {
+    "seed": 0,
+    "initial_update": 2475,
+    "initial_loss": 27.727951049804688,
+    "best_update": 3475,
+    "best_loss": 2.890026807785034,
+    "last_update": 3475,
+    "last_loss": 2.890026807785034,
+    "last10_min": 2.890026807785034,
+    "last10_max": 17.49505615234375,
+    "wall_s": 76.27627095300704
+  },
+  {
+    "seed": 1,
+    "initial_update": 2450,
+    "initial_loss": 43.81948471069336,
+    "best_update": 3450,
+    "best_loss": 2.484600305557251,
+    "last_update": 3450,
+    "last_loss": 2.484600305557251,
+    "last10_min": 2.484600305557251,
+    "last10_max": 9.878396987915039,
+    "wall_s": 77.04212983709294
+  },
+  {
+    "seed": 2,
+    "initial_update": 2250,
+    "initial_loss": 18.09201955795288,
+    "best_update": 2625,
+    "best_loss": 3.474750518798828,
+    "last_update": 3250,
+    "last_loss": 5.2041685581207275,
+    "last10_min": 3.749290108680725,
+    "last10_max": 17.31638526916504,
+    "wall_s": 76.57555631699506
+  }
+]

@@ -1,0 +1,2280 @@
+[
+  {
+    "method": "C",
+    "margin": "raw",
+    "root": 1001,
+    "route": 0,
+    "stage": "departure",
+    "prediction_index": 309,
+    "geometry_index": 0,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.054849833250045776,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "own",
+    "root": 1001,
+    "route": 0,
+    "stage": "departure",
+    "prediction_index": 305,
+    "geometry_index": 3,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.22391038771612592,
+    "margin_xyz_m": [
+      0.1067585551355603,
+      0.23406851269822243,
+      0.13828035788486917
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "shared",
+    "root": 1001,
+    "route": 0,
+    "stage": "departure",
+    "prediction_index": 312,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.25273162387620296,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "cross",
+    "root": 1001,
+    "route": 0,
+    "stage": "departure",
+    "prediction_index": 312,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.25273162387620296,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "raw",
+    "root": 1001,
+    "route": 1,
+    "stage": "approach",
+    "prediction_index": 106,
+    "geometry_index": 0,
+    "constraint": "obstacle",
+    "constraint_index": 0,
+    "clearance_m": -0.00035544635223561105,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "own",
+    "root": 1001,
+    "route": 1,
+    "stage": "departure",
+    "prediction_index": 304,
+    "geometry_index": 3,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.15669314541440132,
+    "margin_xyz_m": [
+      0.1067585551355603,
+      0.23406851269822243,
+      0.13828035788486917
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "shared",
+    "root": 1001,
+    "route": 1,
+    "stage": "departure",
+    "prediction_index": 313,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.24871703647385957,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "cross",
+    "root": 1001,
+    "route": 1,
+    "stage": "departure",
+    "prediction_index": 313,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.24871703647385957,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "raw",
+    "root": 1001,
+    "route": 2,
+    "stage": "departure",
+    "prediction_index": 317,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.12578773498535156,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "own",
+    "root": 1001,
+    "route": 2,
+    "stage": "departure",
+    "prediction_index": 332,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.2741162526934211,
+    "margin_xyz_m": [
+      0.0398096534429979,
+      0.21995127766378633,
+      0.055644981379631406
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "shared",
+    "root": 1001,
+    "route": 2,
+    "stage": "departure",
+    "prediction_index": 332,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.29673670945475195,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "cross",
+    "root": 1001,
+    "route": 2,
+    "stage": "departure",
+    "prediction_index": 332,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.29673670945475195,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "raw",
+    "root": 1002,
+    "route": 0,
+    "stage": "departure",
+    "prediction_index": 308,
+    "geometry_index": 0,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.037323325872421265,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "own",
+    "root": 1002,
+    "route": 0,
+    "stage": "departure",
+    "prediction_index": 305,
+    "geometry_index": 3,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.22575517531378253,
+    "margin_xyz_m": [
+      0.1067585551355603,
+      0.23406851269822243,
+      0.13828035788486917
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "shared",
+    "root": 1002,
+    "route": 0,
+    "stage": "departure",
+    "prediction_index": 312,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.25811797641526546,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "cross",
+    "root": 1002,
+    "route": 0,
+    "stage": "departure",
+    "prediction_index": 312,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.25811797641526546,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "own",
+    "root": 1002,
+    "route": 1,
+    "stage": "departure",
+    "prediction_index": 306,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.14065938826544233,
+    "margin_xyz_m": [
+      0.1067585551355603,
+      0.23406851269822243,
+      0.13828035788486917
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "shared",
+    "root": 1002,
+    "route": 1,
+    "stage": "departure",
+    "prediction_index": 310,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.23956233524094905,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "cross",
+    "root": 1002,
+    "route": 1,
+    "stage": "departure",
+    "prediction_index": 310,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.23956233524094905,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "raw",
+    "root": 1002,
+    "route": 2,
+    "stage": "departure",
+    "prediction_index": 317,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.12539386749267578,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "own",
+    "root": 1002,
+    "route": 2,
+    "stage": "departure",
+    "prediction_index": 332,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.2768628347246711,
+    "margin_xyz_m": [
+      0.0398096534429979,
+      0.21995127766378633,
+      0.055644981379631406
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "shared",
+    "root": 1002,
+    "route": 2,
+    "stage": "departure",
+    "prediction_index": 332,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.29948329148600195,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "cross",
+    "root": 1002,
+    "route": 2,
+    "stage": "departure",
+    "prediction_index": 332,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.29948329148600195,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "own",
+    "root": 1001,
+    "route": 3,
+    "stage": "jump",
+    "prediction_index": 320,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.1339397990320439,
+    "margin_xyz_m": [
+      0.1067585551355603,
+      0.23406851269822243,
+      0.13828035788486917
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "shared",
+    "root": 1001,
+    "route": 3,
+    "stage": "jump",
+    "prediction_index": 324,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.23246737979661347,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "cross",
+    "root": 1001,
+    "route": 3,
+    "stage": "jump",
+    "prediction_index": 324,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.23246737979661347,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "own",
+    "root": 1001,
+    "route": 4,
+    "stage": "jump",
+    "prediction_index": 320,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.1339397990320439,
+    "margin_xyz_m": [
+      0.1067585551355603,
+      0.23406851269822243,
+      0.13828035788486917
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "shared",
+    "root": 1001,
+    "route": 4,
+    "stage": "jump",
+    "prediction_index": 324,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.23246737979661347,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "cross",
+    "root": 1001,
+    "route": 4,
+    "stage": "jump",
+    "prediction_index": 324,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.23246737979661347,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "own",
+    "root": 1001,
+    "route": 5,
+    "stage": "jump",
+    "prediction_index": 320,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.1339397990320439,
+    "margin_xyz_m": [
+      0.1067585551355603,
+      0.23406851269822243,
+      0.13828035788486917
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "shared",
+    "root": 1001,
+    "route": 5,
+    "stage": "jump",
+    "prediction_index": 324,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.23246737979661347,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "cross",
+    "root": 1001,
+    "route": 5,
+    "stage": "jump",
+    "prediction_index": 324,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.23246737979661347,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "own",
+    "root": 1002,
+    "route": 3,
+    "stage": "departure",
+    "prediction_index": 321,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.13614670910458687,
+    "margin_xyz_m": [
+      0.1067585551355603,
+      0.23406851269822243,
+      0.13828035788486917
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "shared",
+    "root": 1002,
+    "route": 3,
+    "stage": "departure",
+    "prediction_index": 325,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.23010644841304262,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "cross",
+    "root": 1002,
+    "route": 3,
+    "stage": "departure",
+    "prediction_index": 325,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.23010644841304262,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "own",
+    "root": 1002,
+    "route": 4,
+    "stage": "departure",
+    "prediction_index": 322,
+    "geometry_index": 0,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.08901363589387062,
+    "margin_xyz_m": [
+      0.1067585551355603,
+      0.23406851269822243,
+      0.13828035788486917
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "shared",
+    "root": 1002,
+    "route": 4,
+    "stage": "departure",
+    "prediction_index": 324,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.19737008014589413,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "cross",
+    "root": 1002,
+    "route": 4,
+    "stage": "departure",
+    "prediction_index": 324,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.19737008014589413,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "raw",
+    "root": 1002,
+    "route": 5,
+    "stage": "departure",
+    "prediction_index": 349,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.08152653954157926,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "own",
+    "root": 1002,
+    "route": 5,
+    "stage": "departure",
+    "prediction_index": 349,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.22786224385875076,
+    "margin_xyz_m": [
+      0.0398096534429979,
+      0.21995127766378633,
+      0.055644981379631406
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "shared",
+    "root": 1002,
+    "route": 5,
+    "stage": "departure",
+    "prediction_index": 347,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.29389633047294694,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "cross",
+    "root": 1002,
+    "route": 5,
+    "stage": "departure",
+    "prediction_index": 347,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.29389633047294694,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "raw",
+    "root": 1001,
+    "route": 6,
+    "stage": "jump",
+    "prediction_index": 324,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.15024112910032272,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "own",
+    "root": 1001,
+    "route": 6,
+    "stage": "departure",
+    "prediction_index": 342,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.26340839746881173,
+    "margin_xyz_m": [
+      0.0398096534429979,
+      0.21995127766378633,
+      0.055644981379631406
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "shared",
+    "root": 1001,
+    "route": 6,
+    "stage": "departure",
+    "prediction_index": 342,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.28602885423014257,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "cross",
+    "root": 1001,
+    "route": 6,
+    "stage": "departure",
+    "prediction_index": 342,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.28602885423014257,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "raw",
+    "root": 1001,
+    "route": 7,
+    "stage": "jump",
+    "prediction_index": 324,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.15024112910032272,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "own",
+    "root": 1001,
+    "route": 7,
+    "stage": "departure",
+    "prediction_index": 342,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.2587367793001494,
+    "margin_xyz_m": [
+      0.0398096534429979,
+      0.21995127766378633,
+      0.055644981379631406
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "shared",
+    "root": 1001,
+    "route": 7,
+    "stage": "departure",
+    "prediction_index": 342,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.299272192594529,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "cross",
+    "root": 1001,
+    "route": 7,
+    "stage": "departure",
+    "prediction_index": 342,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.299272192594529,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "raw",
+    "root": 1001,
+    "route": 8,
+    "stage": "jump",
+    "prediction_index": 324,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.15024112910032272,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "own",
+    "root": 1001,
+    "route": 8,
+    "stage": "departure",
+    "prediction_index": 342,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.2629592168657844,
+    "margin_xyz_m": [
+      0.0398096534429979,
+      0.21995127766378633,
+      0.055644981379631406
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "shared",
+    "root": 1001,
+    "route": 8,
+    "stage": "departure",
+    "prediction_index": 342,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.2855796736271152,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "cross",
+    "root": 1001,
+    "route": 8,
+    "stage": "departure",
+    "prediction_index": 342,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.2855796736271152,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "raw",
+    "root": 1002,
+    "route": 6,
+    "stage": "departure",
+    "prediction_index": 325,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.12787127494812012,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "own",
+    "root": 1002,
+    "route": 6,
+    "stage": "departure",
+    "prediction_index": 326,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.22630123822082915,
+    "margin_xyz_m": [
+      0.0398096534429979,
+      0.21995127766378633,
+      0.055644981379631406
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "shared",
+    "root": 1002,
+    "route": 6,
+    "stage": "departure",
+    "prediction_index": 342,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.3063131700725563,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "cross",
+    "root": 1002,
+    "route": 6,
+    "stage": "departure",
+    "prediction_index": 342,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.3063131700725563,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "raw",
+    "root": 1002,
+    "route": 7,
+    "stage": "departure",
+    "prediction_index": 322,
+    "geometry_index": 0,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.03417739868164027,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "own",
+    "root": 1002,
+    "route": 7,
+    "stage": "departure",
+    "prediction_index": 320,
+    "geometry_index": 3,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.21709738649945381,
+    "margin_xyz_m": [
+      0.1067585551355603,
+      0.23406851269822243,
+      0.13828035788486917
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "shared",
+    "root": 1002,
+    "route": 7,
+    "stage": "departure",
+    "prediction_index": 328,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.24378940128098847,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "cross",
+    "root": 1002,
+    "route": 7,
+    "stage": "departure",
+    "prediction_index": 328,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.24378940128098847,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "raw",
+    "root": 1002,
+    "route": 8,
+    "stage": "departure",
+    "prediction_index": 329,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.19289875030517578,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "own",
+    "root": 1002,
+    "route": 8,
+    "stage": "departure",
+    "prediction_index": 329,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.23270840374817325,
+    "margin_xyz_m": [
+      0.0398096534429979,
+      0.21995127766378633,
+      0.055644981379631406
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "shared",
+    "root": 1002,
+    "route": 8,
+    "stage": "departure",
+    "prediction_index": 345,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.296194685575486,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "C",
+    "margin": "cross",
+    "root": 1002,
+    "route": 8,
+    "stage": "departure",
+    "prediction_index": 345,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.296194685575486,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "raw",
+    "root": 1001,
+    "route": 0,
+    "stage": "departure",
+    "prediction_index": 360,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.09430018439888954,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "own",
+    "root": 1001,
+    "route": 0,
+    "stage": "departure",
+    "prediction_index": 380,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.29462939978638847,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "shared",
+    "root": 1001,
+    "route": 0,
+    "stage": "departure",
+    "prediction_index": 380,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.29462939978638847,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "cross",
+    "root": 1001,
+    "route": 0,
+    "stage": "departure",
+    "prediction_index": 365,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.22181553570618107,
+    "margin_xyz_m": [
+      0.0398096534429979,
+      0.21995127766378633,
+      0.055644981379631406
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "raw",
+    "root": 1001,
+    "route": 1,
+    "stage": "jump",
+    "prediction_index": 305,
+    "geometry_index": 0,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.07770404815673793,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "own",
+    "root": 1001,
+    "route": 1,
+    "stage": "departure",
+    "prediction_index": 365,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.25810023807298066,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "shared",
+    "root": 1001,
+    "route": 1,
+    "stage": "departure",
+    "prediction_index": 365,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.25810023807298066,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "cross",
+    "root": 1001,
+    "route": 1,
+    "stage": "jump",
+    "prediction_index": 308,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.21135239331116118,
+    "margin_xyz_m": [
+      0.0398096534429979,
+      0.21995127766378633,
+      0.055644981379631406
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "raw",
+    "root": 1001,
+    "route": 2,
+    "stage": "departure",
+    "prediction_index": 367,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.1864648818969723,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "own",
+    "root": 1001,
+    "route": 2,
+    "stage": "departure",
+    "prediction_index": 384,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.30500506577799413,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "shared",
+    "root": 1001,
+    "route": 2,
+    "stage": "departure",
+    "prediction_index": 384,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.30500506577799413,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "cross",
+    "root": 1001,
+    "route": 2,
+    "stage": "departure",
+    "prediction_index": 367,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.22627453533996977,
+    "margin_xyz_m": [
+      0.0398096534429979,
+      0.21995127766378633,
+      0.055644981379631406
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "raw",
+    "root": 1002,
+    "route": 0,
+    "stage": "departure",
+    "prediction_index": 361,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.09430018439888954,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "own",
+    "root": 1002,
+    "route": 0,
+    "stage": "departure",
+    "prediction_index": 381,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.29462939978638847,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "shared",
+    "root": 1002,
+    "route": 0,
+    "stage": "departure",
+    "prediction_index": 381,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.29462939978638847,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "cross",
+    "root": 1002,
+    "route": 0,
+    "stage": "departure",
+    "prediction_index": 366,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.22181553570618107,
+    "margin_xyz_m": [
+      0.0398096534429979,
+      0.21995127766378633,
+      0.055644981379631406
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "raw",
+    "root": 1002,
+    "route": 1,
+    "stage": "jump",
+    "prediction_index": 306,
+    "geometry_index": 0,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.07770404815673793,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "own",
+    "root": 1002,
+    "route": 1,
+    "stage": "departure",
+    "prediction_index": 366,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.25810023807298066,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "shared",
+    "root": 1002,
+    "route": 1,
+    "stage": "departure",
+    "prediction_index": 366,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.25810023807298066,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "cross",
+    "root": 1002,
+    "route": 1,
+    "stage": "jump",
+    "prediction_index": 309,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.21135239331116118,
+    "margin_xyz_m": [
+      0.0398096534429979,
+      0.21995127766378633,
+      0.055644981379631406
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "raw",
+    "root": 1002,
+    "route": 2,
+    "stage": "departure",
+    "prediction_index": 368,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.1864648818969723,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "own",
+    "root": 1002,
+    "route": 2,
+    "stage": "departure",
+    "prediction_index": 385,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.30500506577799413,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "shared",
+    "root": 1002,
+    "route": 2,
+    "stage": "departure",
+    "prediction_index": 385,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.30500506577799413,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "cross",
+    "root": 1002,
+    "route": 2,
+    "stage": "departure",
+    "prediction_index": 368,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.22627453533996977,
+    "margin_xyz_m": [
+      0.0398096534429979,
+      0.21995127766378633,
+      0.055644981379631406
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "own",
+    "root": 1001,
+    "route": 3,
+    "stage": "departure",
+    "prediction_index": 381,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.2397561649408923,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "shared",
+    "root": 1001,
+    "route": 3,
+    "stage": "departure",
+    "prediction_index": 381,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.2397561649408923,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "cross",
+    "root": 1001,
+    "route": 3,
+    "stage": "departure",
+    "prediction_index": 376,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.14900490619759682,
+    "margin_xyz_m": [
+      0.1067585551355603,
+      0.23406851269822243,
+      0.13828035788486917
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "own",
+    "root": 1001,
+    "route": 4,
+    "stage": "jump",
+    "prediction_index": 325,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.2016009668436633,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "shared",
+    "root": 1001,
+    "route": 4,
+    "stage": "jump",
+    "prediction_index": 325,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.2016009668436633,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "cross",
+    "root": 1001,
+    "route": 4,
+    "stage": "jump",
+    "prediction_index": 322,
+    "geometry_index": 0,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.08645376541237954,
+    "margin_xyz_m": [
+      0.1067585551355603,
+      0.23406851269822243,
+      0.13828035788486917
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "raw",
+    "root": 1001,
+    "route": 5,
+    "stage": "departure",
+    "prediction_index": 403,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.1276976086867819,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "own",
+    "root": 1001,
+    "route": 5,
+    "stage": "departure",
+    "prediction_index": 401,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.29304374563407976,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "shared",
+    "root": 1001,
+    "route": 5,
+    "stage": "departure",
+    "prediction_index": 401,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.29304374563407976,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "cross",
+    "root": 1001,
+    "route": 5,
+    "stage": "departure",
+    "prediction_index": 401,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.2704232888727489,
+    "margin_xyz_m": [
+      0.0398096534429979,
+      0.21995127766378633,
+      0.055644981379631406
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "own",
+    "root": 1002,
+    "route": 3,
+    "stage": "departure",
+    "prediction_index": 380,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.2397561649408923,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "shared",
+    "root": 1002,
+    "route": 3,
+    "stage": "departure",
+    "prediction_index": 380,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.2397561649408923,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "cross",
+    "root": 1002,
+    "route": 3,
+    "stage": "departure",
+    "prediction_index": 375,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.14900490619759682,
+    "margin_xyz_m": [
+      0.1067585551355603,
+      0.23406851269822243,
+      0.13828035788486917
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "own",
+    "root": 1002,
+    "route": 4,
+    "stage": "jump",
+    "prediction_index": 324,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.2016009668436633,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "shared",
+    "root": 1002,
+    "route": 4,
+    "stage": "jump",
+    "prediction_index": 324,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.2016009668436633,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "cross",
+    "root": 1002,
+    "route": 4,
+    "stage": "jump",
+    "prediction_index": 321,
+    "geometry_index": 0,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.08645376541237954,
+    "margin_xyz_m": [
+      0.1067585551355603,
+      0.23406851269822243,
+      0.13828035788486917
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "raw",
+    "root": 1002,
+    "route": 5,
+    "stage": "departure",
+    "prediction_index": 402,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.1276976086867819,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "own",
+    "root": 1002,
+    "route": 5,
+    "stage": "departure",
+    "prediction_index": 400,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.29304374563407976,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "shared",
+    "root": 1002,
+    "route": 5,
+    "stage": "departure",
+    "prediction_index": 400,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.29304374563407976,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "cross",
+    "root": 1002,
+    "route": 5,
+    "stage": "departure",
+    "prediction_index": 400,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.2704232888727489,
+    "margin_xyz_m": [
+      0.0398096534429979,
+      0.21995127766378633,
+      0.055644981379631406
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "raw",
+    "root": 1001,
+    "route": 6,
+    "stage": "departure",
+    "prediction_index": 342,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.12727928161621094,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "own",
+    "root": 1001,
+    "route": 6,
+    "stage": "departure",
+    "prediction_index": 360,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.2966508787662754,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "shared",
+    "root": 1001,
+    "route": 6,
+    "stage": "departure",
+    "prediction_index": 360,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.2966508787662754,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "cross",
+    "root": 1001,
+    "route": 6,
+    "stage": "departure",
+    "prediction_index": 344,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.23484177319397403,
+    "margin_xyz_m": [
+      0.0398096534429979,
+      0.21995127766378633,
+      0.055644981379631406
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "raw",
+    "root": 1001,
+    "route": 7,
+    "stage": "departure",
+    "prediction_index": 339,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.06567249298095668,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "own",
+    "root": 1001,
+    "route": 7,
+    "stage": "departure",
+    "prediction_index": 345,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.2562901642204416,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "shared",
+    "root": 1001,
+    "route": 7,
+    "stage": "departure",
+    "prediction_index": 345,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.2562901642204416,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "cross",
+    "root": 1001,
+    "route": 7,
+    "stage": "departure",
+    "prediction_index": 337,
+    "geometry_index": 3,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.21170240279180952,
+    "margin_xyz_m": [
+      0.1067585551355603,
+      0.23406851269822243,
+      0.13828035788486917
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "raw",
+    "root": 1001,
+    "route": 8,
+    "stage": "departure",
+    "prediction_index": 346,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.19013843536376918,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "own",
+    "root": 1001,
+    "route": 8,
+    "stage": "departure",
+    "prediction_index": 363,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.2952470701725254,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "shared",
+    "root": 1001,
+    "route": 8,
+    "stage": "departure",
+    "prediction_index": 363,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.2952470701725254,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "cross",
+    "root": 1001,
+    "route": 8,
+    "stage": "departure",
+    "prediction_index": 346,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.22994808880676665,
+    "margin_xyz_m": [
+      0.0398096534429979,
+      0.21995127766378633,
+      0.055644981379631406
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "raw",
+    "root": 1002,
+    "route": 6,
+    "stage": "departure",
+    "prediction_index": 342,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.12727928161621094,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "own",
+    "root": 1002,
+    "route": 6,
+    "stage": "departure",
+    "prediction_index": 360,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.2966508787662754,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "shared",
+    "root": 1002,
+    "route": 6,
+    "stage": "departure",
+    "prediction_index": 360,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.2966508787662754,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "cross",
+    "root": 1002,
+    "route": 6,
+    "stage": "departure",
+    "prediction_index": 344,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.23484177319397403,
+    "margin_xyz_m": [
+      0.0398096534429979,
+      0.21995127766378633,
+      0.055644981379631406
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "raw",
+    "root": 1002,
+    "route": 7,
+    "stage": "departure",
+    "prediction_index": 339,
+    "geometry_index": 6,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.06567249298095668,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "own",
+    "root": 1002,
+    "route": 7,
+    "stage": "departure",
+    "prediction_index": 345,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.2562901642204416,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "shared",
+    "root": 1002,
+    "route": 7,
+    "stage": "departure",
+    "prediction_index": 345,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.2562901642204416,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "cross",
+    "root": 1002,
+    "route": 7,
+    "stage": "departure",
+    "prediction_index": 337,
+    "geometry_index": 3,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.21170240279180952,
+    "margin_xyz_m": [
+      0.1067585551355603,
+      0.23406851269822243,
+      0.13828035788486917
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "raw",
+    "root": 1002,
+    "route": 8,
+    "stage": "departure",
+    "prediction_index": 346,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.19013843536376918,
+    "margin_xyz_m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "own",
+    "root": 1002,
+    "route": 8,
+    "stage": "departure",
+    "prediction_index": 363,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.2952470701725254,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "shared",
+    "root": 1002,
+    "route": 8,
+    "stage": "departure",
+    "prediction_index": 363,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 1,
+    "clearance_m": -0.2952470701725254,
+    "margin_xyz_m": [
+      0.062430110204328745,
+      0.3858515898314105,
+      0.13268524932971437
+    ]
+  },
+  {
+    "method": "I",
+    "margin": "cross",
+    "root": 1002,
+    "route": 8,
+    "stage": "departure",
+    "prediction_index": 346,
+    "geometry_index": 4,
+    "constraint": "obstacle",
+    "constraint_index": 2,
+    "clearance_m": -0.22994808880676665,
+    "margin_xyz_m": [
+      0.0398096534429979,
+      0.21995127766378633,
+      0.055644981379631406
+    ]
+  }
+]

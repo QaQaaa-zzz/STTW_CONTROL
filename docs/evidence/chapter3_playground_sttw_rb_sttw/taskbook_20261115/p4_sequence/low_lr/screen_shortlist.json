@@ -1,0 +1,32 @@
+[
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_low_lr/training/seed0/model_3475.pt",
+    "seed": 0,
+    "update": 3475,
+    "dev_ready": 72,
+    "dev_cases": 72,
+    "mechanism_ready": 12,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.006075774785131216
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_low_lr/training/seed0/model_3425.pt",
+    "seed": 0,
+    "update": 3425,
+    "dev_ready": 72,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.007032801862806082
+  },
+  {
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_low_lr/training/seed1/model_2725.pt",
+    "seed": 1,
+    "update": 2725,
+    "dev_ready": 72,
+    "dev_cases": 72,
+    "mechanism_ready": 15,
+    "mechanism_cases": 18,
+    "dev_mean_joint_error_rad": 0.00841448176652193
+  }
+]

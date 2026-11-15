@@ -1,0 +1,20 @@
+{
+  "true_entry original": {
+    "cases": 12,
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 4,
+    "true_reject": 8,
+    "scope": "OFFLINE true-entry both intervention; NOT causal planning raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.476137481047772
+  },
+  "true_entry displacement": {
+    "cases": 12,
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 4,
+    "true_reject": 8,
+    "scope": "OFFLINE true-entry both intervention; NOT causal planning raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.14117763703689
+  }
+}

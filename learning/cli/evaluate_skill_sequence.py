@@ -11,7 +11,6 @@ from sttw_control.skill_history_bridge import SkillHistoryBridge
 from sttw_control.skill_handoff_history import HandoffHistoryReset
 from sttw_control.skill_sequence_rollout import predict_skill_sequence,native_to_ground,HandoffEventGuard
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('--handoff-event',choices=['classifier','state'],default='state');p.add_argument('--handoff-history',choices=['learned','execution'],default='execution');p.add_argument('--typical',type=Path);p.add_argument('--diagnostic-entry',choices=['physical','history','both']);source=p.add_mutually_exclusive_group(required=True);source.add_argument('--oracle',type=Path);source.add_argument('--evaluation',type=Path);p.add_argument('--selection',type=Path,required=True);p.add_argument('--history',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();
-if a.diagnostic_entry and a.evaluation:p.error('Offline entry diagnostic currently uses the known Oracle matrix')
 if a.typical and a.diagnostic_entry:p.error('TRAIN typical and offline true-entry intervention are separate modes')
 a.output.mkdir(parents=True,exist_ok=False);torch.set_num_threads(1);started=time.perf_counter();tensor=lambda x:torch.as_tensor(np.asarray(x),device='cuda',dtype=torch.float32)
 selection=json.loads(a.selection.read_text())['models']

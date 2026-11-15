@@ -1,0 +1,5 @@
+{
+  "budget": "Top3 state-event DEV72 shortlist plus all loss-best/last, deduplicated; each all90 cases; max600s; no training/physics",
+  "selection": "Shortlist frozen before full-chain outcomes; no mechanism outcome used in screen ranking",
+  "data_role": "Known DEV; compare all failures; retain uncalibrated vs calibrated distinctions"
+}

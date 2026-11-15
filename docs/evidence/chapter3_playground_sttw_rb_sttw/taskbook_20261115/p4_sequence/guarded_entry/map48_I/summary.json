@@ -1,0 +1,20 @@
+{
+  "I original": {
+    "cases": 18,
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 4,
+    "true_reject": 14,
+    "scope": "I independent TRAIN-typical interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.105792477959767
+  },
+  "I displacement": {
+    "cases": 18,
+    "true_admit": 0,
+    "false_admit": 0,
+    "false_reject": 4,
+    "true_reject": 14,
+    "scope": "I independent TRAIN-typical interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.1170236699981615
+  }
+}

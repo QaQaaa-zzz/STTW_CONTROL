@@ -1,0 +1,28 @@
+{
+  "supported_only": true,
+  "fit_domain": "Only candidates with predicted handoff events; excluded cases remain rejected in evaluation",
+  "role": "DEV calibration only; map48 is known DEV diagnostic, not TEST",
+  "maps": [
+    "map06",
+    "map07"
+  ],
+  "methods": [
+    "C",
+    "I"
+  ],
+  "rule": "Same existing spatial support rule: per-region per-axis maximum lower/upper AABB support miss plus0.02m. Stable x-sort/interpolation; actual samples outside predicted x range explicitly uncovered, not clipped into calibration.",
+  "edges": [
+    -5.0,
+    8.3,
+    10.3,
+    10.6,
+    12.6,
+    25.0
+  ],
+  "coordinate": "World x spatial alignment, not same-time error or phase-aligned duration; nonmonotonic prediction counts retained",
+  "scope": "Per collision geometry3D axis supports; empirical observed bound only; no probabilistic or continuous-time safety claim",
+  "budget": "CPU geometry/analysis, 0 training and 0 physical episodes, stop25min",
+  "dev": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_low_lr/calibration_input/seed1_update3450",
+  "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_low_lr/calibration_eval/seed1_update3450",
+  "external_calibration": null
+}

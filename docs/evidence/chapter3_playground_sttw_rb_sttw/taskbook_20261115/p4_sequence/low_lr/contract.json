@@ -1,0 +1,10 @@
+{
+  "change": "Only optimizer lr3e-4 to3e-5; resume each displacement loss-best with Adam moments; no architecture/loss/data/physics changes",
+  "budget": "3seeds x1000 supervised updates; save25; max1500s entire training; no automatic extension",
+  "parents": "displacement seed0 best2475, seed1 best2450, seed2 best2250",
+  "selection": "Keep loss best and last; screen all saved checkpoints by corrected state-event DEV72 readiness before full-chain shortlist; map48 excluded from ranking",
+  "roles": "TRAIN216/DEV72 same map split; known mechanism map48 DEV18",
+  "stop": "Finite1000 updates per seed, outer1500s timeout or process error; no automatic extension",
+  "tensorboard": "Existing PID969435 port6006/chapter3_low_lr",
+  "code_sha": "93b747c2d751286704c2647ec0cceba6be00d758"
+}

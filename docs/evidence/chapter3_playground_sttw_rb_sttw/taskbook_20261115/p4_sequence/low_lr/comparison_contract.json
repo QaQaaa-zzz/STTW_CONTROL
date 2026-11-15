@@ -1,0 +1,9 @@
+{
+  "models": [
+    "seed0_update3475: primary preselected state-event shortlist leader",
+    "seed1_update3450: independent loss-best seed1, report as additional DEV candidate"
+  ],
+  "budget": "Two I predictors x90 cases, then CPU G/I/C/Oracle and unchanged own/shared/cross calibration; zero training/physics; max600s GPU",
+  "calibration": "Same existing DEV72 per-region per-axis maximum AABB spatial-support miss +0.02m; no manual margin reduction",
+  "selection_limits": "Both current DEV candidates, no adoption or TEST; no claim of causal learning-rate ablation"
+}
