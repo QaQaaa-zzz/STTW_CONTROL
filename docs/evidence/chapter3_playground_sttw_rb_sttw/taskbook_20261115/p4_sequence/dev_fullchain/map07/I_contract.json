@@ -1,0 +1,12 @@
+{
+  "method": "I",
+  "diagnostic_entry": null,
+  "jump_start_x_m": 8.55,
+  "typical": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_typical/states.npz",
+  "selection": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p3_world_model/selected_models.json",
+  "history": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+  "oracle": null,
+  "evaluation": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation",
+  "true_data_access": "Only first qpos/qvel/controller/RB history used by predictor; future trajectories/status used only as offline labels",
+  "limits": "Ground locked hip/knee rates assumed zero, flat supported RB entry contract; estimates never modify real controls"
+}

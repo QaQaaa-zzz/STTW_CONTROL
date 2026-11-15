@@ -9,36 +9,62 @@ from sttw_control.playground_prediction import BodyEnvelope,euler,rotate
 from sttw_control.skill_world_model import SkillWorldModel
 from sttw_control.skill_history_bridge import SkillHistoryBridge
 from sttw_control.skill_sequence_rollout import predict_skill_sequence,native_to_ground
-p=argparse.ArgumentParser(description=__doc__);p.add_argument('--typical',type=Path);p.add_argument('--oracle',type=Path,required=True);p.add_argument('--selection',type=Path,required=True);p.add_argument('--history',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False);torch.set_num_threads(1);started=time.perf_counter();tensor=lambda x:torch.as_tensor(np.asarray(x),device='cuda',dtype=torch.float32)
-selection=json.loads(a.selection.read_text())['models'];base=a.oracle/'map48';cfg=json.loads((base/'base/resolved_config.json').read_text());schema=json.loads((base/'base/model_state_schema.json').read_text());world=json.loads((base/'world.json').read_text());bank=np.load('/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/approach_departure_turns/routes.npz')
+p=argparse.ArgumentParser(description=__doc__);p.add_argument('--typical',type=Path);p.add_argument('--diagnostic-entry',choices=['physical','history','both']);source=p.add_mutually_exclusive_group(required=True);source.add_argument('--oracle',type=Path);source.add_argument('--evaluation',type=Path);p.add_argument('--selection',type=Path,required=True);p.add_argument('--history',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();
+if a.diagnostic_entry and a.evaluation:p.error('Offline entry diagnostic currently uses the known Oracle matrix')
+if a.typical and a.diagnostic_entry:p.error('TRAIN typical and offline true-entry intervention are separate modes')
+a.output.mkdir(parents=True,exist_ok=False);torch.set_num_threads(1);started=time.perf_counter();tensor=lambda x:torch.as_tensor(np.asarray(x),device='cuda',dtype=torch.float32)
+selection=json.loads(a.selection.read_text())['models']
+base=a.oracle/'map48' if a.oracle else a.evaluation
+physical=base/'base' if a.oracle else base
+cfg=json.loads((physical/'resolved_config.json').read_text());schema=json.loads((physical/'model_state_schema.json').read_text())
+world=json.loads((base/'world.json' if a.oracle else Path(cfg['world_map'])).read_text());bank=np.load(cfg['ground_handoff']['reference_path'])
 approach=load_history_model(Path(selection['approach']['path']).parent);departure=load_history_model(Path(selection['departure']['path']).parent)
 for model in [approach,departure]:
  if model.terrain is not None:model.terrain=TerrainFeatures(**raster_from_spec(world['terrain']),device='cuda')
 saved=torch.load(selection['jump']['path'],map_location='cuda',weights_only=True)['model'];jump=SkillWorldModel(537,5,*[saved[k] for k in ['input_mean','input_scale','velocity_scale','history_scale']]).cuda();jump.load_state_dict(saved);jump.eval()
 h=torch.load(a.history,map_location='cuda',weights_only=True)['model'];bridge=SkillHistoryBridge(*[h[k] for k in ['mean','scale','target_mean','target_scale']]).cuda();bridge.load_state_dict(h);bridge.eval()
 q=[];v=[];history=[];rows=[]
-for up in range(3):
- for lane,root in [(0,1001),(2,1002)]:
-  source=base/f'approach{up}/evaluation';name=f'rb_run3_route0_h75_v{lane}';z=np.load(source/name/'trajectory.npz')
-  for down in range(3):
-   q.append(z['qpos'][0]);v.append(z['qvel'][0]);history.append(np.r_[z['controller_state'][0],z['rb_state'][0]])
-   label_source=source if up==0 else base/f'departure{up}_{down}/evaluation';actual=next(r for r in json.loads((label_source/'status.json').read_text())['results'] if r['case_dir']==name)
-   rows.append(dict(upstream=up,root=root,downstream=down,route=3*up+down,actual_success=actual['goal'],actual_termination=actual['termination'],prefix=str(source/name/'trajectory.npz'),suffix=None if up==0 else str(label_source/name/'trajectory.npz')))
-route=[r['route'] for r in rows];n=len(rows)
+if a.evaluation:
+ for actual in json.loads((a.evaluation/'status.json').read_text())['results']:
+  source=a.evaluation/actual['case_dir']/'trajectory.npz';z=np.load(source);route=actual['route'];speed=float(actual['variant']['requested_speed_m_s'])
+  q.append(z['qpos'][0]);v.append(z['qvel'][0]);history.append(np.r_[z['controller_state'][0],z['rb_state'][0]])
+  rows.append(dict(speed=speed,upstream=route//3,root=actual['variant']['root_variant'],downstream=route%3,route=route,actual_success=actual['goal'],actual_termination=actual['termination'],prefix=str(source),suffix=None))
+else:
+ for up in (range(1,3) if a.diagnostic_entry else range(3)):
+  for lane,root in [(0,1001),(2,1002)]:
+   source=base/f'approach{up}/evaluation';name=f'rb_run3_route0_h75_v{lane}';z=np.load(source/name/'trajectory.npz')
+   for down in range(3):
+    q.append(z['qpos'][0]);v.append(z['qvel'][0]);history.append(np.r_[z['controller_state'][0],z['rb_state'][0]])
+    label_source=source if up==0 else base/f'departure{up}_{down}/evaluation';actual=next(r for r in json.loads((label_source/'status.json').read_text())['results'] if r['case_dir']==name)
+    rows.append(dict(speed=1.8,upstream=up,root=root,downstream=down,route=3*up+down,actual_success=actual['goal'],actual_termination=actual['termination'],prefix=str(source/name/'trajectory.npz'),suffix=None if up==0 else str(label_source/name/'trajectory.npz')))
+route=[r['route'] for r in rows];n=len(rows);speeds=tensor([r['speed'] for r in rows])
 typical=None
 if a.typical:
  frozen=np.load(a.typical);typical={}
  for stage,phase in [('entry',1),('departure',2)]:
   for name in ['qpos','qvel','previous_qpos','previous_qvel','history']:
-   typical[stage+'_'+name]=tensor([frozen[f'up{r["upstream"]}_v1.800_phase{phase}_{name}'] for r in rows])
+   typical[stage+'_'+name]=tensor([frozen[f'up{r["upstream"]}_v{r["speed"]:.3f}_phase{phase}_{name}'] for r in rows])
+diagnostic=None
+if a.diagnostic_entry:
+ data=[]
+ for row in rows:
+  actual=np.load(row['prefix']);idx=int(np.flatnonzero(actual['trace'][:,-1]==1)[0]);data.append((actual,idx))
+ diagnostic={}
+ if a.diagnostic_entry in ['physical','both']:
+  for key in ['qpos','qvel']:diagnostic[key]=tensor([z[key][idx] for z,idx in data])
+ if a.diagnostic_entry in ['history','both']:diagnostic['history']=tensor([np.r_[z['controller_state'][idx],z['rb_state'][idx]] for z,idx in data])
 with torch.no_grad():
- result=predict_skill_sequence(approach,bridge,jump,departure,tensor(q),tensor(v),tensor(history),schema,tensor(bank['s']),tensor(bank['xy'][route]),tensor(bank['heading'][route]),tensor(bank['curvature'][route]),tensor([1.8]*n),8.6,tensor([[10.3,.3,0.,1.8,0.]]*n),typical=typical)
+ result=predict_skill_sequence(approach,bridge,jump,departure,tensor(q),tensor(v),tensor(history),schema,tensor(bank['s']),tensor(bank['xy'][route]),tensor(bank['heading'][route]),tensor(bank['curvature'][route]),speeds,cfg['ground_handoff']['approach']['jump_start_x_m'],tensor([[world['terrain']['front_x_m'],world['terrain']['width_m'],world['terrain'].get('far_bank_height_m',0.),r['speed'],0.] for r in rows]),typical=typical,diagnostic_entry=diagnostic)
  tail=result['departure'];pose=tail['pose'];vel=tail['velocity'];domain=tail['domain'];goal=world['goal'];wv=rotate(pose[:,:,3:7].reshape(-1,4),vel[:,:,:3].reshape(-1,3))[:,0].reshape(n,-1)
- hold=(pose[:,:,0]>=goal['x_min_m'])&(pose[:,:,0]<=goal['x_max_m'])&(pose[:,:,1].abs()<=goal['abs_y_max_m'])&(wv>=goal['min_vx_m_s'])&(domain[:,:,0].abs()<=goal['path_tolerance_m'])&(domain[:,:,1].abs()<=goal['heading_tolerance_rad'])&((vel[:,:,0]-1.8).abs()<=goal['speed_tolerance_m_s'])
+ hold=(pose[:,:,0]>=goal['x_min_m'])&(pose[:,:,0]<=goal['x_max_m'])&(pose[:,:,1].abs()<=goal['abs_y_max_m'])&(wv>=goal['min_vx_m_s'])&(domain[:,:,0].abs()<=goal['path_tolerance_m'])&(domain[:,:,1].abs()<=goal['heading_tolerance_rad'])&((vel[:,:,0]-speeds[:,None]).abs()<=goal['speed_tolerance_m_s'])
  valid_hold=hold.unfold(1,26,1).all(-1);has_goal=valid_hold.any(-1);stop=torch.where(has_goal,valid_hold.long().argmax(-1)+25,torch.full((n,),250,device='cuda'));goal_time=result['handoff_time_s']+stop*.02
  rb_pose,_=native_to_ground(result['jump']['qpos'].reshape(-1,12),result['jump']['qvel'].reshape(-1,11),schema);rb_pose=rb_pose.reshape(n,125,12)
  all_pose=torch.cat((result['approach_pose'],rb_pose,pose),1);entry_steps=(result['entry_time_s']/.02).round().long();valid=torch.cat((torch.arange(251,device='cuda')[None,:]<=entry_steps[:,None],result['jump']['valid'],torch.arange(251,device='cuda')[None,:]<=stop[:,None]),1)
- physics=mujoco.MjModel.from_binary_path(str(base/'base/terrain.mjb'));lo,hi=BodyEnvelope(physics,dimensions=3)(all_pose);rect=world['terrain']['forbidden_rectangles'];boxes=tensor([[r[0],r[2],0.,r[1],r[3],world['terrain'].get('obstacle_height_m',.5)] for r in rect]);clear=torch.maximum(boxes[None,None,None,:,:3]-hi[:,:,:,None,:],lo[:,:,:,None,:]-boxes[None,None,None,:,3:]).amax(-1).amin((-1,-2));bounds=world['bounds_xy_m'];road=torch.stack((lo[:,:,:,0]-bounds[0],bounds[1]-hi[:,:,:,0],lo[:,:,:,1]-bounds[2],bounds[3]-hi[:,:,:,1]),-1).amin((-1,-2));clear=torch.minimum(clear,road).masked_fill(~valid,float('inf')).amin(-1)
+ physics=mujoco.MjModel.from_binary_path(str(physical/'terrain.mjb'));lo,hi=BodyEnvelope(physics,dimensions=3)(all_pose)
+ rect=world['terrain'].get('forbidden_rectangles',[]);clear=all_pose.new_full(all_pose.shape[:2],float('inf'))
+ if rect:
+  boxes=tensor([[r[0],r[2],0.,r[1],r[3],world['terrain'].get('obstacle_height_m',.5)] for r in rect]);clear=torch.maximum(boxes[None,None,None,:,:3]-hi[:,:,:,None,:],lo[:,:,:,None,:]-boxes[None,None,None,:,3:]).amax(-1).amin((-1,-2))
+ bounds=world['bounds_xy_m'];road=torch.stack((lo[:,:,:,0]-bounds[0],bounds[1]-hi[:,:,:,0],lo[:,:,:,1]-bounds[2],bounds[3]-hi[:,:,:,1]),-1).amin((-1,-2));clear=torch.minimum(clear,road).masked_fill(~valid,float('inf')).amin(-1)
  angles=euler(all_pose[:,:,3:7].reshape(-1,4)).reshape(n,-1,3);posture=((angles[:,:,0].abs()<=.7)&(angles[:,:,1].abs()<=1.309)|~valid).all(-1)
  tail_domain=(domain[:,:,0].abs()<=cfg['ground_handoff']['road_half_width_m'])&(domain[:,:,1].abs()<np.pi/2)&(domain[:,:,2]>.05)&(vel[:,:,0]>=.5)
  domain_ok=(tail_domain|(torch.arange(251,device='cuda')[None,:]>stop[:,None])).all(-1)
@@ -50,5 +76,5 @@ with torch.no_grad():
 for row,metric in zip(rows,metrics):
  row.update(dict(zip(['admitted','has_goal','clearance_m','entry_time_s','handoff_time_s','goal_time_s','posture_valid','departure_domain_valid','events_found','approach_domain_valid'],map(float,metric))))
 (a.output/'cases.json').write_text(json.dumps(rows,indent=2)+'\n')
-summary=dict(cases=n,true_admit=sum(bool(r['admitted']) and r['actual_success'] for r in rows),false_admit=sum(bool(r['admitted']) and not r['actual_success'] for r in rows),false_reject=sum(not r['admitted'] and r['actual_success'] for r in rows),true_reject=sum(not r['admitted'] and not r['actual_success'] for r in rows),scope=('I independent TRAIN-typical interfaces' if a.typical else 'C continuous predicted interfaces')+' raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included',runtime_s=time.perf_counter()-started)
-(a.output/'summary.json').write_text(json.dumps(summary,indent=2)+'\n');(a.output/'contract.json').write_text(json.dumps(dict(method='I' if a.typical else 'C',typical=str(a.typical) if a.typical else None,selection=str(a.selection),history=str(a.history),oracle=str(a.oracle),true_data_access='Only first qpos/qvel/controller/RB history used by predictor; future trajectories/status used only as offline labels',limits='Ground locked hip/knee rates assumed zero, flat supported RB entry contract; estimates never modify real controls'),indent=2)+'\n');print(json.dumps(summary))
+summary=dict(cases=n,true_admit=sum(bool(r['admitted']) and r['actual_success'] for r in rows),false_admit=sum(bool(r['admitted']) and not r['actual_success'] for r in rows),false_reject=sum(not r['admitted'] and r['actual_success'] for r in rows),true_reject=sum(not r['admitted'] and not r['actual_success'] for r in rows),scope=('OFFLINE true-entry '+a.diagnostic_entry+' intervention; NOT causal planning' if a.diagnostic_entry else 'I independent TRAIN-typical interfaces' if a.typical else 'C continuous predicted interfaces')+' raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included',runtime_s=time.perf_counter()-started)
+(a.output/'summary.json').write_text(json.dumps(summary,indent=2)+'\n');(a.output/'contract.json').write_text(json.dumps(dict(method='diagnostic_'+a.diagnostic_entry if a.diagnostic_entry else 'I' if a.typical else 'C',diagnostic_entry=a.diagnostic_entry,jump_start_x_m=cfg['ground_handoff']['approach']['jump_start_x_m'],typical=str(a.typical) if a.typical else None,selection=str(a.selection),history=str(a.history),oracle=str(a.oracle) if a.oracle else None,evaluation=str(a.evaluation) if a.evaluation else None,true_data_access='OFFLINE intervention reads actual future RB entry; predicted entry clock unchanged; never a deployment result' if a.diagnostic_entry else 'Only first qpos/qvel/controller/RB history used by predictor; future trajectories/status used only as offline labels',limits='Ground locked hip/knee rates assumed zero, flat supported RB entry contract; estimates never modify real controls'),indent=2)+'\n');print(json.dumps(summary))

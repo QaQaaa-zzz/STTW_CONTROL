@@ -17,3 +17,5 @@ The false admission is root1002 / approach0 / departure1: predicted minimum raw 
 History bridge: 72 TRAIN and 24 DEV approach sequences, three seeds with 600 updates each; best updates575/375/600 and normalized entry RMSE0.1730/0.1874/0.1745. Seed0 is used here. These are estimated controller/RB histories, not measured future states. Training completion does not establish convergence or safe planning. Raw logs/checkpoints reside in `taskbook_20261115_p4_history_bridge`; [all seed metrics](history_bridge_summary.json).
 
 P4 remains open. Next: compare G/I/C/Oracle with the same candidates, predictor and constraints, including strong backtracking; diagnose stage occupancy errors and calibrate using declared DEV rules; verify selected-plan outcomes. P5/P6 do not start before this stage is assessed.
+
+**Trigger-contract correction:** these historical predictions used hardcoded8.60m; the executed frozen configuration uses8.55m. Corrected prediction results are in [trigger_fix](trigger_fix/README.md). Original artifacts remain unchanged as evidence of the error.

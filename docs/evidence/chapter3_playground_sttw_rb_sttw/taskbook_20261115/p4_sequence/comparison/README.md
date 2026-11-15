@@ -20,3 +20,5 @@ Real obstacle clearance and failure stage are preserved in decisions.json. Succe
 P4 remains incomplete: per-model and shared/cross-margin calibration, direct/residual structural comparison, larger frozen validation and stage-error/occupancy diagnosis remain. These raw-envelope diagnostics do not replace calibrated final results.
 
 [Stage-event state errors](stage_errors.csv) compare predicted versus actual RB-to-ground events (including event-time difference); approach failures are compared at the actual failure time. Event-state errors are not same-time trajectory errors. Downstream variants share the same preceding event and must not be counted as independent samples.
+
+**Trigger-contract correction:** these historical predictions used hardcoded8.60m; the executed frozen configuration uses8.55m. Corrected prediction results are in [trigger_fix](../trigger_fix/README.md). Original artifacts remain unchanged as evidence of the error.

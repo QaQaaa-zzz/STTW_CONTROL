@@ -1,0 +1,20 @@
+{
+  "C": {
+    "cases": 36,
+    "true_admit": 28,
+    "false_admit": 0,
+    "false_reject": 8,
+    "true_reject": 0,
+    "scope": "C continuous predicted interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.20201458199881
+  },
+  "I": {
+    "cases": 36,
+    "true_admit": 36,
+    "false_admit": 0,
+    "false_reject": 0,
+    "true_reject": 0,
+    "scope": "I independent TRAIN-typical interfaces raw-envelope DEV diagnostic; single-method query; no new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+    "runtime_s": 2.1039369109785184
+  }
+}

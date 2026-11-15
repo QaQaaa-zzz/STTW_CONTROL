@@ -1,0 +1,15 @@
+{
+  "role": "Offline diagnostic only, actual future RB entry used deliberately",
+  "arms": [
+    "physical",
+    "history",
+    "both"
+  ],
+  "cases_per_arm": 12,
+  "excluded": "six approach0 cases never enter RB, retained in original comparison",
+  "physical_runs": 0,
+  "training_updates": 0,
+  "budget": "3 batched GPU queries expected under1min; max25min total",
+  "timing": "Predicted entry time retained; intervention only qpos/qvel and/or controller/RBhistory",
+  "unchanged": "same checkpoints/physics/goal/raw envelope gates; no deployment claim"
+}

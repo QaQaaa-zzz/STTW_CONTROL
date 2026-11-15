@@ -26,8 +26,11 @@ def ground_to_native(pose,velocity,schema):
 
 def predict_skill_sequence(approach,bridge,jump,departure,qpos,qvel,initial_history,
                            schema,path_s,path_xy,path_heading,path_curvature,speed,
-                           jump_x,context,ground_steps=250,jump_steps=125,departure_steps=250,typical=None):
-    """No trajectory/status/future data accepted by this interface.
+                           jump_x,context,ground_steps=250,jump_steps=125,departure_steps=250,typical=None,diagnostic_entry=None):
+    """C uses initial real state only; I uses TRAIN-only typical interfaces.
+
+    diagnostic_entry is an explicitly offline true-interface intervention, never
+    a causal planner mode. No files or runtime states are modified.
 
     Constant contact=[supported,not far,not both far] is the declared flat
     approach entry contract. Estimated histories are never sent to real controls.
@@ -46,6 +49,10 @@ def predict_skill_sequence(approach,bridge,jump,departure,qpos,qvel,initial_hist
     entry_q,entry_v=ground_to_native(state.pose,state.velocity,schema)
     if typical is not None:
         entry_q,entry_v,history=typical['entry_qpos'],typical['entry_qvel'],typical['entry_history']
+    if diagnostic_entry is not None:
+        entry_q=diagnostic_entry.get('qpos',entry_q)
+        entry_v=diagnostic_entry.get('qvel',entry_v)
+        history=diagnostic_entry.get('history',history)
     contact=entry_q.new_tensor([1.,0.,0.]).expand(len(pose),-1)
     phase=entry_q.new_tensor([0.,1.,0.,0.,0.]).expand(len(pose),-1)
     rb_state=jump.initialize(entry_q,entry_v,history[:,:381],history[:,381:],contact,phase,context)
