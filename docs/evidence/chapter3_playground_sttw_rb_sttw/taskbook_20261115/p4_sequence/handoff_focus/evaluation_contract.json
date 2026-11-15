@@ -1,0 +1,6 @@
+{
+  "candidates": 12,
+  "budget": "Best/last deduplicated x3maps; max36 GPU batched queries;0 training/physics;stop20min",
+  "selection": "Choose one candidate per arm by originalDEV72 raw true admissions, then smaller mean event-selected position error. Map48 outcomes excluded. Known DEV, not TEST.",
+  "invariants": "Same frozen policies, ground models, guard, schemas, geometry and goal; no new thresholds"
+}

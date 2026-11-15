@@ -81,4 +81,21 @@ class SkillWorldModelTest(unittest.TestCase):
             self.assertTrue((missing['event_step']==10).all())
             self.assertTrue((missing['next_state'].elapsed_steps==10).all())
 
+class HandoffFocusTest(unittest.TestCase):
+    def test_rejects_early_event_and_lateral_exit_bias(self):
+        from sttw_control.skill_world_model import handoff_focus_loss
+        q=torch.zeros(1,4,12);q[...,3]=1;v=torch.zeros(1,4,11)
+        phase=torch.tensor([[1,3,4,2]]);onset=phase==2
+        correct=torch.full((1,4,5),-4.);correct.scatter_(-1,phase[...,None],4.)
+        early=correct.clone();early[...,2]=4.
+        good,zero=handoff_focus_loss(q,v,correct,q,v,phase,onset)
+        bad,_=handoff_focus_loss(q,v,early,q,v,phase,onset)
+        self.assertGreater(bad.item(),good.item());self.assertEqual(zero.item(),0.)
+        shifted=q.clone();shifted[:,-1,1]=.05
+        _,bias=handoff_focus_loss(shifted,v,correct,q,v,phase,onset)
+        self.assertAlmostEqual(bias.item(),1/3,places=6)
+        opposite=q.clone();opposite[...,3:7]*=-1
+        _,equivalent=handoff_focus_loss(opposite,v,correct,q,v,phase,onset)
+        self.assertEqual(equivalent.item(),0.)
+
 if __name__=='__main__':unittest.main()

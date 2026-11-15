@@ -1,0 +1,12 @@
+{
+  "url": "http://localhost:6006",
+  "pid": 969435,
+  "loaded": {
+    "chapter3_handoff_focus/control/seed1/tensorboard": 40,
+    "chapter3_handoff_focus/focus/seed0/tensorboard": 40,
+    "chapter3_handoff_focus/focus/seed1/tensorboard": 40,
+    "chapter3_handoff_focus/focus/seed2/tensorboard": 40,
+    "chapter3_handoff_focus/control/seed2/tensorboard": 40,
+    "chapter3_handoff_focus/control/seed0/tensorboard": 40
+  }
+}

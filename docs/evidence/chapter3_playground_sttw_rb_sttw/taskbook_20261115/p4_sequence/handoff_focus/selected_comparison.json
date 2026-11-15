@@ -1,0 +1,28 @@
+[
+  {
+    "name": "control_s0_u4300",
+    "arm": "control",
+    "seed": 0,
+    "update": 4300,
+    "best": true,
+    "last": false,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/training/control/seed0/model_4300.pt",
+    "sha256": "abe8976f9310231892a0314e926e97c704f1b0cea67e52f7c70f2a8049322794",
+    "dev_admitted": 66,
+    "dev_handoffs": 72,
+    "dev_position_mae_m": 0.15145063317484325
+  },
+  {
+    "name": "focus_s0_u4425",
+    "arm": "focus",
+    "seed": 0,
+    "update": 4425,
+    "best": true,
+    "last": false,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/training/focus/seed0/model_4425.pt",
+    "sha256": "d4accf9a8806d4c2fff540080d0a48272c5e81c04cb1d82326e72d8d1c469ecf",
+    "dev_admitted": 65,
+    "dev_handoffs": 72,
+    "dev_position_mae_m": 0.12968570578636396
+  }
+]

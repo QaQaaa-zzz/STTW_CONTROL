@@ -21,3 +21,5 @@ P4 remains open. Next: compare G/I/C/Oracle with the same candidates, predictor 
 **Trigger-contract correction:** these historical predictions used hardcoded8.60m; the executed frozen configuration uses8.55m. Corrected prediction results are in [trigger_fix](trigger_fix/README.md). Original artifacts remain unchanged as evidence of the error.
 
 [Current departure-input diagnosis](departure_interchange/README.md): true physical exits reduce downstream lateral error substantially; actual-history-only swaps do little. Timing accounts for most longitudinal exit error but leaves lateral bias. No model adopted; P4 remains incomplete.
+
+[Matched handoff-focus continuation](handoff_focus/README.md):6x1000 supervised updates,12 best/last candidates and same-rule calibration completed. Focus improves selected exit-state errors but not task decisions; neither arm is adopted, last models regress, P4 remains open.

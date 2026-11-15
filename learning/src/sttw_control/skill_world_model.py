@@ -24,6 +24,21 @@ class SkillWorldState:
     elapsed_steps: int = 0
 
 
+def handoff_focus_loss(qpos,qvel,logits,target_qpos,target_qvel,target_phase,onset):
+    """Supervised event timing and lateral exit accuracy; never changes gates."""
+    positive=target_phase==2
+    event_logit=logits[...,2]-torch.logsumexp(logits[...,[0,1,3,4]],-1)
+    bce=torch.nn.functional.binary_cross_entropy_with_logits(event_logit,positive.to(logits.dtype),reduction='none')
+    event=.5*((bce*positive).sum()/positive.sum().clamp_min(1)+(bce*~positive).sum()/(~positive).sum().clamp_min(1))
+    def yaw(q):
+        w,x,y,z=q[...,3:7].unbind(-1)
+        return torch.atan2(2*(w*z+x*y),1-2*(y*y+z*z))
+    delta=yaw(qpos)-yaw(target_qpos);delta=torch.atan2(delta.sin(),delta.cos())
+    lateral=(((qpos[...,1]-target_qpos[...,1])/.05).square()+(delta/.05).square()+((qvel[...,1]-target_qvel[...,1])/.1).square())/3
+    exit_loss=(lateral*onset).sum()/onset.sum().clamp_min(1)
+    return event,exit_loss
+
+
 class SkillWorldModel(nn.Module):
     def __init__(self, history_dim, context_dim, input_mean, input_scale,
                  velocity_scale, history_scale, hidden_dim=128, dt=.02):

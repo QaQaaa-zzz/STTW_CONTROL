@@ -1,0 +1,176 @@
+[
+  {
+    "label": "control_s0_u4300_I_map06",
+    "command": [
+      "learning/cli/evaluate_skill_sequence.py",
+      "--selection",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/control_s0_u4300_models.json",
+      "--history",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+      "--output",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/independent/control_s0_u4300/map06",
+      "--evaluation",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation",
+      "--typical",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_typical/states.npz"
+    ],
+    "returncode": 0,
+    "wall_s": 3.323359251022339
+  },
+  {
+    "label": "control_s0_u4300_I_map07",
+    "command": [
+      "learning/cli/evaluate_skill_sequence.py",
+      "--selection",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/control_s0_u4300_models.json",
+      "--history",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+      "--output",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/independent/control_s0_u4300/map07",
+      "--evaluation",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation",
+      "--typical",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_typical/states.npz"
+    ],
+    "returncode": 0,
+    "wall_s": 3.005718946456909
+  },
+  {
+    "label": "control_s0_u4300_I_map48",
+    "command": [
+      "learning/cli/evaluate_skill_sequence.py",
+      "--selection",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/control_s0_u4300_models.json",
+      "--history",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+      "--output",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/independent/control_s0_u4300/map48",
+      "--oracle",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall",
+      "--typical",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_typical/states.npz"
+    ],
+    "returncode": 0,
+    "wall_s": 2.9068987369537354
+  },
+  {
+    "label": "focus_s0_u4425_I_map06",
+    "command": [
+      "learning/cli/evaluate_skill_sequence.py",
+      "--selection",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/focus_s0_u4425_models.json",
+      "--history",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+      "--output",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/independent/focus_s0_u4425/map06",
+      "--evaluation",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation",
+      "--typical",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_typical/states.npz"
+    ],
+    "returncode": 0,
+    "wall_s": 2.983701467514038
+  },
+  {
+    "label": "focus_s0_u4425_I_map07",
+    "command": [
+      "learning/cli/evaluate_skill_sequence.py",
+      "--selection",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/focus_s0_u4425_models.json",
+      "--history",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+      "--output",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/independent/focus_s0_u4425/map07",
+      "--evaluation",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation",
+      "--typical",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_typical/states.npz"
+    ],
+    "returncode": 0,
+    "wall_s": 3.0007169246673584
+  },
+  {
+    "label": "focus_s0_u4425_I_map48",
+    "command": [
+      "learning/cli/evaluate_skill_sequence.py",
+      "--selection",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/focus_s0_u4425_models.json",
+      "--history",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+      "--output",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/independent/focus_s0_u4425/map48",
+      "--oracle",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall",
+      "--typical",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_typical/states.npz"
+    ],
+    "returncode": 0,
+    "wall_s": 2.9230754375457764
+  },
+  {
+    "label": "control_s0_u4300_calibration",
+    "command": [
+      "learning/cli/calibrate_skill_sequence.py",
+      "--supported-only",
+      "--dev",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/calibration_input/control_s0_u4300",
+      "--evaluation",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/calibration_eval/control_s0_u4300",
+      "--output",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/calibration/control_s0_u4300"
+    ],
+    "returncode": 0,
+    "wall_s": 2.3487448692321777
+  },
+  {
+    "label": "control_s0_u4300_comparison",
+    "command": [
+      "learning/cli/evaluate_continuation_planner.py",
+      "--continuous",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/calibration_eval/control_s0_u4300/C",
+      "--independent",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/calibration_eval/control_s0_u4300/I",
+      "--oracle-matrix",
+      "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p2_oracle_wall/oracle_matrix.csv",
+      "--routes",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/approach_departure_turns/routes.npz",
+      "--output",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/comparison/control_s0_u4300"
+    ],
+    "returncode": 0,
+    "wall_s": 0.8671131134033203
+  },
+  {
+    "label": "focus_s0_u4425_calibration",
+    "command": [
+      "learning/cli/calibrate_skill_sequence.py",
+      "--supported-only",
+      "--dev",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/calibration_input/focus_s0_u4425",
+      "--evaluation",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/calibration_eval/focus_s0_u4425",
+      "--output",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/calibration/focus_s0_u4425"
+    ],
+    "returncode": 0,
+    "wall_s": 2.028033971786499
+  },
+  {
+    "label": "focus_s0_u4425_comparison",
+    "command": [
+      "learning/cli/evaluate_continuation_planner.py",
+      "--continuous",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/calibration_eval/focus_s0_u4425/C",
+      "--independent",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/calibration_eval/focus_s0_u4425/I",
+      "--oracle-matrix",
+      "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p2_oracle_wall/oracle_matrix.csv",
+      "--routes",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/approach_departure_turns/routes.npz",
+      "--output",
+      "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/comparison/focus_s0_u4425"
+    ],
+    "returncode": 0,
+    "wall_s": 0.8653631210327148
+  }
+]

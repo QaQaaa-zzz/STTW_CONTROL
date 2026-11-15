@@ -1,0 +1,653 @@
+{
+  "completed": [
+    {
+      "candidate": "control_s0_u4300",
+      "map": "map06",
+      "returncode": 0,
+      "wall_s": 3.2313125133514404,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/control_s0_u4300_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/control_s0_u4300/map06",
+        "--evaluation",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation"
+      ]
+    },
+    {
+      "candidate": "control_s0_u4300",
+      "map": "map07",
+      "returncode": 0,
+      "wall_s": 3.005441904067993,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/control_s0_u4300_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/control_s0_u4300/map07",
+        "--evaluation",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation"
+      ]
+    },
+    {
+      "candidate": "control_s0_u4300",
+      "map": "map48",
+      "returncode": 0,
+      "wall_s": 3.2647781372070312,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/control_s0_u4300_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/control_s0_u4300/map48",
+        "--oracle",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall"
+      ]
+    },
+    {
+      "candidate": "control_s0_u4475",
+      "map": "map06",
+      "returncode": 0,
+      "wall_s": 3.0075583457946777,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/control_s0_u4475_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/control_s0_u4475/map06",
+        "--evaluation",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation"
+      ]
+    },
+    {
+      "candidate": "control_s0_u4475",
+      "map": "map07",
+      "returncode": 0,
+      "wall_s": 3.0116422176361084,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/control_s0_u4475_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/control_s0_u4475/map07",
+        "--evaluation",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation"
+      ]
+    },
+    {
+      "candidate": "control_s0_u4475",
+      "map": "map48",
+      "returncode": 0,
+      "wall_s": 2.9147486686706543,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/control_s0_u4475_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/control_s0_u4475/map48",
+        "--oracle",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall"
+      ]
+    },
+    {
+      "candidate": "control_s1_u4225",
+      "map": "map06",
+      "returncode": 0,
+      "wall_s": 2.999659299850464,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/control_s1_u4225_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/control_s1_u4225/map06",
+        "--evaluation",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation"
+      ]
+    },
+    {
+      "candidate": "control_s1_u4225",
+      "map": "map07",
+      "returncode": 0,
+      "wall_s": 3.0242562294006348,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/control_s1_u4225_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/control_s1_u4225/map07",
+        "--evaluation",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation"
+      ]
+    },
+    {
+      "candidate": "control_s1_u4225",
+      "map": "map48",
+      "returncode": 0,
+      "wall_s": 3.0080792903900146,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/control_s1_u4225_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/control_s1_u4225/map48",
+        "--oracle",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall"
+      ]
+    },
+    {
+      "candidate": "control_s1_u4450",
+      "map": "map06",
+      "returncode": 0,
+      "wall_s": 2.995037794113159,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/control_s1_u4450_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/control_s1_u4450/map06",
+        "--evaluation",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation"
+      ]
+    },
+    {
+      "candidate": "control_s1_u4450",
+      "map": "map07",
+      "returncode": 0,
+      "wall_s": 3.0136795043945312,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/control_s1_u4450_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/control_s1_u4450/map07",
+        "--evaluation",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation"
+      ]
+    },
+    {
+      "candidate": "control_s1_u4450",
+      "map": "map48",
+      "returncode": 0,
+      "wall_s": 2.9632575511932373,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/control_s1_u4450_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/control_s1_u4450/map48",
+        "--oracle",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall"
+      ]
+    },
+    {
+      "candidate": "control_s2_u3525",
+      "map": "map06",
+      "returncode": 0,
+      "wall_s": 2.996046304702759,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/control_s2_u3525_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/control_s2_u3525/map06",
+        "--evaluation",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation"
+      ]
+    },
+    {
+      "candidate": "control_s2_u3525",
+      "map": "map07",
+      "returncode": 0,
+      "wall_s": 3.0338778495788574,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/control_s2_u3525_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/control_s2_u3525/map07",
+        "--evaluation",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation"
+      ]
+    },
+    {
+      "candidate": "control_s2_u3525",
+      "map": "map48",
+      "returncode": 0,
+      "wall_s": 2.971646308898926,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/control_s2_u3525_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/control_s2_u3525/map48",
+        "--oracle",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall"
+      ]
+    },
+    {
+      "candidate": "control_s2_u3625",
+      "map": "map06",
+      "returncode": 0,
+      "wall_s": 3.040142774581909,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/control_s2_u3625_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/control_s2_u3625/map06",
+        "--evaluation",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation"
+      ]
+    },
+    {
+      "candidate": "control_s2_u3625",
+      "map": "map07",
+      "returncode": 0,
+      "wall_s": 3.0289695262908936,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/control_s2_u3625_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/control_s2_u3625/map07",
+        "--evaluation",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation"
+      ]
+    },
+    {
+      "candidate": "control_s2_u3625",
+      "map": "map48",
+      "returncode": 0,
+      "wall_s": 2.99837327003479,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/control_s2_u3625_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/control_s2_u3625/map48",
+        "--oracle",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall"
+      ]
+    },
+    {
+      "candidate": "focus_s0_u4425",
+      "map": "map06",
+      "returncode": 0,
+      "wall_s": 3.029972553253174,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/focus_s0_u4425_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/focus_s0_u4425/map06",
+        "--evaluation",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation"
+      ]
+    },
+    {
+      "candidate": "focus_s0_u4425",
+      "map": "map07",
+      "returncode": 0,
+      "wall_s": 3.0052132606506348,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/focus_s0_u4425_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/focus_s0_u4425/map07",
+        "--evaluation",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation"
+      ]
+    },
+    {
+      "candidate": "focus_s0_u4425",
+      "map": "map48",
+      "returncode": 0,
+      "wall_s": 2.9425101280212402,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/focus_s0_u4425_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/focus_s0_u4425/map48",
+        "--oracle",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall"
+      ]
+    },
+    {
+      "candidate": "focus_s0_u4475",
+      "map": "map06",
+      "returncode": 0,
+      "wall_s": 3.017611026763916,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/focus_s0_u4475_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/focus_s0_u4475/map06",
+        "--evaluation",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation"
+      ]
+    },
+    {
+      "candidate": "focus_s0_u4475",
+      "map": "map07",
+      "returncode": 0,
+      "wall_s": 3.030512809753418,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/focus_s0_u4475_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/focus_s0_u4475/map07",
+        "--evaluation",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation"
+      ]
+    },
+    {
+      "candidate": "focus_s0_u4475",
+      "map": "map48",
+      "returncode": 0,
+      "wall_s": 2.9421589374542236,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/focus_s0_u4475_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/focus_s0_u4475/map48",
+        "--oracle",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall"
+      ]
+    },
+    {
+      "candidate": "focus_s1_u4375",
+      "map": "map06",
+      "returncode": 0,
+      "wall_s": 3.0152461528778076,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/focus_s1_u4375_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/focus_s1_u4375/map06",
+        "--evaluation",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation"
+      ]
+    },
+    {
+      "candidate": "focus_s1_u4375",
+      "map": "map07",
+      "returncode": 0,
+      "wall_s": 3.0094783306121826,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/focus_s1_u4375_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/focus_s1_u4375/map07",
+        "--evaluation",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation"
+      ]
+    },
+    {
+      "candidate": "focus_s1_u4375",
+      "map": "map48",
+      "returncode": 0,
+      "wall_s": 2.915247917175293,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/focus_s1_u4375_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/focus_s1_u4375/map48",
+        "--oracle",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall"
+      ]
+    },
+    {
+      "candidate": "focus_s1_u4450",
+      "map": "map06",
+      "returncode": 0,
+      "wall_s": 3.043455123901367,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/focus_s1_u4450_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/focus_s1_u4450/map06",
+        "--evaluation",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation"
+      ]
+    },
+    {
+      "candidate": "focus_s1_u4450",
+      "map": "map07",
+      "returncode": 0,
+      "wall_s": 3.040114641189575,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/focus_s1_u4450_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/focus_s1_u4450/map07",
+        "--evaluation",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation"
+      ]
+    },
+    {
+      "candidate": "focus_s1_u4450",
+      "map": "map48",
+      "returncode": 0,
+      "wall_s": 2.9351484775543213,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/focus_s1_u4450_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/focus_s1_u4450/map48",
+        "--oracle",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall"
+      ]
+    },
+    {
+      "candidate": "focus_s2_u3550",
+      "map": "map06",
+      "returncode": 0,
+      "wall_s": 2.9967455863952637,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/focus_s2_u3550_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/focus_s2_u3550/map06",
+        "--evaluation",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation"
+      ]
+    },
+    {
+      "candidate": "focus_s2_u3550",
+      "map": "map07",
+      "returncode": 0,
+      "wall_s": 3.049973726272583,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/focus_s2_u3550_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/focus_s2_u3550/map07",
+        "--evaluation",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation"
+      ]
+    },
+    {
+      "candidate": "focus_s2_u3550",
+      "map": "map48",
+      "returncode": 0,
+      "wall_s": 2.9311630725860596,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/focus_s2_u3550_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/focus_s2_u3550/map48",
+        "--oracle",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall"
+      ]
+    },
+    {
+      "candidate": "focus_s2_u3625",
+      "map": "map06",
+      "returncode": 0,
+      "wall_s": 3.014660120010376,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/focus_s2_u3625_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/focus_s2_u3625/map06",
+        "--evaluation",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation"
+      ]
+    },
+    {
+      "candidate": "focus_s2_u3625",
+      "map": "map07",
+      "returncode": 0,
+      "wall_s": 3.006101369857788,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/focus_s2_u3625_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/focus_s2_u3625/map07",
+        "--evaluation",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation"
+      ]
+    },
+    {
+      "candidate": "focus_s2_u3625",
+      "map": "map48",
+      "returncode": 0,
+      "wall_s": 2.9292471408843994,
+      "command": [
+        "/home/qy/mujoco_playground/.venv/bin/python",
+        "learning/cli/evaluate_skill_sequence.py",
+        "--selection",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/focus_s2_u3625_models.json",
+        "--history",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_bridge/seed0/best.pt",
+        "--output",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/evaluation/focus_s2_u3625/map48",
+        "--oracle",
+        "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall"
+      ]
+    }
+  ],
+  "elapsed_s": 108.40826106071472
+}

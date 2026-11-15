@@ -1,0 +1,20 @@
+{
+  "question": "Does explicit phase2 event and lateral-exit supervision improve causal event/state accuracy and calibrated planning?",
+  "arms": {
+    "control": 0.0,
+    "focus": 1.0
+  },
+  "parents": {
+    "0": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_low_lr/training/seed0/best.pt",
+    "1": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_low_lr/training/seed1/best.pt",
+    "2": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_low_lr/training/seed2/best.pt"
+  },
+  "budget": "3seeds x2arms x1000 updates, batch64, lr3e-5, save every25. Total6000 updates. Max1500s training phase, no automatic extension.",
+  "loss_change": "Balanced phase2-vs-rest BCE plus mean squared world-y/.05m,yaw/.05rad,world-vy/.1m_s at actual handoff onset; combined ablation, not isolated attribution of these terms.",
+  "unchanged": "Same parents/Adam/sampling seeds/data/normalizers/architecture/frozen skills/physics/ground models/state-event guard/goal and uncertainty rule.",
+  "role": "TRAIN216/DEV72 original map split; mechanism map48 already known DEV; no new TEST or physics.",
+  "selection": "Best and last per run by that arm DEV loss; compare arms on common event/state/full-chain metrics, never on loss values with different definitions. Screen all saved checkpoints on originalDEV only if necessary; no map48 selection.",
+  "acceptance": "Retain failures and original margins; no adoption from raw loss or event counts. Full-chain raw/own-calibrated admission and matched I/C results determine utility.",
+  "code_base": "bb19f705",
+  "stopping": "Finite1000 updates each or actual process failure/1500s; expected8-10min training. No new control policy training."
+}

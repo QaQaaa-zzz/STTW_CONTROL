@@ -6,8 +6,8 @@ from sttw_control.playground_arx import states
 
 p=argparse.ArgumentParser(description=__doc__)
 for name in ['run','baseline','output']:p.add_argument('--'+name,type=Path,required=True)
-a=p.parse_args();a.output.mkdir(parents=True,exist_ok=True);records=[];parity=[];event_records=[]
-for model in ['seed0_update3475','seed1_update3450']:
+a=p.parse_args();a.output.mkdir(parents=True,exist_ok=True);records=[];parity=[];event_records=[];models=json.loads((a.run/'contract.json').read_text())['models']
+for model in models:
  for mapid in ['map06','map07','map48']:
   old=a.baseline/'calibration_eval'/model/'C' if mapid=='map48' else a.baseline/'calibration_input'/model/mapid/'C'
   rows=json.loads((old/'cases.json').read_text());zold=np.load(old/'predictions.npz');keep=[i for i,r in enumerate(rows) if mapid!='map48' or r['upstream']!=0]
@@ -41,7 +41,7 @@ for model in ['seed0_update3475','seed1_update3450']:
     temporal=np.stack([np.interp(tt,np.arange(251)*.02,estimate[:,j]) for j in range(3)],1)-truth[valid_time,:3]
     records.append(dict(model=model,map=mapid,mode=mode,root=row['root'],route=row['route'],speed=row['speed'],actual_success=row['actual_success'],events_found=bool(row['events_found']),admitted=bool(row['admitted']),handoff_time_error_s=float(row['handoff_time_s']-trace[after,0][0]),initial_xyz_error_m=float(np.linalg.norm(estimate[0,:3]-entry)),initial_y_error_m=float(estimate[0,1]-entry[1]),spatial_y_rmse_m=float(np.sqrt(np.mean(error[:,1]**2))) if len(error) else None,spatial_y_max_m=float(np.abs(error[:,1]).max()) if len(error) else None,near_obstacle_y_max_m=float(np.abs(error[near,1]).max()) if near.any() else None,temporal_xy_rmse_m=float(np.sqrt(np.mean(np.sum(temporal[:,:2]**2,1)))),uncovered_spatial_samples=int((~inside).sum()),nonmonotonic_predicted_steps=int((np.diff(estimate[:,0])<0).sum()),physical_samples=len(truth)))
 summary=[]
-for model in ['seed0_update3475','seed1_update3450']:
+for model in models:
  for maps in [('map06','map07'),('map48',)]:
   for mode in ['baseline','physical','history','both']:
    rows=[r for r in records if r['model']==model and r['map'] in maps and r['mode']==mode];supported=[r for r in rows if r['events_found']];overlap=[r for r in supported if r['spatial_y_rmse_m'] is not None]
@@ -53,7 +53,7 @@ for name,value in [('summary',summary),('parity',parity)]:
 with (a.output/'event_time_diagnostic.csv').open('w') as f:
  w=csv.DictWriter(f,fieldnames=event_records[0]);w.writeheader();w.writerows(event_records)
 event_summary=[]
-for model in ['seed0_update3475','seed1_update3450']:
+for model in models:
  for maps in [['map06','map07'],['map48']]:
   rows=[r for r in event_records if r['model']==model and r['map'] in maps and r['event_found'] and r['time_grid_available']]
   event_summary.append(dict(model=model,maps=maps,n=len(rows),**{k:float(np.mean([abs(r[k]) for r in rows])) for k in ['event_dt_s','event_x_error_m','event_y_error_m','time_grid_x_error_m','time_grid_y_error_m']}))

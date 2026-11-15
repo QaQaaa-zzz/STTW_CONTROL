@@ -1,0 +1,122 @@
+[
+  {
+    "name": "control_s0_u4300",
+    "arm": "control",
+    "seed": 0,
+    "update": 4300,
+    "best": true,
+    "last": false,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/training/control/seed0/model_4300.pt",
+    "sha256": "abe8976f9310231892a0314e926e97c704f1b0cea67e52f7c70f2a8049322794"
+  },
+  {
+    "name": "control_s0_u4475",
+    "arm": "control",
+    "seed": 0,
+    "update": 4475,
+    "best": false,
+    "last": true,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/training/control/seed0/model_4475.pt",
+    "sha256": "bd2b58e5e5a305ae26c2efbc40bb14909ccd876e9c81ed502ddeb026c8c97a43"
+  },
+  {
+    "name": "control_s1_u4225",
+    "arm": "control",
+    "seed": 1,
+    "update": 4225,
+    "best": true,
+    "last": false,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/training/control/seed1/model_4225.pt",
+    "sha256": "3fc331d710034ad880278739353a7c75b7b7c6d80cf4cddb4e9470e6dc2a15e4"
+  },
+  {
+    "name": "control_s1_u4450",
+    "arm": "control",
+    "seed": 1,
+    "update": 4450,
+    "best": false,
+    "last": true,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/training/control/seed1/model_4450.pt",
+    "sha256": "4e134e17e9bdc48db08965f3489cbce30f687a0b9e723213133bc24ce80def08"
+  },
+  {
+    "name": "control_s2_u3525",
+    "arm": "control",
+    "seed": 2,
+    "update": 3525,
+    "best": true,
+    "last": false,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/training/control/seed2/model_3525.pt",
+    "sha256": "c7e295daeb599e0205bd297701e3db807ca7900abcd4324d7b6912d1d50d2ad1"
+  },
+  {
+    "name": "control_s2_u3625",
+    "arm": "control",
+    "seed": 2,
+    "update": 3625,
+    "best": false,
+    "last": true,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/training/control/seed2/model_3625.pt",
+    "sha256": "41ce660788b64e32f5afee06103775aed91e7a0506391dfda27cdfebf39f8bc1"
+  },
+  {
+    "name": "focus_s0_u4425",
+    "arm": "focus",
+    "seed": 0,
+    "update": 4425,
+    "best": true,
+    "last": false,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/training/focus/seed0/model_4425.pt",
+    "sha256": "d4accf9a8806d4c2fff540080d0a48272c5e81c04cb1d82326e72d8d1c469ecf"
+  },
+  {
+    "name": "focus_s0_u4475",
+    "arm": "focus",
+    "seed": 0,
+    "update": 4475,
+    "best": false,
+    "last": true,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/training/focus/seed0/model_4475.pt",
+    "sha256": "899fafc6e36c1dac7e50610cdf43fb1ddf64d87d751f2c93f7b1ca9e1cc48cd6"
+  },
+  {
+    "name": "focus_s1_u4375",
+    "arm": "focus",
+    "seed": 1,
+    "update": 4375,
+    "best": true,
+    "last": false,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/training/focus/seed1/model_4375.pt",
+    "sha256": "fdd00047fbb0472ff6eba3429ca1f75c9ba1e93981dc0f06ef65f6efdca2310d"
+  },
+  {
+    "name": "focus_s1_u4450",
+    "arm": "focus",
+    "seed": 1,
+    "update": 4450,
+    "best": false,
+    "last": true,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/training/focus/seed1/model_4450.pt",
+    "sha256": "9370f4a02f591e652a5838276a6fef2dd5af610804c55664b9ece8f23a1f9482"
+  },
+  {
+    "name": "focus_s2_u3550",
+    "arm": "focus",
+    "seed": 2,
+    "update": 3550,
+    "best": true,
+    "last": false,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/training/focus/seed2/model_3550.pt",
+    "sha256": "ac9d2cdf6955f461469c0fdec241aabb0d48c93cac6aa21b4740cacddcd76e77"
+  },
+  {
+    "name": "focus_s2_u3625",
+    "arm": "focus",
+    "seed": 2,
+    "update": 3625,
+    "best": false,
+    "last": true,
+    "checkpoint": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_handoff_focus/training/focus/seed2/model_3625.pt",
+    "sha256": "c5c784b77c6c1016f6b5de12a8665d75e0bc249a767230f8d944fd0a04a75bc8"
+  }
+]
