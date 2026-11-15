@@ -1,0 +1,9 @@
+{
+  "cases": 18,
+  "true_admit": 2,
+  "false_admit": 1,
+  "false_reject": 2,
+  "true_reject": 13,
+  "scope": "First C-only raw-envelope DEV diagnostic; no I/G/strong-backtracking comparison or new margin calibration; full approach/departure tracking-domain and all-stage posture/obstacle gates included",
+  "runtime_s": 2.1451679130550474
+}
