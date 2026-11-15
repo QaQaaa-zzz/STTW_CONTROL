@@ -1,0 +1,25 @@
+{
+  "world_model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p3_world_handoffloss/seed0/best.pt",
+  "world_model_sha256": "f2a03bf2af765d3e945f895cb500b283b4626d6c00343ad4c5ba692c875cee70",
+  "data": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p3_world_data",
+  "events": [
+    "first no-wheel-contact sample after RB entry andx>8.8",
+    "first far contact from recorded event"
+  ],
+  "labels": "Cumulative event occurrence derived from5ms records, evaluated on20ms clock. Missing events stay all-zero; no motion interpolation.",
+  "features": "Frozen predicted12qpos+11qvel+128hidden+elapsed since actual RB entry; no measured future or true event time input",
+  "normalization": "TRAIN frozen-prediction features only",
+  "updates": 600,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "batch": 64,
+  "lr": 0.0003,
+  "clip": 1.0,
+  "checkpoint_every": 25,
+  "selection": "DEV mean absolute event-time error; missing/spurious events penalized by2.5s horizon",
+  "unchanged": "Physical model weights and phase handoff decisions unchanged; only event readout trained",
+  "role": "Known topology DEV; not test or proof of sustained flight"
+}

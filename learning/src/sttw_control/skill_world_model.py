@@ -92,5 +92,5 @@ class SkillWorldModel(nn.Module):
         lane=torch.arange(len(index),device=index.device)
         values={name:torch.stack([getattr(s,name) for s in states],1) for name in ['qpos','qvel','history','contact','phase','hidden']}
         next_state=SkillWorldState(**{name:value[lane,index] for name,value in values.items()},elapsed_steps=initial_steps+index+1)
-        return dict(qpos=values['qpos'],qvel=values['qvel'],history=values['history'],contact_logits=torch.stack(contacts,1),phase_logits=phase_logits,
+        return dict(qpos=values['qpos'],qvel=values['qvel'],history=values['history'],hidden=values['hidden'],contact_logits=torch.stack(contacts,1),phase_logits=phase_logits,
                     valid=torch.arange(max_steps,device=index.device)[None,:]<=index[:,None],event_found=found,event_step=index+1,duration_s=(index+1)*self.dt,next_state=next_state)

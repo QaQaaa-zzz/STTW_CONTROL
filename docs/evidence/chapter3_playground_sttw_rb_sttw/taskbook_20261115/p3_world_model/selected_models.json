@@ -1,0 +1,22 @@
+{
+  "role": "DEV-selected candidate interfaces for P4; no deployment or full-chain success claim",
+  "models": {
+    "approach": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_approach_models_continue/residual_seed2/best.pt",
+      "sha256": "60537cd938766aa9d5128344d82183c2d9821e92d8cf1a6348df269d310f1c1a"
+    },
+    "jump": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p3_world_handoffloss/seed0/best.pt",
+      "sha256": "f2a03bf2af765d3e945f895cb500b283b4626d6c00343ad4c5ba692c875cee70"
+    },
+    "departure": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/residual_seed2/best.pt",
+      "sha256": "e90b96930ddb549cde6ae40390bafe66253037a6a511fc5bb2eb7b69ef5658bf"
+    },
+    "events": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p3_events/seed1/best.pt",
+      "sha256": "7c4c9028a890f54519d7ff20d384d75fbd3b711d7bb05989bac1028ab80ea24e"
+    }
+  },
+  "missing": "Ground latent-to-controller-history bridge, full-chain calibration and G/I/C/Oracle validation"
+}

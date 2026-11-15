@@ -1,0 +1,14 @@
+{
+  "case": "map06/rb_run3_route0_h75_v0",
+  "world_model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p3_world_handoffloss/seed0/best.pt",
+  "event_model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p3_events/seed1/best.pt",
+  "device": "cuda",
+  "steps": [
+    100,
+    40,
+    60
+  ],
+  "qpos_resume_max": 0.0,
+  "event_resume_max": 0.0,
+  "physical_change_max": 0.0
+}

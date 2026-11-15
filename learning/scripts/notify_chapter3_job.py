@@ -26,7 +26,7 @@ if args.message:
     body = f'{when}\n{args.message}'
 else:
     try:
-        fd = os.pidfd_open(args.pid)
+        fd = os.pidfd_open(args.pid) if args.pid else None
     except ProcessLookupError:
         fd = None  # The observed job may finish before this watcher starts.
     if fd is not None:
