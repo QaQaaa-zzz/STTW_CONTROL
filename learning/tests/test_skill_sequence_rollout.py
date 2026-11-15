@@ -1,8 +1,16 @@
 import unittest
 import torch
-from sttw_control.skill_sequence_rollout import native_to_ground,ground_to_native
+from sttw_control.skill_sequence_rollout import native_to_ground,ground_to_native,handoff_joint_errors
 
 class SkillSequenceTest(unittest.TestCase):
+    def test_lock_errors_use_joint_schema_and_reject_false_phase_event(self):
+        schema=dict(qpos_names=['hip_joint','other','knee_joint'],qvel_names=['other','knee_joint','hip_joint'])
+        q=torch.tensor([[0.,99.,0.],[.02,99.,0.],[0.,99.,0.]])
+        v=torch.tensor([[99.,0.,0.],[99.,0.,0.],[99.,.2,0.]])
+        position,rate=handoff_joint_errors(q,v,torch.zeros(2),schema)
+        self.assertEqual(((position<.01)&(rate<.1)).tolist(),[True,False,False])
+        self.assertEqual(q[1,1].item(),99.)
+
     def test_native_joint_order_round_trip_for_locked_ground(self):
         schema=dict(qpos_names=['x','y','z','w','qx','qy','qz','rearwheel_joint','steering_joint','frontwheel_joint','hip_joint','knee_joint'],steer_dof=7,front_dof=8,rear_dof=6)
         q=torch.tensor([[1.,2.,.3,.70710678,0.,0.,.70710678,11.,.2,13.,.4,-.1]])

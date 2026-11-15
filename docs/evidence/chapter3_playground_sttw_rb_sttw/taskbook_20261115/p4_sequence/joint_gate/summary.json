@@ -1,0 +1,119 @@
+{
+  "home": [
+    -1.2,
+    2.5
+  ],
+  "position_tolerance_rad": 0.01,
+  "velocity_tolerance_rad_s": 0.1,
+  "groups": [
+    {
+      "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_reset/residual/map06/C",
+      "cases": 36,
+      "joint_ready": 0,
+      "original_admitted": 22,
+      "admitted_with_joint_gate": 0,
+      "measured_events": 36,
+      "measured_ready": 36
+    },
+    {
+      "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/evaluation/seed0/map06",
+      "cases": 36,
+      "joint_ready": 0,
+      "original_admitted": 29,
+      "admitted_with_joint_gate": 0,
+      "measured_events": 36,
+      "measured_ready": 36
+    },
+    {
+      "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/evaluation/seed1/map06",
+      "cases": 36,
+      "joint_ready": 0,
+      "original_admitted": 14,
+      "admitted_with_joint_gate": 0,
+      "measured_events": 36,
+      "measured_ready": 36
+    },
+    {
+      "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/evaluation/seed2/map06",
+      "cases": 36,
+      "joint_ready": 0,
+      "original_admitted": 13,
+      "admitted_with_joint_gate": 0,
+      "measured_events": 36,
+      "measured_ready": 36
+    },
+    {
+      "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_reset/residual/map07/C",
+      "cases": 36,
+      "joint_ready": 0,
+      "original_admitted": 22,
+      "admitted_with_joint_gate": 0,
+      "measured_events": 36,
+      "measured_ready": 36
+    },
+    {
+      "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/evaluation/seed0/map07",
+      "cases": 36,
+      "joint_ready": 0,
+      "original_admitted": 27,
+      "admitted_with_joint_gate": 0,
+      "measured_events": 36,
+      "measured_ready": 36
+    },
+    {
+      "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/evaluation/seed1/map07",
+      "cases": 36,
+      "joint_ready": 0,
+      "original_admitted": 16,
+      "admitted_with_joint_gate": 0,
+      "measured_events": 36,
+      "measured_ready": 36
+    },
+    {
+      "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/evaluation/seed2/map07",
+      "cases": 36,
+      "joint_ready": 0,
+      "original_admitted": 13,
+      "admitted_with_joint_gate": 0,
+      "measured_events": 36,
+      "measured_ready": 36
+    },
+    {
+      "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_history_reset/residual/map48/C",
+      "cases": 18,
+      "joint_ready": 0,
+      "original_admitted": 0,
+      "admitted_with_joint_gate": 0,
+      "measured_events": 12,
+      "measured_ready": 12
+    },
+    {
+      "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/evaluation/seed0/map48",
+      "cases": 18,
+      "joint_ready": 0,
+      "original_admitted": 7,
+      "admitted_with_joint_gate": 0,
+      "measured_events": 12,
+      "measured_ready": 12
+    },
+    {
+      "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/evaluation/seed1/map48",
+      "cases": 18,
+      "joint_ready": 0,
+      "original_admitted": 3,
+      "admitted_with_joint_gate": 0,
+      "measured_events": 12,
+      "measured_ready": 12
+    },
+    {
+      "prediction": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_entry_exposure/evaluation/seed2/map48",
+      "cases": 18,
+      "joint_ready": 0,
+      "original_admitted": 1,
+      "admitted_with_joint_gate": 0,
+      "measured_events": 12,
+      "measured_ready": 12
+    }
+  ],
+  "scope": "Known DEV saved-state audit. Necessary joint check only, not full contact/body readiness. Shared prefixes are not independent episodes."
+}

@@ -1,0 +1,8 @@
+{
+  "change": "Only add necessary predicted terminal hip/knee lock gate; retain original phase stop",
+  "budget": "One GPU query of existing 18 map48 candidates, max120s, zero training or physics episodes",
+  "data_role": "Known DEV",
+  "acceptance": "Retain exact prior predicted trajectories; reject invalid joint states; no claim of repaired model",
+  "source": "seed1_models.json; existing history bridge",
+  "stop": "120s timeout"
+}

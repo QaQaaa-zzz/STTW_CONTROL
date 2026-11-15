@@ -5,6 +5,14 @@ from .playground_prediction import rotate
 from .skill_history_bridge import bridge_features
 
 
+def handoff_joint_errors(qpos,qvel,home,schema):
+    """Necessary lock checks; passing does not certify contact/body readiness."""
+    joints=['hip_joint','knee_joint']
+    qi=[schema['qpos_names'].index(n) for n in joints]
+    vi=[schema['qvel_names'].index(n) for n in joints]
+    return (qpos[...,qi]-home).abs().amax(-1),qvel[...,vi].abs().amax(-1)
+
+
 def native_to_ground(qpos,qvel,schema):
     order=[schema['qpos_names'].index(n) for n in ['steering_joint','frontwheel_joint','rearwheel_joint','hip_joint','knee_joint']]
     inv=qpos[:,3:7]*qpos.new_tensor([1,-1,-1,-1])
