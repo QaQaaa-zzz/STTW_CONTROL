@@ -1,0 +1,61 @@
+{
+  "formal_convergence_verified": false,
+  "adopted_for_planning": false,
+  "initial_fit_updates_each": 600,
+  "models": 6,
+  "total_updates": 3600,
+  "wall_s": 1968.2262,
+  "late_reductions": [
+    {
+      "kind": "residual",
+      "seed": 0,
+      "relative_400_to600": {
+        "1.0": 0.1009864175559112,
+        "3.0": 0.08624910717451617
+      }
+    },
+    {
+      "kind": "residual",
+      "seed": 1,
+      "relative_400_to600": {
+        "1.0": 0.13477393779859947,
+        "3.0": 0.08850940892492731
+      }
+    },
+    {
+      "kind": "residual",
+      "seed": 2,
+      "relative_400_to600": {
+        "1.0": 0.1365032058761314,
+        "3.0": 0.09973819720128008
+      }
+    },
+    {
+      "kind": "direct",
+      "seed": 0,
+      "relative_400_to600": {
+        "1.0": 0.0844550405541824,
+        "3.0": -0.03985225917652513
+      }
+    },
+    {
+      "kind": "direct",
+      "seed": 1,
+      "relative_400_to600": {
+        "1.0": 0.06685321454725535,
+        "3.0": -0.028614577441930633
+      }
+    },
+    {
+      "kind": "direct",
+      "seed": 2,
+      "relative_400_to600": {
+        "1.0": 0.037445318010105644,
+        "3.0": 0.06539794152327438
+      }
+    }
+  ],
+  "next": "Matched600-update continuation,model+Adam from last600;retain each original fixedDEV best,checkpoint every25;paired new sampling seed offset1000",
+  "next_review": "Compare1000to1200 fixedDEV1s/3s and tails across3seeds. Further budget only after review;no unbounded continuation.",
+  "limits": "Window true-history entry,knownDEV;not full conditional-chain success or independentTEST."
+}

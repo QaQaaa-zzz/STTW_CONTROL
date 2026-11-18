@@ -1,0 +1,1182 @@
+{
+  "alpha_train_values": [
+    0.0,
+    0.5,
+    1.0
+  ],
+  "alpha_conditioned": true,
+  "ground": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_models/phase0_continue600/residual_seed1",
+  "ground_sha256": "e41dc9f229f4011c3d129d8f6fb04ca301ed274c0f09f0f830b9335dd7976d1e",
+  "collection": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_models/conditional_history_bridge/collection",
+  "rows": [
+    {
+      "case": "alpha_source00/rb_run3_route0_h75_v0",
+      "split": "TRAIN",
+      "approach_alpha": 0.0,
+      "start": 0,
+      "length": 192,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation/rb_run3_route0_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source00/rb_run3_route0_h75_v1",
+      "split": "TRAIN",
+      "approach_alpha": 0.0,
+      "start": 192,
+      "length": 192,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation/rb_run3_route0_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source00/rb_run3_route0_h75_v2",
+      "split": "TRAIN",
+      "approach_alpha": 0.0,
+      "start": 384,
+      "length": 182,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation/rb_run3_route0_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source00/rb_run3_route0_h75_v3",
+      "split": "TRAIN",
+      "approach_alpha": 0.0,
+      "start": 566,
+      "length": 182,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation/rb_run3_route0_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source00/rb_run3_route3_h75_v0",
+      "split": "TRAIN",
+      "approach_alpha": 0.0,
+      "start": 748,
+      "length": 207,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation/rb_run3_route3_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source00/rb_run3_route3_h75_v1",
+      "split": "TRAIN",
+      "approach_alpha": 0.0,
+      "start": 955,
+      "length": 206,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation/rb_run3_route3_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source00/rb_run3_route3_h75_v2",
+      "split": "TRAIN",
+      "approach_alpha": 0.0,
+      "start": 1161,
+      "length": 199,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation/rb_run3_route3_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source00/rb_run3_route3_h75_v3",
+      "split": "TRAIN",
+      "approach_alpha": 0.0,
+      "start": 1360,
+      "length": 198,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation/rb_run3_route3_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source00/rb_run3_route6_h75_v0",
+      "split": "TRAIN",
+      "approach_alpha": 0.0,
+      "start": 1558,
+      "length": 204,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation/rb_run3_route6_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source00/rb_run3_route6_h75_v1",
+      "split": "TRAIN",
+      "approach_alpha": 0.0,
+      "start": 1762,
+      "length": 203,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation/rb_run3_route6_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source00/rb_run3_route6_h75_v2",
+      "split": "TRAIN",
+      "approach_alpha": 0.0,
+      "start": 1965,
+      "length": 194,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation/rb_run3_route6_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source00/rb_run3_route6_h75_v3",
+      "split": "TRAIN",
+      "approach_alpha": 0.0,
+      "start": 2159,
+      "length": 194,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation/rb_run3_route6_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source03/rb_run3_route0_h75_v0",
+      "split": "TRAIN",
+      "approach_alpha": 0.5,
+      "start": 2353,
+      "length": 192,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in0.5_out0/evaluation/rb_run3_route0_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source03/rb_run3_route0_h75_v1",
+      "split": "TRAIN",
+      "approach_alpha": 0.5,
+      "start": 2545,
+      "length": 192,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in0.5_out0/evaluation/rb_run3_route0_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source03/rb_run3_route0_h75_v2",
+      "split": "TRAIN",
+      "approach_alpha": 0.5,
+      "start": 2737,
+      "length": 182,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in0.5_out0/evaluation/rb_run3_route0_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source03/rb_run3_route0_h75_v3",
+      "split": "TRAIN",
+      "approach_alpha": 0.5,
+      "start": 2919,
+      "length": 182,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in0.5_out0/evaluation/rb_run3_route0_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source03/rb_run3_route3_h75_v0",
+      "split": "TRAIN",
+      "approach_alpha": 0.5,
+      "start": 3101,
+      "length": 202,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in0.5_out0/evaluation/rb_run3_route3_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source03/rb_run3_route3_h75_v1",
+      "split": "TRAIN",
+      "approach_alpha": 0.5,
+      "start": 3303,
+      "length": 202,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in0.5_out0/evaluation/rb_run3_route3_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source03/rb_run3_route3_h75_v2",
+      "split": "TRAIN",
+      "approach_alpha": 0.5,
+      "start": 3505,
+      "length": 192,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in0.5_out0/evaluation/rb_run3_route3_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source03/rb_run3_route3_h75_v3",
+      "split": "TRAIN",
+      "approach_alpha": 0.5,
+      "start": 3697,
+      "length": 191,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in0.5_out0/evaluation/rb_run3_route3_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source03/rb_run3_route6_h75_v0",
+      "split": "TRAIN",
+      "approach_alpha": 0.5,
+      "start": 3888,
+      "length": 200,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in0.5_out0/evaluation/rb_run3_route6_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source03/rb_run3_route6_h75_v1",
+      "split": "TRAIN",
+      "approach_alpha": 0.5,
+      "start": 4088,
+      "length": 200,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in0.5_out0/evaluation/rb_run3_route6_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source03/rb_run3_route6_h75_v2",
+      "split": "TRAIN",
+      "approach_alpha": 0.5,
+      "start": 4288,
+      "length": 189,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in0.5_out0/evaluation/rb_run3_route6_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source03/rb_run3_route6_h75_v3",
+      "split": "TRAIN",
+      "approach_alpha": 0.5,
+      "start": 4477,
+      "length": 189,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in0.5_out0/evaluation/rb_run3_route6_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source06/rb_run3_route0_h75_v0",
+      "split": "TRAIN",
+      "approach_alpha": 1.0,
+      "start": 4666,
+      "length": 191,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in1_out0/evaluation/rb_run3_route0_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source06/rb_run3_route0_h75_v1",
+      "split": "TRAIN",
+      "approach_alpha": 1.0,
+      "start": 4857,
+      "length": 191,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in1_out0/evaluation/rb_run3_route0_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source06/rb_run3_route0_h75_v2",
+      "split": "TRAIN",
+      "approach_alpha": 1.0,
+      "start": 5048,
+      "length": 182,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in1_out0/evaluation/rb_run3_route0_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source06/rb_run3_route0_h75_v3",
+      "split": "TRAIN",
+      "approach_alpha": 1.0,
+      "start": 5230,
+      "length": 181,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in1_out0/evaluation/rb_run3_route0_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source06/rb_run3_route3_h75_v0",
+      "split": "TRAIN",
+      "approach_alpha": 1.0,
+      "start": 5411,
+      "length": 200,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in1_out0/evaluation/rb_run3_route3_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source06/rb_run3_route3_h75_v1",
+      "split": "TRAIN",
+      "approach_alpha": 1.0,
+      "start": 5611,
+      "length": 199,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in1_out0/evaluation/rb_run3_route3_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source06/rb_run3_route3_h75_v2",
+      "split": "TRAIN",
+      "approach_alpha": 1.0,
+      "start": 5810,
+      "length": 189,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in1_out0/evaluation/rb_run3_route3_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source06/rb_run3_route3_h75_v3",
+      "split": "TRAIN",
+      "approach_alpha": 1.0,
+      "start": 5999,
+      "length": 189,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in1_out0/evaluation/rb_run3_route3_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source06/rb_run3_route6_h75_v0",
+      "split": "TRAIN",
+      "approach_alpha": 1.0,
+      "start": 6188,
+      "length": 197,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in1_out0/evaluation/rb_run3_route6_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source06/rb_run3_route6_h75_v1",
+      "split": "TRAIN",
+      "approach_alpha": 1.0,
+      "start": 6385,
+      "length": 197,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in1_out0/evaluation/rb_run3_route6_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source06/rb_run3_route6_h75_v2",
+      "split": "TRAIN",
+      "approach_alpha": 1.0,
+      "start": 6582,
+      "length": 186,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in1_out0/evaluation/rb_run3_route6_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source06/rb_run3_route6_h75_v3",
+      "split": "TRAIN",
+      "approach_alpha": 1.0,
+      "start": 6768,
+      "length": 186,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in1_out0/evaluation/rb_run3_route6_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source09/rb_run3_route0_h75_v0",
+      "split": "TRAIN",
+      "approach_alpha": 0.0,
+      "start": 6954,
+      "length": 192,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation/rb_run3_route0_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source09/rb_run3_route0_h75_v1",
+      "split": "TRAIN",
+      "approach_alpha": 0.0,
+      "start": 7146,
+      "length": 192,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation/rb_run3_route0_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source09/rb_run3_route0_h75_v2",
+      "split": "TRAIN",
+      "approach_alpha": 0.0,
+      "start": 7338,
+      "length": 182,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation/rb_run3_route0_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source09/rb_run3_route0_h75_v3",
+      "split": "TRAIN",
+      "approach_alpha": 0.0,
+      "start": 7520,
+      "length": 182,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation/rb_run3_route0_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source09/rb_run3_route3_h75_v0",
+      "split": "TRAIN",
+      "approach_alpha": 0.0,
+      "start": 7702,
+      "length": 207,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation/rb_run3_route3_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source09/rb_run3_route3_h75_v1",
+      "split": "TRAIN",
+      "approach_alpha": 0.0,
+      "start": 7909,
+      "length": 206,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation/rb_run3_route3_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source09/rb_run3_route3_h75_v2",
+      "split": "TRAIN",
+      "approach_alpha": 0.0,
+      "start": 8115,
+      "length": 199,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation/rb_run3_route3_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source09/rb_run3_route3_h75_v3",
+      "split": "TRAIN",
+      "approach_alpha": 0.0,
+      "start": 8314,
+      "length": 199,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation/rb_run3_route3_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source09/rb_run3_route6_h75_v0",
+      "split": "TRAIN",
+      "approach_alpha": 0.0,
+      "start": 8513,
+      "length": 207,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation/rb_run3_route6_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source09/rb_run3_route6_h75_v1",
+      "split": "TRAIN",
+      "approach_alpha": 0.0,
+      "start": 8720,
+      "length": 207,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation/rb_run3_route6_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source09/rb_run3_route6_h75_v2",
+      "split": "TRAIN",
+      "approach_alpha": 0.0,
+      "start": 8927,
+      "length": 197,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation/rb_run3_route6_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source09/rb_run3_route6_h75_v3",
+      "split": "TRAIN",
+      "approach_alpha": 0.0,
+      "start": 9124,
+      "length": 198,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation/rb_run3_route6_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source12/rb_run3_route0_h75_v0",
+      "split": "TRAIN",
+      "approach_alpha": 0.5,
+      "start": 9322,
+      "length": 192,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in0.5_out0/evaluation/rb_run3_route0_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source12/rb_run3_route0_h75_v1",
+      "split": "TRAIN",
+      "approach_alpha": 0.5,
+      "start": 9514,
+      "length": 192,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in0.5_out0/evaluation/rb_run3_route0_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source12/rb_run3_route0_h75_v2",
+      "split": "TRAIN",
+      "approach_alpha": 0.5,
+      "start": 9706,
+      "length": 182,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in0.5_out0/evaluation/rb_run3_route0_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source12/rb_run3_route0_h75_v3",
+      "split": "TRAIN",
+      "approach_alpha": 0.5,
+      "start": 9888,
+      "length": 182,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in0.5_out0/evaluation/rb_run3_route0_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source12/rb_run3_route3_h75_v0",
+      "split": "TRAIN",
+      "approach_alpha": 0.5,
+      "start": 10070,
+      "length": 203,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in0.5_out0/evaluation/rb_run3_route3_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source12/rb_run3_route3_h75_v1",
+      "split": "TRAIN",
+      "approach_alpha": 0.5,
+      "start": 10273,
+      "length": 202,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in0.5_out0/evaluation/rb_run3_route3_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source12/rb_run3_route3_h75_v2",
+      "split": "TRAIN",
+      "approach_alpha": 0.5,
+      "start": 10475,
+      "length": 192,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in0.5_out0/evaluation/rb_run3_route3_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source12/rb_run3_route3_h75_v3",
+      "split": "TRAIN",
+      "approach_alpha": 0.5,
+      "start": 10667,
+      "length": 191,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in0.5_out0/evaluation/rb_run3_route3_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source12/rb_run3_route6_h75_v0",
+      "split": "TRAIN",
+      "approach_alpha": 0.5,
+      "start": 10858,
+      "length": 199,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in0.5_out0/evaluation/rb_run3_route6_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source12/rb_run3_route6_h75_v1",
+      "split": "TRAIN",
+      "approach_alpha": 0.5,
+      "start": 11057,
+      "length": 199,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in0.5_out0/evaluation/rb_run3_route6_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source12/rb_run3_route6_h75_v2",
+      "split": "TRAIN",
+      "approach_alpha": 0.5,
+      "start": 11256,
+      "length": 188,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in0.5_out0/evaluation/rb_run3_route6_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source12/rb_run3_route6_h75_v3",
+      "split": "TRAIN",
+      "approach_alpha": 0.5,
+      "start": 11444,
+      "length": 188,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in0.5_out0/evaluation/rb_run3_route6_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source15/rb_run3_route0_h75_v0",
+      "split": "TRAIN",
+      "approach_alpha": 1.0,
+      "start": 11632,
+      "length": 192,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in1_out0/evaluation/rb_run3_route0_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source15/rb_run3_route0_h75_v1",
+      "split": "TRAIN",
+      "approach_alpha": 1.0,
+      "start": 11824,
+      "length": 192,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in1_out0/evaluation/rb_run3_route0_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source15/rb_run3_route0_h75_v2",
+      "split": "TRAIN",
+      "approach_alpha": 1.0,
+      "start": 12016,
+      "length": 182,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in1_out0/evaluation/rb_run3_route0_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source15/rb_run3_route0_h75_v3",
+      "split": "TRAIN",
+      "approach_alpha": 1.0,
+      "start": 12198,
+      "length": 182,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in1_out0/evaluation/rb_run3_route0_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source15/rb_run3_route3_h75_v0",
+      "split": "TRAIN",
+      "approach_alpha": 1.0,
+      "start": 12380,
+      "length": 201,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in1_out0/evaluation/rb_run3_route3_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source15/rb_run3_route3_h75_v1",
+      "split": "TRAIN",
+      "approach_alpha": 1.0,
+      "start": 12581,
+      "length": 200,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in1_out0/evaluation/rb_run3_route3_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source15/rb_run3_route3_h75_v2",
+      "split": "TRAIN",
+      "approach_alpha": 1.0,
+      "start": 12781,
+      "length": 190,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in1_out0/evaluation/rb_run3_route3_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source15/rb_run3_route3_h75_v3",
+      "split": "TRAIN",
+      "approach_alpha": 1.0,
+      "start": 12971,
+      "length": 189,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in1_out0/evaluation/rb_run3_route3_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source15/rb_run3_route6_h75_v0",
+      "split": "TRAIN",
+      "approach_alpha": 1.0,
+      "start": 13160,
+      "length": 197,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in1_out0/evaluation/rb_run3_route6_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source15/rb_run3_route6_h75_v1",
+      "split": "TRAIN",
+      "approach_alpha": 1.0,
+      "start": 13357,
+      "length": 197,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in1_out0/evaluation/rb_run3_route6_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source15/rb_run3_route6_h75_v2",
+      "split": "TRAIN",
+      "approach_alpha": 1.0,
+      "start": 13554,
+      "length": 187,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in1_out0/evaluation/rb_run3_route6_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source15/rb_run3_route6_h75_v3",
+      "split": "TRAIN",
+      "approach_alpha": 1.0,
+      "start": 13741,
+      "length": 187,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in1_out0/evaluation/rb_run3_route6_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source18/rb_run3_route0_h75_v0",
+      "split": "DEV",
+      "approach_alpha": 0.0,
+      "start": 13928,
+      "length": 191,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route0_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source18/rb_run3_route0_h75_v1",
+      "split": "DEV",
+      "approach_alpha": 0.0,
+      "start": 14119,
+      "length": 192,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route0_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source18/rb_run3_route0_h75_v2",
+      "split": "DEV",
+      "approach_alpha": 0.0,
+      "start": 14311,
+      "length": 182,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route0_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source18/rb_run3_route0_h75_v3",
+      "split": "DEV",
+      "approach_alpha": 0.0,
+      "start": 14493,
+      "length": 182,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route0_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source18/rb_run3_route3_h75_v0",
+      "split": "DEV",
+      "approach_alpha": 0.0,
+      "start": 14675,
+      "length": 208,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route3_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source18/rb_run3_route3_h75_v1",
+      "split": "DEV",
+      "approach_alpha": 0.0,
+      "start": 14883,
+      "length": 207,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route3_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source18/rb_run3_route3_h75_v2",
+      "split": "DEV",
+      "approach_alpha": 0.0,
+      "start": 15090,
+      "length": 200,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route3_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source18/rb_run3_route3_h75_v3",
+      "split": "DEV",
+      "approach_alpha": 0.0,
+      "start": 15290,
+      "length": 200,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route3_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source18/rb_run3_route6_h75_v0",
+      "split": "DEV",
+      "approach_alpha": 0.0,
+      "start": 15490,
+      "length": 207,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route6_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source18/rb_run3_route6_h75_v1",
+      "split": "DEV",
+      "approach_alpha": 0.0,
+      "start": 15697,
+      "length": 208,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route6_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source18/rb_run3_route6_h75_v2",
+      "split": "DEV",
+      "approach_alpha": 0.0,
+      "start": 15905,
+      "length": 197,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route6_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source18/rb_run3_route6_h75_v3",
+      "split": "DEV",
+      "approach_alpha": 0.0,
+      "start": 16102,
+      "length": 198,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map06/evaluation/rb_run3_route6_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source19/rb_run3_route0_h75_v0",
+      "split": "DEV",
+      "approach_alpha": 0.0,
+      "start": 16300,
+      "length": 191,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route0_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source19/rb_run3_route0_h75_v1",
+      "split": "DEV",
+      "approach_alpha": 0.0,
+      "start": 16491,
+      "length": 190,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route0_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source19/rb_run3_route0_h75_v2",
+      "split": "DEV",
+      "approach_alpha": 0.0,
+      "start": 16681,
+      "length": 181,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route0_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source19/rb_run3_route0_h75_v3",
+      "split": "DEV",
+      "approach_alpha": 0.0,
+      "start": 16862,
+      "length": 181,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route0_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source19/rb_run3_route3_h75_v0",
+      "split": "DEV",
+      "approach_alpha": 0.0,
+      "start": 17043,
+      "length": 207,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route3_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source19/rb_run3_route3_h75_v1",
+      "split": "DEV",
+      "approach_alpha": 0.0,
+      "start": 17250,
+      "length": 207,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route3_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source19/rb_run3_route3_h75_v2",
+      "split": "DEV",
+      "approach_alpha": 0.0,
+      "start": 17457,
+      "length": 199,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route3_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source19/rb_run3_route3_h75_v3",
+      "split": "DEV",
+      "approach_alpha": 0.0,
+      "start": 17656,
+      "length": 198,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route3_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source19/rb_run3_route6_h75_v0",
+      "split": "DEV",
+      "approach_alpha": 0.0,
+      "start": 17854,
+      "length": 207,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route6_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source19/rb_run3_route6_h75_v1",
+      "split": "DEV",
+      "approach_alpha": 0.0,
+      "start": 18061,
+      "length": 207,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route6_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source19/rb_run3_route6_h75_v2",
+      "split": "DEV",
+      "approach_alpha": 0.0,
+      "start": 18268,
+      "length": 196,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route6_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source19/rb_run3_route6_h75_v3",
+      "split": "DEV",
+      "approach_alpha": 0.0,
+      "start": 18464,
+      "length": 196,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map07/evaluation/rb_run3_route6_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source32/rb_run3_route0_h75_v0",
+      "split": "DEV",
+      "approach_alpha": 0.5,
+      "start": 18660,
+      "length": 191,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map06_in0.5_out0/evaluation/rb_run3_route0_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source32/rb_run3_route0_h75_v1",
+      "split": "DEV",
+      "approach_alpha": 0.5,
+      "start": 18851,
+      "length": 191,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map06_in0.5_out0/evaluation/rb_run3_route0_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source32/rb_run3_route0_h75_v2",
+      "split": "DEV",
+      "approach_alpha": 0.5,
+      "start": 19042,
+      "length": 181,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map06_in0.5_out0/evaluation/rb_run3_route0_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source32/rb_run3_route0_h75_v3",
+      "split": "DEV",
+      "approach_alpha": 0.5,
+      "start": 19223,
+      "length": 181,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map06_in0.5_out0/evaluation/rb_run3_route0_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source32/rb_run3_route3_h75_v0",
+      "split": "DEV",
+      "approach_alpha": 0.5,
+      "start": 19404,
+      "length": 203,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map06_in0.5_out0/evaluation/rb_run3_route3_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source32/rb_run3_route3_h75_v1",
+      "split": "DEV",
+      "approach_alpha": 0.5,
+      "start": 19607,
+      "length": 203,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map06_in0.5_out0/evaluation/rb_run3_route3_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source32/rb_run3_route3_h75_v2",
+      "split": "DEV",
+      "approach_alpha": 0.5,
+      "start": 19810,
+      "length": 192,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map06_in0.5_out0/evaluation/rb_run3_route3_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source32/rb_run3_route3_h75_v3",
+      "split": "DEV",
+      "approach_alpha": 0.5,
+      "start": 20002,
+      "length": 191,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map06_in0.5_out0/evaluation/rb_run3_route3_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source32/rb_run3_route6_h75_v0",
+      "split": "DEV",
+      "approach_alpha": 0.5,
+      "start": 20193,
+      "length": 200,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map06_in0.5_out0/evaluation/rb_run3_route6_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source32/rb_run3_route6_h75_v1",
+      "split": "DEV",
+      "approach_alpha": 0.5,
+      "start": 20393,
+      "length": 200,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map06_in0.5_out0/evaluation/rb_run3_route6_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source32/rb_run3_route6_h75_v2",
+      "split": "DEV",
+      "approach_alpha": 0.5,
+      "start": 20593,
+      "length": 189,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map06_in0.5_out0/evaluation/rb_run3_route6_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source32/rb_run3_route6_h75_v3",
+      "split": "DEV",
+      "approach_alpha": 0.5,
+      "start": 20782,
+      "length": 189,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map06_in0.5_out0/evaluation/rb_run3_route6_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source33/rb_run3_route0_h75_v0",
+      "split": "DEV",
+      "approach_alpha": 1.0,
+      "start": 20971,
+      "length": 192,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map06_in1_out0/evaluation/rb_run3_route0_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source33/rb_run3_route0_h75_v1",
+      "split": "DEV",
+      "approach_alpha": 1.0,
+      "start": 21163,
+      "length": 192,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map06_in1_out0/evaluation/rb_run3_route0_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source33/rb_run3_route0_h75_v2",
+      "split": "DEV",
+      "approach_alpha": 1.0,
+      "start": 21355,
+      "length": 182,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map06_in1_out0/evaluation/rb_run3_route0_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source33/rb_run3_route0_h75_v3",
+      "split": "DEV",
+      "approach_alpha": 1.0,
+      "start": 21537,
+      "length": 182,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map06_in1_out0/evaluation/rb_run3_route0_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source33/rb_run3_route3_h75_v0",
+      "split": "DEV",
+      "approach_alpha": 1.0,
+      "start": 21719,
+      "length": 200,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map06_in1_out0/evaluation/rb_run3_route3_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source33/rb_run3_route3_h75_v1",
+      "split": "DEV",
+      "approach_alpha": 1.0,
+      "start": 21919,
+      "length": 199,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map06_in1_out0/evaluation/rb_run3_route3_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source33/rb_run3_route3_h75_v2",
+      "split": "DEV",
+      "approach_alpha": 1.0,
+      "start": 22118,
+      "length": 189,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map06_in1_out0/evaluation/rb_run3_route3_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source33/rb_run3_route3_h75_v3",
+      "split": "DEV",
+      "approach_alpha": 1.0,
+      "start": 22307,
+      "length": 189,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map06_in1_out0/evaluation/rb_run3_route3_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source33/rb_run3_route6_h75_v0",
+      "split": "DEV",
+      "approach_alpha": 1.0,
+      "start": 22496,
+      "length": 197,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map06_in1_out0/evaluation/rb_run3_route6_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source33/rb_run3_route6_h75_v1",
+      "split": "DEV",
+      "approach_alpha": 1.0,
+      "start": 22693,
+      "length": 197,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map06_in1_out0/evaluation/rb_run3_route6_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source33/rb_run3_route6_h75_v2",
+      "split": "DEV",
+      "approach_alpha": 1.0,
+      "start": 22890,
+      "length": 186,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map06_in1_out0/evaluation/rb_run3_route6_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source33/rb_run3_route6_h75_v3",
+      "split": "DEV",
+      "approach_alpha": 1.0,
+      "start": 23076,
+      "length": 186,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map06_in1_out0/evaluation/rb_run3_route6_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source34/rb_run3_route0_h75_v0",
+      "split": "DEV",
+      "approach_alpha": 0.5,
+      "start": 23262,
+      "length": 192,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map07_in0.5_out0/evaluation/rb_run3_route0_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source34/rb_run3_route0_h75_v1",
+      "split": "DEV",
+      "approach_alpha": 0.5,
+      "start": 23454,
+      "length": 191,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map07_in0.5_out0/evaluation/rb_run3_route0_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source34/rb_run3_route0_h75_v2",
+      "split": "DEV",
+      "approach_alpha": 0.5,
+      "start": 23645,
+      "length": 182,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map07_in0.5_out0/evaluation/rb_run3_route0_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source34/rb_run3_route0_h75_v3",
+      "split": "DEV",
+      "approach_alpha": 0.5,
+      "start": 23827,
+      "length": 181,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map07_in0.5_out0/evaluation/rb_run3_route0_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source34/rb_run3_route3_h75_v0",
+      "split": "DEV",
+      "approach_alpha": 0.5,
+      "start": 24008,
+      "length": 202,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map07_in0.5_out0/evaluation/rb_run3_route3_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source34/rb_run3_route3_h75_v1",
+      "split": "DEV",
+      "approach_alpha": 0.5,
+      "start": 24210,
+      "length": 202,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map07_in0.5_out0/evaluation/rb_run3_route3_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source34/rb_run3_route3_h75_v2",
+      "split": "DEV",
+      "approach_alpha": 0.5,
+      "start": 24412,
+      "length": 192,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map07_in0.5_out0/evaluation/rb_run3_route3_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source34/rb_run3_route3_h75_v3",
+      "split": "DEV",
+      "approach_alpha": 0.5,
+      "start": 24604,
+      "length": 191,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map07_in0.5_out0/evaluation/rb_run3_route3_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source34/rb_run3_route6_h75_v0",
+      "split": "DEV",
+      "approach_alpha": 0.5,
+      "start": 24795,
+      "length": 199,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map07_in0.5_out0/evaluation/rb_run3_route6_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source34/rb_run3_route6_h75_v1",
+      "split": "DEV",
+      "approach_alpha": 0.5,
+      "start": 24994,
+      "length": 200,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map07_in0.5_out0/evaluation/rb_run3_route6_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source34/rb_run3_route6_h75_v2",
+      "split": "DEV",
+      "approach_alpha": 0.5,
+      "start": 25194,
+      "length": 188,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map07_in0.5_out0/evaluation/rb_run3_route6_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source34/rb_run3_route6_h75_v3",
+      "split": "DEV",
+      "approach_alpha": 0.5,
+      "start": 25382,
+      "length": 189,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map07_in0.5_out0/evaluation/rb_run3_route6_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source35/rb_run3_route0_h75_v0",
+      "split": "DEV",
+      "approach_alpha": 1.0,
+      "start": 25571,
+      "length": 192,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map07_in1_out0/evaluation/rb_run3_route0_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source35/rb_run3_route0_h75_v1",
+      "split": "DEV",
+      "approach_alpha": 1.0,
+      "start": 25763,
+      "length": 191,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map07_in1_out0/evaluation/rb_run3_route0_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source35/rb_run3_route0_h75_v2",
+      "split": "DEV",
+      "approach_alpha": 1.0,
+      "start": 25954,
+      "length": 182,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map07_in1_out0/evaluation/rb_run3_route0_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source35/rb_run3_route0_h75_v3",
+      "split": "DEV",
+      "approach_alpha": 1.0,
+      "start": 26136,
+      "length": 181,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map07_in1_out0/evaluation/rb_run3_route0_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source35/rb_run3_route3_h75_v0",
+      "split": "DEV",
+      "approach_alpha": 1.0,
+      "start": 26317,
+      "length": 200,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map07_in1_out0/evaluation/rb_run3_route3_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source35/rb_run3_route3_h75_v1",
+      "split": "DEV",
+      "approach_alpha": 1.0,
+      "start": 26517,
+      "length": 199,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map07_in1_out0/evaluation/rb_run3_route3_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source35/rb_run3_route3_h75_v2",
+      "split": "DEV",
+      "approach_alpha": 1.0,
+      "start": 26716,
+      "length": 189,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map07_in1_out0/evaluation/rb_run3_route3_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source35/rb_run3_route3_h75_v3",
+      "split": "DEV",
+      "approach_alpha": 1.0,
+      "start": 26905,
+      "length": 188,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map07_in1_out0/evaluation/rb_run3_route3_h75_v3/trajectory.npz"
+    },
+    {
+      "case": "alpha_source35/rb_run3_route6_h75_v0",
+      "split": "DEV",
+      "approach_alpha": 1.0,
+      "start": 27093,
+      "length": 196,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map07_in1_out0/evaluation/rb_run3_route6_h75_v0/trajectory.npz"
+    },
+    {
+      "case": "alpha_source35/rb_run3_route6_h75_v1",
+      "split": "DEV",
+      "approach_alpha": 1.0,
+      "start": 27289,
+      "length": 197,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map07_in1_out0/evaluation/rb_run3_route6_h75_v1/trajectory.npz"
+    },
+    {
+      "case": "alpha_source35/rb_run3_route6_h75_v2",
+      "split": "DEV",
+      "approach_alpha": 1.0,
+      "start": 27486,
+      "length": 185,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map07_in1_out0/evaluation/rb_run3_route6_h75_v2/trajectory.npz"
+    },
+    {
+      "case": "alpha_source35/rb_run3_route6_h75_v3",
+      "split": "DEV",
+      "approach_alpha": 1.0,
+      "start": 27671,
+      "length": 185,
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_phase_alpha/map07_in1_out0/evaluation/rb_run3_route6_h75_v3/trajectory.npz"
+    }
+  ],
+  "controller_dim": 381,
+  "rb_dim": 156,
+  "features": "predicted ground pose12,velocity9,GRU64,elapsed clock,initial537execution history",
+  "target": "estimated controller381+RB156history, not true future runtime state",
+  "normalization": "TRAIN only",
+  "updates": 600,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "batch": 64,
+  "lr": 0.0003,
+  "clip": 1,
+  "selection": "DEV entry-point normalized history RMSE; full sequence RMSE also retained",
+  "control_policy_updates": 0,
+  "scope": "Canonical downstream0 per approach, whole-map split from existing collection; no TEST claim"
+}

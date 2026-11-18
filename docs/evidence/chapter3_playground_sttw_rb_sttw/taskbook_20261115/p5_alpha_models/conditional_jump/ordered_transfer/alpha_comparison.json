@@ -1,0 +1,50 @@
+[
+  {
+    "model": "before",
+    "alpha": 0,
+    "cases": 216,
+    "record_window_handoffs": 131,
+    "mean_max_xyz_m": 0.043734093455390796,
+    "worst_max_xyz_m": 0.08926413953304291
+  },
+  {
+    "model": "before",
+    "alpha": 0.5,
+    "cases": 216,
+    "record_window_handoffs": 113,
+    "mean_max_xyz_m": 0.05235997407214233,
+    "worst_max_xyz_m": 0.09655429422855377
+  },
+  {
+    "model": "before",
+    "alpha": 1,
+    "cases": 216,
+    "record_window_handoffs": 113,
+    "mean_max_xyz_m": 0.06647643160626844,
+    "worst_max_xyz_m": 0.09797772765159607
+  },
+  {
+    "model": "after",
+    "alpha": 0,
+    "cases": 216,
+    "record_window_handoffs": 165,
+    "mean_max_xyz_m": 0.04612991025809337,
+    "worst_max_xyz_m": 0.08650417625904083
+  },
+  {
+    "model": "after",
+    "alpha": 0.5,
+    "cases": 216,
+    "record_window_handoffs": 173,
+    "mean_max_xyz_m": 0.05291812611674821,
+    "worst_max_xyz_m": 0.10037821531295776
+  },
+  {
+    "model": "after",
+    "alpha": 1,
+    "cases": 216,
+    "record_window_handoffs": 197,
+    "mean_max_xyz_m": 0.06698615479938409,
+    "worst_max_xyz_m": 0.0917801484465599
+  }
+]

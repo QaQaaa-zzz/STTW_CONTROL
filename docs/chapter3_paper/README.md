@@ -1,4 +1,30 @@
-# Chapter 3 execution-outline manuscript
+# 第三章任务书执行与文稿状态
+
+当前执行依据为[新版任务书](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/STTW_第三章_Codex任务书.md)。旧DOCX不再指导实验。下方LaTeX/PDF是此前执行大纲下的文稿快照，尚未吸收新版任务书的全部实验；不能把编译完成视为P0–P6完成。
+
+| 阶段 | 当前证据与边界 |
+|---|---|
+| P0–P3 | 已有冻结、快照续接、Oracle和分段预测的有界实验；仍保留数值重放差异、预测误差和失败，不能称通用可靠技能世界模型。 |
+| P4 | 规定的全链实现和G/I/C/Oracle等对照已有记录；标定后C/I在机制案例均无计划，可靠规划能力未达到。见[阶段审查](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p4_sequence/stage_review/README.md)。 |
+| P5 | 条件地面模型两结构三种子均续至1200；条件串联与同预算α选择已完成已知DEV诊断，尚无α成功率增益。原source/完整RB首张TRAIN地图各36条均0最终成功，交接仍未解决。见下方最新证据。 |
+| P6 | 实测落地更新C-R与任务重配置、新地图族泛化尚未完成。 |
+| P7 | 可选；当前不接LLM。 |
+
+P5已知DEV地图06/07共648条件：399最终目标成功，249失败；所有条件跨沟并交回。固定α0/0已72/72，不能据此声称自动α选择增加成功率。TRAIN地图00/01共648条件：409目标成功，239失败；TRAIN仅作模型数据，不能与DEV混成泛化成功率。两组失败均保留。[DEV全部XY](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p5_alpha_grid/README.md) · [TRAIN全部XY](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p5_alpha_train_collection/README.md)。两张TRAIN采集已全部纳入，不能与648条DEV混成一个泛化分母。
+
+当前shared225源于登记为rb_run3的PPO-only分支并经过本项目适配；工程名“RB225”不等于完整RecoveryBridge贡献证明。方法对照必须保留真正来源、各自匹配预测器及相同预算，不能直接用shared225与source之差归因完整RB方法。参见[谱系核对](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p5_snapshot_alpha/jump_lineage_audit.json)。
+
+上述进度绑定source_manifest中的TB_P4_REVIEW、TB_P5_DEV、TB_P5_TRAIN、TB_RB_LINEAGE；代理已检查本地证据，人工核验保持pending。当前不主张可靠C优于I、自动α收益、完整RB因果收益或P6泛化。
+
+条件跳前模型首组seed0已完成同预算600更新：残差1s/3s平均最大XY为0.02913/0.06640m，直接模型为0.04233/0.10367m。两者按1s开发标准选到末轮，末段仍有改善或波动，未认定收敛；单种子预测误差不等于规划收益。[全部逐例XY、存档曲线和限制](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p5_alpha_models/phase0_seed0/RESULTS.md)。
+
+三种子首轮完整结果已补齐：[全部预测XY及曲线](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p5_alpha_models/phase0/RESULTS.md)。固定DEV末段误差仍改善或波动，续训保留原best，不把600更新视为收敛。
+
+三种子600→1200续训已完成，按每25更新的固定1s DEV标准保留各自最佳。残差三个种子的1s平均最大XY误差为0.025898/0.024915/0.024919m，3s为0.058819/0.053635/0.05784m；直接模型对应0.037864/0.037031/0.040508m和0.101263/0.103404/0.092517m。DEV216例，1s3115窗、3s955窗；重叠窗口不是独立样本。直接seed2的3s均值相对首轮变差，残差最坏3s误差仍约0.18–0.20m，不能将均值改善解释为可靠全链规划。[全部XY、逐例与曲线](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p5_alpha_models/phase0_continue600/RESULTS.md)。证据TB_P5_CONDITIONAL_CONTINUE_3SEEDS，人工核验pending。
+
+落地后条件模型两结构×三种子首轮已完成：[全部实际/预测XY](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p5_alpha_models/phase2/RESULTS.md)。残差三个种子的1s均值为0.025435/0.025027/0.024991m，3s为0.061066/0.062666/0.065937m。seed0续至1200后，固定1s标准选残差1175、直接1200，1s/3s均值分别为0.018819/0.044153m与0.022154/0.047914m；[完整续训XY及尾部误差](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p5_alpha_models/phase2_continue600_seed0/RESULTS.md)。有效DEV1s8398窗/618例、3s2511窗/553例，重叠窗口不独立；尚未认定收敛、独立TEST泛化或全链规划收益。证据TB_P5_DEPARTURE_3SEEDS及TB_P5_DEPARTURE_CONTINUE_SEED0，人工核验pending。
+
+## 此前执行大纲文稿快照
 
 Current editable draft: [PDF](MANUSCRIPT.pdf) · [LaTeX](MANUSCRIPT.tex). This revision follows the supplied execution outline: fixed physical map and goal, continuous STTW→RB→STTW, ground dynamics, joint planning, and structured prediction. It replaces the prior two-interface framing in the main text; historical prose remains in Git through0c485653 and all old evidence is retained below.
 
@@ -59,3 +85,9 @@ Current PG11 includes600→900 continuation and retained intermediate best check
 
 
 PG14已加入：50新布局×4根，M0 156/200，M1/M2各200/200；收益来自减少无计划，非假可行下降或M1胜过M2。完整逐例/XY见p4_model_test；静态组件TEST与既有DEV分开，E1/E2和滚动验收仍待完成，作者核验待办。
+
+## P5最新配对证据
+
+[原source与完整RB的全部XY和逐例结果](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p5_source_full_rb/RESULTS.md)：22/36与30/36远岸接触，1/36与0/36交回，均0/36最终成功。不能将接触增加称为整程能力收益。
+
+[同预算α选择](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p5_alpha_models/alpha_selection/README.md)：4个已知DEV任务，固定α0与完整枚举均4/4；18查询候选排列保留全部9种，部分选择退步。无独立TEST、α收益或完整RB因果收益。主稿仍未达到提交条件。

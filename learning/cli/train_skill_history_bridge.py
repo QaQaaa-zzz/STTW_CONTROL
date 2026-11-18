@@ -17,6 +17,9 @@ for entry in entries:
   if row['route']%3:continue
   z=np.load(source/row['case_dir']/'trajectory.npz');j=int(np.flatnonzero(z['trace'][:,-1]==1)[0]);ids=np.arange(0,j+1,4);pose,xi=states(z['qpos'][ids],z['qvel'][ids],schema);h=np.concatenate((z['controller_state'][ids],z['rb_state'][ids]),-1)
   items.append(dict(row=row,pose=pose,velocity=xi,history=h,speed=float(z['trace'][0,18]),source=str(source/row['case_dir']/'trajectory.npz')))
+ alpha=float(cfg['ground_handoff']['approach']['alpha'])
+ if alpha and not model.alpha_conditioned:p.error('Nonzero approach alpha requires a conditional ground model')
+ alpha_request=tensor([alpha]*len(items)) if model.alpha_conditioned else None
  path_s=tensor(bank['s']);path_xy=tensor(bank['xy'][[x['row']['route'] for x in items]]);path_heading=tensor(bank['heading'][[x['row']['route'] for x in items]]);path_curvature=tensor(bank['curvature'][[x['row']['route'] for x in items]]);speed=tensor([x['speed'] for x in items])
  horizon=max(len(x['pose']) for x in items)-1;n=len(items);routes=[x['row']['route'] for x in items];initial=tensor([x['history'][0] for x in items]);pose=tensor([x['pose'][0] for x in items]);velocity=tensor([x['velocity'][0] for x in items]);state=model.initialize(pose,velocity,velocity,initial[:,:381])
  if model.terrain is not None:model.terrain=TerrainFeatures(**raster_from_spec(cfg['ditch_terrain']),device=device)
@@ -24,14 +27,14 @@ for entry in entries:
   fs=[];ps=[]
   for step in range(horizon+1):
    fs.append(bridge_features(state,initial));ps.append(state.pose)
-   if step<horizon:state=model.rollout_state(state,path_s,path_xy,path_heading,path_curvature,1,speed_request=speed)['next_state']
+   if step<horizon:state=model.rollout_state(state,path_s,path_xy,path_heading,path_curvature,1,speed_request=speed,alpha_request=alpha_request)['next_state']
   f=torch.stack(fs,1);pred=torch.stack(ps,1)
  for lane,item in enumerate(items):
   length=len(item['history']);features.append(f[lane,:length]);targets.append(tensor(item['history']));error=(pred[lane,:length,:3]-tensor(item['pose'])[:,:3]).norm(dim=-1).cpu().numpy();pose_errors.append(dict(case=entry['layout']+'/'+item['row']['case_dir'],max_xyz_m=float(error.max()),endpoint_xyz_m=float(error[-1])))
-  rows.append(dict(case=entry['layout']+'/'+item['row']['case_dir'],split='TRAIN' if entry['map_role']=='TRAIN' else 'DEV',start=offset,length=length,source=item['source']));offset+=length
+  rows.append(dict(case=entry['layout']+'/'+item['row']['case_dir'],split='TRAIN' if entry['map_role']=='TRAIN' else 'DEV',approach_alpha=alpha,start=offset,length=length,source=item['source']));offset+=length
 features=torch.cat(features);target=torch.cat(targets);train=torch.tensor([i for r in rows if r['split']=='TRAIN' for i in range(r['start'],r['start']+r['length'])],device=device);dev=torch.tensor([i for r in rows if r['split']=='DEV' for i in range(r['start'],r['start']+r['length'])],device=device);dev_end=torch.tensor([r['start']+r['length']-1 for r in rows if r['split']=='DEV'],device=device)
 mean=features[train].mean(0);scale=features[train].std(0).clamp_min(.1);tmean=target[train].mean(0);tscale=target[train].std(0).clamp_min(.1)
-contract=dict(ground=str(a.ground),ground_sha256=hashlib.sha256((a.ground/'best.pt').read_bytes()).hexdigest(),collection=str(a.collection),rows=rows,controller_dim=381,rb_dim=156,features='predicted ground pose12,velocity9,GRU64,elapsed clock,initial537execution history',target='estimated controller381+RB156history, not true future runtime state',normalization='TRAIN only',updates=a.updates,seeds=[0,1,2],batch=64,lr=3e-4,clip=1,selection='DEV entry-point normalized history RMSE; full sequence RMSE also retained',control_policy_updates=0,scope='Canonical downstream0 per approach, whole-map split from existing collection; no TEST claim')
+contract=dict(alpha_train_values=sorted({r['approach_alpha'] for r in rows if r['split']=='TRAIN'}),alpha_conditioned=model.alpha_conditioned,ground=str(a.ground),ground_sha256=hashlib.sha256((a.ground/'best.pt').read_bytes()).hexdigest(),collection=str(a.collection),rows=rows,controller_dim=381,rb_dim=156,features='predicted ground pose12,velocity9,GRU64,elapsed clock,initial537execution history',target='estimated controller381+RB156history, not true future runtime state',normalization='TRAIN only',updates=a.updates,seeds=[0,1,2],batch=64,lr=3e-4,clip=1,selection='DEV entry-point normalized history RMSE; full sequence RMSE also retained',control_policy_updates=0,scope='Canonical downstream0 per approach, whole-map split from existing collection; no TEST claim')
 (a.output/'contract.json').write_text(json.dumps(contract,indent=2)+'\n');(a.output/'ground_errors.json').write_text(json.dumps(pose_errors,indent=2)+'\n')
 summary=[]
 for seed in range(3):

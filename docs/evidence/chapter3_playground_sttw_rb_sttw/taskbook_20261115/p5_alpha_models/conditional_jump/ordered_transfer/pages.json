@@ -1,0 +1,110 @@
+[
+  {
+    "file": "alpha_source18_ordered_transfer600_xy.png",
+    "run": "ordered_transfer600",
+    "map": "alpha_source18",
+    "cases": 36
+  },
+  {
+    "file": "alpha_source19_ordered_transfer600_xy.png",
+    "run": "ordered_transfer600",
+    "map": "alpha_source19",
+    "cases": 36
+  },
+  {
+    "file": "alpha_source20_ordered_transfer600_xy.png",
+    "run": "ordered_transfer600",
+    "map": "alpha_source20",
+    "cases": 36
+  },
+  {
+    "file": "alpha_source21_ordered_transfer600_xy.png",
+    "run": "ordered_transfer600",
+    "map": "alpha_source21",
+    "cases": 36
+  },
+  {
+    "file": "alpha_source22_ordered_transfer600_xy.png",
+    "run": "ordered_transfer600",
+    "map": "alpha_source22",
+    "cases": 36
+  },
+  {
+    "file": "alpha_source23_ordered_transfer600_xy.png",
+    "run": "ordered_transfer600",
+    "map": "alpha_source23",
+    "cases": 36
+  },
+  {
+    "file": "alpha_source24_ordered_transfer600_xy.png",
+    "run": "ordered_transfer600",
+    "map": "alpha_source24",
+    "cases": 36
+  },
+  {
+    "file": "alpha_source25_ordered_transfer600_xy.png",
+    "run": "ordered_transfer600",
+    "map": "alpha_source25",
+    "cases": 36
+  },
+  {
+    "file": "alpha_source26_ordered_transfer600_xy.png",
+    "run": "ordered_transfer600",
+    "map": "alpha_source26",
+    "cases": 36
+  },
+  {
+    "file": "alpha_source27_ordered_transfer600_xy.png",
+    "run": "ordered_transfer600",
+    "map": "alpha_source27",
+    "cases": 36
+  },
+  {
+    "file": "alpha_source28_ordered_transfer600_xy.png",
+    "run": "ordered_transfer600",
+    "map": "alpha_source28",
+    "cases": 36
+  },
+  {
+    "file": "alpha_source29_ordered_transfer600_xy.png",
+    "run": "ordered_transfer600",
+    "map": "alpha_source29",
+    "cases": 36
+  },
+  {
+    "file": "alpha_source30_ordered_transfer600_xy.png",
+    "run": "ordered_transfer600",
+    "map": "alpha_source30",
+    "cases": 36
+  },
+  {
+    "file": "alpha_source31_ordered_transfer600_xy.png",
+    "run": "ordered_transfer600",
+    "map": "alpha_source31",
+    "cases": 36
+  },
+  {
+    "file": "alpha_source32_ordered_transfer600_xy.png",
+    "run": "ordered_transfer600",
+    "map": "alpha_source32",
+    "cases": 36
+  },
+  {
+    "file": "alpha_source33_ordered_transfer600_xy.png",
+    "run": "ordered_transfer600",
+    "map": "alpha_source33",
+    "cases": 36
+  },
+  {
+    "file": "alpha_source34_ordered_transfer600_xy.png",
+    "run": "ordered_transfer600",
+    "map": "alpha_source34",
+    "cases": 36
+  },
+  {
+    "file": "alpha_source35_ordered_transfer600_xy.png",
+    "run": "ordered_transfer600",
+    "map": "alpha_source35",
+    "cases": 36
+  }
+]

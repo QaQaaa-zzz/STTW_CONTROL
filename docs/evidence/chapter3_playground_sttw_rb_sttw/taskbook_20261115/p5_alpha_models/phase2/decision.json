@@ -1,0 +1,12 @@
+{
+  "stage": "prepared_not_started",
+  "reason": "All residual bests at600; mean errors still decline, direct seed2 last regresses; retain best and assess matched additional600",
+  "completed_pair_wall_s": [
+    1280.1721482276917,
+    1332.7642912864685,
+    1277.7086837291718
+  ],
+  "estimated_six_model_wait_s": 3891,
+  "wait_limit_s": 1800,
+  "resume": "One paired seed queue with1500s cap; no automatic complete six-model run"
+}

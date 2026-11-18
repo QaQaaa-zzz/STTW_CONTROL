@@ -488,6 +488,87 @@
         "docs/evidence/chapter3_playground_sttw_rb_sttw/p4_model_test/cases.csv",
         "docs/evidence/chapter3_playground_sttw_rb_sttw/p4_model_test/paired_statistics.json"
       ]
+    },
+    {
+      "id": "TB_P4_REVIEW",
+      "title": "Taskbook P4 comparison and negative reliability review",
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p4_sequence/stage_review/README.md",
+      "sha256": "9c61e6c6048fb5ad7234993a52dacac7e54e3af0bc3f5633ba19a531412e1d7b",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending",
+      "draft_role": "taskbook_progress_not_yet_integrated_into_main_tex"
+    },
+    {
+      "id": "TB_P5_DEV",
+      "title": "Nine stage-alpha pairs on known DEV maps",
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p5_alpha_grid/summary.json",
+      "sha256": "681f6adb422d2beb8981182e1682d8f4120e531d5efeab726949260fc51548a0",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending",
+      "draft_role": "taskbook_progress_not_yet_integrated_into_main_tex"
+    },
+    {
+      "id": "TB_P5_TRAIN",
+      "title": "Two TRAIN maps complete alpha grid",
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p5_alpha_train_collection/summary.json",
+      "sha256": "320d197debbafd5ae1194b4992cf9c2d893396bd6957033a65eba899e9dd03e5",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending",
+      "draft_role": "taskbook_progress_not_yet_integrated_into_main_tex"
+    },
+    {
+      "id": "TB_RB_LINEAGE",
+      "title": "Actual jump training lineage audit",
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p5_snapshot_alpha/jump_lineage_audit.json",
+      "sha256": "0ba2a8a1e710144a974caf61c567c1966c0625a6a4825b294b1c06c7dd8d2307",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending",
+      "draft_role": "taskbook_progress_not_yet_integrated_into_main_tex"
+    },
+    {
+      "id": "TB_P5_CONDITIONAL_SEED0",
+      "title": "First conditional approach predictor pair;knownDEV,not converged",
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p5_alpha_models/phase0_seed0/summary.json",
+      "sha256": "ef5659525e1aa55794f949050fe33e80e7806417e9db0e0a05412b5cef0e38ef",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending",
+      "draft_role": "taskbook_progress_not_main_tex"
+    },
+    {
+      "id": "TB_P5_CONDITIONAL_3SEEDS",
+      "title": "Completed three-seed conditional approach600-update fits",
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p5_alpha_models/phase0/summary.json",
+      "sha256": "0456b400073659260ff9027486321d7109dbddac25aec968f3174373fc36473f",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending",
+      "draft_role": "taskbook_progress_not_main_tex"
+    },
+    {
+      "id": "TB_P5_CONDITIONAL_CONTINUE_3SEEDS",
+      "title": "Three-seed conditional approach continuation to1200 with retained best",
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p5_alpha_models/phase0_continue600/summary.json",
+      "sha256": "eb0f7ae3e72c0d92da694f4d4c1749584faaf156f652d1eb9511842762503ef5",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending",
+      "draft_role": "taskbook_progress_not_main_tex"
+    },
+    {
+      "id": "TB_P5_DEPARTURE_3SEEDS",
+      "title": "TB_P5_DEPARTURE_3SEEDS",
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p5_alpha_models/phase2/summary.json",
+      "sha256": "9ab5ba6d3acb448d47344bbbd3671c6918236d2baadb533fe25c89d550cc173d",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending",
+      "draft_role": "taskbook_progress_not_main_tex"
+    },
+    {
+      "id": "TB_P5_DEPARTURE_CONTINUE_SEED0",
+      "title": "TB_P5_DEPARTURE_CONTINUE_SEED0",
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p5_alpha_models/phase2_continue600_seed0/summary.json",
+      "sha256": "401c2f953f89de0046fd50e8ce45201dbbb5925ccce84749877efad7ccb35172",
+      "verification": "agent_source_inspected",
+      "human_verification": "pending",
+      "draft_role": "taskbook_progress_not_main_tex"
     }
   ],
   "references": [
@@ -547,5 +628,7 @@
     "PG12",
     "PG13",
     "PG14"
-  ]
+  ],
+  "taskbook_progress_updated_utc": "2026-11-17T04:54:20.465864+00:00",
+  "main_tex_scope": "Earlier execution-outline snapshot; newer taskbook progress recorded in README and IMPLEMENTATION_DETAILS, not yet integrated into main text."
 }

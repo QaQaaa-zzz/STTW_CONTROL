@@ -1,0 +1,13 @@
+{
+  "completed": "seed0 residual/direct each600",
+  "known_dev_only": true,
+  "convergence": "not established; last200 residual mean reductions16.49%/14.78%, direct21.20%/24.91%; residual last25 3s regression",
+  "remaining_first_round_seeds": [
+    1,
+    2
+  ],
+  "measured_pair_wall_s": 1280.1721482276917,
+  "estimated_remaining_first_round_s": 2560.3442964553833,
+  "wait_limit_s": 1800,
+  "decision": "Do not launch both remaining pairs; pause after reporting. On explicit resume run one bounded paired seed, preserve full three-seed experiment. Review matched continuation after first round; no automatic unbounded training."
+}

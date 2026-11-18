@@ -1,0 +1,1163 @@
+[
+  {
+    "source": "alpha_source18",
+    "route": 3,
+    "root": 6,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source18",
+    "route": 3,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source18",
+    "route": 4,
+    "root": 6,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source18",
+    "route": 4,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source18",
+    "route": 5,
+    "root": 6,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source18",
+    "route": 5,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source20",
+    "route": 5,
+    "root": 6,
+    "speed": 1.9,
+    "actual_success": false,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source20",
+    "route": 5,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": false,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source20",
+    "route": 6,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source20",
+    "route": 6,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source20",
+    "route": 6,
+    "root": 6,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source20",
+    "route": 6,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source20",
+    "route": 7,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source20",
+    "route": 7,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source20",
+    "route": 7,
+    "root": 6,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source20",
+    "route": 7,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source21",
+    "route": 3,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source21",
+    "route": 3,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source21",
+    "route": 3,
+    "root": 6,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source21",
+    "route": 3,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source21",
+    "route": 4,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source21",
+    "route": 4,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": false,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source22",
+    "route": 3,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 1.0,
+    "after": 0.0
+  },
+  {
+    "source": "alpha_source22",
+    "route": 4,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 1.0,
+    "after": 0.0
+  },
+  {
+    "source": "alpha_source22",
+    "route": 5,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": false,
+    "before": 1.0,
+    "after": 0.0
+  },
+  {
+    "source": "alpha_source22",
+    "route": 6,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source22",
+    "route": 6,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source22",
+    "route": 6,
+    "root": 6,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source22",
+    "route": 6,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source22",
+    "route": 7,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source22",
+    "route": 7,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source22",
+    "route": 7,
+    "root": 6,
+    "speed": 1.9,
+    "actual_success": false,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source22",
+    "route": 7,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source23",
+    "route": 3,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source23",
+    "route": 3,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source23",
+    "route": 3,
+    "root": 6,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source23",
+    "route": 3,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source23",
+    "route": 4,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": false,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source23",
+    "route": 4,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": false,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source23",
+    "route": 4,
+    "root": 6,
+    "speed": 1.9,
+    "actual_success": false,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source24",
+    "route": 0,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source24",
+    "route": 0,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source24",
+    "route": 1,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": false,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source24",
+    "route": 1,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": false,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source24",
+    "route": 6,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source24",
+    "route": 6,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source24",
+    "route": 7,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": false,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source24",
+    "route": 7,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": false,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source25",
+    "route": 3,
+    "root": 6,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source25",
+    "route": 3,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source25",
+    "route": 4,
+    "root": 6,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source25",
+    "route": 4,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source25",
+    "route": 5,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": false,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source25",
+    "route": 8,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": false,
+    "before": 1.0,
+    "after": 0.0
+  },
+  {
+    "source": "alpha_source26",
+    "route": 3,
+    "root": 6,
+    "speed": 1.9,
+    "actual_success": false,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source26",
+    "route": 3,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": false,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source27",
+    "route": 0,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source27",
+    "route": 0,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source27",
+    "route": 1,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source27",
+    "route": 1,
+    "root": 6,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source27",
+    "route": 1,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source27",
+    "route": 3,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source27",
+    "route": 3,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source27",
+    "route": 4,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source27",
+    "route": 4,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source27",
+    "route": 5,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": false,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source28",
+    "route": 0,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source28",
+    "route": 3,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 1.0,
+    "after": 0.0
+  },
+  {
+    "source": "alpha_source28",
+    "route": 4,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": false,
+    "before": 1.0,
+    "after": 0.0
+  },
+  {
+    "source": "alpha_source30",
+    "route": 7,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": false,
+    "before": 1.0,
+    "after": 0.0
+  },
+  {
+    "source": "alpha_source31",
+    "route": 0,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source31",
+    "route": 0,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source31",
+    "route": 3,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source31",
+    "route": 3,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source31",
+    "route": 4,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source31",
+    "route": 4,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source31",
+    "route": 5,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source31",
+    "route": 5,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source32",
+    "route": 2,
+    "root": 6,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source32",
+    "route": 2,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source32",
+    "route": 6,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source32",
+    "route": 6,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source32",
+    "route": 6,
+    "root": 6,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source32",
+    "route": 6,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source32",
+    "route": 7,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source32",
+    "route": 7,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source32",
+    "route": 7,
+    "root": 6,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source32",
+    "route": 7,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source32",
+    "route": 8,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source32",
+    "route": 8,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source32",
+    "route": 8,
+    "root": 6,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source32",
+    "route": 8,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source33",
+    "route": 2,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source33",
+    "route": 3,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source33",
+    "route": 3,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source33",
+    "route": 4,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source33",
+    "route": 4,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source33",
+    "route": 5,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source33",
+    "route": 5,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source33",
+    "route": 6,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source33",
+    "route": 7,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source34",
+    "route": 2,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source34",
+    "route": 3,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 1.0,
+    "after": 0.0
+  },
+  {
+    "source": "alpha_source34",
+    "route": 4,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 1.0,
+    "after": 0.0
+  },
+  {
+    "source": "alpha_source34",
+    "route": 5,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 1.0,
+    "after": 0.0
+  },
+  {
+    "source": "alpha_source34",
+    "route": 6,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source34",
+    "route": 6,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source34",
+    "route": 6,
+    "root": 6,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source34",
+    "route": 6,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source34",
+    "route": 7,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source34",
+    "route": 7,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source34",
+    "route": 7,
+    "root": 6,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source34",
+    "route": 7,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source34",
+    "route": 8,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source34",
+    "route": 8,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source34",
+    "route": 8,
+    "root": 6,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source34",
+    "route": 8,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source35",
+    "route": 2,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source35",
+    "route": 2,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source35",
+    "route": 3,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source35",
+    "route": 3,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source35",
+    "route": 4,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source35",
+    "route": 4,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source35",
+    "route": 5,
+    "root": 6,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source35",
+    "route": 5,
+    "root": 7,
+    "speed": 1.8,
+    "actual_success": true,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source35",
+    "route": 6,
+    "root": 6,
+    "speed": 1.9,
+    "actual_success": false,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source35",
+    "route": 6,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": false,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source35",
+    "route": 7,
+    "root": 6,
+    "speed": 1.9,
+    "actual_success": false,
+    "before": 0.0,
+    "after": 1.0
+  },
+  {
+    "source": "alpha_source35",
+    "route": 7,
+    "root": 7,
+    "speed": 1.9,
+    "actual_success": false,
+    "before": 0.0,
+    "after": 1.0
+  }
+]

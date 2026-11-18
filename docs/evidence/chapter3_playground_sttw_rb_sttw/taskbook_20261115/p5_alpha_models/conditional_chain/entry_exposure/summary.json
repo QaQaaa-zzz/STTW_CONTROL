@@ -1,0 +1,7 @@
+{
+  "cases": 648,
+  "true_admit": 336,
+  "false_admit": 56,
+  "false_reject": 63,
+  "true_reject": 193
+}

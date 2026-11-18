@@ -1,0 +1,20 @@
+{
+  "far_contact": {
+    "gained": 11,
+    "retained": 19,
+    "lost": 3,
+    "neither": 3
+  },
+  "handoff_s": {
+    "gained": 0,
+    "retained": 0,
+    "lost": 1,
+    "neither": 35
+  },
+  "goal": {
+    "gained": 0,
+    "retained": 0,
+    "lost": 0,
+    "neither": 36
+  }
+}

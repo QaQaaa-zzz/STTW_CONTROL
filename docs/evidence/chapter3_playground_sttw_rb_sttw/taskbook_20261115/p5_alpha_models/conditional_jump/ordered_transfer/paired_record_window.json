@@ -1,0 +1,7 @@
+{
+  "gained": 181,
+  "retained": 354,
+  "lost": 3,
+  "neither": 110,
+  "scope": "event found before actual record end only; not2.5s query or execution success"
+}

@@ -1,0 +1,236 @@
+[
+  {
+    "model": "after",
+    "method": "fixed_alpha0",
+    "tasks": 4,
+    "success": 4,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 18
+  },
+  {
+    "model": "after",
+    "method": "fixed_alpha0.5",
+    "tasks": 4,
+    "success": 4,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 18
+  },
+  {
+    "model": "after",
+    "method": "fixed_alpha1",
+    "tasks": 4,
+    "success": 4,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 18
+  },
+  {
+    "model": "after",
+    "method": "joint_budget18_offset0",
+    "tasks": 4,
+    "success": 4,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 18
+  },
+  {
+    "model": "after",
+    "method": "joint_budget18_offset1",
+    "tasks": 4,
+    "success": 4,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 18
+  },
+  {
+    "model": "after",
+    "method": "joint_budget18_offset2",
+    "tasks": 4,
+    "success": 4,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 18
+  },
+  {
+    "model": "after",
+    "method": "joint_budget18_offset3",
+    "tasks": 4,
+    "success": 4,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 18
+  },
+  {
+    "model": "after",
+    "method": "joint_budget18_offset4",
+    "tasks": 4,
+    "success": 4,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 18
+  },
+  {
+    "model": "after",
+    "method": "joint_budget18_offset5",
+    "tasks": 4,
+    "success": 1,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 18
+  },
+  {
+    "model": "after",
+    "method": "joint_budget18_offset6",
+    "tasks": 4,
+    "success": 4,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 18
+  },
+  {
+    "model": "after",
+    "method": "joint_budget18_offset7",
+    "tasks": 4,
+    "success": 4,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 18
+  },
+  {
+    "model": "after",
+    "method": "joint_budget18_offset8",
+    "tasks": 4,
+    "success": 4,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 18
+  },
+  {
+    "model": "after",
+    "method": "joint_full162",
+    "tasks": 4,
+    "success": 4,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 162
+  },
+  {
+    "model": "before",
+    "method": "fixed_alpha0",
+    "tasks": 4,
+    "success": 4,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 18
+  },
+  {
+    "model": "before",
+    "method": "fixed_alpha0.5",
+    "tasks": 4,
+    "success": 4,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 18
+  },
+  {
+    "model": "before",
+    "method": "fixed_alpha1",
+    "tasks": 4,
+    "success": 0,
+    "no_plan": 2,
+    "oracle_feasible": 4,
+    "queries_per_task": 18
+  },
+  {
+    "model": "before",
+    "method": "joint_budget18_offset0",
+    "tasks": 4,
+    "success": 4,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 18
+  },
+  {
+    "model": "before",
+    "method": "joint_budget18_offset1",
+    "tasks": 4,
+    "success": 4,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 18
+  },
+  {
+    "model": "before",
+    "method": "joint_budget18_offset2",
+    "tasks": 4,
+    "success": 3,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 18
+  },
+  {
+    "model": "before",
+    "method": "joint_budget18_offset3",
+    "tasks": 4,
+    "success": 4,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 18
+  },
+  {
+    "model": "before",
+    "method": "joint_budget18_offset4",
+    "tasks": 4,
+    "success": 4,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 18
+  },
+  {
+    "model": "before",
+    "method": "joint_budget18_offset5",
+    "tasks": 4,
+    "success": 4,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 18
+  },
+  {
+    "model": "before",
+    "method": "joint_budget18_offset6",
+    "tasks": 4,
+    "success": 4,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 18
+  },
+  {
+    "model": "before",
+    "method": "joint_budget18_offset7",
+    "tasks": 4,
+    "success": 4,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 18
+  },
+  {
+    "model": "before",
+    "method": "joint_budget18_offset8",
+    "tasks": 4,
+    "success": 4,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 18
+  },
+  {
+    "model": "before",
+    "method": "joint_full162",
+    "tasks": 4,
+    "success": 4,
+    "no_plan": 0,
+    "oracle_feasible": 4,
+    "queries_per_task": 162
+  }
+]

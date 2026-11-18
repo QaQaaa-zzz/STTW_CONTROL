@@ -1,0 +1,14 @@
+[
+  {
+    "seed": "ordered_transfer600",
+    "cases": 648,
+    "model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_models/conditional_jump/ordered_transfer600/training/best.pt",
+    "update": 6850,
+    "mean_max_xyz_m": 0.05534473039140856,
+    "worst_max_xyz_m": 0.10037821531295776,
+    "mean_endpoint_xyz_m": 0.03232342832043399,
+    "missing_predicted_handoff": 113,
+    "actual_handoffs": 648,
+    "scope": "True entry, then free full RB segment through actual record duration; fixed horizon is evaluation only, never supplied to predictor as an input; no full-chain or decision benefit claim"
+  }
+]

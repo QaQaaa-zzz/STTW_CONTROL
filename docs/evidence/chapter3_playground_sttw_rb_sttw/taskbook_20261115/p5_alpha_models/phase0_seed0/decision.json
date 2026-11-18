@@ -1,0 +1,14 @@
+{
+  "status": "first_pair_complete_not_adopted",
+  "formal_convergence_verified": false,
+  "updates_each": 600,
+  "checkpoints_each": 25,
+  "actual_pair_wall_s": 654.0762,
+  "selected_updates": {
+    "residual": 600,
+    "direct": 600
+  },
+  "evidence": "Residual1s and3s keep improving;direct3s rises9.285percent from575to600 despite1s improvement. Best uses fixed1s criterion, not retrospective3s selection.",
+  "next": "Finish planned seed1/2 paired first600 fits, then assess matched continuation from saved model+Adam;do not infer planning success from prediction averages.",
+  "limitations": "One seed;knownDEV;true window entry history;no full conditional chain or alpha-selection result;tail errors remain."
+}

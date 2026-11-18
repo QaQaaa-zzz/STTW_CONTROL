@@ -1,0 +1,24 @@
+{
+  "before": {
+    "cases": 648,
+    "predicted_handoffs": 648,
+    "event_mae_s": 0.037376563490172966,
+    "event_max_abs_s": 0.21000003814697266,
+    "handoff_position_mean_m": 0.0734912248092623,
+    "handoff_position_max_m": 0.41904759407043457,
+    "occupancy_mean_m": 0.0976739770196016,
+    "scope": "125-step max query; GPU predicted phase selects handoff, never actual future event time. Compare event-selected state to actual handoff, includes timing error. AABB corner metric is conservative geometric discrepancy, not safety proof.",
+    "model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6600.pt"
+  },
+  "after": {
+    "cases": 648,
+    "predicted_handoffs": 648,
+    "event_mae_s": 0.02933643482349537,
+    "event_max_abs_s": 0.21000003814697266,
+    "handoff_position_mean_m": 0.05848639299891843,
+    "handoff_position_max_m": 0.43098917603492737,
+    "occupancy_mean_m": 0.07326440330070906,
+    "scope": "125-step max query; GPU predicted phase selects handoff, never actual future event time. Compare event-selected state to actual handoff, includes timing error. AABB corner metric is conservative geometric discrepancy, not safety proof.",
+    "model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_models/conditional_jump/ordered_transfer600/training/best.pt"
+  }
+}

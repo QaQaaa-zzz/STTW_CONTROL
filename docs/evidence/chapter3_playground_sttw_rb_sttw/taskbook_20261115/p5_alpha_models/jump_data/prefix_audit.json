@@ -1,0 +1,22 @@
+{
+  "rows": 1296,
+  "train": 648,
+  "dev": 648,
+  "old_samples": 109100,
+  "new_samples": 97368,
+  "exact_prefix_fields": {
+    "qpos": true,
+    "qvel": true,
+    "history": true,
+    "contact": true,
+    "phase": true,
+    "context": true,
+    "time": true,
+    "action": true,
+    "action_valid": true
+  },
+  "phase2_samples_per_sequence": 1,
+  "rounding": "First regular20ms sampled phase2 may be less than20ms after native handoff;not exact event-time state",
+  "purpose": "Exclude0.2s post-handoff ground-control supervision conditioned by departure alpha from jump-only model;keep immutable full sequences and labels",
+  "model_training_started": false
+}

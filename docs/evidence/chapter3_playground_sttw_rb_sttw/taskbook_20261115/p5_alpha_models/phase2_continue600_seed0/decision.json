@@ -1,0 +1,29 @@
+{
+  "stage": "seed0_complete_remaining_not_started",
+  "reason": "All residual bests at600; mean errors still decline, direct seed2 last regresses; retain best and assess matched additional600",
+  "completed_pair_wall_s": [
+    1280.1721482276917,
+    1332.7642912864685,
+    1277.7086837291718
+  ],
+  "estimated_six_model_wait_s": 3891,
+  "wait_limit_s": 1800,
+  "resume": "One paired seed queue with1500s cap; no automatic complete six-model run",
+  "resume_execution": {
+    "stage": "seed0_pair_started",
+    "queue": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_models/phase2_continue600/pairs/seed0",
+    "hard_limit_s": 1500,
+    "remaining_seeds_not_started": [
+      1,
+      2
+    ]
+  },
+  "completed_seed0_wall_s": 1289.6954472064972,
+  "remaining_seeds": [
+    1,
+    2
+  ],
+  "estimated_remaining_s": 2579.3908944129944,
+  "convergence_review": "1000to1200 means residual decrease3.38%/6.98%,direct6.23%/10.11%; residual1s last25 regresses1%; best1175 retained; no formal convergence or planning adoption",
+  "pause_reason": "Remaining paired seeds estimated43min exceed30min wait limit"
+}

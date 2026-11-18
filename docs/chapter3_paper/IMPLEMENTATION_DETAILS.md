@@ -1,3 +1,15 @@
+## 新任务书条件接口状态（当前）
+
+以下旧章节保留其冻结配置和历史结果；不代表最新阶段已经完成。当前原始轨迹与每次resolved_config定义实际物理/策略身份。
+
+P5中α在每个地面阶段保持常数，阶段交接采用实际native回交事件。HistoryDynamics可选显式α输入，保留GRU64及128×128头；无地形输入26→27，有地形101→102。旧模型缺省无条件，不能外推非零α。训练归一化只用TRAIN，600更新为首轮预算；跳前seed0两结构已完成，其他种子与后段拟合尚未完成。
+
+全链预测CLI读取真实配置中的阶段α并传给地面预测器，跳跃上下文也使用跳前α。历史桥训练显式使用相同α；新桥接/跳跃训练合同记录TRAIN α覆盖。旧典型交接接口仅α0。实现已通过既有地面/续接单元检查和CLI解析检查，但尚无条件模型全链GPU结果。新接口不能替代匹配模型的训练和误差检验。
+
+跳跃仍执行用户选定的shared225；其PPO-only来源和本项目续训不能混写成完整RB方法对照。完整来源审计及缺项见本目录README。
+
+## 以下为此前执行大纲的实现与结果快照
+
 ## Current speed input and fit scope
 
 Both ordered phase-speed pairs (1.8→1.9 and1.9→1.8) complete72/72; the runner changes request on actual RB handback. Physical initial speed magnitude is1.8m/s, rotated by initial yaw. A preparation manifest's2m/s description was incorrect and has a separate correction record; the physics was unchanged.

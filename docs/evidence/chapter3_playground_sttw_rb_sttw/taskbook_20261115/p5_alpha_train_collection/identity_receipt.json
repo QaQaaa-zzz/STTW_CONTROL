@@ -1,0 +1,236 @@
+[
+  {
+    "map": "map00",
+    "approach_alpha": 0.0,
+    "departure_alpha": 0.0,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map00/evaluation",
+    "checks": {
+      "config": true,
+      "ground_actor": true,
+      "jump_actor": true,
+      "terrain": true
+    },
+    "terrain_sha256": "ddd37307f5c56ac3ff77c53a593a0e27ef546a1fb5a4e05ba9f281f0eccc4545"
+  },
+  {
+    "map": "map00",
+    "approach_alpha": 0.0,
+    "departure_alpha": 0.5,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in0_out0.5/evaluation",
+    "checks": {
+      "config": true,
+      "ground_actor": true,
+      "jump_actor": true,
+      "terrain": true
+    },
+    "terrain_sha256": "ddd37307f5c56ac3ff77c53a593a0e27ef546a1fb5a4e05ba9f281f0eccc4545"
+  },
+  {
+    "map": "map00",
+    "approach_alpha": 0.0,
+    "departure_alpha": 1.0,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in0_out1/evaluation",
+    "checks": {
+      "config": true,
+      "ground_actor": true,
+      "jump_actor": true,
+      "terrain": true
+    },
+    "terrain_sha256": "ddd37307f5c56ac3ff77c53a593a0e27ef546a1fb5a4e05ba9f281f0eccc4545"
+  },
+  {
+    "map": "map00",
+    "approach_alpha": 0.5,
+    "departure_alpha": 0.0,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in0.5_out0/evaluation",
+    "checks": {
+      "config": true,
+      "ground_actor": true,
+      "jump_actor": true,
+      "terrain": true
+    },
+    "terrain_sha256": "ddd37307f5c56ac3ff77c53a593a0e27ef546a1fb5a4e05ba9f281f0eccc4545"
+  },
+  {
+    "map": "map00",
+    "approach_alpha": 0.5,
+    "departure_alpha": 0.5,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in0.5_out0.5/evaluation",
+    "checks": {
+      "config": true,
+      "ground_actor": true,
+      "jump_actor": true,
+      "terrain": true
+    },
+    "terrain_sha256": "ddd37307f5c56ac3ff77c53a593a0e27ef546a1fb5a4e05ba9f281f0eccc4545"
+  },
+  {
+    "map": "map00",
+    "approach_alpha": 0.5,
+    "departure_alpha": 1.0,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in0.5_out1/evaluation",
+    "checks": {
+      "config": true,
+      "ground_actor": true,
+      "jump_actor": true,
+      "terrain": true
+    },
+    "terrain_sha256": "ddd37307f5c56ac3ff77c53a593a0e27ef546a1fb5a4e05ba9f281f0eccc4545"
+  },
+  {
+    "map": "map00",
+    "approach_alpha": 1.0,
+    "departure_alpha": 0.0,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in1_out0/evaluation",
+    "checks": {
+      "config": true,
+      "ground_actor": true,
+      "jump_actor": true,
+      "terrain": true
+    },
+    "terrain_sha256": "ddd37307f5c56ac3ff77c53a593a0e27ef546a1fb5a4e05ba9f281f0eccc4545"
+  },
+  {
+    "map": "map00",
+    "approach_alpha": 1.0,
+    "departure_alpha": 0.5,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in1_out0.5/evaluation",
+    "checks": {
+      "config": true,
+      "ground_actor": true,
+      "jump_actor": true,
+      "terrain": true
+    },
+    "terrain_sha256": "ddd37307f5c56ac3ff77c53a593a0e27ef546a1fb5a4e05ba9f281f0eccc4545"
+  },
+  {
+    "map": "map00",
+    "approach_alpha": 1.0,
+    "departure_alpha": 1.0,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map00/in1_out1/evaluation",
+    "checks": {
+      "config": true,
+      "ground_actor": true,
+      "jump_actor": true,
+      "terrain": true
+    },
+    "terrain_sha256": "ddd37307f5c56ac3ff77c53a593a0e27ef546a1fb5a4e05ba9f281f0eccc4545"
+  },
+  {
+    "map": "map01",
+    "approach_alpha": 0.0,
+    "departure_alpha": 0.0,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_collection/map01/evaluation",
+    "checks": {
+      "config": true,
+      "ground_actor": true,
+      "jump_actor": true,
+      "terrain": true
+    },
+    "terrain_sha256": "19a2b25743c2bacdc9dc1be7eed552d7dabd6866e024e6a89ba516942713903e"
+  },
+  {
+    "map": "map01",
+    "approach_alpha": 0.0,
+    "departure_alpha": 0.5,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in0_out0.5/evaluation",
+    "checks": {
+      "config": true,
+      "ground_actor": true,
+      "jump_actor": true,
+      "terrain": true
+    },
+    "terrain_sha256": "19a2b25743c2bacdc9dc1be7eed552d7dabd6866e024e6a89ba516942713903e"
+  },
+  {
+    "map": "map01",
+    "approach_alpha": 0.0,
+    "departure_alpha": 1.0,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in0_out1/evaluation",
+    "checks": {
+      "config": true,
+      "ground_actor": true,
+      "jump_actor": true,
+      "terrain": true
+    },
+    "terrain_sha256": "19a2b25743c2bacdc9dc1be7eed552d7dabd6866e024e6a89ba516942713903e"
+  },
+  {
+    "map": "map01",
+    "approach_alpha": 0.5,
+    "departure_alpha": 0.0,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in0.5_out0/evaluation",
+    "checks": {
+      "config": true,
+      "ground_actor": true,
+      "jump_actor": true,
+      "terrain": true
+    },
+    "terrain_sha256": "19a2b25743c2bacdc9dc1be7eed552d7dabd6866e024e6a89ba516942713903e"
+  },
+  {
+    "map": "map01",
+    "approach_alpha": 0.5,
+    "departure_alpha": 0.5,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in0.5_out0.5/evaluation",
+    "checks": {
+      "config": true,
+      "ground_actor": true,
+      "jump_actor": true,
+      "terrain": true
+    },
+    "terrain_sha256": "19a2b25743c2bacdc9dc1be7eed552d7dabd6866e024e6a89ba516942713903e"
+  },
+  {
+    "map": "map01",
+    "approach_alpha": 0.5,
+    "departure_alpha": 1.0,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in0.5_out1/evaluation",
+    "checks": {
+      "config": true,
+      "ground_actor": true,
+      "jump_actor": true,
+      "terrain": true
+    },
+    "terrain_sha256": "19a2b25743c2bacdc9dc1be7eed552d7dabd6866e024e6a89ba516942713903e"
+  },
+  {
+    "map": "map01",
+    "approach_alpha": 1.0,
+    "departure_alpha": 0.0,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in1_out0/evaluation",
+    "checks": {
+      "config": true,
+      "ground_actor": true,
+      "jump_actor": true,
+      "terrain": true
+    },
+    "terrain_sha256": "19a2b25743c2bacdc9dc1be7eed552d7dabd6866e024e6a89ba516942713903e"
+  },
+  {
+    "map": "map01",
+    "approach_alpha": 1.0,
+    "departure_alpha": 0.5,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in1_out0.5/evaluation",
+    "checks": {
+      "config": true,
+      "ground_actor": true,
+      "jump_actor": true,
+      "terrain": true
+    },
+    "terrain_sha256": "19a2b25743c2bacdc9dc1be7eed552d7dabd6866e024e6a89ba516942713903e"
+  },
+  {
+    "map": "map01",
+    "approach_alpha": 1.0,
+    "departure_alpha": 1.0,
+    "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_train_collection/map01/in1_out1/evaluation",
+    "checks": {
+      "config": true,
+      "ground_actor": true,
+      "jump_actor": true,
+      "terrain": true
+    },
+    "terrain_sha256": "19a2b25743c2bacdc9dc1be7eed552d7dabd6866e024e6a89ba516942713903e"
+  }
+]

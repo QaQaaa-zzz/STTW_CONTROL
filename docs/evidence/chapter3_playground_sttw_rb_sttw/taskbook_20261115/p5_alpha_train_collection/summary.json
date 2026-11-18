@@ -1,0 +1,219 @@
+[
+  {
+    "map": "map00",
+    "approach_alpha": 0.0,
+    "departure_alpha": 0.0,
+    "cases": 36,
+    "goals": 36,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {}
+  },
+  {
+    "map": "map00",
+    "approach_alpha": 0.0,
+    "departure_alpha": 0.5,
+    "cases": 36,
+    "goals": 30,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 4,
+      "tracking_domain_exit": 2
+    }
+  },
+  {
+    "map": "map00",
+    "approach_alpha": 0.0,
+    "departure_alpha": 1.0,
+    "cases": 36,
+    "goals": 9,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 13,
+      "tracking_domain_exit": 14
+    }
+  },
+  {
+    "map": "map00",
+    "approach_alpha": 0.5,
+    "departure_alpha": 0.0,
+    "cases": 36,
+    "goals": 36,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {}
+  },
+  {
+    "map": "map00",
+    "approach_alpha": 0.5,
+    "departure_alpha": 0.5,
+    "cases": 36,
+    "goals": 29,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 7
+    }
+  },
+  {
+    "map": "map00",
+    "approach_alpha": 0.5,
+    "departure_alpha": 1.0,
+    "cases": 36,
+    "goals": 9,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 14,
+      "tracking_domain_exit": 13
+    }
+  },
+  {
+    "map": "map00",
+    "approach_alpha": 1.0,
+    "departure_alpha": 0.0,
+    "cases": 36,
+    "goals": 30,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "tracking_domain_exit": 6
+    }
+  },
+  {
+    "map": "map00",
+    "approach_alpha": 1.0,
+    "departure_alpha": 0.5,
+    "cases": 36,
+    "goals": 23,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 5,
+      "tracking_domain_exit": 8
+    }
+  },
+  {
+    "map": "map00",
+    "approach_alpha": 1.0,
+    "departure_alpha": 1.0,
+    "cases": 36,
+    "goals": 6,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 13,
+      "tracking_domain_exit": 17
+    }
+  },
+  {
+    "map": "map01",
+    "approach_alpha": 0.0,
+    "departure_alpha": 0.0,
+    "cases": 36,
+    "goals": 36,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {}
+  },
+  {
+    "map": "map01",
+    "approach_alpha": 0.0,
+    "departure_alpha": 0.5,
+    "cases": 36,
+    "goals": 24,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 12
+    }
+  },
+  {
+    "map": "map01",
+    "approach_alpha": 0.0,
+    "departure_alpha": 1.0,
+    "cases": 36,
+    "goals": 10,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 13,
+      "tracking_domain_exit": 13
+    }
+  },
+  {
+    "map": "map01",
+    "approach_alpha": 0.5,
+    "departure_alpha": 0.0,
+    "cases": 36,
+    "goals": 36,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {}
+  },
+  {
+    "map": "map01",
+    "approach_alpha": 0.5,
+    "departure_alpha": 0.5,
+    "cases": 36,
+    "goals": 24,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 12
+    }
+  },
+  {
+    "map": "map01",
+    "approach_alpha": 0.5,
+    "departure_alpha": 1.0,
+    "cases": 36,
+    "goals": 12,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 16,
+      "tracking_domain_exit": 8
+    }
+  },
+  {
+    "map": "map01",
+    "approach_alpha": 1.0,
+    "departure_alpha": 0.0,
+    "cases": 36,
+    "goals": 30,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "tracking_domain_exit": 6
+    }
+  },
+  {
+    "map": "map01",
+    "approach_alpha": 1.0,
+    "departure_alpha": 0.5,
+    "cases": 36,
+    "goals": 20,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 8,
+      "tracking_domain_exit": 8
+    }
+  },
+  {
+    "map": "map01",
+    "approach_alpha": 1.0,
+    "departure_alpha": 1.0,
+    "cases": 36,
+    "goals": 9,
+    "far_contact": 36,
+    "handoffs": 36,
+    "failures": {
+      "timeout": 10,
+      "tracking_domain_exit": 17
+    }
+  }
+]

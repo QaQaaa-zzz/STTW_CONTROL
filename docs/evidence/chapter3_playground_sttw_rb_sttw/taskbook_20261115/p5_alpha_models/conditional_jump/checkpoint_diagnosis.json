@@ -1,0 +1,46 @@
+{
+  "seed0": {
+    "cases": 648,
+    "model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_models/conditional_jump/seed0/training/last.pt",
+    "update": 600,
+    "mean_max_xyz_m": 0.28912465385862707,
+    "worst_max_xyz_m": 0.4669102132320404,
+    "mean_endpoint_xyz_m": 0.28228350911565403,
+    "missing_predicted_handoff": 648,
+    "actual_handoffs": 648,
+    "scope": "True entry, then free full RB segment through actual record duration; fixed horizon is evaluation only, never supplied to predictor as an input; no full-chain or decision benefit claim"
+  },
+  "seed0_continue1000": {
+    "cases": 648,
+    "model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_models/conditional_jump/seed0_continue1000/training/last.pt",
+    "update": 1275,
+    "mean_max_xyz_m": 0.23661083646440578,
+    "worst_max_xyz_m": 0.43875688314437866,
+    "mean_endpoint_xyz_m": 0.2340784979880684,
+    "missing_predicted_handoff": 648,
+    "actual_handoffs": 648,
+    "scope": "True entry, then free full RB segment through actual record duration; fixed horizon is evaluation only, never supplied to predictor as an input; no full-chain or decision benefit claim"
+  },
+  "seed0_event_focus": {
+    "cases": 648,
+    "model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p5_alpha_models/conditional_jump/seed0_event_focus/training/last.pt",
+    "update": 1875,
+    "mean_max_xyz_m": 0.16924021683955265,
+    "worst_max_xyz_m": 0.34323033690452576,
+    "mean_endpoint_xyz_m": 0.16079535814186122,
+    "missing_predicted_handoff": 648,
+    "actual_handoffs": 648,
+    "scope": "True entry, then free full RB segment through actual record duration; fixed horizon is evaluation only, never supplied to predictor as an input; no full-chain or decision benefit claim"
+  },
+  "old_alpha0_transfer_diagnostic": {
+    "cases": 648,
+    "model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p4_phase_order/training/seed0/model_6600.pt",
+    "update": 6600,
+    "mean_max_xyz_m": 0.054190166377933856,
+    "worst_max_xyz_m": 0.09797772765159607,
+    "mean_endpoint_xyz_m": 0.0320446521193249,
+    "missing_predicted_handoff": 291,
+    "actual_handoffs": 648,
+    "scope": "True entry, then free full RB segment through actual record duration; fixed horizon is evaluation only, never supplied to predictor as an input; no full-chain or decision benefit claim"
+  }
+}

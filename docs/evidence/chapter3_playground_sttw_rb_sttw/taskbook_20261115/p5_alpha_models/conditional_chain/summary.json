@@ -1,0 +1,8 @@
+{
+  "cases": 648,
+  "true_admit": 242,
+  "false_admit": 41,
+  "false_reject": 157,
+  "true_reject": 208,
+  "scope": "KnownDEV raw-envelope conditional full chain; no new physical executions"
+}

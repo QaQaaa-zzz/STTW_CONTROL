@@ -1,0 +1,11 @@
+{
+  "role": "KnownDEV exploratory finite candidate comparison; protocol written after predictor error review, not independentTEST or preregistration",
+  "task": "Same map and initial root, choose from9 geometric routes and2 speed requests, stage-constant alpha0/.5/1",
+  "fixed_alpha": "Each diagonal alpha pair fixed; evaluate all9routes x2speeds =18 queries. Speed-only is exactly fixed alpha0 under this definition, report alias rather than invent a distinct method.",
+  "joint_full": "9routes x2speeds x9stage-alpha pairs =162 candidates",
+  "joint_budget18": "Nine deterministic offsets0..8; for each route0..8 and speed_index0..1 choose stage-alpha pair index(route+3*speed_index+offset)%9 in lexicographic pair ordering. Each offset has18 queries; report all offsets, no best-offset selection.",
+  "selection": "Among raw admitted candidates minimize predicted goal_time_s; deterministic tie alpha_pair,route,speed. No actual success or trajectory used for selection.",
+  "oracle": "Existence of actual successful candidate in same queried set; no fabricated optimal time",
+  "comparison": "Report selected actual task outcome, no-plan, feasible-but-rejected, query count, all per-root choices; raw model gates not certified/calibrated; both before/after exposure predictors",
+  "identity": "Before comparing confirm candidate initial physical states agree and map grouping from source manifest, not filename guesses"
+}
