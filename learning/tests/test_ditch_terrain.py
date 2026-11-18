@@ -10,7 +10,8 @@ def test_chain_has_two_meter_flat_takeoff_and_landing_buffers():
     import json
     from pathlib import Path
     config=json.loads(Path('learning/configs/playground_sttw_rb_sttw.json').read_text())
-    vertices,faces=build_ditch_terrain(config['ditch_terrain'])
+    terrain=json.loads(Path(config['world_map']).read_text())['terrain']
+    vertices,faces=build_ditch_terrain(terrain)
     xyz=vertices[faces]
     for lo,hi in config['flat_intervals_m']:
         overlaps=(xyz[:,:,0].max(1)>lo+1e-6)&(xyz[:,:,0].min(1)<hi-1e-6)

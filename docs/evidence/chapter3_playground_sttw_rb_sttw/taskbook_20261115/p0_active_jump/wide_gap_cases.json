@@ -1,0 +1,4955 @@
+[
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route0_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.840000152587891,
+        "end_s": 4.929999828338623,
+        "unloaded_ms": 103.00000000000001,
+        "initial_com_vz_m_s": -0.348246574385856,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.11931415025190555,
+        "front_start_x": 10.605380871800287,
+        "rear_end_x": 10.502370471810785,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.0,
+        "end_s": 5.010000228881836,
+        "unloaded_ms": 17.0,
+        "initial_com_vz_m_s": 1.8522835318483504,
+        "com_rise_m": 0.018277999874971196,
+        "clearance_over_gap_m": -0.10949490922278406,
+        "front_start_x": 10.798548153750495,
+        "rear_end_x": 10.54774769418031,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.025000095367432,
+        "end_s": 5.139999866485596,
+        "unloaded_ms": 124.0,
+        "initial_com_vz_m_s": 1.6368670464200819,
+        "com_rise_m": 0.1261968992414675,
+        "clearance_over_gap_m": -0.06641110617120563,
+        "front_start_x": 10.767639800178332,
+        "rear_end_x": 10.56702426836373,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route0_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.835000038146973,
+        "end_s": 4.929999828338623,
+        "unloaded_ms": 103.00000000000001,
+        "initial_com_vz_m_s": -0.32469430955001605,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.12275927053489832,
+        "front_start_x": 10.599031591379296,
+        "rear_end_x": 10.505891157924934,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.005000114440918,
+        "end_s": 5.114999771118164,
+        "unloaded_ms": 115.0,
+        "initial_com_vz_m_s": 1.2430178388314201,
+        "com_rise_m": 0.08008102989853585,
+        "clearance_over_gap_m": -0.12224170779028573,
+        "front_start_x": 10.780693490775088,
+        "rear_end_x": 10.55374448198263,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route0_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.579999923706055,
+        "end_s": 4.670000076293945,
+        "unloaded_ms": 98.0,
+        "initial_com_vz_m_s": -0.32938465404017553,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.11446299239379215,
+        "front_start_x": 10.604397365896412,
+        "rear_end_x": 10.509076830015415,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 4.739999771118164,
+        "end_s": 4.875,
+        "unloaded_ms": 142.00000000000003,
+        "initial_com_vz_m_s": 0.39586668301682754,
+        "com_rise_m": 0.0089855425810135,
+        "clearance_over_gap_m": -0.13795109655813098,
+        "front_start_x": 10.786330008922022,
+        "rear_end_x": 10.601317260078362,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route0_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.59499979019165,
+        "end_s": 4.684999942779541,
+        "unloaded_ms": 98.0,
+        "initial_com_vz_m_s": -0.32367711560488704,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.11346882194621373,
+        "front_start_x": 10.602876172559066,
+        "rear_end_x": 10.507773978826739,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 4.744999885559082,
+        "end_s": 4.795000076293945,
+        "unloaded_ms": 55.0,
+        "initial_com_vz_m_s": -0.06474709799296954,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.15350695471179743,
+        "front_start_x": 10.772950448010706,
+        "rear_end_x": 10.55022839501018,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 4.809999942779541,
+        "end_s": 4.84499979019165,
+        "unloaded_ms": 44.0,
+        "initial_com_vz_m_s": -0.45840142373636844,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.14029567729072664,
+        "front_start_x": 10.699036855202328,
+        "rear_end_x": 10.609115312224516,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route1_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.840000152587891,
+        "end_s": 4.929999828338623,
+        "unloaded_ms": 103.00000000000001,
+        "initial_com_vz_m_s": -0.3482606289895299,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.11930301331770594,
+        "front_start_x": 10.60540243248583,
+        "rear_end_x": 10.502386054906495,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.010000228881836,
+        "end_s": 5.130000114440918,
+        "unloaded_ms": 125.0,
+        "initial_com_vz_m_s": 1.1384517433361736,
+        "com_rise_m": 0.06891669602307501,
+        "clearance_over_gap_m": -0.1268002168450104,
+        "front_start_x": 10.781771793441177,
+        "rear_end_x": 10.586708296488123,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route1_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.835000038146973,
+        "end_s": 4.929999828338623,
+        "unloaded_ms": 103.00000000000001,
+        "initial_com_vz_m_s": -0.32411580635028436,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.12272110891769607,
+        "front_start_x": 10.598992298531973,
+        "rear_end_x": 10.505798934386954,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.010000228881836,
+        "end_s": 5.110000133514404,
+        "unloaded_ms": 108.0,
+        "initial_com_vz_m_s": 1.1036295416482564,
+        "com_rise_m": 0.06374598604124357,
+        "clearance_over_gap_m": -0.11813790182763836,
+        "front_start_x": 10.775939801695449,
+        "rear_end_x": 10.550434644246273,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route1_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.579999923706055,
+        "end_s": 4.670000076293945,
+        "unloaded_ms": 97.0,
+        "initial_com_vz_m_s": -0.3322066827064472,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.11442629722265428,
+        "front_start_x": 10.604033784437794,
+        "rear_end_x": 10.509095719136791,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 4.730000019073486,
+        "end_s": 4.855000019073486,
+        "unloaded_ms": 133.0,
+        "initial_com_vz_m_s": 1.2245703591051913,
+        "com_rise_m": 0.07950726279994116,
+        "clearance_over_gap_m": -0.12371766812401182,
+        "front_start_x": 10.78925863021681,
+        "rear_end_x": 10.577090040946906,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route1_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.59499979019165,
+        "end_s": 4.684999942779541,
+        "unloaded_ms": 98.0,
+        "initial_com_vz_m_s": -0.32346366754031025,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.11336802858509956,
+        "front_start_x": 10.60264977019285,
+        "rear_end_x": 10.507641169553674,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 4.760000228881836,
+        "end_s": 4.880000114440918,
+        "unloaded_ms": 125.0,
+        "initial_com_vz_m_s": 0.7744367638771619,
+        "com_rise_m": 0.032522611727638234,
+        "clearance_over_gap_m": -0.11440765518553578,
+        "front_start_x": 10.782808221854726,
+        "rear_end_x": 10.607679050604741,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route2_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.840000152587891,
+        "end_s": 4.929999828338623,
+        "unloaded_ms": 103.00000000000001,
+        "initial_com_vz_m_s": -0.3493381539332153,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.11953522093580418,
+        "front_start_x": 10.605630364293987,
+        "rear_end_x": 10.502587835109955,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.005000114440918,
+        "end_s": 5.090000152587891,
+        "unloaded_ms": 94.0,
+        "initial_com_vz_m_s": 0.8827044247459234,
+        "com_rise_m": 0.04166063830067959,
+        "clearance_over_gap_m": -0.13134122528607262,
+        "front_start_x": 10.76805530187756,
+        "rear_end_x": 10.602047282647368,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route2_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.840000152587891,
+        "end_s": 4.929999828338623,
+        "unloaded_ms": 103.00000000000001,
+        "initial_com_vz_m_s": -0.3563819825274423,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.12084460420167212,
+        "front_start_x": 10.60543010378547,
+        "rear_end_x": 10.502708178665598,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.014999866485596,
+        "end_s": 5.110000133514404,
+        "unloaded_ms": 102.00000000000001,
+        "initial_com_vz_m_s": 0.6769952578673999,
+        "com_rise_m": 0.025070921754916792,
+        "clearance_over_gap_m": -0.13495931397194497,
+        "front_start_x": 10.773179195340198,
+        "rear_end_x": 10.567889376549017,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route2_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.579999923706055,
+        "end_s": 4.670000076293945,
+        "unloaded_ms": 97.0,
+        "initial_com_vz_m_s": -0.3270080594286243,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.11385953825513755,
+        "front_start_x": 10.603664118130965,
+        "rear_end_x": 10.508527913886674,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 4.739999771118164,
+        "end_s": 4.84499979019165,
+        "unloaded_ms": 111.0,
+        "initial_com_vz_m_s": 0.6392592333769654,
+        "com_rise_m": 0.022431435533440847,
+        "clearance_over_gap_m": -0.1349898010963803,
+        "front_start_x": 10.774714137050834,
+        "rear_end_x": 10.55749275383173,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route2_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.59499979019165,
+        "end_s": 4.684999942779541,
+        "unloaded_ms": 98.0,
+        "initial_com_vz_m_s": -0.32137766361756853,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.11321439497407318,
+        "front_start_x": 10.602395474538916,
+        "rear_end_x": 10.507238004910215,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 4.775000095367432,
+        "end_s": 4.889999866485596,
+        "unloaded_ms": 122.0,
+        "initial_com_vz_m_s": 1.6238647759915361,
+        "com_rise_m": 0.12470108772552918,
+        "clearance_over_gap_m": -0.0562680345365454,
+        "front_start_x": 10.770405880581622,
+        "rear_end_x": 10.581261386009883,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route3_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.15500020980835,
+        "end_s": 5.25,
+        "unloaded_ms": 104.00000000000001,
+        "initial_com_vz_m_s": -0.37412683772874494,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.1306197555442937,
+        "front_start_x": 10.605934757592914,
+        "rear_end_x": 10.51157714517332,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.304999828338623,
+        "end_s": 5.400000095367432,
+        "unloaded_ms": 100.0,
+        "initial_com_vz_m_s": 0.2772139591452839,
+        "com_rise_m": 0.004637542720465293,
+        "clearance_over_gap_m": -0.15694965336639294,
+        "front_start_x": 10.775047902681195,
+        "rear_end_x": 10.582341080337475,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route3_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.139999866485596,
+        "end_s": 5.235000133514404,
+        "unloaded_ms": 105.0,
+        "initial_com_vz_m_s": -0.34654673249923484,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.12657086766759895,
+        "front_start_x": 10.600751777035642,
+        "rear_end_x": 10.506263184802187,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.315000057220459,
+        "end_s": 5.409999847412109,
+        "unloaded_ms": 103.00000000000001,
+        "initial_com_vz_m_s": 1.0839173679737795,
+        "com_rise_m": 0.06103343342590936,
+        "clearance_over_gap_m": -0.12782799543292822,
+        "front_start_x": 10.77513502062359,
+        "rear_end_x": 10.593635994494667,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route3_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.934999942779541,
+        "end_s": 5.025000095367432,
+        "unloaded_ms": 100.0,
+        "initial_com_vz_m_s": -0.3368093045148848,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.1159752226943466,
+        "front_start_x": 10.603161700914,
+        "rear_end_x": 10.506460317645193,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.090000152587891,
+        "end_s": 5.215000152587891,
+        "unloaded_ms": 134.0,
+        "initial_com_vz_m_s": 0.4367335798328267,
+        "com_rise_m": 0.01082178998370556,
+        "clearance_over_gap_m": -0.14324996362801035,
+        "front_start_x": 10.777826188479732,
+        "rear_end_x": 10.58743273627799,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route3_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.934999942779541,
+        "end_s": 5.025000095367432,
+        "unloaded_ms": 100.0,
+        "initial_com_vz_m_s": -0.33298451274748825,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.11512484488271679,
+        "front_start_x": 10.60290206327806,
+        "rear_end_x": 10.506480156183398,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.074999809265137,
+        "end_s": 5.079999923706055,
+        "unloaded_ms": 13.000000000000002,
+        "initial_com_vz_m_s": 1.4537024019110314,
+        "com_rise_m": 0.007268678372592485,
+        "clearance_over_gap_m": -0.12594799460234427,
+        "front_start_x": 10.800497680908856,
+        "rear_end_x": 10.545424541162264,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.09499979019165,
+        "end_s": 5.224999904632568,
+        "unloaded_ms": 136.0,
+        "initial_com_vz_m_s": 1.3131660983791322,
+        "com_rise_m": 0.09102535893811192,
+        "clearance_over_gap_m": -0.09973345915466211,
+        "front_start_x": 10.781987968397841,
+        "rear_end_x": 10.611606312194091,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route4_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.15500020980835,
+        "end_s": 5.25,
+        "unloaded_ms": 104.00000000000001,
+        "initial_com_vz_m_s": -0.37246226409878086,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.1304282918593025,
+        "front_start_x": 10.6056301310196,
+        "rear_end_x": 10.511234030735446,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.309999942779541,
+        "end_s": 5.394999980926514,
+        "unloaded_ms": 93.0,
+        "initial_com_vz_m_s": 0.32917913709584623,
+        "com_rise_m": 0.006370916380566666,
+        "clearance_over_gap_m": -0.15779645093695485,
+        "front_start_x": 10.768804179317875,
+        "rear_end_x": 10.586390381000118,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route4_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.139999866485596,
+        "end_s": 5.235000133514404,
+        "unloaded_ms": 105.0,
+        "initial_com_vz_m_s": -0.3464715135308503,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.1265959460816956,
+        "front_start_x": 10.60116595720116,
+        "rear_end_x": 10.506614097299874,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.304999828338623,
+        "end_s": 5.420000076293945,
+        "unloaded_ms": 122.0,
+        "initial_com_vz_m_s": 1.5179647259237696,
+        "com_rise_m": 0.11253242880270586,
+        "clearance_over_gap_m": -0.11447289131800986,
+        "front_start_x": 10.783141431935189,
+        "rear_end_x": 10.567208397265091,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route4_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.934999942779541,
+        "end_s": 5.025000095367432,
+        "unloaded_ms": 101.0,
+        "initial_com_vz_m_s": -0.33337747647546967,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.1155631438912822,
+        "front_start_x": 10.602376304214673,
+        "rear_end_x": 10.505792658523353,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.090000152587891,
+        "end_s": 5.210000038146973,
+        "unloaded_ms": 129.0,
+        "initial_com_vz_m_s": 1.4841108235852765,
+        "com_rise_m": 0.11038876267540881,
+        "clearance_over_gap_m": -0.10531891805595923,
+        "front_start_x": 10.786315113548218,
+        "rear_end_x": 10.590863805198651,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route4_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.934999942779541,
+        "end_s": 5.025000095367432,
+        "unloaded_ms": 100.0,
+        "initial_com_vz_m_s": -0.3371433712257602,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.11582873272093422,
+        "front_start_x": 10.603819602038248,
+        "rear_end_x": 10.507305298545665,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.090000152587891,
+        "end_s": 5.190000057220459,
+        "unloaded_ms": 109.0,
+        "initial_com_vz_m_s": 0.49078380028606966,
+        "com_rise_m": 0.0135016782184329,
+        "clearance_over_gap_m": -0.14173114539803866,
+        "front_start_x": 10.769320682032264,
+        "rear_end_x": 10.55892620508311,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route5_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.15500020980835,
+        "end_s": 5.25,
+        "unloaded_ms": 105.0,
+        "initial_com_vz_m_s": -0.36928678338012216,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.12995740367543582,
+        "front_start_x": 10.605321341475854,
+        "rear_end_x": 10.510831391700231,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.364999771118164,
+        "end_s": 5.385000228881836,
+        "unloaded_ms": 32.0,
+        "initial_com_vz_m_s": 0.06266732986649474,
+        "com_rise_m": 0.0003814424030710861,
+        "clearance_over_gap_m": -0.13482052210130288,
+        "front_start_x": 10.75101325733371,
+        "rear_end_x": 10.57006279108636,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route5_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.139999866485596,
+        "end_s": 5.235000133514404,
+        "unloaded_ms": 105.0,
+        "initial_com_vz_m_s": -0.347804226295044,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.1268169471407869,
+        "front_start_x": 10.601382462683954,
+        "rear_end_x": 10.506843126714758,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.289999961853027,
+        "end_s": 5.300000190734863,
+        "unloaded_ms": 19.0,
+        "initial_com_vz_m_s": 1.9388821789338686,
+        "com_rise_m": 0.01914411904647728,
+        "clearance_over_gap_m": -0.1202763920200611,
+        "front_start_x": 10.798321514356168,
+        "rear_end_x": 10.545042891905354,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.309999942779541,
+        "end_s": 5.460000038146973,
+        "unloaded_ms": 156.0,
+        "initial_com_vz_m_s": 1.7754892455581688,
+        "com_rise_m": 0.1596204111624535,
+        "clearance_over_gap_m": -0.08493156774797264,
+        "front_start_x": 10.781883581197924,
+        "rear_end_x": 10.616028045782555,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route5_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.934999942779541,
+        "end_s": 5.025000095367432,
+        "unloaded_ms": 100.0,
+        "initial_com_vz_m_s": -0.3360968719668819,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.11581644801567992,
+        "front_start_x": 10.602843173747038,
+        "rear_end_x": 10.506170959342922,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.110000133514404,
+        "end_s": 5.21999979019165,
+        "unloaded_ms": 119.00000000000001,
+        "initial_com_vz_m_s": 1.5796161866555982,
+        "com_rise_m": 0.11710234602811931,
+        "clearance_over_gap_m": -0.06615839298704254,
+        "front_start_x": 10.770600070535687,
+        "rear_end_x": 10.5950194490183,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route5_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.934999942779541,
+        "end_s": 5.025000095367432,
+        "unloaded_ms": 99.0,
+        "initial_com_vz_m_s": -0.34046065135104553,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.11619933479828452,
+        "front_start_x": 10.604307238600953,
+        "rear_end_x": 10.507859516135381,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.090000152587891,
+        "end_s": 5.099999904632568,
+        "unloaded_ms": 18.000000000000004,
+        "initial_com_vz_m_s": 1.6037290282995094,
+        "com_rise_m": 0.015791009229678826,
+        "clearance_over_gap_m": -0.1094969149926367,
+        "front_start_x": 10.79732633108897,
+        "rear_end_x": 10.5486470399508,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.110000133514404,
+        "end_s": 5.21999979019165,
+        "unloaded_ms": 117.0,
+        "initial_com_vz_m_s": 1.4220849100861084,
+        "com_rise_m": 0.0997768708126982,
+        "clearance_over_gap_m": -0.07788636047052097,
+        "front_start_x": 10.774534410069112,
+        "rear_end_x": 10.608615664917554,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route6_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.09499979019165,
+        "end_s": 5.190000057220459,
+        "unloaded_ms": 104.00000000000001,
+        "initial_com_vz_m_s": -0.3527215526263239,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.1273294126674956,
+        "front_start_x": 10.604100105966442,
+        "rear_end_x": 10.511259500052645,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.244999885559082,
+        "end_s": 5.255000114440918,
+        "unloaded_ms": 22.0,
+        "initial_com_vz_m_s": 1.5177570119502026,
+        "com_rise_m": 0.014932672779127687,
+        "clearance_over_gap_m": -0.12292621103547925,
+        "front_start_x": 10.795821379749176,
+        "rear_end_x": 10.54347510164376,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.269999980926514,
+        "end_s": 5.389999866485596,
+        "unloaded_ms": 128.0,
+        "initial_com_vz_m_s": 1.2875547807910321,
+        "com_rise_m": 0.08682415481946204,
+        "clearance_over_gap_m": -0.08793203524371966,
+        "front_start_x": 10.771735895827453,
+        "rear_end_x": 10.580118489821752,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route6_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.079999923706055,
+        "end_s": 5.175000190734863,
+        "unloaded_ms": 104.00000000000001,
+        "initial_com_vz_m_s": -0.3284707356439898,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.1240431496335545,
+        "front_start_x": 10.599213496286144,
+        "rear_end_x": 10.505862112549593,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.255000114440918,
+        "end_s": 5.389999866485596,
+        "unloaded_ms": 140.0,
+        "initial_com_vz_m_s": 0.42685434734374406,
+        "com_rise_m": 0.010380379226584802,
+        "clearance_over_gap_m": -0.14713852585544163,
+        "front_start_x": 10.774571494268995,
+        "rear_end_x": 10.596702573266484,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route6_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.835000038146973,
+        "end_s": 4.925000190734863,
+        "unloaded_ms": 100.0,
+        "initial_com_vz_m_s": -0.30662170742720474,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.11144776227022492,
+        "front_start_x": 10.598261139572989,
+        "rear_end_x": 10.503425807303351,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 4.994999885559082,
+        "end_s": 5.119999885559082,
+        "unloaded_ms": 134.0,
+        "initial_com_vz_m_s": 0.6227749122918412,
+        "com_rise_m": 0.021351657491167103,
+        "clearance_over_gap_m": -0.13114419100603045,
+        "front_start_x": 10.782548063506189,
+        "rear_end_x": 10.588244599514667,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route6_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.835000038146973,
+        "end_s": 4.925000190734863,
+        "unloaded_ms": 100.0,
+        "initial_com_vz_m_s": -0.32794650926982266,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.1146990466090284,
+        "front_start_x": 10.602727318469503,
+        "rear_end_x": 10.507684599444755,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 4.989999771118164,
+        "end_s": 5.125,
+        "unloaded_ms": 143.00000000000003,
+        "initial_com_vz_m_s": 1.3487909319286278,
+        "com_rise_m": 0.0960038346484918,
+        "clearance_over_gap_m": -0.11104891038452609,
+        "front_start_x": 10.77945446592096,
+        "rear_end_x": 10.577543775615947,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route7_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.125,
+        "end_s": 5.21999979019165,
+        "unloaded_ms": 104.00000000000001,
+        "initial_com_vz_m_s": -0.3250245541676781,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.12339077284526745,
+        "front_start_x": 10.598864625315825,
+        "rear_end_x": 10.505344988805009,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.28000020980835,
+        "end_s": 5.40500020980835,
+        "unloaded_ms": 134.0,
+        "initial_com_vz_m_s": 0.5182991592572972,
+        "com_rise_m": 0.015017592237306587,
+        "clearance_over_gap_m": -0.15231580110577503,
+        "front_start_x": 10.77902219991763,
+        "rear_end_x": 10.56816060606402,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route7_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.079999923706055,
+        "end_s": 5.175000190734863,
+        "unloaded_ms": 103.00000000000001,
+        "initial_com_vz_m_s": -0.33396875376262414,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.12470128419694529,
+        "front_start_x": 10.600246237581471,
+        "rear_end_x": 10.506857936308442,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.244999885559082,
+        "end_s": 5.360000133514404,
+        "unloaded_ms": 120.0,
+        "initial_com_vz_m_s": 0.5528620009428957,
+        "com_rise_m": 0.016984174301945626,
+        "clearance_over_gap_m": -0.14656062514215085,
+        "front_start_x": 10.780756618379895,
+        "rear_end_x": 10.589239236156686,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route7_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.835000038146973,
+        "end_s": 4.925000190734863,
+        "unloaded_ms": 99.0,
+        "initial_com_vz_m_s": -0.30180932757499834,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.11083517091596477,
+        "front_start_x": 10.597431912585764,
+        "rear_end_x": 10.502530052527332,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.014999866485596,
+        "end_s": 5.139999866485596,
+        "unloaded_ms": 130.0,
+        "initial_com_vz_m_s": 0.32031194978517424,
+        "com_rise_m": 0.006061241776260995,
+        "clearance_over_gap_m": -0.13720769673526792,
+        "front_start_x": 10.775938195185141,
+        "rear_end_x": 10.620041937914365,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route7_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.835000038146973,
+        "end_s": 4.925000190734863,
+        "unloaded_ms": 99.0,
+        "initial_com_vz_m_s": -0.3072688125479398,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.11102809885028181,
+        "front_start_x": 10.597323925212002,
+        "rear_end_x": 10.502543810714748,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.005000114440918,
+        "end_s": 5.09499979019165,
+        "unloaded_ms": 98.0,
+        "initial_com_vz_m_s": 0.2718151876294163,
+        "com_rise_m": 0.004475771187319594,
+        "clearance_over_gap_m": -0.14309587598625959,
+        "front_start_x": 10.784217817607306,
+        "rear_end_x": 10.577575062782142,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route8_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.090000152587891,
+        "end_s": 5.184999942779541,
+        "unloaded_ms": 103.00000000000001,
+        "initial_com_vz_m_s": -0.3308142576874738,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.12421473621858005,
+        "front_start_x": 10.599844984409414,
+        "rear_end_x": 10.506625328330475,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.260000228881836,
+        "end_s": 5.40500020980835,
+        "unloaded_ms": 150.0,
+        "initial_com_vz_m_s": 1.2950920937993773,
+        "com_rise_m": 0.08873989673423316,
+        "clearance_over_gap_m": -0.10340912542635312,
+        "front_start_x": 10.77925108700622,
+        "rear_end_x": 10.583144236460678,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route8_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.079999923706055,
+        "end_s": 5.175000190734863,
+        "unloaded_ms": 104.00000000000001,
+        "initial_com_vz_m_s": -0.3321133762122185,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.12441880173489692,
+        "front_start_x": 10.59944224145886,
+        "rear_end_x": 10.506173380038597,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.244999885559082,
+        "end_s": 5.25,
+        "unloaded_ms": 12.0,
+        "initial_com_vz_m_s": 1.3884027050484449,
+        "com_rise_m": 0.006942172415322301,
+        "clearance_over_gap_m": -0.11770616006327775,
+        "front_start_x": 10.791533159286539,
+        "rear_end_x": 10.550820289944083,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.264999866485596,
+        "end_s": 5.315000057220459,
+        "unloaded_ms": 59.00000000000001,
+        "initial_com_vz_m_s": 1.2516887601773377,
+        "com_rise_m": 0.05154346751894601,
+        "clearance_over_gap_m": -0.0847476981840963,
+        "front_start_x": 10.772149843308785,
+        "rear_end_x": 10.560068677644331,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route8_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.875,
+        "end_s": 4.965000152587891,
+        "unloaded_ms": 98.0,
+        "initial_com_vz_m_s": -0.3169520208551024,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.11257279939679511,
+        "front_start_x": 10.600506639291664,
+        "rear_end_x": 10.50552586531255,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.019999980926514,
+        "end_s": 5.025000095367432,
+        "unloaded_ms": 14.0,
+        "initial_com_vz_m_s": 1.002288100953013,
+        "com_rise_m": 0.005011555207535406,
+        "clearance_over_gap_m": -0.1283192030580213,
+        "front_start_x": 10.799217945454116,
+        "rear_end_x": 10.548764078032498,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.034999847412109,
+        "end_s": 5.164999961853027,
+        "unloaded_ms": 139.0,
+        "initial_com_vz_m_s": 0.890331395854695,
+        "com_rise_m": 0.042647688744854334,
+        "clearance_over_gap_m": -0.11582012042648242,
+        "front_start_x": 10.787867784432096,
+        "rear_end_x": 10.636726973233968,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "locked",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route8_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.840000152587891,
+        "end_s": 4.929999828338623,
+        "unloaded_ms": 99.0,
+        "initial_com_vz_m_s": -0.3389961239630996,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.11562028333779249,
+        "front_start_x": 10.604792598681628,
+        "rear_end_x": 10.51005992318464,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 4.985000133514404,
+        "end_s": 4.994999885559082,
+        "unloaded_ms": 15.0,
+        "initial_com_vz_m_s": 0.6181184381981422,
+        "com_rise_m": 0.005935504876674769,
+        "clearance_over_gap_m": -0.1413698808127707,
+        "front_start_x": 10.792956060130205,
+        "rear_end_x": 10.538575102399792,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.005000114440918,
+        "end_s": 5.119999885559082,
+        "unloaded_ms": 124.0,
+        "initial_com_vz_m_s": 0.4542118727685094,
+        "com_rise_m": 0.011675823133253077,
+        "clearance_over_gap_m": -0.13198406776021707,
+        "front_start_x": 10.767069490943884,
+        "rear_end_x": 10.566273175746478,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route0_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.059999942779541,
+        "end_s": 5.710000038146973,
+        "unloaded_ms": 656.0,
+        "initial_com_vz_m_s": 2.6343828646811454,
+        "com_rise_m": 0.36624542720613606,
+        "clearance_over_gap_m": -0.17020250179942026,
+        "front_start_x": 9.982754932573146,
+        "rear_end_x": 10.550308812760791,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route0_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.005000114440918,
+        "end_s": 5.675000190734863,
+        "unloaded_ms": 683.0,
+        "initial_com_vz_m_s": 2.775692203521627,
+        "com_rise_m": 0.4034851532327457,
+        "clearance_over_gap_m": -0.10410036894291776,
+        "front_start_x": 9.979428164818305,
+        "rear_end_x": 10.675746141320468,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route0_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.755000114440918,
+        "end_s": 5.340000152587891,
+        "unloaded_ms": 594.0,
+        "initial_com_vz_m_s": 2.6420240560716155,
+        "com_rise_m": 0.37175420141390186,
+        "clearance_over_gap_m": 0.00948436734429918,
+        "front_start_x": 9.973362735810024,
+        "rear_end_x": 10.287262462936326,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.380000114440918,
+        "end_s": 5.454999923706055,
+        "unloaded_ms": 84.0,
+        "initial_com_vz_m_s": -1.1234177613336067,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.041463904676146066,
+        "front_start_x": 10.545482053304761,
+        "rear_end_x": 10.528545488809895,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route0_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.804999828338623,
+        "end_s": 5.375,
+        "unloaded_ms": 575.0000000000001,
+        "initial_com_vz_m_s": 2.647243926566858,
+        "com_rise_m": 0.368908564209853,
+        "clearance_over_gap_m": 0.16747449623252944,
+        "front_start_x": 9.986321674208035,
+        "rear_end_x": 10.453748605432802,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route1_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.059999942779541,
+        "end_s": 5.650000095367432,
+        "unloaded_ms": 598.0,
+        "initial_com_vz_m_s": 2.6588526346022263,
+        "com_rise_m": 0.3732766803361407,
+        "clearance_over_gap_m": 0.003940864188794191,
+        "front_start_x": 9.974558737576045,
+        "rear_end_x": 10.29309902653996,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.684999942779541,
+        "end_s": 5.739999771118164,
+        "unloaded_ms": 60.0,
+        "initial_com_vz_m_s": -1.2806865634655704,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.041033849696348504,
+        "front_start_x": 10.512598338937835,
+        "rear_end_x": 10.483613510668407,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route1_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.005000114440918,
+        "end_s": 5.664999961853027,
+        "unloaded_ms": 666.0,
+        "initial_com_vz_m_s": 2.6351501498343253,
+        "com_rise_m": 0.3694143485256221,
+        "clearance_over_gap_m": -0.16790363676856518,
+        "front_start_x": 9.990489187410699,
+        "rear_end_x": 10.603628203085748,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route1_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.755000114440918,
+        "end_s": 5.329999923706055,
+        "unloaded_ms": 588.0,
+        "initial_com_vz_m_s": 2.5760548414660525,
+        "com_rise_m": 0.3525479116018706,
+        "clearance_over_gap_m": 0.00954448563621739,
+        "front_start_x": 9.968306290768536,
+        "rear_end_x": 10.28559441256905,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.369999885559082,
+        "end_s": 5.510000228881836,
+        "unloaded_ms": 146.0,
+        "initial_com_vz_m_s": -0.9121811031282083,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.10502026468659258,
+        "front_start_x": 10.52913485840966,
+        "rear_end_x": 10.57810337676701,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route1_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.804999828338623,
+        "end_s": 5.465000152587891,
+        "unloaded_ms": 673.0,
+        "initial_com_vz_m_s": 2.725175143886182,
+        "com_rise_m": 0.3882064875035036,
+        "clearance_over_gap_m": -0.0959867047919121,
+        "front_start_x": 9.981627836004456,
+        "rear_end_x": 10.637944613054916,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.599999904632568,
+        "end_s": 5.739999771118164,
+        "unloaded_ms": 145.0,
+        "initial_com_vz_m_s": 0.5766816028935687,
+        "com_rise_m": 0.018424059435606918,
+        "clearance_over_gap_m": -0.17550595856856804,
+        "front_start_x": 10.81882733720112,
+        "rear_end_x": 10.664890158372781,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.809999942779541,
+        "end_s": 6.215000152587891,
+        "unloaded_ms": 413.00000000000006,
+        "initial_com_vz_m_s": -0.49946707136844803,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -1.2454359048795893,
+        "front_start_x": 10.762948624959783,
+        "rear_end_x": 10.308347796341131,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route2_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.059999942779541,
+        "end_s": 5.644999980926514,
+        "unloaded_ms": 597.0,
+        "initial_com_vz_m_s": 2.6352661176868737,
+        "com_rise_m": 0.36660137046708696,
+        "clearance_over_gap_m": 0.008596216606072613,
+        "front_start_x": 9.970235165190802,
+        "rear_end_x": 10.282589834857054,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.684999942779541,
+        "end_s": 5.784999847412109,
+        "unloaded_ms": 109.0,
+        "initial_com_vz_m_s": -0.7621847898579663,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.06127315467354959,
+        "front_start_x": 10.49345078284993,
+        "rear_end_x": 10.515716271443221,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route2_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.025000095367432,
+        "end_s": 5.690000057220459,
+        "unloaded_ms": 670.0,
+        "initial_com_vz_m_s": 2.7222359953910242,
+        "com_rise_m": 0.39274520085719694,
+        "clearance_over_gap_m": -0.17816861851983654,
+        "front_start_x": 9.979748383480539,
+        "rear_end_x": 10.466924954219529,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.800000190734863,
+        "end_s": 5.894999980926514,
+        "unloaded_ms": 101.0,
+        "initial_com_vz_m_s": -0.9622454681449809,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.45592544037834726,
+        "front_start_x": 10.565565515908107,
+        "rear_end_x": 10.276959591213643,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.929999828338623,
+        "end_s": 5.954999923706055,
+        "unloaded_ms": 33.0,
+        "initial_com_vz_m_s": -2.8485133752517355,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.534992042722428,
+        "front_start_x": 10.356270042612016,
+        "rear_end_x": 10.29787915098195,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route2_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.760000228881836,
+        "end_s": 5.349999904632568,
+        "unloaded_ms": 599.0,
+        "initial_com_vz_m_s": 2.657210258722608,
+        "com_rise_m": 0.3721503341801378,
+        "clearance_over_gap_m": 0.00439788480536947,
+        "front_start_x": 9.976898793112316,
+        "rear_end_x": 10.288724796509902,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.385000228881836,
+        "end_s": 5.480000019073486,
+        "unloaded_ms": 100.0,
+        "initial_com_vz_m_s": -0.9996546187532891,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.06925870318722496,
+        "front_start_x": 10.520950679436835,
+        "rear_end_x": 10.549880664573868,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route2_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.804999828338623,
+        "end_s": 5.385000228881836,
+        "unloaded_ms": 585.0,
+        "initial_com_vz_m_s": 2.6355208092735927,
+        "com_rise_m": 0.36616379184881576,
+        "clearance_over_gap_m": 0.1473440798308026,
+        "front_start_x": 9.989180858922806,
+        "rear_end_x": 10.497049810714985,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route3_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.324999809265137,
+        "end_s": 5.985000133514404,
+        "unloaded_ms": 669.0,
+        "initial_com_vz_m_s": 2.6988591972096523,
+        "com_rise_m": 0.3848276346044746,
+        "clearance_over_gap_m": -0.15856073126220033,
+        "front_start_x": 9.984507105749135,
+        "rear_end_x": 10.493369967556978,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.184999942779541,
+        "end_s": 6.429999828338623,
+        "unloaded_ms": 257.0,
+        "initial_com_vz_m_s": 0.6407632876493133,
+        "com_rise_m": 0.022680847960242903,
+        "clearance_over_gap_m": -0.3853420146393001,
+        "front_start_x": 10.68035514098377,
+        "rear_end_x": 10.597813683253278,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route3_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.329999923706055,
+        "end_s": 5.985000133514404,
+        "unloaded_ms": 667.0,
+        "initial_com_vz_m_s": 2.6443393246937323,
+        "com_rise_m": 0.37110742247174344,
+        "clearance_over_gap_m": -0.16231687093761415,
+        "front_start_x": 9.989371491953026,
+        "rear_end_x": 10.563750745080307,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.034999847412109,
+        "end_s": 6.045000076293945,
+        "unloaded_ms": 22.0,
+        "initial_com_vz_m_s": -2.3992249662428664,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.29445084522676895,
+        "front_start_x": 10.75411009373453,
+        "rear_end_x": 10.580859564826582,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route3_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.130000114440918,
+        "end_s": 5.769999980926514,
+        "unloaded_ms": 648.0,
+        "initial_com_vz_m_s": 2.5401477690742116,
+        "com_rise_m": 0.34181274701613434,
+        "clearance_over_gap_m": -0.10279344955720297,
+        "front_start_x": 10.001457274090322,
+        "rear_end_x": 10.649132070019231,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route3_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.074999809265137,
+        "end_s": 5.71999979019165,
+        "unloaded_ms": 652.0,
+        "initial_com_vz_m_s": 2.5969480359886297,
+        "com_rise_m": 0.358387600579891,
+        "clearance_over_gap_m": -0.17120620522634722,
+        "front_start_x": 9.969425862335392,
+        "rear_end_x": 10.461398970796731,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.960000038146973,
+        "end_s": 5.96999979019165,
+        "unloaded_ms": 17.0,
+        "initial_com_vz_m_s": -0.16941355555532203,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.311129833858588,
+        "front_start_x": 10.626991372449604,
+        "rear_end_x": 10.383554043664887,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.985000133514404,
+        "end_s": 5.994999885559082,
+        "unloaded_ms": 21.0,
+        "initial_com_vz_m_s": -0.33570062080952245,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.38335645473785535,
+        "front_start_x": 10.606635672704336,
+        "rear_end_x": 10.360700760621222,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.079999923706055,
+        "end_s": 6.114999771118164,
+        "unloaded_ms": 47.0,
+        "initial_com_vz_m_s": -0.17667739075496805,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.5005101614104308,
+        "front_start_x": 10.458327900008763,
+        "rear_end_x": 10.25404909642746,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route4_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.309999942779541,
+        "end_s": 5.989999771118164,
+        "unloaded_ms": 690.0000000000001,
+        "initial_com_vz_m_s": 2.6451812174797737,
+        "com_rise_m": 0.3713602327824173,
+        "clearance_over_gap_m": -0.2316212794054946,
+        "front_start_x": 9.983580652999649,
+        "rear_end_x": 10.628663682783277,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.264999866485596,
+        "end_s": 6.329999923706055,
+        "unloaded_ms": 74.0,
+        "initial_com_vz_m_s": -1.0058513954519028,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.7062783838654095,
+        "front_start_x": 10.542144947423546,
+        "rear_end_x": 10.173045962067562,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route4_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.300000190734863,
+        "end_s": 5.954999923706055,
+        "unloaded_ms": 663.0,
+        "initial_com_vz_m_s": 2.700848716170992,
+        "com_rise_m": 0.38662733183569153,
+        "clearance_over_gap_m": -0.06431731692492447,
+        "front_start_x": 9.983891036531858,
+        "rear_end_x": 10.77138439424175,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route4_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.144999980926514,
+        "end_s": 5.804999828338623,
+        "unloaded_ms": 667.0,
+        "initial_com_vz_m_s": 2.6831811322229133,
+        "com_rise_m": 0.38215223243815344,
+        "clearance_over_gap_m": -0.1756463905045665,
+        "front_start_x": 9.97947766655307,
+        "rear_end_x": 10.486536701919892,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.965000152587891,
+        "end_s": 6.074999809265137,
+        "unloaded_ms": 117.0,
+        "initial_com_vz_m_s": 0.897822573523523,
+        "com_rise_m": 0.043763020832525604,
+        "clearance_over_gap_m": -0.30100321434796606,
+        "front_start_x": 10.641902833342458,
+        "rear_end_x": 10.368663930245459,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.099999904632568,
+        "end_s": 6.195000171661377,
+        "unloaded_ms": 100.0,
+        "initial_com_vz_m_s": -0.7034517022223178,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.3914122740239631,
+        "front_start_x": 10.62109496139089,
+        "rear_end_x": 10.477856920287369,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route4_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.119999885559082,
+        "end_s": 5.809999942779541,
+        "unloaded_ms": 696.0000000000001,
+        "initial_com_vz_m_s": 2.7778779388360952,
+        "com_rise_m": 0.4061579648453169,
+        "clearance_over_gap_m": -0.16565123227733625,
+        "front_start_x": 9.964503147367381,
+        "rear_end_x": 10.609236555990988,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.045000076293945,
+        "end_s": 6.260000228881836,
+        "unloaded_ms": 221.0,
+        "initial_com_vz_m_s": 1.0323588153278074,
+        "com_rise_m": 0.05703989041961505,
+        "clearance_over_gap_m": -0.3140751593450869,
+        "front_start_x": 10.662370547074747,
+        "rear_end_x": 10.531925682945866,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route5_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.324999809265137,
+        "end_s": 6.010000228881836,
+        "unloaded_ms": 693.0000000000001,
+        "initial_com_vz_m_s": 2.7287967672138387,
+        "com_rise_m": 0.39406759245421874,
+        "clearance_over_gap_m": -0.2215745606557883,
+        "front_start_x": 9.980239219641456,
+        "rear_end_x": 10.633933032779826,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.110000133514404,
+        "end_s": 6.585000038146973,
+        "unloaded_ms": 482.0,
+        "initial_com_vz_m_s": -0.5868140642873412,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -1.68423533347925,
+        "front_start_x": 10.807026493386905,
+        "rear_end_x": 10.395377806585747,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route5_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.335000038146973,
+        "end_s": 5.954999923706055,
+        "unloaded_ms": 632.0,
+        "initial_com_vz_m_s": 2.4926719246469378,
+        "com_rise_m": 0.33062234331929913,
+        "clearance_over_gap_m": -0.15325128146331607,
+        "front_start_x": 9.981657817534728,
+        "rear_end_x": 10.398777488072884,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route5_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.144999980926514,
+        "end_s": 5.800000190734863,
+        "unloaded_ms": 665.0,
+        "initial_com_vz_m_s": 2.6483078785919205,
+        "com_rise_m": 0.3697090085480428,
+        "clearance_over_gap_m": -0.2017094855047869,
+        "front_start_x": 9.977010219289692,
+        "rear_end_x": 10.51921837292897,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route5_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.130000114440918,
+        "end_s": 5.795000076293945,
+        "unloaded_ms": 675.0,
+        "initial_com_vz_m_s": 2.5796442946106644,
+        "com_rise_m": 0.3523663021959104,
+        "clearance_over_gap_m": -0.19721995662866307,
+        "front_start_x": 9.986987089597333,
+        "rear_end_x": 10.545620863205087,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route6_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.329999923706055,
+        "end_s": 5.974999904632568,
+        "unloaded_ms": 651.0,
+        "initial_com_vz_m_s": 2.491145980845607,
+        "com_rise_m": 0.3297991627622017,
+        "clearance_over_gap_m": -0.21896827482274966,
+        "front_start_x": 9.980066578678246,
+        "rear_end_x": 10.486628052876348,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route6_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.360000133514404,
+        "end_s": 6.010000228881836,
+        "unloaded_ms": 659.0,
+        "initial_com_vz_m_s": 2.6463851042748923,
+        "com_rise_m": 0.36882372890204274,
+        "clearance_over_gap_m": -0.15033159617822073,
+        "front_start_x": 9.971504378433337,
+        "rear_end_x": 10.492084334502987,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.135000228881836,
+        "end_s": 6.300000190734863,
+        "unloaded_ms": 173.00000000000003,
+        "initial_com_vz_m_s": -1.6223929507295483,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.6549330380479801,
+        "front_start_x": 10.638955176406201,
+        "rear_end_x": 10.359692896965024,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route6_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.96999979019165,
+        "end_s": 5.619999885559082,
+        "unloaded_ms": 662.0,
+        "initial_com_vz_m_s": 2.50127651499818,
+        "com_rise_m": 0.33181556803800155,
+        "clearance_over_gap_m": -0.19010818140884425,
+        "front_start_x": 9.985119269361672,
+        "rear_end_x": 10.549555534719456,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route6_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.059999942779541,
+        "end_s": 5.724999904632568,
+        "unloaded_ms": 675.0,
+        "initial_com_vz_m_s": 2.6747602306628497,
+        "com_rise_m": 0.3765366462756815,
+        "clearance_over_gap_m": -0.1834145864652818,
+        "front_start_x": 9.975602313167217,
+        "rear_end_x": 10.563015199039961,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route7_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.329999923706055,
+        "end_s": 6.0,
+        "unloaded_ms": 681.0,
+        "initial_com_vz_m_s": 2.6438115719036284,
+        "com_rise_m": 0.37065679974252774,
+        "clearance_over_gap_m": -0.24876168272548632,
+        "front_start_x": 9.967681423055492,
+        "rear_end_x": 10.438959408064097,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route7_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.355000019073486,
+        "end_s": 6.0,
+        "unloaded_ms": 651.0,
+        "initial_com_vz_m_s": 2.6007060098093597,
+        "com_rise_m": 0.3603712299107474,
+        "clearance_over_gap_m": -0.1587701165784718,
+        "front_start_x": 9.971688784695518,
+        "rear_end_x": 10.535738576203187,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.210000038146973,
+        "end_s": 6.315000057220459,
+        "unloaded_ms": 112.0,
+        "initial_com_vz_m_s": -2.2481181177252925,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.6489945490095551,
+        "front_start_x": 10.578186616515465,
+        "rear_end_x": 10.276382311601195,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route7_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 4.980000019073486,
+        "end_s": 5.625,
+        "unloaded_ms": 658.0,
+        "initial_com_vz_m_s": 2.627947323024628,
+        "com_rise_m": 0.3633102712319657,
+        "clearance_over_gap_m": -0.1536342852540738,
+        "front_start_x": 9.975607274688398,
+        "rear_end_x": 10.490084034323083,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route7_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.034999847412109,
+        "end_s": 5.690000057220459,
+        "unloaded_ms": 663.0,
+        "initial_com_vz_m_s": 2.622118350177328,
+        "com_rise_m": 0.365313435324614,
+        "clearance_over_gap_m": -0.17948067547783286,
+        "front_start_x": 9.977753421149679,
+        "rear_end_x": 10.50436144554382,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route8_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.349999904632568,
+        "end_s": 5.980000019073486,
+        "unloaded_ms": 635.0,
+        "initial_com_vz_m_s": 2.4873498519749115,
+        "com_rise_m": 0.3298194089460679,
+        "clearance_over_gap_m": -0.19280776161410018,
+        "front_start_x": 9.979765228042536,
+        "rear_end_x": 10.459326304825508,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route8_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.355000019073486,
+        "end_s": 5.985000133514404,
+        "unloaded_ms": 640.0,
+        "initial_com_vz_m_s": 2.543244312424921,
+        "com_rise_m": 0.34382828881481614,
+        "clearance_over_gap_m": -0.15909329511375914,
+        "front_start_x": 9.990556224410575,
+        "rear_end_x": 10.438516374912636,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.130000114440918,
+        "end_s": 6.389999866485596,
+        "unloaded_ms": 266.0,
+        "initial_com_vz_m_s": -0.38381483425881974,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.6165861161225118,
+        "front_start_x": 10.588278842817854,
+        "rear_end_x": 10.420292663914267,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route8_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.070000171661377,
+        "end_s": 5.724999904632568,
+        "unloaded_ms": 668.0,
+        "initial_com_vz_m_s": 2.5604922017775733,
+        "com_rise_m": 0.3463869531279958,
+        "clearance_over_gap_m": -0.16569435274514083,
+        "front_start_x": 10.00466046817729,
+        "rear_end_x": 10.587945032748516,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.829999923706055,
+        "end_s": 5.860000133514404,
+        "unloaded_ms": 38.0,
+        "initial_com_vz_m_s": 0.3980055776830461,
+        "com_rise_m": 0.00823043232931376,
+        "clearance_over_gap_m": -0.2808387238224658,
+        "front_start_x": 10.749261682259258,
+        "rear_end_x": 10.549164413925546,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.90500020980835,
+        "end_s": 6.065000057220459,
+        "unloaded_ms": 168.0,
+        "initial_com_vz_m_s": 0.8341728473122072,
+        "com_rise_m": 0.03757601101124079,
+        "clearance_over_gap_m": -0.2744216610307947,
+        "front_start_x": 10.652353026978053,
+        "rear_end_x": 10.5068766792935,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.105000019073486,
+        "end_s": 6.244999885559082,
+        "unloaded_ms": 148.0,
+        "initial_com_vz_m_s": 0.3342637952184094,
+        "com_rise_m": 0.006486025936673467,
+        "clearance_over_gap_m": -0.2574668585258996,
+        "front_start_x": 10.349184220695575,
+        "rear_end_x": 10.473897461106716,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_nominal",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route8_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.039999961853027,
+        "end_s": 5.635000228881836,
+        "unloaded_ms": 603.0,
+        "initial_com_vz_m_s": 2.7389758067941186,
+        "com_rise_m": 0.3949175210611641,
+        "clearance_over_gap_m": 0.15862739736415796,
+        "front_start_x": 9.978921944100106,
+        "rear_end_x": 10.540517609220432,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route0_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.380000114440918,
+        "end_s": 6.364999771118164,
+        "unloaded_ms": 992.0,
+        "initial_com_vz_m_s": 2.5085187299566085,
+        "com_rise_m": 0.33019089802157925,
+        "clearance_over_gap_m": -0.668890963207404,
+        "front_start_x": 10.211191702396384,
+        "rear_end_x": 11.0516940970352,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route0_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.639999866485596,
+        "end_s": 5.789999961853027,
+        "unloaded_ms": 156.0,
+        "initial_com_vz_m_s": -0.5011349682411043,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.27327596270841376,
+        "front_start_x": 10.556383528620483,
+        "rear_end_x": 10.550443290775757,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route0_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.019999980926514,
+        "end_s": 5.664999961853027,
+        "unloaded_ms": 654.0,
+        "initial_com_vz_m_s": 2.6140373083055075,
+        "com_rise_m": 0.35998445933358797,
+        "clearance_over_gap_m": -0.1616349366658241,
+        "front_start_x": 10.153145872033603,
+        "rear_end_x": 10.68079050010135,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route0_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.130000114440918,
+        "end_s": 5.735000133514404,
+        "unloaded_ms": 615.0,
+        "initial_com_vz_m_s": 2.43932249069822,
+        "com_rise_m": 0.3152166866415168,
+        "clearance_over_gap_m": -0.10222782142924204,
+        "front_start_x": 10.225997997235615,
+        "rear_end_x": 10.741095323973552,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route1_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.375,
+        "end_s": 6.025000095367432,
+        "unloaded_ms": 655.0,
+        "initial_com_vz_m_s": 2.425776138394772,
+        "com_rise_m": 0.3132622138183419,
+        "clearance_over_gap_m": -0.2757489528227721,
+        "front_start_x": 10.202899593460982,
+        "rear_end_x": 10.700262180609021,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route1_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.349999904632568,
+        "end_s": 6.005000114440918,
+        "unloaded_ms": 665.0,
+        "initial_com_vz_m_s": 2.4719755503006464,
+        "com_rise_m": 0.32129553814159345,
+        "clearance_over_gap_m": -0.2861682120112826,
+        "front_start_x": 10.234013798341666,
+        "rear_end_x": 10.676896114907468,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route1_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.039999961853027,
+        "end_s": 5.679999828338623,
+        "unloaded_ms": 648.0,
+        "initial_com_vz_m_s": 2.66822530443459,
+        "com_rise_m": 0.37542467911339095,
+        "clearance_over_gap_m": -0.12081691510813958,
+        "front_start_x": 10.166926363605981,
+        "rear_end_x": 10.713123220483409,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route1_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.090000152587891,
+        "end_s": 5.739999771118164,
+        "unloaded_ms": 660.0,
+        "initial_com_vz_m_s": 2.638210359961194,
+        "com_rise_m": 0.3649601626983462,
+        "clearance_over_gap_m": -0.17042065273941492,
+        "front_start_x": 10.174840055350995,
+        "rear_end_x": 10.651036697432351,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.764999866485596,
+        "end_s": 5.775000095367432,
+        "unloaded_ms": 16.0,
+        "initial_com_vz_m_s": -3.7243436564398804,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.28794032686222615,
+        "front_start_x": 10.790900566360142,
+        "rear_end_x": 10.676750084373086,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.784999847412109,
+        "end_s": 5.804999828338623,
+        "unloaded_ms": 29.0,
+        "initial_com_vz_m_s": -3.841726456209856,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.3950465209140103,
+        "front_start_x": 10.793675909877622,
+        "rear_end_x": 10.696313290598646,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.84499979019165,
+        "end_s": 6.065000057220459,
+        "unloaded_ms": 229.0,
+        "initial_com_vz_m_s": -2.073870582827163,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -1.1353258326659552,
+        "front_start_x": 10.78961385370383,
+        "rear_end_x": 10.334478225065233,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route2_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.385000228881836,
+        "end_s": 6.014999866485596,
+        "unloaded_ms": 636.0,
+        "initial_com_vz_m_s": 2.5458884467787284,
+        "com_rise_m": 0.34224145810129925,
+        "clearance_over_gap_m": -0.1342272928479028,
+        "front_start_x": 10.21809855573606,
+        "rear_end_x": 10.778032907071854,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route2_h75_v1",
+    "skill": "rb_run1",
+    "flight": true,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.324999809265137,
+        "end_s": 5.934999942779541,
+        "unloaded_ms": 618.0,
+        "initial_com_vz_m_s": 2.578441982811357,
+        "com_rise_m": 0.35288752574912124,
+        "clearance_over_gap_m": 0.20665672562830562,
+        "front_start_x": 10.196230790695285,
+        "rear_end_x": 10.878574700923329,
+        "bank_to_bank_flight": true
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route2_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.054999828338623,
+        "end_s": 5.739999771118164,
+        "unloaded_ms": 694.0000000000001,
+        "initial_com_vz_m_s": 2.4126961864519494,
+        "com_rise_m": 0.3096423286342285,
+        "clearance_over_gap_m": -0.4151678208340399,
+        "front_start_x": 10.183546321022893,
+        "rear_end_x": 10.68357446251981,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.775000095367432,
+        "end_s": 5.949999809265137,
+        "unloaded_ms": 183.0,
+        "initial_com_vz_m_s": -0.2518145087349461,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.7778044629761026,
+        "front_start_x": 10.813827141801433,
+        "rear_end_x": 10.825951331785062,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.974999904632568,
+        "end_s": 6.034999847412109,
+        "unloaded_ms": 65.0,
+        "initial_com_vz_m_s": 0.30892551252636863,
+        "com_rise_m": 0.00651647640432701,
+        "clearance_over_gap_m": -0.8817322910126156,
+        "front_start_x": 10.759552866209559,
+        "rear_end_x": 10.639529691586008,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route2_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.090000152587891,
+        "end_s": 5.690000057220459,
+        "unloaded_ms": 609.0,
+        "initial_com_vz_m_s": 2.4162521409928712,
+        "com_rise_m": 0.3110608814142717,
+        "clearance_over_gap_m": 0.0012209605857851843,
+        "front_start_x": 10.187570366024957,
+        "rear_end_x": 10.783958111729637,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route3_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.659999847412109,
+        "end_s": 6.28000020980835,
+        "unloaded_ms": 627.0,
+        "initial_com_vz_m_s": 2.5027129290507637,
+        "com_rise_m": 0.3293889451629629,
+        "clearance_over_gap_m": -0.14180059900813363,
+        "front_start_x": 10.223635032150327,
+        "rear_end_x": 10.719919876051675,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route3_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.690000057220459,
+        "end_s": 6.360000133514404,
+        "unloaded_ms": 680.0,
+        "initial_com_vz_m_s": 2.355654831425007,
+        "com_rise_m": 0.29546508191773346,
+        "clearance_over_gap_m": -0.369759192791575,
+        "front_start_x": 10.243354843919002,
+        "rear_end_x": 10.74446173656625,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route3_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.449999809265137,
+        "end_s": 6.045000076293945,
+        "unloaded_ms": 608.0,
+        "initial_com_vz_m_s": 2.3686913196290345,
+        "com_rise_m": 0.2984329048480377,
+        "clearance_over_gap_m": -0.13270300202433133,
+        "front_start_x": 10.208996979609848,
+        "rear_end_x": 10.662643814903914,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.085000038146973,
+        "end_s": 6.09499979019165,
+        "unloaded_ms": 19.0,
+        "initial_com_vz_m_s": -2.702570078386979,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.21889897014729048,
+        "front_start_x": 10.811627484734961,
+        "rear_end_x": 10.718964317138617,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route3_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.349999904632568,
+        "end_s": 5.954999923706055,
+        "unloaded_ms": 614.0,
+        "initial_com_vz_m_s": 2.450868132252549,
+        "com_rise_m": 0.3192715323379677,
+        "clearance_over_gap_m": -0.06445136509973556,
+        "front_start_x": 10.169132435556689,
+        "rear_end_x": 10.770335614854444,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route4_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.664999961853027,
+        "end_s": 6.434999942779541,
+        "unloaded_ms": 777.0,
+        "initial_com_vz_m_s": 2.4136516435600104,
+        "com_rise_m": 0.30336692329506076,
+        "clearance_over_gap_m": -0.7625542970010077,
+        "front_start_x": 10.249828430662545,
+        "rear_end_x": 10.744919833222696,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route4_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.929999828338623,
+        "end_s": 6.184999942779541,
+        "unloaded_ms": 262.0,
+        "initial_com_vz_m_s": 1.2237603394154557,
+        "com_rise_m": 0.08019721570382343,
+        "clearance_over_gap_m": -0.1355302030787134,
+        "front_start_x": 10.433864355220607,
+        "rear_end_x": 10.75060598101357,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route4_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.389999866485596,
+        "end_s": 6.010000228881836,
+        "unloaded_ms": 628.0,
+        "initial_com_vz_m_s": 2.4855998359341602,
+        "com_rise_m": 0.329392459451135,
+        "clearance_over_gap_m": -0.10876159993283491,
+        "front_start_x": 10.164721104014744,
+        "rear_end_x": 10.699573921943513,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route4_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.429999828338623,
+        "end_s": 6.079999923706055,
+        "unloaded_ms": 659.0,
+        "initial_com_vz_m_s": 2.6089995656410165,
+        "com_rise_m": 0.3576580078861602,
+        "clearance_over_gap_m": -0.1883012636269757,
+        "front_start_x": 10.17575676614263,
+        "rear_end_x": 10.500455080614454,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.159999847412109,
+        "end_s": 6.28000020980835,
+        "unloaded_ms": 127.0,
+        "initial_com_vz_m_s": -2.2100109563364483,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.7253904526826583,
+        "front_start_x": 10.579978862090874,
+        "rear_end_x": 10.385660851473396,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route5_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.96999979019165,
+        "end_s": 6.139999866485596,
+        "unloaded_ms": 179.0,
+        "initial_com_vz_m_s": -0.6112857909177856,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.34162754725382327,
+        "front_start_x": 10.54708064685419,
+        "rear_end_x": 10.586948487845977,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.275000095367432,
+        "end_s": 6.480000019073486,
+        "unloaded_ms": 210.0,
+        "initial_com_vz_m_s": -0.9456709906526777,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.809488856091138,
+        "front_start_x": 10.787521522779123,
+        "rear_end_x": 10.903117818787143,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route5_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.670000076293945,
+        "end_s": 6.675000190734863,
+        "unloaded_ms": 1013.0000000000001,
+        "initial_com_vz_m_s": 2.4100443179300695,
+        "com_rise_m": 0.30784445900666846,
+        "clearance_over_gap_m": -0.9843338376217747,
+        "front_start_x": 10.215619403494555,
+        "rear_end_x": 10.960244844379881,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route5_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.489999771118164,
+        "end_s": 6.079999923706055,
+        "unloaded_ms": 596.0,
+        "initial_com_vz_m_s": 2.32620059540184,
+        "com_rise_m": 0.28836627701680795,
+        "clearance_over_gap_m": -0.11458563211352951,
+        "front_start_x": 10.236737103773823,
+        "rear_end_x": 10.717994695886278,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route5_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.429999828338623,
+        "end_s": 6.025000095367432,
+        "unloaded_ms": 603.0,
+        "initial_com_vz_m_s": 2.33073069968114,
+        "com_rise_m": 0.2898798804603398,
+        "clearance_over_gap_m": -0.14350505011885106,
+        "front_start_x": 10.195645033558415,
+        "rear_end_x": 10.681439949768064,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route6_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.619999885559082,
+        "end_s": 6.264999866485596,
+        "unloaded_ms": 653.0,
+        "initial_com_vz_m_s": 2.5976531140998484,
+        "com_rise_m": 0.3565598753643623,
+        "clearance_over_gap_m": -0.17365514219220252,
+        "front_start_x": 10.160879976193282,
+        "rear_end_x": 10.528748165574163,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.329999923706055,
+        "end_s": 6.480000019073486,
+        "unloaded_ms": 158.0,
+        "initial_com_vz_m_s": -2.285133357815667,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.8584799887336845,
+        "front_start_x": 10.677234838732499,
+        "rear_end_x": 10.407198388308531,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route6_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.644999980926514,
+        "end_s": 6.25,
+        "unloaded_ms": 611.0,
+        "initial_com_vz_m_s": 2.618795103474062,
+        "com_rise_m": 0.3623934875137977,
+        "clearance_over_gap_m": 0.11953271034628768,
+        "front_start_x": 10.195537945630608,
+        "rear_end_x": 10.822561859155874,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route6_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.25,
+        "end_s": 5.855000019073486,
+        "unloaded_ms": 612.0,
+        "initial_com_vz_m_s": 2.4703333166614048,
+        "com_rise_m": 0.32473443049807915,
+        "clearance_over_gap_m": -0.05839738320222368,
+        "front_start_x": 10.183388167146477,
+        "rear_end_x": 10.777144129155806,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route6_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.315000057220459,
+        "end_s": 5.960000038146973,
+        "unloaded_ms": 653.0,
+        "initial_com_vz_m_s": 2.378920145966969,
+        "com_rise_m": 0.30022140946987524,
+        "clearance_over_gap_m": -0.3077067195336239,
+        "front_start_x": 10.171408974833176,
+        "rear_end_x": 10.642143839177894,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.980000019073486,
+        "end_s": 6.375,
+        "unloaded_ms": 403.0,
+        "initial_com_vz_m_s": -2.4837600258072596,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -2.0543815775965473,
+        "front_start_x": 10.80383075185468,
+        "rear_end_x": 10.84327178627431,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route7_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.639999866485596,
+        "end_s": 6.275000095367432,
+        "unloaded_ms": 643.0,
+        "initial_com_vz_m_s": 2.559533081263632,
+        "com_rise_m": 0.3451991287653201,
+        "clearance_over_gap_m": -0.15548187548761278,
+        "front_start_x": 10.166726557631815,
+        "rear_end_x": 10.530675162483362,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.349999904632568,
+        "end_s": 6.505000114440918,
+        "unloaded_ms": 160.0,
+        "initial_com_vz_m_s": -2.239988313962661,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.8909514060800635,
+        "front_start_x": 10.646190957290942,
+        "rear_end_x": 10.387300863469756,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route7_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.635000228881836,
+        "end_s": 6.659999847412109,
+        "unloaded_ms": 1031.0,
+        "initial_com_vz_m_s": 2.5124517976308045,
+        "com_rise_m": 0.33552150187974833,
+        "clearance_over_gap_m": -0.7312183502999637,
+        "front_start_x": 10.16889251917713,
+        "rear_end_x": 11.065546157141585,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route7_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.295000076293945,
+        "end_s": 6.315000057220459,
+        "unloaded_ms": 1029.0,
+        "initial_com_vz_m_s": 2.481312400763314,
+        "com_rise_m": 0.3276848859237322,
+        "clearance_over_gap_m": -0.7834965640803142,
+        "front_start_x": 10.165374897165147,
+        "rear_end_x": 11.051459489879415,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route7_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.289999961853027,
+        "end_s": 5.900000095367432,
+        "unloaded_ms": 623.0,
+        "initial_com_vz_m_s": 2.5030800204055135,
+        "com_rise_m": 0.3320154805562074,
+        "clearance_over_gap_m": -0.0773987511575889,
+        "front_start_x": 10.175536140729493,
+        "rear_end_x": 10.698613806084024,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route8_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.614999771118164,
+        "end_s": 6.210000038146973,
+        "unloaded_ms": 607.0,
+        "initial_com_vz_m_s": 2.377412620512509,
+        "com_rise_m": 0.2994887010966298,
+        "clearance_over_gap_m": -0.10671084043817577,
+        "front_start_x": 10.175372454192845,
+        "rear_end_x": 10.668084282187207,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route8_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.619999885559082,
+        "end_s": 6.269999980926514,
+        "unloaded_ms": 657.0,
+        "initial_com_vz_m_s": 2.613577335475569,
+        "com_rise_m": 0.35967770403436794,
+        "clearance_over_gap_m": -0.18219518991887979,
+        "front_start_x": 10.164655369751094,
+        "rear_end_x": 10.512128175525563,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.34499979019165,
+        "end_s": 6.550000190734863,
+        "unloaded_ms": 211.0,
+        "initial_com_vz_m_s": -2.5346721656035474,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -1.0421093875794765,
+        "front_start_x": 10.602137513461647,
+        "rear_end_x": 10.394842488559238,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route8_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.349999904632568,
+        "end_s": 5.96999979019165,
+        "unloaded_ms": 632.0,
+        "initial_com_vz_m_s": 2.509631126138105,
+        "com_rise_m": 0.33488737039425587,
+        "clearance_over_gap_m": -0.13080296198660019,
+        "front_start_x": 10.189483425709657,
+        "rear_end_x": 10.703609222678367,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus15",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route8_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.315000057220459,
+        "end_s": 5.945000171661377,
+        "unloaded_ms": 639.0,
+        "initial_com_vz_m_s": 2.499756662054969,
+        "com_rise_m": 0.33243754404666165,
+        "clearance_over_gap_m": -0.1669717893954093,
+        "front_start_x": 10.164409343305772,
+        "rear_end_x": 10.58039543837603,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.954999923706055,
+        "end_s": 6.320000171661377,
+        "unloaded_ms": 372.0,
+        "initial_com_vz_m_s": -3.346137684116258,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.893453697944936,
+        "front_start_x": 10.733170673745946,
+        "rear_end_x": 11.085789900980483,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route0_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "timeout",
+    "events": [
+      {
+        "start_s": 5.804999828338623,
+        "end_s": 6.0,
+        "unloaded_ms": 201.0,
+        "initial_com_vz_m_s": -0.43897335239586244,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.35110915296340905,
+        "front_start_x": 10.545252490926249,
+        "rear_end_x": 10.597264431787199,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.480000019073486,
+        "end_s": 6.539999961853027,
+        "unloaded_ms": 70.0,
+        "initial_com_vz_m_s": -0.393450717125545,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.6178026943753107,
+        "front_start_x": 10.95598889615477,
+        "rear_end_x": 10.647347779770834,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route0_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.739999771118164,
+        "end_s": 5.90500020980835,
+        "unloaded_ms": 170.0,
+        "initial_com_vz_m_s": -0.4643878467987413,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.29170058098622537,
+        "front_start_x": 10.550291174820567,
+        "rear_end_x": 10.559284886599965,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route0_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.494999885559082,
+        "end_s": 5.650000095367432,
+        "unloaded_ms": 168.0,
+        "initial_com_vz_m_s": -0.47073009066051585,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.2670146431244564,
+        "front_start_x": 10.56136581521929,
+        "rear_end_x": 10.548418401171581,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route0_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.539999961853027,
+        "end_s": 5.695000171661377,
+        "unloaded_ms": 167.0,
+        "initial_com_vz_m_s": -0.4582273658731066,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.265512308844105,
+        "front_start_x": 10.560352434991394,
+        "rear_end_x": 10.551374328768985,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route1_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.804999828338623,
+        "end_s": 6.0,
+        "unloaded_ms": 201.0,
+        "initial_com_vz_m_s": -0.439422752049805,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.35130615492531286,
+        "front_start_x": 10.545208713084813,
+        "rear_end_x": 10.597224781690459,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.485000133514404,
+        "end_s": 6.539999961853027,
+        "unloaded_ms": 65.0,
+        "initial_com_vz_m_s": -0.40972067155132696,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.6244259523140462,
+        "front_start_x": 10.94336106214708,
+        "rear_end_x": 10.65595328533796,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.585000038146973,
+        "end_s": 6.619999885559082,
+        "unloaded_ms": 40.0,
+        "initial_com_vz_m_s": 0.06734693694745437,
+        "com_rise_m": 0.0004173069700852128,
+        "clearance_over_gap_m": -0.648937476887392,
+        "front_start_x": 10.867970302434575,
+        "rear_end_x": 10.656758984860309,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.699999809265137,
+        "end_s": 6.755000114440918,
+        "unloaded_ms": 67.0,
+        "initial_com_vz_m_s": 0.08451089674568663,
+        "com_rise_m": 0.0006007650459611269,
+        "clearance_over_gap_m": -0.5125246203471187,
+        "front_start_x": 10.943451093967532,
+        "rear_end_x": 10.67985595736753,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route1_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.744999885559082,
+        "end_s": 5.909999847412109,
+        "unloaded_ms": 173.00000000000003,
+        "initial_com_vz_m_s": -0.46925292042156513,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.2911475439547989,
+        "front_start_x": 10.552482301173812,
+        "rear_end_x": 10.559548184778345,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route1_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.489999771118164,
+        "end_s": 5.650000095367432,
+        "unloaded_ms": 169.0,
+        "initial_com_vz_m_s": -0.42049167442986635,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.2663703467212867,
+        "front_start_x": 10.555471169380748,
+        "rear_end_x": 10.549226284901845,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route1_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.534999847412109,
+        "end_s": 5.695000171661377,
+        "unloaded_ms": 169.0,
+        "initial_com_vz_m_s": -0.4216871057372942,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.266133494674512,
+        "front_start_x": 10.557269949225475,
+        "rear_end_x": 10.553833513438947,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route2_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.809999942779541,
+        "end_s": 5.980000019073486,
+        "unloaded_ms": 179.0,
+        "initial_com_vz_m_s": -0.4501137725259109,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.2969093594068372,
+        "front_start_x": 10.548026839779503,
+        "rear_end_x": 10.561132116685888,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.989999771118164,
+        "end_s": 6.010000228881836,
+        "unloaded_ms": 27.0,
+        "initial_com_vz_m_s": -1.8825574340892977,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.3513588491134063,
+        "front_start_x": 10.763807032589522,
+        "rear_end_x": 10.60076998543664,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.135000228881836,
+        "end_s": 6.184999942779541,
+        "unloaded_ms": 56.0,
+        "initial_com_vz_m_s": -0.5628614217073346,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.6134122776448636,
+        "front_start_x": 10.689982410443129,
+        "rear_end_x": 10.60658570214992,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.199999809265137,
+        "end_s": 6.534999847412109,
+        "unloaded_ms": 344.0,
+        "initial_com_vz_m_s": -0.8655787470194901,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.7152537034889843,
+        "front_start_x": 10.791207300090756,
+        "rear_end_x": 10.859854963641517,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route2_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.789999961853027,
+        "end_s": 5.980000019073486,
+        "unloaded_ms": 199.0,
+        "initial_com_vz_m_s": -0.4859919465477265,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.3509198369402329,
+        "front_start_x": 10.550334376773657,
+        "rear_end_x": 10.596356746410953,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.110000133514404,
+        "end_s": 6.364999771118164,
+        "unloaded_ms": 264.0,
+        "initial_com_vz_m_s": -0.9339251677493237,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.8729019381275408,
+        "front_start_x": 10.838170660336363,
+        "rear_end_x": 10.95028679994881,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route2_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.489999771118164,
+        "end_s": 5.650000095367432,
+        "unloaded_ms": 169.0,
+        "initial_com_vz_m_s": -0.4153710016323419,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.2650924836426734,
+        "front_start_x": 10.555544064690503,
+        "rear_end_x": 10.548974020592595,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route2_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.539999961853027,
+        "end_s": 5.695000171661377,
+        "unloaded_ms": 168.0,
+        "initial_com_vz_m_s": -0.44338242562705366,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.26038998237759203,
+        "front_start_x": 10.560578133903677,
+        "rear_end_x": 10.55037798282777,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route3_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 6.074999809265137,
+        "end_s": 6.264999866485596,
+        "unloaded_ms": 200.0,
+        "initial_com_vz_m_s": -0.5171971598903823,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.3598133026362007,
+        "front_start_x": 10.547435803747106,
+        "rear_end_x": 10.597256749863098,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.389999866485596,
+        "end_s": 6.409999847412109,
+        "unloaded_ms": 29.0,
+        "initial_com_vz_m_s": -0.157313585114551,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.5088082926192761,
+        "front_start_x": 10.78470147565609,
+        "rear_end_x": 10.610299401984939,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.440000057220459,
+        "end_s": 6.460000038146973,
+        "unloaded_ms": 29.0,
+        "initial_com_vz_m_s": 0.1240151654955512,
+        "com_rise_m": 0.0011240072033132376,
+        "clearance_over_gap_m": -0.47798063915372424,
+        "front_start_x": 10.807460878369534,
+        "rear_end_x": 10.638925298419757,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.474999904632568,
+        "end_s": 6.489999771118164,
+        "unloaded_ms": 22.0,
+        "initial_com_vz_m_s": -0.02974590528595901,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.44437661206429346,
+        "front_start_x": 10.83594810820943,
+        "rear_end_x": 10.66150162443256,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.505000114440918,
+        "end_s": 6.510000228881836,
+        "unloaded_ms": 18.000000000000004,
+        "initial_com_vz_m_s": -0.23498425965096456,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.44216149475185107,
+        "front_start_x": 10.859503754393389,
+        "rear_end_x": 10.677684376951962,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.525000095367432,
+        "end_s": 6.534999847412109,
+        "unloaded_ms": 18.000000000000004,
+        "initial_com_vz_m_s": -0.36044326768998924,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.4562163267745493,
+        "front_start_x": 10.87483577288009,
+        "rear_end_x": 10.699183205834439,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.545000076293945,
+        "end_s": 6.554999828338623,
+        "unloaded_ms": 17.0,
+        "initial_com_vz_m_s": -0.49956473283274594,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.4703411377452352,
+        "front_start_x": 10.890037344318285,
+        "rear_end_x": 10.7174826013142,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.565000057220459,
+        "end_s": 7.135000228881836,
+        "unloaded_ms": 577.0,
+        "initial_com_vz_m_s": -0.6544499155671909,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.5339614925222486,
+        "front_start_x": 10.905074822623193,
+        "rear_end_x": 11.021659279358012,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route3_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 6.074999809265137,
+        "end_s": 6.269999980926514,
+        "unloaded_ms": 200.0,
+        "initial_com_vz_m_s": -0.49639202319292985,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.3680458794832495,
+        "front_start_x": 10.53827283411983,
+        "rear_end_x": 10.597590847789327,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 7.019999980926514,
+        "end_s": 7.559999942779541,
+        "unloaded_ms": 546.0,
+        "initial_com_vz_m_s": -0.536803001748629,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -2.1469344019123806,
+        "front_start_x": 10.97958405508978,
+        "rear_end_x": 10.782474738527252,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route3_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.875,
+        "end_s": 6.070000171661377,
+        "unloaded_ms": 201.0,
+        "initial_com_vz_m_s": -0.48921435177680134,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.3651017177564364,
+        "front_start_x": 10.541986031861546,
+        "rear_end_x": 10.598984504309861,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.179999828338623,
+        "end_s": 6.53000020980835,
+        "unloaded_ms": 355.0,
+        "initial_com_vz_m_s": -1.2238112286043534,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.9637779359355323,
+        "front_start_x": 10.770069478712045,
+        "rear_end_x": 10.912978782486343,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route3_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.815000057220459,
+        "end_s": 5.974999904632568,
+        "unloaded_ms": 170.0,
+        "initial_com_vz_m_s": -0.4255764012557987,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.2685581293056456,
+        "front_start_x": 10.554022299327245,
+        "rear_end_x": 10.551222502502542,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route4_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 6.054999828338623,
+        "end_s": 6.244999885559082,
+        "unloaded_ms": 197.0,
+        "initial_com_vz_m_s": -0.5135593010256325,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.36073396848997585,
+        "front_start_x": 10.540591055630411,
+        "rear_end_x": 10.593921080720062,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.699999809265137,
+        "end_s": 6.755000114440918,
+        "unloaded_ms": 65.0,
+        "initial_com_vz_m_s": -0.3910601992905102,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.6182030761979392,
+        "front_start_x": 10.95885615794046,
+        "rear_end_x": 10.653323256181402,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 7.434999942779541,
+        "end_s": 7.449999809265137,
+        "unloaded_ms": 23.0,
+        "initial_com_vz_m_s": -0.2126927293602669,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.47772511889496383,
+        "front_start_x": 10.946806991114377,
+        "rear_end_x": 10.73340917001174,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 7.525000095367432,
+        "end_s": 7.610000133514404,
+        "unloaded_ms": 92.0,
+        "initial_com_vz_m_s": -0.36586749113223116,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.6584452060191524,
+        "front_start_x": 10.790313949804139,
+        "rear_end_x": 10.572571152738442,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 7.65500020980835,
+        "end_s": 8.024999618530273,
+        "unloaded_ms": 379.0,
+        "initial_com_vz_m_s": 0.45100449795144,
+        "com_rise_m": 0.011512605816222127,
+        "clearance_over_gap_m": -0.6018997302190878,
+        "front_start_x": 10.826737196997149,
+        "rear_end_x": 10.838509709682697,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route4_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 6.050000190734863,
+        "end_s": 6.215000152587891,
+        "unloaded_ms": 176.0,
+        "initial_com_vz_m_s": -0.46150525821781235,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.2868184831570317,
+        "front_start_x": 10.553441237776337,
+        "rear_end_x": 10.559714961789721,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route4_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.849999904632568,
+        "end_s": 6.010000228881836,
+        "unloaded_ms": 168.0,
+        "initial_com_vz_m_s": -0.4138384067726264,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.2644421498491285,
+        "front_start_x": 10.555992876911471,
+        "rear_end_x": 10.55057318034679,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route4_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.885000228881836,
+        "end_s": 6.054999828338623,
+        "unloaded_ms": 178.0,
+        "initial_com_vz_m_s": -0.4479942687017564,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.29637752530844486,
+        "front_start_x": 10.548631564951673,
+        "rear_end_x": 10.562338956349501,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.070000171661377,
+        "end_s": 6.085000038146973,
+        "unloaded_ms": 24.0,
+        "initial_com_vz_m_s": -1.6387399021872298,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.33844264527605816,
+        "front_start_x": 10.764618008397523,
+        "rear_end_x": 10.597245516453413,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.114999771118164,
+        "end_s": 6.139999866485596,
+        "unloaded_ms": 32.0,
+        "initial_com_vz_m_s": -1.8282629356132547,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.4664253400649829,
+        "front_start_x": 10.727407757756787,
+        "rear_end_x": 10.569533156296377,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route5_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 6.074999809265137,
+        "end_s": 6.264999866485596,
+        "unloaded_ms": 201.0,
+        "initial_com_vz_m_s": -0.4867417086399739,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.3528856268305388,
+        "front_start_x": 10.543358850475746,
+        "rear_end_x": 10.59262740209762,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.715000152587891,
+        "end_s": 6.784999847412109,
+        "unloaded_ms": 79.0,
+        "initial_com_vz_m_s": -0.38080771317427714,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.6358926007636378,
+        "front_start_x": 11.013153485574758,
+        "rear_end_x": 10.726156068370631,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.820000171661377,
+        "end_s": 6.84499979019165,
+        "unloaded_ms": 38.0,
+        "initial_com_vz_m_s": -0.229837264584025,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.649637746266843,
+        "front_start_x": 10.969944735805763,
+        "rear_end_x": 10.723320301329336,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.909999847412109,
+        "end_s": 7.074999809265137,
+        "unloaded_ms": 172.0,
+        "initial_com_vz_m_s": 0.6155330023251248,
+        "com_rise_m": 0.020762812052229213,
+        "clearance_over_gap_m": -0.5304424763325392,
+        "front_start_x": 11.009482234390001,
+        "rear_end_x": 10.73049663242823,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 7.105000019073486,
+        "end_s": 7.329999923706055,
+        "unloaded_ms": 230.0,
+        "initial_com_vz_m_s": -0.5671520954009882,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.5298187299900652,
+        "front_start_x": 10.958816868659378,
+        "rear_end_x": 10.873995258516372,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route5_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "timeout",
+    "events": [
+      {
+        "start_s": 6.099999904632568,
+        "end_s": 6.295000076293945,
+        "unloaded_ms": 203.0,
+        "initial_com_vz_m_s": -0.5282758946273888,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.37671181279092447,
+        "front_start_x": 10.53342821575858,
+        "rear_end_x": 10.59528083129224,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.635000228881836,
+        "end_s": 6.695000171661377,
+        "unloaded_ms": 72.00000000000001,
+        "initial_com_vz_m_s": -0.2722014825056155,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.5886280241999268,
+        "front_start_x": 10.875414363597477,
+        "rear_end_x": 10.631217017134048,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.760000228881836,
+        "end_s": 6.78000020980835,
+        "unloaded_ms": 25.0,
+        "initial_com_vz_m_s": 0.4002773401005388,
+        "com_rise_m": 0.006537617279391714,
+        "clearance_over_gap_m": -0.588936448481878,
+        "front_start_x": 10.848786696665183,
+        "rear_end_x": 10.653039912628605,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route5_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.889999866485596,
+        "end_s": 6.074999809265137,
+        "unloaded_ms": 195.0,
+        "initial_com_vz_m_s": -0.5398529969751099,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.3547392713125898,
+        "front_start_x": 10.547825426174477,
+        "rear_end_x": 10.592551467642743,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.210000038146973,
+        "end_s": 6.565000057220459,
+        "unloaded_ms": 361.0,
+        "initial_com_vz_m_s": -0.23737606030305047,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.5134804443262642,
+        "front_start_x": 10.836365848713404,
+        "rear_end_x": 11.041594230387986,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route5_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.885000228881836,
+        "end_s": 6.070000171661377,
+        "unloaded_ms": 196.0,
+        "initial_com_vz_m_s": -0.4970785705738203,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.344481723996694,
+        "front_start_x": 10.54590124967106,
+        "rear_end_x": 10.589453261637027,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.554999828338623,
+        "end_s": 6.605000019073486,
+        "unloaded_ms": 55.0,
+        "initial_com_vz_m_s": -0.4261575049634487,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.6145664527902968,
+        "front_start_x": 10.990939384750735,
+        "rear_end_x": 10.681828459625311,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route6_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.885000228881836,
+        "end_s": 6.369999885559082,
+        "unloaded_ms": 491.0,
+        "initial_com_vz_m_s": 2.073049823943564,
+        "com_rise_m": 0.22624509568301904,
+        "clearance_over_gap_m": 0.01887638922542302,
+        "front_start_x": 10.395887207244325,
+        "rear_end_x": 10.923355078697943,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route6_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 6.070000171661377,
+        "end_s": 6.21999979019165,
+        "unloaded_ms": 162.0,
+        "initial_com_vz_m_s": -0.40556233393301067,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.2340898456431444,
+        "front_start_x": 10.572651246804336,
+        "rear_end_x": 10.54399535239545,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.269999980926514,
+        "end_s": 6.275000095367432,
+        "unloaded_ms": 10.0,
+        "initial_com_vz_m_s": 1.8571114610877915,
+        "com_rise_m": 0.009285769834979335,
+        "clearance_over_gap_m": -0.10771036079165855,
+        "front_start_x": 10.769299502374345,
+        "rear_end_x": 10.58225183297893,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route6_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.684999942779541,
+        "end_s": 5.829999923706055,
+        "unloaded_ms": 158.0,
+        "initial_com_vz_m_s": -0.38401095801534757,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.2180394588902978,
+        "front_start_x": 10.57621407279395,
+        "rear_end_x": 10.541721280552247,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.885000228881836,
+        "end_s": 5.909999847412109,
+        "unloaded_ms": 31.0,
+        "initial_com_vz_m_s": 1.0231558678828325,
+        "com_rise_m": 0.023140380310760655,
+        "clearance_over_gap_m": -0.1640084376636943,
+        "front_start_x": 10.759232113496891,
+        "rear_end_x": 10.53192921934707,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route6_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.760000228881836,
+        "end_s": 5.909999847412109,
+        "unloaded_ms": 158.0,
+        "initial_com_vz_m_s": -0.367976969162457,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.22341626448059826,
+        "front_start_x": 10.575534874784369,
+        "rear_end_x": 10.547853331219214,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.965000152587891,
+        "end_s": 5.985000133514404,
+        "unloaded_ms": 25.0,
+        "initial_com_vz_m_s": 1.3920678632888972,
+        "com_rise_m": 0.026345012448084765,
+        "clearance_over_gap_m": -0.1563431862115878,
+        "front_start_x": 10.749959556432934,
+        "rear_end_x": 10.529750650543388,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route7_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 6.065000057220459,
+        "end_s": 6.21999979019165,
+        "unloaded_ms": 163.0,
+        "initial_com_vz_m_s": -0.3880337447205418,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.23954187695412066,
+        "front_start_x": 10.570658263474446,
+        "rear_end_x": 10.54922070283305,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.269999980926514,
+        "end_s": 6.275000095367432,
+        "unloaded_ms": 11.0,
+        "initial_com_vz_m_s": 1.8952631651858713,
+        "com_rise_m": 0.009476532721585773,
+        "clearance_over_gap_m": -0.09985515612341231,
+        "front_start_x": 10.77550327856148,
+        "rear_end_x": 10.580606891896245,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route7_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 6.079999923706055,
+        "end_s": 6.235000133514404,
+        "unloaded_ms": 162.0,
+        "initial_com_vz_m_s": -0.3238099208054447,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.21981115850497784,
+        "front_start_x": 10.568902225624946,
+        "rear_end_x": 10.548309605063354,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.28000020980835,
+        "end_s": 6.309999942779541,
+        "unloaded_ms": 36.00000000000001,
+        "initial_com_vz_m_s": 1.9623894656241518,
+        "com_rise_m": 0.055143481180380066,
+        "clearance_over_gap_m": -0.150368935759747,
+        "front_start_x": 10.768176281068634,
+        "rear_end_x": 10.534198429719687,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route7_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.690000057220459,
+        "end_s": 5.84499979019165,
+        "unloaded_ms": 164.0,
+        "initial_com_vz_m_s": -0.3865998812121763,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.23867586876686514,
+        "front_start_x": 10.569883469145852,
+        "rear_end_x": 10.551223738457221,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.889999866485596,
+        "end_s": 5.90500020980835,
+        "unloaded_ms": 20.0,
+        "initial_com_vz_m_s": 2.127096912750128,
+        "com_rise_m": 0.0311647298977005,
+        "clearance_over_gap_m": -0.12128019866166209,
+        "front_start_x": 10.77097213990337,
+        "rear_end_x": 10.576634936013297,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route7_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.739999771118164,
+        "end_s": 5.885000228881836,
+        "unloaded_ms": 156.0,
+        "initial_com_vz_m_s": -0.39724402183567975,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.22220344568680933,
+        "front_start_x": 10.577164825463298,
+        "rear_end_x": 10.543946556,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 5.934999942779541,
+        "end_s": 5.945000171661377,
+        "unloaded_ms": 15.0,
+        "initial_com_vz_m_s": 1.7529076284273386,
+        "com_rise_m": 0.017281717734746238,
+        "clearance_over_gap_m": -0.11993147688372802,
+        "front_start_x": 10.769395741629433,
+        "rear_end_x": 10.543618782712082,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route8_h75_v0",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 6.059999942779541,
+        "end_s": 6.210000038146973,
+        "unloaded_ms": 157.0,
+        "initial_com_vz_m_s": -0.3724201786893681,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.22697221916237453,
+        "front_start_x": 10.572831067921724,
+        "rear_end_x": 10.548089601132098,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.255000114440918,
+        "end_s": 6.28000020980835,
+        "unloaded_ms": 30.0,
+        "initial_com_vz_m_s": 1.2410459208155586,
+        "com_rise_m": 0.028549794622053176,
+        "clearance_over_gap_m": -0.1594927628753145,
+        "front_start_x": 10.766879116892373,
+        "rear_end_x": 10.532593086400867,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route8_h75_v1",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 6.065000057220459,
+        "end_s": 6.21999979019165,
+        "unloaded_ms": 164.0,
+        "initial_com_vz_m_s": -0.3720501333253251,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.2390610181271952,
+        "front_start_x": 10.564310368531931,
+        "rear_end_x": 10.546226477888133,
+        "bank_to_bank_flight": false
+      },
+      {
+        "start_s": 6.275000095367432,
+        "end_s": 6.28000020980835,
+        "unloaded_ms": 10.0,
+        "initial_com_vz_m_s": 1.8331352845889015,
+        "com_rise_m": 0.009165886208629237,
+        "clearance_over_gap_m": -0.12470442797422793,
+        "front_start_x": 10.747972197003902,
+        "rear_end_x": 10.557228910053391,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route8_h75_v2",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": false,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.784999847412109,
+        "end_s": 5.945000171661377,
+        "unloaded_ms": 167.0,
+        "initial_com_vz_m_s": -0.3947695285323465,
+        "com_rise_m": 0.0,
+        "clearance_over_gap_m": -0.2562175227669976,
+        "front_start_x": 10.561521025366956,
+        "rear_end_x": 10.54956340264108,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  {
+    "mode": "rb_plus25",
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "rb_run1_route8_h75_v3",
+    "skill": "rb_run1",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": null,
+    "goal": false,
+    "termination": "physical_failure",
+    "events": [
+      {
+        "start_s": 5.539999961853027,
+        "end_s": 6.079999923706055,
+        "unloaded_ms": 549.0,
+        "initial_com_vz_m_s": 2.3043297305559616,
+        "com_rise_m": 0.2794348231210428,
+        "clearance_over_gap_m": 0.15129545465569486,
+        "front_start_x": 10.350898906148489,
+        "rear_end_x": 10.848592160773228,
+        "bank_to_bank_flight": false
+      }
+    ]
+  }
+]

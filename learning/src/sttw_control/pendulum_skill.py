@@ -28,6 +28,7 @@ class PendulumSkill:
         config = load_config(Path(inputs["up_config_path"]), runtime_only=True)
         if config.config_sha256 != inputs["up_config_sha256"]:
             raise ValueError("Frozen actuator configuration changed")
+        self.up_config = config
         self.bundle = load_host_model(config)
         identity = CheckpointIdentity(
             self.record["formal_config_sha256"], self.bundle.xml_sha256,

@@ -1,5 +1,8 @@
 # 第三章任务书执行与文稿状态
 
+> **2026-11-18结论撤回：** 用户指出成功视频没有明确主动跳跃。已复查视频：该案例不能作为主动起跳跨沟成功证据。旧goal/airborne标签仅保留作历史执行记录；P2机制解释及依赖它的后续跳跃结论需重新验收。不能将短暂无接触或到达目标替代真实起跳。
+
+
 当前执行依据为[新版任务书](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/STTW_第三章_Codex任务书.md)。旧DOCX不再指导实验。下方LaTeX/PDF是此前执行大纲下的文稿快照，尚未吸收新版任务书的全部实验；不能把编译完成视为P0–P6完成。
 
 | 阶段 | 当前证据与边界 |
@@ -10,7 +13,7 @@
 | P6 | 实测落地更新C-R与任务重配置、新地图族泛化尚未完成。 |
 | P7 | 可选；当前不接LLM。 |
 
-P5已知DEV地图06/07共648条件：399最终目标成功，249失败；所有条件跨沟并交回。固定α0/0已72/72，不能据此声称自动α选择增加成功率。TRAIN地图00/01共648条件：409目标成功，239失败；TRAIN仅作模型数据，不能与DEV混成泛化成功率。两组失败均保留。[DEV全部XY](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p5_alpha_grid/README.md) · [TRAIN全部XY](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p5_alpha_train_collection/README.md)。两张TRAIN采集已全部纳入，不能与648条DEV混成一个泛化分母。
+P5已知DEV地图06/07共648条件：399最终目标成功，249失败；所有条件触发了旧交回逻辑，主动腾空跨岸需以新物理记录重验。固定α0/0已72/72，不能据此声称自动α选择增加成功率。TRAIN地图00/01共648条件：409目标成功，239失败；TRAIN仅作模型数据，不能与DEV混成泛化成功率。两组失败均保留。[DEV全部XY](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p5_alpha_grid/README.md) · [TRAIN全部XY](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p5_alpha_train_collection/README.md)。两张TRAIN采集已全部纳入，不能与648条DEV混成一个泛化分母。
 
 当前shared225源于登记为rb_run3的PPO-only分支并经过本项目适配；工程名“RB225”不等于完整RecoveryBridge贡献证明。方法对照必须保留真正来源、各自匹配预测器及相同预算，不能直接用shared225与source之差归因完整RB方法。参见[谱系核对](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p5_snapshot_alpha/jump_lineage_audit.json)。
 

@@ -21,7 +21,8 @@ for row in status['results']:
  archive=np.load(root/'trajectory.npz');trace=archive['trace'];poses=archive['qpos'];velocities=archive['qvel'] if 'qvel' in archive else None;dt=.005
  file=a.root/(name+'.mp4');writer=subprocess.Popen(['ffmpeg','-y','-loglevel','error','-f','rawvideo','-pix_fmt','rgb24','-s','1920x540','-r','30','-i','-','-an','-c:v','libx264','-crf','20','-pix_fmt','yuv420p','-movflags','+faststart',str(file)],stdin=subprocess.PIPE)
  # 0.5x playback: 30 frames per video-second, 60 per simulated second.
- indices=np.unique(np.r_[np.round(np.arange(0,trace[-1,0],1/60)/dt).astype(int),len(trace)-1])
+ frame_times=np.arange(float(trace[0,0]),float(trace[-1,0]),1/60)
+ indices=np.unique(np.r_[np.round((frame_times-trace[0,0])/dt).astype(int),len(trace)-1])
  for j in list(indices)+[len(trace)-1]*30:
   data.qpos[:]=poses[j];data.qvel[:]=velocities[j] if velocities is not None else 0.;mujoco.mj_forward(model,data)
   images=[]
@@ -33,14 +34,15 @@ for row in status['results']:
   image=Image.fromarray(np.concatenate(images,axis=1));draw=ImageDraw.Draw(image)
   draw.rectangle((0,0,1920,95),fill=(15,18,24));draw.rectangle((0,490,1920,540),fill=(15,18,24))
   phase='STTW continuation' if trace[j,10] else ('H75 approach' if trace[j,16] else 'RB jump control')
-  if trace.shape[1]>19:phase={0:'STTW approach',1:'RB jump',2:'STTW locked',3:'Landing recovery',4:'STTW wheels / pendulum homing'}[int(trace[j,19])]
+  if trace.shape[1]>19:phase={0:'STTW approach',1:('Source jump' if row['skill']=='source' else 'RB jump'),2:'STTW locked',3:'Landing preparation',4:'Pendulum homing'}[int(trace[j,19])]
   draw.text((18,8),f"{name} | saved-state replay | 0.5x playback",font=font,fill='white')
   draw.text((18,42),f"Simulation t={trace[j,0]:.3f}s | {phase} | vx={trace[j,7]:.2f} m/s | roll={np.rad2deg(trace[j,4]):.1f} deg | pitch={np.rad2deg(trace[j,5]):.1f} deg",font=font,fill='white')
-  text=f"Near bank edge x=10.30 m; far bank x=10.60 m | End: {row['termination']} | Far contact: {row['far_contact']} | Lock handoff: {row['handoff_s']}"
+  near=declaration['terrain']['front_x_m'];far=near+declaration['terrain']['width_m']
+  text=f"Near bank x={near:.2f} m; far bank x={far:.2f} m | End: {row['termination']} | Far contact: {row['far_contact']} | Lock handoff: {row['handoff_s']}"
   if j==len(trace)-1:text='RECORDED TERMINAL STATE (held image) | '+text
   draw.text((18,503),text,font=small,fill=(255,210,130));writer.stdin.write(np.asarray(image).tobytes())
  writer.stdin.close();code=writer.wait();assert code==0
- records.append(dict(video=file.name,source=name,frames=len(indices)+30,simulation_duration_s=float(trace[-1,0]),playback_speed=.5,terminal_hold_s=1,termination=row['termination'],far_contact=row['far_contact']))
+ records.append(dict(video=file.name,source=name,frames=len(indices)+30,simulation_duration_s=float(trace[-1,0]-trace[0,0]),simulation_start_s=float(trace[0,0]),simulation_end_s=float(trace[-1,0]),playback_speed=.5,terminal_hold_s=1,termination=row['termination'],far_contact=row['far_contact']))
  Image.fromarray(np.asarray(image)).save(a.root/(name+'_terminal.png'))
 renderer.close();(a.root/'video_index.json').write_text(json.dumps(records,indent=2))
 (a.root/'VIDEO_README.md').write_text('# Saved-state episode replays\n\nRecorded qpos replayed without new physics; original real terminal state preserved. Left: side view; right: map overview. Playback0.5x with labeled1s terminal hold. Controller variants and physical domain follow the run configuration.\n\n'+'\n'.join(f"- [{r['video']}]({r['video']}): {r['simulation_duration_s']:.3f}s simulation, {r['termination']}, far contact={r['far_contact']}." for r in records)+'\n')

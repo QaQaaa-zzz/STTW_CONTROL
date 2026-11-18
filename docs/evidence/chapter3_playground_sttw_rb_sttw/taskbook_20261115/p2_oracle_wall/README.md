@@ -1,5 +1,8 @@
 # P2 开发地图跨阶段候选案例（冻结重复完成）
 
+> **2026-11-18结论撤回：** 用户指出成功视频没有明确主动跳跃。已复查视频：该案例不能作为主动起跳跨沟成功证据。旧goal/airborne标签仅保留作历史执行记录；P2机制解释及依赖它的后续跳跃结论需重新验收。不能将短暂无接触或到达目标替代真实起跳。
+
+
 [全部实际/参考 XY](oracle_xy.png) · [逐例矩阵](oracle_matrix.csv)
 
 地图48、初态1001/1002、每初态3接近×3驶离：18格中4完成、6跳前失败、8跳后失败。左右接近均跨沟交回；左接近的直行/左驶离可完成，右接近的三个允许驶离候选均失败。
@@ -12,11 +15,11 @@
 
 - [初态1001状态](states_root1001.png) / [占据局部图](occupancy_root1001.png)
 - [初态1002状态](states_root1002.png) / [占据局部图](occupancy_root1002.png)
-- [配对成功视频](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall/paired_media/up1_down0_root1001.mp4)
+- [旧终点通过录像（主动起跳未通过复查）](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall/paired_media/up1_down0_root1001.mp4)
 - [配对失败视频](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/taskbook_20261115_p2_oracle_wall/paired_media/up2_down0_root1001.mp4)
 
 视频按实际qpos回放，0.5倍速与1秒终态保持；成功576帧/19.2秒，失败409帧/13.633秒，ffprobe核对帧数。完整快照边界qpos/qvel一致后拼接真实前缀和后缀，不生成新物理。状态图不平滑，失败处停止；占据局部图使用各碰撞几何体的投影AABB，保守包围框不是精确mesh或连续安全证明。完整轨迹见首图，局部图只显示x10–14m。
 
-P2所需机制案例、冻结重复、完整失败矩阵、两条配对视频及状态/占据图已具备，可进入P3。现证据仅支持开发任务上有限候选的跨阶段可行性差异；尚未验证学习预测或连续状态传递的收益。P3必须新增全关节/接触RB分支，不能将已有地面模型改名替代。
+此处仅保留旧协议的冻结重复、失败矩阵、录像及状态/占据图。P2要求的两条真实跳跃及其不同后续尚待复验；尚未验证学习预测或连续状态传递的收益。P3必须新增全关节/接触RB分支，不能将已有地面模型改名替代。
 
 制图审查参考本地 scientific-visualization 技能；无平滑、无删除失败、无不确定性区间推断，源数据与变换见 state_figure_sources.json。

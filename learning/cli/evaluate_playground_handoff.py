@@ -113,6 +113,10 @@ def main():
         raise ValueError('snapshot time must lie within the rollout')
     if 'snapshot_branch_continuation_alpha' in cfg and ('snapshot_replay_s' not in cfg or not 0<=cfg['snapshot_branch_continuation_alpha']<=1):
         raise ValueError('Snapshot alpha branch requires a replay anchor and alpha in [0,1]')
+    if 'snapshot_branch_continuation_speed_m_s' in cfg and ('snapshot_replay_s' not in cfg or cfg['snapshot_branch_continuation_speed_m_s'] not in (1.8,1.9)):
+        raise ValueError('Post-handoff speed branch requires a replay anchor and a validated 1.8 or 1.9 m/s request')
+    if cfg.get('verify_active_jump') and not cfg.get('contact_substep_telemetry'):
+        raise ValueError('Jump verification needs substep contact telemetry')
     if cfg.get('contact_substep_telemetry') and (cfg.get('rb_physics') or a.physics_substeps!=5):
         raise ValueError('Contact telemetry requires shared 1 ms physics (five substeps)')
     ground_physics=cfg.get('ground_physics',{})
@@ -162,6 +166,14 @@ def main():
     (a.output/'declaration.json').write_text(json.dumps(contract,indent=2))
     from sttw_control.playground_handoff_evaluation import evaluate_handoff
     evaluate_handoff(model,mm,idx,cfg,bundle,hcfg,identity,controller,skills,a,brake_ids)
+    if cfg.get('verify_active_jump'):
+        from audit_playground_jump import assess
+        records = assess(a.output)
+        (a.output/'jump_validation.json').write_text(json.dumps({
+            'task_success_count': sum(row['task_success'] for row in records),
+            'total': len(records), 'cases': records,
+        }, indent=2) + '\n')
+
 
 
 if __name__=='__main__':main()

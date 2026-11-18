@@ -8,6 +8,7 @@ import time
 import math
 import hashlib
 from copy import deepcopy
+from dataclasses import replace
 import numpy as np
 import jax
 import jax.numpy as jp
@@ -17,6 +18,7 @@ from mujoco import mjx
 from mujoco.mjx.warp.types import DATA_NON_VMAP
 from mujoco_playground._src import mjx_env
 from jit_dvgc.action_mapping import map_action
+from jit_dvgc.semantics import PhaseUSignals, advance_events, initial_event_state
 from jit_dvgc.geometry import build_geometry_contract, extract_geometry
 from jit_dvgc.observation import initial_history, advance_history, observable_frame, actor_observation, ObservableGeometry
 from .torch_controller import TorchController
@@ -42,7 +44,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
     variants=hand.get('handoff_variants',[{}])
     lanes=[tuple(lane) for lane in cfg['evaluation_lanes']] if 'evaluation_lanes' in cfg else [(r,m,i) for i in range(len(variants)) for r in args.routes for m in args.modes];n=len(lanes)
     approach_speed=tensor([variants[i].get('approach_speed_m_s',variants[i].get('requested_speed_m_s',hand['approach']['speed_m_s'])) for r,m,i in lanes]).float()
-    continuation_speed=tensor([variants[i].get('continuation_speed_m_s',variants[i].get('requested_speed_m_s',hand.get('continuation',{}).get('speed_m_s',1.5))) for r,m,i in lanes]).float()
+    nominal_continuation_speed=tensor([variants[i].get('continuation_speed_m_s',variants[i].get('requested_speed_m_s',hand.get('continuation',{}).get('speed_m_s',1.5))) for r,m,i in lanes]).float()
     event=hand.get('handoff_mechanism')=='landing_state'
     landing_height=tensor([variants[i].get('landing_height_m',.35) for r,m,i in lanes]).float()
     swing_scale=jp.asarray([variants[i].get('swing_scale',1.) for r,m,i in lanes],dtype=jp.float32)
@@ -166,13 +168,14 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         m=jp.stack((-roll,-gyro[:,0],q[:,idx.steering_qpos_address],v[:,idx.steering_dof_address],gyro[:,2],v[:,idx.rearwheel_dof_address],v[:,idx.frontwheel_dof_address]),1)
         return q,v,m,jp.stack((q[:,0],q[:,1],yaw),1),v[:,0]*jp.cos(yaw)+v[:,1]*jp.sin(yaw),jp.stack((roll,pitch,yaw),1)
 
-    def frame_one(d,history,last,offset):
+    def frame_one(d,history,last,offset,signal):
         g=extract_geometry(d,geometry)
         far_fraction=jp.clip((d.qpos[0]-terrain['front_x_m'])/terrain['width_m'],0.,1.)
         geom=ObservableGeometry(g.obstacle_relative_x,d.qpos[2]+offset*far_fraction,g.roll,g.pitch,g.yaw)
         history=advance_history(history,observable_frame(d,idx,geom,last,jp.asarray(1.)))
-        return history,actor_observation(history,(d.qpos[0]>=signal_window[0])&(d.qpos[0]<=signal_window[1]))
+        return history,actor_observation(history,signal)
     frame=jax.jit(jax.vmap(frame_one))
+    use_apex=cfg.get('native_apex_signal',False)
     results=[];all_timing=[]
     for name,skill in skills.items():
         route=TorchPathReference(dict(saved),hcfg,device,route_ids=[r for r,m,i in lanes])
@@ -195,6 +198,19 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
             action=action.at[2:].multiply(scale)
             return action,map_action(action,knee,skill.bundle.action_mapping)
         infer=jax.jit(jax.vmap(infer_one))
+        ground_action_history=cfg.get('rb_history_from_ground_targets',False)
+        action_mapping=skill.bundle.action_mapping
+        if ground_action_history and action_mapping.joint_target_semantics!='keyframe_centered_absolute':
+            raise ValueError('Ground history projection requires the frozen absolute joint mapping')
+        if use_apex:
+            event_cfg=replace(skill.up_config,events=replace(skill.up_config.events,
+                jump_zone_x_min=signal_window[0],jump_zone_x_max=signal_window[1]))
+            def signal_step(previous,d,failed):
+                signals=PhaseUSignals(d.qpos[0],d.qpos[2],d.qvel[0],d.qvel[2],failed)
+                current=advance_events(previous,signals,event_cfg)
+                return current,current.jump_signal & ~current.apex_seen
+            native_signal=jax.jit(jax.vmap(signal_step))
+            rb_events=jax.vmap(lambda x:initial_event_state(x,event_cfg))(data.qpos[:,0])
         history=jax.tree.map(lambda x:jp.broadcast_to(x,(n,)+x.shape),initial_history())
         last=jp.zeros((n,4));obs=jax.vmap(lambda h:actor_observation(h,jp.asarray(False)))(history)
         policy=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],hcfg,n,device)
@@ -229,9 +245,12 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         memory_repeats=cfg.get('snapshot_memory_repeats',0)
         for replay in range(2+memory_repeats if snapshot_tick is not None else 1):
             case_name=name+(f'_memory{replay}' if 0<replay<=memory_repeats else ('_replay' if replay else ''))
+            continuation_speed=nominal_continuation_speed
             continuation_alpha=hand.get('continuation',{}).get('alpha',.5)
             if replay==memory_repeats+1 and 'snapshot_branch_continuation_alpha' in cfg:
                 continuation_alpha=cfg['snapshot_branch_continuation_alpha']
+            if replay==memory_repeats+1 and 'snapshot_branch_continuation_speed_m_s' in cfg:
+                continuation_speed=torch.full_like(continuation_speed,cfg['snapshot_branch_continuation_speed_m_s'])
             start_tick=0
             if replay or cfg.get('initial_snapshot_path'):
                 restore_started=time.perf_counter()
@@ -250,6 +269,13 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                     with (args.output/f'{name}_runtime_snapshot.pkl').open('rb') as stream:snapshot=pickle.load(stream)
                 data,(history,obs,last),runtime=restore_snapshot(snapshot,ground_adapter)
                 phase,alive,recovering,stable_time,upper_ready_time,airborne,flags,far_time,entry_time,handoff_time,hold,lock,target,codes,durations,ownership_error,substep_loads=(runtime[key] for key in ['phase', 'alive', 'recovering', 'stable_time', 'upper_ready_time', 'airborne', 'flags', 'far_time', 'entry_time', 'handoff_time', 'hold', 'lock', 'target', 'codes', 'durations', 'ownership_error', 'substep_loads'])
+                if use_apex:
+                    if 'rb_events' in runtime:
+                        rb_events=runtime['rb_events']
+                    elif bool((phase!=0).any()) or bool((data.qpos[:,0]>=signal_window[0]).any()):
+                        raise ValueError('Apex signal requires event history for a post-entry snapshot')
+                    else:
+                        rb_events=jax.vmap(lambda x:initial_event_state(x,event_cfg))(data.qpos[:,0])
                 if rolling is not None:
                     rolling.restore(runtime['planner']['library'])
                     pending=deepcopy(runtime['planner']['pending']);rolling_events=deepcopy(runtime['planner']['events'])
@@ -277,6 +303,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 collect_handoff=cfg.get('snapshot_ground_handoff',False) and not handoff_snapshot_saved and tick%4==0 and bool(((phase==2)|~alive).all())
                 if (snapshot_tick==tick or tick in collection_ticks or collect_handoff or (tick==0 and cfg.get('collect_model_state'))) and not replay:
                     runtime=dict(phase=phase,alive=alive,recovering=recovering,stable_time=stable_time,upper_ready_time=upper_ready_time,airborne=airborne,flags=flags,far_time=far_time,entry_time=entry_time,handoff_time=handoff_time,hold=hold,lock=lock,target=target,codes=codes,durations=durations,ownership_error=ownership_error,substep_loads=substep_loads)
+                    if use_apex:runtime['rb_events']=rb_events
                     if rolling is not None:
                         runtime['planner']=dict(library=rolling.snapshot(),pending=deepcopy(pending),events=deepcopy(rolling_events),jump_start=jump_start.clone())
                     snapshot=capture_snapshot(data,ground_adapter,(history,obs,last),runtime,tick,dict(world_map=world,terrain=terrain,ground_identity=identity,rb_identity=skill.record,physics_model=str(args.output/'terrain.mjb'),resolved_config=str(args.output/'resolved_config.json')))
@@ -448,7 +475,20 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 flags=to_torch(jflags)
                 q,v,m,pose,speed,angles=map(to_torch,observe(data))
                 middle.after(m,pose,speed,governed,torch.stack((steer,target[:,1]),1),torch.zeros(n,2,device=device),ctl)
-                if (tick+1)%4==0:history,obs=frame(data,history,last,height_offset)
+                if (tick+1)%4==0:
+                    if ground_action_history:
+                        # Last actuator target in the observed 20 ms interval, in actor units.
+                        delta=target[:,2:]-home_pose
+                        span=torch.where(delta>=0,hi[2:]-home_pose,home_pose-lo[2:])
+                        ground_action=torch.cat((target[:,:1]/hi[0],
+                            (target[:,1:2]-action_mapping.base_rear_speed)/action_mapping.rear_speed_delta,
+                            delta/span),dim=1).clamp(-1,1)
+                        last=jp.where(to_jax(alive&((phase==0)|(phase==2)))[:,None],to_jax(ground_action),last)
+                    if use_apex:
+                        rb_events,signal=native_signal(rb_events,data,to_jax(~alive))
+                    else:
+                        signal=(data.qpos[:,0]>=signal_window[0])&(data.qpos[:,0]<=signal_window[1])
+                    history,obs=frame(data,history,last,height_offset,signal)
             torch.cuda.synchronize();rollout_s=time.perf_counter()-rollout_start
             traces=torch.stack(rows).cpu().numpy();positions=torch.stack(poses).cpu().numpy();speeds=torch.stack(velocities).cpu().numpy();valid=torch.stack(valid_rows).cpu().numpy();contact_trace=torch.stack(contact_rows).cpu().numpy();world_trace=torch.stack(world_rows).cpu().numpy();ownership_max=ownership_error.cpu().numpy()
             if cfg.get('collect_model_state'):
