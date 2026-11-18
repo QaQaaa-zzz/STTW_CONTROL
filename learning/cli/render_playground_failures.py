@@ -34,7 +34,7 @@ for row in status['results']:
   image=Image.fromarray(np.concatenate(images,axis=1));draw=ImageDraw.Draw(image)
   draw.rectangle((0,0,1920,95),fill=(15,18,24));draw.rectangle((0,490,1920,540),fill=(15,18,24))
   phase='STTW continuation' if trace[j,10] else ('H75 approach' if trace[j,16] else 'RB jump control')
-  if trace.shape[1]>19:phase={0:'STTW approach',1:('Source jump' if row['skill']=='source' else 'RB jump'),2:'STTW locked',3:'Landing preparation',4:'Pendulum homing'}[int(trace[j,19])]
+  if trace.shape[1]>19:phase={0:'STTW approach',1:('Source jump' if row['skill'].startswith('source') else 'RB jump'),2:'STTW locked',3:'Landing preparation',4:'Pendulum homing'}[int(trace[j,19])]
   draw.text((18,8),f"{name} | saved-state replay | 0.5x playback",font=font,fill='white')
   draw.text((18,42),f"Simulation t={trace[j,0]:.3f}s | {phase} | vx={trace[j,7]:.2f} m/s | roll={np.rad2deg(trace[j,4]):.1f} deg | pitch={np.rad2deg(trace[j,5]):.1f} deg",font=font,fill='white')
   near=declaration['terrain']['front_x_m'];far=near+declaration['terrain']['width_m']

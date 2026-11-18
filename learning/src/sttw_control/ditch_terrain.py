@@ -68,6 +68,24 @@ def build_ditch_terrain(spec, *, return_patches=False):
     return (*mesh, patches) if return_patches else mesh
 
 
+def split_flat_lips(patches, near, far):
+    """Keep the sampled rough mesh and split only its constant-height lip rows."""
+    fields, boxes = [], []
+    for x, y, z in patches:
+        if len(x) > 2 and (np.isclose(x[-1], near) or np.isclose(x[0], far)):
+            lip = -1 if np.isclose(x[-1], near) else 0
+            level = z[lip, 0]
+            uneven = np.flatnonzero((z != level).any(axis=1))
+            cut = (uneven[-1] + 1 if lip == -1 else uneven[0] - 1) if len(uneven) else None
+            if cut is not None and 0 < cut < len(x) - 1 and np.all(z[lip] == level):
+                left, right = sorted((x[cut], x[lip]))
+                boxes.append((left, right, y[0], y[-1], level))
+                kept = slice(None, cut + 1) if lip == -1 else slice(cut, None)
+                x, z = x[kept], z[kept]
+        fields.append((x, y, z))
+    return fields, boxes
+
+
 def ditch_support_mask(wheels, forces, roll, pitch, forward_velocity, spec):
     on = ((wheels[:,:,0] > spec['front_x_m']+spec['width_m'])
           & (wheels[:,:,0] < spec['ground_end_x_m'])

@@ -15,7 +15,7 @@ collision_convex.MJ_MAXCONPAIR = 512
 collision_convex.vec_maxconpair = wp.types.vector(length=512, dtype=float)
 collision_convex.mat_maxconpair = wp.types.matrix(shape=(512, 3), dtype=float)
 import torch
-from sttw_control.ditch_terrain import build_ditch_terrain
+from sttw_control.ditch_terrain import build_ditch_terrain, split_flat_lips
 from sttw_control.runtime import configure_compilation_cache
 from sttw_control.pendulum_skill import PendulumSkill
 from jit_dvgc.model import _build_index
@@ -40,6 +40,16 @@ def transplant(bundle, terrain, output, physics_substeps=1, ground_physics=None)
         if pair.tag == 'pair' and {pair.get('geom1'), pair.get('geom2')} & {'floor', 'step'}:
             contacts.remove(pair)
     vertices, triangles, patches = build_ditch_terrain(terrain, return_patches=True)
+    ground_physics = ground_physics or {}
+    boxes = []
+    if ground_physics.get('analytic_flat_lips'):
+        patches, boxes = split_flat_lips(patches, terrain['front_x_m'], terrain['front_x_m']+terrain['width_m'])
+    bank_names = [f'bank{i}' for i in range(len(patches))]
+    for i,(xmin,xmax,ymin,ymax,z) in enumerate(boxes):
+        name=f'flat_lip_{i}';bank_names.append(name)
+        ET.SubElement(world,'geom',name=name,type='box',size=f'{(xmax-xmin)/2} {(ymax-ymin)/2} .05',
+                      pos=f'{(xmax+xmin)/2} {(ymax+ymin)/2} {z-.05}',contype='1',conaffinity='15',
+                      friction='.8 .005 .0001',rgba='.45 .38 .25 1')
     heights = []
     for i, (xs, ys, zz) in enumerate(patches):
         bottom=float(zz.min()); scale=max(float(zz.max()-bottom),1e-6)
@@ -53,10 +63,9 @@ def transplant(bundle, terrain, output, physics_substeps=1, ground_physics=None)
             pos=f'{(xmin+xmax)/2} {(ymin+ymax)/2} {height/2}',
             size=f'{(xmax-xmin)/2} {(ymax-ymin)/2} {height/2}',
             contype='1',conaffinity='15',friction='.8 .005 .0001',rgba='.65 .18 .12 1')
-    ground_physics = ground_physics or {}
     if ground_physics.get('native_wheel_contacts',False):
-        for i in range(len(patches)):
-            for pair in native_wheel_pairs:ET.SubElement(contacts,'pair',**dict(pair,geom1=f'bank{i}'))
+        for bank in bank_names:
+            for pair in native_wheel_pairs:ET.SubElement(contacts,'pair',**dict(pair,geom1=bank))
     if 'integrator' in ground_physics:
         root.find('option').set('integrator',ground_physics['integrator'])
     if ground_physics.get('steering_velocity_gain') is not None:
@@ -65,7 +74,7 @@ def transplant(bundle, terrain, output, physics_substeps=1, ground_physics=None)
         actuator.set('ctrlrange','-3 3')
     if 'friction' in ground_physics:
         for geom in root.findall('.//geom'):
-            if geom.get('name') in ('frontwheel_collision','rearwheel_collision') or geom.get('hfield'):
+            if geom.get('name') in ('frontwheel_collision','rearwheel_collision') or geom.get('name') in bank_names:
                 geom.set('friction',f"{ground_physics['friction']} .005 .0001")
     if ground_physics.get('wheel_collision') == 'cylinder':
         for name in ('frontwheel_collision','rearwheel_collision'):
@@ -171,6 +180,7 @@ def main():
         records = assess(a.output)
         (a.output/'jump_validation.json').write_text(json.dumps({
             'task_success_count': sum(row['task_success'] for row in records),
+            'solid_bank_rear_launch_goal_count': sum(row['solid_bank_goal'] for row in records),
             'total': len(records), 'cases': records,
         }, indent=2) + '\n')
 

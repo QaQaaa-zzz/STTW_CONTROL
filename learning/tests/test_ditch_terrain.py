@@ -100,3 +100,16 @@ def test_rotated_heightfield_uses_isaac_triangle_diagonal():
   gid=np.zeros(1,dtype=np.int32)
   distance=mujoco.mj_ray(m,d,np.array([x,y,2.]),np.array([0.,0.,-1.]),None,1,-1,gid)
   np.testing.assert_allclose(2-distance,max(0.,x+y-1),atol=1e-7)
+
+
+def test_analytic_lips_replace_only_identical_flat_grid_cells():
+    from sttw_control.ditch_terrain import split_flat_lips
+    x = np.arange(7, dtype=float)
+    y = np.array([-1., 1.])
+    z = np.zeros((7, 2))
+    z[1:3, 0] = [0.02, 0.01]
+    inputs = [(x, y, z), (x + 7, y, z[::-1])]
+    fields, boxes = split_flat_lips(inputs, 6., 7.)
+    assert boxes == [(3., 6., -1., 1., 0.), (7., 10., -1., 1., 0.)]
+    np.testing.assert_array_equal(fields[0][2], z[:4])
+    np.testing.assert_array_equal(fields[1][2], z[::-1][3:])

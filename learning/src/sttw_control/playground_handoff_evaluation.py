@@ -59,6 +59,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
     landing_pitch_d=tensor([variants[i].get('landing_pitch_d',0.) for r,m,i in lanes]).float()
     height_offset=jp.asarray([variants[i].get('rb_far_height_offset_m',0.) for r,m,i in lanes],dtype=jp.float32)
     staged_native=hand.get('staged_native_handoff',False)
+    nominal_homing_speed=hand.get('homing_min_forward_m_s',1.5)
     gate_roll=tensor([variants[i].get('gate_roll_rad',.08) for r,m,i in lanes]).float()
     gate_rate=tensor([variants[i].get('gate_roll_rate',.3) for r,m,i in lanes]).float()
     gate_hold=tensor([variants[i].get('gate_hold_s',0.) for r,m,i in lanes]).float()
@@ -76,7 +77,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
     geometry=build_geometry_contract(model);brake_qpos=np.array([idx.hip_qpos_address,idx.knee_qpos_address])
     home_pose=tensor(model.key_qpos[idx.keyframe_id,brake_qpos]).float()
     joint_kp=tensor(model.actuator_gainprm[2:,0]).float()
-    terrain_geoms=jp.asarray(model.geom_type==mujoco.mjtGeom.mjGEOM_HFIELD)
+    terrain_geoms=jp.asarray([model.geom_type[i]==mujoco.mjtGeom.mjGEOM_HFIELD or model.geom(i).name.startswith('flat_lip_') for i in range(model.ngeom)])
     forbidden_geoms=jp.asarray([model.geom(i).name.startswith('planning_obstacle_') for i in range(model.ngeom)])
     rb_model=mm.replace(opt=mm.opt.replace(timestep=jp.asarray(.005,dtype=mm.opt.timestep.dtype),integrator=type(mm.opt.integrator)(int(mujoco.mjtIntegrator.mjINT_RK4)))) if cfg.get('rb_physics') else mm
     rb_substeps=1 if cfg.get('rb_physics') else args.physics_substeps
@@ -241,10 +242,13 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         applied_rows=[];applied_masks=[];rb_state_rows=[];collected_snapshots={};rows=[];poses=[];velocities=[];contact_rows=[];valid_rows=[];world_rows=[];load_rows=[];controller_rows=[];substep_loads=torch.full((n,args.physics_substeps,4),torch.nan,device=device);ownership_error=torch.zeros(n,device=device);goal=hand['goal'];data.qpos.block_until_ready();init_s=time.perf_counter()-init_start;rollout_start=time.perf_counter()
         snapshot_tick=round(cfg['snapshot_replay_s']/.005) if 'snapshot_replay_s' in cfg else None
         collection_ticks={round(t/.005) for t in cfg.get('snapshot_times_s',[])}
+        stage_anchors={}
         handoff_snapshot_saved=False
         memory_repeats=cfg.get('snapshot_memory_repeats',0)
         for replay in range(2+memory_repeats if snapshot_tick is not None else 1):
             case_name=name+(f'_memory{replay}' if 0<replay<=memory_repeats else ('_replay' if replay else ''))
+            homing_speed=(cfg.get('snapshot_branch_homing_min_forward_m_s',nominal_homing_speed)
+                          if replay==memory_repeats+1 else nominal_homing_speed)
             continuation_speed=nominal_continuation_speed
             continuation_alpha=hand.get('continuation',{}).get('alpha',.5)
             if replay==memory_repeats+1 and 'snapshot_branch_continuation_alpha' in cfg:
@@ -301,14 +305,24 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
             for tick in range(start_tick,round(args.seconds/.005)+1):
                 t=tick*.005
                 collect_handoff=cfg.get('snapshot_ground_handoff',False) and not handoff_snapshot_saved and tick%4==0 and bool(((phase==2)|~alive).all())
-                if (snapshot_tick==tick or tick in collection_ticks or collect_handoff or (tick==0 and cfg.get('collect_model_state'))) and not replay:
+                capture_stage=False
+                if cfg.get('capture_handoff_stages') and not replay and len(stage_anchors)<3 and tick%4==0:
+                    supported=substep_loads[:,-1,:2].amax(1)>1e-5
+                    masks=torch.stack((alive&(phase==1)&supported&(q[:,0]>terrain['front_x_m']-.65)&(q[:,0]<terrain['front_x_m']-.15),
+                                       alive&((phase==1)|(phase==3))&flags[:,1]&supported,
+                                       alive&(phase==2)))
+                    for stage,mask in zip(('before_takeoff','far_touch','sttw_return'),masks.cpu().numpy()):
+                        if stage not in stage_anchors and mask.any():
+                            stage_anchors[stage]=dict(tick=tick,lanes=np.flatnonzero(mask).tolist())
+                            capture_stage=True
+                if (snapshot_tick==tick or tick in collection_ticks or collect_handoff or capture_stage or (tick==0 and cfg.get('collect_model_state'))) and not replay:
                     runtime=dict(phase=phase,alive=alive,recovering=recovering,stable_time=stable_time,upper_ready_time=upper_ready_time,airborne=airborne,flags=flags,far_time=far_time,entry_time=entry_time,handoff_time=handoff_time,hold=hold,lock=lock,target=target,codes=codes,durations=durations,ownership_error=ownership_error,substep_loads=substep_loads)
                     if use_apex:runtime['rb_events']=rb_events
                     if rolling is not None:
                         runtime['planner']=dict(library=rolling.snapshot(),pending=deepcopy(pending),events=deepcopy(rolling_events),jump_start=jump_start.clone())
                     snapshot=capture_snapshot(data,ground_adapter,(history,obs,last),runtime,tick,dict(world_map=world,terrain=terrain,ground_identity=identity,rb_identity=skill.record,physics_model=str(args.output/'terrain.mjb'),resolved_config=str(args.output/'resolved_config.json')))
                     if tick==0 and cfg.get('collect_model_state'):initial_snapshot=snapshot
-                    if tick in collection_ticks or collect_handoff:collected_snapshots[tick]=snapshot
+                    if tick in collection_ticks or collect_handoff or capture_stage:collected_snapshots[tick]=snapshot
                     if collect_handoff:handoff_snapshot_saved=True
                     if snapshot_tick==tick:replay_snapshot=snapshot
                     if snapshot_tick==tick:prefix=[rows.copy(),poses.copy(),velocities.copy(),contact_rows.copy(),valid_rows.copy(),world_rows.copy(),plan_receipts.copy(),load_rows.copy(),controller_rows.copy(),applied_rows.copy(),applied_masks.copy(),rb_state_rows.copy()]
@@ -377,7 +391,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                     landed=flags[:,2] if require_both_wheels else flags[:,1]
                     ready=landed&(angles[:,0].abs()<.35)&(angles[:,1].abs()<.45)&(v[:,2].abs()<1.5)
                     if staged_native:
-                        body_ready=landed&(angles[:,0].abs()<gate_roll)&(angles[:,1].abs()<.2)&(v[:,2].abs()<.5)&(m[:,1].abs()<gate_rate)&(speed>=1.5)
+                        body_ready=landed&(angles[:,0].abs()<gate_roll)&(angles[:,1].abs()<.2)&(v[:,2].abs()<.5)&(m[:,1].abs()<gate_rate)&(speed>=homing_speed)
                         if settle_joints:
                             body_ready &= (angles[:,1].abs()<.03)&(v[:,4].abs()<.3)&((q[:,brake_qpos]-home_pose).abs().amax(-1)<.15)&(v[:,[idx.hip_dof_address,idx.knee_dof_address]].abs().amax(-1)<.5)
                         stable_time=torch.where(alive&(phase==3)&body_ready,stable_time+.005,0.)
@@ -500,6 +514,8 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 applied_valid[:len(applied_masks)]=torch.stack(applied_masks).cpu().numpy()
                 for anchor_tick,anchor_snapshot in collected_snapshots.items():
                     with (args.output/f'{name}_anchor_{anchor_tick:05d}.pkl').open('wb') as stream:pickle.dump(anchor_snapshot,stream,protocol=pickle.HIGHEST_PROTOCOL)
+                if cfg.get('capture_handoff_stages'):
+                    (args.output/f'{name}_stage_anchors.json').write_text(json.dumps(stage_anchors,indent=2))
                 (args.output/'snapshot_anchors.json').write_text(json.dumps(dict(ticks=sorted(collected_snapshots),lower_dt_s=.005,timing='before events and control at tick; full batched runtime, not per-lane RB-entry snapshot'),indent=2))
                 with (args.output/f'{name}_initial_snapshot.pkl').open('wb') as stream:pickle.dump(initial_snapshot,stream,protocol=pickle.HIGHEST_PROTOCOL)
                 (args.output/'controller_schema.json').write_text(json.dumps(controller_schema,indent=2))
@@ -516,7 +532,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                     samples=load_trace[keep,lane]
                     contact_data.update(dict(contact_substep=samples,contact_substep_columns=['front_normal_N','rear_normal_N','body_normal_N','body_contact'],contact_physics_dt_s=.005/args.physics_substeps,contact_interval_mean_N=samples[:,:,:3].mean(1),contact_interval_peak_N=samples[:,:,:3].max(1),contact_interval_impulse_Ns=samples[:,:,:3].sum(1)*(.005/args.physics_substeps)))
                 np.savez_compressed(target_dir/'trajectory.npz',**contact_data,trace=trace,qpos=qsave,qvel=speeds[keep,lane],world_flags=world_trace[keep,lane],world_flag_columns=['physical_map_exit','nonwheel_terrain_contact','forbidden_obstacle_contact'],wheel_contact_flags=contact_trace[keep,lane],wheel_contact_columns=['any_terrain','any_far','both_far'],reference_xy=saved['xy'][route_id],published_reference_xy=route.xy[route.route_ids[lane]].cpu().numpy(),columns=['time','x','y','z','roll','pitch','yaw','vx','vy','vz','ground_active','path_distance','steer_target','rear_target','hip_target','knee_target','approaching','rear_rate_rad_s','requested_speed_m_s','phase'])
-                row=dict(continuation_alpha=continuation_alpha,case_dir=case_dir,variant=variants[variant],skill=case_name,route=route_id,continuation=mode,termination=['timeout','physical_failure','tracking_domain_exit' if world else 'corridor_or_domain_exit','goal','world_boundary_exit','forbidden_obstacle_contact'][codes[lane]],actuator_owner_max_difference=float(ownership_max[lane]) if audit_owner else None,nonwheel_contact_steps=int(world_trace[keep,lane,1].sum()),forbidden_contact_steps=int(world_trace[keep,lane,2].sum()),goal=bool(codes[lane]==3),rb_entry_s=None if entry_time[lane]<0 else float(entry_time[lane]),goal_hold_s=float(hold[lane]),airborne=bool(airborne[lane]),far_contact=bool(far_time[lane]>=0),first_far_contact_s=None if far_time[lane]<0 else float(far_time[lane]),handoff_s=None if handoff_time[lane]<0 else float(handoff_time[lane]),duration_s=float(durations[lane]),final_xy=qsave[-1,:2].tolist())
+                row=dict(continuation_alpha=continuation_alpha,case_dir=case_dir,variant=variants[variant],skill=case_name,route=route_id,continuation=mode,termination=['timeout','physical_failure','tracking_domain_exit' if world else 'corridor_or_domain_exit','goal','world_boundary_exit','forbidden_obstacle_contact'][codes[lane]],actuator_owner_max_difference=float(ownership_max[lane]) if audit_owner else None,nonwheel_contact_steps=int(world_trace[keep,lane,1].sum()),forbidden_contact_steps=int(world_trace[keep,lane,2].sum()),goal=bool(codes[lane]==3),rb_entry_s=None if entry_time[lane]<0 else float(entry_time[lane]),goal_hold_s=float(hold[lane]),airborne=bool(airborne[lane]),far_contact=bool(far_time[lane]>=0),first_far_contact_s=None if far_time[lane]<0 else float(far_time[lane]),handoff_s=None if handoff_time[lane]<0 else float(handoff_time[lane]),duration_s=float(durations[lane]),final_xy=positions[-1,lane,:2].tolist())
                 if cfg.get('collect_model_state') and not cfg.get('task_evaluation'):row['completed_slice']=bool(codes[lane]==0)
                 if rolling is not None:
                     row.update(planning_failed=bool(rolling.failed[lane]),final_candidate=int(rolling.active[lane]),final_route=int(rolling.current_route[lane]),final_activation_x_m=float(jump_start[lane]))
