@@ -169,9 +169,16 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
     def probe_first_substep(data,ctrl,locks,damping,rb,locked,alive):
         data,damping=prepare_substeps(data,damping,rb,locked)
         new=jax.vmap(substep_with_brakes)(data,ctrl,locks,damping)
-        return {key:getattr(new,key) for key in (
+        fields={key:getattr(new,key) for key in (
             'qfrc_bias','qfrc_passive','qfrc_actuator','qfrc_smooth','qacc_smooth',
             'qfrc_constraint','qacc','qvel','qpos')}
+        c=new._impl
+        for key in ('efc__J','efc__D','efc__aref','efc__force'):
+            value=getattr(c,key)
+            active=jp.arange(value.shape[1])[None,:]<c.nefc[:,None]
+            fields[key]=jp.where(active.reshape(active.shape+(1,)*(value.ndim-2)),value,0.)
+        fields['nefc']=c.nefc
+        return fields
 
     @jax.jit
     def observe(data):

@@ -156,6 +156,11 @@ def main():
             raise ValueError('Canonical constraint rows require the elliptic contact model')
         from sttw_control.playground_constraint_order import enable as order_constraint_rows
         order_constraint_rows()
+    if cfg.get('ordered_solver_reductions'):
+        if not cfg.get('canonical_constraint_rows'):
+            raise ValueError('Ordered solver reductions use canonical elliptic constraint rows')
+        from sttw_control.playground_solver_order import enable as order_solver
+        order_solver()
     idx=_build_index(model); mm=mjx.put_model(model,impl='warp')
     brake_ids=np.array([mujoco.mj_name2id(model,mujoco.mjtObj.mjOBJ_EQUALITY,f'ground_brake_{joint}') for joint in ('hip_joint','knee_joint')])
     if (brake_ids<0).any():raise ValueError('Cached model lacks STTW pendulum brakes; rebuild it')
@@ -171,6 +176,7 @@ def main():
         contract.update(role=cfg['role'],scope='Bounded ground model collection; 4 s timeout denotes completed slice, not goal success. Splits are frozen in the collection manifest.',collect_model_state=True)
     if cfg.get('task_evaluation'):contract.update(scope=cfg['role'],completed_slice_semantics=False)
     contract['fixed_order_tree_reductions']=cfg.get('fixed_order_tree_reductions',False)
+    contract['ordered_solver_reductions']=cfg.get('ordered_solver_reductions',False)
     contract['canonical_constraint_rows']=cfg.get('canonical_constraint_rows',False)
     contract['contact_substep_telemetry']=cfg.get('contact_substep_telemetry',False)
     contract['contact_timing']='Each sample is a solver load during one 1 ms step; row t aggregates the preceding 5 ms, row zero has no interval and is NaN.'

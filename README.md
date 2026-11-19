@@ -4,7 +4,7 @@
 
 > **2026-11-18：第三章从P0重新验收。** 0.55米沟已核实原始Source主动腾空、落地交回并完成0.505秒终点保持；首次1/36，之后两批复跑各0/36。完整RB已实测飞越，整程仍待完成。
 
-[宽沟三阶段回交复验](docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p1_snapshots/wide_gap/RESULTS.md)记录了一次 624 毫秒飞越、实测着陆和交回后驶出的全过程。12 条阶段轨迹中，8 条的磁盘恢复误差落在同状态重复范围内。
+[宽沟三阶段回交复验](docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p1_snapshots/wide_gap/RESULTS.md)记录了一次 624 毫秒飞越、实测着陆和交回后驶出的全过程。固定约束行顺序后，12 条阶段轨迹中 6 条满足整段复现基准。修正接触求解的累加顺序后，五个实测状态的单步结果逐位一致，整段仍在复验。
 
 ## 从这里阅读
 
