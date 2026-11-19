@@ -1,0 +1,19 @@
+{
+  "input": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/active_jump_rebuild_map48/p2_trigger_oracle",
+  "lane": 71,
+  "root": 3,
+  "skills": [
+    "source",
+    "rb_run1"
+  ],
+  "windows": {
+    "launch_preparation": 1130,
+    "flight": 1200
+  },
+  "force_n": 5,
+  "ticks": 10,
+  "role": "Known DEV candidate. Compare the two original policies on matched nominal, launch preparation pulse and flight pulse. Not an online planner comparison.",
+  "budget": "Four physical ten-second batches, two per skill. Existing nominal paired trajectories reused. Same lane order, snapshots, actions, 0.55 m geometry, locked STTW and success criteria.",
+  "selection": "Fixed root 3/right/1.8 m/s/offset -1.95. The first pulse begins before each nominal main unload. The second is within both nominal unload intervals. Report actual loaded substeps rather than assuming the interval stays airborne.",
+  "intervention": "World +y generalized force on the free-root translational DOF of lane 71 only. +5 N for 50 ms = +0.25 N s; system mass 5.091 kg. Each window is an independent run from the original full start, with all other lanes unchanged."
+}
