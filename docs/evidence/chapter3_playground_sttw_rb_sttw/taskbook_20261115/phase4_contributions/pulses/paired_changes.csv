@@ -5,3 +5,6 @@ nominal,full_task,1,1,0,0,0,1,0
 launch_preparation,flight,1,1,0,0,0,1,0
 launch_preparation,qualified,1,1,0,0,0,1,0
 launch_preparation,full_task,1,0,0,0,0,0,1
+flight,flight,1,1,0,0,0,1,0
+flight,qualified,1,0,0,0,0,0,1
+flight,full_task,1,0,0,0,0,0,1

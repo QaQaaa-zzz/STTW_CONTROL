@@ -3,3 +3,5 @@ nominal,source,True,True,6.349999904632568,6.494999885559082,True,True,True,0.50
 nominal,rb_run1,False,True,,,False,False,False,0.0,physical_failure,6.71999979019165
 launch_preparation,source,True,True,6.460000038146973,6.644999980926514,True,False,False,0.38999977707862854,timeout,10.0
 launch_preparation,rb_run1,False,True,,,False,False,False,0.0,physical_failure,6.550000190734863
+flight,source,True,True,6.425000190734863,,False,False,False,0.0,tracking_domain_exit,6.559999942779541
+flight,rb_run1,False,True,,,False,False,False,0.0,physical_failure,6.84499979019165

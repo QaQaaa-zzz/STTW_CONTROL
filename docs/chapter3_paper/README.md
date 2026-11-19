@@ -8,6 +8,8 @@
 
 保持原来成功的两个起点与三条接近命令，换到此前冻结的 19033 布局后，三条中一条仍有核验飞越，两条首触远岸，均在锁摆交回前终止。技能接口的名义比较也已核对到接管帧：两个沟宽共 168 对，Source 与原 Full RB 的起步至接管位姿、速度与地面控制器历史均逐元素相同。0.45 m 下，换成 Full RB 新增 7 次核验飞越、保留 7 次、丢失 14 次，两者都没有稳定交回；0.55 m 下 Source 唯一有合法后续的交回在换成 Full RB 后丢失。数据仅限该场景和候选库。[同起点布局迁移 XY](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/phase2_task_reversal/matched_layout/matched_layout_xy.png) · [同入口技能对照](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/phase1_mechanism/rb_funnel_diagnosis.md)
 
+已完成同根 3、同车道 71、两种技能在两个独立施力窗口的 4 条配对实测。起跳准备受扰时仅 Source 锁摆交回，原直行在终点保持 0.390 s 后超时。空中窗口的 50 个子步，Source 与 Full RB 分别有 0 和 0 个子步受地面支撑。Source 在承重后、交回前越出跟踪域；Full RB 飞越未通过，无双轮承重，未交回。[实测技能与扰动对照](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/phase4_contributions/RESULTS.md)
+
 > **2026-11-18结论撤回：** 用户指出成功视频没有明确主动跳跃。已复查视频：该案例不能作为主动起跳跨沟成功证据。旧goal/airborne标签仅保留作历史执行记录；P2机制解释及依赖它的后续跳跃结论需重新验收。不能将短暂无接触或到达目标替代真实起跳。
 
 

@@ -1,0 +1,5 @@
+window,skill,lane,force_n,impulse_ns,start_s,end_s,max_qpos_diff_from_nominal_through_pulse_onset,loaded_substeps_during_pulse,recorded_substeps,flight,far_touch,loaded_s,handoff_s,qualified,goal,termination,end_time_s
+launch_preparation,source,71,5,0.25,5.65,5.7,0.0,50,50,True,True,6.460000038146973,6.644999980926514,True,False,timeout,10.0
+launch_preparation,rb_run1,71,5,0.25,5.65,5.7,0.0,49,50,False,True,,,False,False,physical_failure,6.550000190734863
+flight,source,71,5,0.25,6.0,6.05,0.0,0,50,True,True,6.425000190734863,,False,False,tracking_domain_exit,6.559999942779541
+flight,rb_run1,71,5,0.25,6.0,6.05,0.0,0,50,False,True,,,False,False,physical_failure,6.84499979019165

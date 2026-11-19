@@ -9,6 +9,25 @@ import sys
 from run_playground_task_reversal import write_rows
 
 
+def paired_opportunities(outcomes):
+    by_contract = {}
+    for row in outcomes:
+        key = row['window'], row['bin'], row['task']
+        by_contract.setdefault(key, {})[row['skill']] = row
+    pairs = []
+    for (window, distance, task), skills in by_contract.items():
+        source, rb = skills['source'], skills['rb_run1']
+        # A prefix that never hands back cannot complete the full contract.
+        # Its conditional suffix result stays NA in the per-skill table.
+        a, b = (r['qualified'] and r['legal_suffix_exists'] for r in (source, rb))
+        comparison = ('retained' if a and b else 'gained' if b else 'lost' if a else 'neither')
+        pairs.append(dict(window=window, bin=distance, task=task,
+                          source_qualified=source['qualified'], full_rb_qualified=rb['qualified'],
+                          source_can_complete=a, full_rb_can_complete=b,
+                          full_rb_change=comparison, online_selected='NA'))
+    return pairs
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('run',type=Path)
@@ -54,6 +73,7 @@ def main():
                                      feasible_departures=' '.join(options) if accepted else 'NA',
                                      legal_suffix_exists=bool(options) if accepted else 'NA',online_selected='NA'))
         write_rows(root/'contract_opportunities.csv',outcomes)
+    write_rows(root/'paired_contract_opportunities.csv',paired_opportunities(outcomes))
     (root/'terminal.json').write_text(json.dumps(dict(physical_prefixes=len(physical),
         handbacks=sum(r['qualified']=='True' for r in physical),task_rows=len(outcomes)))+'\n')
 
