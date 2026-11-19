@@ -35,6 +35,11 @@ def main():
         states = starts.setdefault(key, set())
         if row['qualified'] == 'True':
             states.add((row['y_h_m'], row['yaw_h_rad']))
+    for row in read(evidence/'prefixes.csv'):
+        if float(row['width_m']) == .45:
+            states = starts.setdefault(('DEV 0.45 m', 'wide_oracle_045', row['root']), set())
+            if row['eligible'] == 'True':
+                states.add((row['handoff_y_m'], row['handoff_yaw_deg']))
     for row in read(evidence/'new_domain_prefixes.csv'):
         key = ('DEV new starts', known, row['root'])
         states = starts.setdefault(key, set())
@@ -71,7 +76,7 @@ def main():
             counts[role, map_id, label, category] += 1
             colors.append(categories.index(category))
         chart.append(colors)
-        tick_labels.append(f"{role}  {root}" + ('  new map' if map_id != known else ''))
+        tick_labels.append(f"{role}  {root}" + ('  new map' if role == 'Frozen transfer' and map_id != known else ''))
     totals = []
     for role, map_id in sorted({(r['role'],r['map']) for r in records}):
         for label in bins:

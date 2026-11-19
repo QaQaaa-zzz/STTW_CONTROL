@@ -75,7 +75,10 @@ for row in rows:
     if 'template' in prefixes[lane]:
         row['upstream_template_lane']=prefixes[lane]['template']
     row['speed_m_s']=cfg['oracle_initial_speed_m_s'][int(lane)]
-    row['approach_alpha']=cfg['oracle_initial_alpha'][int(lane)]
+    alpha = cfg.get('oracle_initial_alpha')
+    row['approach_alpha'] = None if alpha is None else float(np.broadcast_to(alpha, (len(audits),))[int(lane)])
+    if alpha is None:
+        row['approach_alpha_source'] = 'inherited_initial_snapshot'
     row['prefix']=str(Path(row['prefix']).relative_to(d))
     row['trajectory']=str(Path(row['trajectory']).relative_to(d))
 write_rows(out/'oracle_task_reversal.csv',rows)

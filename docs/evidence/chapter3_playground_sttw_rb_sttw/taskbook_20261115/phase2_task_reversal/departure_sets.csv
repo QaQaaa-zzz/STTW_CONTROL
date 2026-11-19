@@ -1,0 +1,61 @@
+map,root,prefix,bin,task,margin,feasible,kinematic_accepted,kinematic_contains_success,kinematic_contains_failure,phase2_accepted,phase2_contains_success,phase2_contains_failure
+wide_oracle_055,3,54,near,left,bare,,,False,False,,False,False
+wide_oracle_055,3,54,near,right,bare,straight,,False,False,straight,True,False
+wide_oracle_055,3,54,mid,left,bare,,,False,False,,False,False
+wide_oracle_055,3,54,mid,right,bare,straight,,False,False,straight,True,False
+wide_oracle_055,3,54,far,left,bare,,,False,False,,False,False
+wide_oracle_055,3,54,far,right,bare,,,False,False,straight,False,True
+wide_oracle_055,3,59,near,left,bare,,,False,False,,False,False
+wide_oracle_055,3,59,near,right,bare,straight,right straight,True,True,straight,True,False
+wide_oracle_055,3,59,mid,left,bare,,,False,False,,False,False
+wide_oracle_055,3,59,mid,right,bare,straight,right straight,True,True,straight,True,False
+wide_oracle_055,3,59,far,left,bare,,,False,False,,False,False
+wide_oracle_055,3,59,far,right,bare,straight,right,False,True,straight,True,False
+wide_oracle_055,3,54,near,left,shared_dev,,,False,False,,False,False
+wide_oracle_055,3,54,near,right,shared_dev,straight,,False,False,,False,False
+wide_oracle_055,3,54,mid,left,shared_dev,,,False,False,,False,False
+wide_oracle_055,3,54,mid,right,shared_dev,straight,,False,False,,False,False
+wide_oracle_055,3,54,far,left,shared_dev,,,False,False,,False,False
+wide_oracle_055,3,54,far,right,shared_dev,,,False,False,,False,False
+wide_oracle_055,3,59,near,left,shared_dev,,,False,False,,False,False
+wide_oracle_055,3,59,near,right,shared_dev,straight,right,False,True,straight,True,False
+wide_oracle_055,3,59,mid,left,shared_dev,,,False,False,,False,False
+wide_oracle_055,3,59,mid,right,shared_dev,straight,right,False,True,straight,True,False
+wide_oracle_055,3,59,far,left,shared_dev,,,False,False,,False,False
+wide_oracle_055,3,59,far,right,shared_dev,straight,right,False,True,straight,True,False
+wide_oracle_055,21950,76,near,left,bare,,,False,False,,False,False
+wide_oracle_055,21950,76,near,right,bare,straight,right,False,True,right straight,True,True
+wide_oracle_055,21950,76,mid,left,bare,,,False,False,,False,False
+wide_oracle_055,21950,76,mid,right,bare,straight,right,False,True,right straight,True,True
+wide_oracle_055,21950,76,far,left,bare,,,False,False,,False,False
+wide_oracle_055,21950,76,far,right,bare,,right,False,True,right straight,False,True
+wide_oracle_055,21950,76,near,left,shared_dev,,,False,False,,False,False
+wide_oracle_055,21950,76,near,right,shared_dev,straight,right,False,True,right,False,True
+wide_oracle_055,21950,76,mid,left,shared_dev,,,False,False,,False,False
+wide_oracle_055,21950,76,mid,right,shared_dev,straight,right,False,True,right,False,True
+wide_oracle_055,21950,76,far,left,shared_dev,,,False,False,,False,False
+wide_oracle_055,21950,76,far,right,shared_dev,,right,False,True,right,False,True
+wide_oracle_045,0,4,near,left,bare,,,False,False,,False,False
+wide_oracle_045,0,4,near,right,bare,,,False,False,right,False,True
+wide_oracle_045,0,4,mid,left,bare,,,False,False,,False,False
+wide_oracle_045,0,4,mid,right,bare,,,False,False,right,False,True
+wide_oracle_045,0,4,far,left,bare,,,False,False,,False,False
+wide_oracle_045,0,4,far,right,bare,,,False,False,right,False,True
+wide_oracle_045,0,4,near,left,shared_dev,,,False,False,,False,False
+wide_oracle_045,0,4,near,right,shared_dev,,,False,False,right,False,True
+wide_oracle_045,0,4,mid,left,shared_dev,,,False,False,,False,False
+wide_oracle_045,0,4,mid,right,shared_dev,,,False,False,right,False,True
+wide_oracle_045,0,4,far,left,shared_dev,,,False,False,,False,False
+wide_oracle_045,0,4,far,right,shared_dev,,,False,False,right,False,True
+wide_oracle_045,3,43,near,left,bare,,,False,False,,False,False
+wide_oracle_045,3,43,near,right,bare,,,False,False,straight,False,True
+wide_oracle_045,3,43,mid,left,bare,,,False,False,,False,False
+wide_oracle_045,3,43,mid,right,bare,,,False,False,straight,False,True
+wide_oracle_045,3,43,far,left,bare,,,False,False,,False,False
+wide_oracle_045,3,43,far,right,bare,,,False,False,straight,False,True
+wide_oracle_045,3,43,near,left,shared_dev,,,False,False,,False,False
+wide_oracle_045,3,43,near,right,shared_dev,,,False,False,,False,False
+wide_oracle_045,3,43,mid,left,shared_dev,,,False,False,,False,False
+wide_oracle_045,3,43,mid,right,shared_dev,,,False,False,,False,False
+wide_oracle_045,3,43,far,left,shared_dev,,,False,False,,False,False
+wide_oracle_045,3,43,far,right,shared_dev,,,False,False,,False,False

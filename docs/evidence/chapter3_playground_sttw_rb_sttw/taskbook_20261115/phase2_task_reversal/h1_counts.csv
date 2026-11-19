@@ -1,4 +1,7 @@
 role,map,bin,total_map_root_pairs,insufficient_prefixes,both_infeasible,shared_one_side,one_way_differentiation,both_universal,two_way
+DEV 0.45 m,wide_oracle_045,near,2,2,0,0,0,0,0
+DEV 0.45 m,wide_oracle_045,mid,2,2,0,0,0,0,0
+DEV 0.45 m,wide_oracle_045,far,2,2,0,0,0,0,0
 DEV approach search,wide_oracle_055,near,3,2,0,1,0,0,0
 DEV approach search,wide_oracle_055,mid,3,2,0,1,0,0,0
 DEV approach search,wide_oracle_055,far,3,2,0,0,1,0,0

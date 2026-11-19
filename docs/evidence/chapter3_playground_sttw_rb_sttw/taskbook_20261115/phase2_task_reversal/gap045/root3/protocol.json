@@ -1,0 +1,37 @@
+{
+  "input": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/active_jump_rebuild_map48/task_reversal_045",
+  "horizon_s": 10,
+  "contracts": {
+    "x_sections_m": [
+      12.7,
+      13.6,
+      15.0
+    ],
+    "target_time_s": [
+      0.7,
+      1.2,
+      2.0
+    ],
+    "left_y_interval_m": [
+      0.06,
+      3.9
+    ],
+    "right_y_interval_m": [
+      -3.9,
+      -0.06
+    ],
+    "point": "base origin first forward crossing after measured handback, linear interpolation",
+    "goal": "same physical map, true contact veto, native 0.5 s terminal hold by 10 s",
+    "scope": "Known map and one root. No layout adjustment based on score."
+  },
+  "snapshots_s": [
+    6.47,
+    6.83
+  ],
+  "duplicates": [],
+  "lanes": [
+    43
+  ],
+  "role": "Previously screened 0.45 m development map. One actual handback per start. Evaluate frozen ground predictions and the same two contracts on three actual departures; not an independent layout or an H1 pair.",
+  "budget": "One shared full-batch repeat for both roots; four new physical branch batches total. Zero training; stop at two roots, irrespective of scores."
+}

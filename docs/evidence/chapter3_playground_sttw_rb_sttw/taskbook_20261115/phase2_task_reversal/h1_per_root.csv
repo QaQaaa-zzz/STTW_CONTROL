@@ -8,6 +8,12 @@ DEV approach search,wide_oracle_055,3,far,2,one_way_differentiation,6,2.10136365
 DEV approach search,wide_oracle_055,21950,near,1,insufficient_prefixes,3,0.6498661041259766,0.660794734954834
 DEV approach search,wide_oracle_055,21950,mid,1,insufficient_prefixes,3,1.180060863494873,1.187633991241455
 DEV approach search,wide_oracle_055,21950,far,1,insufficient_prefixes,3,1.9343419075012207,1.9651312828063965
+DEV 0.45 m,wide_oracle_045,0,near,1,insufficient_prefixes,3,0.8636264801025391,0.8771929740905762
+DEV 0.45 m,wide_oracle_045,0,mid,1,insufficient_prefixes,3,1.4742326736450195,1.9245500564575195
+DEV 0.45 m,wide_oracle_045,0,far,1,insufficient_prefixes,3,2.279202461242676,2.279202461242676
+DEV 0.45 m,wide_oracle_045,3,near,1,insufficient_prefixes,3,0.5882411003112793,0.590853214263916
+DEV 0.45 m,wide_oracle_045,3,mid,1,insufficient_prefixes,3,1.1867189407348633,1.211700439453125
+DEV 0.45 m,wide_oracle_045,3,far,1,insufficient_prefixes,3,1.9760551452636719,2.0099573135375977
 DEV new starts,wide_oracle_055,21901,near,0,insufficient_prefixes,,,
 DEV new starts,wide_oracle_055,21901,mid,0,insufficient_prefixes,,,
 DEV new starts,wide_oracle_055,21901,far,0,insufficient_prefixes,,,
