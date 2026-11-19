@@ -1,0 +1,51 @@
+{
+  "audit": {
+    "solid_bank_landing_s": 6.485000133514404,
+    "solid_bank_goal": true,
+    "rear_supported_launch": true,
+    "rear_launch_both_far_s": 6.485000133514404,
+    "rear_launch_handoff": true,
+    "rear_launch_goal": true,
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "source_route76_h75_v76",
+    "skill": "source",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": 6.639999866485596,
+    "goal": true,
+    "termination": "goal",
+    "events": [
+      {
+        "rear_supported_launch": true,
+        "solid_bank_rear_launch": true,
+        "wheel_to_solid_bank_lower_bound_m": 0.0010643577592932413,
+        "start_s": 5.644999980926514,
+        "end_s": 6.195000171661377,
+        "unloaded_ms": 557.0,
+        "initial_com_vz_m_s": 2.410621901981021,
+        "com_rise_m": 0.3109933737890901,
+        "clearance_over_gap_m": 0.013845067685422721,
+        "front_start_x": 10.388650889188222,
+        "rear_end_x": 10.972701442429495,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  "root": 21950,
+  "initial_y_yaw_roll": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "goal": true,
+  "terminal_s": 9.885000228881836,
+  "goal_hold_s": 0.5049996972084045,
+  "front_rear_force_at_verified_landing_N": [
+    47.818084716796875,
+    268.6328125
+  ],
+  "max_locked_joint_deviation_rad": 6.783008575439453e-05,
+  "forbidden_contact_steps": 0,
+  "data_role": "Additional DEV start, original straight departure, frozen Source"
+}

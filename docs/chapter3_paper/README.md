@@ -1,13 +1,17 @@
 # 第三章任务书执行与文稿状态
 
-原始Source在0.55米开沟已有单条主动起跳、落地交回且终点保持0.505秒的实测，两批复跑各0/36。方法与视频见[宽沟实测](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p0_active_jump/RESULTS.md)。
+第三章考察一个具体决策：同一辆车从同一初态出发，若远岸改为必须通过另一侧检查点，是否需要在沟前就选择不同的接近路线？第一章的锁摆 STTW 执行地面接近和驶离，第二章提供冻结的 Source 与 Full RB。第三章以实测接管状态衔接两段控制，以整车碰障、检查点与终点保持共同评价整程。原 Full RB 在 map00 的 36 条中首触远岸 30 条，稳定交回 0 条；当前主矩阵使用冻结 Source。[任务书](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/STTW_第三章_Codex任务书.md) · [技能失败漏斗](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/phase1_mechanism/rb_funnel_diagnosis.md)
+
+**截至 11 月 19 日的可写结论。** 在 0.55 m 宽沟的一个开发初态，两条沟前右弯路线均产生核验飞越，远岸双轮承重并锁摆交回。两种接近各实跑直行、左绕和右绕三条后缀，同一轨迹分别按左右必经合同计分；三档均未观察到双向反转。远档只有一种接近能完成右侧任务。两条实际右绕均避开墙却因终点保持不足而超时，说明只检查碰撞会漏掉任务失败。[实际与参考 XY](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/phase2_task_reversal/task_reversal_xy.png) · [合同矩阵](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/phase2_task_reversal/oracle_task_reversal.csv)
+
+同一开发根、相同占据裕量下，复用地面动态模型将误放行由 3/31 降至 0/31，将误拒由 5/5 降至 2/5；三次纠正来自同一条物理超时轨迹。冻结两条接近移至两个新初态，原图和新布局各 0/4 稳定交回。随后八个开发初态的 144 个接近候选也未产生合格交回。当前证据支持在实测交回状态上研究短窗预测，另一个中心正向起步的开发初态已取得单条真跳、稳定交回并完成保持的实测（卸载 557 ms，9.885 s 完成）。已测试的两个独立迁移初态仍未能交回；双向任务反转及在线整程收益仍待验证。[逐例结果与迁移轨迹](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/phase2_task_reversal/RESULTS.md)
 
 > **2026-11-18结论撤回：** 用户指出成功视频没有明确主动跳跃。已复查视频：该案例不能作为主动起跳跨沟成功证据。旧goal/airborne标签仅保留作历史执行记录；P2机制解释及依赖它的后续跳跃结论需重新验收。不能将短暂无接触或到达目标替代真实起跳。
 
 
 当前执行依据为[新版任务书](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/STTW_第三章_Codex任务书.md)。旧DOCX不再指导实验。下方LaTeX/PDF是此前执行大纲下的文稿快照，尚未吸收新版任务书的全部实验；不能把编译完成视为P0–P6完成。
 
-| 阶段 | 当前证据与边界 |
+| 历史阶段 | 当时的证据与边界 |
 |---|---|
 | P0–P3 | 已有冻结、快照续接、Oracle和分段预测的有界实验；仍保留数值重放差异、预测误差和失败，不能称通用可靠技能世界模型。 |
 | P4 | 规定的全链实现和G/I/C/Oracle等对照已有记录；标定后C/I在机制案例均无计划，可靠规划能力未达到。见[阶段审查](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p4_sequence/stage_review/README.md)。 |
