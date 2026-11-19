@@ -5,9 +5,9 @@ DEV approach search,wide_oracle_055,0,far,0,insufficient_prefixes,,,
 DEV approach search,wide_oracle_055,3,near,2,shared_one_side,6,0.8163537979125977,0.8459029197692871
 DEV approach search,wide_oracle_055,3,mid,2,shared_one_side,6,1.340871810913086,1.3532614707946777
 DEV approach search,wide_oracle_055,3,far,2,one_way_differentiation,6,2.1013636589050293,2.1423392295837402
-DEV approach search,wide_oracle_055,21950,near,1,insufficient_prefixes,,,
-DEV approach search,wide_oracle_055,21950,mid,1,insufficient_prefixes,,,
-DEV approach search,wide_oracle_055,21950,far,1,insufficient_prefixes,,,
+DEV approach search,wide_oracle_055,21950,near,1,insufficient_prefixes,3,0.6498661041259766,0.660794734954834
+DEV approach search,wide_oracle_055,21950,mid,1,insufficient_prefixes,3,1.180060863494873,1.187633991241455
+DEV approach search,wide_oracle_055,21950,far,1,insufficient_prefixes,3,1.9343419075012207,1.9651312828063965
 DEV new starts,wide_oracle_055,21901,near,0,insufficient_prefixes,,,
 DEV new starts,wide_oracle_055,21901,mid,0,insufficient_prefixes,,,
 DEV new starts,wide_oracle_055,21901,far,0,insufficient_prefixes,,,

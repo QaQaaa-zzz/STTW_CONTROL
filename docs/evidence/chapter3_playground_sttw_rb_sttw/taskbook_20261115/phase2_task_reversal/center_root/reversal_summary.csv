@@ -1,0 +1,4 @@
+bin,map_root_pairs,prefix76,category,reached_section,physical_suffixes,min_T_s,max_T_s
+near,1,"(0, 1)",insufficient_prefixes,3,3,0.6498661041259766,0.660794734954834
+mid,1,"(0, 1)",insufficient_prefixes,2,3,1.180060863494873,1.187633991241455
+far,1,"(0, 0)",insufficient_prefixes,2,3,1.9343419075012207,1.9651312828063965

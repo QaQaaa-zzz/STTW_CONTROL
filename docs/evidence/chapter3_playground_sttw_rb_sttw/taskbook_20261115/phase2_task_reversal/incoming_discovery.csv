@@ -1,0 +1,3 @@
+group,lane,root,case,entry_s,entry_action_change_l2,original_flight,original_loaded,original_qualified,original_termination,ground_actions_flight,ground_actions_loaded,ground_actions_qualified,ground_actions_termination
+discovery,54,3,source_route54_h75_v54,4.0,1.0046762228012085,True,True,True,goal,False,False,False,physical_failure
+discovery,59,3,source_route59_h75_v59,4.0,1.004701018333435,True,True,True,goal,False,False,False,physical_failure

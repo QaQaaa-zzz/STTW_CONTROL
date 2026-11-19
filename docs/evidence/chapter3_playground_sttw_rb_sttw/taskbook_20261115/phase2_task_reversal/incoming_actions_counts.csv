@@ -1,0 +1,16 @@
+group,root,stage,cases,original,ground_actions,retained,gained,lost,neither
+discovery,3,flight,2,2,0,0,0,2,0
+discovery,3,loaded,2,2,0,0,0,2,0
+discovery,3,qualified,2,2,0,0,0,2,0
+new_roots,21901,flight,18,3,2,2,0,1,15
+new_roots,21901,loaded,18,1,2,0,2,1,15
+new_roots,21901,qualified,18,0,2,0,2,0,16
+new_roots,21902,flight,18,2,3,2,1,0,15
+new_roots,21902,loaded,18,0,2,0,2,0,16
+new_roots,21902,qualified,18,0,0,0,0,0,18
+new_roots,21903,flight,18,2,0,0,0,2,16
+new_roots,21903,loaded,18,0,0,0,0,0,18
+new_roots,21903,qualified,18,0,0,0,0,0,18
+new_roots,21904,flight,18,2,1,0,1,2,15
+new_roots,21904,loaded,18,0,0,0,0,0,18
+new_roots,21904,qualified,18,0,0,0,0,0,18
