@@ -55,11 +55,12 @@ def main():
     args = parser.parse_args()
     out = args.output.resolve()
     plan = json.loads((out/'plan.json').read_text())
+    skill = plan.get('skill', 'source')
     screen = Path(plan['input'])
     cfg = json.loads((screen/'screen.json').read_text())
     repeat = out/'repeat'
     if args.capture:
-        run(dict(cfg, snapshot_times_s=plan['snapshots_s'], snapshot_loaded_far=False), repeat, 'source', 10, out)
+        run(dict(cfg, snapshot_times_s=plan['snapshots_s'], snapshot_loaded_far=False), repeat, skill, 10, out)
     world = json.loads(Path(cfg['world_map']).read_text())
     original = json.loads((repeat/'status.json').read_text())['results']
     attempts = json.loads((repeat/'jump_validation.json').read_text())['cases']
@@ -91,7 +92,7 @@ def main():
         # Snapshots precede the discrete handback update at tick k. At k+1 the
         # runner already owns the actuator in phase 2 and preserves the lock/ESO.
         tick = round(hand/.005) + 1
-        anchor = repeat/f'source_anchor_{tick:05d}.pkl'
+        anchor = repeat/f'{skill}_anchor_{tick:05d}.pkl'
         for direction, name in enumerate(DIRECTIONS):
             path = repeat/filename
             result = case
@@ -107,7 +108,7 @@ def main():
                 if (child/'status.json').exists() and json.loads((child/'status.json').read_text()).get('results'):
                     result = json.loads((child/'status.json').read_text())['results'][lane]
                 else:
-                    result = run(suffix, child, 'source', 10, out)[lane]
+                    result = run(suffix, child, skill, 10, out)[lane]
                 path = child/filename
             with np.load(path) as z:
                 trace = z['trace']

@@ -1,0 +1,7 @@
+window,stage,pairs,source,full_rb,gained,retained,lost,neither
+nominal,flight,1,1,0,0,0,1,0
+nominal,qualified,1,1,0,0,0,1,0
+nominal,full_task,1,1,0,0,0,1,0
+launch_preparation,flight,1,1,0,0,0,1,0
+launch_preparation,qualified,1,1,0,0,0,1,0
+launch_preparation,full_task,1,0,0,0,0,0,1

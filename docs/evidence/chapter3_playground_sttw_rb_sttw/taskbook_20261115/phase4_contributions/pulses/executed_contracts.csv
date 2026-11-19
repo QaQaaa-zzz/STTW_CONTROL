@@ -1,0 +1,13 @@
+window,skill,bin,task,cross_s,cross_y_m,nominal_departure_pass
+nominal,source,near,left,7.33419942855835,-0.4674738943576813,False
+nominal,source,near,right,7.33419942855835,-0.4674738943576813,True
+nominal,source,mid,left,7.84826135635376,-0.2863074541091919,False
+nominal,source,mid,right,7.84826135635376,-0.2863074541091919,True
+nominal,source,far,left,8.601080894470215,-0.07577266544103622,False
+nominal,source,far,right,8.601080894470215,-0.07577266544103622,True
+launch_preparation,source,near,left,7.436058521270752,-0.38014480471611023,False
+launch_preparation,source,near,right,7.436058521270752,-0.38014480471611023,False
+launch_preparation,source,mid,left,8.019640922546387,-0.10660375654697418,False
+launch_preparation,source,mid,right,8.019640922546387,-0.10660375654697418,False
+launch_preparation,source,far,left,8.797171592712402,0.14048074185848236,False
+launch_preparation,source,far,right,8.797171592712402,0.14048074185848236,False

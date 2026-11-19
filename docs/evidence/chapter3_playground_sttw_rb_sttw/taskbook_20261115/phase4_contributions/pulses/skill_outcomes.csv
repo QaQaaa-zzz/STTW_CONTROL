@@ -1,0 +1,5 @@
+window,skill,flight,far_touch,loaded_s,handoff_s,qualified,original_goal,full_task,hold_s,termination,end_s
+nominal,source,True,True,6.349999904632568,6.494999885559082,True,True,True,0.5049996972084045,goal,9.914999961853027
+nominal,rb_run1,False,True,,,False,False,False,0.0,physical_failure,6.71999979019165
+launch_preparation,source,True,True,6.460000038146973,6.644999980926514,True,False,False,0.38999977707862854,timeout,10.0
+launch_preparation,rb_run1,False,True,,,False,False,False,0.0,physical_failure,6.550000190734863

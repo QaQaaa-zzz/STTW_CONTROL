@@ -1,0 +1,7 @@
+{
+  "input": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/active_jump_rebuild_map48/taskbook_paired_pulses",
+  "contracts": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/active_jump_rebuild_map48/task_reversal_pair/plan.json",
+  "departure_bank": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/rb_adaptation/approach_departure_turns/routes.npz",
+  "role": "DEV post-return physical opportunity only; upstream online selection is unavailable.",
+  "budget": "Complete the declared four pulse exposures first. Per qualified disturbed return, one full-state capture and two physical branches from its first locked tick. Stop after those cases. For no return, branch zero times and report NA. Same map, deadlines, contacts, controllers and frozen straight/left/right routes."
+}
