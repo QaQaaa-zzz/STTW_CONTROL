@@ -1,0 +1,7 @@
+group,lane,departure,bin,task,checkpoint_12s,wall_contact,termination_10s,termination_12s,hold_12s,end_12s,success_10s,success_12s
+task_reversal_pair,54,right,near,left,False,False,timeout,goal,0.5049996972084045,10.199999809265137,False,False
+task_reversal_pair,54,right,near,right,True,False,timeout,goal,0.5049996972084045,10.199999809265137,False,True
+task_reversal_pair,54,right,mid,left,False,False,timeout,goal,0.5049996972084045,10.199999809265137,False,False
+task_reversal_pair,54,right,mid,right,True,False,timeout,goal,0.5049996972084045,10.199999809265137,False,True
+task_reversal_pair,54,right,far,left,False,False,timeout,goal,0.5049996972084045,10.199999809265137,False,False
+task_reversal_pair,54,right,far,right,True,False,timeout,goal,0.5049996972084045,10.199999809265137,False,True

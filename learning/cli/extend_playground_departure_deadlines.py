@@ -33,13 +33,19 @@ def main():
                     ref=json.loads((folder/'repeat.json').read_text())['ground_handoff']['reference_path']
                     cfg.update(oracle_branch_reference=ref,ground_handoff=dict(cfg['ground_handoff'],reference_path=ref))
                 case=out/f'{group}_{lane}_{dep}'
-                result=run(cfg,case,'source',12,out)[int(lane)]
+                if (case/'status.json').exists() and (case.parent/(case.name+'.exit.json')).exists():
+                    result=json.loads((case/'status.json').read_text())['results'][int(lane)]
+                else:
+                    result=run(cfg,case,'source',12,out)[int(lane)]
                 next_path=case/result['case_dir']/'trajectory.npz'
                 with np.load(trajectory) as a,np.load(next_path) as b:
                     start=np.argmin(abs(a['trace'][:,0]-b['trace'][0,0]))
                     length=len(a['trace'])-start
-                    for field in ('qpos','qvel','applied_targets','trace'):
+                    for field in ('qpos','qvel','trace'):
                         np.testing.assert_array_equal(a[field][start:],b[field][:length])
+                    # The original final row records a state but applies no next command.
+                    valid=a['applied_target_valid'][start:].astype(bool)
+                    np.testing.assert_array_equal(a['applied_targets'][start:][valid],b['applied_targets'][:length][valid])
                     end=float(b['trace'][-1,0])
                     wall=bool(b['world_flags'][:,2].any())
                 trajectory=next_path

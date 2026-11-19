@@ -1,0 +1,9 @@
+{
+  "groups": {
+    "task_reversal_pair": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/active_jump_rebuild_map48/task_reversal_pair",
+    "task_reversal_center_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/active_jump_rebuild_map48/task_reversal_center_root",
+    "task_reversal_045_suffixes_root0": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/active_jump_rebuild_map48/task_reversal_045_suffixes/root0",
+    "task_reversal_045_suffixes_root3": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/active_jump_rebuild_map48/task_reversal_045_suffixes/root3"
+  },
+  "role": "DEV deadline diagnostic. Same frozen 15 physical branches, six censored at 10s. Continue those to 12s at most, retain earlier goal, crash or domain exit. Check overlap to 10s. No optimization or gate changes to the original task."
+}
