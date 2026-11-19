@@ -1,0 +1,13 @@
+root,approach,departure,outcome,handoff_s,wall,signed_min_m,time_s,robot_geom
+1001,1,0,goal,5.599999904632568,planning_obstacle_2,0.15886660238936115,6.534999847412109,base_collision
+1001,1,1,goal,5.599999904632568,planning_obstacle_2,0.2530880375469006,6.385000228881836,base_collision
+1001,1,2,forbidden_obstacle_contact,5.599999904632568,planning_obstacle_2,0.04576137713021223,6.619999885559082,base_collision
+1002,1,0,goal,5.605000019073486,planning_obstacle_2,0.1397673863064769,6.53000020980835,base_collision
+1002,1,1,goal,5.605000019073486,planning_obstacle_2,0.2358249159440187,6.375,base_collision
+1002,1,2,forbidden_obstacle_contact,5.605000019073486,planning_obstacle_2,0.02888015166956781,6.605000019073486,base_collision
+1001,2,0,forbidden_obstacle_contact,5.590000152587891,planning_obstacle_2,-0.005819346826612315,6.295000076293945,frontwheel_collision
+1001,2,1,forbidden_obstacle_contact,5.590000152587891,planning_obstacle_2,-0.0031524887294581976,6.309999942779541,frontwheel_collision
+1001,2,2,forbidden_obstacle_contact,5.590000152587891,planning_obstacle_2,-0.007317330618847218,6.335000038146973,frontwheel_collision
+1002,2,0,forbidden_obstacle_contact,5.590000152587891,planning_obstacle_2,-0.006977282015447256,6.304999828338623,frontwheel_collision
+1002,2,1,forbidden_obstacle_contact,5.590000152587891,planning_obstacle_2,-0.0069115937579463695,6.320000171661377,frontwheel_collision
+1002,2,2,forbidden_obstacle_contact,5.590000152587891,planning_obstacle_2,-0.00726435030834401,6.340000152587891,frontwheel_collision

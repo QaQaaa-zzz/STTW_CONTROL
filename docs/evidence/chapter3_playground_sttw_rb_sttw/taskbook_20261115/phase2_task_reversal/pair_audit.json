@@ -1,0 +1,128 @@
+[
+  {
+    "lane": 54,
+    "audit": {
+      "solid_bank_landing_s": 6.264999866485596,
+      "solid_bank_goal": true,
+      "rear_supported_launch": true,
+      "rear_launch_both_far_s": 6.264999866485596,
+      "rear_launch_handoff": true,
+      "rear_launch_goal": true,
+      "task_success": false,
+      "both_far_after_flight_s": null,
+      "case": "source_route54_h75_v54",
+      "skill": "source",
+      "flight": false,
+      "far_contact": true,
+      "handoff_s": 6.554999828338623,
+      "goal": true,
+      "termination": "goal",
+      "events": [
+        {
+          "rear_supported_launch": true,
+          "solid_bank_rear_launch": true,
+          "wheel_to_solid_bank_lower_bound_m": 0.001025545935825517,
+          "start_s": 5.679999828338623,
+          "end_s": 6.25,
+          "unloaded_ms": 576.0000000000001,
+          "initial_com_vz_m_s": 2.493694038148739,
+          "com_rise_m": 0.3311680223444479,
+          "clearance_over_gap_m": 0.04367376314783168,
+          "front_start_x": 10.386376263308351,
+          "rear_end_x": 10.944680254839303,
+          "bank_to_bank_flight": false
+        }
+      ]
+    },
+    "repeat": {
+      "qpos": "exact",
+      "qvel": "exact",
+      "trace": "exact",
+      "controller_state": "exact",
+      "rb_state": "exact",
+      "applied_targets": "exact",
+      "contact_substep": "exact"
+    },
+    "start": [
+      1.5,
+      -0.05000000074505806,
+      0.15000000596046448
+    ],
+    "handback_vector": [
+      6.554999828338623,
+      11.456324577331543,
+      -0.37815865874290466,
+      -0.009426917880773544,
+      0.05032268539071083,
+      0.005184458568692207
+    ],
+    "locked_joint_max_departure_rad": [
+      2.8967857360839844e-05,
+      5.626678466796875e-05
+    ],
+    "first_phase2_snapshot_s": 6.5600000000000005
+  },
+  {
+    "lane": 59,
+    "audit": {
+      "solid_bank_landing_s": 6.349999904632568,
+      "solid_bank_goal": true,
+      "rear_supported_launch": false,
+      "rear_launch_both_far_s": null,
+      "rear_launch_handoff": false,
+      "rear_launch_goal": false,
+      "task_success": false,
+      "both_far_after_flight_s": null,
+      "case": "source_route59_h75_v59",
+      "skill": "source",
+      "flight": false,
+      "far_contact": true,
+      "handoff_s": 6.494999885559082,
+      "goal": true,
+      "termination": "goal",
+      "events": [
+        {
+          "rear_supported_launch": false,
+          "solid_bank_rear_launch": true,
+          "wheel_to_solid_bank_lower_bound_m": 0.0018605968827564712,
+          "start_s": 5.75,
+          "end_s": 6.235000133514404,
+          "unloaded_ms": 495.0,
+          "initial_com_vz_m_s": 2.1045439763371405,
+          "com_rise_m": 0.23856503783013355,
+          "clearance_over_gap_m": -0.04221148414689618,
+          "front_start_x": 10.396152836170518,
+          "rear_end_x": 10.95701729857395,
+          "bank_to_bank_flight": false
+        }
+      ]
+    },
+    "repeat": {
+      "qpos": "exact",
+      "qvel": "exact",
+      "trace": "exact",
+      "controller_state": "exact",
+      "rb_state": "exact",
+      "applied_targets": "exact",
+      "contact_substep": "exact"
+    },
+    "start": [
+      1.5,
+      -0.05000000074505806,
+      0.15000000596046448
+    ],
+    "handback_vector": [
+      6.494999885559082,
+      11.35861587524414,
+      -0.4943099915981293,
+      -0.04341857135295868,
+      -0.17645925283432007,
+      -0.1275589019060135
+    ],
+    "locked_joint_max_departure_rad": [
+      3.516674041748047e-05,
+      2.8967857360839844e-05
+    ],
+    "first_phase2_snapshot_s": 6.5
+  }
+]

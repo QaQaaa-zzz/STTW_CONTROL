@@ -1,0 +1,9 @@
+map,root,lane,prefix,flight,landing_s,handoff_s,qualified,termination,end_s
+wide_oracle_055,19031,12,A,False,,,False,physical_failure,6.135000228881836
+wide_oracle_055,19031,17,B,True,,,False,physical_failure,6.355000019073486
+wide_oracle_055,19032,54,A,False,,,False,physical_failure,6.224999904632568
+wide_oracle_055,19032,59,B,False,,,False,physical_failure,6.34499979019165
+heldout_reversal_055_19033,19031,12,A,True,,,False,physical_failure,6.355000019073486
+heldout_reversal_055_19033,19031,17,B,False,,,False,physical_failure,6.019999980926514
+heldout_reversal_055_19033,19032,54,A,False,,,False,physical_failure,6.534999847412109
+heldout_reversal_055_19033,19032,59,B,False,,,False,physical_failure,5.940000057220459

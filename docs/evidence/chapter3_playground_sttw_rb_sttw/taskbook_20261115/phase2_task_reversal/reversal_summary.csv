@@ -1,0 +1,4 @@
+bin,map_root_pairs,prefix54,prefix59,category,reached_section,physical_suffixes,min_T_s,max_T_s
+near,1,"(0, 1)","(0, 1)",shared_one_side,6,6,0.8163537979125977,0.8459029197692871
+mid,1,"(0, 1)","(0, 1)",shared_one_side,4,6,1.340871810913086,1.3532614707946777
+far,1,"(0, 0)","(0, 1)",one_way_differentiation,4,6,2.1013636589050293,2.1423392295837402

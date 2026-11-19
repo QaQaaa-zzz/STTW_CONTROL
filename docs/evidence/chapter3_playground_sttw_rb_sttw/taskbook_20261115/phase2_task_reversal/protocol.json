@@ -1,0 +1,49 @@
+{
+  "role": "Existing TRAIN-labelled root, development use. Transfer table separate.",
+  "input": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/active_jump_rebuild_map48/task_reversal_bend_prefixes",
+  "lanes": [
+    54,
+    59
+  ],
+  "duplicates": [
+    55,
+    60
+  ],
+  "snapshots_s": [
+    6.495,
+    6.5,
+    6.555,
+    6.56
+  ],
+  "horizon_s": 10,
+  "budget": "one full 84-lane replay, compare all measured states to screen; two post-handoff counterfactual directions per prefix with frozen companions",
+  "contracts": {
+    "x_sections_m": [
+      12.7,
+      13.6,
+      15.0
+    ],
+    "target_time_s": [
+      0.7,
+      1.2,
+      2.0
+    ],
+    "left_y_interval_m": [
+      0.06,
+      3.9
+    ],
+    "right_y_interval_m": [
+      -3.9,
+      -0.06
+    ],
+    "point": "base origin first forward crossing after measured handback, linear interpolation",
+    "goal": "same physical map, true contact veto, native 0.5 s terminal hold by 10 s",
+    "scope": "Known map and one root. No layout adjustment based on score."
+  },
+  "model": "p3_multimap_models/residual_seed2/best.pt, update 575",
+  "margin": "p3_model_planning/calibration.json, M1 coordinatewise maxima of maps 06 and 07; zero margin also reported",
+  "source_actor": "original Source",
+  "initial_snapshot": "p2_trigger_oracle/055_source/neutral/source_initial_snapshot.pkl",
+  "replay": "Starting at task_reversal_bend_prefixes/screen.json, use snapshot_times_s from snapshots_s and snapshot_loaded_far=false for repeat; script run_playground_task_reversal.py consumes the plan and this repeat.",
+  "files_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/active_jump_rebuild_map48/task_reversal_pair"
+}
