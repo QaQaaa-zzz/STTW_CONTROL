@@ -114,7 +114,9 @@ def main():
         cfg=dict(cfg,world_map_spec=world,ditch_terrain=world['terrain'],ground_handoff=dict(cfg['ground_handoff'],goal=world['goal']))
         activation=world['terrain']['front_x_m']+cfg.get('planned_activation_offset_m',world['forward_obstacle']['activation_offset_m'])
         cfg['ground_handoff']['approach']['jump_start_x_m']=activation
-        for variant in cfg['ground_handoff'].get('handoff_variants',[]):variant['jump_start_x_m']=activation
+        for variant in cfg['ground_handoff'].get('handoff_variants',[]):
+            variant['jump_start_x_m']=(world['terrain']['front_x_m']+variant['activation_offset_m']
+                                       if 'activation_offset_m' in variant else activation)
     hand=cfg['ground_handoff']; terrain=cfg['ditch_terrain']
     if cfg.get('shared_adapters') and not (hand['landing_control']=='native' and hand['sttw_only_after_lock'] and hand['staged_native_handoff']):
         raise ValueError('Shared adapters require the frozen native landing and lock-first completion contract')

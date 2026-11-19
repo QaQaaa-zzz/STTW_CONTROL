@@ -1,0 +1,41 @@
+{
+  "cells": 144,
+  "approach_groups": 48,
+  "executed_departure_branches": 2,
+  "missing_loaded_snapshot": 0,
+  "counts": [
+    {
+      "map": "wide_oracle_045",
+      "skill": "rb_run1",
+      "approaches": 12,
+      "flight": 2,
+      "landing": 0,
+      "with_feasible_departure": 0
+    },
+    {
+      "map": "wide_oracle_045",
+      "skill": "source",
+      "approaches": 12,
+      "flight": 8,
+      "landing": 1,
+      "with_feasible_departure": 0
+    },
+    {
+      "map": "wide_oracle_055",
+      "skill": "rb_run1",
+      "approaches": 12,
+      "flight": 0,
+      "landing": 0,
+      "with_feasible_departure": 0
+    },
+    {
+      "map": "wide_oracle_055",
+      "skill": "source",
+      "approaches": 12,
+      "flight": 0,
+      "landing": 0,
+      "with_feasible_departure": 0
+    }
+  ],
+  "paired_feasibility_cases": []
+}

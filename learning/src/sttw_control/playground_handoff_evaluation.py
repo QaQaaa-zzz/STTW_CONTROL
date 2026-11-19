@@ -262,6 +262,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         snapshot_tick=round(cfg['snapshot_replay_s']/.005) if 'snapshot_replay_s' in cfg else None
         collection_ticks={round(t/.005) for t in cfg.get('snapshot_times_s',[])}
         stage_anchors={}
+        landing_captured=torch.zeros_like(alive)
         handoff_snapshot_saved=False
         memory_repeats=cfg.get('snapshot_memory_repeats',0)
         for replay in range(2+memory_repeats if snapshot_tick is not None else 1):
@@ -304,6 +305,11 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                     pending=deepcopy(runtime['planner']['pending']);rolling_events=deepcopy(runtime['planner']['events'])
                     jump_start=runtime['planner']['jump_start'].clone()
                 route=middle.route
+                if not replay and 'oracle_initial_speed_m_s' in cfg:
+                    speed_request=torch.as_tensor(cfg['oracle_initial_speed_m_s'],dtype=middle.v_user.dtype,device=device).expand_as(middle.v_user)
+                    if snapshot['tick']!=0 or not ((speed_request==1.8)|(speed_request==1.9)).all():
+                        raise ValueError('Oracle approach speed must be a validated request at the initial snapshot')
+                    middle.v_user=speed_request.clone()
                 if not replay and cfg.get('oracle_branch_reference'):
                     # Offline counterfactual command, not an online committed-preview update.
                     # Keep all control/ESO/history/held-command tensors; next scheduled update
@@ -325,6 +331,11 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 t=tick*.005
                 collect_handoff=cfg.get('snapshot_ground_handoff',False) and not handoff_snapshot_saved and tick%4==0 and bool(((phase==2)|~alive).all())
                 capture_stage=False
+                if cfg.get('snapshot_loaded_far') and not replay:
+                    loaded=alive & ~landing_captured & flags[:,2] & (substep_loads[:,-1,:2]>1e-5).all(1)
+                    if bool(loaded.any()):
+                        landing_captured |= loaded
+                        collection_ticks.add(tick)
                 if cfg.get('capture_handoff_stages') and not replay and len(stage_anchors)<3 and tick%4==0:
                     supported=substep_loads[:,-1,:2].amax(1)>1e-5
                     masks=torch.stack((alive&(phase==1)&supported&(q[:,0]>terrain['front_x_m']-.65)&(q[:,0]<terrain['front_x_m']-.15),
