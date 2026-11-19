@@ -10,6 +10,10 @@
 
 已完成同根 3、同车道 71、两种技能在两个独立施力窗口的 4 条配对实测。起跳准备受扰时仅 Source 锁摆交回，原直行在终点保持 0.390 s 后超时。空中窗口的 50 个子步，Source 与 Full RB 分别有 0 和 0 个子步受地面支撑。Source 在承重后、交回前越出跟踪域；Full RB 飞越未通过，无双轮承重，未交回。[实测技能与扰动对照](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/phase4_contributions/RESULTS.md)
 
+## 3.2 冻结跳跃技能的零样本迁移
+
+原 map00 上冻结 Source 与 Full RB 分别只有 1/36、0/36 次锁摆交回。Full RB 的 30/36 次远岸首触均未带来整车越过远岸的结果。在 0.55 m 沟的八个开发初态上，对两个冻结接近分别只改变沟前速度请求。1.8 与 2.0 m/s 两档下，Source 的核验飞越分别为 3/16、2/16，双轮承重各 1/16；Full RB 两档均为 0/16 次核验飞越。两种技能两档均无合格交回。原第二章 XML 是连续地面加台阶，迁移到本章真沟还增加了跨岸与落地交回要求。提高实测入口速度在这一有限筛查中未能恢复交回。后续同预算接口适配须获批准，并独立报告适配后的权重和结果。[八个初态实际与参考 XY](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/phase1_mechanism/domain_alignment/speed_xy.png) · [原始逐例、失败时序与适配提案](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/phase1_mechanism/domain_alignment/RESULTS.md)
+
 > **2026-11-18结论撤回：** 用户指出成功视频没有明确主动跳跃。已复查视频：该案例不能作为主动起跳跨沟成功证据。旧goal/airborne标签仅保留作历史执行记录；P2机制解释及依赖它的后续跳跃结论需重新验收。不能将短暂无接触或到达目标替代真实起跳。
 
 

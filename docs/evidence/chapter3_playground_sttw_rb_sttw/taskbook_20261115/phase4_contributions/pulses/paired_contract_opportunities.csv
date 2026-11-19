@@ -1,0 +1,13 @@
+window,bin,task,source_qualified,full_rb_qualified,source_can_complete,full_rb_can_complete,full_rb_change,online_selected
+launch_preparation,near,left,True,False,False,False,neither,NA
+launch_preparation,near,right,True,False,False,False,neither,NA
+launch_preparation,mid,left,True,False,False,False,neither,NA
+launch_preparation,mid,right,True,False,False,False,neither,NA
+launch_preparation,far,left,True,False,False,False,neither,NA
+launch_preparation,far,right,True,False,False,False,neither,NA
+flight,near,left,False,False,False,False,neither,NA
+flight,near,right,False,False,False,False,neither,NA
+flight,mid,left,False,False,False,False,neither,NA
+flight,mid,right,False,False,False,False,neither,NA
+flight,far,left,False,False,False,False,neither,NA
+flight,far,right,False,False,False,False,neither,NA

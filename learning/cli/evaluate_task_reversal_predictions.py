@@ -50,8 +50,19 @@ def evaluate():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ('matrix','model','calibration','output'):
         parser.add_argument(name,type=Path)
+    parser.add_argument('--deadline', type=float, default=10.)
+    parser.add_argument('--extended-truth', type=Path)
+    parser.add_argument('--group')
+    parser.add_argument('--fit-low-speed', action='store_true')
+    parser.add_argument('--margin-name', default='shared_dev')
     a = parser.parse_args()
     rows = list(csv.DictReader(a.matrix.open()))
+    if a.extended_truth:
+        with a.extended_truth.open() as stream:
+            truth = {(r['lane'],r['departure'],r['bin'],r['task']):r for r in csv.DictReader(stream) if r['group']==a.group}
+        for r in rows:
+            t = truth[r['lane'],r['departure'],r['bin'],r['task']]
+            r.update(success=t['success_12s'],termination=t['termination_12s'],checkpoint=t['checkpoint_12s'])
     runs = {(r['lane'],r['departure']):r for r in rows}
     out = a.output
     out.mkdir(exist_ok=True,parents=True)
@@ -75,7 +86,7 @@ def evaluate():
     model = load_history_model(a.model)
     model.terrain = TerrainFeatures(**raster_from_spec(cfg['ditch_terrain']),device='cuda') if model.terrain is not None else None
     dt = .02
-    steps = int(np.ceil(max(10-float(r['handoff_s']) for r in runs.values())/dt))
+    steps = int(np.ceil(max(a.deadline-float(r['handoff_s']) for r in runs.values())/dt))
     state = model.initialize(p,u,previous,memory)
     dynamic = model.rollout_state(state,*route,steps,request,torch.zeros(len(p),dtype=torch.long,device='cuda'))
     methods = {'kinematic':kinematic(model,p,u[:,0].clone(),request,route,steps),
@@ -89,13 +100,44 @@ def evaluate():
     boundaries = tensor(calibration[0]['edges'][1:-1])
     plan = json.loads((a.matrix.parent/'plan.json').read_text())['contracts']
     goal = cfg['ground_handoff']['goal']
+    if a.fit_low_speed:
+        # Fit exclusively on measured support residuals inside the predicted x range.
+        # Root exclusion and pooling across fits are performed before scoring.
+        edges = np.asarray(calibration[0]['edges'])
+        fit = []
+        predicted = dynamic['pose']
+        lows, highs = [v.cpu().numpy() for v in envelope(predicted)]
+        for i,((lane,dep),r) in enumerate(runs.items()):
+            hand = float(r['handoff_s'])
+            with np.load(r['trajectory']) as z:
+                start = np.argmin(abs(z['trace'][:,0]-(hand+.005)))
+                actual,_ = states(z['qpos'][start::4],z['qvel'][start::4],schema)
+                vx = float(z['qvel'][start,0])
+            if not 1.1 <= vx <= 1.5:
+                continue
+            n = np.count_nonzero(hand+.005+dt*np.arange(steps+1)<=a.deadline+1e-6)
+            x = predicted[i,:n,0].cpu().numpy()
+            order = np.argsort(x,kind='stable')
+            actual = actual[(actual[:,0]>=x.min()) & (actual[:,0]<=x.max())]
+            lo,hi = [v.cpu().numpy() for v in envelope(tensor(actual))]
+            interpolated = []
+            for support in (lows[i,:n],highs[i,:n]):
+                flat = support[order].reshape(n,-1)
+                interpolated.append(np.stack([np.interp(actual[:,0],x[order],col) for col in flat.T],axis=1).reshape(lo.shape))
+            miss = np.maximum(0,np.maximum(interpolated[0]-lo,hi-interpolated[1]))
+            regions = np.searchsorted(edges[1:-1],actual[:,0],side='right')
+            for region in np.unique(regions):
+                selected = miss[regions==region]
+                fit.append(dict(root=r['root'],lane=lane,departure=dep,vx_m_s=vx,region=int(region),
+                                samples=len(selected),peak_m=selected.max((0,1)).tolist()))
+        (out/'support_fit.json').write_text(json.dumps(fit,indent=2))
     reports = []
     for method,(pose,velocity,domain) in methods.items():
         low, high = envelope(pose)
         angles = euler(pose[:,:,3:7].reshape(-1,4)).reshape(len(p),-1,3)
         world_v = rotate(pose[:,:,3:7].reshape(-1,4),velocity[:,:,:3].reshape(-1,3)).reshape(len(p),-1,3)
         speed = world_v[:,:,0]*angles[:,:,2].cos()+world_v[:,:,1]*angles[:,:,2].sin()
-        for margin_name, margin in [('bare',torch.zeros_like(margins)),('shared_dev',margins)]:
+        for margin_name, margin in [('bare',torch.zeros_like(margins)),(a.margin_name,margins)]:
             eps = margin[torch.bucketize(pose[:,:,0].contiguous(),boundaries)]
             sep = torch.maximum((low-eps[:,:,None])[:,:,:,None]-(center+half),
                                 (center-half)-(high+eps[:,:,None])[:,:,:,None]).amax(-1)
@@ -112,7 +154,7 @@ def evaluate():
             for i,((lane,departure),r) in enumerate(runs.items()):
                 hand = float(r['handoff_s'])
                 t = hand+.005+dt*np.arange(steps+1)
-                n = np.count_nonzero(t<=10+1e-6)
+                n = np.count_nonzero(t<=a.deadline+1e-6)
                 hold = np.convolve(goal_cpu[i,:n].astype(int),np.ones(26,int),'valid')
                 ids = np.flatnonzero(hold==26)  # 26 samples span 0.500 s
                 stop = int(ids[0]+26) if len(ids) else n
@@ -129,6 +171,7 @@ def evaluate():
                                bin=label,task=side,predicted_pass=passed,actual_pass=success,
                                false_pass=passed and not success,false_reject=success and not passed,
                                predicted_hold=bool(len(ids)),minimum_axis_separation_m=closest,
+                               predicted_collision_free=closest>0,actual_collision=truth['termination']=='forbidden_obstacle_contact',
                                actual_termination=truth['termination'],actual_checkpoint=truth['checkpoint']))
     write_rows(out/'offline_false_accepts.csv',reports)
 
