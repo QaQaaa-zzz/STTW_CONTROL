@@ -51,6 +51,12 @@ def main():
         # These failed prefixes have no valid handback to branch.
         assert row['qualified'] == 'False'
 
+    for result in evidence.glob('matched_layout/matched_layout.csv'):
+        for row in read(result):
+            key = ('Known start, other layout', 'heldout_reversal_055_19033', row['root'])
+            starts.setdefault(key, set())
+            assert row['qualified'] == 'False'
+
     measured = {}
     for path in sorted(p.parent for p in evidence.rglob('reversal_summary.csv')):
         matrix = read(path/'oracle_task_reversal.csv')

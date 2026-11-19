@@ -1,0 +1,12 @@
+{
+  "input": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/active_jump_rebuild_map48/task_reversal_mirrored",
+  "map": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/active_jump_rebuild_map48/task_reversal_transfer/heldout_reversal_055_19033/map.json",
+  "lanes": [
+    47,
+    52,
+    76
+  ],
+  "role": "Matched previously successful DEV starts on the already frozen alternate physical map; not a new independent TEST.",
+  "budget": "One neutral initialization and one ten-second 84-lane replay with identical batch companions. Score only these three predeclared handbacks, and stop screening regardless of outcome.",
+  "hypothesis": "Earlier transfer changed both the start and terrain. Holding the successful starts and approach commands fixed isolates the physical layout change. Apply the original true-flight, loaded-landing and locked handback criteria."
+}

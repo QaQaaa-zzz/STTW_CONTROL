@@ -1,0 +1,4 @@
+root,lane,template,trigger_offset_m,original_handoff_s,flight,far_contact,loaded_s,handoff_s,qualified,goal,termination,end_s
+3,47,54,-1.91,6.554999828338623,False,False,,,False,False,physical_failure,6.375
+3,52,59,-1.95,6.494999885559082,False,True,,,False,False,physical_failure,6.554999828338623
+21950,76,54,-1.89,6.639999866485596,True,True,,,False,False,physical_failure,6.65500020980835
