@@ -68,7 +68,7 @@ def main():
         writer.writeheader()
         writer.writerows(rows)
     def approach_key(r):
-        return (r['initial_snapshot'],r['root'],r['approach'],r['speed_m_s'],r.get('activation_offset_m',''))
+        return (r['initial_snapshot'],r['root'],r['approach'],r['speed_m_s'],r.get('activation_offset_m',''),r.get('approach_alpha',''))
     groups={}
     for row in rows:
         groups.setdefault(approach_key(row),[]).append(row)
@@ -128,6 +128,8 @@ def main():
         name=f"{row['skill']}_root{row['root']}_{row['approach']}_{row['speed_m_s']}_{row['departure']}"
         if row.get('activation_offset_m'):
             name+=f"_x{row['activation_offset_m']}"
+        if row.get('approach_alpha'):
+            name+=f"_a{row['approach_alpha']}"
         d=join(row);t=d['trace'][:,0];folder=video/name;folder.mkdir(exist_ok=True)
         np.savez_compressed(folder/'trajectory.npz',**d)
         src=Path(row['suffix'] or row['prefix'])

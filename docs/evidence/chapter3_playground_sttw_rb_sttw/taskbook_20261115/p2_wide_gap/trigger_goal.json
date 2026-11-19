@@ -79,5 +79,11 @@
     ]
   },
   "obstacle_distance_lower_bound_m": 0.12691497849735467,
-  "source_trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/active_jump_rebuild_map48/p2_trigger_oracle/055_source/batch/source_route71_h75_v71/trajectory.npz"
+  "source_trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/active_jump_rebuild_map48/p2_trigger_oracle/055_source/batch/source_route71_h75_v71/trajectory.npz",
+  "frozen_policy": {
+    "actor_sha256": "a06acbc81aead7120a291cf82359189bff36ccfecde132615ae0f264ee3126e8",
+    "checkpoint_identity_sha256": "0307799fa5059cd55d81eedec9f33e89a53b75d1f718e29c919b74e01d1445e8",
+    "iteration": 0,
+    "data_role": "train"
+  }
 }

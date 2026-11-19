@@ -312,6 +312,11 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                     if snapshot['tick']!=0 or not ((speed_request==1.8)|(speed_request==1.9)).all():
                         raise ValueError('Oracle approach speed must be a validated request at the initial snapshot')
                     middle.v_user=speed_request.clone()
+                if not replay and 'oracle_initial_alpha' in cfg:
+                    alpha=torch.as_tensor(cfg['oracle_initial_alpha'],device=device,dtype=middle.alpha.dtype).expand_as(middle.alpha)
+                    if snapshot['tick']!=0 or not ((alpha>=0)&(alpha<=1)).all():
+                        raise ValueError('Oracle approach alpha must be in [0,1] at the initial snapshot')
+                    middle.alpha=alpha.clone()
                 if not replay and cfg.get('oracle_branch_reference'):
                     # Offline counterfactual command, not an online committed-preview update.
                     # Keep all control/ESO/history/held-command tensors; next scheduled update
