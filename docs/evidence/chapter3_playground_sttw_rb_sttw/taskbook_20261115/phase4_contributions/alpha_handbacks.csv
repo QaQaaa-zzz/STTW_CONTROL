@@ -1,0 +1,10 @@
+batch_alpha,approach_alpha,unchanged_control,root,lane,entry_s,entry_forward_m_s,flight,loaded_s,handoff_s,qualified,goal,termination,control_qpos_max_diff
+0,0,False,3,47,4.0,1.8223768472671509,True,6.264999866485596,6.554999828338623,True,True,goal,
+0,0,False,21950,76,4.019999980926514,1.8203132152557373,True,6.485000133514404,6.639999866485596,True,True,goal,
+0,0,True,3,52,4.0,1.794276475906372,True,6.349999904632568,6.494999885559082,True,True,goal,0.0
+0.5,0.5,False,3,47,3.880000114440918,1.8261504173278809,False,,,False,False,physical_failure,
+0.5,0.5,False,21950,76,3.880000114440918,1.8147356510162354,False,,,False,False,physical_failure,
+0.5,0,True,3,52,4.0,1.794276475906372,True,6.349999904632568,6.494999885559082,True,True,goal,0.0
+1,1,False,3,47,3.819999933242798,1.833923578262329,False,,,False,False,physical_failure,
+1,1,False,21950,76,3.8399999141693115,1.8444607257843018,True,,,False,False,physical_failure,
+1,0,True,3,52,4.0,1.794276475906372,True,6.349999904632568,6.494999885559082,True,True,goal,0.0

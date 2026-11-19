@@ -1,0 +1,16 @@
+{
+  "role": "Frozen 0.55 m DEV capability prerequisite for Phase 4. No online planning.",
+  "input": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/active_jump_rebuild_map48/task_reversal_mirrored",
+  "lanes": [
+    47,
+    76
+  ],
+  "control": 52,
+  "alphas": [
+    0,
+    0.5,
+    1
+  ],
+  "budget": "Reuse alpha zero. Two ten-second 84-lane batches; two modified lanes per batch; keep lane 52 at zero as a physical control. No search or further tuning. Report real Source entry speed and whether each fixed alpha has at least one verified loaded handback.",
+  "fixed": "Identical full initial snapshot, lane arrangement, Source, terrain, approach references, switch offsets, requested speed 1.8 and continuation alpha 0. No terrain or goal changes."
+}

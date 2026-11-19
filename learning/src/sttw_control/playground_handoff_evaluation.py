@@ -82,6 +82,8 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
     rb_model=mm.replace(opt=mm.opt.replace(timestep=jp.asarray(.005,dtype=mm.opt.timestep.dtype),integrator=type(mm.opt.integrator)(int(mujoco.mjtIntegrator.mjINT_RK4)))) if cfg.get('rb_physics') else mm
     rb_substeps=1 if cfg.get('rb_physics') else args.physics_substeps
 
+    pulse=cfg.get('world_y_force_pulse')
+    pulse_edges={} if pulse is None else {pulse['start_tick']:pulse['force_n'],pulse['stop_tick']:0.0}
     world=cfg.get('world_map_spec')
     signal_window=[terrain['front_x_m']+v for v in world['forward_obstacle']['jump_signal_offsets_m']] if world else [9.5,11.]
     jump_adapter=JumpAdapter(home_pose,joint_kp,tensor(model.actuator_ctrlrange[2:,0]).float(),tensor(model.actuator_ctrlrange[2:,1]).float(),home_compensation)
@@ -519,6 +521,13 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                     last=jp.where(to_jax((phase==4)&alive)[:,None],to_jax(actual),last)
                 if cfg.get('collect_model_state'):
                     applied_rows.append(target.clone());applied_masks.append(alive.clone())
+                if tick in pulse_edges:
+                    # Free-root translation uses world axes. Leave all other lanes and DOFs untouched.
+                    lane=pulse['lane']
+                    data=data.replace(qfrc_applied=data.qfrc_applied.at[lane,1].set(pulse_edges[tick]))
+                    receipt=dict(tick=tick,time_s=tick*.005,lane=lane,world_y_force_n=float(data.qfrc_applied[lane,1]))
+                    with (args.output/'applied_pulse.jsonl').open('a') as stream:
+                        stream.write(json.dumps(receipt)+'\n')
                 step_args=(data,to_jax(target),to_jax(lock),to_jax(torch.where(phase>=2,landing_damping,.1)),to_jax(phase==1 if align_landing else ((phase==1)|(phase==3))),to_jax((phase==0)|(phase==2)),to_jax(alive))
                 if tick==start_tick and cfg.get('physics_repeat_probe'):
                     probe=cfg['physics_repeat_probe']
