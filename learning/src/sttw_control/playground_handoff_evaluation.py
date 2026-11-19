@@ -293,6 +293,8 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                     with (args.output/f'{name}_runtime_snapshot.pkl').open('rb') as stream:snapshot=pickle.load(stream)
                 data,(history,obs,last),runtime=restore_snapshot(snapshot,ground_adapter)
                 phase,alive,recovering,stable_time,upper_ready_time,airborne,flags,far_time,entry_time,handoff_time,hold,lock,target,codes,durations,ownership_error,substep_loads=(runtime[key] for key in ['phase', 'alive', 'recovering', 'stable_time', 'upper_ready_time', 'airborne', 'flags', 'far_time', 'entry_time', 'handoff_time', 'hold', 'lock', 'target', 'codes', 'durations', 'ownership_error', 'substep_loads'])
+                # Live lanes inherit the new horizon when extending a short snapshot run.
+                durations=torch.where(alive,torch.full_like(durations,args.seconds),durations)
                 if use_apex:
                     if 'rb_events' in runtime:
                         rb_events=runtime['rb_events']

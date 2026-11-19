@@ -1,0 +1,83 @@
+{
+  "case": {
+    "continuation_alpha": 0.0,
+    "case_dir": "source_route71_h75_v71",
+    "variant": {
+      "landing_height_m": 0.6,
+      "swing_scale": 1.0,
+      "jump_start_x_m": 8.350000000000001,
+      "rb_far_height_offset_m": 0.0,
+      "gate_roll_rad": 0.15,
+      "gate_roll_rate": 0.6,
+      "gate_hold_s": 0.0,
+      "recovery_wc": 8.0,
+      "body_speed_feedback": true,
+      "recovery_eso_scale": 1.0,
+      "recovery_eso_delay_s": 0.0,
+      "start_y_m": -0.05,
+      "start_yaw_rad": 0.03,
+      "start_roll_rad": 0.015,
+      "lookahead_scale": 1.3,
+      "root_variant": 3,
+      "data_split": "TRAIN",
+      "requested_speed_m_s": 1.8,
+      "approach_speed_m_s": 1.8,
+      "continuation_speed_m_s": 1.8,
+      "activation_offset_m": -1.95
+    },
+    "skill": "source",
+    "route": 71,
+    "continuation": "h75",
+    "termination": "goal",
+    "actuator_owner_max_difference": null,
+    "nonwheel_contact_steps": 0,
+    "forbidden_contact_steps": 0,
+    "goal": true,
+    "rb_entry_s": 4.0,
+    "goal_hold_s": 0.5049996972084045,
+    "airborne": true,
+    "far_contact": true,
+    "first_far_contact_s": 6.239999771118164,
+    "handoff_s": 6.494999885559082,
+    "duration_s": 9.914999961853027,
+    "final_xy": [
+      17.43433952331543,
+      -0.11745867133140564
+    ]
+  },
+  "flight_audit": {
+    "solid_bank_landing_s": 6.349999904632568,
+    "solid_bank_goal": true,
+    "rear_supported_launch": false,
+    "rear_launch_both_far_s": null,
+    "rear_launch_handoff": false,
+    "rear_launch_goal": false,
+    "task_success": false,
+    "both_far_after_flight_s": null,
+    "case": "source_route71_h75_v71",
+    "skill": "source",
+    "flight": false,
+    "far_contact": true,
+    "handoff_s": 6.494999885559082,
+    "goal": true,
+    "termination": "goal",
+    "events": [
+      {
+        "rear_supported_launch": false,
+        "solid_bank_rear_launch": true,
+        "wheel_to_solid_bank_lower_bound_m": 0.0018605968827564712,
+        "start_s": 5.75,
+        "end_s": 6.235000133514404,
+        "unloaded_ms": 495.0,
+        "initial_com_vz_m_s": 2.1045439763371405,
+        "com_rise_m": 0.23856503783013355,
+        "clearance_over_gap_m": -0.04221148414689618,
+        "front_start_x": 10.396152836170518,
+        "rear_end_x": 10.95701729857395,
+        "bank_to_bank_flight": false
+      }
+    ]
+  },
+  "obstacle_distance_lower_bound_m": 0.12691497849735467,
+  "source_trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/active_jump_rebuild_map48/p2_trigger_oracle/055_source/batch/source_route71_h75_v71/trajectory.npz"
+}

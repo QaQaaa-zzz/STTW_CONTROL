@@ -68,7 +68,7 @@ def main():
         writer.writeheader()
         writer.writerows(rows)
     def approach_key(r):
-        return (r['initial_snapshot'],r['root'],r['approach'],r['speed_m_s'])
+        return (r['initial_snapshot'],r['root'],r['approach'],r['speed_m_s'],r.get('activation_offset_m',''))
     groups={}
     for row in rows:
         groups.setdefault(approach_key(row),[]).append(row)
@@ -109,7 +109,7 @@ def main():
     candidates=[]
     for a,b in itertools.combinations(rows,2):
         if (a['initial_snapshot'],a['root'])!=(b['initial_snapshot'],b['root']):continue
-        if (a['approach'],a['speed_m_s'])==(b['approach'],b['speed_m_s']):continue
+        if approach_key(a)==approach_key(b):continue
         # Prefer two actual jumps and different full outcomes, then two loaded landings.
         flights=sum(has_flight(r) for r in (a,b))
         pair=[approach_key(a),approach_key(b)]
@@ -126,6 +126,8 @@ def main():
     rendered=[]
     for i,row in enumerate((a,b)):
         name=f"{row['skill']}_root{row['root']}_{row['approach']}_{row['speed_m_s']}_{row['departure']}"
+        if row.get('activation_offset_m'):
+            name+=f"_x{row['activation_offset_m']}"
         d=join(row);t=d['trace'][:,0];folder=video/name;folder.mkdir(exist_ok=True)
         np.savez_compressed(folder/'trajectory.npz',**d)
         src=Path(row['suffix'] or row['prefix'])

@@ -1,0 +1,12 @@
+{
+  "case": "source_route71_h75_v71",
+  "equal": {
+    "qpos": true,
+    "qvel": true,
+    "rb_state": true,
+    "controller_state": true,
+    "applied_targets": true,
+    "trace": true
+  },
+  "termination": "goal"
+}

@@ -49,7 +49,7 @@ def write_matrix(output, rows):
         writer.writerows(rows)
 
 
-def departures(originals,case,skill,cfg,bank,model,root,world_id,up,speed,output,selected_lanes):
+def departures(originals,case,skill,cfg,bank,model,root,world_id,up,speed,output,selected_lanes,route_ids=None):
     group=case.parent
     h=cfg['ground_handoff']
     results=[]
@@ -67,13 +67,14 @@ def departures(originals,case,skill,cfg,bank,model,root,world_id,up,speed,output
         for down in range(3):
             row=orig
             pose=prefix['qpos']; suffix=''
+            end_s=float(t[-1])
             status='failed_prefix'
             if landing is not None:
                 status='continuous' if down==0 else 'branched'
             if down and landing is not None:
                 anchor=case/f'{skill}_anchor_{tick:05d}.pkl'
                 child=group/f'{case.name}_root{lane}_{DIRECTIONS[down]}'
-                ids=[3*up]*2
+                ids=list(route_ids) if route_ids is not None else [3*up]*2
                 ids[lane]+=down
                 childref=routes(bank,ids,group/(child.name+'_routes.npz'))
                 if anchor.exists():
@@ -86,6 +87,7 @@ def departures(originals,case,skill,cfg,bank,model,root,world_id,up,speed,output
                         np.testing.assert_array_equal(prefix['qpos'][k],z['qpos'][0])
                         np.testing.assert_array_equal(prefix['qvel'][k],z['qvel'][0])
                         pose=np.concatenate((pose[:k],z['qpos']))
+                        end_s=float(z['trace'][-1,0])
                 else:
                     status='missing_loaded_snapshot'
             _,clearance=obstacle_aabb_bounds(model,pose)
@@ -95,7 +97,7 @@ def departures(originals,case,skill,cfg,bank,model,root,world_id,up,speed,output
                 initial_snapshot=str(root),activation_offset_m=cfg['planned_activation_offset_m'],approach=DIRECTIONS[up],speed_m_s=speed,departure=DIRECTIONS[down],
                 strict_flight=jump['flight'],rear_launch_solid=any(e['solid_bank_rear_launch'] for e in jump['events']),
                 landing_s=landing,handoff_s=row['handoff_s'],goal=row['goal'],full_success=success,
-                status=status,termination=row['termination'],end_s=row['duration_s'],
+                status=status,termination=row['termination'],end_s=end_s,
                 obstacle_distance_lower_bound_m=clearance,prefix=str(case/orig['case_dir']/'trajectory.npz'),suffix=suffix))
         prefix.close()
     return results
