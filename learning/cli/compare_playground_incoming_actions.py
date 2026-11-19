@@ -37,6 +37,8 @@ def main():
                 k=np.flatnonzero(np.isclose(before['trace'][:,0],r['rb_entry_s'],atol=1e-6,rtol=0)).item()
                 for field in ('qpos','qvel'):
                     np.testing.assert_array_equal(before[field][:k+1],after[field][:k+1])
+                if not np.isfinite(after['rb_state'][k]).all():
+                    raise ValueError(f'Nonfinite Source observation at handback into jump skill: {r["case_dir"]}')
                 record['entry_action_change_l2']=float(np.linalg.norm(after['rb_state'][k,-4:]-before['rb_state'][k,-4:]))
             for method,result,audits in zip(('original','ground_actions'),(base,r),both):
                 audit=audits[lane]

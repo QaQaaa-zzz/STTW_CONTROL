@@ -540,7 +540,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                         span=torch.where(delta>=0,hi[2:]-home_pose,home_pose-lo[2:])
                         ground_action=torch.cat((target[:,:1]/hi[0],
                             (target[:,1:2]-action_mapping.base_rear_speed)/action_mapping.rear_speed_delta,
-                            delta/span),dim=1).clamp(-1,1)
+                            delta/torch.where(delta==0,1.,span)),dim=1).clamp(-1,1)
                         last=jp.where(to_jax(alive&((phase==0)|(phase==2)))[:,None],to_jax(ground_action),last)
                     if use_apex:
                         rb_events,signal=native_signal(rb_events,data,to_jax(~alive))
