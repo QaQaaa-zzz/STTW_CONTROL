@@ -1,0 +1,17 @@
+configuration,lanes,strict_airborne_crossings,subsequent_both_far_loaded,any_STTW_return,any_goal,strict_full_goal
+rb_045_box_generic,36,9,0,0,0,0
+rb_045_box_native,36,0,0,0,0,0
+rb_045_field_generic,36,2,0,0,0,0
+rb_045_field_native,36,0,0,0,0,0
+rb_055_box_generic,36,2,0,0,0,0
+rb_055_box_native,36,0,0,0,0,0
+rb_055_field_generic,36,1,0,0,0,0
+rb_055_field_native,36,0,0,0,0,0
+source_045_box_generic,36,21,10,3,0,0
+source_045_box_native,36,11,1,1,0,0
+source_045_field_generic,36,10,1,0,0,0
+source_045_field_native,36,4,0,0,0,0
+source_055_box_generic,36,8,3,2,0,0
+source_055_box_native,36,3,0,1,1,0
+source_055_field_generic,36,5,2,0,0,0
+source_055_field_native,36,0,0,1,0,0

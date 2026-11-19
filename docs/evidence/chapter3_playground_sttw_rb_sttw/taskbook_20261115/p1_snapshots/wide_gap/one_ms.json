@@ -1,0 +1,262 @@
+{
+  "physics_first_substep": {
+    "full_pre": {
+      "tick": 952,
+      "repeats": 5,
+      "lanes": [
+        2,
+        6,
+        10
+      ],
+      "span": {
+        "qacc": [
+          0.0019073486328125,
+          0.00598907470703125,
+          0.0069580078125
+        ],
+        "qacc_smooth": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "qfrc_actuator": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "qfrc_bias": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "qfrc_constraint": [
+          0.00018310546875,
+          0.0009174346923828125,
+          0.0008563995361328125
+        ],
+        "qfrc_passive": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "qfrc_smooth": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "qpos": [
+          0.0,
+          1.862645149230957e-09,
+          1.862645149230957e-09
+        ],
+        "qvel": [
+          1.9073486328125e-06,
+          5.990266799926758e-06,
+          6.67572021484375e-06
+        ]
+      }
+    },
+    "source_far": {
+      "tick": 1160,
+      "repeats": 5,
+      "lanes": [
+        6
+      ],
+      "span": {
+        "qacc": [
+          0.376953125
+        ],
+        "qacc_smooth": [
+          0.0
+        ],
+        "qfrc_actuator": [
+          0.0
+        ],
+        "qfrc_bias": [
+          0.0
+        ],
+        "qfrc_constraint": [
+          0.1164703369140625
+        ],
+        "qfrc_passive": [
+          0.0
+        ],
+        "qfrc_smooth": [
+          0.0
+        ],
+        "qpos": [
+          2.384185791015625e-07
+        ],
+        "qvel": [
+          0.00023174285888671875
+        ]
+      }
+    },
+    "source_return": {
+      "tick": 1296,
+      "repeats": 5,
+      "lanes": [
+        7
+      ],
+      "span": {
+        "qacc": [
+          6.866455078125e-05
+        ],
+        "qacc_smooth": [
+          0.0
+        ],
+        "qfrc_actuator": [
+          0.0
+        ],
+        "qfrc_bias": [
+          0.0
+        ],
+        "qfrc_constraint": [
+          9.059906005859375e-06
+        ],
+        "qfrc_passive": [
+          0.0
+        ],
+        "qfrc_smooth": [
+          0.0
+        ],
+        "qpos": [
+          0.0
+        ],
+        "qvel": [
+          5.960464477539063e-08
+        ]
+      }
+    }
+  },
+  "constraint_order_substep": {
+    "full_pre": {
+      "tick": 952,
+      "repeats": 5,
+      "lanes": [
+        2,
+        6,
+        10
+      ],
+      "span": {
+        "qacc": [
+          0.00189208984375,
+          6.103515625e-05,
+          0.0041656494140625
+        ],
+        "qacc_smooth": [
+          0.0,
+          0.0,
+          5.7220458984375e-06
+        ],
+        "qfrc_actuator": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "qfrc_bias": [
+          0.0,
+          0.0,
+          3.814697265625e-06
+        ],
+        "qfrc_constraint": [
+          0.00018310546875,
+          2.288818359375e-05,
+          0.000576019287109375
+        ],
+        "qfrc_passive": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "qfrc_smooth": [
+          0.0,
+          0.0,
+          3.814697265625e-06
+        ],
+        "qpos": [
+          0.0,
+          0.0,
+          1.862645149230957e-09
+        ],
+        "qvel": [
+          1.9073486328125e-06,
+          3.864988684654236e-08,
+          3.814697265625e-06
+        ]
+      }
+    },
+    "source_far": {
+      "tick": 1160,
+      "repeats": 5,
+      "lanes": [
+        6
+      ],
+      "span": {
+        "qacc": [
+          0.0
+        ],
+        "qacc_smooth": [
+          0.0
+        ],
+        "qfrc_actuator": [
+          0.0
+        ],
+        "qfrc_bias": [
+          0.0
+        ],
+        "qfrc_constraint": [
+          0.0
+        ],
+        "qfrc_passive": [
+          0.0
+        ],
+        "qfrc_smooth": [
+          0.0
+        ],
+        "qpos": [
+          0.0
+        ],
+        "qvel": [
+          0.0
+        ]
+      }
+    },
+    "source_return": {
+      "tick": 1296,
+      "repeats": 5,
+      "lanes": [
+        7
+      ],
+      "span": {
+        "qacc": [
+          0.0
+        ],
+        "qacc_smooth": [
+          0.0
+        ],
+        "qfrc_actuator": [
+          0.0
+        ],
+        "qfrc_bias": [
+          0.0
+        ],
+        "qfrc_constraint": [
+          0.0
+        ],
+        "qfrc_passive": [
+          0.0
+        ],
+        "qfrc_smooth": [
+          0.0
+        ],
+        "qpos": [
+          0.0
+        ],
+        "qvel": [
+          0.0
+        ]
+      }
+    }
+  }
+}

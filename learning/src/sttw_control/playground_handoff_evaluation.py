@@ -143,15 +143,19 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
     telemetry=cfg.get('contact_substep_telemetry',False)
     audit_owner=cfg.get('audit_actuator_owner',True)
 
+    def substep_with_brakes(d,c,lock,damping):
+        plant=mm.replace(eq_data=mm.eq_data.at[brake_ids,0].set(lock),actuator_biasprm=mm.actuator_biasprm.at[0,2].set(-damping))
+        return mjx_env.step(plant,d,c,1)
+
+    def prepare_substeps(data,damping,rb,locked):
+        return (data.replace(eq_active=data.eq_active.at[:,brake_ids].set(locked[:,None])),
+                jp.where(rb,-mm.actuator_biasprm[0,2],damping))
+
     @jax.jit
     def advance_with_contacts(data,ctrl,locks,damping,rb,locked,alive):
-        data=data.replace(eq_active=data.eq_active.at[:,brake_ids].set(locked[:,None]))
-        damping=jp.where(rb,-mm.actuator_biasprm[0,2],damping)
-        def one(d,c,lock,damp):
-            plant=mm.replace(eq_data=mm.eq_data.at[brake_ids,0].set(lock),actuator_biasprm=mm.actuator_biasprm.at[0,2].set(-damp))
-            return mjx_env.step(plant,d,c,1)
+        data,damping=prepare_substeps(data,damping,rb,locked)
         def substep(d,_):
-            new=jax.vmap(one)(d,ctrl,locks,damping)
+            new=jax.vmap(substep_with_brakes)(d,ctrl,locks,damping)
             loads=normal_loads(new,terrain_geoms,(idx.frontwheel_geom_id,idx.rearwheel_geom_id),geometry.body_geom_ids)
             return new,loads
         result,loads=jax.lax.scan(substep,data,None,length=args.physics_substeps)
@@ -160,6 +164,14 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
             return jp.where(alive.reshape((n,)+(1,)*(new.ndim-1)),new,old)
         result=jax.tree_util.tree_map_with_path(freeze,result,data)
         return result,contacts(result),jp.where(alive[:,None,None],loads.transpose(1,0,2),jp.nan)
+
+    @jax.jit
+    def probe_first_substep(data,ctrl,locks,damping,rb,locked,alive):
+        data,damping=prepare_substeps(data,damping,rb,locked)
+        new=jax.vmap(substep_with_brakes)(data,ctrl,locks,damping)
+        return {key:getattr(new,key) for key in (
+            'qfrc_bias','qfrc_passive','qfrc_actuator','qfrc_smooth','qacc_smooth',
+            'qfrc_constraint','qacc','qvel','qpos')}
 
     @jax.jit
     def observe(data):
@@ -483,6 +495,13 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 if cfg.get('collect_model_state'):
                     applied_rows.append(target.clone());applied_masks.append(alive.clone())
                 step_args=(data,to_jax(target),to_jax(lock),to_jax(torch.where(phase>=2,landing_damping,.1)),to_jax(phase==1 if align_landing else ((phase==1)|(phase==3))),to_jax((phase==0)|(phase==2)),to_jax(alive))
+                if tick==start_tick and cfg.get('physics_repeat_probe'):
+                    probe=cfg['physics_repeat_probe']
+                    outputs=[probe_first_substep(*step_args) for _ in range(probe['repeats'])]
+                    low=jax.tree.map(lambda *xs:jp.min(jp.stack(xs),axis=0),*outputs)
+                    ranges=jax.tree.map(lambda lo,*xs:(jp.max(jp.stack(xs),axis=0)-lo).reshape(n,-1).max(1),low,*outputs)
+                    measured={k:np.asarray(v)[probe['lanes']].tolist() for k,v in ranges.items()}
+                    (args.output/'physics_repeat_probe.json').write_text(json.dumps(dict(tick=tick,**probe,span=measured),indent=2))
                 if telemetry:
                     data,jflags,loads=advance_with_contacts(*step_args);substep_loads=to_torch(loads)
                 else:data,jflags=advance(*step_args)
