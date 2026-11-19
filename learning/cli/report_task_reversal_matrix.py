@@ -2,7 +2,6 @@
 import argparse
 import csv
 import json
-from collections import defaultdict
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -23,7 +22,15 @@ model = mujoco.MjModel.from_binary_path(str(d/'repeat/terrain.mjb'))
 wall = next(i for i in range(model.ngeom) if model.geom(i).name.startswith('planning_obstacle_'))
 robot = np.flatnonzero((model.geom_bodyid>0)&((model.geom_contype|model.geom_conaffinity)!=0))
 md = mujoco.MjData(model)
-fig, axes = plt.subplots(2,1,figsize=(10,5.8),layout='constrained')
+plan = json.loads((d/'plan.json').read_text())
+lanes = [str(lane) for lane in plan['lanes']]
+screen = Path(plan['input'])
+prefixes = {r['lane']:r for r in csv.DictReader((screen/'prefixes.csv').open())}
+cfg = json.loads((screen/'screen.json').read_text())
+world = json.loads(Path(cfg['world_map']).read_text())
+out.mkdir(exist_ok=True,parents=True)
+fig, panels = plt.subplots(len(lanes),1,figsize=(10,2.9*len(lanes)),squeeze=False,layout='constrained')
+axes = panels[:,0]
 witnesses = {}
 for row in rows:
     key = row['lane'], row['departure']
@@ -43,47 +50,51 @@ for row in rows:
         lb = np.linalg.norm(np.maximum(abs(centers-md.geom_xpos[wall])-half-model.geom_size[wall],0),axis=1)
         best = update_wall_minimum(model,md,robot,wall,rot,lb,best,t[k])
     witnesses[key] = best or (None,None,None)
-    ax = axes[['54','59'].index(key[0])]
+    ax = axes[lanes.index(key[0])]
     color = {'left':'#d55e00','right':'#029e73','straight':'#0072b2'}[key[1]]
     ax.plot(*ref.T,':',color=color,lw=.7)
     ax.plot(*q[t>=hand,:2].T,label=key[1],color=color)
     ax.plot(*q[-1,:2],'x',color=color)
-for ax,num in zip(axes,(54,59)):
+for ax,num in zip(axes,lanes):
     corner = model.geom_pos[wall,:2]-model.geom_size[wall,:2]
     ax.add_patch(Rectangle(corner,* (2*model.geom_size[wall,:2]),color='0.3'))
-    for x in [12.7,13.6,15.0]:
+    for x in plan['contracts']['x_sections_m']:
         ax.axvline(x,ls='--',lw=.8,color='0.5')
     ax.set(title=f'Prefix lane {num}',xlim=(11,17.8),ylim=(-1.1,.9),aspect='equal',xlabel='World x (m)',ylabel='World y (m)')
     ax.legend(fontsize=8)
 fig.suptitle('Post-handoff measured paths | dotted: reference | dashed: scoring sections')
 fig.savefig(out/'task_reversal_xy.png',dpi=150)
-audits={str(r['lane']):r for r in json.loads((out/'pair_audit.json').read_text())}
+audits=json.loads((d/'repeat/jump_validation.json').read_text())['cases']
 for row in rows:
     lane=row['lane']
     row['min_clearance_m'],row['min_clearance_s'],row['closest_geometry']=witnesses[lane,row['departure']]
-    row['unloaded_ms']=max(e['unloaded_ms'] for e in audits[lane]['audit']['events'] if e['solid_bank_rear_launch'] or e['bank_to_bank_flight'])
-    row['width_m']=.55
-    row['bend_scale'],row['trigger_offset_m']=(.98,-1.91) if lane=='54' else (1.,-1.95)
-    row['speed_m_s'],row['approach_alpha']=1.8,0.
+    row['unloaded_ms']=max(e['unloaded_ms'] for e in audits[int(lane)]['events'] if e['solid_bank_rear_launch'] or e['bank_to_bank_flight'])
+    row['width_m']=world['terrain']['width_m']
+    row['bend_scale']=prefixes[lane].get('bend_scale')
+    row['trigger_offset_m']=prefixes[lane]['trigger_offset_m']
+    if 'template' in prefixes[lane]:
+        row['upstream_template_lane']=prefixes[lane]['template']
+    row['speed_m_s']=cfg['oracle_initial_speed_m_s'][int(lane)]
+    row['approach_alpha']=cfg['oracle_initial_alpha'][int(lane)]
     row['prefix']=str(Path(row['prefix']).relative_to(d))
     row['trajectory']=str(Path(row['trajectory']).relative_to(d))
 write_rows(out/'oracle_task_reversal.csv',rows)
 counts=[]
 for label in ('near','mid','far'):
     scored=[r for r in rows if r['bin']==label]
-    vectors={lane:tuple(int(any(r['success']=='True' for r in scored if r['lane']==lane and r['task']==task)) for task in ('left','right')) for lane in ('54','59')}
+    vectors={lane:tuple(int(any(r['success']=='True' for r in scored if r['lane']==lane and r['task']==task)) for task in ('left','right')) for lane in lanes}
     vec=set(vectors.values())
-    category=('two_way' if {(1,0),(0,1)}<=vec else 'both_universal' if vec=={(1,1)} else
+    category=('insufficient_prefixes' if len(lanes)<2 else 'two_way' if {(1,0),(0,1)}<=vec else 'both_universal' if vec=={(1,1)} else
               'both_infeasible' if vec=={(0,0)} else 'one_way_differentiation' if len(vec)>1 else 'shared_one_side')
     times=[float(r['measured_T_s']) for r in scored if r['measured_T_s'] and r['task']=='left']
-    counts.append(dict(bin=label,map_root_pairs=1,prefix54=str(vectors['54']),prefix59=str(vectors['59']),category=category,
-                       reached_section=len(times),physical_suffixes=6,min_T_s=min(times),max_T_s=max(times)))
+    counts.append(dict(bin=label,map_root_pairs=1,**{f'prefix{lane}':str(vectors[lane]) for lane in lanes},category=category,
+                       reached_section=len(times),physical_suffixes=sum(r['task']=='left' for r in scored),min_T_s=min(times,default=None),max_T_s=max(times,default=None)))
 write_rows(out/'reversal_summary.csv',counts)
 
 # Descriptive DEV travel scales (world y), from the same executed suffixes.
 # Keep the centre-based task gate separate from clearance of a whole vehicle.
 scales=[]
-for lane in ('54','59'):
+for lane in lanes:
     physical = [r for r in rows if r['lane']==lane and r['bin']=='near' and r['task']=='left']
     straight=next(r for r in physical if r['departure']=='straight')
     with np.load(d/straight['trajectory']) as z:

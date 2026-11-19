@@ -1,0 +1,13 @@
+role,map,bin,total_map_root_pairs,insufficient_prefixes,both_infeasible,shared_one_side,one_way_differentiation,both_universal,two_way
+DEV approach search,wide_oracle_055,near,3,2,0,1,0,0,0
+DEV approach search,wide_oracle_055,mid,3,2,0,1,0,0,0
+DEV approach search,wide_oracle_055,far,3,2,0,0,1,0,0
+DEV new starts,wide_oracle_055,near,8,8,0,0,0,0,0
+DEV new starts,wide_oracle_055,mid,8,8,0,0,0,0,0
+DEV new starts,wide_oracle_055,far,8,8,0,0,0,0,0
+Frozen transfer,heldout_reversal_055_19033,near,2,2,0,0,0,0,0
+Frozen transfer,heldout_reversal_055_19033,mid,2,2,0,0,0,0,0
+Frozen transfer,heldout_reversal_055_19033,far,2,2,0,0,0,0,0
+Frozen transfer,wide_oracle_055,near,2,2,0,0,0,0,0
+Frozen transfer,wide_oracle_055,mid,2,2,0,0,0,0,0
+Frozen transfer,wide_oracle_055,far,2,2,0,0,0,0,0

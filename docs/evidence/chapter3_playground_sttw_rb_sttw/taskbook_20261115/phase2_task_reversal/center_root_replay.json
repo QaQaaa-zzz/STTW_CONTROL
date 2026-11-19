@@ -1,0 +1,68 @@
+{
+  "root": 21950,
+  "lane": 76,
+  "first": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/active_jump_rebuild_map48/task_reversal_mirrored/screen/source_route76_h75_v76",
+  "repeat": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/active_jump_rebuild_map48/task_reversal_center_root/repeat/source_route76_h75_v76",
+  "array_equal": {
+    "controller_state": [
+      1978,
+      381
+    ],
+    "rb_state": [
+      1978,
+      156
+    ],
+    "applied_targets": [
+      1978,
+      4
+    ],
+    "applied_target_valid": [
+      1978
+    ],
+    "contact_substep": [
+      1978,
+      5,
+      4
+    ],
+    "contact_physics_dt_s": [],
+    "contact_interval_mean_N": [
+      1978,
+      3
+    ],
+    "contact_interval_peak_N": [
+      1978,
+      3
+    ],
+    "contact_interval_impulse_Ns": [
+      1978,
+      3
+    ],
+    "trace": [
+      1978,
+      20
+    ],
+    "qpos": [
+      1978,
+      12
+    ],
+    "qvel": [
+      1978,
+      11
+    ],
+    "world_flags": [
+      1978,
+      3
+    ],
+    "wheel_contact_flags": [
+      1978,
+      3
+    ],
+    "published_reference_xy": [
+      1205,
+      2
+    ]
+  },
+  "audit_events_equal": true,
+  "role": "Known-map DEV repeat of the same physical start. Nominal departure.",
+  "seconds": 9.885
+}
