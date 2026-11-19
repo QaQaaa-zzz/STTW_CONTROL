@@ -30,7 +30,7 @@ def main():
             if term=='timeout':
                 cfg=json.loads((folder/f"lane{lane}_{dep if dep!='straight' else 'right'}.json").read_text())
                 if dep=='straight':
-                    ref=json.loads((folder/'repeat.json').read_text())['ground_handoff']['reference_path']
+                    ref=json.loads((folder/'repeat/resolved_config.json').read_text())['ground_handoff']['reference_path']
                     cfg.update(oracle_branch_reference=ref,ground_handoff=dict(cfg['ground_handoff'],reference_path=ref))
                 case=out/f'{group}_{lane}_{dep}'
                 if (case/'status.json').exists() and (case.parent/(case.name+'.exit.json')).exists():

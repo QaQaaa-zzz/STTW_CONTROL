@@ -1,0 +1,25 @@
+group,root,lane,bin,task,feasible_10s,feasible_12s,routes_10s,routes_12s
+task_reversal_pair,3,54,near,left,False,False,,
+task_reversal_pair,3,54,near,right,True,True,straight,straight right
+task_reversal_pair,3,54,mid,left,False,False,,
+task_reversal_pair,3,54,mid,right,True,True,straight,straight right
+task_reversal_pair,3,54,far,left,False,False,,
+task_reversal_pair,3,54,far,right,False,True,,right
+task_reversal_pair,3,59,near,left,False,False,,
+task_reversal_pair,3,59,near,right,True,True,straight,straight right
+task_reversal_pair,3,59,mid,left,False,False,,
+task_reversal_pair,3,59,mid,right,True,True,straight,straight right
+task_reversal_pair,3,59,far,left,False,False,,
+task_reversal_pair,3,59,far,right,True,True,straight,straight right
+task_reversal_center_root,21950,76,near,left,False,False,,
+task_reversal_center_root,21950,76,near,right,True,True,straight,straight right
+task_reversal_center_root,21950,76,mid,left,False,False,,
+task_reversal_center_root,21950,76,mid,right,True,True,straight,straight right
+task_reversal_center_root,21950,76,far,left,False,False,,
+task_reversal_center_root,21950,76,far,right,False,True,,right
+task_reversal_045_suffixes_root0,0,4,near,left,False,False,,
+task_reversal_045_suffixes_root0,0,4,near,right,False,True,,right
+task_reversal_045_suffixes_root0,0,4,mid,left,False,False,,
+task_reversal_045_suffixes_root0,0,4,mid,right,False,True,,right
+task_reversal_045_suffixes_root0,0,4,far,left,False,False,,
+task_reversal_045_suffixes_root0,0,4,far,right,False,True,,right

@@ -1,0 +1,16 @@
+group,root,lane,departure,wall,termination_10s,kinematic_min_separation_m,kinematic_predicts_clear,phase2_min_separation_m,phase2_predicts_clear
+task_reversal_pair,3,54,straight,False,goal,-0.24371075630187988,False,-0.12413272261619568,False
+task_reversal_pair,3,54,left,True,forbidden_obstacle_contact,-0.11702434718608856,False,-0.17636330425739288,False
+task_reversal_pair,3,54,right,False,timeout,0.07389934360980988,True,0.11772741377353668,True
+task_reversal_pair,3,59,straight,False,goal,-0.14340056478977203,False,0.005968887358903885,True
+task_reversal_pair,3,59,left,True,forbidden_obstacle_contact,-0.18561649322509766,False,-0.26921749114990234,False
+task_reversal_pair,3,59,right,False,timeout,0.15875692665576935,True,0.25940221548080444,True
+task_reversal_center_root,21950,76,straight,False,goal,-0.18862149119377136,False,-0.07521949708461761,False
+task_reversal_center_root,21950,76,left,True,forbidden_obstacle_contact,-0.17050960659980774,False,-0.2536256015300751,False
+task_reversal_center_root,21950,76,right,False,timeout,0.11260318756103516,True,0.11895234882831573,True
+task_reversal_045_suffixes_root0,0,4,straight,True,forbidden_obstacle_contact,-0.16818971931934357,False,-0.007854681462049484,False
+task_reversal_045_suffixes_root0,0,4,left,False,tracking_domain_exit,-0.17086315155029297,False,-0.2595653533935547,False
+task_reversal_045_suffixes_root0,0,4,right,False,timeout,0.1709805577993393,True,0.248479425907135,True
+task_reversal_045_suffixes_root3,3,43,straight,False,timeout,-0.16520604491233826,False,-0.04592285677790642,False
+task_reversal_045_suffixes_root3,3,43,left,True,forbidden_obstacle_contact,-0.18671417236328125,False,-0.2672920227050781,False
+task_reversal_045_suffixes_root3,3,43,right,False,timeout,0.153584286570549,True,0.1817198246717453,True

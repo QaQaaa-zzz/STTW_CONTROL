@@ -64,7 +64,9 @@ def main():
                           false_accept_timeout=sum(r['actual_termination']=='timeout' for r in accepts),
                           false_accept_other=sum(r['actual_termination'] not in ('timeout','forbidden_obstacle_contact') for r in accepts),
                           wall_hits_predicted_clear=sum(r['actual_collision']=='True' and r['predicted_collision_free']=='True' for r in physical),
-                          actual_wall_hits=sum(r['actual_collision']=='True' for r in physical),physical_suffixes=len(physical)))
+                          actual_wall_hits=sum(r['actual_collision']=='True' for r in physical),
+                          clear_routes_predicted_blocked=sum(r['actual_collision']=='False' and r['predicted_collision_free']=='False' for r in physical),
+                          physical_suffixes=len(physical)))
         write_rows(out/'comparison.csv',counts)
 
 

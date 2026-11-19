@@ -62,7 +62,8 @@ def evaluate():
             truth = {(r['lane'],r['departure'],r['bin'],r['task']):r for r in csv.DictReader(stream) if r['group']==a.group}
         for r in rows:
             t = truth[r['lane'],r['departure'],r['bin'],r['task']]
-            r.update(success=t['success_12s'],termination=t['termination_12s'],checkpoint=t['checkpoint_12s'])
+            r.update(success=t['success_12s'],termination=t['termination_12s'],checkpoint=t['checkpoint_12s'],
+                     forbidden_contact=t['wall_contact'])
     runs = {(r['lane'],r['departure']):r for r in rows}
     out = a.output
     out.mkdir(exist_ok=True,parents=True)
@@ -171,7 +172,7 @@ def evaluate():
                                bin=label,task=side,predicted_pass=passed,actual_pass=success,
                                false_pass=passed and not success,false_reject=success and not passed,
                                predicted_hold=bool(len(ids)),minimum_axis_separation_m=closest,
-                               predicted_collision_free=closest>0,actual_collision=truth['termination']=='forbidden_obstacle_contact',
+                               predicted_collision_free=closest>0,actual_collision=truth['forbidden_contact']=='True',
                                actual_termination=truth['termination'],actual_checkpoint=truth['checkpoint']))
     write_rows(out/'offline_false_accepts.csv',reports)
 
