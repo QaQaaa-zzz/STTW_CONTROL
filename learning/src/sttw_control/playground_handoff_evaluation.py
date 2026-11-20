@@ -96,11 +96,12 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         valid=(jp.arange(g.shape[0])<c.nacon[0])&(c.contact__dist<=0)
         valid &= jp.any(terrain_geoms[jp.clip(g,0,model.ngeom-1)]&(g>=0),-1)
         valid &= jp.any(g[:,:,None]==geometry.body_geom_ids[None,None,:],axis=(1,2))
-        body_contact=jp.any((c.contact__worldid[None,:]==jp.arange(n)[:,None])&valid,1)
+        world_id=jp.clip(c.contact__worldid,0,n-1)
+        body_contact=jp.zeros(n,dtype=bool).at[world_id].max(valid)
         forbidden=(jp.arange(g.shape[0])<c.nacon[0])&(c.contact__dist<=0)
         forbidden &= jp.any(forbidden_geoms[jp.clip(g,0,model.ngeom-1)]&(g>=0),-1)
         forbidden &= jp.any(g[:,:,None]==geometry.robot_geom_ids[None,None,:],axis=(1,2))
-        forbidden_contact=jp.any((c.contact__worldid[None,:]==jp.arange(n)[:,None])&forbidden,1)
+        forbidden_contact=jp.zeros(n,dtype=bool).at[world_id].max(forbidden)
         return jp.stack((outside,body_contact,forbidden_contact),1)
 
     def contacts(d):
@@ -108,16 +109,16 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         valid=(jp.arange(g.shape[0])<c.nacon[0])&(c.contact__dist<=0)
         valid &= jp.any((g==idx.frontwheel_geom_id)|(g==idx.rearwheel_geom_id),-1)
         valid &= jp.any(terrain_geoms[jp.clip(g,0,model.ngeom-1)]&(g>=0),-1)
-        worlds=c.contact__worldid[None,:]==jp.arange(n)[:,None]
         far=valid&(c.contact__pos[:,0]>terrain['front_x_m']+terrain['width_m'])
         if native_surface:
             upper = jp.any(g == model.geom('step').id, -1)
             if 'rough_source' in terrain:
                 upper |= jp.any(g == model.geom('platform_rough').id, -1)
             far &= upper & (c.contact__pos[:,2] >= terrain['far_bank_height_m'] - .01)
-        front=jp.any(worlds&far&jp.any(g==idx.frontwheel_geom_id,-1),1)
-        rear=jp.any(worlds&far&jp.any(g==idx.rearwheel_geom_id,-1),1)
-        return jp.stack((jp.any(worlds&valid,1),front|rear,front&rear),1)
+        front=far&jp.any(g==idx.frontwheel_geom_id,-1)
+        rear=far&jp.any(g==idx.rearwheel_geom_id,-1)
+        any_contact,front,rear=jp.zeros((n,3),dtype=bool).at[jp.clip(c.contact__worldid,0,n-1)].max(jp.stack((valid,front,rear),1)).T
+        return jp.stack((any_contact,front|rear,front&rear),1)
 
     def ground_one(d,c,lock,damping):
         plant=mm.replace(eq_data=mm.eq_data.at[brake_ids,0].set(lock),actuator_biasprm=mm.actuator_biasprm.at[0,2].set(-damping))
@@ -223,7 +224,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 qpos, qvel = bank['qpos'][ids].copy(), bank['qvel'][ids].copy()
                 qpos[:, 0] += hand['start_x_m'] - 2.5
         def make(q,v):
-            d=mjx_env.make_data(model,qpos=q,qvel=v,impl='warp',naconmax=4096*n,naccdmax=512,njmax=256)
+            d=mjx_env.make_data(model,qpos=q,qvel=v,impl='warp',naconmax=cfg.get('world_contact_capacity',4096)*n,naccdmax=cfg.get('ccd_capacity',512),njmax=256)
             plant=mm.replace(eq_data=mm.eq_data.at[brake_ids,0].set(q[brake_qpos]))
             return mjx.forward(plant,d.replace(eq_active=d.eq_active.at[brake_ids].set(True)))
         data=jax.jit(jax.vmap(make))(jp.asarray(qpos,dtype=jp.float32),jp.asarray(qvel,dtype=jp.float32))
@@ -265,6 +266,16 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         q,v,m,pose,speed,angles,joint_bias=map(to_torch,observe(data));raw=torch.stack((speed,m[:,2]),1);previous=torch.stack((m[:,3],m[:,5]),1)
         nearest=(route.xy[route.route_ids]-pose[:,None,:2]).square().sum(-1).argmin(-1)
         middle.reset(m,pose,speed,raw,raw,previous,ctl,initial_progress=route.s[nearest])
+        paired_departures=cfg.get('paired_departures')
+        if paired_departures:
+            approach_ids=tensor([r for r,_,_ in lanes]).long()
+            route=TorchPathReference(dict(np.load(paired_departures['route_bank'])),hcfg,device,route_ids=approach_ids)
+            middle.route=route
+            approach_ref=dict(np.load(paired_departures['approach_file']))
+            approach_x=tensor(approach_ref['xy'][:,:,0]).contiguous()
+            directions=tensor(paired_departures['direction_ids']).long()
+            arc64=tensor(saved['s'])
+            world_index=torch.arange(n,device=device)
         middle.lane_ticks=torch.zeros(n,device=device,dtype=torch.long);middle.latent=torch.zeros_like(raw)
         ground_adapter=GroundAdapter(middle,ctl)
         updates={round(u['time_s']/.005):(u,TorchPathReference(dict(np.load(u['reference_path'])),hcfg,device,route_ids=[r for r,m,i in lanes]))
@@ -371,6 +382,16 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
             rollout_start=time.perf_counter()
             for tick in range(start_tick,round(args.seconds/.005)+1):
                 t=tick*.005
+                if paired_departures:
+                    # Every departure keeps the common approach until the first tick after physical relock.
+                    just_locked=alive & (phase==2) & ((handoff_time/.005).round().long()==tick-1)
+                    after_x=torch.stack([torch.searchsorted(x,q[:,0].double().contiguous()+.05) for x in approach_x])
+                    join=torch.maximum(after_x[approach_ids,world_index],torch.searchsorted(arc64,middle.projection['progress'].double().contiguous())+1)
+                    branch=len(approach_x)+(approach_ids*3+directions)*len(arc64)+join.clamp_max(len(arc64)-1)
+                    route.route_ids=torch.where(just_locked,branch,route.route_ids)
+                    if tick in (1,8,32) or tick%256==0:
+                        data.qpos.block_until_ready()
+                        (args.output/'gpu_progress.json').write_text(json.dumps(dict(tick=tick,worlds=data.qpos.shape[0],device=str(data.qpos.device),elapsed_s=time.perf_counter()-rollout_start)))
                 if tick in branch_ticks:
                     ids = branch_ticks[tick]
                     locked = alive[ids] & (phase[ids] == 2) & ((handoff_time[ids]/.005).round().long() == tick-1)
@@ -629,7 +650,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 if telemetry:
                     samples=load_trace[keep,lane]
                     contact_data.update(dict(contact_substep=samples,contact_substep_columns=['front_normal_N','rear_normal_N','body_normal_N','body_contact'],contact_physics_dt_s=.005/args.physics_substeps,contact_interval_mean_N=samples[:,:,:3].mean(1),contact_interval_peak_N=samples[:,:,:3].max(1),contact_interval_impulse_Ns=samples[:,:,:3].sum(1)*(.005/args.physics_substeps)))
-                np.savez_compressed(target_dir/'trajectory.npz',**contact_data,trace=trace,qpos=qsave,qvel=speeds[keep,lane],world_flags=world_trace[keep,lane],world_flag_columns=['physical_map_exit','nonwheel_terrain_contact','forbidden_obstacle_contact'],wheel_contact_flags=contact_trace[keep,lane],wheel_contact_columns=['any_terrain','any_far','both_far'],reference_xy=saved['xy'][route_id],published_reference_xy=route.xy[route.route_ids[lane]].cpu().numpy(),columns=['time','x','y','z','roll','pitch','yaw','vx','vy','vz','ground_active','path_distance','steer_target','rear_target','hip_target','knee_target','approaching','rear_rate_rad_s','requested_speed_m_s','phase'])
+                np.savez_compressed(target_dir/'trajectory.npz',**contact_data,trace=trace,qpos=qsave,qvel=speeds[keep,lane],world_flags=world_trace[keep,lane],world_flag_columns=['physical_map_exit','nonwheel_terrain_contact','forbidden_obstacle_contact'],wheel_contact_flags=contact_trace[keep,lane],wheel_contact_columns=['any_terrain','any_far','both_far'],reference_xy=(approach_ref['xy'] if paired_departures else saved['xy'])[route_id],published_reference_xy=route.xy[route.route_ids[lane]].cpu().numpy(),columns=['time','x','y','z','roll','pitch','yaw','vx','vy','vz','ground_active','path_distance','steer_target','rear_target','hip_target','knee_target','approaching','rear_rate_rad_s','requested_speed_m_s','phase'])
                 row=dict(continuation_alpha=continuation_alpha,case_dir=case_dir,variant=variants[variant],skill=case_name,route=route_id,continuation=mode,termination=['timeout','physical_failure','tracking_domain_exit' if world else 'corridor_or_domain_exit','goal','world_boundary_exit','forbidden_obstacle_contact'][codes[lane]],actuator_owner_max_difference=float(ownership_max[lane]) if audit_owner else None,nonwheel_contact_steps=int(world_trace[keep,lane,1].sum()),forbidden_contact_steps=int(world_trace[keep,lane,2].sum()),goal=bool(codes[lane]==3),rb_entry_s=None if entry_time[lane]<0 else float(entry_time[lane]),goal_hold_s=float(hold[lane]),airborne=bool(airborne[lane]),far_contact=bool(far_time[lane]>=0),first_far_contact_s=None if far_time[lane]<0 else float(far_time[lane]),handoff_s=None if handoff_time[lane]<0 else float(handoff_time[lane]),duration_s=float(durations[lane]),final_xy=positions[-1,lane,:2].tolist())
                 if cfg.get('collect_model_state') and not cfg.get('task_evaluation'):row['completed_slice']=bool(codes[lane]==0)
                 if rolling is not None:
