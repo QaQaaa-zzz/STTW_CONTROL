@@ -1,0 +1,52 @@
+{
+  "base": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/primary/roots_0008",
+  "roots": [
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37
+  ],
+  "alphas": [
+    0,
+    0.5,
+    1
+  ],
+  "speeds": [
+    1.8,
+    1.9,
+    2.0
+  ],
+  "skills": [
+    "source",
+    "rb_run1"
+  ],
+  "role": "paired primary layout DEV. ground H75 approach alpha only; same continuation alpha0 and 2 m/s. Identical roots/3 approaches/3 departures/locked handback/1ms physics/10s limit.",
+  "budget": "30 roots x 3 speeds x 3 alpha x 3 approaches x 3 departures x 2 frozen skills; reuse 540 reference trajectories, run remaining 4320. No retraining.",
+  "comparison": "Full root x side x section success, verified handback. At fixed request compare each nonzero alpha to alpha0 for same physical root, route and departure. |delta measured forward speed at RB entry| <= .05 m/s. Include lost/failed entries. Compare fixed alpha each at 2 m/s, speed-only alpha0, joint choices. Report candidate upper bound and leave-one-root-out fixed rule (choose training folds only)."
+}

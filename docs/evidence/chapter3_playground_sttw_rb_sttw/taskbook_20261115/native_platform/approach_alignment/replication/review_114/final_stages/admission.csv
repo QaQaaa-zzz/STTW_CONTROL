@@ -1,0 +1,9 @@
+planner,vote,contracts,complete,wall,oracle_feasible,unsolvable_wall,feasible_admitted
+C,admitted,727,655,0,677,0,677
+C,fallback,767,62,60,207,55,0
+C,no_query,666,0,0,161,0,0
+C-R,admitted,727,660,0,677,0,677
+C-R,fallback,767,58,32,207,29,0
+C-R,no_query,666,0,0,161,0,0
+fixed,no_query,2160,873,165,1045,161,0
+nominal,no_query,2160,660,6,1045,4,0

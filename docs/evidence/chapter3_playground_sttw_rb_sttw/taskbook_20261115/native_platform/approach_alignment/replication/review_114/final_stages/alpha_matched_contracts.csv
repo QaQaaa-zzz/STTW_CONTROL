@@ -1,0 +1,13 @@
+skill,task,contracts,base_feasible,new_matched
+rb_run1,near_-1,30,30,0
+rb_run1,near_1,30,23,7
+rb_run1,mid_-1,30,30,0
+rb_run1,mid_1,30,23,7
+rb_run1,far_-1,30,30,0
+rb_run1,far_1,30,23,7
+source,near_-1,30,30,0
+source,near_1,30,8,11
+source,mid_-1,30,30,0
+source,mid_1,30,13,8
+source,far_-1,30,30,0
+source,far_1,30,13,8

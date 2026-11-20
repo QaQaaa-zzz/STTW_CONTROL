@@ -262,7 +262,8 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                                     (previous,history,last,obs))
         policy=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],hcfg,n,device)
         ctl=TorchController(controller_config,n,device)
-        middle=TorchMiddleControl(policy,route,identity['frame_scales'],torch.full((n,),hand['approach']['alpha'],device=device),approach_speed)
+        approach_alpha=tensor([variants[i].get('approach_alpha',hand['approach']['alpha']) for _,_,i in lanes]).float()
+        middle=TorchMiddleControl(policy,route,identity['frame_scales'],approach_alpha,approach_speed)
         q,v,m,pose,speed,angles,joint_bias=map(to_torch,observe(data));raw=torch.stack((speed,m[:,2]),1);previous=torch.stack((m[:,3],m[:,5]),1)
         nearest=(route.xy[route.route_ids]-pose[:,None,:2]).square().sum(-1).argmin(-1)
         middle.reset(m,pose,speed,raw,raw,previous,ctl,initial_progress=route.s[nearest])
@@ -278,9 +279,10 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
             world_index=torch.arange(n,device=device)
         online=cfg.get('platform_online')
         if online:
-            from .platform_online import PlatformDepartureQuery
+            from .platform_online import PlatformDepartureQuery, velocity_state
             from .playground_history_model import load_history_model
-            query=PlatformDepartureQuery(model,load_history_model(Path(online['ground_model'])),hand['goal'],online['margin_m'],hand['road_half_width_m'])
+            query=PlatformDepartureQuery(model,load_history_model(Path(online['ground_model'])),hand['goal'],online['margin_m'],hand['road_half_width_m'],online.get('relative'))
+            velocity_history = [(q,v)]*4 if query.relative else None
             contracts=[variants[i] for _,_,i in lanes]
             reselect=tensor([c['planner']=='C-R' for c in contracts])
             shadow=tensor([c['planner']=='C' for c in contracts])
@@ -410,11 +412,15 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                         # Rotate world velocity into body x exactly as in the offline predictor.
                         quat=q[ids,3:7];bw,bx,by,bz=quat.T
                         axis=torch.stack((1-2*(by.square()+bz.square()),2*(bx*by+bw*bz),2*(bx*bz-bw*by)),1)
-                        chosen,admitted=query.choose(q[ids],(axis*v[ids,:3]).sum(1),nominal_continuation_speed[ids],route,choices,section[ids],side[ids],directions[ids],args.seconds-t)
+                        prev = velocity_state(velocity_history[tick%4][0][ids],velocity_history[tick%4][1][ids]) if query.relative else None
+                        current = velocity_state(q[ids],v[ids]) if query.relative else None
+                        chosen,admitted,incumbent=query.choose(q[ids],(axis*v[ids,:3]).sum(1),nominal_continuation_speed[ids],route,choices,section[ids],side[ids],directions[ids],args.seconds-t,current,prev)
                         directions[ids]=torch.where(reselect[ids],chosen,directions[ids])
-                        query_pass[ids]=admitted
+                        query_pass[ids]=torch.where(reselect[ids],admitted,incumbent) if online.get('committed_vote') else admitted
                         torch.cuda.synchronize()
                         query_ms[ids]=1000*(time.perf_counter()-start_query)
+                    if online and query.relative:
+                        velocity_history[tick%4] = (q,v)
                     branch=len(approach_x)+(approach_ids*3+directions)*len(arc64)+join.clamp_max(len(arc64)-1)
                     route.route_ids=torch.where(just_locked,branch,route.route_ids)
                     if tick in (1,8,32) or tick%256==0:

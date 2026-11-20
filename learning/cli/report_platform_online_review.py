@@ -55,6 +55,9 @@ def report(out):
     data=pd.DataFrame(records)
     keys=['layout','skill','root','force','section','side']
     oracle=data[data.planner=='oracle'].groupby(keys).success.any().rename('oracle_feasible')
+    if 'oracle_cases' in plan:
+        reference=pd.read_csv(plan['oracle_cases'])
+        oracle=reference.drop_duplicates(keys).set_index(keys).oracle_feasible
     assigned=data[data.planner!='oracle'].join(oracle,on=keys)
     assigned.to_csv(out/'online_cases.csv',index=False)
     summary=assigned.groupby(['layout','skill','force','section','planner']).agg(tasks=('root','size'),
@@ -87,6 +90,37 @@ def report(out):
             ax.scatter(*tr[-1,1:3],s=10,color=color)
         ax.set_title(f"{layout}/{skill}, root {r.root}, {r.force:+} N, {r.section}");ax.set(xlim=(1,19),xlabel='world x (m)',ylabel='world y (m)',aspect='equal');ax.legend()
     fig.savefig(out/'online_xy.png',dpi=140)
+    if 'method' in plan:
+        write_calibrated_comparison(out,plan)
+
+
+def write_calibrated_comparison(out,plan):
+    parent=out.parent
+    archives=[('original_0211',Path(plan['oracle_cases']))]
+    archives.extend((m,parent/m/'online_cases.csv') for m in ('kinematic','phase2_relative'))
+    tables=[]
+    for method,path in archives:
+        if not path.exists():continue
+        cases=pd.read_csv(path)
+        cases=cases[cases.skill=='rb_run1'].copy()
+        cases['method']=method
+        cases['queried']=cases.query_batch_ms>0
+        cases['admitted_goal']=cases.success & cases.query_feasible
+        cases['admitted_wall']=cases.collision & cases.query_feasible
+        cases['admitted_oracle']=cases.oracle_feasible & cases.query_feasible
+        tables.append(cases)
+    all_cases=pd.concat(tables)
+    metrics=dict(n=('root','size'),complete=('success','sum'),walls=('collision','sum'),queried=('queried','sum'),
+        admitted=('query_feasible','sum'),admitted_goal=('admitted_goal','sum'),admitted_wall=('admitted_wall','sum'),
+        oracle_feasible=('oracle_feasible','sum'),admitted_oracle=('admitted_oracle','sum'))
+    g=all_cases.groupby(['method','planner']).agg(**metrics)
+    g.to_csv(parent/'pareto.csv')
+    all_cases.groupby(['method','planner','side','force','layout']).agg(**metrics).to_csv(parent/'calibrated_sides.csv')
+    fig,ax=plt.subplots(figsize=(7,4),layout='constrained')
+    for (method,planner),r in g.iterrows():
+        ax.scatter(100*r.walls/r.n,100*r.complete/r.n,label=f'{method} {planner}')
+    ax.set(xlabel='Physical wall contact (%)',ylabel='Completed assigned contracts (%)')
+    ax.legend(fontsize=7,ncol=2);fig.savefig(parent/'safety_completion.png',dpi=150);plt.close(fig)
 
 
 if __name__=='__main__':
