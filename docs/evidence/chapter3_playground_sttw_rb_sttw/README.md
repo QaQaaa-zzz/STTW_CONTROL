@@ -1,5 +1,7 @@
 # 第三章：当前结果与大纲进度
 
+**粗糙高台出现同根双向反转。** 冻结 Source 在开发初态 5 的近检查点、初态 6 的中远检查点分别出现双向独占。初态 5 改为左任务时，成功路径采用右弯接近；改为右任务时，成功路径采用左弯接近。每个合格交回都执行了左、直、右三个驶离。正例覆盖两个实际初态。[逐候选证据和录像](taskbook_20261115/native_platform/approach_alignment/entry_heading/SOURCE.md) · [16 个新粗糙图初态和两幅地图的冻结复验方案](taskbook_20261115/native_platform/approach_alignment/replication/protocol.json)
+
 **弯道接近已在粗糙高台复测。** 左右接近在同一初态都能完成真跳、承重和交回，Source 为 8/8 个根，Full RB 为 7/8 个根。两策略在默认驶离下各完成 9/16 个整程。统一完整起点后，两策略各 16/16 条接近完成真跳和交回；96 条实际驶离在近、中、远均为 0/8 根双向反转。[配对 XY、成绩和录像](taskbook_20261115/native_platform/approach_alignment/paired_tasks/RESULTS.md)。[逐例对照与实际 XY](taskbook_20261115/native_platform/approach_alignment/RESULTS.md)
 
 **原生高台初次对照。** Full RB 在第二章 RK4、5 ms 直接复测稳定恢复 31/32。在 RK4、1 ms 锁摆弯道串联中，2.0 m/s 时合格交回 12/24，整程 3/24，三个终点成功均来自右弯。[高台与空沟逐例、实际 XY 及成功录像](taskbook_20261115/native_platform/RESULTS.md)

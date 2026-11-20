@@ -41,6 +41,9 @@ def report(raw, dest):
     counts = json.loads((raw/'complete.json').read_text())
     datasets = {}
     for name in ('prefixes','physical_suffixes','oracle_task_reversal','paired_reversal'):
+        if counts['physical_suffixes']==0 and name in ('physical_suffixes','oracle_task_reversal'):
+            datasets[name]=[]
+            continue
         with (raw/(name+'.csv')).open() as f:
             rows = list(csv.DictReader(f))
         for row in rows:
@@ -50,12 +53,14 @@ def report(raw, dest):
         write_rows(dest/(name+'.csv'),rows)
         datasets[name] = rows
     skills, roots = plan['skills'], plan['rows']
-    fig,axes = plt.subplots(len(roots),len(skills)*2,figsize=(15,1.55*len(roots)),squeeze=False,layout='constrained')
+    approaches=plan.get('approach_labels',['left','right'])
+    fig,axes = plt.subplots(len(roots),len(skills)*len(approaches),figsize=(7.5*len(approaches),1.55*len(roots)),squeeze=False,layout='constrained')
     colors = {'left':'#176d89','straight':'#61556b','right':'#bd6123'}
     sections = plan['contracts']['x_sections_m']
+    rectangles = json.loads(Path(plan['physical_map']).read_text())['terrain']['forbidden_rectangles']
     for row in datasets['prefixes']:
         i = roots.index(int(row['root']))
-        j = skills.index(row['skill'])*2+(row['approach']=='right')
+        j = skills.index(row['skill'])*len(approaches)+approaches.index(row['approach'])
         ax = axes[i,j]
         with np.load(raw/row['prefix']) as z:
             q,t,ref = z['qpos'],z['trace'][:,0],z['reference_xy']
@@ -63,7 +68,8 @@ def report(raw, dest):
         ax.plot(*ref.T,color='.55',ls=':',lw=.9)
         ax.plot(*q[:last,:2].T,color='black',lw=1)
         ax.plot(*q[last-1,:2],'o',color='black',ms=2.7)
-        ax.add_patch(Rectangle((13.3,-.06),.2,.12,color='black'))
+        for x0,x1,y0,y1 in rectangles:
+            ax.add_patch(Rectangle((x0,y0),x1-x0,y1-y0,color='black'))
         for x in sections:
             ax.axvline(x,color='.75',lw=.5)
         ax.set_aspect('equal',adjustable='box')
@@ -72,7 +78,7 @@ def report(raw, dest):
         if i==len(roots)-1: ax.set_xlabel('world x (m)')
         if not j: ax.set_ylabel(f'root {roots[i]}\ny (m)')
     for row in datasets['physical_suffixes']:
-        ax = axes[roots.index(int(row['root'])),skills.index(row['skill'])*2+(row['approach']=='right')]
+        ax = axes[roots.index(int(row['root'])),skills.index(row['skill'])*len(approaches)+approaches.index(row['approach'])]
         with np.load(raw/row['trajectory']) as z:
             trace = z['trace']
             xy = trace[np.rint(trace[:,0]/.005).astype(int)>=int(row['branch_tick']),1:3]
@@ -85,6 +91,9 @@ def report(raw, dest):
     fig.legend(handles=[Line2D([],[],color=c,label=k) for k,c in colors.items()],loc='outside lower center',ncol=3)
     fig.savefig(dest/'xy.png',dpi=125)
     plt.close(fig)
+    if not counts['physical_suffixes']:
+        (dest/'RESULTS.md').write_text(f"# 高台接近复验\n\n{counts['prefixes']} 条接近中，合格交回为 0。后缀缺少可执行的起点，各根的双向反转记为 NA。[实测 XY](xy.png) · [接近逐例](prefixes.csv) · [逐根覆盖](paired_reversal.csv)\n")
+        return
     fig,axes = plt.subplots(1,len(skills),figsize=(6.5,3.7),layout='constrained')
     labels = ['near','mid','far']
     from matplotlib.colors import ListedColormap
@@ -102,12 +111,13 @@ def report(raw, dest):
     doc = ['# 高台同图左右任务实测','',
         '[各根实际与参考 XY](xy.png) · [近中远双向反转图](h1_phase_map.png) · [逐合同结果](oracle_task_reversal.csv)','',
         f"同一张粗糙高台中央墙地图，{len(roots)} 个开发初态。{counts['prefixes']} 条接近中，{counts['verified']} 条经腾空、台面双轮承重和锁摆交回核验。每条合格前缀实际执行三种驶离，共 {counts['physical_suffixes']} 条物理后缀、{counts['scored_contracts']} 项合同评分。每个方向在首次真实交回后下一个 5 ms 控制步发布。将分支在切换时的位姿、速度、RB 和地面控制器历史与原轨迹逐项配对。",'',
-        '| 策略 | 左接近 / 右接近合格 | 左绕 / 直行 / 右绕完成终点保持 | 近 / 中 / 远双向反转根数（分母为两种接近均合格的根） |','|---|---|---|---|']
+        '| 策略 | 各接近合格 | 左绕 / 直行 / 右绕完成终点保持 | 近 / 中 / 远双向反转根数（分母为至少两条接近合格的根） |','|---|---|---|---|']
+    doc.insert(4,'接近候选顺序为 '+ '、'.join(approaches)+'。')
     for sk in skills:
         pref=[r for r in datasets['prefixes'] if r['skill']==sk]
         tested=[r for r in datasets['physical_suffixes'] if r['skill']==sk]
         h1=[r for r in datasets['paired_reversal'] if r['skill']==sk and r['reversal']!='']
-        p=['%d/%d'%(sum(r['verified']=='1' for r in pref if r['approach']==d),sum(r['approach']==d for r in pref)) for d in ('left','right')]
+        p=['%d/%d'%(sum(r['verified']=='1' for r in pref if r['approach']==d),sum(r['approach']==d for r in pref)) for d in approaches]
         g=['%d/%d'%(sum(r['goal']=='True' for r in tested if r['departure']==d),sum(r['departure']==d for r in tested)) for d in ('left','straight','right')]
         h=['%d/%d'%(sum(r['reversal']=='1' for r in h1 if r['bin']==b),sum(r['bin']==b for r in h1)) for b in labels]
         doc.append('| '+' | '.join((sk,' · '.join(p),' · '.join(g),' · '.join(h)))+' |')
@@ -128,8 +138,9 @@ def report(raw, dest):
             stats=Counter()
             for r in datasets['paired_reversal']:
                 if (r['skill'],r['bin'])!=(sk,label): continue
-                masks={r['left_mask'],r['right_mask']}
-                category=('insufficient' if 'NA' in masks else 'reversal' if masks=={'01','10'}
+                values=[r[name+'_mask'] for name in approaches]
+                masks=set(values)-{'NA'}
+                category=('insufficient' if sum(v!='NA' for v in values)<2 else 'reversal' if {'01','10'}<=masks
                           else 'universal' if masks=={'11'} else 'infeasible' if masks=={'00'}
                           else 'shared_one_side' if len(masks)==1 else 'one_way')
                 stats[category]+=1
@@ -190,7 +201,7 @@ def report(raw, dest):
     doc.extend(['','[逐档覆盖、反转类别和实测 T 最小/中位/最大值](coverage_by_section.csv) · [点模型横移、含响应延迟横移及整车外廓所需横移](lateral_scales.csv)。横移用交回实测侧速及该开发轨迹的最大同向 100 ms 平均加速度估算。响应延迟取同前缀相对直行的侧速差首次连续 11 帧达到 0.05 m/s 的起点；缺失延迟保留空值。整车横移按交回姿态的碰撞外廓与中央墙边缘计算，这些量用于解释开发轨迹。'])
     doc.extend(['','| 策略及接近 | 交回横向位置中位数 m | 航向中位数 ° | 世界横向速度中位数 m/s |','|---|---:|---:|---:|'])
     for skill in skills:
-        for approach in ('left','right'):
+        for approach in approaches:
             states=[r for r in handbacks if (r['skill'],r['approach'])==(skill,approach)]
             if states:
                 med=[np.median([r[k] for r in states]) for k in ('y_m','yaw_deg','world_vy_m_s')]

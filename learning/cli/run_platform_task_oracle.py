@@ -60,6 +60,7 @@ def departure_route(ref, lane, join, target, length, far_gate, goal_start):
 
 def branches(out):
     plan = read(out/'plan.json')
+    approaches = plan.get('approach_labels',['left','right'])
     prefixes, scores, physical = [], [], []
     for skill in plan['skills']:
         cap = out/(skill+'_capture')
@@ -92,7 +93,7 @@ def branches(out):
                 take, end, land = flight(model,q,load,supported,trace[:,0],front,front,terrain['far_bank_height_m'],
                                          np.inf if entry is None else entry)
                 qualified = land is not None and h is not None and land <= h+1e-5
-                row = dict(skill=skill,root=root,lane=i,approach=('left','right')[i%2],takeoff_s=take,flight_end_s=end,
+                row = dict(skill=skill,root=root,lane=i,approach=approaches[i%len(approaches)],takeoff_s=take,flight_end_s=end,
                            loaded_s=land,handoff_s=h,verified=int(qualified),termination=case['termination'],prefix=str(path))
                 if qualified:
                     tick = round(h/.005)+1
@@ -131,7 +132,7 @@ def branches(out):
                         np.testing.assert_array_equal(anchor,anchors[i])
                         np.testing.assert_array_equal(z['published_reference_xy'],ref['xy'][i].astype('float32'))
                         wall = bool(z['world_flags'][:,2].any())  # Forbidden contact terminates a prefix before it can qualify.
-                        row = dict(skill=skill,root=case['variant']['bank_row'],approach=('left','right')[i%2],
+                        row = dict(skill=skill,root=case['variant']['bank_row'],approach=approaches[i%len(approaches)],
                                    lane=i,departure=direction,handoff_s=case['handoff_s'],branch_tick=tick,
                                    goal=result[i]['goal'],hold_s=result[i]['goal_hold_s'],forbidden_contact=wall,
                                    termination=result[i]['termination'],end_s=float(trace[-1,0]),trajectory=str(path))
@@ -152,12 +153,13 @@ def branches(out):
             for label in ('near','mid','far'):
                 cell = [r for r in scores if (r['skill'],r['root'],r['bin'])==(skill,root,label)]
                 masks = {}
-                for approach in ('left','right'):
+                for approach in approaches:
                     subset = [r for r in cell if r['approach']==approach]
                     masks[approach] = ''.join(str(int(any(r['success'] for r in subset if r['task']==side))) for side in ('left','right')) if subset else 'NA'
-                reversal = set(masks.values())=={'10','01'}
-                summary.append(dict(skill=skill,root=root,bin=label,left_mask=masks['left'],right_mask=masks['right'],
-                                    reversal=None if 'NA' in masks.values() else int(reversal)))
+                eligible = sum(value!='NA' for value in masks.values())
+                reversal = {'10','01'} <= set(masks.values())
+                summary.append(dict(skill=skill,root=root,bin=label,**{k+'_mask':v for k,v in masks.items()},
+                                    reversal=int(reversal) if eligible>=2 else None))
     write_rows(out/'paired_reversal.csv',summary)
     save(out/'complete.json',dict(prefixes=len(prefixes),verified=sum(r['verified'] for r in prefixes),
                                   physical_suffixes=len(physical),scored_contracts=len(scores)))

@@ -1,0 +1,70 @@
+{
+  "baseline": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/rough_oracle",
+  "approaches": [
+    {
+      "name": "baseline_right",
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/rough_oracle",
+      "route": 1
+    },
+    {
+      "name": "signed_left",
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/entry_heading",
+      "route": 0
+    },
+    {
+      "name": "signed_right",
+      "run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/entry_heading",
+      "route": 1
+    }
+  ],
+  "rows": [
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+  ],
+  "maps": {
+    "primary": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/rough_development/world.json",
+    "alternate": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication/world_19033.json"
+  },
+  "alternate_rough_source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/active_jump_rebuild_map48/task_reversal_transfer/heldout_reversal_055_19033/map.json",
+  "role": "locked cross-root and cross-layout DEV replication; 8..23 were used for smooth-platform diagnostics",
+  "contracts": {
+    "x_sections_m": [
+      12.7,
+      13.6,
+      15.0
+    ],
+    "target_time_s": [
+      0.7,
+      1.2,
+      2.0
+    ],
+    "left_y_interval_m": [
+      0.06,
+      3.9
+    ],
+    "right_y_interval_m": [
+      -3.9,
+      -0.06
+    ],
+    "point": "base origin first forward crossing after measured handback, linear interpolation",
+    "goal": "same physical map, true contact veto, native 0.5 s terminal hold by 10 s",
+    "scope": "Two fixed physical layouts, eight previously observed DEV roots excluded. Same map and common neutral state for all candidate prefixes in a skill."
+  },
+  "budget": "Per map: two skills, 16 reserved rough-platform starts, three frozen prefixes. At most 96 prefixes and 288 physical departures. Two maps, 192 prefixes and at most 576 departures. Zero training.",
+  "selection": "Source root 5 near: signed_left accepts only right and signed_right only left. Root 6 mid/far: signed_left accepts only left and baseline_right only right. Baseline right is a verified Full RB reference. Freeze these three before consulting new roots; no per-map selection.",
+  "scores": "Per skill/map/bin, compare task feasibility over all three actually executed departures. Reversal requires both exclusive vectors on distinct physically verified prefixes from the same root; insufficient prefixes remain NA."
+}

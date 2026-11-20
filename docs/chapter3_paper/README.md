@@ -1,5 +1,7 @@
 # 第三章任务书执行与文稿状态
 
+**同图换任务的实测正例。** 冻结 Source 同一物理起点下，在开发初态 5 的近档、初态 6 的中远档均有两种接近，每种只支持相反一侧任务。近档正例的右接近支持左任务、左接近支持右任务。中远档复用同一初态和驶离轨迹。论文现阶段可报告这两个有界候选集的开发实例；跨初态和物理布局的结果需单独报告。[真实 XY、双任务录像与全候选逐格评分](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/entry_heading/SOURCE.md)
+
 **原生高台开发试验。** 把第二章 0.16 m 高台接入第三章粗糙弯道和中央墙后，8 个共同初态、两种接近和两种冻结策略共 32 条轨迹均出现真实腾空、台面双轮承重和锁摆交回。分别实跑三个驶离选择后，Source 和 Full RB 在近、中、远三档均为 0/8 个初态双向反转。交接已足以开展规划对照，左任务仍受交回时真实侧向运动和随后的路径跟踪约束。[实际轨迹、整程录像与逐合同判定](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/paired_tasks/RESULTS.md)
 
 在上述 96 条物理后缀上，使用相同车体包络与冻结裕量，地面动态预测将 Source 误放行从 3/207 降至 0/207，误拒从 45/81 升至 72/81。Full RB 的误放行同为 0/198，误拒从 54/90 升至 81/90。每条实际驶离承担六项合同评分，有效样本按根和物理路线分组。此结果支持讨论模型迁移造成的取舍，H2 的净规划收益仍待建立。[共享裕量与零裕量的逐根对照](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/ground_predictions/RESULTS.md)

@@ -2,7 +2,7 @@
 
 双轮机器人控制与连续骑行—跳跃—骑行研究。
 
-> **当前第三章高台实测。** 粗糙图八个开发初态、两种冻结策略共 32/32 条接近均真跳、台面承重、锁摆交回。96 条真实驶离尚未给出同根双向任务反转。[实测 XY、逐例结果和整程录像](docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/paired_tasks/RESULTS.md)
+> **当前第三章高台实测。** 冻结 Source 在同一粗糙高台的两个开发初态上出现双向任务反转。初态 5 在近档、初态 6 在中远档，均有两条接近分别只能通过相反一侧合同。已启动新初态与第二布局复验。[实际 XY、两车同步实测录像和完整判定](docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/entry_heading/SOURCE.md)
 
 **此前的宽沟协议（11 月 18 日）。** 0.55米沟已核实原始Source主动腾空、落地交回并完成0.505秒终点保持；首次1/36，之后两批复跑各0/36。完整RB已实测飞越，整程仍待完成。
 
