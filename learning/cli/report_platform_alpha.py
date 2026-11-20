@@ -67,9 +67,15 @@ def report(out):
     matched['delta_yaw_deg']=np.rad2deg(np.arctan2(np.sin(matched.hand_heading-matched.hand_heading_0),np.cos(matched.hand_heading-matched.hand_heading_0)))
     # A contract is new only if every alpha-zero action at every speed failed for that same root/task.
     fixed=df[df.alpha==0].groupby(['skill','root'])[tests].any()
-    support=matched[matched.match_vx].groupby(['skill','root'])[tests].any().reindex_like(fixed).fillna(False)
+    def feasible_with(mask):
+        return matched[mask].groupby(['skill','root'])[tests].any().reindex_like(fixed).fillna(False)
+    support=feasible_with(matched.match_vx)
+    forward_support=feasible_with(matched.match_forward)
+    both=feasible_with(matched.match_forward & matched.match_vx)
     pd.DataFrame([dict(skill=skill,task=task,contracts=len(group),base_feasible=int(group[task].sum()),
-                  new_matched=int((~group[task]&support.loc[skill,task].to_numpy()).sum()))
+                  new_matched=int((~group[task]&support.loc[skill,task].to_numpy()).sum()),
+                  new_forward=int((~group[task]&forward_support.loc[skill,task].to_numpy()).sum()),
+                  new_both=int((~group[task]&both.loc[skill,task].to_numpy()).sum()))
                   for skill,group in fixed.groupby(level='skill') for task in tests]).to_csv(out/'matched_contracts.csv',index=False)
     matched['gain']=matched.verified&~matched.verified_0
     matched['loss']=~matched.verified&matched.verified_0
