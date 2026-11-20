@@ -65,7 +65,10 @@ def measure(out):
                 start=time.perf_counter_ns()
                 query.choose(*args)
                 torch.cuda.synchronize()
-                if i>=50:samples_ms.append((time.perf_counter_ns()-start)/1e6)
+                elapsed=(time.perf_counter_ns()-start)/1e6
+                if i>=50:samples_ms.append(elapsed)
+                if i in (9,99,549):
+                    print(name,candidates,'iteration',i+1,'last synchronized ms',round(elapsed,2),flush=True)
             path=out/f'latency_{name}_{candidates}.csv'
             np.savetxt(path,samples_ms,delimiter=',',header='ms',comments='')
             rows.append(dict(method=name,robots=1,candidates=candidates,horizon_steps=int(seconds[0]/.02),

@@ -1,0 +1,9 @@
+method,planner,n,complete,walls,queried,admitted,admitted_goal,admitted_wall,oracle_feasible,admitted_oracle
+kinematic,C,1080,562,78,813,567,542,3,,
+kinematic,C-R,1080,545,10,813,570,545,3,,
+original_0211,C,1080,417,45,743,385,361,0,598.0,372.0
+original_0211,C-R,1080,419,24,743,385,364,0,598.0,372.0
+original_0211,fixed,1080,529,114,0,0,0,0,598.0,0.0
+original_0211,nominal,1080,360,6,0,0,0,0,598.0,0.0
+phase2_relative,C,1080,535,79,824,465,450,0,,
+phase2_relative,C-R,1080,535,3,824,469,454,0,,

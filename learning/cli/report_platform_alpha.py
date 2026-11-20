@@ -72,10 +72,12 @@ def report(out):
     support=feasible_with(matched.match_vx)
     forward_support=feasible_with(matched.match_forward)
     both=feasible_with(matched.match_forward & matched.match_vx)
+    same_batch=feasible_with(matched.match_forward & matched.match_vx & (matched.speed!=2.))
     pd.DataFrame([dict(skill=skill,task=task,contracts=len(group),base_feasible=int(group[task].sum()),
                   new_matched=int((~group[task]&support.loc[skill,task].to_numpy()).sum()),
                   new_forward=int((~group[task]&forward_support.loc[skill,task].to_numpy()).sum()),
-                  new_both=int((~group[task]&both.loc[skill,task].to_numpy()).sum()))
+                  new_both=int((~group[task]&both.loc[skill,task].to_numpy()).sum()),
+                  new_same_batch_both=int((~group[task]&same_batch.loc[skill,task].to_numpy()).sum()))
                   for skill,group in fixed.groupby(level='skill') for task in tests]).to_csv(out/'matched_contracts.csv',index=False)
     matched['gain']=matched.verified&~matched.verified_0
     matched['loss']=~matched.verified&matched.verified_0

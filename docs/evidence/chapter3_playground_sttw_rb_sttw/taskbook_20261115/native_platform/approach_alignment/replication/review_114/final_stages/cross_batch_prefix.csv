@@ -1,0 +1,9 @@
+method,layout,planner,same_approach,same_physical_prefix
+kinematic,alternate,C,459,0
+kinematic,alternate,C-R,459,0
+kinematic,primary,C,408,0
+kinematic,primary,C-R,408,0
+phase2_relative,alternate,C,468,0
+phase2_relative,alternate,C-R,468,0
+phase2_relative,primary,C,432,0
+phase2_relative,primary,C-R,432,0

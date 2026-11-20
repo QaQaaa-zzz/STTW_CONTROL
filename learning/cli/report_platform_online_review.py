@@ -55,13 +55,13 @@ def report(out):
     data=pd.DataFrame(records)
     keys=['layout','skill','root','force','section','side']
     oracle=data[data.planner=='oracle'].groupby(keys).success.any().rename('oracle_feasible')
-    if 'oracle_cases' in plan:
-        reference=pd.read_csv(plan['oracle_cases'])
-        oracle=reference.drop_duplicates(keys).set_index(keys).oracle_feasible
     assigned=data[data.planner!='oracle'].join(oracle,on=keys)
+    # A separately packed physical run can diverge before RB entry.
+    # Only the exhaustive candidates executed in this batch can supply its oracle.
+
     assigned.to_csv(out/'online_cases.csv',index=False)
     summary=assigned.groupby(['layout','skill','force','section','planner']).agg(tasks=('root','size'),
-               locked_true_jump=('verified','sum'),oracle_feasible=('oracle_feasible','sum'),
+               locked_true_jump=('verified','sum'),oracle_feasible=('oracle_feasible',lambda x:x.sum(min_count=1)),
                chosen_completed=('success','sum'),collision=('collision','sum'),issued_full_pulse=('force_steps',lambda x:(x==20).sum()))
     summary.to_csv(out/'online_funnel.csv')
     c=assigned[assigned.planner=='C'].set_index(keys)
@@ -108,11 +108,20 @@ def write_calibrated_comparison(out,plan):
         cases['admitted_goal']=cases.success & cases.query_feasible
         cases['admitted_wall']=cases.collision & cases.query_feasible
         cases['admitted_oracle']=cases.oracle_feasible & cases.query_feasible
+        if method!='original_0211':
+            cases[['admitted_oracle','oracle_feasible']]=np.nan
         tables.append(cases)
     all_cases=pd.concat(tables)
+    keys=['layout','root','force','section','side','planner']
+    reference=all_cases[all_cases.method=='original_0211']
+    matched=all_cases[all_cases.method!='original_0211'].merge(reference,on=keys,suffixes=('','_old'),validate='many_to_one')
+    same=matched[matched.approach==matched.approach_old].copy()
+    same['same_prefix']=same.prefix==same.prefix_old
+    same.groupby(['method','layout','planner']).agg(same_approach=('root','size'),
+        same_physical_prefix=('same_prefix','sum')).to_csv(parent/'cross_batch_prefix.csv')
     metrics=dict(n=('root','size'),complete=('success','sum'),walls=('collision','sum'),queried=('queried','sum'),
         admitted=('query_feasible','sum'),admitted_goal=('admitted_goal','sum'),admitted_wall=('admitted_wall','sum'),
-        oracle_feasible=('oracle_feasible','sum'),admitted_oracle=('admitted_oracle','sum'))
+        oracle_feasible=('oracle_feasible',lambda x:x.sum(min_count=1)),admitted_oracle=('admitted_oracle',lambda x:x.sum(min_count=1)))
     g=all_cases.groupby(['method','planner']).agg(**metrics)
     g.to_csv(parent/'pareto.csv')
     all_cases.groupby(['method','planner','side','force','layout']).agg(**metrics).to_csv(parent/'calibrated_sides.csv')
