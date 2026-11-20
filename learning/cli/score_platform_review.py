@@ -50,9 +50,15 @@ def score(raw,out):
                 return np.c_[df.x/.1,df.y/.1,yaw/np.deg2rad(5),df.speed/.2]
             dist=np.linalg.norm(xyz(pos)[:,None]-xyz(neg)[None],axis=-1)
             i,j=np.unravel_index(dist.argmin(),dist.shape);a,b=pos.iloc[i],neg.iloc[j]
+            def roll(v):
+                return np.arctan2(2*(v.qw*v.qx+v.qy*v.qz),1-2*(v.qx**2+v.qy**2))
+            def yaw(v):
+                return np.arctan2(2*(v.qw*v.qz+v.qx*v.qy),1-2*(v.qy**2+v.qz**2))
             near_pairs.append(dict(layout=layout,skill=skill,approach=approach,departure=dep,
                                    goal_root=a.root,failed_root=b.root,termination=b.termination,
                                    dx_m=a.x-b.x,dy_m=a.y-b.y,dvx_m_s=a.speed-b.speed,
+                                   dyaw_deg=np.rad2deg(np.angle(np.exp(1j*(yaw(a)-yaw(b))))),
+                                   droll_deg=np.rad2deg(roll(a)-roll(b)),
                                    dsteer_deg=np.rad2deg(a.steer-b.steer),normalized_distance=dist[i,j]))
     pd.DataFrame(records).to_csv(out/'p2_summary.csv',index=False)
     pd.DataFrame(near_pairs).to_csv(out/'p2_pairs.csv',index=False)

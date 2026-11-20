@@ -18,6 +18,9 @@ def planned_actions(table, bank, root, sections, margin):
     nominal=[]
     for a in range(3):
         states=table[table.approach==a].drop_duplicates('root')
+        if states.empty:
+            nominal.append(None)
+            continue
         x=states[['x','y','speed','qw','qx','qy','qz']].to_numpy()
         nominal.append(int(states.iloc[np.argmin((((x-x.mean(0))/x.std(0).clip(.01))**2).sum(1))].root))
     actions={}
@@ -28,7 +31,7 @@ def planned_actions(table, bank, root, sections, margin):
             values=(16*(safe&gate&table.reachable).astype(float)+4*safe+2*gate+table.reachable.astype(float)+.01*table.clear.clip(-1,1))
             grid=table.assign(value=values).pivot(index='root',columns=['approach','departure'],values='value')
             grid=grid.reindex(index=ids,columns=pd.MultiIndex.from_product([range(3),['left','straight','right']])).fillna(-4)
-            nom=np.stack([grid.loc[nominal[a]].to_numpy().reshape(3,3)[a] for a in range(3)])
+            nom=np.stack([grid.loc[nominal[a]].to_numpy().reshape(3,3)[a] if nominal[a] is not None else np.full(3,-4.) for a in range(3)])
             n=divmod(int(nom.argmax()),3)
             c=divmod(int(grid.loc[near].mean().argmax()),3)
             fixed=(1,0) if side==1 else (0,2)
