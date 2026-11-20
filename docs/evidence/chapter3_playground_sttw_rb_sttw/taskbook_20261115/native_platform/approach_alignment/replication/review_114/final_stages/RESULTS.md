@@ -2,7 +2,7 @@
 
 **S3 独立盲测和 S4 论文图表已完成。** 两张新高台图共用 40 个此前未见初态，三档指定扰动为 0、+5、−5 N。12 批各 1320 条真实物理轨迹，共 15,840 条。未按 TEST 结果调参。下列区间按 40 个初态聚类，两张图与同根任务一起重采样。
 
-[严格反转的实跑帧、XY 与包络](../../../../../../../../chapter3_paper/figures/platform_reversal.png) · [R9 盲测真跳并改道通关视频](verified_test_jump.mp4) · [视频的原始逐步位姿、接触及控制记录](verified_test_jump.npz) · [五图四表论文 PDF](../../../../../../../../chapter3_paper/MANUSCRIPT.pdf)
+[严格反转的实跑帧、XY 与包络](../../../../../../../../chapter3_paper/figures/platform_reversal.png) · [R9 盲测真跳并改道通关视频](verified_test_jump.mp4) · [视频的原始逐步位姿、接触及控制记录](verified_test_jump.npz) · [八页论文 PDF](../../../../../../../../chapter3_paper/MANUSCRIPT.pdf)
 
 |待检验的问题|独立 TEST 结果|
 |---|---|

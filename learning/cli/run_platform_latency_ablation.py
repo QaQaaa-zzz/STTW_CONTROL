@@ -7,6 +7,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from compare_platform_clocks import compare
 from report_blind_platform import summarize
 from run_blind_platform import execute
 
@@ -39,6 +40,7 @@ def repeat(baseline, benchmark, output):
     receipt.write_text(json.dumps(plan, indent=2) + '\n')
     execute(output)
     summarize(output)
+    compare(baseline, output)
 
 
 if __name__ == '__main__':
