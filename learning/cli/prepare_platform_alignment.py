@@ -19,6 +19,29 @@ def aligned_route(grid, arc, front, sign, flat_length):
     return xy, heading, np.gradient(heading,arc)
 
 
+def shape_entry_heading(reference, entry_x, slope):
+    """Change the reference tangent at RB entry while keeping its lateral target fixed there."""
+    shaped = {key: value.copy() for key,value in reference.items()}
+    arc = shaped['s']
+    for lane, xy in enumerate(shaped['xy']):
+        x, y = xy.T.copy()
+        dx = x-entry_x
+        taper = np.clip((3.-np.abs(dx))/.8,0.,1.)
+        taper = taper**3*(10.-15.*taper+6.*taper**2)
+        sign = 1 if lane%2==0 else -1
+        y += sign*slope*dx*np.exp(-.5*(dx/1.55)**2)*taper
+        distance = arc[0]+np.r_[0.,np.cumsum(np.hypot(np.diff(x),np.diff(y)))]
+        xy[:,0] = np.interp(arc,distance,x)+np.maximum(arc-distance[-1],0.)
+        xy[:,1] = np.interp(arc,distance,y)
+        heading = np.arctan2(np.gradient(xy[:,1]),np.gradient(xy[:,0]))
+        shaped['heading'][lane] = heading
+        shaped['curvature'][lane] = np.gradient(heading,arc)
+        prefix = x < entry_x-3.
+        for key in ('xy','heading','curvature'):
+            shaped[key][lane,prefix] = reference[key][lane,prefix]
+    return shaped
+
+
 def prepare(template, output, roots, stage, fresh_context):
     cfg = json.loads(template.read_text())
     hand = cfg['ground_handoff']

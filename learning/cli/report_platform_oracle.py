@@ -12,6 +12,29 @@ import numpy as np
 from run_playground_task_reversal import write_rows
 
 
+def compare_entry_states(raw, baseline, dst):
+    records = []
+    for skill in ('source','rb_run1'):
+        for rootdir in (baseline,raw):
+            cap=rootdir/(skill+'_capture')
+            with (rootdir/'prefixes.csv').open() as stream:
+                audited={row['lane']:row for row in csv.DictReader(stream) if row['skill']==skill}
+            for r in json.loads((cap/'status.json').read_text())['results']:
+                with np.load(cap/r['case_dir']/'trajectory.npz') as z:
+                    trace=z['trace']
+                rec=dict(run='baseline' if rootdir==baseline else 'signed_tangent',skill=skill,
+                         root=r['variant']['bank_row'],approach=('left','right')[r['route']%2])
+                physical=audited[str(r['route'])]
+                events=[('entry',r['rb_entry_s']),('takeoff',physical['takeoff_s']),('flight_end',physical['flight_end_s']),
+                        ('loaded',physical['loaded_s']),('handoff',r['handoff_s'])]
+                for name,t in events:
+                    event=trace[np.argmin(abs(trace[:,0]-float(t)))] if t not in (None,'') else None
+                    for k,index in [('y_m',2),('yaw_rad',6),('world_vy_m_s',8)]:
+                        rec[name+'_'+k]=float(event[index]) if event is not None else None
+                records.append(rec)
+    write_rows(dst/'paired_entry_states.csv',records)
+
+
 def report(raw, dest):
     dest.mkdir(exist_ok=True,parents=True)
     plan = json.loads((raw/'plan.json').read_text())
@@ -78,7 +101,7 @@ def report(raw, dest):
     plt.close(fig)
     doc = ['# 高台同图左右任务实测','',
         '[各根实际与参考 XY](xy.png) · [近中远双向反转图](h1_phase_map.png) · [逐合同结果](oracle_task_reversal.csv)','',
-        f"同一张粗糙高台中央墙地图，8 个开发初态。{counts['prefixes']} 条接近中，{counts['verified']} 条经腾空、台面双轮承重和锁摆交回核验。每条合格前缀实际执行三种驶离，共 {counts['physical_suffixes']} 条物理后缀、{counts['scored_contracts']} 项合同评分。每个方向在首次真实交回后下一个 5 ms 控制步发布。将分支在切换时的位姿、速度、RB 和地面控制器历史与原轨迹逐项配对。",'',
+        f"同一张粗糙高台中央墙地图，{len(roots)} 个开发初态。{counts['prefixes']} 条接近中，{counts['verified']} 条经腾空、台面双轮承重和锁摆交回核验。每条合格前缀实际执行三种驶离，共 {counts['physical_suffixes']} 条物理后缀、{counts['scored_contracts']} 项合同评分。每个方向在首次真实交回后下一个 5 ms 控制步发布。将分支在切换时的位姿、速度、RB 和地面控制器历史与原轨迹逐项配对。",'',
         '| 策略 | 左接近 / 右接近合格 | 左绕 / 直行 / 右绕完成终点保持 | 近 / 中 / 远双向反转根数（分母为两种接近均合格的根） |','|---|---|---|---|']
     for sk in skills:
         pref=[r for r in datasets['prefixes'] if r['skill']==sk]
@@ -172,9 +195,26 @@ def report(raw, dest):
             if states:
                 med=[np.median([r[k] for r in states]) for k in ('y_m','yaw_deg','world_vy_m_s')]
                 doc.append(f'| {skill} / {approach} | {med[0]:+.3f} | {med[1]:+.1f} | {med[2]:+.3f} |')
-    doc.extend(['','[逐根交回状态](handoff_states.csv)。本图的两种接近均在向右运动时交回。后续可直接检查交回后的前段轨迹，以及左绕指令在哪个位置退出跟踪域或碰墙。'])
+    doc.extend(['','[逐根交回位置、航向与横向速度](handoff_states.csv)。'])
     if (dest/'full_rb_root1.mp4').exists():
         doc.extend(['','[Full RB 初态 1 的整程录像](full_rb_root1.mp4)。左弯接近和左绕请求，全车腾空后上台、锁摆交回并完成终点保持。录像叠加实测前后轮法向力；各检查点的左右任务成绩另见逐合同表。'])
+    if 'entry_tangent_delta' in plan:
+        compare_entry_states(raw,Path(plan['baseline']),dest)
+        source_paths = {'baseline':Path(plan['baseline']), 'signed_tangent':raw}
+        options = {}
+        for name,path in source_paths.items():
+            with (path/'paired_reversal.csv').open() as f:
+                for r in csv.DictReader(f):
+                    key = r['skill'],r['root'],r['bin']
+                    options.setdefault(key,{}).update({name+'_left':r['left_mask'],name+'_right':r['right_mask']})
+        pooled=[]
+        for (skill,root,group),masks in options.items():
+            valid = [m for m in masks.values() if m!='NA']
+            pooled.append(dict(skill=skill,root=root,bin=group,**masks,eligible=len(valid),
+                               reversal=int('10' in valid and '01' in valid) if len(valid)>=2 else None))
+        write_rows(dest/'four_prefixes.csv',pooled)
+        doc.extend(['','[同根四条已实跑接近的合并判定](four_prefixes.csv)。这项开发集分析允许从两轮共四条候选接近中选择；两轮使用同一份完整中立起步快照。'])
+        doc.extend(['',f"本轮在 x={plan['entry_x_m']:.2f} m 入口对左右参考施加 ±{plan['entry_tangent_delta']:.2f} 的切线斜率增量。原图、冻结权重、初态和三种驶离沿用基线。[同根入口与交回状态对照](paired_entry_states.csv)"])
     (dest/'RESULTS.md').write_text('\n'.join(doc)+'\n')
 
 

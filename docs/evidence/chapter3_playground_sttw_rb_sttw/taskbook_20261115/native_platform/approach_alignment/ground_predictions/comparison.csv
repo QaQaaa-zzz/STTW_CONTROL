@@ -1,0 +1,9 @@
+skill,method,margin,contracts,observed_pass,false_accept,false_reject,physical_branches,observed_collision,missed_collision
+source,kinematic,bare,288,81,27,29,48,3,1
+source,kinematic,shared_dev,288,81,3,45,48,3,0
+source,phase2,bare,288,81,0,72,48,3,2
+source,phase2,shared_dev,288,81,0,72,48,3,0
+rb_run1,kinematic,bare,288,90,28,38,48,5,4
+rb_run1,kinematic,shared_dev,288,90,0,54,48,5,0
+rb_run1,phase2,bare,288,90,0,81,48,5,4
+rb_run1,phase2,shared_dev,288,90,0,81,48,5,0

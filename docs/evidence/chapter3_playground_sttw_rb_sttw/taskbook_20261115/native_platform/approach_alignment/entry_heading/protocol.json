@@ -1,0 +1,54 @@
+{
+  "physical_map": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/rough_development/world.json",
+  "rows": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "skills": [
+    "source",
+    "rb_run1"
+  ],
+  "role": "paired DEV intervention on the same eight bank rows and frozen map",
+  "contracts": {
+    "x_sections_m": [
+      12.7,
+      13.6,
+      15.0
+    ],
+    "target_time_s": [
+      0.7,
+      1.2,
+      2.0
+    ],
+    "left_y_interval_m": [
+      0.06,
+      3.9
+    ],
+    "right_y_interval_m": [
+      -3.9,
+      -0.06
+    ],
+    "point": "base origin first forward crossing after measured handback, linear interpolation",
+    "goal": "same physical map, true contact veto, native 0.5 s terminal hold by 10 s",
+    "scope": "Known map and one root. No layout adjustment based on score."
+  },
+  "entry": "signed local change in reference tangent, zero lateral change at the physical entry x",
+  "snapshot": "first lower tick immediately after physical lock; exact physics, RB and ground state restored",
+  "departures": {
+    "left": 0.36,
+    "straight": 0.0,
+    "right": -0.36
+  },
+  "transition_length_m": 1.6,
+  "horizon_s": 10,
+  "budget": "32 approach prefixes, up to 96 physical departures and 576 contract scores, zero optimizer updates",
+  "baseline": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/rough_oracle",
+  "entry_x_m": 9.200000000000001,
+  "entry_tangent_delta": 0.14
+}

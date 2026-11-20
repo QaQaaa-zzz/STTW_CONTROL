@@ -52,6 +52,8 @@ def evaluate():
         parser.add_argument(name,type=Path)
     parser.add_argument('--deadline', type=float, default=10.)
     parser.add_argument('--extended-truth', type=Path)
+    parser.add_argument('--terrain-raster',type=Path)
+    parser.add_argument('--save-forecast',action='store_true')
     parser.add_argument('--group')
     parser.add_argument('--fit-low-speed', action='store_true')
     parser.add_argument('--margin-name', default='shared_dev')
@@ -68,6 +70,8 @@ def evaluate():
     out = a.output
     out.mkdir(exist_ok=True,parents=True)
     samples = []
+    measured = {}
+    references = {}
     for (lane, _), r in runs.items():
         lane = int(lane)
         prefix, trajectory = Path(r['prefix']), Path(r['trajectory'])
@@ -75,17 +79,24 @@ def evaluate():
         cfg = json.loads((case/'resolved_config.json').read_text())
         schema = json.loads((case/'model_state_schema.json').read_text())
         handoff = float(r['handoff_s'])
-        with np.load(prefix) as z:
-            k = int(np.argmin(abs(z['trace'][:,0]-handoff))) + 1  # first already-locked tick
-            p, u = states(z['qpos'][[k-4,k]],z['qvel'][[k-4,k]],schema)
-            samples.append((p[-1],u[-1],u[0],z['controller_state'][k],z['trace'][k,18]))
-        b = dict(np.load(cfg['ground_handoff']['reference_path']))
-        samples[-1] += tuple(b[key][lane] for key in ('xy','heading','curvature'))
+        if prefix not in measured:
+            with np.load(prefix) as z:
+                k = int(np.argmin(abs(z['trace'][:,0]-handoff))) + 1
+                pose, velocity = states(z['qpos'][[k-4,k]],z['qvel'][[k-4,k]],schema)
+                measured[prefix] = pose[-1],velocity[-1],velocity[0],z['controller_state'][k],z['trace'][k,18]
+        route_file = cfg.get('locked_departures',{}).get('reference_path',cfg['ground_handoff']['reference_path'])
+        if route_file not in references:
+            with np.load(route_file) as f:
+                references[route_file] = dict(f)
+        b = references[route_file]
+        samples.append(measured[prefix]+tuple(b[key][lane] for key in ('xy','heading','curvature')))
     tensor = lambda v: torch.as_tensor(np.asarray(v),device='cuda',dtype=torch.float32)
     p,u,previous,memory,request,xy,h,curvature = (tensor(v) for v in zip(*samples))
     route = tensor(b['s']), xy, h, curvature
     model = load_history_model(a.model)
-    model.terrain = TerrainFeatures(**raster_from_spec(cfg['ditch_terrain']),device='cuda') if model.terrain is not None else None
+    if model.terrain is not None:
+        raster = dict(np.load(a.terrain_raster)) if a.terrain_raster else raster_from_spec(cfg['ditch_terrain'])
+        model.terrain = TerrainFeatures(**raster,device='cuda')
     dt = .02
     steps = int(np.ceil(max(a.deadline-float(r['handoff_s']) for r in runs.values())/dt))
     state = model.initialize(p,u,previous,memory)
@@ -133,11 +144,15 @@ def evaluate():
                                 samples=len(selected),peak_m=selected.max((0,1)).tolist()))
         (out/'support_fit.json').write_text(json.dumps(fit,indent=2))
     reports = []
+    forecast = {}
     for method,(pose,velocity,domain) in methods.items():
         low, high = envelope(pose)
         angles = euler(pose[:,:,3:7].reshape(-1,4)).reshape(len(p),-1,3)
         world_v = rotate(pose[:,:,3:7].reshape(-1,4),velocity[:,:,:3].reshape(-1,3)).reshape(len(p),-1,3)
         speed = world_v[:,:,0]*angles[:,:,2].cos()+world_v[:,:,1]*angles[:,:,2].sin()
+        xy_cpu = pose[:,:,:2].cpu().numpy()
+        if a.save_forecast:
+            forecast[method] = xy_cpu
         for margin_name, margin in [('bare',torch.zeros_like(margins)),(a.margin_name,margins)]:
             eps = margin[torch.bucketize(pose[:,:,0].contiguous(),boundaries)]
             sep = torch.maximum((low-eps[:,:,None])[:,:,:,None]-(center+half),
@@ -147,7 +162,7 @@ def evaluate():
                        (pose[:,:,1].abs()<=goal['abs_y_max_m']) & (world_v[:,:,0]>=goal['min_vx_m_s']) &
                        (domain[:,:,0].abs()<=goal['path_tolerance_m']) & (domain[:,:,1].abs()<=goal['heading_tolerance_rad']) &
                        ((speed-request[:,None]).abs()<=goal['speed_tolerance_m_s']))
-            xy_cpu, clear_cpu, goal_cpu = pose[:,:,:2].cpu().numpy(), clear.cpu().numpy(), in_goal.cpu().numpy()
+            clear_cpu, goal_cpu = clear.cpu().numpy(), in_goal.cpu().numpy()
             bad = ((angles[:,:,0].abs()>.7) | (angles[:,:,1].abs()>1.309) |
                    (domain[:,:,0].abs()>cfg['ground_handoff']['road_half_width_m']) |
                    (domain[:,:,1].abs()>=np.pi/2) | (domain[:,:,2]<model.nominal.follower['preview_body_x_min_m']))
@@ -175,6 +190,8 @@ def evaluate():
                                predicted_collision_free=closest>0,actual_collision=truth['forbidden_contact']=='True',
                                actual_termination=truth['termination'],actual_checkpoint=truth['checkpoint']))
     write_rows(out/'offline_false_accepts.csv',reports)
+    if a.save_forecast:
+        np.savez_compressed(out/'forecast_xy.npz',lane=[k[0] for k in runs],departure=[k[1] for k in runs],dt=dt,**forecast)
 
 
 if __name__=='__main__':

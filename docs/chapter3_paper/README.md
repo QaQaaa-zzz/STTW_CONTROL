@@ -1,5 +1,9 @@
 # 第三章任务书执行与文稿状态
 
+**原生高台开发试验。** 把第二章 0.16 m 高台接入第三章粗糙弯道和中央墙后，8 个共同初态、两种接近和两种冻结策略共 32 条轨迹均出现真实腾空、台面双轮承重和锁摆交回。分别实跑三个驶离选择后，Source 和 Full RB 在近、中、远三档均为 0/8 个初态双向反转。交接已足以开展规划对照，左任务仍受交回时真实侧向运动和随后的路径跟踪约束。[实际轨迹、整程录像与逐合同判定](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/paired_tasks/RESULTS.md)
+
+在上述 96 条物理后缀上，使用相同车体包络与冻结裕量，地面动态预测将 Source 误放行从 3/207 降至 0/207，误拒从 45/81 升至 72/81。Full RB 的误放行同为 0/198，误拒从 54/90 升至 81/90。每条实际驶离承担六项合同评分，有效样本按根和物理路线分组。此结果支持讨论模型迁移造成的取舍，H2 的净规划收益仍待建立。[共享裕量与零裕量的逐根对照](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/ground_predictions/RESULTS.md)
+
 第三章考察一个具体决策：同一辆车从同一初态出发，若远岸改为必须通过另一侧检查点，是否需要在沟前就选择不同的接近路线？第一章的锁摆 STTW 执行地面接近和驶离，第二章提供冻结的 Source 与 Full RB。第三章以实测接管状态衔接两段控制，以整车碰障、检查点与终点保持共同评价整程。原 Full RB 在 map00 的 36 条中首触远岸 30 条，稳定交回 0 条；当前主矩阵使用冻结 Source。[任务书](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/STTW_第三章_Codex任务书.md) · [技能失败漏斗](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/phase1_mechanism/rb_funnel_diagnosis.md)
 
 **截至 11 月 19 日的可写结论。** 在 0.55 m 宽沟的一个开发初态，两条沟前右弯路线均产生核验飞越，远岸双轮承重并锁摆交回。两种接近各实跑直行、左绕和右绕三条后缀，同一轨迹分别按左右必经合同计分；三档均未观察到双向反转。远档只有一种接近能完成右侧任务。两条实际右绕均避开墙却因终点保持不足而超时，说明只检查碰撞会漏掉任务失败。[实际与参考 XY](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/phase2_task_reversal/task_reversal_xy.png) · [合同矩阵](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/phase2_task_reversal/oracle_task_reversal.csv)

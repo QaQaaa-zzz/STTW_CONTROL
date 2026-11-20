@@ -1,0 +1,14 @@
+{
+  "raw": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/rough_oracle/ground_predictions",
+  "source_matrix": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/rough_oracle/oracle_task_reversal.csv",
+  "identity": {
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/residual_seed2/best.pt": "e90b96930ddb549cde6ae40390bafe66253037a6a511fc5bb2eb7b69ef5658bf",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_model_planning/calibration.json": "840e213d3add6b071cd963d9bc839df87bf90f1321fa63a6980545d3b1bc6637"
+  },
+  "calibration": "frozen shared mask from maps 06 and 07",
+  "dt_s": 0.02,
+  "deadline_s": 10,
+  "raw_units": "96 physical suffixes, 576 contracts, 8 paired DEV roots",
+  "terrain": "support and z measured by rays on floor, step and original rough hfields; center wall separately checked with body envelope",
+  "horizon": "physical comparisons end at observed termination; contract decisions use predicted paths"
+}
