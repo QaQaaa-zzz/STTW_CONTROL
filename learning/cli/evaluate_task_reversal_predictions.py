@@ -14,35 +14,7 @@ from sttw_control.playground_prediction import BodyEnvelope, euler, rotate
 from sttw_control.playground_terrain_features import TerrainFeatures, raster_from_spec
 
 
-def kinematic(model, initial, speed, request, route, steps):
-    follower = model.nominal.follower
-    wheelbase = follower['wheelbase_m_expected']
-    x = initial.clone()
-    yaw = euler(x[:,3:7])[:,2]
-    zero = torch.zeros_like(yaw)
-    x[:,3:7] = torch.stack(((yaw/2).cos(), zero, zero, (yaw/2).sin()), 1)
-    # Locked joints are common geometry. This baseline observes no live steering,
-    # roll, yaw rate, or controller history. Use geometry and the actual chord.
-    x[:,7] = 0
-    u = torch.zeros((len(x),9), device=x.device)
-    u[:,0] = speed
-    poses, speeds, domains = [], [], []
-    for _ in range(steps+1):
-        f = model.nominal.features(x, u, *route)
-        poses.append(x.clone())
-        speeds.append(u.clone())
-        domains.append(f[:,9:12])
-        chord2 = f[:,11:13].square().sum(1).clamp_min(1e-8)
-        steer = torch.atan(2*wheelbase*f[:,12]/chord2).clamp(-follower['steer_reference_max_rad'], follower['steer_reference_max_rad'])
-        dyaw = .02*u[:,0]*steer.tan()/wheelbase
-        x[:,0] += .02*u[:,0]*(yaw+dyaw/2).cos()
-        x[:,1] += .02*u[:,0]*(yaw+dyaw/2).sin()
-        yaw = yaw+dyaw
-        x[:,3:7] = torch.stack(((yaw/2).cos(), zero, zero, (yaw/2).sin()),1)
-        x[:,7] = steer
-        dv = .02*follower['nominal_speed_slew_m_s2']
-        u[:,0] += (request-u[:,0]).clamp(-dv,dv)
-    return tuple(torch.stack(values, 1) for values in (poses, speeds, domains))
+from sttw_control.platform_online import kinematic
 
 
 @torch.inference_mode()

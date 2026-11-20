@@ -1,0 +1,56 @@
+{
+  "p2": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/review_114",
+  "ground_model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/residual_seed2",
+  "roots": [
+    464,
+    465,
+    466,
+    467,
+    468,
+    469,
+    470,
+    471,
+    472,
+    473,
+    474,
+    475,
+    476,
+    477,
+    478,
+    479,
+    480,
+    481,
+    482,
+    483,
+    484,
+    485,
+    486,
+    487,
+    488,
+    489,
+    490,
+    491,
+    492,
+    493
+  ],
+  "forces_N": [
+    0,
+    5,
+    -5
+  ],
+  "section_x": [
+    12.7,
+    13.6,
+    15.0
+  ],
+  "margin_m": 0.2105724513530731,
+  "scope": "30 reserved paired bank rows in two layouts; DEV, no independent TEST. 2 skills x 2 maps x 2 batches of 1485. Real 20 consecutive 5 ms world-y force intervals after first ascending free contact; report exposure.",
+  "controls": [
+    "fixed task lookup",
+    "nominal medoid from primary-calibration root IDs on each map",
+    "C empirical conditional handback distribution from nearest five calibration initial states",
+    "C-R same prefix and offline C choice, one measured handback query"
+  ],
+  "budget": "All plan methods have access to three approaches x three departures; fixed policy ignores forecast; C shadow queries the same three live candidates and commits its original command; C-R can switch once. Forecast wall latency recorded per affected batch; sim clock holds during decision. Forced-choice with unsafe candidates kept.",
+  "criteria": "Paired physical outcomes, fallback/no feasible reported. C-R net rescued minus lost <=2 distinct layout/root/task units is auxiliary; force, skill and section reported separately. Alpha and final blind TEST deferred."
+}

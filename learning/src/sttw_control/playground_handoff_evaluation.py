@@ -276,6 +276,21 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
             directions=tensor(paired_departures['direction_ids']).long()
             arc64=tensor(saved['s'])
             world_index=torch.arange(n,device=device)
+        online=cfg.get('platform_online')
+        if online:
+            from .platform_online import PlatformDepartureQuery
+            from .playground_history_model import load_history_model
+            query=PlatformDepartureQuery(model,load_history_model(Path(online['ground_model'])),hand['goal'],online['margin_m'],hand['road_half_width_m'])
+            contracts=[variants[i] for _,_,i in lanes]
+            reselect=tensor([c['planner']=='C-R' for c in contracts])
+            shadow=tensor([c['planner']=='C' for c in contracts])
+            section=tensor([c['section_x'] for c in contracts]).float()
+            side=tensor([c['side'] for c in contracts]).float()
+            force=tensor([c['force_y_N'] for c in contracts]).float()
+            pulse_start=torch.full_like(approach_ids,-1)
+            pulse_ticks=torch.zeros_like(pulse_start)
+            query_ms=torch.zeros_like(force)
+            query_pass=torch.zeros_like(reselect)
         middle.lane_ticks=torch.zeros(n,device=device,dtype=torch.long);middle.latent=torch.zeros_like(raw)
         ground_adapter=GroundAdapter(middle,ctl)
         updates={round(u['time_s']/.005):(u,TorchPathReference(dict(np.load(u['reference_path'])),hcfg,device,route_ids=[r for r,m,i in lanes]))
@@ -387,6 +402,19 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                     just_locked=alive & (phase==2) & ((handoff_time/.005).round().long()==tick-1)
                     after_x=torch.stack([torch.searchsorted(x,q[:,0].double().contiguous()+.05) for x in approach_x])
                     join=torch.maximum(after_x[approach_ids,world_index],torch.searchsorted(arc64,middle.projection['progress'].double().contiguous())+1)
+                    if online and bool((just_locked & (reselect|shadow)).any()):
+                        ids=torch.where(just_locked & (reselect|shadow))[0]
+                        choices=len(approach_x)+(approach_ids[ids,None]*3+torch.arange(3,device=device))*len(arc64)+join[ids,None].clamp_max(len(arc64)-1)
+                        torch.cuda.synchronize()
+                        start_query=time.perf_counter()
+                        # Rotate world velocity into body x exactly as in the offline predictor.
+                        quat=q[ids,3:7];bw,bx,by,bz=quat.T
+                        axis=torch.stack((1-2*(by.square()+bz.square()),2*(bx*by+bw*bz),2*(bx*bz-bw*by)),1)
+                        chosen,admitted=query.choose(q[ids],(axis*v[ids,:3]).sum(1),nominal_continuation_speed[ids],route,choices,section[ids],side[ids],directions[ids],args.seconds-t)
+                        directions[ids]=torch.where(reselect[ids],chosen,directions[ids])
+                        query_pass[ids]=admitted
+                        torch.cuda.synchronize()
+                        query_ms[ids]=1000*(time.perf_counter()-start_query)
                     branch=len(approach_x)+(approach_ids*3+directions)*len(arc64)+join.clamp_max(len(arc64)-1)
                     route.route_ids=torch.where(just_locked,branch,route.route_ids)
                     if tick in (1,8,32) or tick%256==0:
@@ -587,6 +615,12 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                     last=jp.where(to_jax((phase==4)&alive)[:,None],to_jax(actual),last)
                 if cfg.get('collect_model_state'):
                     applied_rows.append(target.clone());applied_masks.append(alive.clone())
+                if online:
+                    launch=alive & ((phase==1)|(phase==3)) & (~flags[:,0]) & (substep_loads[:,-1,:3]<=1e-5).all(1) & (substep_loads[:,-1,3]==0) & (v[:,2]>0) & (q[:,0]>terrain['front_x_m']-1.5) & (pulse_start<0)
+                    pulse_start=torch.where(launch,tick,pulse_start)
+                    applied=alive & (pulse_start>=0) & (tick-pulse_start<20) & (force!=0)
+                    data=data.replace(qfrc_applied=data.qfrc_applied.at[:,1].set(to_jax(torch.where(applied,force,0.))))
+                    pulse_ticks+=applied.long()
                 if tick in pulse_edges:
                     # Free-root translation uses world axes. Leave all other lanes and DOFs untouched.
                     lane=pulse['lane']
@@ -641,6 +675,9 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 (args.output/'model_state_schema.json').write_text(json.dumps(dict(qpos_names=['root_x','root_y','root_z','qw','qx','qy','qz']+[model.joint(i).name for i in range(1,model.njnt)],qvel_names=['world_vx','world_vy','world_vz','body_wx','body_wy','body_wz']+[model.joint(i).name for i in range(1,model.njnt)],steer_qpos=idx.steering_qpos_address,steer_dof=idx.steering_dof_address,front_dof=idx.frontwheel_dof_address,rear_dof=idx.rearwheel_dof_address,lower_dt_s=.005,model_dt_s=.02,history_timing='pre-control after phase events; prior target in trace; initial complete snapshot separately saved'),indent=2))
             load_trace=torch.stack(load_rows).cpu().numpy() if telemetry else None
             codes,durations,entry_time,far_time,handoff_time,hold,airborne=[x.cpu().numpy() for x in (codes,durations,entry_time,far_time,handoff_time,hold,airborne)]
+            if online:
+                online_end=torch.stack((directions,pulse_start,pulse_ticks,query_pass),1).cpu().numpy()
+                query_clock=query_ms.cpu().numpy()
             for lane,(route_id,mode,variant) in enumerate(lanes):
                 case_dir=f'{case_name}_route{route_id}_{mode}'+(f'_v{variant}' if len(variants)>1 else '')
                 target_dir=args.output/case_dir;target_dir.mkdir();keep=valid[:,lane];trace=traces[keep,lane];qsave=positions[keep,lane]
@@ -652,6 +689,9 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                     contact_data.update(dict(contact_substep=samples,contact_substep_columns=['front_normal_N','rear_normal_N','body_normal_N','body_contact'],contact_physics_dt_s=.005/args.physics_substeps,contact_interval_mean_N=samples[:,:,:3].mean(1),contact_interval_peak_N=samples[:,:,:3].max(1),contact_interval_impulse_Ns=samples[:,:,:3].sum(1)*(.005/args.physics_substeps)))
                 np.savez_compressed(target_dir/'trajectory.npz',**contact_data,trace=trace,qpos=qsave,qvel=speeds[keep,lane],world_flags=world_trace[keep,lane],world_flag_columns=['physical_map_exit','nonwheel_terrain_contact','forbidden_obstacle_contact'],wheel_contact_flags=contact_trace[keep,lane],wheel_contact_columns=['any_terrain','any_far','both_far'],reference_xy=(approach_ref['xy'] if paired_departures else saved['xy'])[route_id],published_reference_xy=route.xy[route.route_ids[lane]].cpu().numpy(),columns=['time','x','y','z','roll','pitch','yaw','vx','vy','vz','ground_active','path_distance','steer_target','rear_target','hip_target','knee_target','approaching','rear_rate_rad_s','requested_speed_m_s','phase'])
                 row=dict(continuation_alpha=continuation_alpha,case_dir=case_dir,variant=variants[variant],skill=case_name,route=route_id,continuation=mode,termination=['timeout','physical_failure','tracking_domain_exit' if world else 'corridor_or_domain_exit','goal','world_boundary_exit','forbidden_obstacle_contact'][codes[lane]],actuator_owner_max_difference=float(ownership_max[lane]) if audit_owner else None,nonwheel_contact_steps=int(world_trace[keep,lane,1].sum()),forbidden_contact_steps=int(world_trace[keep,lane,2].sum()),goal=bool(codes[lane]==3),rb_entry_s=None if entry_time[lane]<0 else float(entry_time[lane]),goal_hold_s=float(hold[lane]),airborne=bool(airborne[lane]),far_contact=bool(far_time[lane]>=0),first_far_contact_s=None if far_time[lane]<0 else float(far_time[lane]),handoff_s=None if handoff_time[lane]<0 else float(handoff_time[lane]),duration_s=float(durations[lane]),final_xy=positions[-1,lane,:2].tolist())
+                if online:
+                    dep,onset,ticks,admitted=online_end[lane]
+                    row.update(selected_departure=int(dep),air_event_tick=int(onset),applied_force_ticks=int(ticks),query_batch_ms=float(query_clock[lane]),handoff_query_feasible=bool(admitted))
                 if cfg.get('collect_model_state') and not cfg.get('task_evaluation'):row['completed_slice']=bool(codes[lane]==0)
                 if rolling is not None:
                     row.update(planning_failed=bool(rolling.failed[lane]),final_candidate=int(rolling.active[lane]),final_route=int(rolling.current_route[lane]),final_activation_x_m=float(jump_start[lane]))

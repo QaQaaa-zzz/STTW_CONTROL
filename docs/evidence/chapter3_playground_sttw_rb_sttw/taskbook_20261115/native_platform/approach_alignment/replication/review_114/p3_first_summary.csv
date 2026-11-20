@@ -1,0 +1,10 @@
+layout,skill,force,section,tasks,rescued,lost,net,changed,c_wall,cr_wall
+primary,source,-5,far,30,1,0,1,4,0,0
+primary,source,-5,mid,30,1,0,1,4,0,0
+primary,source,-5,near,30,0,0,0,4,0,0
+primary,source,0,far,30,0,0,0,1,0,0
+primary,source,0,mid,30,0,0,0,0,0,0
+primary,source,0,near,30,0,0,0,0,0,0
+primary,source,5,far,30,0,0,0,1,0,0
+primary,source,5,mid,30,0,0,0,1,0,0
+primary,source,5,near,30,0,0,0,1,0,0

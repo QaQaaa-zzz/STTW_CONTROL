@@ -1,0 +1,13 @@
+layout,skill,section,total,eligible,exclusive,strict,universal,fixed,oracle_left,oracle_right,oracle,gap
+alternate,rb_run1,far,114,105,22,22,28,162,50,113,163,1
+alternate,rb_run1,mid,114,105,22,22,27,161,49,113,162,1
+alternate,rb_run1,near,114,105,38,38,10,160,48,113,161,1
+alternate,source,far,114,93,7,7,10,119,17,112,129,10
+alternate,source,mid,114,93,7,7,9,118,16,112,128,10
+alternate,source,near,114,93,11,11,3,116,14,112,126,10
+primary,rb_run1,far,114,104,44,44,12,166,56,112,168,2
+primary,rb_run1,mid,114,104,44,44,12,166,56,112,168,2
+primary,rb_run1,near,114,104,49,49,1,162,52,110,162,0
+primary,source,far,114,101,14,13,11,111,24,106,130,19
+primary,source,mid,114,101,14,13,11,111,24,106,130,19
+primary,source,near,114,101,16,16,4,111,20,106,126,15
