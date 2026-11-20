@@ -1,4 +1,4 @@
-"""Rebuild the five platform figures and four manuscript tables from frozen scores and saved poses."""
+"""Rebuild the six platform figures and four manuscript tables from frozen scores and saved poses."""
 import argparse
 import json
 import os
@@ -150,6 +150,28 @@ def rescues(b):
     axes[0,1].legend();finish(fig,'platform_rescues')
 
 
+def approved_walls(blind):
+    from count_platform_histories import fingerprint
+    cases = pd.read_csv(blind / 'online_cases.csv').query(
+        "skill == 'rb_run1' and planner == 'C-R' and query_feasible and collision").copy()
+    cases['history'] = cases.trajectory.map(fingerprint)
+    paths = cases.drop_duplicates(['layout', 'root', 'force', 'side', 'history'])
+    fig, axes = plt.subplots(len(paths), 1, figsize=(7.0, 1.42 * len(paths)), layout='constrained')
+    for ax, row in zip(axes, paths.itertuples(), strict=True):
+        world = json.loads((blind / (row.layout + '.json')).read_text())
+        wall(ax, world)
+        with np.load(row.trajectory) as data:
+            pathline(ax, data, BLUE, 'Actual')
+            q = data['qpos']
+            ax.plot(q[-1, 0], q[-1, 1], 'x', color=ORANGE)
+            j = row.departure_applied_tick
+            ax.plot(q[j, 0], q[j, 1], 'o', ms=4, color=BLUE)
+        ax.set(xlim=(10.5, 16), ylim=(-.8, .8), ylabel='World y (m)', aspect='equal',
+               title=f'{row.layout}, root {row.root}, {row.force:+} N, ' + ('left gate' if row.side == 1 else 'right gate'))
+    axes[-1].set_xlabel('World x (m)')
+    finish(fig, 'platform_approved_walls')
+
+
 def tables(b,metrics):
     dest=PAPER/'figures'
     def write(name,header,rows,cols):
@@ -213,7 +235,7 @@ def replay_video(b):
 def publish(wide):
     b=wide/'chapter_mainline/blind_test';raw=wide/'review_114';metrics=pd.read_csv(b/'blind_metrics.csv')
     plt.rcParams.update({'font.size':8,'axes.spines.top':False,'axes.spines.right':False})
-    reversal(b,pd.read_csv(b/'oracle_cases.csv'));layouts(b,raw);dynamics(raw);tradeoff(raw,b,metrics);rescues(b);tables(b,metrics);replay_video(b)
+    reversal(b,pd.read_csv(b/'oracle_cases.csv'));layouts(b,raw);dynamics(raw);tradeoff(raw,b,metrics);rescues(b);approved_walls(b);tables(b,metrics);replay_video(b)
 
 
 if __name__=='__main__':

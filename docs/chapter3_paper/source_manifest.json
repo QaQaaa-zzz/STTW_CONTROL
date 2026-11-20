@@ -64,6 +64,14 @@
     {
       "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/p2_pairs.csv",
       "sha256": "1dd64bf6c1376a463523e58259a42e4888a5e967c30973f6f07cdd981a1bad19"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/gpu_query_benchmark.csv",
+      "sha256": "95a5723929cee1bf7f5733c17dedbee919099830a43ac08dd94f619cbaee82a5"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/history_counts.csv",
+      "sha256": "832ca512cf573c986e39da27dd1b65ab544ac207effecadc7637d5b1db7b09ba"
     }
   ]
 }

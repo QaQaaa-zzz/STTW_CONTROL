@@ -46,6 +46,7 @@ class PlatformDepartureQuery:
     def __init__(self, physics, nominal, goal, margin, halfwidth, relative=None):
         self.model=nominal
         self.relative = relative
+        self.pose_order = torch.tensor([0,1,2,3,4,5,6,8,9,7,10,11],device='cuda')
         if relative:
             terrain = dict(np.load(relative['raster']))
             terrain['height'] -= relative['height']
@@ -61,9 +62,9 @@ class PlatformDepartureQuery:
         self.halfwidth=halfwidth
 
     @torch.inference_mode()
-    def choose(self,q,body_speed,request,route,branch_ids,section,side,old,seconds,velocity=None,previous=None):
+    def choose(self,q,body_speed,request,route,branch_ids,section,side,old,seconds,velocity=None,previous=None,return_forecast=False):
         # The caller has the first physical state after relock; measure three feasible continuations.
-        pose=q[:,[0,1,2,3,4,5,6,8,9,7,10,11]].repeat_interleave(3,0)
+        pose=q.index_select(1,self.pose_order).repeat_interleave(3,0)
         refs=branch_ids.flatten()
         published=(route.s,route.xy[refs],route.heading[refs],route.curvature[refs])
         req=request.repeat_interleave(3)
@@ -89,7 +90,9 @@ class PlatformDepartureQuery:
         goal=self.goal
         hit=(poses[:,:,0]>=goal['x_min_m'])&(poses[:,:,0]<=goal['x_max_m'])&(poses[:,:,1].abs()<=goal['abs_y_max_m'])&(vx>=goal['min_vx_m_s'])&(domain[:,:,0].abs()<=goal['path_tolerance_m'])&(domain[:,:,1].abs()<=goal['heading_tolerance_rad'])&((speed-req[:,None]).abs()<=goal['speed_tolerance_m_s'])
         steps=hit.shape[1]
-        if steps<26:return old,torch.zeros_like(old,dtype=torch.bool),torch.zeros_like(old,dtype=torch.bool)
+        if steps<26:
+            empty=torch.zeros_like(old,dtype=torch.bool)
+            return (old,empty,empty,poses,v,domain) if return_forecast else (old,empty,empty)
         held=hit.unfold(1,26,1).all(-1)
         end=torch.where(held.any(1),held.long().argmax(1)+25,steps-1)
         window=torch.arange(steps,device=q.device)<=end[:,None]
@@ -110,4 +113,22 @@ class PlatformDepartureQuery:
         # Keep C's command when it is predicted feasible; otherwise prefer safer alternatives.
         lane=torch.arange(len(old),device=q.device)
         choice=torch.where(feasible.reshape(-1,3)[lane,old],old,score.argmax(1))
-        return choice,feasible.reshape(-1,3)[lane,choice],feasible.reshape(-1,3)[lane,old]
+        decision=choice,feasible.reshape(-1,3)[lane,choice],feasible.reshape(-1,3)[lane,old]
+        return (*decision,poses,v,domain) if return_forecast else decision
+
+
+class CapturedDepartureQuery:
+    """Reuse a CUDA graph for one layout, immutable route bank, batch shape and horizon."""
+    def __init__(self,query,args):
+        self.indices=[i for i,value in enumerate(args) if isinstance(value,torch.Tensor)]
+        self.inputs=list(args)
+        for i in self.indices:self.inputs[i]=args[i].clone()
+        query.choose(*self.inputs,return_forecast=True)
+        self.graph=torch.cuda.CUDAGraph()
+        with torch.cuda.graph(self.graph):
+            self.outputs=query.choose(*self.inputs,return_forecast=True)
+
+    def __call__(self,*args):
+        for i in self.indices:self.inputs[i].copy_(args[i])
+        self.graph.replay()
+        return self.outputs

@@ -1,11 +1,12 @@
 {
-  "pages": 5,
+  "pages": 8,
   "format": "US Letter, official ieeeconf initial-submission template",
   "figures": [
     "chapter3_paper/figures/platform_reversal.png",
     "chapter3_paper/figures/platform_layouts.png",
     "chapter3_paper/figures/platform_state.png",
     "chapter3_paper/figures/platform_tradeoff.png",
+    "chapter3_paper/figures/platform_approved_walls.png",
     "chapter3_paper/figures/platform_rescues.png"
   ],
   "overfull_boxes": false,

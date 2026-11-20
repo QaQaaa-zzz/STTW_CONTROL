@@ -36,7 +36,7 @@ def execute(out):
                             departure=['left','straight','right'][d],approach_alpha=plan['alpha'],approach_speed_m_s=plan['speed']))
                 hand['handoff_variants']=options;cfg['paired_departures']['direction_ids']=directions
                 cfg.update(world_map=map_entry['path'],approach_initial_bank=plan['bank'],evaluation_lanes=lanes,
-                    ccd_capacity=8*len(lanes),role='Frozen independent TEST',platform_online=dict(ground_model=plan['ground_model'],
+                    ccd_capacity=8*len(lanes),role=plan['role'],platform_online=dict(ground_model=plan['ground_model'],
                     margin_m=eps,committed_vote=True,latency_ticks=plan['latency_ticks'],relative=dict(height=.16,
                     raster=str(folder/'terrain.npz'),initializer=str(folder/(skill+'_initializer.npz')))))
                 run(cfg,target,skill,10,out)

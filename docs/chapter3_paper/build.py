@@ -4,7 +4,7 @@ from pathlib import Path
 
 p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('--engine',default=str(Path.home()/'.local/bin/tectonic'))
-p.add_argument('--platform-run',type=Path,help='Rebuild five figures, four tables and the recorded trial from the replication_wide archive')
+p.add_argument('--platform-run',type=Path,help='Rebuild six figures, four tables and the recorded trial from the replication_wide archive')
 a=p.parse_args();here=Path(__file__).resolve().parent
 if a.platform_run:
     repo=here.parents[1]
