@@ -28,44 +28,58 @@ def transplant(bundle, terrain, output, physics_substeps=1, ground_physics=None)
     root.find('option').set('timestep', str(.005/physics_substeps))
     root.find('option').set('ccd_iterations', '100')
     world, assets = root.find('worldbody'), root.find('asset')
-    for name in ('floor', 'step'):
-        geom = world.find(f"geom[@name='{name}']")
-        geom.set('contype', '0'); geom.set('conaffinity', '0'); geom.set('rgba', '0 0 0 0')
-    anchor=world.find("geom[@name='step']")
-    anchor.set('pos', f"{terrain['front_x_m']+float(anchor.get('size').split()[0])} 0 0")
-    # Explicit pairs bypass contype/conaffinity; remove the replaced ground contacts.
-    contacts = root.find('contact')
-    native_wheel_pairs=[dict(pair.attrib) for pair in contacts if pair.get('geom1')=='floor' and pair.get('geom2') in ('frontwheel_collision','rearwheel_collision')]
-    for pair in list(contacts):
-        if pair.tag == 'pair' and {pair.get('geom1'), pair.get('geom2')} & {'floor', 'step'}:
-            contacts.remove(pair)
-    vertices, triangles, patches = build_ditch_terrain(terrain, return_patches=True)
     ground_physics = ground_physics or {}
-    boxes = []
-    if ground_physics.get('analytic_flat_lips'):
-        patches, boxes = split_flat_lips(patches, terrain['front_x_m'], terrain['front_x_m']+terrain['width_m'])
-    bank_names = [f'bank{i}' for i in range(len(patches))]
-    for i,(xmin,xmax,ymin,ymax,z) in enumerate(boxes):
-        name=f'flat_lip_{i}';bank_names.append(name)
-        ET.SubElement(world,'geom',name=name,type='box',size=f'{(xmax-xmin)/2} {(ymax-ymin)/2} .05',
-                      pos=f'{(xmax+xmin)/2} {(ymax+ymin)/2} {z-.05}',contype='1',conaffinity='15',
-                      friction='.8 .005 .0001',rgba='.45 .38 .25 1')
-    heights = []
-    for i, (xs, ys, zz) in enumerate(patches):
-        bottom=float(zz.min()); scale=max(float(zz.max()-bottom),1e-6)
-        ET.SubElement(assets,'hfield',name=f'bank{i}',nrow=str(len(xs)),ncol=str(len(ys)),size=f'{(ys[-1]-ys[0])/2} {(xs[-1]-xs[0])/2} {scale} .1')
-        ET.SubElement(world,'geom',name=f'bank{i}',type='hfield',hfield=f'bank{i}',pos=f'{(xs[-1]+xs[0])/2} {(ys[-1]+ys[0])/2} {bottom}',quat='.7071067811865476 0 0 .7071067811865476',friction='.8 .005 .0001',contype='1',conaffinity='15',rgba='.45 .38 .25 1')
-        # Rotate local grid 90 degrees so MuJoCo's cell diagonal matches Isaac.
-        heights.append(((zz[::-1,:]-bottom)/scale).astype(np.float32))
-    for i,(xmin,xmax,ymin,ymax) in enumerate(terrain.get('forbidden_rectangles',[])):
-        height=terrain.get('obstacle_height_m',.5)
-        ET.SubElement(world,'geom',name=f'planning_obstacle_{i}',type='box',
-            pos=f'{(xmin+xmax)/2} {(ymin+ymax)/2} {height/2}',
-            size=f'{(xmax-xmin)/2} {(ymax-ymin)/2} {height/2}',
-            contype='1',conaffinity='15',friction='.8 .005 .0001',rgba='.65 .18 .12 1')
-    if ground_physics.get('native_wheel_contacts',False):
-        for bank in bank_names:
-            for pair in native_wheel_pairs:ET.SubElement(contacts,'pair',**dict(pair,geom1=bank))
+    surface = terrain.get('surface')
+    if surface in ('native_step', 'level_gap'):
+        floor = world.find("geom[@name='floor']")
+        step = world.find("geom[@name='step']")
+        front = terrain['front_x_m']
+        half_length, half_width, half_height = map(float, step.get('size').split())
+        step.set('pos', f'{front + terrain["width_m"] + half_length} 0 {terrain["far_bank_height_m"] - half_height}')
+        if surface == 'level_gap':
+            floor.set('type', 'box')
+            floor.set('pos', f'{front - 20} 0 -1')
+            floor.set('size', '20 10 1')
+        bank_names = ['floor', 'step']
+        heights = []
+    else:
+        for name in ('floor', 'step'):
+            geom = world.find(f"geom[@name='{name}']")
+            geom.set('contype', '0'); geom.set('conaffinity', '0'); geom.set('rgba', '0 0 0 0')
+        anchor=world.find("geom[@name='step']")
+        anchor.set('pos', f"{terrain['front_x_m']+float(anchor.get('size').split()[0])} 0 0")
+        # Explicit pairs bypass contype/conaffinity; remove the replaced ground contacts.
+        contacts = root.find('contact')
+        native_wheel_pairs=[dict(pair.attrib) for pair in contacts if pair.get('geom1')=='floor' and pair.get('geom2') in ('frontwheel_collision','rearwheel_collision')]
+        for pair in list(contacts):
+            if pair.tag == 'pair' and {pair.get('geom1'), pair.get('geom2')} & {'floor', 'step'}:
+                contacts.remove(pair)
+        vertices, triangles, patches = build_ditch_terrain(terrain, return_patches=True)
+        boxes = []
+        if ground_physics.get('analytic_flat_lips'):
+            patches, boxes = split_flat_lips(patches, terrain['front_x_m'], terrain['front_x_m']+terrain['width_m'])
+        bank_names = [f'bank{i}' for i in range(len(patches))]
+        for i,(xmin,xmax,ymin,ymax,z) in enumerate(boxes):
+            name=f'flat_lip_{i}';bank_names.append(name)
+            ET.SubElement(world,'geom',name=name,type='box',size=f'{(xmax-xmin)/2} {(ymax-ymin)/2} .05',
+                          pos=f'{(xmax+xmin)/2} {(ymax+ymin)/2} {z-.05}',contype='1',conaffinity='15',
+                          friction='.8 .005 .0001',rgba='.45 .38 .25 1')
+        heights = []
+        for i, (xs, ys, zz) in enumerate(patches):
+            bottom=float(zz.min()); scale=max(float(zz.max()-bottom),1e-6)
+            ET.SubElement(assets,'hfield',name=f'bank{i}',nrow=str(len(xs)),ncol=str(len(ys)),size=f'{(ys[-1]-ys[0])/2} {(xs[-1]-xs[0])/2} {scale} .1')
+            ET.SubElement(world,'geom',name=f'bank{i}',type='hfield',hfield=f'bank{i}',pos=f'{(xs[-1]+xs[0])/2} {(ys[-1]+ys[0])/2} {bottom}',quat='.7071067811865476 0 0 .7071067811865476',friction='.8 .005 .0001',contype='1',conaffinity='15',rgba='.45 .38 .25 1')
+            # Rotate local grid 90 degrees so MuJoCo's cell diagonal matches Isaac.
+            heights.append(((zz[::-1,:]-bottom)/scale).astype(np.float32))
+        for i,(xmin,xmax,ymin,ymax) in enumerate(terrain.get('forbidden_rectangles',[])):
+            height=terrain.get('obstacle_height_m',.5)
+            ET.SubElement(world,'geom',name=f'planning_obstacle_{i}',type='box',
+                pos=f'{(xmin+xmax)/2} {(ymin+ymax)/2} {height/2}',
+                size=f'{(xmax-xmin)/2} {(ymax-ymin)/2} {height/2}',
+                contype='1',conaffinity='15',friction='.8 .005 .0001',rgba='.65 .18 .12 1')
+        if ground_physics.get('native_wheel_contacts',False):
+            for bank in bank_names:
+                for pair in native_wheel_pairs:ET.SubElement(contacts,'pair',**dict(pair,geom1=bank))
     if 'integrator' in ground_physics:
         root.find('option').set('integrator',ground_physics['integrator'])
     if ground_physics.get('steering_velocity_gain') is not None:
@@ -89,7 +103,8 @@ def transplant(bundle, terrain, output, physics_substeps=1, ground_physics=None)
     for i,z in enumerate(heights):
         adr=model.hfield_adr[i]; model.hfield_data[adr:adr+z.size]=z.ravel()
     mujoco.mj_saveModel(model,str(output/'terrain.mjb'),None)
-    np.savez_compressed(output/'terrain_source.npz',vertices=vertices,triangles=triangles,**{f'hfield{i}':z for i,z in enumerate(heights)})
+    if surface not in ('native_step', 'level_gap'):
+        np.savez_compressed(output/'terrain_source.npz',vertices=vertices,triangles=triangles,**{f'hfield{i}':z for i,z in enumerate(heights)})
     return model
 
 
@@ -180,6 +195,8 @@ def main():
     contract['fixed_order_tree_reductions']=cfg.get('fixed_order_tree_reductions',False)
     contract['ordered_solver_reductions']=cfg.get('ordered_solver_reductions',False)
     contract['canonical_constraint_rows']=cfg.get('canonical_constraint_rows',False)
+    if terrain.get('surface') in ('native_step', 'level_gap'):
+        contract['terrain_conversion'] = terrain['surface'] + ' analytic geometry, original XML collision pairs'
     contract['contact_substep_telemetry']=cfg.get('contact_substep_telemetry',False)
     contract['contact_timing']='Each sample is a solver load during one 1 ms step; row t aggregates the preceding 5 ms, row zero has no interval and is NaN.'
     contract['snapshot_replay_s']=cfg.get('snapshot_replay_s')

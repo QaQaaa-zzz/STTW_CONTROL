@@ -1,5 +1,7 @@
 # 第三章：当前结果与大纲进度
 
+**原生高台最新对照。** Full RB 在第二章 RK4、5 ms 直接复测稳定恢复 31/32。在 RK4、1 ms 锁摆弯道串联中，2.0 m/s 时合格交回 12/24，整程 3/24，三个终点成功均来自右弯。[高台与空沟逐例、实际 XY 及成功录像](taskbook_20261115/native_platform/RESULTS.md)
+
 **11 月 19 日任务书主实验。** 0.55 m 宽沟同一开发初态的两条接近均真跳、稳定承重并交回锁摆 STTW。六条实测后缀在近、中、远三档均未出现双向任务反转，远档仅一条前缀能完成右任务。两组误放行与误拒已用真实交回状态做了首轮离线对照。[新版任务书](taskbook_20261115/STTW_第三章_Codex任务书.md) · [实测轨迹、跳跃录像与任务矩阵](taskbook_20261115/phase2_task_reversal/RESULTS.md) · [原始 Full RB 失败漏斗](taskbook_20261115/phase1_mechanism/rb_funnel_diagnosis.md)。
 
 **P0已核实一条主动跳沟并完成目标的Source轨迹，两批复跑各0/36。** [原始Source实测起跳、交回并完成目标的录像及完整RB失败记录](taskbook_20261115/p0_active_jump/RESULTS.md)。以下P2–P5计数保留作旧协议记录。

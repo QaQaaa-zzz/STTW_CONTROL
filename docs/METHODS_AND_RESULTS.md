@@ -1,3 +1,7 @@
+## 第三章原生高台的物理与交接对照
+
+同初态的四个积分器/步长组合和三种接近方向分开计数。Full RB 用 RK4、5 ms 原模型直接稳定恢复 31/32。RK4、1 ms 名义速度全程中，Source 和 Full RB 的锁摆交回为 18/24 和 12/24，终点为 4/24 和 3/24。[运行合同、逐例、录像](evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/RESULTS.md)
+
 ## 同出口连接候选的控制状态保存/恢复接口已实现
 
 IsaacPathRollout.capture_connection_state在50Hz边界导出单lane车体/关节位置速度、ECBC ESO/扰动/gains、Local300历史/前动作/偏航率、H75历史/mask、filtered/offsets/执行模式、原参考/命令、进度/跟随器及物理控制时钟。restore_connection_state把该出口广播给匹配原模型/网络/控制器的名义批次，不用重新预热替代真实出口。begin_connection只绑定下一路线/速度/alpha与新任务计时，保留历史、ESO、滤波和原参考slew。

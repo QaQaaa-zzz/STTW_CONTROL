@@ -77,7 +77,8 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
     geometry=build_geometry_contract(model);brake_qpos=np.array([idx.hip_qpos_address,idx.knee_qpos_address])
     home_pose=tensor(model.key_qpos[idx.keyframe_id,brake_qpos]).float()
     joint_kp=tensor(model.actuator_gainprm[2:,0]).float()
-    terrain_geoms=jp.asarray([model.geom_type[i]==mujoco.mjtGeom.mjGEOM_HFIELD or model.geom(i).name.startswith('flat_lip_') for i in range(model.ngeom)])
+    native_surface = terrain.get('surface') in ('native_step', 'level_gap')
+    terrain_geoms=jp.asarray([(native_surface and model.geom(i).name in ('floor', 'step')) or model.geom_type[i]==mujoco.mjtGeom.mjGEOM_HFIELD or model.geom(i).name.startswith('flat_lip_') for i in range(model.ngeom)])
     forbidden_geoms=jp.asarray([model.geom(i).name.startswith('planning_obstacle_') for i in range(model.ngeom)])
     rb_model=mm.replace(opt=mm.opt.replace(timestep=jp.asarray(.005,dtype=mm.opt.timestep.dtype),integrator=type(mm.opt.integrator)(int(mujoco.mjtIntegrator.mjINT_RK4)))) if cfg.get('rb_physics') else mm
     rb_substeps=1 if cfg.get('rb_physics') else args.physics_substeps
@@ -109,6 +110,8 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         valid &= jp.any(terrain_geoms[jp.clip(g,0,model.ngeom-1)]&(g>=0),-1)
         worlds=c.contact__worldid[None,:]==jp.arange(n)[:,None]
         far=valid&(c.contact__pos[:,0]>terrain['front_x_m']+terrain['width_m'])
+        if native_surface:
+            far &= jp.any(g == model.geom('step').id, -1) & (c.contact__pos[:,2] >= terrain['far_bank_height_m'] - .01)
         front=jp.any(worlds&far&jp.any(g==idx.frontwheel_geom_id,-1),1)
         rear=jp.any(worlds&far&jp.any(g==idx.rearwheel_geom_id,-1),1)
         return jp.stack((jp.any(worlds&valid,1),front|rear,front&rear),1)
@@ -192,8 +195,9 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
 
     def frame_one(d,history,last,offset,signal):
         g=extract_geometry(d,geometry)
-        far_fraction=jp.clip((d.qpos[0]-terrain['front_x_m'])/terrain['width_m'],0.,1.)
-        geom=ObservableGeometry(g.obstacle_relative_x,d.qpos[2]+offset*far_fraction,g.roll,g.pitch,g.yaw)
+        far_fraction=(d.qpos[0]>=terrain['front_x_m']) if terrain['width_m']==0 else jp.clip((d.qpos[0]-terrain['front_x_m'])/terrain['width_m'],0.,1.)
+        relative_x = terrain['front_x_m'] - g.robot_frontmost_x if native_surface else g.obstacle_relative_x
+        geom=ObservableGeometry(relative_x,d.qpos[2]+offset*far_fraction,g.roll,g.pitch,g.yaw)
         history=advance_history(history,observable_frame(d,idx,geom,last,jp.asarray(1.)))
         return history,actor_observation(history,signal)
     frame=jax.jit(jax.vmap(frame_one))
@@ -210,6 +214,11 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
             qpos[lane,1]=case.get('start_y_m',0.)
             qpos[lane,3:7]=[np.cos(yaw/2)*np.cos(roll/2),np.cos(yaw/2)*np.sin(roll/2),np.sin(yaw/2)*np.sin(roll/2),np.sin(yaw/2)*np.cos(roll/2)]
             qvel[lane,:2]=hand.get('start_vx_m_s',2.)*np.array([np.cos(yaw),np.sin(yaw)])
+        if 'approach_initial_bank' in cfg:
+            with np.load(cfg['approach_initial_bank']) as bank:
+                ids = [variants[i]['bank_row'] for _, _, i in lanes]
+                qpos, qvel = bank['qpos'][ids].copy(), bank['qvel'][ids].copy()
+                qpos[:, 0] += hand['start_x_m'] - 2.5
         def make(q,v):
             d=mjx_env.make_data(model,qpos=q,qvel=v,impl='warp',naconmax=4096*n,naccdmax=512,njmax=256)
             plant=mm.replace(eq_data=mm.eq_data.at[brake_ids,0].set(q[brake_qpos]))
@@ -423,7 +432,9 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 crossed=airborne|(supported_far&hand.get('allow_supported_far_completion',False))
                 far=alive&crossed&((phase==1)|(phase==3))&flags[:,1]&(far_time<0)
                 far_time=torch.where(far,t,far_time)
-                if event:
+                if hand.get('retain_rb_after_entry', False):
+                    returning = reset_control = torch.zeros_like(alive)
+                elif event:
                     descending=(v[:,2]<-.1)&(q[:,2]-terrain['far_bank_height_m']<=landing_height)&(q[:,0]>terrain['front_x_m']+terrain['width_m']-.15)
                     preparing=alive&(phase==1)&((airborne&descending)|(crossed&flags[:,1]))
                     phase=torch.where(preparing,3,phase)

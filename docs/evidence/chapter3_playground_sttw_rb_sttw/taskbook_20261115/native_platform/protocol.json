@@ -1,0 +1,99 @@
+{
+  "declaration": {
+    "test": 0,
+    "role": "paired diagnostic, nominal initial bank batch_000 rows 0..31",
+    "controllers": [
+      "source",
+      "rb_run1"
+    ],
+    "optimizer_updates": 0,
+    "maximum_control_steps_per_episode": 400,
+    "physics": "MJX-Warp implicitfast 20x1ms, original floor, step and collision pairs",
+    "comparison": "archived RK4 4x5ms outcomes for identical bank rows",
+    "endpoint": "original stable forward recovery",
+    "physical_check": "before stable recovery: both wheels >10 mm clear and all wheel/body normal loads <=1e-5 N at two consecutive 20 ms samples, then both wheels positively loaded on the step beyond its lip; report sampled flight separately from continuous flight",
+    "progression": "if direct native step recovery <50% for either policy inspect original paired controls, observation and physics before Test1-3; no training"
+  },
+  "physics_comparison": {
+    "role": "diagnosis triggered by 11/32 Full-RB recovery; two by two solver and timestep controls",
+    "cells": [
+      "implicitfast 1ms already observed",
+      "RK4 5ms",
+      "implicitfast 5ms",
+      "RK4 1ms"
+    ],
+    "worlds_per_policy_per_cell": 32,
+    "control_period_ms": 20,
+    "maximum_ticks_per_episode": 400,
+    "weights_bank_geometry_and_metrics": "same as declaration.json",
+    "endpoint": "hold STTW follow-ups until base is explained; make physical-vs-archived comparison with paired lane IDs",
+    "training": false
+  },
+  "approach_contract": {
+    "tests": [
+      1,
+      2,
+      3
+    ],
+    "episodes_each": 48,
+    "horizon_s": 8.0,
+    "bank_rows": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "requested_speed_m_s": 2.0,
+    "entry_offset_m": -1.1,
+    "ground_integrator": "RK4 1 ms, matched to Test 0 RK4 1 ms",
+    "route_order": [
+      "left",
+      "straight",
+      "right"
+    ],
+    "comparisons": "1 RB retains authority; 2 state-triggered handback; 3 same handback on .55m level gap",
+    "goal": "0.5s in the declared platform window, 2.1 to 3.85m after front",
+    "training_updates": 0
+  },
+  "source": {
+    "actor": "a06acbc81aead7120a291cf82359189bff36ccfecde132615ae0f264ee3126e8",
+    "bank": "/home/qy/DVGC/JIT/runs/monitoring/phase_u_random_initial_2x10k_20261019/initial_batches/batch_000.npz",
+    "spec": "/home/qy/DVGC/JIT/runs/experiments/recoverybridge_reviewer_controls_20261022/nominal/pi0/specs/batch_000.json",
+    "step_height_m": 0.16,
+    "dt": 0.02,
+    "n_substeps": 20,
+    "physics_dt": 0.001,
+    "integrator": 3,
+    "backend": "gpu"
+  },
+  "rb_run1": {
+    "actor": "c3eae39c7c116d5db56122d5aff4f29a6f95b8971a51c4c46864754ecb58b040",
+    "bank": "/home/qy/DVGC/JIT/runs/monitoring/phase_u_random_initial_2x10k_20261019/initial_batches/batch_000.npz",
+    "spec": "/home/qy/DVGC/JIT/runs/experiments/recoverybridge_reviewer_controls_20261022/nominal/full_8113001_r9/specs/batch_000.json",
+    "step_height_m": 0.16,
+    "dt": 0.02,
+    "n_substeps": 20,
+    "physics_dt": 0.001,
+    "integrator": 3,
+    "backend": "gpu"
+  },
+  "raw_directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120",
+  "nominal_approach_inputs": "test1.json, test2.json, test3.json",
+  "scored_gap_output": "test3_near_anchor",
+  "speed_extension": "test2_speeds.json",
+  "speed_requests_m_s": [
+    1.9,
+    2.0,
+    2.1
+  ],
+  "control_comparison": "8 s, platform 4 x 2 m, front translated to x = 10.3 m. No obstacles. End window 12.4 to 14.15 m.",
+  "scored_episodes": {
+    "direct": 256,
+    "coupled": 240
+  },
+  "excluded_runs": "48 preliminary gap lanes used far-bank relative-x and were superseded by the near-edge rerun."
+}
