@@ -45,6 +45,12 @@ def compare(original, repeat):
     if not pairs[0].index.equals(pairs[1].index):
         raise ValueError('C/C-R paired keys differ between clocks')
     net = pd.concat([x[['rescued','lost']].groupby(level='skill').sum() for x in pairs],axis=1,keys=['original','repeat'])
+    net.columns = ['_'.join(column) for column in net.columns]
+    conditions = pd.concat([old.add_prefix('old_'), new.add_prefix('new_')], axis=1)
+    cr = conditions.xs('C-R',level='planner').groupby(level=['skill','layout','force'])
+    per_condition = cr.sum()
+    per_condition.insert(0, 'assignments', cr.size())
+    per_condition.to_csv(repeat/'clock_conditions.csv')
     net.to_csv(repeat/'clock_rescues.csv')
 
 

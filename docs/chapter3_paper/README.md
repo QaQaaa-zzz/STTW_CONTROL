@@ -12,7 +12,7 @@
 |[4　完成与撞墙的取舍](figures/platform_tradeoff.png)|左图同 DEV 物理库，右图为未见布局三档扰动及区间|
 |[5　交回改道的两例配对回放](figures/platform_rescues.png)|两组独立 TEST 合同，C 撞墙、C-R 通关|
 
-另附[获准后撞墙的四条实际轨迹](figures/platform_approved_walls.png)、实速匹配表和逐轨迹去重表。四张原主表分别给出严格反转及上界、四规划器整程结果、准入与否决、分扰动配对技能差。全部计数来源及文件哈希见 [source_manifest.json](source_manifest.json)。8 页主稿已编译，含 17 篇外部文献和两条章节自引占位，作者审核待完成。
+另附[原获准撞墙四例在两种时钟下的实际轨迹](figures/platform_approved_walls.png)、实速匹配表和逐轨迹去重表。四张原主表分别给出严格反转及上界、四规划器整程结果、准入与否决、分扰动配对技能差。全部计数来源及文件哈希见 [source_manifest.json](source_manifest.json)。90/85 ms 配对复验已纳入正文，R9 C-R 通关从 701 增至 757/1440，撞墙从 90 降至 18/1440。8 页主稿已编译，含 17 篇外部文献和两条章节自引占位，作者审核待完成。
 
 从工作树根目录运行以下命令可从归档轨迹生成六幅图、四张自动生成的表、视频及 PDF。仅重新排版时使用 `python docs/chapter3_paper/build.py`。
 

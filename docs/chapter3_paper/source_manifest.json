@@ -1,6 +1,6 @@
 {
-  "paper_sha256": "3d1feac4d22a228fad30f655a58c59befa0479f07a4bbead53052d37c75ae337",
-  "pdf_sha256": "b72c000129d20ce116aa200108b0c580c337c3bf24f827953c5d8cb2200ed0ef",
+  "paper_sha256": "c99b69881981506e0aa6e82583433db82d9ce7618ed5224fb266bc6392d0ad3b",
+  "pdf_sha256": "8a588df9fed7119cfdfc22a0501fded2cbd41c9d5153d43f78074a8feaeee530",
   "submission_ready": false,
   "author_verification": "pending",
   "historical_draft_local_commit": "7219dbe6abac4075eea94c4feea87a74f67b37e8",
@@ -67,11 +67,23 @@
     },
     {
       "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/gpu_query_benchmark.csv",
-      "sha256": "95a5723929cee1bf7f5733c17dedbee919099830a43ac08dd94f619cbaee82a5"
+      "sha256": "f67fb11db297b391392fea6afe4aa150eebbfda97b0067c4fc56f83ae198cd62"
     },
     {
       "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/history_counts.csv",
       "sha256": "832ca512cf573c986e39da27dd1b65ab544ac207effecadc7637d5b1db7b09ba"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/paired_clock_effect.csv",
+      "sha256": "905eb98a22c3b3ec0bca7e49a1efa73a2b9cd696abbc438f5f9b599f43ca7370"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/clock_rescues.csv",
+      "sha256": "8b5520ec14d27b7fc922b1bcf1d561c637d85a47642eaf6354f9debe485b29a9"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/clock_conditions.csv",
+      "sha256": "1d8686f047fabb3a095f8392ca32cd2ea2c39ec515a45f4e6d35cd1e7cf7e67d"
     }
   ]
 }

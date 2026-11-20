@@ -15,7 +15,7 @@ from sttw_control.playground_history_model import load_history_model
 
 
 @torch.inference_mode()
-def measure(out, graph_out=None, compiled=False):
+def measure(out, graph_out=None, compiled=False, fused=False):
     plan=read(out/'phase2_relative/plan.json');raw=Path(plan['p2']);wide=raw.parent
     config=read(wide/'primary/roots_0008/rb_run1/resolved_config.json')
     phys=mujoco.MjModel.from_binary_path(str(wide/'primary/roots_0008/rb_run1/terrain.mjb'))
@@ -70,7 +70,7 @@ def measure(out, graph_out=None, compiled=False):
                     eager_step=model.step
                     compiled_step=torch.compile(eager_step,fullgraph=True,dynamic=False,options={'use_fast_math':False,'triton.cudagraphs':False,'emulate_precision_casts':True})
                     model.step=compiled_step
-                runner=CapturedDepartureQuery(query,args)
+                runner=CapturedDepartureQuery(query,args,fused=fused)
                 if compiled:model.step=eager_step
                 errors=dict(max_pose_abs=0.,max_velocity_abs=0.,max_domain_abs=0.,decision_mismatches=0)
                 for k in range(3):
@@ -99,5 +99,13 @@ def measure(out, graph_out=None, compiled=False):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('out',type=Path)
-    p.add_argument('--graph-out',type=Path);p.add_argument('--compile-step',action='store_true');a=p.parse_args();measure(a.out,a.graph_out,a.compile_step)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('out', type=Path)
+    parser.add_argument('--graph-out', type=Path)
+    methods = parser.add_mutually_exclusive_group()
+    methods.add_argument('--compile-step', action='store_true')
+    methods.add_argument('--fused-step', action='store_true')
+    args = parser.parse_args()
+    if (args.compile_step or args.fused_step) and args.graph_out is None:
+        parser.error('The accelerated benchmarks require --graph-out')
+    measure(args.out, args.graph_out, args.compile_step, args.fused_step)

@@ -7,3 +7,4 @@ Time charged to physical control,TEST design,single_robot_latency.csv; test_free
 "Physical completions, rescues and wall contacts",TEST,blind_cases.zip; blind_metrics.csv,pending
 Between-skill differences by assigned force,TEST,blind_metrics.csv,pending
 Recorded R9 successful trajectory,TEST illustration,source_manifest.json; verified_test_jump.npz,pending
+Shorter physical decision clock,post-TEST paired repeat,paired_clock_effect.csv; clock_rescues.csv; clock_conditions.csv,pending

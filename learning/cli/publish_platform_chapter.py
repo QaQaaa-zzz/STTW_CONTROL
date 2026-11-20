@@ -156,17 +156,20 @@ def approved_walls(blind):
         "skill == 'rb_run1' and planner == 'C-R' and query_feasible and collision").copy()
     cases['history'] = cases.trajectory.map(fingerprint)
     paths = cases.drop_duplicates(['layout', 'root', 'force', 'side', 'history'])
+    keys = ['layout','skill','planner','root','force','section','side']
+    repeat = pd.read_csv(blind.parent / 'post_review/latency_ablation/online_cases.csv').set_index(keys)
     fig, axes = plt.subplots(len(paths), 1, figsize=(7.0, 1.42 * len(paths)), layout='constrained')
     for ax, row in zip(axes, paths.itertuples(), strict=True):
         world = json.loads((blind / (row.layout + '.json')).read_text())
         wall(ax, world)
-        with np.load(row.trajectory) as data:
-            pathline(ax, data, BLUE, 'Actual')
-            q = data['qpos']
-            ax.plot(q[-1, 0], q[-1, 1], 'x', color=ORANGE)
-            j = row.departure_applied_tick
-            ax.plot(q[j, 0], q[j, 1], 'o', ms=4, color=BLUE)
-        ax.set(xlim=(10.5, 16), ylim=(-.8, .8), ylabel='World y (m)', aspect='equal',
+        match = repeat.loc[tuple(getattr(row,k) for k in keys)]
+        for path, tick, color in [(row.trajectory,row.departure_applied_tick,BLUE),
+                                  (match.trajectory,match.departure_applied_tick,ORANGE)]:
+            with np.load(path) as data:
+                pathline(ax,data,color,'Actual')
+                q = data['qpos']
+                ax.plot(q[tick,0],q[tick,1],'o',ms=3,color=color)
+        ax.set(xlim=(10.5, 18.6), ylim=(-.8, .8), ylabel='World y (m)', aspect='equal',
                title=f'{row.layout}, root {row.root}, {row.force:+} N, ' + ('left gate' if row.side == 1 else 'right gate'))
     axes[-1].set_xlabel('World x (m)')
     finish(fig, 'platform_approved_walls')

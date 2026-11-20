@@ -119,10 +119,26 @@ class PlatformDepartureQuery:
 
 class CapturedDepartureQuery:
     """Reuse a CUDA graph for one layout, immutable route bank, batch shape and horizon."""
-    def __init__(self,query,args):
+    def __init__(self,query,args,fused=False):
         self.indices=[i for i,value in enumerate(args) if isinstance(value,torch.Tensor)]
         self.inputs=list(args)
         for i in self.indices:self.inputs[i]=args[i].clone()
+        if fused:
+            from functools import partial
+            from .platform_query_kernels import route_features, fused_step
+            model = query.model
+            previous_step, previous_features = model.step, model.nominal.features
+            if query.relative and (model.model_kind == 'direct' or model.alpha_conditioned or len(model.terrain.field) != 1):
+                raise ValueError('Fused platform inference requires the single-map residual checkpoint')
+            model.nominal.features = partial(route_features,model.nominal.follower)
+            model.step = partial(fused_step,model)
+        try:
+            self._capture(query)
+        finally:
+            if fused:
+                model.step, model.nominal.features = previous_step, previous_features
+
+    def _capture(self,query):
         query.choose(*self.inputs,return_forecast=True)
         self.graph=torch.cuda.CUDAGraph()
         with torch.cuda.graph(self.graph):

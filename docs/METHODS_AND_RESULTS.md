@@ -2,6 +2,8 @@
 
 H75 锁摆接近、R9/Source 跳台和锁摆交回在两张新布局及 40 个新初态完成 15,840 条物理轨迹。R9 的 C-R 相对 C 少撞 102 次、少通关 7 个；原 DEV 的获准零碰撞在 TEST 未复现。[独立评分、真跳视频及论文](evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/RESULTS.md)
 
+相同任务的起步/交回改用 90/85 ms 后，R9 C-R 通关从 701 增至 757/1440、撞墙从 90 降至 18；同一时钟下改道救回 8、损失 22。完整 255 步 GPU 融合查询的 3/9 候选 P95 为 10.33/10.79 ms，逐帧校准误差为零。
+
 ## 第三章原生高台的物理与交接对照
 
 第三章冻结 H75、Source 和 rb_run1 的高台弯道接近、交回及端到端逐例结果，见[原生高台对照](evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/RESULTS.md)。
