@@ -21,6 +21,45 @@ from sttw_control.pendulum_skill import PendulumSkill
 from jit_dvgc.model import _build_index
 
 
+def platform_rough_sections(root, terrain):
+    """Use the Chapter 3 bank grids outside the two flat metres on either side."""
+    world, assets, contacts = root.find('worldbody'), root.find('asset'), root.find('contact')
+    source = terrain['rough_source']
+    _, _, patches = build_ditch_terrain(source, return_patches=True)
+    near, far = [patch for patch in patches if len(patch[0]) > 2]
+    front, height = terrain['front_x_m'], terrain['far_bank_height_m']
+    width = source['width_m']
+    floor, step = (world.find(f"geom[@name='{name}']") for name in ('floor','step'))
+    floor.attrib.update(type='box', size='20 4 1', pos=f'{front-2+20} 0 -1')
+    step.set('size','1 1 .16')
+    step.set('pos',f'{front+1} 0 {height-.16}')
+    cut = near[0][0]
+    ET.SubElement(world,'geom',dict(floor.attrib,name='flat_lip_start',size=f'{(cut+5)/2} 4 1',pos=f'{(cut-5)/2} 0 -1'))
+    def copy_pairs(src, dst):
+        for pair in list(contacts):
+            if pair.get('geom1') == src:
+                ET.SubElement(contacts,'pair',dict(pair.attrib,geom1=dst))
+    copy_pairs('floor','flat_lip_start')
+    heights=[]
+    for name,patch,src in [('approach_rough',near,'floor'),('platform_rough',far,'step')]:
+        x,y,z=patch
+        if src=='floor':
+            take=x<=front-2+1e-6
+            x,z=x[take],z[take]
+        else:
+            take=x>=front+width+2-1e-6
+            inside=np.abs(y)<=1+1e-6
+            x,y,z=x[take]-width,y[inside],z[take][:,inside]+height-source['far_bank_height_m']
+        low=float(z.min());scale=float(z.max()-low)
+        ET.SubElement(assets,'hfield',name=name,nrow=str(len(x)),ncol=str(len(y)),
+                      size=f'{np.ptp(y)/2} {np.ptp(x)/2} {scale} .1')
+        ET.SubElement(world,'geom',name=name,type='hfield',hfield=name,contype='1',conaffinity='15',
+                      pos=f'{(x[-1]+x[0])/2} 0 {low}',quat='.7071067811865476 0 0 .7071067811865476',rgba='.46 .40 .31 1')
+        copy_pairs(src,name)
+        heights.append(((z[::-1]-low)/scale).astype(np.float32))
+    return heights
+
+
 def transplant(bundle, terrain, output, physics_substeps=1, ground_physics=None):
     """Use each original Isaac rectangular patch without resampling its heights."""
     root = ET.parse(bundle.xml_path).getroot()
@@ -41,7 +80,7 @@ def transplant(bundle, terrain, output, physics_substeps=1, ground_physics=None)
             floor.set('pos', f'{front - 20} 0 -1')
             floor.set('size', '20 10 1')
         bank_names = ['floor', 'step']
-        heights = []
+        heights = platform_rough_sections(root,terrain) if 'rough_source' in terrain else []
     else:
         for name in ('floor', 'step'):
             geom = world.find(f"geom[@name='{name}']")
@@ -71,15 +110,16 @@ def transplant(bundle, terrain, output, physics_substeps=1, ground_physics=None)
             ET.SubElement(world,'geom',name=f'bank{i}',type='hfield',hfield=f'bank{i}',pos=f'{(xs[-1]+xs[0])/2} {(ys[-1]+ys[0])/2} {bottom}',quat='.7071067811865476 0 0 .7071067811865476',friction='.8 .005 .0001',contype='1',conaffinity='15',rgba='.45 .38 .25 1')
             # Rotate local grid 90 degrees so MuJoCo's cell diagonal matches Isaac.
             heights.append(((zz[::-1,:]-bottom)/scale).astype(np.float32))
-        for i,(xmin,xmax,ymin,ymax) in enumerate(terrain.get('forbidden_rectangles',[])):
-            height=terrain.get('obstacle_height_m',.5)
-            ET.SubElement(world,'geom',name=f'planning_obstacle_{i}',type='box',
-                pos=f'{(xmin+xmax)/2} {(ymin+ymax)/2} {height/2}',
-                size=f'{(xmax-xmin)/2} {(ymax-ymin)/2} {height/2}',
-                contype='1',conaffinity='15',friction='.8 .005 .0001',rgba='.65 .18 .12 1')
         if ground_physics.get('native_wheel_contacts',False):
             for bank in bank_names:
                 for pair in native_wheel_pairs:ET.SubElement(contacts,'pair',**dict(pair,geom1=bank))
+    for i,(xmin,xmax,ymin,ymax) in enumerate(terrain.get('forbidden_rectangles',[])):
+        height=terrain.get('obstacle_height_m',.5)
+        base = terrain['far_bank_height_m'] if surface=='native_step' else 0.
+        ET.SubElement(world,'geom',name=f'planning_obstacle_{i}',type='box',
+            pos=f'{(xmin+xmax)/2} {(ymin+ymax)/2} {base+height/2}',
+            size=f'{(xmax-xmin)/2} {(ymax-ymin)/2} {height/2}',
+            contype='1',conaffinity='15',friction='.8 .005 .0001',rgba='.65 .18 .12 1')
     if 'integrator' in ground_physics:
         root.find('option').set('integrator',ground_physics['integrator'])
     if ground_physics.get('steering_velocity_gain') is not None:
@@ -143,8 +183,9 @@ def main():
         raise ValueError('Post-handoff speed branch requires a replay anchor and a validated 1.8 or 1.9 m/s request')
     if cfg.get('verify_active_jump') and not cfg.get('contact_substep_telemetry'):
         raise ValueError('Jump verification needs substep contact telemetry')
-    if cfg.get('contact_substep_telemetry') and (cfg.get('rb_physics') or a.physics_substeps!=5):
-        raise ValueError('Contact telemetry requires shared 1 ms physics (five substeps)')
+    native_step_5ms = terrain.get('surface') == 'native_step' and a.physics_substeps == 1
+    if cfg.get('contact_substep_telemetry') and (cfg.get('rb_physics') or (a.physics_substeps!=5 and not native_step_5ms)):
+        raise ValueError('Contact telemetry needs shared physics at the declared terrain sampling rate')
     ground_physics=cfg.get('ground_physics',{})
     rb_physics=cfg.get('rb_physics')
     if rb_physics and rb_physics != {'integrator':'RK4','physics_dt_s':.005}:
@@ -198,7 +239,7 @@ def main():
     if terrain.get('surface') in ('native_step', 'level_gap'):
         contract['terrain_conversion'] = terrain['surface'] + ' analytic geometry, original XML collision pairs'
     contract['contact_substep_telemetry']=cfg.get('contact_substep_telemetry',False)
-    contract['contact_timing']='Each sample is a solver load during one 1 ms step; row t aggregates the preceding 5 ms, row zero has no interval and is NaN.'
+    contract['contact_timing']=f'Each sample is a solver load during one {5/a.physics_substeps:g} ms step; row t aggregates the preceding 5 ms, row zero has no interval and is NaN.'
     contract['snapshot_replay_s']=cfg.get('snapshot_replay_s')
     contract['planned_activation_offset_m']=cfg.get('planned_activation_offset_m')
     (a.output/'resolved_config.json').write_text(json.dumps(cfg,indent=2))

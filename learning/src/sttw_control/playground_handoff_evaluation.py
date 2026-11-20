@@ -111,7 +111,10 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         worlds=c.contact__worldid[None,:]==jp.arange(n)[:,None]
         far=valid&(c.contact__pos[:,0]>terrain['front_x_m']+terrain['width_m'])
         if native_surface:
-            far &= jp.any(g == model.geom('step').id, -1) & (c.contact__pos[:,2] >= terrain['far_bank_height_m'] - .01)
+            upper = jp.any(g == model.geom('step').id, -1)
+            if 'rough_source' in terrain:
+                upper |= jp.any(g == model.geom('platform_rough').id, -1)
+            far &= upper & (c.contact__pos[:,2] >= terrain['far_bank_height_m'] - .01)
         front=jp.any(worlds&far&jp.any(g==idx.frontwheel_geom_id,-1),1)
         rear=jp.any(worlds&far&jp.any(g==idx.rearwheel_geom_id,-1),1)
         return jp.stack((jp.any(worlds&valid,1),front|rear,front&rear),1)
@@ -191,7 +194,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         roll=jp.arctan2(2*(w*x+y*z),1-2*(x*x+y*y));pitch=jp.arcsin(jp.clip(2*(w*y-z*x),-1,1));yaw=jp.arctan2(2*(w*z+x*y),1-2*(y*y+z*z))
         gyro=data.sensordata[:,idx.sensor_addresses[5]:idx.sensor_addresses[5]+3]
         m=jp.stack((-roll,-gyro[:,0],q[:,idx.steering_qpos_address],v[:,idx.steering_dof_address],gyro[:,2],v[:,idx.rearwheel_dof_address],v[:,idx.frontwheel_dof_address]),1)
-        return q,v,m,jp.stack((q[:,0],q[:,1],yaw),1),v[:,0]*jp.cos(yaw)+v[:,1]*jp.sin(yaw),jp.stack((roll,pitch,yaw),1)
+        return q,v,m,jp.stack((q[:,0],q[:,1],yaw),1),v[:,0]*jp.cos(yaw)+v[:,1]*jp.sin(yaw),jp.stack((roll,pitch,yaw),1),data.qfrc_bias[:,[idx.hip_dof_address,idx.knee_dof_address]]
 
     def frame_one(d,history,last,offset,signal):
         g=extract_geometry(d,geometry)
@@ -244,10 +247,22 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
             rb_events=jax.vmap(lambda x:initial_event_state(x,event_cfg))(data.qpos[:,0])
         history=jax.tree.map(lambda x:jp.broadcast_to(x,(n,)+x.shape),initial_history())
         last=jp.zeros((n,4));obs=jax.vmap(lambda h:actor_observation(h,jp.asarray(False)))(history)
+        if cfg.get('native_rb_entry_context'):
+            if not use_apex:
+                raise ValueError('Native RB entry context needs the native jump event signal')
+            empty_history = history
+            @jax.jit
+            def enter_native(mask, data, previous, history, last, obs):
+                fresh = jax.vmap(lambda x: initial_event_state(x,event_cfg))(data.qpos[:,0])
+                first_obs = jax.vmap(actor_observation)(empty_history,fresh.jump_signal)
+                def select(new,old):
+                    return jp.where(mask.reshape((n,)+(1,)*(new.ndim-1)),new,old)
+                return jax.tree.map(select,(fresh,empty_history,jp.zeros_like(last),first_obs),
+                                    (previous,history,last,obs))
         policy=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],hcfg,n,device)
         ctl=TorchController(controller_config,n,device)
         middle=TorchMiddleControl(policy,route,identity['frame_scales'],torch.full((n,),hand['approach']['alpha'],device=device),approach_speed)
-        q,v,m,pose,speed,angles=map(to_torch,observe(data));raw=torch.stack((speed,m[:,2]),1);previous=torch.stack((m[:,3],m[:,5]),1)
+        q,v,m,pose,speed,angles,joint_bias=map(to_torch,observe(data));raw=torch.stack((speed,m[:,2]),1);previous=torch.stack((m[:,3],m[:,5]),1)
         nearest=(route.xy[route.route_ids]-pose[:,None,:2]).square().sum(-1).argmin(-1)
         middle.reset(m,pose,speed,raw,raw,previous,ctl,initial_progress=route.s[nearest])
         middle.lane_ticks=torch.zeros(n,device=device,dtype=torch.long);middle.latent=torch.zeros_like(raw)
@@ -339,16 +354,33 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                     if not torch.all(torch.where(mask[...,None],(old_xy-new_xy).abs()<=1e-6,True)):
                         raise ValueError('Oracle route changes the executed geometric prefix')
                     middle.route=proposal;route=proposal;ground_adapter.plan_version+=1
-                q,v,m,pose,speed,angles=map(to_torch,observe(data))
+                q,v,m,pose,speed,angles,joint_bias=map(to_torch,observe(data))
                 if replay:rows,poses,velocities,contact_rows,valid_rows,world_rows,plan_receipts,load_rows,controller_rows,applied_rows,applied_masks,rb_state_rows=[x.copy() for x in prefix]
                 start_tick=snapshot['tick']
                 data.qpos.block_until_ready()
                 (args.output/f'{case_name}_restore.json').write_text(json.dumps(dict(tick=start_tick,time_s=start_tick*.005,restore_s=time.perf_counter()-restore_started,runtime_fields=list(runtime),physics_leaf_count=len(jax.tree.leaves(data)),source=('in-memory' if replay and replay<=memory_repeats else 'serialized')+' full MJX data, RB FIFO/observation/action, ground controller and runner state'),indent=2))
+            branch_ticks = {}
+            if cfg.get('locked_departures'):
+                departure = cfg['locked_departures']
+                proposal = TorchPathReference(dict(np.load(departure['reference_path'])), hcfg, device)
+                first_departure = len(route.xy)
+                for key in ('xy', 'heading', 'curvature'):
+                    setattr(route, key, torch.cat((getattr(route, key), getattr(proposal, key))))
+                for tick_s, lane_numbers in departure['lanes_by_tick'].items():
+                    branch_ticks[int(tick_s)] = tensor(lane_numbers).long()
             rollout_start=time.perf_counter()
             for tick in range(start_tick,round(args.seconds/.005)+1):
                 t=tick*.005
+                if tick in branch_ticks:
+                    ids = branch_ticks[tick]
+                    locked = alive[ids] & (phase[ids] == 2) & ((handoff_time[ids]/.005).round().long() == tick-1)
+                    route.route_ids[ids] = torch.where(locked, first_departure + ids, route.route_ids[ids])
                 collect_handoff=cfg.get('snapshot_ground_handoff',False) and not handoff_snapshot_saved and tick%4==0 and bool(((phase==2)|~alive).all())
                 capture_stage=False
+                if cfg.get('snapshot_first_locked') and not replay:
+                    just_locked = alive & (phase==2) & (handoff_time>=0) & ((handoff_time/.005).round().long()==tick-1)
+                    if bool(just_locked.any()):
+                        collection_ticks.add(tick)
                 if cfg.get('snapshot_loaded_far') and not replay:
                     loaded=alive & ~landing_captured & flags[:,2] & (substep_loads[:,-1,:2]>1e-5).all(1)
                     if bool(loaded.any()):
@@ -426,6 +458,8 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                         pending=dict(selected=selected,feasible=feasible,query_tick=tick,due_tick=tick+delay_ticks,query_ms=query_ms)
                         event_row.update(query_ms=query_ms,due_tick=pending['due_tick']);rolling_events.append(event_row)
                 enter=alive&(phase==0)&(q[:,0]>=jump_start)&(tick%4==0)&(not args.ground_only)
+                if cfg.get('native_rb_entry_context') and tick%4==0:
+                    rb_events,history,last,obs=enter_native(to_jax(enter),data,rb_events,history,last,obs)
                 phase=torch.where(enter,1,phase);entry_time=torch.where(enter,t,entry_time)
                 airborne |= alive&((phase==1)|(phase==3))&~flags[:,0]&(q[:,0]>terrain['front_x_m']-1.5)
                 supported_far=flags[:,2]&(q[:,0]>terrain['front_x_m']+terrain['width_m'])
@@ -515,14 +549,14 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 ground_target[:,2:]=torch.where((phase==3)[:,None],home_targets if home_landing else target[:,2:],ground_target[:,2:])
                 ground_target[:,2:]=torch.where((phase==4)[:,None],home_pose,ground_target[:,2:])
                 if home_compensation:
-                    compensated=(home_pose+to_torch(data.qfrc_bias[:,[idx.hip_dof_address,idx.knee_dof_address]])/joint_kp).clamp(lo[2:],hi[2:])
+                    compensated=(home_pose+joint_bias/joint_kp).clamp(lo[2:],hi[2:])
                     ground_target[:,2:]=torch.where((phase==4)[:,None],compensated,ground_target[:,2:])
                 if lock_first:
                     # RB owns wheels throughout physical homing; STTW starts only after locking.
                     ground_target[:,:2]=torch.where((phase==4)[:,None],target[:,:2],ground_target[:,:2])
                 if not cfg.get('shared_adapters',False) or audit_owner:legacy_target=torch.where(ground_mode[:,None],ground_target,target)
                 if cfg.get('shared_adapters',False):
-                    target=jump_adapter.select(phase,ground_target,target,to_torch(data.qfrc_bias[:,[idx.hip_dof_address,idx.knee_dof_address]]))
+                    target=jump_adapter.select(phase,ground_target,target,joint_bias)
                     if audit_owner:ownership_error=torch.maximum(ownership_error,(target-legacy_target).abs().amax(-1))
                 else:target=legacy_target
                 if lock_first:
@@ -551,7 +585,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                     data,jflags,loads=advance_with_contacts(*step_args);substep_loads=to_torch(loads)
                 else:data,jflags=advance(*step_args)
                 flags=to_torch(jflags)
-                q,v,m,pose,speed,angles=map(to_torch,observe(data))
+                q,v,m,pose,speed,angles,joint_bias=map(to_torch,observe(data))
                 middle.after(m,pose,speed,governed,torch.stack((steer,target[:,1]),1),torch.zeros(n,2,device=device),ctl)
                 if (tick+1)%4==0:
                     if ground_action_history:

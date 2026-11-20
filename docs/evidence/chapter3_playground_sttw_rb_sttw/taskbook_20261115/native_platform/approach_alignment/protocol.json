@@ -1,0 +1,54 @@
+{
+  "physical_map": "rough_development/world.json",
+  "rows": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "skills": [
+    "source",
+    "rb_run1"
+  ],
+  "role": "known layout DEV paired physical oracle, same initial snapshot across approaches within each skill and root",
+  "contracts": {
+    "x_sections_m": [
+      12.7,
+      13.6,
+      15.0
+    ],
+    "target_time_s": [
+      0.7,
+      1.2,
+      2.0
+    ],
+    "left_y_interval_m": [
+      0.06,
+      3.9
+    ],
+    "right_y_interval_m": [
+      -3.9,
+      -0.06
+    ],
+    "point": "base origin first forward crossing after measured handback, linear interpolation",
+    "goal": "same physical map, true contact veto, native 0.5 s terminal hold by 10 s",
+    "scope": "Frozen checkpoint contracts applied to 8 paired DEV roots, one known raised-platform wall map"
+  },
+  "entry": "fixed left lane change ends 4m prior, right 2m prior",
+  "snapshot": "first lower tick immediately after physical lock; exact physics, RB and ground state restored",
+  "departures": {
+    "left": 0.36,
+    "straight": 0.0,
+    "right": -0.36
+  },
+  "transition_length_m": 1.6,
+  "horizon_s": 10,
+  "budget": "One 16-world common reset and prefix pass per skill. Branch each qualified prefix once per direction. At most 96 branch trajectories, 576 contract scores. No training.",
+  "raw_output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/rough_oracle",
+  "batch_replay": "Restore full batch at earliest actual lock tick. Change only the respective lane reference at its own first lower tick after lock. Check captured qpos, qvel, RB and controller history through each switch.",
+  "departure_reference": "Blend from the intact prefix toward the fixed lateral target over 1.6 m, start returning to common track at the last gate x=15.0, reach common global track at x=16.5."
+}

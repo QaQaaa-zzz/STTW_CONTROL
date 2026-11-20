@@ -1,0 +1,44 @@
+{
+  "approach_rough": {
+    "sampled_vertices": 208,
+    "seen_geoms": [
+      "approach_rough"
+    ],
+    "maximum_height_error_m": 6.387070664026773e-10
+  },
+  "platform_rough": {
+    "sampled_vertices": 256,
+    "seen_geoms": [
+      "platform_rough"
+    ],
+    "maximum_height_error_m": 0.000509744656735811
+  },
+  "8.31": {
+    "height_m": 0.0,
+    "name": "floor"
+  },
+  "9.2": {
+    "height_m": 0.0,
+    "name": "floor"
+  },
+  "10.29": {
+    "height_m": 0.0,
+    "name": "floor"
+  },
+  "10.31": {
+    "height_m": 0.16000000000000003,
+    "name": "step"
+  },
+  "11.3": {
+    "height_m": 0.16000000000000003,
+    "name": "step"
+  },
+  "12.29": {
+    "height_m": 0.16000000000000003,
+    "name": "step"
+  },
+  "13.4": {
+    "height_m": 0.66,
+    "name": "planning_obstacle_0"
+  }
+}

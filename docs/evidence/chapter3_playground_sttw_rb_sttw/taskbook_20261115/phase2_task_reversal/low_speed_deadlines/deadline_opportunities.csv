@@ -23,3 +23,9 @@ task_reversal_045_suffixes_root0,0,4,mid,left,False,False,,
 task_reversal_045_suffixes_root0,0,4,mid,right,False,True,,right
 task_reversal_045_suffixes_root0,0,4,far,left,False,False,,
 task_reversal_045_suffixes_root0,0,4,far,right,False,True,,right
+task_reversal_045_suffixes_root3,3,43,near,left,False,False,,
+task_reversal_045_suffixes_root3,3,43,near,right,False,True,,straight right
+task_reversal_045_suffixes_root3,3,43,mid,left,False,False,,
+task_reversal_045_suffixes_root3,3,43,mid,right,False,True,,straight right
+task_reversal_045_suffixes_root3,3,43,far,left,False,True,,straight
+task_reversal_045_suffixes_root3,3,43,far,right,False,True,,right

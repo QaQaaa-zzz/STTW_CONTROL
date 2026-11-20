@@ -2,7 +2,9 @@
 
 双轮机器人控制与连续骑行—跳跃—骑行研究。
 
-> **2026-11-18：第三章从P0重新验收。** 0.55米沟已核实原始Source主动腾空、落地交回并完成0.505秒终点保持；首次1/36，之后两批复跑各0/36。完整RB已实测飞越，整程仍待完成。
+> **当前第三章高台实测。** 粗糙图八个开发初态、两种冻结策略共 32/32 条接近均真跳、台面承重、锁摆交回。96 条真实驶离尚未给出同根双向任务反转。[实测 XY、逐例结果和整程录像](docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/paired_tasks/RESULTS.md)
+
+**此前的宽沟协议（11 月 18 日）。** 0.55米沟已核实原始Source主动腾空、落地交回并完成0.505秒终点保持；首次1/36，之后两批复跑各0/36。完整RB已实测飞越，整程仍待完成。
 
 [P1 宽沟快照复验](docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p1_snapshots/wide_gap/RESULTS.md)已完成，12/12 条阶段轨迹逐项复现至终点。[P2 配对录像与矩阵](docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p2_wide_gap/RESULTS.md)记录了同一个完整初态下的两条实测飞越。0.55 米沟上，右弯接近方案两次完成避障和终点保持，左弯接近方案在远岸承重前失败。[成功录像](docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p2_wide_gap/source_055_goal.mp4) · [失败录像](docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/p2_wide_gap/source_055_left_failure.mp4)。
 

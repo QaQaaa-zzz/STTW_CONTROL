@@ -1,5 +1,7 @@
 ## 第三章原生高台的物理与交接对照
 
+第三章冻结 H75、Source 和 rb_run1 的高台弯道接近、交回及端到端逐例结果，见[原生高台对照](evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/RESULTS.md)。
+
 同初态的四个积分器/步长组合和三种接近方向分开计数。Full RB 用 RK4、5 ms 原模型直接稳定恢复 31/32。RK4、1 ms 名义速度全程中，Source 和 Full RB 的锁摆交回为 18/24 和 12/24，终点为 4/24 和 3/24。[运行合同、逐例、录像](evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/RESULTS.md)
 
 ## 同出口连接候选的控制状态保存/恢复接口已实现
