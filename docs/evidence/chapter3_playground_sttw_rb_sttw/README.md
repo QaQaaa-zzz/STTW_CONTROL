@@ -1,5 +1,7 @@
 # 第三章：当前结果与大纲进度
 
+**当前验收（原生高台 S1–S4）。** 两图 40 个新初态的独立盲测、带物理时延的四规划器对照、五张主图与四张主表均已交付。R9 C-R 完成 701/1440，Source 完成 442/1440；R9 改道减少 102 次撞墙，通关少 7 个。下文保留此前阶段的记录与原计划。[当前证据与失败案例](taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/RESULTS.md) · [论文稿](../../chapter3_paper/MANUSCRIPT.pdf)
+
 **粗糙高台出现同根双向反转。** 冻结 Source 在开发初态 5 的近检查点、初态 6 的中远检查点分别出现双向独占。初态 5 改为左任务时，成功路径采用右弯接近；改为右任务时，成功路径采用左弯接近。每个合格交回都执行了左、直、右三个驶离。正例覆盖两个实际初态。[逐候选证据和录像](taskbook_20261115/native_platform/approach_alignment/entry_heading/SOURCE.md) · [16 个新粗糙图初态和两幅地图的冻结复验方案](taskbook_20261115/native_platform/approach_alignment/replication/protocol.json)
 
 **弯道接近已在粗糙高台复测。** 左右接近在同一初态都能完成真跳、承重和交回，Source 为 8/8 个根，Full RB 为 7/8 个根。两策略在默认驶离下各完成 9/16 个整程。统一完整起点后，两策略各 16/16 条接近完成真跳和交回；96 条实际驶离在近、中、远均为 0/8 根双向反转。[配对 XY、成绩和录像](taskbook_20261115/native_platform/approach_alignment/paired_tasks/RESULTS.md)。[逐例对照与实际 XY](taskbook_20261115/native_platform/approach_alignment/RESULTS.md)
@@ -8,11 +10,19 @@
 
 **11 月 19 日任务书主实验。** 0.55 m 宽沟同一开发初态的两条接近均真跳、稳定承重并交回锁摆 STTW。六条实测后缀在近、中、远三档均未出现双向任务反转，远档仅一条前缀能完成右任务。两组误放行与误拒已用真实交回状态做了首轮离线对照。[新版任务书](taskbook_20261115/STTW_第三章_Codex任务书.md) · [实测轨迹、跳跃录像与任务矩阵](taskbook_20261115/phase2_task_reversal/RESULTS.md) · [原始 Full RB 失败漏斗](taskbook_20261115/phase1_mechanism/rb_funnel_diagnosis.md)。
 
+**当前执行顺序（11月19日修订）**：[五阶段任务书](taskbook_20261115/STTW_第三章_Codex任务书.md) · [给评审的证据与边界](taskbook_20261115/给方案评审的证据说明.md)。先补墙边净空与交接漏斗，优先宽沟双稳定交回和同图左右任务反转；收取既有预测器诊断后停止扩扫。下方 P 编号是历史证据索引。
+
 **P0已核实一条主动跳沟并完成目标的Source轨迹，两批复跑各0/36。** [原始Source实测起跳、交回并完成目标的录像及完整RB失败记录](taskbook_20261115/p0_active_jump/RESULTS.md)。以下P2–P5计数保留作旧协议记录。
 
 **P1 宽沟快照复验通过。** 七组 12/12 条阶段轨迹逐项复现至真实终点。[逐例字段、XY 与回交录像](taskbook_20261115/p1_snapshots/wide_gap/RESULTS.md)。
 
-**P2 最新。** 0.55 米沟、冻结 Source 已有一条完整避障飞越，495 ms 整车无支撑，终点保持 0.505 s。两车道复验的 10 个接近方案均未完成。在原批次同一车道逐项重现成功；配对左弯也飞越，在双轮承重前失败。[成功录像](taskbook_20261115/p2_wide_gap/source_055_goal.mp4) · [XY 与全部候选](taskbook_20261115/p2_wide_gap/RESULTS.md)。
+[Phase 1：墙边净空、同条件 72 条交接漏斗和三组触地帧](taskbook_20261115/phase1_mechanism/RESULTS.md)。Full RB 30 次首触、2 次短双轮承重、0 交回；Source 为 22、10、1。
+
+**P3 宽沟 Source 首轮监督训练与评估已完成。** 168 条 TRAIN、84 条 DEV，三种子在 150 次更新时都仍改善，远岸接触存在漏报，DEV 没有回交正例。该线已经停止续训。[分种子结果与曲线](taskbook_20261115/p3_wide_source/RESULTS.md)。
+
+**P2 同初态双落地配对已完成。** 同一 0.55 m 沟、同一冻结 Source，两个接近方案全车离地并在远岸承重；三个相同驶离选项分别完成 1/3 和 0/3。第二套在回交前失稳。已进入 P3 宽沟监督数据采集。[配对 XY、实测矩阵和两个录像](taskbook_20261115/p2_wide_gap/RESULTS.md)。
+
+**P2 接近 α 复验。** 同一车道左右弯各用 4 个非零 α。8 个方案中 4 个接触远岸，0 个通过飞越判据。对应 α=0 的右弯仍是已复现的整程成功例。[实际与参考轨迹](taskbook_20261115/p2_wide_gap/approach_alpha_xy.png) · [逐方案数值](taskbook_20261115/p2_wide_gap/approach_alpha_events.csv)。
 
 **P2 首轮。** 48 个接近方案中有 10 个实测飞越、1 个远岸双轮承重，整程完成 0。已得到同初态左右弯均真实飞越的配对。[两条录像、轨迹及完整矩阵](taskbook_20261115/p2_wide_gap/RESULTS.md)。
 

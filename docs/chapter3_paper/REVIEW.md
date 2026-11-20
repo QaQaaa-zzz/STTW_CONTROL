@@ -1,5 +1,7 @@
 # Current execution-outline audit
 
+**当前验收（原生高台 S1–S4）。** 两图 40 个新初态的独立盲测、带物理时延的四规划器对照、五张主图与四张主表均已交付。R9 C-R 完成 701/1440，Source 完成 442/1440；R9 改道减少 102 次撞墙，通关少 7 个。下文保留此前阶段的记录与原计划。[当前证据与失败案例](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/RESULTS.md) · [论文稿](MANUSCRIPT.pdf)
+
 The current manuscript follows the supplied Chapter3 execution outline. The older two-interface critique and its numerical evidence are retained below as historical work, not current acceptance criteria.
 
 | Required stage | Current evidence | Remaining boundary |

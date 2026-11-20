@@ -1,9 +1,12 @@
 {
-  "pages": 7,
+  "pages": 5,
   "format": "US Letter, official ieeeconf initial-submission template",
   "figures": [
-    "chapter3_paper/../evidence/chapter3_playground_sttw_rb_sttw/e2_joint/paired_xy.png",
-    "chapter3_paper/figures/approach_prediction.png"
+    "chapter3_paper/figures/platform_reversal.png",
+    "chapter3_paper/figures/platform_layouts.png",
+    "chapter3_paper/figures/platform_state.png",
+    "chapter3_paper/figures/platform_tradeoff.png",
+    "chapter3_paper/figures/platform_rescues.png"
   ],
   "overfull_boxes": false,
   "submission_ready": false,

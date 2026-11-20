@@ -1,10 +1,15 @@
 """Compile the Chapter 3 English draft and inventory its rendered inputs."""
-import argparse,json,re,subprocess
+import argparse,json,os,re,subprocess,sys
 from pathlib import Path
 
 p=argparse.ArgumentParser(description=__doc__)
 p.add_argument('--engine',default=str(Path.home()/'.local/bin/tectonic'))
+p.add_argument('--platform-run',type=Path,help='Rebuild five figures, four tables and the recorded trial from the replication_wide archive')
 a=p.parse_args();here=Path(__file__).resolve().parent
+if a.platform_run:
+    repo=here.parents[1]
+    env=dict(os.environ,PYTHONPATH=os.pathsep.join([str(repo/'learning/src'),os.environ.get('PYTHONPATH','')]))
+    subprocess.run([sys.executable,str(repo/'learning/cli/publish_platform_chapter.py'),str(a.platform_run.resolve())],env=env,check=True)
 source=(here/'MANUSCRIPT.tex').read_text()
 paths=[here]+[here/d for d in re.findall(r'\{([^{}]+/)\}',source.split(r'\graphicspath',1)[1].splitlines()[0])]
 figures=re.findall(r'\\includegraphics\[[^]]+\]\{([^}]+)\}',source)

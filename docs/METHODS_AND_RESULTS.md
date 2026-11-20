@@ -1,3 +1,7 @@
+## 第三章独立高台盲测与论文收官
+
+H75 锁摆接近、R9/Source 跳台和锁摆交回在两张新布局及 40 个新初态完成 15,840 条物理轨迹。R9 的 C-R 相对 C 少撞 102 次、少通关 7 个；原 DEV 的获准零碰撞在 TEST 未复现。[独立评分、真跳视频及论文](evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/RESULTS.md)
+
 ## 第三章原生高台的物理与交接对照
 
 第三章冻结 H75、Source 和 rb_run1 的高台弯道接近、交回及端到端逐例结果，见[原生高台对照](evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/RESULTS.md)。

@@ -1,6 +1,8 @@
 # 第三章执行任务书：面向后续任务可行性的单轨两轮机器人跨技能预测与接近规划
 
-**当前执行顺序（S1–S4）。** S1 逐合同审计实际准入与避墙，在原保留根检验 R9 专属裕量与动态预测，并实测单车 3/9 候选端到端预测延迟。S2 用已完成的主图 30 根实速匹配评估第一章 α。S3 在参数和延迟处理冻结后评估 2 张全新高台 × 40 个新根，按根聚类报告 H1–H4；S4 随后交付 5 图 4 表。底层权重冻结，LLM 接口可选。[收官实验、证据与统计口径](native_platform/approach_alignment/replication/review_114/final_stages/RESULTS.md)
+**当前验收（原生高台 S1–S4）。** 两图 40 个新初态的独立盲测、带物理时延的四规划器对照、五张主图与四张主表均已交付。R9 C-R 完成 701/1440，Source 完成 442/1440；R9 改道减少 102 次撞墙，通关少 7 个。下文保留此前阶段的记录与原计划。[当前证据与失败案例](native_platform/approach_alignment/replication/review_114/final_stages/RESULTS.md) · [论文稿](../../../chapter3_paper/MANUSCRIPT.pdf)
+
+**归档执行顺序（S1–S4）。** S1 逐合同审计实际准入与避墙，在原保留根检验 R9 专属裕量与动态预测，并实测单车 3/9 候选端到端预测延迟。S2 用已完成的主图 30 根实速匹配评估第一章 α。S3 在参数和延迟处理冻结后评估 2 张全新高台 × 40 个新根，按根聚类报告 H1–H4；S4 随后交付 5 图 4 表。底层权重冻结，LLM 接口可选。[收官实验、证据与统计口径](native_platform/approach_alignment/replication/review_114/final_stages/RESULTS.md)
 
 **P1–P3 完成。** 在线两图 30 个相同预留根、3 种强度、4 种规划方法及全候选对照共 11880 条物理轨迹。C-R 对 C 救回 13、损失 12，净 +1，按评审规则列为辅助消融；撞墙从 60 降至 32。固定任务规则完成 873/2160，C-R 完成 718/2160。正文收束到跨技能任务条件选路、Full RB 的匹配增益和碰撞/通关的实际取舍；3B 与底层训练继续冻结。α 与独立 TEST 另列未验证。[完整系统主表及逐例证据](native_platform/approach_alignment/replication/review_114/RESULTS.md)
 
