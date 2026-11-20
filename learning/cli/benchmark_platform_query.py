@@ -17,7 +17,7 @@ from sttw_control.playground_history_model import load_history_model
 @torch.inference_mode()
 def measure(out):
     plan=read(out/'phase2_relative/plan.json');raw=Path(plan['p2']);wide=raw.parent
-    config=read(wide/'primary/roots_0008/rb_run1.json')
+    config=read(wide/'primary/roots_0008/rb_run1/resolved_config.json')
     phys=mujoco.MjModel.from_binary_path(str(wide/'primary/roots_0008/rb_run1/terrain.mjb'))
     model=load_history_model(Path(plan['ground_model']))
     archive=pd.read_csv(raw/'physical_scores.csv')

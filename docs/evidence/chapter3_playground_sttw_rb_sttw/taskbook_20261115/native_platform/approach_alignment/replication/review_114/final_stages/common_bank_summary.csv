@@ -1,0 +1,13 @@
+method,planner,side,n,success,wall,admitted,admitted_wall,admitted_oracle,oracle
+kinematic,C,-1,540,344,3,366,0,354,419
+kinematic,C,1,540,130,79,99,0,95,179
+kinematic,C-R,-1,540,341,3,366,0,354,419
+kinematic,C-R,1,540,107,3,108,0,103,179
+original_0211,C,-1,540,350,3,360,0,351,419
+original_0211,C,1,540,67,42,22,0,18,179
+original_0211,C-R,-1,540,347,3,360,0,351,419
+original_0211,C-R,1,540,72,21,25,0,21,179
+phase2_relative,C,-1,540,344,3,333,0,330,419
+phase2_relative,C,1,540,103,82,55,0,54,179
+phase2_relative,C-R,-1,540,338,3,333,0,330,419
+phase2_relative,C-R,1,540,83,3,68,0,67,179

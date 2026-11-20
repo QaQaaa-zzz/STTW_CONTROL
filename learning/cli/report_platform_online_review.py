@@ -48,13 +48,16 @@ def report(out):
                         records.append(dict(layout=layout,skill=skill,root=variant['bank_row'],
                             planner=variant['planner'],section=section,side=side,force=variant['force_y_N'],
                             approach=row['route'],planned_dep=variant['planned_departure'],chosen_dep=row['selected_departure'],
-                            verified=verified,success=success,collision=bool(row['forbidden_contact_steps']),
+                            departure_applied_tick=row.get('departure_applied_tick'),verified=verified,success=success,collision=bool(row['forbidden_contact_steps']),
                             termination=row['termination'],force_steps=row['applied_force_ticks'],force_onset=row['air_event_tick'],
                             handoff_s=hand,query_batch_ms=row['query_batch_ms'],query_feasible=row['handoff_query_feasible'],
                             prefix=digest,trajectory=str(path)))
     data=pd.DataFrame(records)
     keys=['layout','skill','root','force','section','side']
-    oracle=data[data.planner=='oracle'].groupby(keys).success.any().rename('oracle_feasible')
+    candidates=data[data.planner=='oracle']
+    if plan.get('blind'):
+        candidates.to_csv(out/'oracle_cases.csv',index=False)
+    oracle=candidates.groupby(keys).success.any().rename('oracle_feasible')
     assigned=data[data.planner!='oracle'].join(oracle,on=keys)
     # A separately packed physical run can diverge before RB entry.
     # Only the exhaustive candidates executed in this batch can supply its oracle.
@@ -79,10 +82,11 @@ def report(out):
     pd.Series(dict(distinct_task_units=len(per_task),net_positive_units=(per_task>0).sum(),
                    net_negative_units=(per_task<0).sum(),unchanged_units=(per_task==0).sum(),
                    mismatched_pairs=(~pairs.same_prefix).sum())).to_json(out/'decision_units.json')
+    layouts=sorted(assigned.layout.unique(),reverse=True)
     fig,axes=plt.subplots(2,2,figsize=(10,5),layout='constrained')
     for (layout,skill),group in pairs.reset_index().groupby(['layout','skill']):
         group=group.sort_values(['rescued','lost','changed'],ascending=False)
-        r=group.iloc[0];ax=axes[int(layout=='alternate'),int(skill=='rb_run1')]
+        r=group.iloc[0];ax=axes[layouts.index(layout),int(skill=='rb_run1')]
         for name,color in [('c','#155789'),('cr','#a14324')]:
             with np.load(r[name+'_trajectory']) as z:
                 tr=z['trace'];ref=z['published_reference_xy']

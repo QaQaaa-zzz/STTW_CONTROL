@@ -293,6 +293,18 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
             pulse_ticks=torch.zeros_like(pulse_start)
             query_ms=torch.zeros_like(force)
             query_pass=torch.zeros_like(reselect)
+            latency=online.get('latency_ticks')
+            if latency:
+                # Publish the neutral lead-in while the initial plan is pending.
+                neutral_id=len(route.xy)
+                for field in ('xy','heading','curvature'):
+                    values=getattr(route,field)
+                    setattr(route,field,torch.cat((values,tensor(saved[field][0:1]).to(values))))
+                route.route_ids=torch.full_like(approach_ids,neutral_id)
+                release=torch.full_like(approach_ids,-1)
+                pending_route=torch.zeros_like(approach_ids)
+                applied_tick=torch.full_like(approach_ids,-1)
+                proposed=directions.clone()
         middle.lane_ticks=torch.zeros(n,device=device,dtype=torch.long);middle.latent=torch.zeros_like(raw)
         ground_adapter=GroundAdapter(middle,ctl)
         updates={round(u['time_s']/.005):(u,TorchPathReference(dict(np.load(u['reference_path'])),hcfg,device,route_ids=[r for r,m,i in lanes]))
@@ -400,6 +412,8 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
             for tick in range(start_tick,round(args.seconds/.005)+1):
                 t=tick*.005
                 if paired_departures:
+                    if online and latency and tick==latency['start']:
+                        route.route_ids=approach_ids.clone()
                     # Every departure keeps the common approach until the first tick after physical relock.
                     just_locked=alive & (phase==2) & ((handoff_time/.005).round().long()==tick-1)
                     after_x=torch.stack([torch.searchsorted(x,q[:,0].double().contiguous()+.05) for x in approach_x])
@@ -415,14 +429,29 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                         prev = velocity_state(velocity_history[tick%4][0][ids],velocity_history[tick%4][1][ids]) if query.relative else None
                         current = velocity_state(q[ids],v[ids]) if query.relative else None
                         chosen,admitted,incumbent=query.choose(q[ids],(axis*v[ids,:3]).sum(1),nominal_continuation_speed[ids],route,choices,section[ids],side[ids],directions[ids],args.seconds-t,current,prev)
-                        directions[ids]=torch.where(reselect[ids],chosen,directions[ids])
+                        selected=torch.where(reselect[ids],chosen,directions[ids])
+                        if latency:proposed[ids]=selected
+                        else:directions[ids]=selected
                         query_pass[ids]=torch.where(reselect[ids],admitted,incumbent) if online.get('committed_vote') else admitted
                         torch.cuda.synchronize()
                         query_ms[ids]=1000*(time.perf_counter()-start_query)
                     if online and query.relative:
                         velocity_history[tick%4] = (q,v)
                     branch=len(approach_x)+(approach_ids*3+directions)*len(arc64)+join.clamp_max(len(arc64)-1)
-                    route.route_ids=torch.where(just_locked,branch,route.route_ids)
+                    if online and latency:
+                        anchor=join.clamp_max(len(arc64)-1)
+                        exit_branch=len(approach_x)+(approach_ids*3+proposed)*len(arc64)+anchor
+                        pending_route=torch.where(just_locked,exit_branch,pending_route)
+                        release=torch.where(just_locked,tick+latency['departure'],release)
+                        # All comparators execute the same straight exit during the measured decision time.
+                        branch=len(approach_x)+(approach_ids*3+1)*len(arc64)+anchor
+                        directions=torch.where(just_locked,1,directions)
+                        apply=alive & (release==tick)
+                        route.route_ids=torch.where(apply,pending_route,torch.where(just_locked,branch,route.route_ids))
+                        directions=torch.where(apply,proposed,directions)
+                        applied_tick=torch.where(apply,tick,applied_tick)
+                    else:
+                        route.route_ids=torch.where(just_locked,branch,route.route_ids)
                     if tick in (1,8,32) or tick%256==0:
                         data.qpos.block_until_ready()
                         (args.output/'gpu_progress.json').write_text(json.dumps(dict(tick=tick,worlds=data.qpos.shape[0],device=str(data.qpos.device),elapsed_s=time.perf_counter()-rollout_start)))
@@ -684,6 +713,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
             if online:
                 online_end=torch.stack((directions,pulse_start,pulse_ticks,query_pass),1).cpu().numpy()
                 query_clock=query_ms.cpu().numpy()
+                if latency:delay_receipt=torch.stack((proposed,release,applied_tick),1).cpu().numpy()
             for lane,(route_id,mode,variant) in enumerate(lanes):
                 case_dir=f'{case_name}_route{route_id}_{mode}'+(f'_v{variant}' if len(variants)>1 else '')
                 target_dir=args.output/case_dir;target_dir.mkdir();keep=valid[:,lane];trace=traces[keep,lane];qsave=positions[keep,lane]
@@ -697,6 +727,10 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 row=dict(continuation_alpha=continuation_alpha,case_dir=case_dir,variant=variants[variant],skill=case_name,route=route_id,continuation=mode,termination=['timeout','physical_failure','tracking_domain_exit' if world else 'corridor_or_domain_exit','goal','world_boundary_exit','forbidden_obstacle_contact'][codes[lane]],actuator_owner_max_difference=float(ownership_max[lane]) if audit_owner else None,nonwheel_contact_steps=int(world_trace[keep,lane,1].sum()),forbidden_contact_steps=int(world_trace[keep,lane,2].sum()),goal=bool(codes[lane]==3),rb_entry_s=None if entry_time[lane]<0 else float(entry_time[lane]),goal_hold_s=float(hold[lane]),airborne=bool(airborne[lane]),far_contact=bool(far_time[lane]>=0),first_far_contact_s=None if far_time[lane]<0 else float(far_time[lane]),handoff_s=None if handoff_time[lane]<0 else float(handoff_time[lane]),duration_s=float(durations[lane]),final_xy=positions[-1,lane,:2].tolist())
                 if online:
                     dep,onset,ticks,admitted=online_end[lane]
+                    if latency:
+                        proposed_dep,due,applied=delay_receipt[lane]
+                        row.update(proposed_departure=int(proposed_dep),departure_due_tick=int(due),departure_applied_tick=int(applied),
+                                   initial_release_tick=latency['start'])
                     row.update(selected_departure=int(dep),air_event_tick=int(onset),applied_force_ticks=int(ticks),query_batch_ms=float(query_clock[lane]),handoff_query_feasible=bool(admitted))
                 if cfg.get('collect_model_state') and not cfg.get('task_evaluation'):row['completed_slice']=bool(codes[lane]==0)
                 if rolling is not None:

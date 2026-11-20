@@ -24,7 +24,7 @@ def replay(out):
     reports=[]
     for layout in ('primary','alternate'):
         base=wide/layout/'roots_0008'
-        cfg=read(base/'rb_run1.json');hand=cfg['ground_handoff'];sections=dict(zip(('near','mid','far'),plan['section_x']))
+        cfg=read(base/'rb_run1/resolved_config.json');hand=cfg['ground_handoff'];sections=dict(zip(('near','mid','far'),plan['section_x']))
         physics=mujoco.MjModel.from_binary_path(str(base/'rb_run1/terrain.mjb'))
         bank=dict(np.load(wide/layout/'departure_bank.npz'));initial=dict(np.load(cfg['approach_initial_bank']))
         ref_index={xy.tobytes():i for i,xy in enumerate(bank['xy'])}
@@ -41,14 +41,15 @@ def replay(out):
                     if handback is not None:
                         t=round(handback/.005)+1;q=z['qpos'];v=z['qvel'];loads=z['contact_substep'][:t+1]
                         flags=z['wheel_contact_flags'][:t+1,2];end=t+1
-                        digest=hashlib.sha256(q[:end].tobytes()+v[:end].tobytes()+loads.tobytes()+flags.tobytes()).digest()
+                        digest=hashlib.sha256(q[:end].tobytes()+v[:end].tobytes()).digest()
+                        supported=flags&(loads[:,-1,:2]>1e-5).all(1)
+                        _,_,land=flight(physics,q[:end],loads,supported,tr[:end,0],edge,edge,.16,row['rb_entry_s'])
+                        passed=land is not None and land<=handback+1.e-5
                         if key not in state:
-                            supported=flags&(loads[:,-1,:2]>1e-5).all(1)
-                            _,_,land=flight(physics,q[:end],loads,supported,tr[:end,0],edge,edge,.16,row['rb_entry_s'])
-                            state[key]=(q[t],v[t],q[t-4],v[t-4],t,land is not None and land<=handback+1.e-5)
+                            state[key]=(q[t],v[t],q[t-4],v[t-4],t)
                             digests[key]=digest
                         if digest!=digests[key]:raise ValueError(f'different physical prefix: {layout} {key}')
-                        passed=state[key][-1];ref=ref_index[z['published_reference_xy'].tobytes()]
+                        ref=ref_index[z['published_reference_xy'].tobytes()]
                     crosses=crossings_by_section(tr,np.inf if handback is None else handback,plan['section_x'])
                     tasks={(name,side):bool(passed and row['goal'] and not row['forbidden_contact_steps'] and y is not None and .06<=side*y<=3.9)
                            for name,_,_,y in crosses for side in (-1,1)}
