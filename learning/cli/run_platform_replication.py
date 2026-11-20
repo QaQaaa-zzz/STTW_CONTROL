@@ -104,7 +104,7 @@ def score_wide(plan_path):
                         hand = row['handoff_s']
                         end = len(q) if hand is None else round(hand/.005)+2
                         state = np.column_stack((q[:end],v[:end]))
-                        root = groups.setdefault(key,dict(start=state,paired=True,cells={}))
+                        root = groups.setdefault(key,dict(start=state,paired=True,verified=False,cells={}))
                         root['paired'] &= np.array_equal(root['start'],state,equal_nan=True)
                         land = take = None
                         if hand is not None:
@@ -113,6 +113,7 @@ def score_wide(plan_path):
                             take,_,land = flight(model,q[:end],loads[:end],supported[:end],trace[:end,0],
                                                  edge,edge,terrain['far_bank_height_m'],row['rb_entry_s'])
                         verified = land is not None and land<=hand+1.e-5
+                        root['verified'] |= verified
                         for section,_,_,y in crossings_by_section(trace,hand if hand is not None else np.inf,
                                                                   tasks['x_sections_m']):
                             mask = root['cells'].setdefault(section,[False,False])
@@ -133,9 +134,11 @@ def score_wide(plan_path):
                         for section in ('near','mid','far'):
                             masks = [tuple(prefix['cells'][section]) for prefix in groups.values()]
                             paired = all(prefix['paired'] for prefix in groups.values())
+                            eligible = sum(prefix['verified'] for prefix in groups.values())
+                            reversal = (True,False) in masks and (False,True) in masks
                             reversals.append(dict(layout=name,skill=skill,root=key[0],section=section,
-                                                  paired_prefixes=paired,reversal=(paired and (True,False) in masks
-                                                                                   and (False,True) in masks)))
+                                                  paired_prefixes=paired,eligible_approaches=eligible,
+                                                  reversal=reversal if paired and eligible>=2 else None))
                         groups.clear()
                 write_rows(out/'physical_scores.csv',scores)
                 write_rows(out/'paired_reversal.csv',reversals)
