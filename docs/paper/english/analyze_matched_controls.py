@@ -45,8 +45,13 @@ def read_case(path, labels):
     return contract, lanes
 
 
-def check_pair(c, o):
-    assert c['identity'] == o['identity'] and c['terrain'][0] == o['terrain'][0]
+def check_pair(c, o, *, different_actor=False):
+    if different_actor:
+        for file in ('route.npz', 'config.json'):
+            assert c['identity']['files'][file] == o['identity']['files'][file]
+    else:
+        assert c['identity'] == o['identity']
+    assert all(t == c['terrain'][0] for t in c['terrain'] + o['terrain'][:6])
     for k in ('physics_dt', 'policy_dt', 'lower_dt'):
         assert c[k] == o[k]
     for k in ('lower_sha256', 'randomization', 'initial_state', 'seed', 'plant_options', 'user_speed_m_s', 'terrains'):
@@ -54,7 +59,8 @@ def check_pair(c, o):
     assert Path(c['settings']['asset']).read_bytes() == Path(o['settings']['asset']).read_bytes()
     for group in ('randomization_readback', 'delay_steps'):
         for k, values in c[group].items():
-            np.testing.assert_allclose(np.asarray(o[group][k])[:6], np.broadcast_to(values[0], np.asarray(o[group][k])[:6].shape), atol=0, rtol=0)
+            for lanes in (np.asarray(values), np.asarray(o[group][k])[:6]):
+                np.testing.assert_array_equal(lanes, np.broadcast_to(values[0], lanes.shape))
 
 
 def draw_xy(ax, route, lanes):

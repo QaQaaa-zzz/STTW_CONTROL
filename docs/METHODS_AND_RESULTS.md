@@ -2069,3 +2069,8 @@ source_type=repo_artifact；artifact_checked。共同起点150轮模型无外部
 ## PCRP same-stack bends and analytical speed governor
 
 The corrected flat mesh covered all 60 observed bend trajectories. S-bend full-window counts were 5/5 at all settings, with 5/5 final holds for .5 and .75. On the right bend, each learned preference held 5/5, Zero held 0/5, and no learned run passed Task C. A curvature-based speed cap on 40 archived terrain/group conditions completed 10 and held zero. The 240 matched fixed/Zero control trajectories were reused. [Full matrix and per-group XY](evidence/pcrp_matched_controls/README.md).
+
+
+## PCRP shared seed 7101 on the matched development matrix
+
+Seed 7101 (final update 150) completed 14/40 flat runs, 0/120 ridge runs and 17/40 gravel runs. All 31 completed runs met the final-window speed and heading limits and exceeded the lateral-error limit. Final hold was 0/200. On the same five preferences and physical groups historical H75 completed 118/200 and held 107/200. Seed 7101 used the prospective training protocol. [All 40 paired trajectory panels and 480 lane records](evidence/pcrp_matched_controls/training/shared7101/README.md).

@@ -282,7 +282,7 @@ Neither criterion changes with preference or terrain. The main endpoint figure u
 
 \section{Simulation Study}
 \subsection{Experimental Conditions and Evaluation Order}
-Table~\ref{tab:experiments} separates route geometry, terrain, and imposed lateral pulses. We evaluate the two bends with the frozen H75 middle policy and Local300 lower controller and examine the ridge-placement reversal and its recorded states. A one-factor study tests the wider role of position, slope length, and relative geometry. The original terrain scan supplies the seven terrain-height comparisons. All comparisons use the same frozen middle actor. The terrain scans and error-plane runs share the same balance stack. Historical smooth-bend comparisons used separately archived execution settings and are reported as supporting evidence. Within each condition, route, speed request, saved initial state, physical parameters, and pulse schedule are matched across preferences.
+Table~\ref{tab:experiments} separates route geometry, terrain, and imposed lateral pulses. We evaluate the two bends with the frozen H75 middle policy and Local300 lower controller and examine the ridge-placement reversal and its recorded states. A one-factor study tests the wider role of position, slope length, and relative geometry. The original terrain scan supplies the seven terrain-height comparisons. These mechanism and preference scans use the frozen H75 middle actor. The terrain scans and error-plane runs share the same balance stack. Historical smooth-bend comparisons used separately archived execution settings and are reported as supporting evidence. Within each condition, route, speed request, saved initial state, physical parameters, and pulse schedule are matched across preferences.
 
 \begin{table}[t]\centering\footnotesize
 \caption{Experimental conditions and their roles. ``Pulse'' denotes an imposed lateral force, in addition to wheel--ground contact.}\label{tab:experiments}
@@ -423,6 +423,11 @@ Gravel 0 &4&1/0&0/0&3/3&4/4&4/2\\
 Gravel 1 &4&1/0&1/0&2/2&2/1&3/3\\\bottomrule
 \end{tabular}\end{table}
 
+\subsection{Evaluation after training a new middle policy}
+We initialized a fresh middle actor and critic (seed 7101), retained Local300 and trained on the archived route geometries using flat and wave ground, a common warm start, signed force pulses and vehicle randomization. Go2 PPO ran 150 updates with 4,096 environments and 24 policy steps per update. We evaluated the final weights on the same 40 layout--group pairs as the analytical governor, once at each of the five preferences. Both the initialization and training protocol differ from the historical H75 run.
+
+The new policy completed 14/40 flat runs and 8/20 and 9/20 runs on the two gravel layouts. It completed 0/40 at each of the three ridge positions. All 31 completions met the final speed and heading tolerances, but each exceeded the 0.10~m cross-track tolerance during the final second. Final hold was therefore 0/200. On the same conditions H75 completed 118/200 runs, held in 107/200 and passed Task C in 56/200. Of the new policy's 169 early terminations, 94 reached the follower-domain boundary, 70 reached the lean limit and five triggered the contact criterion. The ridge-placement reversal observed for H75 therefore did not recur for this actor. A comparison across seeds trained under the same protocol is needed to quantify variability due to initialization.
+
 \section{What the preference selector can predict}
 The pre-run selector used terrain family, height, requested speed and the tracking specification. Its decision was frozen before testing on two new layouts and four further physical groups. Each task required completion, final hold and bounds on peak lateral error and speed RMSE. The bound pairs (m, m/s) were $(0.30,0.20)$, $(0.60,0.10)$ and $(0.40,0.15)$ for A, B and C.
 
@@ -436,7 +441,7 @@ C & 70 & 64 & 63 & 44 & 32 & 75\\\bottomrule
 \end{tabular}\end{table}
 On C, the selector gained 15 passes and lost 10 relative to fixed zero preference. Crossed resampling of layouts and physical groups gave a descriptive 95\% interval of $[-3.41,8.52]$ percentage points for the net gain. Its 9/48 gravel passes also fell short of 17/48 for the middle preference. Ridge location was absent from the selector inputs. At fixed height and requested speed, the selector therefore assigned the same setting to placements with different endpoint outcomes.
 
-The experiments used one trained middle policy. Physical groups measure sensitivity to the sampled vehicle and contact parameters. A separate natural switching study found that none of 60 prefix groups met its predeclared common-state check at the switch, so it cannot isolate the effect of changing the post-entry preference. A test of online selection requires matched entry states, a causal post-ridge trigger and layouts reserved before tuning.
+The ridge-placement and contact-mechanism results come from the H75 policy. Physical groups measure sensitivity to the sampled vehicle and contact parameters. A separate natural switching study found that none of 60 prefix groups met its predeclared common-state check at the switch, so it cannot isolate the effect of changing the post-entry preference. A test of online selection requires matched entry states, a causal post-ridge trigger and layouts reserved before tuning.
 
 \section{Conclusion}
 A preference-conditioned policy can change the approach to the same obstacle enough to reverse which endpoint completes the turn. The contact records identify a short interval in which a front wheel reloads while rear support is absent, and the steering envelope quantifies how little recovery authority remains in some of the resulting states. These observations explain why a setting chosen from height and requested speed alone transfers unevenly across placements and tracking tasks.

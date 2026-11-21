@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True);p.add_argument('--output',type=Path);p.add_argument('--baseline-run',type=Path);p.add_argument('--rescore-zero',action='store_true',help='Use the Zero lane in this run for same-alpha paired rewards');p.add_argument('--lane-labels',type=json.loads);p.add_argument('--preference-label-prefix',default='alpha');p.add_argument('--title',default='H75 fixed-alpha GPU evaluation');a=p.parse_args();out=a.run if a.output is None else a.output;out.mkdir(parents=True,exist_ok=True)
+p=argparse.ArgumentParser();p.add_argument('--run',type=Path,required=True);p.add_argument('--output',type=Path);p.add_argument('--baseline-run',type=Path);p.add_argument('--full-diagnostics',action='store_true',help='Also produce detailed paired plots for compact evaluation records');p.add_argument('--rescore-zero',action='store_true',help='Use the Zero lane in this run for same-alpha paired rewards');p.add_argument('--lane-labels',type=json.loads);p.add_argument('--preference-label-prefix',default='alpha');p.add_argument('--title',default='H75 fixed-alpha GPU evaluation');a=p.parse_args();out=a.run if a.output is None else a.output;out.mkdir(parents=True,exist_ok=True)
 from sttw_control.isaac_path_reporting import load_case,write_zero_scores,static_case_metrics
 if a.rescore_zero:
  write_zero_scores(a.run);a.baseline_run=a.run
@@ -46,7 +46,7 @@ fig,ax=plt.subplots(figsize=(8,6));ax.plot(*route['xy'][ref].T,':',color='gray',
 for lane,(label,color) in enumerate(zip(labels,colors)):
  trace=r['lower_trace'][:,:,lane].reshape(-1,11);v=trace[trace[:,6].astype(bool)];ax.plot(v[:,0],v[:,1],color=color,label=label,linestyle=styles[lane],marker=palette_markers[lane%len(palette_markers)],markevery=400,markersize=3);ax.scatter(*v[-1,:2],marker='x',color=color)
 ax.set(xlabel='World x (m)',ylabel='World y (m)',title=a.title+': actual/reference XY');ax.axis('equal');ax.legend();fig.tight_layout();fig.savefig(out/'xy.png',dpi=170);plt.close(fig)
-if c['settings'].get('compact_results'):
+if c['settings'].get('compact_results') and not a.full_diagnostics:
  from sttw_control.isaac_path_reporting import replay_rewards
  cfg=json.loads((Path(c['bundle'])/'config.json').read_text());replayed,parts,closure=replay_rewards(r,cfg)
  np.savez_compressed(out/'reward_components.npz',reward=replayed,**parts)
