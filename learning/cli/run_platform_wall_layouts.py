@@ -47,7 +47,7 @@ def freeze(parent, out):
                                   'timings_ms','clock','alpha','speed','forces_N','section_x','root_bootstrap_seed')}
     clean.update(role='T2 geometry transfer; locked unseen initial states',maps=maps,roots=roots,
                  parent_manifest=str(original),parent_sha256=sha(original),base_map=str(source_map),
-                 assignment_batches=[pairs[:45],pairs[45:]],scope='3 layouts x 2 skills x 2 batches x 1485 physical lanes. Four planners and nine physical oracle branches; 30 paired root clusters.')
+                 assignment_batches=[pairs],scope='3 layouts x 2 skills x 2970 physical lanes. Four planners and nine physical oracle branches; 30 paired root clusters.')
     save(out/'test_freeze_manifest.json',clean)
 
 
@@ -55,7 +55,8 @@ if __name__ == '__main__':
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('parent',type=Path);p.add_argument('output',type=Path)
     args=p.parse_args()
     if not (args.output/'test_freeze_manifest.json').exists(): freeze(args.parent,args.output)
-    project(args.output, args.parent/'test_a')
+    if not all((args.output/layout/'rb_run1_prior.csv').exists() for layout in read(args.output/'test_freeze_manifest.json')['maps']):
+        project(args.output, args.parent/'test_a')
     execute(args.output)
     summarize(args.output)
     report(args.output)

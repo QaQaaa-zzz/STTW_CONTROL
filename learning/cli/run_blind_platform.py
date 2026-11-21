@@ -1,4 +1,4 @@
-"""Execute the frozen TEST in twelve GPU batches; every online method shares its physical oracle batch."""
+"""Execute the frozen TEST in paired GPU batches; every online method shares its physical oracle batch."""
 import argparse
 from itertools import product
 from pathlib import Path
@@ -16,11 +16,19 @@ def execute(out):
     bank=dict(np.load(plan['bank']));sections=dict(zip(('near','mid','far'),plan['section_x']))
     save(out/'plan.json',dict(blind=True,section_x=plan['section_x']))
     batches = plan.get('assignment_batches') or [[(root,force) for root in plan['roots']] for force in plan['forces_N']]
+    packing_file = out/'execution_packing.json'
+    packing = read(packing_file)['by_layout_skill'] if packing_file.exists() else {}
+    sizes = []
     for layout,map_entry in plan['maps'].items():
         folder=out/layout
-        for part,assignments in enumerate(batches):
-            group=folder/f'part_{part}';group.mkdir(exist_ok=True)
-            for skill in ('source','rb_run1'):
+        by_skill = packing.get(layout, {skill:batches for skill in ('source','rb_run1')})
+        for part in range(max(map(len,by_skill.values()))):
+            for skill,parts in by_skill.items():
+                if part >= len(parts):
+                    continue
+                assignments = parts[part]
+                sizes.append(len(assignments)*33)
+                group=folder/f'part_{part}';group.mkdir(exist_ok=True)
                 target=group/skill
                 if (target/'status.json').exists():continue
                 eps=plan['margin'][skill];tab=pd.read_csv(folder/(skill+'_prior.csv'))
@@ -41,10 +49,8 @@ def execute(out):
                     margin_m=eps,committed_vote=True,latency_ticks=plan['latency_ticks'],relative=dict(height=.16,
                     raster=str(folder/'terrain.npz'),initializer=str(folder/(skill+'_initializer.npz')))))
                 run(cfg,target,skill,10,out)
-    sizes = [len(batch)*33 for batch in batches]
-    repeats = len(plan['maps'])*2
-    save(out/'complete.json',dict(physical_trajectories=sum(sizes)*repeats,worlds_per_batch=sizes[0] if len(set(sizes))==1 else sizes,
-                                  batches=len(batches)*repeats))
+    save(out/'complete.json',dict(physical_trajectories=sum(sizes),worlds_per_batch=sizes[0] if len(set(sizes))==1 else sizes,
+                                  batches=len(sizes)))
 
 
 if __name__=='__main__':
