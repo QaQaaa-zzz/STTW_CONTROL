@@ -18,3 +18,5 @@
 独立在线复验使用相同三图上的 50 个新初态 1071–1120、原速度、原模型、原裕量和 15/15 ms 物理时延，两臂每图各 450 份任务。实际任务、同批三出口分支和至少 1024 的并行约束已经组入 3×3150 的预算。新初态结果待收取；本轮覆盖已校准墙图上的初态泛化。
 
 [两次开发迭代](initial_rule_summary.csv) · [第二版计数](development_summary.csv) · [配对区间](development_intervals.csv) · [全部配对任务](development_pairs.csv.gz) · [冻结协议和采用标准](protocol.md) · [物理批次配置](test_freeze_manifest.json)
+
+后续两批复验的条件分支、预算和结束条件见[队列合同](followup_protocol.md)。
