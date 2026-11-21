@@ -62,6 +62,23 @@ class TorchMiddleControl:
             torch.zeros_like(raw),self.yaw_rate,self.rates,controller)
         self.frames[indices,-1]=frame[indices];self.mask[indices,-1]=1.
 
+    def curvature_cap_action(self, rule):
+        """Analytical reference action on the fixed route, matching the JAX speed cap."""
+        route = self.route
+        start = self.projection['progress'].clamp(route.s[0], route.s[-1])
+        end = (start + rule['preview_m']).clamp_max(route.s[-1])
+        knots = (route.s >= start[:, None]) & (route.s <= end[:, None])
+        peak = torch.where(knots, route.curvature.abs(), 0.).amax(dim=1)
+        peak = torch.maximum(peak, torch.maximum(route.at(start)[2].abs(), route.at(end)[2].abs()))
+        cap = torch.sqrt(rule['lateral_acceleration_limit_m_s2'] / peak.clamp_min(1e-12))
+        interface = self.policy.config['residual_interface']
+        speed = torch.minimum(self.v_user, cap).clamp(*interface['speed_reference_bounds_m_s'])
+        positive = interface['speed_positive_scale_m_s']
+        negative = interface['speed_negative_scale_m_s']
+        offset = (speed - self.nominal[:, 0]).clamp(-negative + 1e-6, positive - 1e-6)
+        magnitude = torch.where(offset >= 0, positive, negative)
+        return torch.stack((torch.atanh(offset / magnitude), torch.zeros_like(offset)), dim=-1)
+
     def before(self,pose,zero_middle=False,noise_std=None,zero_mask=None,latent_override=None):
         if self.tick%4==0:
             self.obs,fault=self.observation(pose)

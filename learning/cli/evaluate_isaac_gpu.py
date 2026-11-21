@@ -96,6 +96,9 @@ if s.get('contact_torque_intervention'):
         raise ValueError('Contact torque experiment requires its own solved-step hook and fixed route')
     from sttw_control.contact_torque_intervention import ContactTorqueExperiment
     env.physics_recorder=ContactTorqueExperiment(env,s['contact_torque_intervention'],a.output)
+rule=s.get('traditional_rule')
+if rule and (intervention or planner or any(s['zero_middle']) or rule['preview_m']<=0 or rule['lateral_acceleration_limit_m_s2']<=0):
+    raise ValueError('The curvature-cap comparator requires a fixed route, positive limits and dedicated comparator lanes')
 fork_step=None
 for step in range(env.horizon):
     if branching is not None:branching.decision(step)
@@ -116,7 +119,7 @@ for step in range(env.horizon):
         if fork_step is not None:
             active=(step-fork_step)*.02<intervention['hold_s'];env.policy.hold_channels.copy_(torch.tensor(intervention['hold_channels'],device=env.device,dtype=torch.bool) if active else torch.zeros_like(env.policy.hold_channels))
     if planner is not None:planner.update()
-    result=env.step(None)
+    result=env.step(None,latent=env.middle.curvature_cap_action(rule)) if rule else env.step(None)
     keys=['reward','valid','done','failure','lower_trace']
     keys.extend(key for key in ('executed_commands','body_poses') if key in result)
     rows.append({key:result[key] for key in keys})
