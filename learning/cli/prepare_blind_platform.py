@@ -71,7 +71,7 @@ def freeze(wide,out):
 
 
 @torch.inference_mode()
-def project(out):
+def project(out, initializer_dir=None):
     plan=read(out/'test_freeze_manifest.json');wide=Path(plan['wide']);raw=wide/'review_114';base=wide/'primary/roots_0008'
     captures=wide.parent/'replication/primary'
     schema=read(captures/'source_capture/model_state_schema.json')
@@ -89,7 +89,12 @@ def project(out):
         walls=[i for i in range(physics.ngeom) if physics.geom(i).name.startswith('planning_obstacle_')]
         obs=tensor(physics.geom_pos[walls]),tensor(physics.geom_size[walls]);env=BodyEnvelope(physics,dimensions=3)
         for skill in ('source','rb_run1'):
-            g=rows[rows.skill==skill].reset_index(drop=True);mu,scale,weights=fit_hidden(captures/(skill+'_capture'),model,schema)
+            g=rows[rows.skill==skill].reset_index(drop=True)
+            if initializer_dir is None:
+                mu,scale,weights=fit_hidden(captures/(skill+'_capture'),model,schema)
+            else:
+                with np.load(initializer_dir/(skill+'_initializer.npz')) as saved:
+                    mu,scale,weights=(saved[k] for k in ('mu','scale','weight'))
             np.savez(dest/(skill+'_initializer.npz'),mu=mu,scale=scale,weight=weights)
             ps=[];us=[];vs=[];refids=[];speeds=[]
             for r in g.itertuples():

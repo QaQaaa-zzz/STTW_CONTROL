@@ -1,0 +1,14 @@
+{
+  "rule": "keep incumbent when clearance > original skill margin and inside original forecast domain; otherwise use original C-R ranking",
+  "dev_pairs": 1080,
+  "decisions_reproduced": 161,
+  "dev": {
+    "success_c": 535,
+    "collision_c": 79,
+    "success_cr": 535,
+    "collision_cr": 3,
+    "success_safe": 535,
+    "collision_safe": 3
+  },
+  "test": "disclosed 15/15 ms paired archive, unchanged margin, 40 root clusters; no tuning"
+}

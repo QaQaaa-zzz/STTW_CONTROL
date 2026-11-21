@@ -62,7 +62,7 @@ class PlatformDepartureQuery:
         self.halfwidth=halfwidth
 
     @torch.inference_mode()
-    def choose(self,q,body_speed,request,route,branch_ids,section,side,old,seconds,velocity=None,previous=None,return_forecast=False):
+    def choose(self,q,body_speed,request,route,branch_ids,section,side,old,seconds,velocity=None,previous=None,return_forecast=False,safety_only=False,return_reasons=False):
         # The caller has the first physical state after relock; measure three feasible continuations.
         pose=q.index_select(1,self.pose_order).repeat_interleave(3,0)
         refs=branch_ids.flatten()
@@ -92,6 +92,9 @@ class PlatformDepartureQuery:
         steps=hit.shape[1]
         if steps<26:
             empty=torch.zeros_like(old,dtype=torch.bool)
+            if return_reasons:
+                # No decision is issued when the remaining horizon cannot contain the hold.
+                return old,empty,empty,{}
             return (old,empty,empty,poses,v,domain) if return_forecast else (old,empty,empty)
         held=hit.unfold(1,26,1).all(-1)
         end=torch.where(held.any(1),held.long().argmax(1)+25,steps-1)
@@ -107,13 +110,19 @@ class PlatformDepartureQuery:
             attitude=euler(poses[:,:,3:7].reshape(-1,4)).reshape(*yaw.shape,3)
             bad |= (attitude[:,:,0].abs()>.7)|(attitude[:,:,1].abs()>1.309)
         safe=clearance>self.margin
-        pass_goal=held.any(1)&~(bad&window).any(1)
+        in_domain=~(bad&window).any(1)
+        goal_hold=held.any(1)
+        pass_goal=goal_hold&in_domain
         feasible=safe&pass_goal&gate
         score=(16*feasible.float()+4*safe.float()+2*gate.float()+pass_goal.float()+.01*clearance.clamp(-1,1)).reshape(-1,3)
         # Keep C's command when it is predicted feasible; otherwise prefer safer alternatives.
         lane=torch.arange(len(old),device=q.device)
-        choice=torch.where(feasible.reshape(-1,3)[lane,old],old,score.argmax(1))
+        retain=safe&in_domain if safety_only else feasible
+        choice=torch.where(retain.reshape(-1,3)[lane,old],old,score.argmax(1))
         decision=choice,feasible.reshape(-1,3)[lane,choice],feasible.reshape(-1,3)[lane,old]
+        if return_reasons:
+            criteria=dict(clearance_m=clearance,clear=safe,in_domain=in_domain,gate=gate,goal_hold=goal_hold)
+            return (*decision,{k:value.reshape(-1,3)[lane,old] for k,value in criteria.items()})
         return (*decision,poses,v,domain) if return_forecast else decision
 
 
