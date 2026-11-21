@@ -26,3 +26,5 @@ PYTHONPATH=learning/src python -m unittest discover -s learning/tests -p test_ma
 ```
 
 本轮14项通过；排版和文章整合没有新增仿真或训练。PDF公式、结果页已检查，表4与机器汇总逐项一致。作者、单位、期刊、基金及最终作者审阅由作者补充；这是完整研究稿，尚未投稿。
+
+英文稿的同栈弯道和解析调速器已更新。[逐工况XY、完整窗口和末段保持](../evidence/pcrp_matched_controls/README.md)对应[逐回合数据](../evidence/pcrp_matched_controls/episodes.csv)。

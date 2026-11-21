@@ -2065,3 +2065,7 @@ source_type=repo_artifact；artifact_checked。共同起点150轮模型无外部
 ## 2026-11-11 H75 S4冻结选档新布局验证
 
 原H75/Local300、共同起点，22工况×2新布局×4新物理组×12车道=2112回合，0训练。机制选档任务A/B/C为64/64/75（各176），最佳固定为68/71/70，简单规则51/71/66。C对固定0救回15丢失10；单脊机制66/128、碎石9/48，收益集中单脊。S0–S4实验收尾，当前选择器未全面超过固定档，不继续事后调参。详见[阶段收尾](evidence/h75_theory_iteration/CLOSURE.md)、[结果与XY](evidence/h75_theory_iteration/S4_layout/results/README.md)。原始数据在`/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_theory_iteration/layout_test`。
+
+## PCRP same-stack bends and analytical speed governor
+
+The corrected flat mesh covered all 60 observed bend trajectories. S-bend full-window counts were 5/5 at all settings, with 5/5 final holds for .5 and .75. On the right bend, each learned preference held 5/5, Zero held 0/5, and no learned run passed Task C. A curvature-based speed cap on 40 archived terrain/group conditions completed 10 and held zero. The 240 matched fixed/Zero control trajectories were reused. [Full matrix and per-group XY](evidence/pcrp_matched_controls/README.md).

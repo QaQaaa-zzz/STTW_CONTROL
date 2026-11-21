@@ -282,7 +282,7 @@ Neither criterion changes with preference or terrain. The main endpoint figure u
 
 \section{Simulation Study}
 \subsection{Experimental Conditions and Evaluation Order}
-Table~\ref{tab:experiments} separates route geometry, terrain, and imposed lateral pulses. We report historical preference-dependent bending motion and examine the ridge-placement reversal and its recorded states. A one-factor study tests the wider role of position, slope length, and relative geometry. The original terrain scan supplies the seven terrain-height comparisons. All comparisons use the same frozen middle actor. The terrain scans and error-plane runs share the same balance stack. Historical smooth-bend comparisons used separately archived execution settings and are reported as supporting evidence. Within each condition, route, speed request, saved initial state, physical parameters, and pulse schedule are matched across preferences.
+Table~\ref{tab:experiments} separates route geometry, terrain, and imposed lateral pulses. We evaluate the two bends with the frozen H75 middle policy and Local300 lower controller and examine the ridge-placement reversal and its recorded states. A one-factor study tests the wider role of position, slope length, and relative geometry. The original terrain scan supplies the seven terrain-height comparisons. All comparisons use the same frozen middle actor. The terrain scans and error-plane runs share the same balance stack. Historical smooth-bend comparisons used separately archived execution settings and are reported as supporting evidence. Within each condition, route, speed request, saved initial state, physical parameters, and pulse schedule are matched across preferences.
 
 \begin{table}[t]\centering\footnotesize
 \caption{Experimental conditions and their roles. ``Pulse'' denotes an imposed lateral force, in addition to wheel--ground contact.}\label{tab:experiments}
@@ -312,7 +312,10 @@ The post-layout one-factor development study adds 2112 rollouts: 44 cells, eight
 Bends use speed, curvature, and outward displacement; the error plane uses matched-window RMSE. Completion figures use $C_{10}$ with all failures in the denominator. Separate $E_p,E_v,S_C$ scores retain the original targets; the robot continues after crossing the goal.
 
 \subsection{Bending Motion and the Speed--Path Exchange}
-In the historical flat-bend study, recorded speed and curvature allow a direct check of~\eqref{eq:allocation}. Curvature is computed from the 200~Hz XY records using a 205~ms third-order Savitzky--Golay derivative window. In the 40-run five-preference and 96-run three-preference unforced batches, the mean absolute first-order demand error is 0.147 and 0.089~m/s$^2$, respectively, over sustained-curvature segments. Increasing preference raises turning speed and reduces the slowdown contribution in all 96 adjacent-preference comparisons; signed outward deviation increases in 94. These observations support the direction motivated by~\eqref{eq:weights}, while the measured curvature, rather than outward displacement alone, supplies the demand decomposition.
+Figure~\ref{fig:matchedbends} shows the actual and reference paths for one of five physical groups. We evaluated five preferences and a zero-middle control on each route (60 runs). On the S-bend at 1.90~m/s, a world-frame lateral force of 36~N acted from 2.80 to 2.95~s (recorded impulse 5.40~N\,s). All six settings completed 10~s in every group. Final-hold counts, in order $\alpha=0,.25,.5,.75,1$ and Zero, were $0,3,5,5,0,0$ out of five. On the unforced right bend ($R=2.2$~m, 3.05~m/s), every learned setting completed and held in all five groups. Zero completed once and never held. None of the 25 learned right-bend runs passed Task C, which also constrains errors accumulated before the final hold.
+
+\begin{figure}[!t]\centering\includegraphics[width=\columnwidth]{figures/matched_bends.pdf}
+\caption{Actual and original reference paths for physical group 101 with the same H75/Local300 stack used in the terrain experiments. Zero disables both middle corrections. Each trajectory ends at its observed endpoint.}\label{fig:matchedbends}\end{figure}
 
 Figure~\ref{fig:tradeoff} then compares tracking errors at a common requested speed of 2.6~m/s. On flat ground and 20-/40-mm ridges, increasing $\alpha$ reduces speed RMSE and raises position RMSE. Across the full 20-condition set, 41 of 80 adjacent comparisons follow that ordering; terrain contact and transient motion can change it.
 
@@ -404,6 +407,21 @@ Gravel 20 mm &16&1&4&3&0&0&0\\\bottomrule
 \end{table}
 
 Channel ablation uses $\alpha=0.5$, two speeds, and three physical groups. On the 10~cm ridge, joint corrections reach final-window tracking in 6/6 runs, versus 1/6 for steering alone and 0/6 for speed alone. On 10~mm gravel, steering alone instead exceeds joint correction (5/6 versus 3/6). Both the useful preference and the useful balance of correction channels depend on the condition.
+
+\subsection{Analytical Reference Governor}
+We replaced the middle policy with a pure-pursuit curvature speed cap, retaining the same nominal steering, reference shaper and frozen lower controller. The governor used a 6~m preview and a lateral acceleration limit of 3.5~m/s$^2$. We evaluated it at 2.6~m/s on 40 previously examined layout--group pairs and reused the six archived controls for each pair. Physical groups, meshes, routes and lower controller matched across batches. Table~\ref{tab:cap} reports both completion and final hold. The speed cap completed every flat run but never held, and it terminated early on every ridge. The learned middle preference held in all eight runs on the central ridge and only two runs at 3.9~m. These results compare this particular speed rule with joint speed and steering correction on the tested layouts.
+
+\begin{table}[t]\centering\footnotesize
+\caption{Completed 10~s / final hold counts. Each method uses the denominator $n$ in its row. Gravel rows differ in stone placement.}\label{tab:cap}
+\begin{tabular}{@{}lrrrrrr@{}}\toprule
+Condition & $n$ & Cap & Zero & $\alpha=0$ & $.5$ & $1$\\\midrule
+Flat &8&8/0&8/0&8/8&8/8&8/8\\
+Ridge 3.9~m &8&0/0&0/0&8/8&2/2&0/0\\
+Ridge 4.2~m &8&0/0&0/0&1/0&8/8&1/1\\
+Ridge 4.5~m &8&0/0&1/0&0/0&7/5&8/4\\
+Gravel 0 &4&1/0&0/0&3/3&4/4&4/2\\
+Gravel 1 &4&1/0&1/0&2/2&2/1&3/3\\\bottomrule
+\end{tabular}\end{table}
 
 \section{What the preference selector can predict}
 The pre-run selector used terrain family, height, requested speed and the tracking specification. Its decision was frozen before testing on two new layouts and four further physical groups. Each task required completion, final hold and bounds on peak lateral error and speed RMSE. The bound pairs (m, m/s) were $(0.30,0.20)$, $(0.60,0.10)$ and $(0.40,0.15)$ for A, B and C.

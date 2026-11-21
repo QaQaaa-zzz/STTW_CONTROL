@@ -1,4 +1,4 @@
-"""Continue original H75 with Go2's actual runner/PPO/storage on the Lab task."""
+"""Train or continue the H75 architecture with Go2's actual runner/PPO/storage on the Lab task."""
 import argparse,importlib.util,json,os,shutil,sys,time
 from pathlib import Path
 p=argparse.ArgumentParser();p.add_argument('--config',type=Path,required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--resume-checkpoint',type=Path);p.add_argument('--completed-updates',type=int,default=0);p.add_argument('--profile-first-step',action='store_true');a=p.parse_args();s=json.loads(a.config.read_text());a.output=a.output.resolve();a.output.mkdir(parents=True,exist_ok=False)
@@ -11,10 +11,29 @@ from sttw_control.go2_training_config import spring_jump_recipe
 from sttw_control.go2_path_env import Go2PathEnv
 from sttw_control.go2_ppo_adapter import H75ActorCritic
 runner_path=Path(s['go2_checkout'])/'rsl_rl/rsl_rl/runners/on_policy_runner.py';spec=importlib.util.spec_from_file_location('sttw_go2_path_runner',runner_path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
-policy_config=json.loads((Path(s['bundle'])/'config.json').read_text());original=torch.load(s['initial_policy'],map_location='cpu',weights_only=False)
-module.STTWPathActorCritic=lambda *args,**kwargs:H75ActorCritic.from_original_policy(policy_config,original['policy'],s['device'])
+policy_config=json.loads((Path(s['bundle'])/'config.json').read_text())
+if s.get('policy_initialization') == 'fresh':
+    from sttw_control.torch_path_policy import make_torch_path_network
+
+    def new_policy(*args, **kwargs):
+        # The runner constructs its policy after the physical environment.
+        with torch.random.fork_rng(devices=[]):
+            torch.random.default_generator.manual_seed(s['seed'])
+            actor = make_torch_path_network(351, 2, policy_config)
+            critic = make_torch_path_network(352, 1, policy_config)
+        std = policy_config['training_future_phase_C']['std_initial']
+        return H75ActorCritic(actor, critic, torch.tensor(std).log()).to(s['device'])
+
+    module.STTWPathActorCritic = new_policy
+    source = dict(initialization='fresh Torch linear layers', seed=s['seed'])
+    initial_description = 'Seeded fresh actor and critic with configured initial exploration std'
+else:
+    original = torch.load(s['initial_policy'], map_location='cpu', weights_only=False)
+    module.STTWPathActorCritic = lambda *args, **kwargs: H75ActorCritic.from_original_policy(policy_config, original['policy'], s['device'])
+    source = {k:v for k,v in original.items() if k != 'policy'}
+    initial_description = 'original H75 u77 Actor/Critic/log_std weights; fresh optimizer'
 recipe=spring_jump_recipe(s['go2_checkout']);train=recipe['train'];train['algorithm'].update(s['ppo_overrides']);train['runner'].update(policy_class_name='STTWPathActorCritic',num_steps_per_env=s['rollout_steps'],save_interval=s['save_interval'],max_iterations=s['updates'],experiment_name='sttw_h75_offroad')
-(a.output/'config.json').write_text(json.dumps(dict(task=s,upstream=recipe,initial_policy_source={k:v for k,v in original.items() if k!='policy'},role='original H75 TRAIN prefix continuation plus switch/terrain/Go2 DR; not independent TEST',resume_checkpoint=str(a.resume_checkpoint.resolve()) if a.resume_checkpoint else None,resume_completed_updates=a.completed_updates,resume_semantics='weights and optimizer restored; task states and declared RNG resampled' if a.resume_checkpoint else 'original H75 weights; fresh Go2 optimizer'),indent=2))
+(a.output/'config.json').write_text(json.dumps(dict(task=s,upstream=recipe,initial_policy_source=source,role=s.get('role','original H75 TRAIN prefix continuation plus switch/terrain/Go2 DR; not independent TEST'),resume_checkpoint=str(a.resume_checkpoint.resolve()) if a.resume_checkpoint else None,resume_completed_updates=a.completed_updates,resume_semantics='weights and optimizer restored; task states and declared RNG resampled' if a.resume_checkpoint else initial_description),indent=2))
 torch.manual_seed(s['seed']);torch.set_num_threads(2);started=time.time();status=dict(stage='initializing',pid=os.getpid(),completed_updates=a.completed_updates,started=started,updates=s['updates']);(a.output/'status.json').write_text(json.dumps(status,indent=2))
 snapshot=a.output/'source';snapshot.mkdir()
 for file in ['learning/cli/train_go2_path.py','learning/src/sttw_control/go2_path_env.py','learning/src/sttw_control/go2_ppo_adapter.py','learning/src/sttw_control/isaac_path_rollout.py','learning/src/sttw_control/isaaclab_vector_env.py','learning/src/sttw_control/isaaclab_randomization.py','learning/src/sttw_control/torch_middle_control.py','learning/src/sttw_control/torch_path_reference.py','learning/src/sttw_control/torch_path_policy.py','learning/src/sttw_control/torch_path_reward.py',str(runner_path)]:shutil.copyfile(file,snapshot/Path(file).name)
@@ -32,7 +51,7 @@ class RecordedRunner(module.OnPolicyRunner):
 env=Go2PathEnv(s,a.output);(a.output/'randomized_properties.json').write_text(json.dumps(env.rollout.randomization_properties));(a.output/'plant.json').write_text(json.dumps(env.plant.metadata));runner=RecordedRunner(env,train,log_dir=str(a.output/'training'),device=s['device']);(a.output/'training').mkdir(exist_ok=True)
 if a.resume_checkpoint:
     runner.load(str(a.resume_checkpoint),load_optimizer=True);runner.current_learning_iteration=a.completed_updates
-runner.save(a.output/'training/model_initial.pt',infos={'completed_updates':a.completed_updates,'source':str(a.resume_checkpoint) if a.resume_checkpoint else 'original H75 u77 Actor/Critic/log_std weights; fresh optimizer'})
+runner.save(a.output/'training/model_initial.pt',infos={'completed_updates':a.completed_updates,'source':str(a.resume_checkpoint) if a.resume_checkpoint else initial_description})
 runner.learn(num_learning_iterations=s['updates']-a.completed_updates,init_at_random_ep_len=False)
 runner.writer.close()
 status.update(stage='training_complete',completed_updates=s['updates'],elapsed_s=time.time()-started,final_checkpoint=f'training/model_{s["updates"]}.pt');(a.output/'status.json').write_text(json.dumps(status,indent=2));app.close(wait_for_replicator=False,skip_cleanup=True)
