@@ -6,6 +6,12 @@ Each stage runs one network for 150 updates of 4096 environments by 24 steps (14
 
 Evaluate the final model on the frozen six-condition matrix used for the analytical governor, five preferences for the shared actor and its designated preference for each dedicated actor. Treat the archived physical groups as matched development evidence. Report physical completion, final hold, A/B/C and common-window speed/path RMSE individually, then summarize between shared-model seeds. The historical H75 weights do not enter the three-seed calculation.
 
+## Interpretation of the matched comparison
+
+The historical H75 results establish a placement-dependent reversal for one frozen actor. The new Isaac/Go2 runs test how a freshly trained actor performs under a different training protocol. Report variation across 7101–7103 using the same physical groups for each seed. A gap between H75 and a new actor combines several training differences and cannot be assigned to initialization alone.
+
+At each of the three dedicated preferences, compare the dedicated actor with the shared actor initialized from the same seed (7101) and evaluated on the same groups. Report completion, final hold, A/B/C and common-window speed/path errors separately. If both policies have zero passes, report the observed errors and termination causes; the experiment supplies no equivalence margin. The three dedicated actors provide one observation per preference for this comparison.
+
 ## Shared seed 7101
 
 Training reached update 150 in 13,780 s with 14,745,600 transitions. Use the final checkpoint for matched evaluation. The archived training scalars describe episodes collected during optimization. The final logged ended-episode failure statistic was 0.6303, speed RMSE was 0.2030 m/s and path RMSE was 0.5377 m. The three quantities use the training runner's per-step ended-episode averaging. [Training curves](training/shared7101.png) · [150 per-update records](training/shared7101.csv).
