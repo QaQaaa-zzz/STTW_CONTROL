@@ -1,0 +1,501 @@
+{
+  "wide": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide",
+  "bank": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/chapter_mainline/blind_test/initial_bank.npz",
+  "bank_sha256": "7c9618e21cb4650deae1d873a6f0dc7cfebf7aa152c656c4cbc8069d55f3eadc",
+  "weights": {
+    "source": {
+      "actor_sha256": "a06acbc81aead7120a291cf82359189bff36ccfecde132615ae0f264ee3126e8",
+      "checkpoint_identity_sha256": "0307799fa5059cd55d81eedec9f33e89a53b75d1f718e29c919b74e01d1445e8",
+      "normalizer_sha256": "db84aad7750991d6b720e9f065ed7e49f862893c7753f9839c593d7951b6ea86",
+      "source_training_run_id": "bridge_baseline"
+    },
+    "rb_run1": {
+      "actor_sha256": "c3eae39c7c116d5db56122d5aff4f29a6f95b8971a51c4c46864754ecb58b040",
+      "checkpoint_identity_sha256": "f6c42676539c66e06d4703b744577243e5b0f99d5df7c8431e3cc40e929036db",
+      "normalizer_sha256": "db84aad7750991d6b720e9f065ed7e49f862893c7753f9839c593d7951b6ea86",
+      "source_training_run_id": "round_0009_student"
+    },
+    "H75": {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+      "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+      "artifact": "actor.npz",
+      "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+      "conversion": "exact arrays, no optimization or architecture change"
+    }
+  },
+  "predictor": "phase2_relative",
+  "ground_model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/residual_seed2",
+  "margin": {
+    "source": 0.2105724513530731,
+    "rb_run1": 0.1017768085002899
+  },
+  "latency_ticks": {
+    "start": 3,
+    "departure": 3
+  },
+  "timings_ms": {
+    "9": 10.79033885,
+    "3": 10.3291987
+  },
+  "clock": "same physical budget for each method. H75 neutral lead-in then selected approach. Straight published exit until candidate release.",
+  "alpha": 0.0,
+  "speed": 2.0,
+  "forces_N": [
+    0,
+    5,
+    -5
+  ],
+  "section_x": [
+    12.7,
+    13.6,
+    15.0
+  ],
+  "root_bootstrap_seed": 20261120,
+  "role": "T2 geometry transfer; locked unseen initial states",
+  "maps": {
+    "config_l": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/chapter_mainline/post_review/wall_layouts/config_l.json",
+      "sha256": "bdb946c433b90b42b1cd04372dd23070868fc49ea9b0f33bffb9243846764a61",
+      "walls": [
+        [
+          13.180000000000001,
+          13.38,
+          0.14,
+          0.26
+        ]
+      ]
+    },
+    "config_r": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/chapter_mainline/post_review/wall_layouts/config_r.json",
+      "sha256": "f2ea3ba2257ada10b640be2acffc233dfa851ab757e3f5cb3e369fba11f94110",
+      "walls": [
+        [
+          13.180000000000001,
+          13.38,
+          -0.31,
+          -0.19
+        ]
+      ]
+    },
+    "config_double": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/chapter_mainline/post_review/wall_layouts/config_double.json",
+      "sha256": "c785f0eedfcec6420ec4cfefd84ac1f92a76b0f90ab60298007a118b0e736dd5",
+      "walls": [
+        [
+          12.700000000000001,
+          12.9,
+          0.14,
+          0.26
+        ],
+        [
+          14.4,
+          14.6,
+          -0.31,
+          -0.19
+        ]
+      ]
+    }
+  },
+  "roots": [
+    1041,
+    1042,
+    1043,
+    1044,
+    1045,
+    1046,
+    1047,
+    1048,
+    1049,
+    1050,
+    1051,
+    1052,
+    1053,
+    1054,
+    1055,
+    1056,
+    1057,
+    1058,
+    1059,
+    1060,
+    1061,
+    1062,
+    1063,
+    1064,
+    1065,
+    1066,
+    1067,
+    1068,
+    1069,
+    1070
+  ],
+  "parent_manifest": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/chapter_mainline/post_review/realtime_15ms/test_freeze_manifest.json",
+  "parent_sha256": "dc77c1b227bd880ce9b750dbef695921b2e9757bb700cbf6aa493a75aa45b40f",
+  "base_map": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/chapter_mainline/blind_test/test_a.json",
+  "assignment_batches": [
+    [
+      [
+        1041,
+        0
+      ],
+      [
+        1041,
+        5
+      ],
+      [
+        1041,
+        -5
+      ],
+      [
+        1042,
+        0
+      ],
+      [
+        1042,
+        5
+      ],
+      [
+        1042,
+        -5
+      ],
+      [
+        1043,
+        0
+      ],
+      [
+        1043,
+        5
+      ],
+      [
+        1043,
+        -5
+      ],
+      [
+        1044,
+        0
+      ],
+      [
+        1044,
+        5
+      ],
+      [
+        1044,
+        -5
+      ],
+      [
+        1045,
+        0
+      ],
+      [
+        1045,
+        5
+      ],
+      [
+        1045,
+        -5
+      ],
+      [
+        1046,
+        0
+      ],
+      [
+        1046,
+        5
+      ],
+      [
+        1046,
+        -5
+      ],
+      [
+        1047,
+        0
+      ],
+      [
+        1047,
+        5
+      ],
+      [
+        1047,
+        -5
+      ],
+      [
+        1048,
+        0
+      ],
+      [
+        1048,
+        5
+      ],
+      [
+        1048,
+        -5
+      ],
+      [
+        1049,
+        0
+      ],
+      [
+        1049,
+        5
+      ],
+      [
+        1049,
+        -5
+      ],
+      [
+        1050,
+        0
+      ],
+      [
+        1050,
+        5
+      ],
+      [
+        1050,
+        -5
+      ],
+      [
+        1051,
+        0
+      ],
+      [
+        1051,
+        5
+      ],
+      [
+        1051,
+        -5
+      ],
+      [
+        1052,
+        0
+      ],
+      [
+        1052,
+        5
+      ],
+      [
+        1052,
+        -5
+      ],
+      [
+        1053,
+        0
+      ],
+      [
+        1053,
+        5
+      ],
+      [
+        1053,
+        -5
+      ],
+      [
+        1054,
+        0
+      ],
+      [
+        1054,
+        5
+      ],
+      [
+        1054,
+        -5
+      ],
+      [
+        1055,
+        0
+      ],
+      [
+        1055,
+        5
+      ],
+      [
+        1055,
+        -5
+      ]
+    ],
+    [
+      [
+        1056,
+        0
+      ],
+      [
+        1056,
+        5
+      ],
+      [
+        1056,
+        -5
+      ],
+      [
+        1057,
+        0
+      ],
+      [
+        1057,
+        5
+      ],
+      [
+        1057,
+        -5
+      ],
+      [
+        1058,
+        0
+      ],
+      [
+        1058,
+        5
+      ],
+      [
+        1058,
+        -5
+      ],
+      [
+        1059,
+        0
+      ],
+      [
+        1059,
+        5
+      ],
+      [
+        1059,
+        -5
+      ],
+      [
+        1060,
+        0
+      ],
+      [
+        1060,
+        5
+      ],
+      [
+        1060,
+        -5
+      ],
+      [
+        1061,
+        0
+      ],
+      [
+        1061,
+        5
+      ],
+      [
+        1061,
+        -5
+      ],
+      [
+        1062,
+        0
+      ],
+      [
+        1062,
+        5
+      ],
+      [
+        1062,
+        -5
+      ],
+      [
+        1063,
+        0
+      ],
+      [
+        1063,
+        5
+      ],
+      [
+        1063,
+        -5
+      ],
+      [
+        1064,
+        0
+      ],
+      [
+        1064,
+        5
+      ],
+      [
+        1064,
+        -5
+      ],
+      [
+        1065,
+        0
+      ],
+      [
+        1065,
+        5
+      ],
+      [
+        1065,
+        -5
+      ],
+      [
+        1066,
+        0
+      ],
+      [
+        1066,
+        5
+      ],
+      [
+        1066,
+        -5
+      ],
+      [
+        1067,
+        0
+      ],
+      [
+        1067,
+        5
+      ],
+      [
+        1067,
+        -5
+      ],
+      [
+        1068,
+        0
+      ],
+      [
+        1068,
+        5
+      ],
+      [
+        1068,
+        -5
+      ],
+      [
+        1069,
+        0
+      ],
+      [
+        1069,
+        5
+      ],
+      [
+        1069,
+        -5
+      ],
+      [
+        1070,
+        0
+      ],
+      [
+        1070,
+        5
+      ],
+      [
+        1070,
+        -5
+      ]
+    ]
+  ],
+  "scope": "3 layouts x 2 skills x 2 batches x 1485 physical lanes. Four planners and nine physical oracle branches; 30 paired root clusters."
+}

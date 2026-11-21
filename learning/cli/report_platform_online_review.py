@@ -46,7 +46,7 @@ def report(out):
                         success=bool(verified and row['goal'] and not row['forbidden_contact_steps']
                                      and y is not None and .06<=side*y<=3.9)
                         records.append(dict(layout=layout,skill=skill,root=variant['bank_row'],
-                            planner=variant['planner'],section=section,side=side,force=variant['force_y_N'],
+                            planner=variant.get('arm',variant['planner']),approach_alpha=variant.get('approach_alpha',0.),section=section,side=side,force=variant['force_y_N'],
                             approach=row['route'],planned_dep=variant['planned_departure'],chosen_dep=row['selected_departure'],
                             departure_applied_tick=row.get('departure_applied_tick'),verified=verified,success=success,collision=bool(row['forbidden_contact_steps']),
                             termination=row['termination'],force_steps=row['applied_force_ticks'],force_onset=row['air_event_tick'],
@@ -67,8 +67,9 @@ def report(out):
                locked_true_jump=('verified','sum'),oracle_feasible=('oracle_feasible',lambda x:x.sum(min_count=1)),
                chosen_completed=('success','sum'),collision=('collision','sum'),issued_full_pulse=('force_steps',lambda x:(x==20).sum()))
     summary.to_csv(out/'online_funnel.csv')
-    c=assigned[assigned.planner=='C'].set_index(keys)
-    cr=assigned[assigned.planner=='C-R'].set_index(keys)
+    first,second=plan.get('pair',['C','C-R'])
+    c=assigned[assigned.planner==first].set_index(keys)
+    cr=assigned[assigned.planner==second].set_index(keys)
     pairs=pd.DataFrame(dict(same_prefix=(c.prefix==cr.prefix),rescued=~c.success&cr.success,
                             lost=c.success&~cr.success,changed=c.chosen_dep!=cr.chosen_dep,
                             c_wall=c.collision,cr_wall=cr.collision,clock_ms=cr.query_batch_ms,
@@ -90,7 +91,7 @@ def report(out):
         for name,color in [('c','#155789'),('cr','#a14324')]:
             with np.load(r[name+'_trajectory']) as z:
                 tr=z['trace'];ref=z['published_reference_xy']
-            ax.plot(*ref.T,':',color=color,lw=.8);ax.plot(tr[:,1],tr[:,2],color=color,label=name)
+            ax.plot(*ref.T,':',color=color,lw=.8);ax.plot(tr[:,1],tr[:,2],color=color,label=first if name=='c' else second)
             ax.scatter(*tr[-1,1:3],s=10,color=color)
         ax.set_title(f"{layout}/{skill}, root {r.root}, {r.force:+} N, {r.section}");ax.set(xlim=(1,19),xlabel='world x (m)',ylabel='world y (m)',aspect='equal');ax.legend()
     fig.savefig(out/'online_xy.png',dpi=140)

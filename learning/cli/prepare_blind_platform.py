@@ -71,11 +71,11 @@ def freeze(wide,out):
 
 
 @torch.inference_mode()
-def project(out, initializer_dir=None):
+def project(out, initializer_dir=None, development=None):
     plan=read(out/'test_freeze_manifest.json');wide=Path(plan['wide']);raw=wide/'review_114';base=wide/'primary/roots_0008'
     captures=wide.parent/'replication/primary'
     schema=read(captures/'source_capture/model_state_schema.json')
-    rows=pd.read_csv(raw/'physical_scores.csv').query("layout=='primary' and section=='near' and verified_jump and root<78")
+    rows=development if development is not None else pd.read_csv(raw/'physical_scores.csv').query("layout=='primary' and section=='near' and verified_jump and root<78")
     bank=dict(np.load(wide/'primary/departure_bank.npz'));refs={x.tobytes():i for i,x in enumerate(bank['xy'])}
     model=load_history_model(Path(plan['ground_model']))
     for layout,m in plan['maps'].items():
@@ -111,6 +111,8 @@ def project(out, initializer_dir=None):
             f['pose'][:,:,2]+=height
             table=decisions(f['pose'],f['velocity'],f['domain'],request,ends,world,.6,model.nominal.follower['preview_body_x_min_m'],env,obs,plan['section_x'])
             table[['root','approach','departure']]=g[['root','approach','departure']]
+            if 'candidate' in g:
+                table[['candidate','alpha']]=g[['candidate','alpha']]
             for i,k in enumerate(('x','y','z','qw','qx','qy','qz')):table[k]=np.asarray(ps)[:,i]
             table['speed']=np.asarray(us)[:,0]
             table.to_csv(dest/(skill+'_prior.csv'),index=False)

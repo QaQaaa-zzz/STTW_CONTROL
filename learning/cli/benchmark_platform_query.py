@@ -15,7 +15,7 @@ from sttw_control.playground_history_model import load_history_model
 
 
 @torch.inference_mode()
-def measure(out, graph_out=None, compiled=False, fused=False):
+def measure(out, graph_out=None, compiled=False, fused=False, alpha_panel=None):
     plan=read(out/'phase2_relative/plan.json');raw=Path(plan['p2']);wide=raw.parent
     config=read(wide/'primary/roots_0008/rb_run1/resolved_config.json')
     phys=mujoco.MjModel.from_binary_path(str(wide/'primary/roots_0008/rb_run1/terrain.mjb'))
@@ -32,6 +32,10 @@ def measure(out, graph_out=None, compiled=False, fused=False):
         if key[0] not in unique:unique[key[0]]=g
         else:extras.append(g)
     samples=(list(unique.values())+extras)[:3]
+    if alpha_panel:
+        from platform_alpha_states import development_states
+        dev=development_states(alpha_panel).query("skill=='rb_run1'")
+        samples.extend(dev[(dev.candidate==a)&(dev.root==dev[dev.candidate==a].root.min())] for a in (3,4))
     q=[];v=[];lastq=[];lastv=[];refs=[];seconds=[]
     bank=dict(np.load(wide/'primary/departure_bank.npz'))
     index={row.tobytes():i for i,row in enumerate(bank['xy'])}
@@ -55,9 +59,9 @@ def measure(out, graph_out=None, compiled=False, fused=False):
     dest=graph_out or out
     dest.mkdir(exist_ok=True,parents=True)
     for name,setup in [('kinematic',None),('phase2_relative',relative)]:
-        if compiled and not setup:continue
+        if (compiled or alpha_panel) and not setup:continue
         query=PlatformDepartureQuery(phys,model,hand['goal'],plan['margin_m'],hand['road_half_width_m'],setup)
-        for n in (1,3):
+        for n in ((5,) if alpha_panel else (1,3)):
             candidates=3*n
             refids=torch.arange(candidates,device='cuda').reshape(n,3)
             request=torch.full((n,),2.,device='cuda');section=torch.full_like(request,13.6)
@@ -105,7 +109,8 @@ if __name__=='__main__':
     methods = parser.add_mutually_exclusive_group()
     methods.add_argument('--compile-step', action='store_true')
     methods.add_argument('--fused-step', action='store_true')
+    parser.add_argument('--alpha-panel', type=Path)
     args = parser.parse_args()
     if (args.compile_step or args.fused_step) and args.graph_out is None:
         parser.error('The accelerated benchmarks require --graph-out')
-    measure(args.out, args.graph_out, args.compile_step, args.fused_step)
+    measure(args.out, args.graph_out, args.compile_step, args.fused_step, args.alpha_panel)
