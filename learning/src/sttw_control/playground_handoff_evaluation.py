@@ -289,6 +289,13 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
             section=tensor([c['section_x'] for c in contracts]).float()
             side=tensor([c['side'] for c in contracts]).float()
             force=tensor([c['force_y_N'] for c in contracts]).float()
+            fallback = None
+            if online.get('veto_bank'):
+                from .platform_fallback import VetoExitBank, handback_features
+                with np.load(online['veto_bank']) as bank:
+                    fallback = VetoExitBank(bank, device)
+                use_bank = tensor([c['arm']=='veto_bank' for c in contracts])
+                gate_index = tensor([('near','mid','far').index(c['bin']) for c in contracts]).long()
             pulse_start=torch.full_like(approach_ids,-1)
             pulse_ticks=torch.zeros_like(pulse_start)
             query_ms=torch.zeros_like(force)
@@ -429,6 +436,10 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                         prev = velocity_state(velocity_history[tick%4][0][ids],velocity_history[tick%4][1][ids]) if query.relative else None
                         current = velocity_state(q[ids],v[ids]) if query.relative else None
                         chosen,admitted,incumbent=query.choose(q[ids],(axis*v[ids,:3]).sum(1),nominal_continuation_speed[ids],route,choices,section[ids],side[ids],directions[ids],args.seconds-t,current,prev)
+                        if fallback is not None:
+                            alternate = fallback.choose(handback_features(q[ids],v[ids]), approach_ids[ids],
+                                                        gate_index[ids], chosen)
+                            chosen = torch.where(use_bank[ids] & ~admitted, alternate, chosen)
                         selected=torch.where(reselect[ids],chosen,directions[ids])
                         if latency:proposed[ids]=selected
                         else:directions[ids]=selected

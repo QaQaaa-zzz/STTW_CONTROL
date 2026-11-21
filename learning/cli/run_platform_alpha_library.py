@@ -39,7 +39,7 @@ def assignments(table, bank, root, sections, margin):
     return choices
 
 
-def score(out):
+def score(out, arms=ARMS):
     report(out)
     rows=pd.read_csv(out/'online_cases.csv')
     index=['layout','root','force','section']
@@ -49,12 +49,12 @@ def score(out):
             pivot=part.pivot(index=index,columns='planner',values=['success','collision'])
             for metric in ['success','collision']:
                 v=pivot[metric].astype(int)
-                delta=v[ARMS[1]]-v[ARMS[0]]
+                delta=v[arms[1]]-v[arms[0]]
                 byroot=delta.groupby(level='root').mean().to_numpy()
                 draws=np.random.default_rng(20261120).choice(byroot,(10000,len(byroot)))
                 lo,hi=np.quantile(draws.mean(1),[.025,.975])
-                records.append((skill,layout,metric,len(v),*v[ARMS].sum(),int(delta.sum()),lo,hi))
-    pd.DataFrame(records,columns=['skill','layout','metric','contracts',*ARMS,'net','delta_low','delta_high']).to_csv(out/'paired_metrics.csv',index=False)
+                records.append((skill,layout,metric,len(v),*v[arms].sum(),int(delta.sum()),lo,hi))
+    pd.DataFrame(records,columns=['skill','layout','metric','contracts',*arms,'net','delta_low','delta_high']).to_csv(out/'paired_metrics.csv',index=False)
 
 
 def main(base, transfer=False):

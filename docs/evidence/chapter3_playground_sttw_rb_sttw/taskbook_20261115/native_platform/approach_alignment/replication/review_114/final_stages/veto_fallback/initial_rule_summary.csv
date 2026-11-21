@@ -1,0 +1,4 @@
+layout,contracts,veto,done,fallback_done,wall,fallback_wall,avoidable_wall
+config_double,270,157,94,75,67,51,35
+config_l,270,159,78,48,8,9,5
+config_r,270,12,189,189,0,1,0

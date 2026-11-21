@@ -1,0 +1,26 @@
+[
+  {
+    "role": "Contact avoided",
+    "root": 1044,
+    "section": "near",
+    "force": 0.0,
+    "original": "config_double/part_0/rb_run1/rb_run1_route1_h75_v190/trajectory.npz",
+    "replayed": "config_double/part_0/rb_run1/rb_run1_route1_h75_v208/trajectory.npz"
+  },
+  {
+    "role": "Completion lost",
+    "root": 1067,
+    "section": "far",
+    "force": 0.0,
+    "original": "config_double/part_0/rb_run1/rb_run1_route1_h75_v1643/trajectory.npz",
+    "replayed": "config_double/part_0/rb_run1/rb_run1_route1_h75_v1657/trajectory.npz"
+  },
+  {
+    "role": "All three exits collide",
+    "root": 1041,
+    "section": "far",
+    "force": 0.0,
+    "original": "config_double/part_0/rb_run1/rb_run1_route1_h75_v5/trajectory.npz",
+    "replayed": "config_double/part_0/rb_run1/rb_run1_route1_h75_v18/trajectory.npz"
+  }
+]

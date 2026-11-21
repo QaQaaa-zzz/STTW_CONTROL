@@ -51,6 +51,8 @@ def execute(out, alpha_choices=None):
                     ccd_capacity=8*len(lanes),role=plan['role'],platform_online=dict(ground_model=plan['ground_model'],
                     margin_m=eps,committed_vote=True,latency_ticks=plan['latency_ticks'],relative=dict(height=.16,
                     raster=str(folder/'terrain.npz'),initializer=str(folder/(skill+'_initializer.npz')))))
+                if 'veto_banks' in plan:
+                    cfg['platform_online']['veto_bank'] = plan['veto_banks'][layout]
                 run(cfg,target,skill,10,out)
     save(out/'complete.json',dict(physical_trajectories=sum(sizes),worlds_per_batch=sizes[0] if len(set(sizes))==1 else sizes,
                                   batches=len(sizes)))
