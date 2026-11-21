@@ -1,0 +1,9 @@
+layout,skill,planner,success,collision,queried,query_feasible,admitted_done,admitted_wall,vetoed_wall,unqueried_wall
+test_a,rb_run1,alpha0,83,3,259,43,43,0,3,0
+test_a,rb_run1,alpha_enabled,182,18,266,154,154,0,18,0
+test_a,source,alpha0,0,9,246,0,0,0,9,0
+test_a,source,alpha_enabled,7,9,244,0,0,0,9,0
+test_b,rb_run1,alpha0,118,3,229,88,88,0,3,0
+test_b,rb_run1,alpha_enabled,223,0,266,212,212,0,0,0
+test_b,source,alpha0,23,0,248,21,15,0,0,0
+test_b,source,alpha_enabled,29,0,248,23,17,0,0,0

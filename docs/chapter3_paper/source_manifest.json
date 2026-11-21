@@ -1,6 +1,6 @@
 {
-  "paper_sha256": "8e43b1c20505ce0b30b24dfec927b182737a518e5d7486aacc599d4d775deb54",
-  "pdf_sha256": "9815cdd750dbb7287beb142ee9c7578ee4d9e3c18ea862ca6946bd26bbbc120a",
+  "paper_sha256": "61e57944e94de9e4c87c431cc62f29825d9fd1a49eb2dc727b672ee729263b7f",
+  "pdf_sha256": "e02699d461a3f99c581b50c0815db6e22badf109d946b3c3e5812ec7468972d4",
   "submission_ready": false,
   "author_verification": "pending",
   "historical_draft_local_commit": "7219dbe6abac4075eea94c4feea87a74f67b37e8",
@@ -131,7 +131,7 @@
     },
     {
       "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_library/online_xy.png",
-      "sha256": "f6369f2ee9f6c0c2093954570388e12cfdc08dd65017c202100863d9e26bde7d"
+      "sha256": "4a0b4e2f365d40c3233cf92528d7c3c1f7d8d76df388311e1a0a4257a8603aa1"
     },
     {
       "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_library/paired_metrics.csv",
@@ -183,7 +183,7 @@
     },
     {
       "path": "docs/chapter3_paper/claims.csv",
-      "sha256": "0846172c4999de32a8f6bce23c71878bfcb2e5453cdc4733205127a2a8f170e2"
+      "sha256": "a9926a15c0c0b4bbc83c471b76dc5507b0c407bdd89d240d84ea0029a1a0ca0b"
     },
     {
       "path": "learning/cli/score_platform_review.py",
@@ -191,7 +191,7 @@
     },
     {
       "path": "learning/cli/run_platform_alpha_library.py",
-      "sha256": "c2e13c33ece0611c853d53e332b5374ee4baf57ffae975f219b0bd599825f258"
+      "sha256": "32c4e2bc58b3d1b4d625b59ad8ce1df01f7292c4d89954804d8d25726d9c1c2d"
     },
     {
       "path": "learning/cli/plot_platform_layout_detail.py",
@@ -204,6 +204,66 @@
     {
       "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/RESULTS.md",
       "sha256": "d620584c235406096ea547616c1c8f595baed4cc60c504f69b063f475b97425f"
+    },
+    {
+      "path": "docs/chapter3_paper/README.md",
+      "sha256": "f578992f64908ad83d5c899f5055adc972c860fb0c6ee0deabc7357fcf4d6e26"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_library/RESULTS_BREAKDOWN.md",
+      "sha256": "9c2ed1ca27c346af889c8c32629bc70d9ac4290590acb99ce4b65a13bcf57df8"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_library/admission_funnel.csv",
+      "sha256": "5eff7bb962d5cf2880e969878533a7b307c7dc4ee8961431d47985a899f76882"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_library/commit_only.csv",
+      "sha256": "4c8991caef624f8b118d2eb7c3c797fe4b4c54785e0714e4bcad6b4898044503"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_library/expanded_wall_contracts.csv",
+      "sha256": "58b500306c45376ec41ddf7d817903653cbebeeba7dae2cf4c0a6e9711c227e7"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_library/fixed_lookup.csv",
+      "sha256": "884ae26af4426c272d1fd67765755ed20a52ca71e25330159862b56a3945d623"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_library/matched_wall_outcomes.csv",
+      "sha256": "04747d0fbba4031e90ea969a4d5bf658cddbf077c8ea83d621dc2dfb9d1da7a1"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_library/online_xy_cases.json",
+      "sha256": "4fd69dd08f3bf6a74ecf3b9c8aad4c435d391ab1199e9375a13bf2a9cc3525ea"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_library/oracle_ceiling.csv",
+      "sha256": "7821845c9bf3435cab08ddd8a0f12da0d26ec131592508b65ab490b37dd3990b"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/realtime_15ms/clock_state_pairs.csv",
+      "sha256": "8b9ae0fcda5d299d40f7f0d8d95f2f678204bfb0e45325244f68e275fdfc777d"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/wall_layouts/admission_funnel.csv",
+      "sha256": "6002611416f9a7677f43d84bff32592637adea5f392ec685ea75d3bd1e9e6c86"
+    },
+    {
+      "path": "learning/cli/audit_platform_paper.py",
+      "sha256": "55036d9258f17d9005fc9ad83db4b5a2d31733c2001e8372f8589a0b4c99e848"
+    },
+    {
+      "path": "learning/cli/run_blind_platform.py",
+      "sha256": "cee32d0729a7e9cf995c9e095194e68ef5551b982cef3d3d7d673fb1cadd51a7"
+    },
+    {
+      "path": "learning/cli/report_platform_online_review.py",
+      "sha256": "af4661f4abe635213308233cbba14b547805d58c946ec25c246d80fd240b7294"
+    },
+    {
+      "path": "learning/cli/prepare_blind_platform.py",
+      "sha256": "bb819b7d015523635b57bff0bdf9c09326a6a9838f25f7287304f8b98b088311"
     }
   ],
   "rb_checkpoint": {

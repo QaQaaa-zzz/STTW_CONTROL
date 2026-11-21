@@ -1,0 +1,9 @@
+layout,skill,side,contracts,oracle_9,oracle_15
+test_a,rb_run1,-1,360,293,313
+test_a,rb_run1,1,360,147,298
+test_a,source,-1,360,263,290
+test_a,source,1,360,42,169
+test_b,rb_run1,-1,360,276,310
+test_b,rb_run1,1,360,170,308
+test_b,source,-1,360,255,281
+test_b,source,1,360,83,203

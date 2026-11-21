@@ -57,9 +57,11 @@ def score(out):
     pd.DataFrame(records,columns=['skill','layout','metric','contracts',*ARMS,'net','delta_low','delta_high']).to_csv(out/'paired_metrics.csv',index=False)
 
 
-def main(base):
-    out=base/'post_review/alpha_library'
-    latency=pd.read_csv(out/'timing/latency.csv').query("method=='phase2_relative' and candidates==15").iloc[0]
+def main(base, transfer=False):
+    library=base/'post_review/alpha_library'
+    out=library.with_name('alpha_transfer') if transfer else library
+    out.mkdir(exist_ok=True)
+    latency=pd.read_csv(library/'timing/latency.csv').query("method=='phase2_relative' and candidates==15").iloc[0]
     if not (latency.n==1000 and latency.horizon_steps==255 and latency.p95_ms<=15 and latency.decision_mismatches==0 and latency[['max_pose_abs','max_velocity_abs','max_domain_abs']].max()<1e-5):
         raise ValueError('15-candidate timing or parity exceeded the frozen budget')
     parent=base/'post_review/realtime_15ms'
@@ -68,11 +70,30 @@ def main(base):
                 parent_sha256=sha(parent/'test_freeze_manifest.json'),pair=ARMS,lanes_per_assignment=21,
                 assignment_batches=[list(product(plan['roots'],plan['forces_N']))],dev_roots=list(range(8,38)),
                 timings_ms={**plan['timings_ms'],'15':float(latency.p95_ms)},scope='Left gates. Four 2520-lane batches; two C-R arms with the same 30-root 5NN and 15 physical oracle branches.')
+    if transfer:
+        walls=read(base/'post_review/wall_layouts/test_freeze_manifest.json')
+        plan.update(maps=walls['maps'],roots=walls['roots'],skills=['rb_run1'],
+                    assignment_batches=[list(product(walls['roots'],plan['forces_N']))],
+                    role='Frozen T3 library on previously evaluated T2 geometries',
+                    parent_manifest=str(library/'test_freeze_manifest.json'),
+                    parent_sha256=sha(library/'test_freeze_manifest.json'),
+                    scope='R9 left gates only; three batches x 1890 lanes, same 30 DEV calibration states and both T3 arms.')
     save(out/'test_freeze_manifest.json',plan)
     project(out,parent/'test_a',development_states(base/'phase4_alpha'))
     execute(out,assignments)
     score(out)
+    if transfer:
+        cases = pd.read_csv(out/'online_cases.csv')
+        veto = (cases.query_batch_ms > 0) & ~cases.query_feasible
+        cases.assign(admitted_done=cases.query_feasible & cases.success,
+                     admitted_wall=cases.query_feasible & cases.collision,
+                     veto=veto, veto_wall=veto & cases.collision).groupby(['layout', 'planner']).agg(
+            contracts=('root', 'size'), completed=('success', 'sum'), collisions=('collision', 'sum'),
+            admitted=('query_feasible', 'sum'), admitted_done=('admitted_done', 'sum'),
+            admitted_wall=('admitted_wall', 'sum'), vetoed=('veto', 'sum'),
+            wall_after_veto=('veto_wall', 'sum')).to_csv(out/'admission_funnel.csv')
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('base',type=Path);main(p.parse_args().base)
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('base',type=Path);p.add_argument('--transfer',action='store_true')
+    a=p.parse_args();main(a.base,a.transfer)

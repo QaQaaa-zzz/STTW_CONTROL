@@ -88,7 +88,7 @@ def project(out, initializer_dir=None, development=None):
         raster=dict(np.load(dest/'terrain.npz'));raster['height']-=height;model.terrain=TerrainFeatures(**raster,device='cuda')
         walls=[i for i in range(physics.ngeom) if physics.geom(i).name.startswith('planning_obstacle_')]
         obs=tensor(physics.geom_pos[walls]),tensor(physics.geom_size[walls]);env=BodyEnvelope(physics,dimensions=3)
-        for skill in ('source','rb_run1'):
+        for skill in plan.get('skills',('source','rb_run1')):
             g=rows[rows.skill==skill].reset_index(drop=True)
             if initializer_dir is None:
                 mu,scale,weights=fit_hidden(captures/(skill+'_capture'),model,schema)

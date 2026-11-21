@@ -84,10 +84,11 @@ def report(out):
                    net_negative_units=(per_task<0).sum(),unchanged_units=(per_task==0).sum(),
                    mismatched_pairs=(~pairs.same_prefix).sum())).to_json(out/'decision_units.json')
     layouts=sorted(assigned.layout.unique(),reverse=True)
-    fig,axes=plt.subplots(len(layouts),2,figsize=(10,2.5*len(layouts)),squeeze=False,layout='constrained')
+    skills=sorted(assigned.skill.unique(),reverse=True)
+    fig,axes=plt.subplots(len(layouts),len(skills),figsize=(5*len(skills),2.5*len(layouts)),squeeze=False,layout='constrained')
     for (layout,skill),group in pairs.reset_index().groupby(['layout','skill']):
         group=group.sort_values(['rescued','lost','changed'],ascending=False)
-        r=group.iloc[0];ax=axes[layouts.index(layout),int(skill=='rb_run1')]
+        r=group.iloc[0];ax=axes[layouts.index(layout),skills.index(skill)]
         for name,color in [('c','#155789'),('cr','#a14324')]:
             with np.load(r[name+'_trajectory']) as z:
                 tr=z['trace'];ref=z['published_reference_xy']

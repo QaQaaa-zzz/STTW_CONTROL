@@ -1,0 +1,9 @@
+layout,skill,planner,success_o,collision_o
+test_a,rb_run1,alpha0,96,57
+test_a,rb_run1,alpha_enabled,196,60
+test_a,source,alpha0,0,5
+test_a,source,alpha_enabled,4,7
+test_b,rb_run1,alpha0,142,15
+test_b,rb_run1,alpha_enabled,234,21
+test_b,source,alpha0,10,0
+test_b,source,alpha_enabled,17,0

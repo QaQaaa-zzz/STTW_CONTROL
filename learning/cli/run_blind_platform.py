@@ -21,7 +21,7 @@ def execute(out, alpha_choices=None):
     sizes = []
     for layout,map_entry in plan['maps'].items():
         folder=out/layout
-        by_skill = packing.get(layout, {skill:batches for skill in ('source','rb_run1')})
+        by_skill = packing.get(layout, {skill:batches for skill in plan.get('skills',('source','rb_run1'))})
         for part in range(max(map(len,by_skill.values()))):
             for skill,parts in by_skill.items():
                 if part >= len(parts):
