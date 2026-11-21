@@ -1,0 +1,9 @@
+skill,planner,contracts,histories,walls,ever_admitted,ever_admitted_walls,mixed_admission
+rb_run1,C,1440,493,35,218,0,0
+rb_run1,C-R,1440,487,9,219,1,0
+rb_run1,fixed,1440,480,41,0,0,0
+rb_run1,nominal,1440,480,2,0,0,0
+source,C,1440,489,5,128,0,0
+source,C-R,1440,497,3,129,0,0
+source,fixed,1440,480,8,0,0,0
+source,nominal,1440,480,0,0,0,0

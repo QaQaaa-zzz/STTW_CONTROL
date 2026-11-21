@@ -1,6 +1,6 @@
 {
-  "paper_sha256": "c99b69881981506e0aa6e82583433db82d9ce7618ed5224fb266bc6392d0ad3b",
-  "pdf_sha256": "8a588df9fed7119cfdfc22a0501fded2cbd41c9d5153d43f78074a8feaeee530",
+  "paper_sha256": "a2bd9689debaf42f3faaa61506555bd5cd77f6f2ba526d190726e4d9d6a01a74",
+  "pdf_sha256": "43bdfe2cab791cddb385a6d95ca6d9a442e46cfefb1e4d352374de22fcf78787",
   "submission_ready": false,
   "author_verification": "pending",
   "historical_draft_local_commit": "7219dbe6abac4075eea94c4feea87a74f67b37e8",
@@ -84,6 +84,69 @@
     {
       "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/clock_conditions.csv",
       "sha256": "1d8686f047fabb3a095f8392ca32cd2ea2c39ec515a45f4e6d35cd1e7cf7e67d"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/realtime_15ms/assignments.csv.gz",
+      "sha256": "0bac24f50b5fe726a6b032a1bfaa763f62f0888e8c2399ce349cdda5b4491af3"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/realtime_15ms/clock_conditions.csv",
+      "sha256": "e977d62de5297949593f851ae9d0295a4b30a86c96f0007277259619ade45739"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/realtime_15ms/clock_rescues.csv",
+      "sha256": "3a082668382ec28e58a31bc4d7b80910da669aa8d02c078e6ff18f9e5eed48a2"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/realtime_15ms/history_counts.csv",
+      "sha256": "f795340bc7ec8c301e06655c06c11fd83198957cfc364a6beac051f1cec96659"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/realtime_15ms/paired_clock_effect.csv",
+      "sha256": "19842f1eea808843bec3f3970df9526a3c2eae5cc2fed4ebb6d48b7bd61bdac0"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/realtime_15ms/test_freeze_manifest.json",
+      "sha256": "dc77c1b227bd880ce9b750dbef695921b2e9757bb700cbf6aa493a75aa45b40f"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/realtime_15ms/verified_jump.json",
+      "sha256": "c00001653b1a7796868542970eca74d405ed72846781bec369c8eafc54cd8591"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/realtime_15ms/verified_jump.mp4",
+      "sha256": "a5ff8cb13e647d88f5a562ae3f5e7c448468550cdc440eb2557d9dc5a9704213"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/realtime_15ms/verified_jump.npz",
+      "sha256": "0e18553f93200db60877e048148f890be92941b0e6cd032105f6b3e12f694e70"
     }
-  ]
+  ],
+  "rb_checkpoint": {
+    "source_training_run_id": "round_0009_student",
+    "actor_sha256": "c3eae39c7c116d5db56122d5aff4f29a6f95b8971a51c4c46864754ecb58b040",
+    "normalizer_sha256": "db84aad7750991d6b720e9f065ed7e49f862893c7753f9839c593d7951b6ea86",
+    "source_formal_report_sha256": "6b4c25707dd7ce4abf967d3f83c25b7c65c5aaefae999285feb39c76dadcdc79",
+    "registry": "learning/configs/playground_rb_skill_sources.json",
+    "relation_to_chapter2": "Reviewed round-9 student. No verified binding to the final actors of the three reported 100-round runs."
+  },
+  "realtime_replay": {
+    "role": "paired follow-up on disclosed TEST",
+    "raw_trajectory_sha256": "0e18553f93200db60877e048148f890be92941b0e6cd032105f6b3e12f694e70",
+    "layout": "test_a",
+    "root": 1028,
+    "force_N": 5,
+    "section": "near",
+    "side": 1,
+    "skill": "rb_run1",
+    "planner": "C-R",
+    "trajectory": "test_a/part_1/rb_run1/rb_run1_route1_h75_v898/trajectory.npz",
+    "handback_s": 4.815000057220459,
+    "verified_jump": true,
+    "task_success": true,
+    "wall_contact": false,
+    "takeoff_s": 3.9600000381469727,
+    "airborne_end_s": 4.539999961853027,
+    "loaded_landing_s": 4.574999809265137
+  }
 }

@@ -1,0 +1,13 @@
+skill,layout,force,assignments,old_success,old_collision,old_approved,old_approved_wall,old_approved_done,new_success,new_collision,new_approved,new_approved_wall,new_approved_done
+rb_run1,test_a,-5,240,96,12,90,3,84,90,3,81,0,81
+rb_run1,test_a,0,240,138,18,132,3,129,144,0,132,0,129
+rb_run1,test_a,5,240,120,21,120,3,117,137,6,111,0,111
+rb_run1,test_b,-5,240,90,21,87,3,81,94,9,78,3,75
+rb_run1,test_b,0,240,158,9,149,0,146,155,6,131,0,128
+rb_run1,test_b,5,240,99,9,88,0,88,128,3,120,0,120
+source,test_a,-5,240,42,0,27,0,27,42,0,27,0,27
+source,test_a,0,240,111,3,105,0,105,114,0,105,0,105
+source,test_a,5,240,81,5,81,0,78,81,3,81,0,78
+source,test_b,-5,240,31,6,18,3,15,27,0,15,0,15
+source,test_b,0,240,108,1,105,0,95,111,1,105,0,96
+source,test_b,5,240,69,3,57,0,54,72,3,54,0,54

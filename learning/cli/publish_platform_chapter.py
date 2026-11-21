@@ -2,6 +2,7 @@
 import argparse
 import json
 import os
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -157,21 +158,22 @@ def approved_walls(blind):
     cases['history'] = cases.trajectory.map(fingerprint)
     paths = cases.drop_duplicates(['layout', 'root', 'force', 'side', 'history'])
     keys = ['layout','skill','planner','root','force','section','side']
-    repeat = pd.read_csv(blind.parent / 'post_review/latency_ablation/online_cases.csv').set_index(keys)
+    repeat = pd.read_csv(blind.parent / 'post_review/realtime_15ms/online_cases.csv').set_index(keys)
     fig, axes = plt.subplots(len(paths), 1, figsize=(7.0, 1.42 * len(paths)), layout='constrained')
     for ax, row in zip(axes, paths.itertuples(), strict=True):
         world = json.loads((blind / (row.layout + '.json')).read_text())
         wall(ax, world)
         match = repeat.loc[tuple(getattr(row,k) for k in keys)]
-        for path, tick, color in [(row.trajectory,row.departure_applied_tick,BLUE),
-                                  (match.trajectory,match.departure_applied_tick,ORANGE)]:
+        for path, tick, color, label in [(row.trajectory,row.departure_applied_tick,BLUE,'305/300 ms'),
+                                         (match.trajectory,match.departure_applied_tick,ORANGE,'15/15 ms')]:
             with np.load(path) as data:
-                pathline(ax,data,color,'Actual')
+                pathline(ax,data,color,label)
                 q = data['qpos']
                 ax.plot(q[tick,0],q[tick,1],'o',ms=3,color=color)
         ax.set(xlim=(10.5, 18.6), ylim=(-.8, .8), ylabel='World y (m)', aspect='equal',
                title=f'{row.layout}, root {row.root}, {row.force:+} N, ' + ('left gate' if row.side == 1 else 'right gate'))
     axes[-1].set_xlabel('World x (m)')
+    fig.legend(*axes[0].get_legend_handles_labels(),loc='outside lower center',ncol=2,frameon=False)
     finish(fig, 'platform_approved_walls')
 
 
@@ -212,8 +214,31 @@ def replay_video(b):
     pairs=pd.read_csv(b/'matched_cases.csv')
     case=pairs.query("skill=='rb_run1' and rescued and c_wall and not cr_wall and section=='near'").sort_values(['layout','root']).iloc[0]
     path=Path(case.cr_trajectory);dest=REVIEW/'final_stages'/'verified_test_jump.mp4'
+    label=f'TEST A | R9 | C-R | root {case.root} | {case.force:+} N | left gate'
+    render_jump_video(path,b/(case.layout+'.json'),dest,label)
+
+
+def realtime_video(blind):
+    repeat=blind.parent/'post_review/realtime_15ms'
+    keys=['layout','root','force','section','side']
+    old=pd.read_csv(blind/'online_cases.csv').query("skill=='rb_run1' and planner=='C-R' and side==1 and section=='near' and query_feasible and collision")
+    new=pd.read_csv(repeat/'online_cases.csv').query("skill=='rb_run1' and planner=='C-R' and verified and success and not collision")
+    case=old[keys].merge(new,on=keys,validate='one_to_one').sort_values(['layout','root']).iloc[0]
+    path=Path(case.trajectory)
+    output=REVIEW/'final_stages'/'realtime_15ms'
+    label=f'{case.layout.upper()} | R9 C-R | {case.root} | {case.force:+} N | left gate | 15 ms'
+    events=render_jump_video(path,blind/(case.layout+'.json'),output/'verified_jump.mp4',label)
+    shutil.copyfile(path,output/'verified_jump.npz')
+    receipt=dict(layout=case.layout,root=int(case.root),force_N=int(case.force),section=case.section,
+                 side=int(case.side),skill=case.skill,planner=case.planner,trajectory=str(path.relative_to(repeat)),
+                 handback_s=case.handoff_s,verified_jump=bool(case.verified),task_success=bool(case.success),
+                 wall_contact=bool(case.collision),**events)
+    (output/'verified_jump.json').write_text(json.dumps(receipt,indent=2)+'\n')
+
+
+def render_jump_video(path,map_path,dest,label):
     model=mujoco.MjModel.from_binary_path(str(path.parents[1]/'terrain.mjb'))
-    scene=json.loads((b/(case.layout+'.json')).read_text());edge=scene['terrain']['front_x_m']
+    edge=json.loads(map_path.read_text())['terrain']['front_x_m']
     with np.load(path) as z:
         q=z['qpos'];tr=z['trace'];loads=z['contact_substep']
         take,end,land=flight(model,q,loads,z['wheel_contact_flags'][:,2]&(loads[:,-1,:2]>1e-5).all(1),tr[:,0],edge,edge,.16,0.)
@@ -228,17 +253,18 @@ def replay_video(b):
             frame=Image.fromarray(renderer.render());draw=ImageDraw.Draw(frame)
             event='Flight: wheels unloaded' if take<=t<=end else ('Platform support verified' if t>=land else 'Approach / jump transition')
             draw.rectangle((0,0,560,33),fill='#17232c')
-            draw.text((6,2),f'TEST A | R9 | C-R | root {case.root} | {case.force:+} N | left gate',fill='white')
+            draw.text((6,2),label,fill='white')
             draw.text((6,17),f't = {t:.2f} s    {event}',fill='white')
             encoder.stdin.write(frame.tobytes())
         encoder.stdin.close()
         if encoder.wait():raise RuntimeError('Video encoder failed')
+    return dict(takeoff_s=take,airborne_end_s=end,loaded_landing_s=land)
 
 
 def publish(wide):
     b=wide/'chapter_mainline/blind_test';raw=wide/'review_114';metrics=pd.read_csv(b/'blind_metrics.csv')
     plt.rcParams.update({'font.size':8,'axes.spines.top':False,'axes.spines.right':False})
-    reversal(b,pd.read_csv(b/'oracle_cases.csv'));layouts(b,raw);dynamics(raw);tradeoff(raw,b,metrics);rescues(b);approved_walls(b);tables(b,metrics);replay_video(b)
+    reversal(b,pd.read_csv(b/'oracle_cases.csv'));layouts(b,raw);dynamics(raw);tradeoff(raw,b,metrics);rescues(b);approved_walls(b);tables(b,metrics);replay_video(b);realtime_video(b)
 
 
 if __name__=='__main__':

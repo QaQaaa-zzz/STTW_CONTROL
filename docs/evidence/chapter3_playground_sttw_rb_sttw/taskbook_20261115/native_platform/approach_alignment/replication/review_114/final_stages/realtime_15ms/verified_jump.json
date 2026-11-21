@@ -1,0 +1,17 @@
+{
+  "layout": "test_a",
+  "root": 1028,
+  "force_N": 5,
+  "section": "near",
+  "side": 1,
+  "skill": "rb_run1",
+  "planner": "C-R",
+  "trajectory": "test_a/part_1/rb_run1/rb_run1_route1_h75_v898/trajectory.npz",
+  "handback_s": 4.815000057220459,
+  "verified_jump": true,
+  "task_success": true,
+  "wall_contact": false,
+  "takeoff_s": 3.9600000381469727,
+  "airborne_end_s": 4.539999961853027,
+  "loaded_landing_s": 4.574999809265137
+}
