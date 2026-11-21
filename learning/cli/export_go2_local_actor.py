@@ -51,6 +51,11 @@ if a.h75_reference_bundle:
         budget=json.loads((a.training_run/'config.json').read_text())['task']['updates']
         completed=label if label==budget else label+1
     identity['native_checkpoint']=dict(path=str(a.checkpoint.resolve()),sha256=hashlib.sha256(a.checkpoint.read_bytes()).hexdigest(),training_run=str(a.training_run.resolve()),raw_upstream_iteration=checkpoint['iter'],completed_updates=completed,infos=infos,log_std=state['log_std'].tolist())
+    identity['reference_bundle_source_actor'] = identity.get('source_actor')
+    identity['source_actor'] = dict(source=str(a.checkpoint.resolve()),
+        source_sha256=identity['native_checkpoint']['sha256'], artifact='actor.npz',
+        artifact_sha256=identity['files']['actor.npz'],
+        conversion='native actor arrays transposed into frozen evaluation format')
     identity['role']='native Go2 H75 candidate export; frozen original route/config/lower; no physics or optimizer'
     (a.output/'identity.json').write_text(json.dumps(identity,indent=2))
     print('Exported native H75 Actor into existing fixed-case bundle')
