@@ -1,5 +1,7 @@
 # STTW论文：偏好条件参考调节与越野恢复
 
+四稿整合英文工作稿：[PDF](english/PCRP.pdf) · [LaTeX](english/PCRP.tex)。在 english 目录用 `tectonic --only-cached PCRP.tex` 构建。当前版合入名义包络、六刚体预算、七种地形及冻结选档。新同栈弯道与解析基线结果待补入。
+
 当前完整稿：[PDF](MANUSCRIPT.pdf) · [可编辑中文正文及英文摘要](MANUSCRIPT.md) · [HTML](MANUSCRIPT.html)。当前PDF由Markdown生成；MANUSCRIPT.tex及method_training.tex保留为历史平地英文材料，不是本版编辑源。
 
 主线：α改变速度—转向协调；接触状态决定转向恢复作用，侧倾与跟踪域分别限制任务；据此检验任务相关选档。正文包含两项命题、16个公式、4张表和7张图。第一张图为实际／原参考XY。
