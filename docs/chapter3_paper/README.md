@@ -14,6 +14,8 @@
 
 [15 ms 全方法表](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/safety_trigger/main_table.csv) · [三种墙的逐布局区间](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/wall_layouts/layout_metrics.csv) · [α 消融逐图结果](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_library/paired_metrics.csv) · [来源清单](source_manifest.json)
 
+在此前评测的三种墙布局和 30 个初态上冻结复验 R9（左门每组 810 项、15/15 ms），9→15 候选的通关为 197→361，撞墙为 46→75，扩库后准入的 246 项中 238 项通关、0 项撞墙。 [三墙复验与逐项证据](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_transfer/RESULTS.md)
+
 在工作树根目录运行 `python3 docs/chapter3_paper/build.py` 可从已提交的图表编译 PDF。方法与数据角色已按实验归档核对。文献 [18]、[19] 按本地未发表手稿著录；署名、单位及投稿审批由作者确认。
 
 [新增零仿真归因、同批 C/Fixed 与 18 个撞墙合同](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_library/RESULTS_BREAKDOWN.md)。文献 [11] 已对照 arXiv 原始页面核验题名、作者顺序和日期，编号 2611.15280，2026 年 11 月 11 日。文献 [18]、[19] 沿用已核实的未发表稿题名，作者顺序待作者确认。

@@ -17,3 +17,4 @@ R9 one of 508 and Source zero of 256 admitted wall contacts; R9 staggered zero o
 R9 admitted completions 131/131 to 366/366; zero admitted contacts,disclosed T3 paired cases,alpha_library/admission_funnel.csv,pending
 T3 finite-library oracle and committed controls,same-batch physical library,alpha_library/RESULTS_BREAKDOWN.md,pending
 Differences at takeoff and relock,outcome-selected R9 paired clock cases,realtime_15ms/clock_state_pairs.csv,pending
+R9 paired preference transfer on three offset-wall layouts,T2 geometries and starts revisited; left gates only,alpha_transfer/paired_metrics.csv; alpha_transfer/layout_outcomes.csv,pending

@@ -1,0 +1,7 @@
+layout,planner,contracts,verified,solvable,newly_solved,solvable_veto,nonzero_alpha,completed,collisions,admitted,admitted_done,admitted_wall,vetoed,wall_after_veto
+config_double,alpha0,270,179,71,0,59,0,44,36,11,6,1,168,35
+config_double,alpha_enabled,270,187,190,53,121,186,94,67,30,29,0,157,67
+config_l,alpha0,270,195,65,0,55,0,28,6,9,7,0,186,6
+config_l,alpha_enabled,270,183,189,45,123,180,78,8,24,22,0,159,8
+config_r,alpha0,270,186,129,0,5,0,125,4,126,121,0,60,4
+config_r,alpha_enabled,270,204,239,88,7,258,189,0,192,187,0,12,0

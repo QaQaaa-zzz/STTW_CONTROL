@@ -1,6 +1,6 @@
 {
-  "paper_sha256": "61e57944e94de9e4c87c431cc62f29825d9fd1a49eb2dc727b672ee729263b7f",
-  "pdf_sha256": "e02699d461a3f99c581b50c0815db6e22badf109d946b3c3e5812ec7468972d4",
+  "paper_sha256": "562d87782bb6f4722dd3f7f791db748bce35beebde525a1243db9870b49a93e5",
+  "pdf_sha256": "e4ff36aaecc5d6b0f83c0ffa3e89bbdc8177cbab8e812e1c446d2344a0c10ebc",
   "submission_ready": false,
   "author_verification": "pending",
   "historical_draft_local_commit": "7219dbe6abac4075eea94c4feea87a74f67b37e8",
@@ -183,7 +183,7 @@
     },
     {
       "path": "docs/chapter3_paper/claims.csv",
-      "sha256": "a9926a15c0c0b4bbc83c471b76dc5507b0c407bdd89d240d84ea0029a1a0ca0b"
+      "sha256": "025dac8ebbde0d5478275831f01544f12d0732d8f674d01bf131c47f48551289"
     },
     {
       "path": "learning/cli/score_platform_review.py",
@@ -195,7 +195,7 @@
     },
     {
       "path": "learning/cli/plot_platform_layout_detail.py",
-      "sha256": "82619d0097e8875cdf2f2073404d608a779db1f70aa99f1521af25bb73311ce7"
+      "sha256": "f3eb94d4ffe5134d60280ce1ee68215243a35ef5cb14a9852b0ddb67232e9748"
     },
     {
       "path": "learning/configs/playground_rb_skill_sources.json",
@@ -251,7 +251,7 @@
     },
     {
       "path": "learning/cli/audit_platform_paper.py",
-      "sha256": "55036d9258f17d9005fc9ad83db4b5a2d31733c2001e8372f8589a0b4c99e848"
+      "sha256": "175826619b0503bee9a479c5dd09a5f06a5110ceb0888d9fca3a153791baaf15"
     },
     {
       "path": "learning/cli/run_blind_platform.py",
@@ -264,6 +264,46 @@
     {
       "path": "learning/cli/prepare_blind_platform.py",
       "sha256": "bb819b7d015523635b57bff0bdf9c09326a6a9838f25f7287304f8b98b088311"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_transfer/RESULTS.md",
+      "sha256": "1eaf50ef7f212b0fb8aec53aae8509aadaa59de84fc4e894f598454d8eb5151e"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_transfer/assignments.csv.gz",
+      "sha256": "81ed98f48e751b4df3ca1109b31954ffa63e3b22ea4c7491004c00a56025a9a7"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_transfer/by_section_force.csv",
+      "sha256": "5d5f6ee6ddd532120dcc1b0b07a369b2a0eb7ac34e7661a371849b14b12caa6f"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_transfer/complete.json",
+      "sha256": "99c5d0b30e8e90cc974ca2e00723061bc2ef31a0492c85e3ac4d144ac9de93db"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_transfer/illustrated_events.csv",
+      "sha256": "ef135ccc98f793ba0df8cfbf40197eaf522535f2af2ea2fc25f67a87cbe14788"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_transfer/layout_outcomes.csv",
+      "sha256": "417f7dbc09632ab75f19c13452c3bd8dbd3bc08d3d2f869029621ed92fdf8c4a"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_transfer/online_xy.png",
+      "sha256": "aed39312a24dd96e9f03a20743d79249aab231ca27cb2053e9316f0aa01d3efe"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_transfer/paired_metrics.csv",
+      "sha256": "b85709b7e4f4069a285da05cfa39cab6fe7daec85286f952750d5bca9acb4882"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_transfer/selected_paths.png",
+      "sha256": "c8e3f6734f06ef7727f9b988f94d9835faa2154d909d6d0789c1ccd8858396ee"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_transfer/test_freeze_manifest.json",
+      "sha256": "c45e8bd4d48f0e942b2aafcadcab317f647cc87e6dc79d2bad73f6638ccfb45f"
     }
   ],
   "rb_checkpoint": {

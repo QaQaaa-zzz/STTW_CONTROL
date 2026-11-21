@@ -1,0 +1,7 @@
+layout,root,arm,alpha,takeoff_s,airborne_end_s,loaded_landing_s,relock_s,success,collision,trajectory
+config_double,1041,alpha0,0.0,3.9649999141693115,4.539999961853027,4.545000076293945,4.954999923706055,False,False,config_double/part_0/rb_run1/rb_run1_route0_h75_v0/trajectory.npz
+config_double,1041,alpha_enabled,1.0,3.9649999141693115,4.545000076293945,4.550000190734863,4.900000095367432,False,True,config_double/part_0/rb_run1/rb_run1_route1_h75_v1/trajectory.npz
+config_l,1041,alpha0,0.0,3.9649999141693115,4.539999961853027,4.545000076293945,4.954999923706055,False,False,config_l/part_0/rb_run1/rb_run1_route0_h75_v0/trajectory.npz
+config_l,1041,alpha_enabled,1.0,3.9649999141693115,4.545000076293945,4.550000190734863,4.900000095367432,False,False,config_l/part_0/rb_run1/rb_run1_route1_h75_v1/trajectory.npz
+config_r,1041,alpha0,0.0,3.9649999141693115,4.550000190734863,4.570000171661377,4.880000114440918,True,False,config_r/part_0/rb_run1/rb_run1_route1_h75_v0/trajectory.npz
+config_r,1041,alpha_enabled,1.0,3.9649999141693115,4.545000076293945,4.550000190734863,4.900000095367432,True,False,config_r/part_0/rb_run1/rb_run1_route1_h75_v1/trajectory.npz

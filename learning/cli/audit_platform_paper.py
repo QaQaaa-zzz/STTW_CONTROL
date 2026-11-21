@@ -24,18 +24,22 @@ CLOCKS = {
 STATE = ["x", "y", "z", "roll", "pitch", "yaw", "vx", "vy", "vz"]
 
 
-def alpha_audit(raw, output, layout_cases):
+def oracle_options(raw):
     oracle = pd.read_csv(raw / "oracle_cases.csv")
     assert (oracle.groupby(KEYS).size() == 15).all()
     assert (oracle[oracle.approach_alpha == 0].groupby(KEYS).size() == 9).all()
     assert not oracle.duplicated(KEYS + ["approach", "approach_alpha", "planned_dep"]).any()
-    options = pd.concat(
+    return oracle, pd.concat(
         [
             oracle[oracle.approach_alpha == 0].groupby(KEYS).success.any().rename("oracle_9"),
             oracle.groupby(KEYS).success.any().rename("oracle_15"),
         ],
         axis=1,
     )
+
+
+def alpha_audit(raw, output, layout_cases):
+    oracle, options = oracle_options(raw)
     options.reset_index().groupby(["layout", "skill", "side"]).agg(
         contracts=("root", "size"), oracle_9=("oracle_9", "sum"), oracle_15=("oracle_15", "sum")
     ).to_csv(output / "oracle_ceiling.csv")
@@ -154,17 +158,29 @@ def alpha_figure(raw, output, cases):
     pd.DataFrame(selected).to_json(output / "online_xy_cases.json", orient="records", indent=2)
 
 
-def clock_audit(raw, output):
+@lru_cache(maxsize=32)
+def read_batch(folder):
     import mujoco
+
+    model = mujoco.MjModel.from_binary_path(str(folder / "terrain.mjb"))
+    terrain = json.loads((folder / "resolved_config.json").read_text())["ditch_terrain"]
+    rows = json.loads((folder / "status.json").read_text())["results"]
+    return model, terrain, {row["case_dir"]: row for row in rows}
+
+
+def flight_events(z, model, terrain, rb_entry):
     from report_platform_controls import flight
 
-    @lru_cache(maxsize=32)
-    def read_batch(folder):
-        model = mujoco.MjModel.from_binary_path(str(folder / "terrain.mjb"))
-        terrain = json.loads((folder / "resolved_config.json").read_text())["ditch_terrain"]
-        rows = json.loads((folder / "status.json").read_text())["results"]
-        return model, terrain, {row["case_dir"]: row for row in rows}
+    if rb_entry is None:
+        return None, None, None
+    loads = z["contact_substep"]
+    support = z["wheel_contact_flags"][:, 2] & (loads[:, -1, :2] > 1e-5).all(1)
+    edge = terrain["front_x_m"]
+    return flight(model, z["qpos"], loads, support, z["trace"][:, 0], edge, edge,
+                  terrain["far_bank_height_m"], rb_entry)
 
+
+def clock_audit(raw, output):
     assignments = {}
     for clock, folder in CLOCKS.items():
         cases = pd.read_csv(raw / folder / "online_cases.csv")
@@ -180,13 +196,7 @@ def clock_audit(raw, output):
             physical = status[path.parent.name]
             with np.load(path) as z:
                 trace = pd.DataFrame(z["trace"], columns=z["columns"])
-                loads = z["contact_substep"]
-                supported = z["wheel_contact_flags"][:, 2] & (loads[:, -1, :2] > 1e-5).all(1)
-                edge = terrain["front_x_m"]
-                takeoff, _, _ = flight(
-                    model, z["qpos"], loads, supported, trace.time.to_numpy(), edge, edge,
-                    terrain["far_bank_height_m"], physical["rb_entry_s"],
-                ) if physical["rb_entry_s"] is not None else (None, None, None)
+                takeoff, _, _ = flight_events(z, model, terrain, physical["rb_entry_s"])
             row = dict(zip(KEYS, key), clock=clock, approach=record.approach,
                        planned_dep=record.planned_dep, chosen_dep=record.chosen_dep,
                        success=record.success, collision=record.collision, termination=record.termination,
@@ -203,11 +213,65 @@ def clock_audit(raw, output):
     pd.DataFrame(rows).sort_values(KEYS + ["clock"]).to_csv(output / "clock_state_pairs.csv", index=False)
 
 
+def transfer_audit(raw, output):
+    from plot_platform_layout_detail import plot
+
+    output.mkdir(parents=True, exist_ok=True)
+    cases = pd.read_csv(raw / "online_cases.csv")
+    oracle, options = oracle_options(raw)
+    branch = KEYS + ["approach", "approach_alpha", "chosen_dep"]
+    executed = oracle.rename(columns={"planned_dep": "branch_exit"})
+    matched = cases.merge(executed, left_on=branch, right_on=branch[:-1] + ["branch_exit"],
+                          suffixes=("", "_oracle"), validate="many_to_one")
+    assert len(matched) == len(cases)
+    for label in ("prefix", "success", "collision"):
+        assert matched[label].eq(matched[label + "_oracle"]).all(), label
+    cases = cases.join(options, on=KEYS)
+    cases["solvable"] = np.where(cases.planner == "alpha0", cases.oracle_9, cases.oracle_15)
+    cases["veto"] = (cases.query_batch_ms > 0) & ~cases.query_feasible
+    cases["solvable_veto"] = cases.veto & cases.solvable
+    cases["newly_solved"] = cases.success & ~cases.oracle_9
+    cases["nonzero_alpha"] = cases.approach_alpha > 0
+    cases["trajectory"] = cases.trajectory.map(lambda path: str(Path(path).relative_to(raw)))
+    cols = KEYS + ["planner", "approach", "approach_alpha", "chosen_dep", "verified",
+                   "solvable", "oracle_9", "oracle_15", "query_feasible", "veto", "success",
+                   "collision", "termination", "trajectory"]
+    cases[cols].to_csv(output / "assignments.csv.gz", index=False)
+    cases.groupby(["layout", "section", "force", "planner"]).agg(
+        contracts=("root", "size"), completed=("success", "sum"), wall=("collision", "sum"),
+        relocked=("verified", "sum"), admitted=("query_feasible", "sum"),
+    ).to_csv(output / "by_section_force.csv")
+    counts = cases.groupby(["layout", "planner"]).agg(
+        contracts=("root", "size"), verified=("verified", "sum"), solvable=("solvable", "sum"),
+        newly_solved=("newly_solved", "sum"), solvable_veto=("solvable_veto", "sum"),
+        nonzero_alpha=("nonzero_alpha", "sum"))
+    counts.join(pd.read_csv(raw / "admission_funnel.csv").set_index(["layout", "planner"])
+                .drop(columns="contracts")).to_csv(output / "layout_outcomes.csv")
+    pd.read_csv(raw / "paired_metrics.csv").to_csv(output / "paired_metrics.csv", index=False)
+    examples = cases[(cases.root == cases.root.min()) & (cases.force == 0) & (cases.section == "near")]
+    events = []
+    for case in examples.itertuples():
+        path = raw / case.trajectory
+        model, terrain, rows = read_batch(path.parents[1])
+        with np.load(path) as z:
+            times = flight_events(z, model, terrain, rows[path.parent.name]["rb_entry_s"])
+        events.append((case.layout, case.root, case.planner, case.approach_alpha, *times,
+                       case.handoff_s, case.success, case.collision, case.trajectory))
+    pd.DataFrame(events, columns=["layout", "root", "arm", "alpha", "takeoff_s", "airborne_end_s",
+                 "loaded_landing_s", "relock_s", "success", "collision", "trajectory"]).to_csv(
+        output / "illustrated_events.csv", index=False)
+    plot(raw, output / "online_xy.png", arms=ARMS)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("chapter_mainline", type=Path)
     parser.add_argument("final_stages", type=Path)
+    parser.add_argument("--transfer", action="store_true", help="Report the frozen library on the three T2 wall maps")
     args = parser.parse_args()
+    if args.transfer:
+        transfer_audit(args.chapter_mainline / "post_review/alpha_transfer", args.final_stages / "alpha_transfer")
+        parser.exit()
     wall = pd.read_csv(args.chapter_mainline / "post_review/wall_layouts/online_cases.csv")
     alpha_audit(args.chapter_mainline / "post_review/alpha_library", args.final_stages / "alpha_library", wall)
     clock_audit(args.chapter_mainline, args.final_stages / "realtime_15ms")
