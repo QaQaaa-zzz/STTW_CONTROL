@@ -9,3 +9,7 @@ Between-skill differences by assigned force,TEST,blind_metrics.csv,pending
 Recorded R9 successful trajectory,TEST illustration,source_manifest.json; verified_test_jump.npz,pending
 Shorter physical decision clock,post-TEST paired repeat,paired_clock_effect.csv; clock_rescues.csv; clock_conditions.csv,pending
 Full-horizon GPU clock and 15 ms system effects,post-TEST paired repeat,gpu_query_benchmark.csv; realtime_15ms/paired_clock_effect.csv; realtime_15ms/assignments.csv.gz,pending
+Safety-only trigger and 28 lost contracts,post-TEST replay,safety_trigger/changed_outcomes.csv,pending
+Paired transfer to three wall geometries,30 new initial states,wall_layouts/layout_metrics.csv,pending
+Preference library on two left-gate layouts,paired post-TEST 40 root clusters,alpha_library/paired_metrics.csv,pending
+Fifteen-candidate query,DEV latency,alpha_library/latency.csv,pending

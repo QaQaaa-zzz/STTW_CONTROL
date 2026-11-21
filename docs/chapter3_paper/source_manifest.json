@@ -1,6 +1,6 @@
 {
-  "paper_sha256": "a2bd9689debaf42f3faaa61506555bd5cd77f6f2ba526d190726e4d9d6a01a74",
-  "pdf_sha256": "43bdfe2cab791cddb385a6d95ca6d9a442e46cfefb1e4d352374de22fcf78787",
+  "paper_sha256": "8e43b1c20505ce0b30b24dfec927b182737a518e5d7486aacc599d4d775deb54",
+  "pdf_sha256": "9815cdd750dbb7287beb142ee9c7578ee4d9e3c18ea862ca6946bd26bbbc120a",
   "submission_ready": false,
   "author_verification": "pending",
   "historical_draft_local_commit": "7219dbe6abac4075eea94c4feea87a74f67b37e8",
@@ -120,6 +120,90 @@
     {
       "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/realtime_15ms/verified_jump.npz",
       "sha256": "0e18553f93200db60877e048148f890be92941b0e6cd032105f6b3e12f694e70"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_library/assignments.csv.gz",
+      "sha256": "84e3a91eee8e9ad33c673eb4e308d7103359388af1af6ed50517c55988f2f070"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_library/latency.csv",
+      "sha256": "c52c59bed68dcb30fe1488acded2dfcde77357578378eaff87c33b1cb5b9fcfe"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_library/online_xy.png",
+      "sha256": "f6369f2ee9f6c0c2093954570388e12cfdc08dd65017c202100863d9e26bde7d"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_library/paired_metrics.csv",
+      "sha256": "4e3cd184c0c67d77dd3d21fdcaca4ed249f786872abbaccbb1208ee8495c8c9a"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_library/test_freeze_manifest.json",
+      "sha256": "dd6c9fc1e52696cb917f77b1eb61c41959def8c990a90fc04a6474f7de63c825"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/safety_trigger/changed_outcomes.csv",
+      "sha256": "97c66ff7f6f8ab0533897c53534e1eca29dab4fe2134697d62c67dfed00319ad"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/safety_trigger/main_table.csv",
+      "sha256": "161cde8e81abbb38fbb2b9c343766f1af1b88d9396028c1173e5fae60b8b9dcc"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/safety_trigger/paired_summary.csv",
+      "sha256": "dfbaca485f60dc8ce3924299ac7fbb0bbc49dfb1367ade856f92e7eded94a431"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/safety_trigger/paired_xy.png",
+      "sha256": "06a81c33901fc3d6859740655d2e7ede5be75f1a8b14ea9405ae5085505f78fc"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/safety_trigger/rule_freeze.json",
+      "sha256": "ee6de1972481b41f45980b6eb681e239e3bc04611b402bc7dc6efe661232617b"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/wall_layouts/layout_metrics.csv",
+      "sha256": "fa6a5df30a43f6b1f79dd0bb2e9c24fb605e849a1d63068697757ee1f962fe54"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/wall_layouts/layout_xy.png",
+      "sha256": "4af8219ebd9052b7f6a18ff491377a3c30ba99175086ed515505da4f2ea63da7"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/wall_layouts/test_freeze_manifest.json",
+      "sha256": "efc1d83f999f43241ea487e314ad184e1704bc0a8beea7f36a1463754b1f40be"
+    },
+    {
+      "path": "docs/chapter3_paper/figures/layout_detail.png",
+      "sha256": "8a71d20293dc56064742dc1db3e053a8d214ebf9557007a88fc584d7a84d61d3"
+    },
+    {
+      "path": "docs/chapter3_paper/references.tex",
+      "sha256": "21ef91aaa85834198906fdaec1738ce041a0816164ca9af22c592d9473af904d"
+    },
+    {
+      "path": "docs/chapter3_paper/claims.csv",
+      "sha256": "0846172c4999de32a8f6bce23c71878bfcb2e5453cdc4733205127a2a8f170e2"
+    },
+    {
+      "path": "learning/cli/score_platform_review.py",
+      "sha256": "c65f93f958a31fe126f0525a6a2a31c25c28eaab2f912aba21bf958fb3dfb0fb"
+    },
+    {
+      "path": "learning/cli/run_platform_alpha_library.py",
+      "sha256": "c2e13c33ece0611c853d53e332b5374ee4baf57ffae975f219b0bd599825f258"
+    },
+    {
+      "path": "learning/cli/plot_platform_layout_detail.py",
+      "sha256": "82619d0097e8875cdf2f2073404d608a779db1f70aa99f1521af25bb73311ce7"
+    },
+    {
+      "path": "learning/configs/playground_rb_skill_sources.json",
+      "sha256": "9b2e723ccdd56ac62a5a2507874004b1ea136df79030c580b8e5d63aca9f20dd"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/RESULTS.md",
+      "sha256": "d620584c235406096ea547616c1c8f595baed4cc60c504f69b063f475b97425f"
     }
   ],
   "rb_checkpoint": {

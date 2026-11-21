@@ -1,6 +1,8 @@
 # 第三章：当前结果与大纲进度
 
-**当前验收（原生高台，15 ms 实时复验已结束）。** 锁摆 STTW 接近、R9/Source 真跳上台、锁摆交回后驶离。两图同 40 初态各测三档扰动。R9 C-R 从原时钟 701/1440 通关、90 次撞墙变为 748/1440、27 次撞墙；获准撞墙由 12/666 降为 3/653。实时版改道相对同钟 C 少撞 69 份、净少通关 18 份。下文保留阶段记录。[三档时钟与失败案例](taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/RESULTS.md) · [实时版真跳通关录像](taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/realtime_15ms/verified_jump.mp4) · [八页论文](../../chapter3_paper/MANUSCRIPT.pdf)
+**第三章 T1–T4 已完成。** 两图左门配对消融中，R9 通过接近偏好扩库净增 204/720 个通关合同，同时多撞墙 12 次。三种偏置墙布局上固定规则的通关数均高于落地改道。两项实验的数据角色和适用条件见[当前报告](taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/RESULTS.md)、[八页英文稿](../../chapter3_paper/MANUSCRIPT.pdf)和[学位论文章节映射](../../chapter3_paper/README.md)。
+
+**前期原生高台与 15 ms 实时复验。** 锁摆 STTW 接近、R9/Source 真跳上台、锁摆交回后驶离。两图同 40 初态各测三档扰动。R9 C-R 从原时钟 701/1440 通关、90 次撞墙变为 748/1440、27 次撞墙；获准撞墙由 12/666 降为 3/653。实时版改道相对同钟 C 少撞 69 份、净少通关 18 份。下文保留阶段记录。[三档时钟与失败案例](taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/RESULTS.md) · [实时版真跳通关录像](taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/realtime_15ms/verified_jump.mp4) · [八页论文](../../chapter3_paper/MANUSCRIPT.pdf)
 
 **粗糙高台出现同根双向反转。** 冻结 Source 在开发初态 5 的近检查点、初态 6 的中远检查点分别出现双向独占。初态 5 改为左任务时，成功路径采用右弯接近；改为右任务时，成功路径采用左弯接近。每个合格交回都执行了左、直、右三个驶离。正例覆盖两个实际初态。[逐候选证据和录像](taskbook_20261115/native_platform/approach_alignment/entry_heading/SOURCE.md) · [16 个新粗糙图初态和两幅地图的冻结复验方案](taskbook_20261115/native_platform/approach_alignment/replication/protocol.json)
 

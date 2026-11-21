@@ -1,5 +1,7 @@
 # 第三章收官实验 S1–S4
 
+**T3、T4 已完成。** 在已经公开的 test_a / test_b 上，两臂共享 30 个 DEV 初态的先验，同速、同起始状态、同 15/15 ms 查询预算。加入 signed_left 的 α=0.5、1 后，R9 左门通关从 201/720 增至 405/720，撞墙从 6 次增至 18 次；两图通关分别净增 99、105 次。Source 从 23 增至 36，两臂均撞墙 9 次。每技能分母 720 包含 40 个共享初态；整轮共 10,080 条物理轨迹。15 候选单车查询 P95 为 11.29 ms。[逐图配对结果与 40 根区间](alpha_library/paired_metrics.csv) · [实际及参考 XY](alpha_library/online_xy.png) · [逐任务记录](alpha_library/assignments.csv.gz) · [八页主稿](../../../../../../../../chapter3_paper/MANUSCRIPT.pdf)
+
 **T1 已完成。** 在公开的 15/15 ms TEST 上，R9 原路线通关而改道失败的 28 个合同，原路线均被预测为净空不足。20 个预测仍有正间隙但低于 0.1018 m，8 个预测包络与墙相交。25 个仅净空一项未通过，另 3 个同时未满足终点保持。原路线实际全部无撞墙，改道后有 7 个撞墙。10 个救回中，9 个触发净空风险，1 个触发跟踪域风险；原路线实际有 6 个撞墙。仅由检查点或终点保持触发的 13 个改道，保留原路线后通关与撞墙计数均无变化。[38 个合同的实际与参考 XY](safety_trigger/paired_xy.png) · [逐条原因与终止类型](safety_trigger/changed_outcomes.csv)
 
 安全触发规则在 1080 对 DEV 合同上冻结，随后在两图同 40 根、三档扰动上复用同前缀、同延迟的真实 C/C-R 轨迹。DEV 的 161 次和已公开 TEST 的 308 次改道均复现了原选择和两种准入判定。R9 的安全触发版与 C-R 同为 748/1440 通关、27 次撞墙、获准撞墙 3/653。Source 两版同为 447/1440、7 次撞墙、获准撞墙 0/387。T2 沿用原先的四种方法。[完整主表与 40 根聚类区间](safety_trigger/main_table.csv) · [配对差与区间](safety_trigger/paired_summary.csv) · [DEV 冻结记录](safety_trigger/rule_freeze.json)

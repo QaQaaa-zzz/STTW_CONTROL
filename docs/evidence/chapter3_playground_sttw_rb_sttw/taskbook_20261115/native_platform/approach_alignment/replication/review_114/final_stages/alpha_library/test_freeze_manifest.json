@@ -1,0 +1,655 @@
+{
+  "role": "T3 paired post-TEST alpha ablation",
+  "wide": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide",
+  "maps": {
+    "test_a": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/chapter_mainline/blind_test/test_a.json",
+      "sha256": "6d9eb7b004dcf071dd7a185eb4fe16a5efdd81a7a6f15671cb58b4304b097bef",
+      "seed": 520731
+    },
+    "test_b": {
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/chapter_mainline/blind_test/test_b.json",
+      "sha256": "1f86c71b0904505ad53cdc85fee1d67fd4e9f425fc5b91bdc6185925acf9ad27",
+      "seed": 860917
+    }
+  },
+  "roots": [
+    1001,
+    1002,
+    1003,
+    1004,
+    1005,
+    1006,
+    1007,
+    1008,
+    1009,
+    1010,
+    1011,
+    1012,
+    1013,
+    1014,
+    1015,
+    1016,
+    1017,
+    1018,
+    1019,
+    1020,
+    1021,
+    1022,
+    1023,
+    1024,
+    1025,
+    1026,
+    1027,
+    1028,
+    1029,
+    1030,
+    1031,
+    1032,
+    1033,
+    1034,
+    1035,
+    1036,
+    1037,
+    1038,
+    1039,
+    1040
+  ],
+  "bank": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/chapter_mainline/blind_test/initial_bank.npz",
+  "bank_sha256": "7c9618e21cb4650deae1d873a6f0dc7cfebf7aa152c656c4cbc8069d55f3eadc",
+  "hashes": {
+    "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/learning/cli/prepare_blind_platform.py": "ed3b3ea241272dd517d5410d34cb165ae21c211c304da499a5afd30d342e9975",
+    "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/learning/cli/run_blind_platform.py": "e77e0e57562c80ae6c629ab93bfb4602c52205330bf8ecbfc0aac58731cc1d8f",
+    "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/learning/cli/report_blind_platform.py": "ae7a3c6545b6977b99a2e8ec1d92a3a51a80f1bb7ba20474716409a7498af8ae",
+    "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/learning/cli/report_platform_online_review.py": "e1e2f99ca4a7b23f02e41c6c9c7e617f0926ce72960ca44fa75b7e755b7386ba",
+    "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/learning/cli/run_platform_online_review.py": "3128f67a736aec5d5a53ef42d28185e778dea2403f909660a63de211ce5034f8",
+    "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/learning/cli/report_platform_controls.py": "ab04b18e032621cb6b4efaf419751597d38ca853f4a6eab78d31c747321dac93",
+    "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/learning/cli/evaluate_playground_handoff.py": "0c218157a88ce0cf081200c10f8772d6960c7d1d9d27f32305101959a1e205a5",
+    "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/learning/src/sttw_control/platform_online.py": "302a6350b08f67e4d088d17918154d538cc2af27d4dc341a81385cf1e555e2a1",
+    "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/learning/src/sttw_control/playground_handoff_evaluation.py": "b15a1c321d205169181b5abd7e9a4170a02cf9240e7750ca99fa315758a5bd8b",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/review_114/physical_scores.csv": "46d4418bb6e5890ded0af58f6e873f61fa657c8d6fe5059d90103f636ed7db28",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/chapter_mainline/s1/latency.csv": "63f38ad853b993426b3ad9675ff00ad4160af3c87f163d339193adbbd5957125",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/chapter_mainline/s1/common_bank_summary.csv": "6b8d378cb748301007102e347811773ce803fdde3397d11ba1933861f762abcd",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/residual_seed2/best.pt": "e90b96930ddb549cde6ae40390bafe66253037a6a511fc5bb2eb7b69ef5658bf",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/residual_seed2/nominal.npz": "aba26d22938bd169facdf0e14d69faf286c11333d62f7af4dedca24bb49986ca",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/primary/departure_bank.npz": "1c2ccd083b54349baffbaa96672c5c8a752c53f176fa50c0215cf05784ca711a",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/primary/roots_0008/rb_run1.json": "f6089d55f1195bff9ab6ce8cacbace2843c2a8452b9c4b9e7d00213a317c3346",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/primary/roots_0008/source.json": "f6089d55f1195bff9ab6ce8cacbace2843c2a8452b9c4b9e7d00213a317c3346",
+    "learning/configs/playground_rb_skill_sources.json": "9b2e723ccdd56ac62a5a2507874004b1ea136df79030c580b8e5d63aca9f20dd"
+  },
+  "weights": {
+    "source": {
+      "actor_sha256": "a06acbc81aead7120a291cf82359189bff36ccfecde132615ae0f264ee3126e8",
+      "checkpoint_identity_sha256": "0307799fa5059cd55d81eedec9f33e89a53b75d1f718e29c919b74e01d1445e8",
+      "normalizer_sha256": "db84aad7750991d6b720e9f065ed7e49f862893c7753f9839c593d7951b6ea86",
+      "source_training_run_id": "bridge_baseline"
+    },
+    "rb_run1": {
+      "actor_sha256": "c3eae39c7c116d5db56122d5aff4f29a6f95b8971a51c4c46864754ecb58b040",
+      "checkpoint_identity_sha256": "f6c42676539c66e06d4703b744577243e5b0f99d5df7c8431e3cc40e929036db",
+      "normalizer_sha256": "db84aad7750991d6b720e9f065ed7e49f862893c7753f9839c593d7951b6ea86",
+      "source_training_run_id": "round_0009_student"
+    },
+    "H75": {
+      "source": "/home/qy/STTW_CONTROL/runs/worktrees/tolerance-calibration/runs/preference_full_tail_length75_v1/uniform/checkpoints/actor_0077.pkl",
+      "source_sha256": "d10642082f74e730ce1e834608575eab04b04b16d7373784646499ad1cd2b0df",
+      "artifact": "actor.npz",
+      "artifact_sha256": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+      "conversion": "exact arrays, no optimization or architecture change"
+    }
+  },
+  "predictor": "phase2_relative",
+  "ground_model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/p3_multimap_models/residual_seed2",
+  "margin": {
+    "source": 0.2105724513530731,
+    "rb_run1": 0.1017768085002899
+  },
+  "timings_ms": {
+    "9": 10.79033885,
+    "3": 10.3291987,
+    "15": 11.293502
+  },
+  "latency_ticks": {
+    "start": 3,
+    "departure": 3
+  },
+  "clock": "same physical budget for each method. H75 neutral lead-in then selected approach. Straight published exit until candidate release.",
+  "alpha": 0.0,
+  "speed": 2.0,
+  "forces_N": [
+    0,
+    5,
+    -5
+  ],
+  "section_x": [
+    12.7,
+    13.6,
+    15.0
+  ],
+  "root_bootstrap_seed": 20261120,
+  "scope": "Left gates. Four 2520-lane batches; two C-R arms with the same 30-root 5NN and 15 physical oracle branches.",
+  "parent_manifest": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/chapter_mainline/post_review/realtime_15ms/test_freeze_manifest.json",
+  "parent_sha256": "dc77c1b227bd880ce9b750dbef695921b2e9757bb700cbf6aa493a75aa45b40f",
+  "latency_source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/chapter_mainline/post_review/fused_aten_pitch/latency.csv",
+  "pair": [
+    "alpha0",
+    "alpha_enabled"
+  ],
+  "lanes_per_assignment": 21,
+  "assignment_batches": [
+    [
+      [
+        1001,
+        0
+      ],
+      [
+        1001,
+        5
+      ],
+      [
+        1001,
+        -5
+      ],
+      [
+        1002,
+        0
+      ],
+      [
+        1002,
+        5
+      ],
+      [
+        1002,
+        -5
+      ],
+      [
+        1003,
+        0
+      ],
+      [
+        1003,
+        5
+      ],
+      [
+        1003,
+        -5
+      ],
+      [
+        1004,
+        0
+      ],
+      [
+        1004,
+        5
+      ],
+      [
+        1004,
+        -5
+      ],
+      [
+        1005,
+        0
+      ],
+      [
+        1005,
+        5
+      ],
+      [
+        1005,
+        -5
+      ],
+      [
+        1006,
+        0
+      ],
+      [
+        1006,
+        5
+      ],
+      [
+        1006,
+        -5
+      ],
+      [
+        1007,
+        0
+      ],
+      [
+        1007,
+        5
+      ],
+      [
+        1007,
+        -5
+      ],
+      [
+        1008,
+        0
+      ],
+      [
+        1008,
+        5
+      ],
+      [
+        1008,
+        -5
+      ],
+      [
+        1009,
+        0
+      ],
+      [
+        1009,
+        5
+      ],
+      [
+        1009,
+        -5
+      ],
+      [
+        1010,
+        0
+      ],
+      [
+        1010,
+        5
+      ],
+      [
+        1010,
+        -5
+      ],
+      [
+        1011,
+        0
+      ],
+      [
+        1011,
+        5
+      ],
+      [
+        1011,
+        -5
+      ],
+      [
+        1012,
+        0
+      ],
+      [
+        1012,
+        5
+      ],
+      [
+        1012,
+        -5
+      ],
+      [
+        1013,
+        0
+      ],
+      [
+        1013,
+        5
+      ],
+      [
+        1013,
+        -5
+      ],
+      [
+        1014,
+        0
+      ],
+      [
+        1014,
+        5
+      ],
+      [
+        1014,
+        -5
+      ],
+      [
+        1015,
+        0
+      ],
+      [
+        1015,
+        5
+      ],
+      [
+        1015,
+        -5
+      ],
+      [
+        1016,
+        0
+      ],
+      [
+        1016,
+        5
+      ],
+      [
+        1016,
+        -5
+      ],
+      [
+        1017,
+        0
+      ],
+      [
+        1017,
+        5
+      ],
+      [
+        1017,
+        -5
+      ],
+      [
+        1018,
+        0
+      ],
+      [
+        1018,
+        5
+      ],
+      [
+        1018,
+        -5
+      ],
+      [
+        1019,
+        0
+      ],
+      [
+        1019,
+        5
+      ],
+      [
+        1019,
+        -5
+      ],
+      [
+        1020,
+        0
+      ],
+      [
+        1020,
+        5
+      ],
+      [
+        1020,
+        -5
+      ],
+      [
+        1021,
+        0
+      ],
+      [
+        1021,
+        5
+      ],
+      [
+        1021,
+        -5
+      ],
+      [
+        1022,
+        0
+      ],
+      [
+        1022,
+        5
+      ],
+      [
+        1022,
+        -5
+      ],
+      [
+        1023,
+        0
+      ],
+      [
+        1023,
+        5
+      ],
+      [
+        1023,
+        -5
+      ],
+      [
+        1024,
+        0
+      ],
+      [
+        1024,
+        5
+      ],
+      [
+        1024,
+        -5
+      ],
+      [
+        1025,
+        0
+      ],
+      [
+        1025,
+        5
+      ],
+      [
+        1025,
+        -5
+      ],
+      [
+        1026,
+        0
+      ],
+      [
+        1026,
+        5
+      ],
+      [
+        1026,
+        -5
+      ],
+      [
+        1027,
+        0
+      ],
+      [
+        1027,
+        5
+      ],
+      [
+        1027,
+        -5
+      ],
+      [
+        1028,
+        0
+      ],
+      [
+        1028,
+        5
+      ],
+      [
+        1028,
+        -5
+      ],
+      [
+        1029,
+        0
+      ],
+      [
+        1029,
+        5
+      ],
+      [
+        1029,
+        -5
+      ],
+      [
+        1030,
+        0
+      ],
+      [
+        1030,
+        5
+      ],
+      [
+        1030,
+        -5
+      ],
+      [
+        1031,
+        0
+      ],
+      [
+        1031,
+        5
+      ],
+      [
+        1031,
+        -5
+      ],
+      [
+        1032,
+        0
+      ],
+      [
+        1032,
+        5
+      ],
+      [
+        1032,
+        -5
+      ],
+      [
+        1033,
+        0
+      ],
+      [
+        1033,
+        5
+      ],
+      [
+        1033,
+        -5
+      ],
+      [
+        1034,
+        0
+      ],
+      [
+        1034,
+        5
+      ],
+      [
+        1034,
+        -5
+      ],
+      [
+        1035,
+        0
+      ],
+      [
+        1035,
+        5
+      ],
+      [
+        1035,
+        -5
+      ],
+      [
+        1036,
+        0
+      ],
+      [
+        1036,
+        5
+      ],
+      [
+        1036,
+        -5
+      ],
+      [
+        1037,
+        0
+      ],
+      [
+        1037,
+        5
+      ],
+      [
+        1037,
+        -5
+      ],
+      [
+        1038,
+        0
+      ],
+      [
+        1038,
+        5
+      ],
+      [
+        1038,
+        -5
+      ],
+      [
+        1039,
+        0
+      ],
+      [
+        1039,
+        5
+      ],
+      [
+        1039,
+        -5
+      ],
+      [
+        1040,
+        0
+      ],
+      [
+        1040,
+        5
+      ],
+      [
+        1040,
+        -5
+      ]
+    ]
+  ],
+  "dev_roots": [
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37
+  ]
+}

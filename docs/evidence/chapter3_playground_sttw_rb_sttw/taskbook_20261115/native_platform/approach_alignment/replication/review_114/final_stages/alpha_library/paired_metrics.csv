@@ -1,0 +1,13 @@
+skill,layout,metric,contracts,alpha0,alpha_enabled,net,delta_low,delta_high
+rb_run1,all,success,720,201,405,204,0.18611111111111112,0.38055555555555554
+rb_run1,all,collision,720,6,18,12,0.0,0.0375
+rb_run1,test_a,success,360,83,182,99,0.15833333333333335,0.38888888888888884
+rb_run1,test_a,collision,360,3,18,15,0.008333333333333333,0.075
+rb_run1,test_b,success,360,118,223,105,0.175,0.40555555555555556
+rb_run1,test_b,collision,360,3,0,-3,-0.025,0.0
+source,all,success,720,23,36,13,0.004166666666666667,0.03611111111111111
+source,all,collision,720,9,9,0,0.0,0.0
+source,test_a,success,360,0,7,7,0.0,0.04444444444444444
+source,test_a,collision,360,9,9,0,0.0,0.0
+source,test_b,success,360,23,29,6,0.0027777777777777775,0.03333333333333334
+source,test_b,collision,360,0,0,0,0.0,0.0

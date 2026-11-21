@@ -3,18 +3,19 @@
 \overrideIEEEmargins
 \usepackage{amsmath,amssymb,graphicx,booktabs,array,url}
 \usepackage[hidelinks]{hyperref}
-\graphicspath{{figures/}}
+\graphicspath{{figures/}{../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/wall_layouts/}{../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_library/}}
 \title{Choosing a Ground Approach for the Task After a Jump}
-\author{\normalsize Chapter 3 research draft}
+\author{}
 \begin{document}
 \raggedbottom
 \maketitle
 \begin{abstract}
-A two-wheeled robot can land successfully and still be unable to reach the requested side of an obstacle. We study this problem with a locked-pendulum ground controller, a forward-jump controller, and a return to ground control on a raised platform. An exhaustive library pairs three approaches with three departures at each initial state. On two previously unseen layouts with 40 shared initial states, switching the requested gate produced a strict reversal of feasible approaches in 32 of 80 layout--state pairs with Full RecoveryBridge and 14 with Source. Under a common physical decision-time allowance, replanning at handback reduced Full RecoveryBridge wall contacts from 192 to 90 in 1440 assignments, while completions changed from 708 to 701. Twelve of 666 approved Full RecoveryBridge paths hit a wall. Approach preference added left-gate options at matched entry speeds on development starts. Under assigned lateral pushes on the blind layouts, replacing Source with Full RecoveryBridge increased replanned task completion by 14.4 to 23.5 percentage points.
+A single-track robot approaching a jump must also prepare for the turn it will make after landing. We compare ground approaches and departures on a raised platform using frozen ground and recovery policies. A change of downstream gate reversed the feasible approach on 32 of 80 layout--start pairs for the recovery policy. With a 15 ms decision allowance, replanning at landing reduced wall contacts from 96 to 27 in 1440 tasks, at a cost of 18 completions. Three additional obstacle layouts showed where this trade-off breaks down: the fixed gate rule completed more tasks on all three. A separate paired test expanded the approach library by varying the ground controller's speed--path preference on the left curve. Left-gate completions increased from 201 to 405 out of 720, while wall contacts rose from six to 18. The 15-candidate forecast took 11.29 ms at the 95th percentile. These simulation results distinguish the value of shaping the approach from the value of changing the departure.
+
 \end{abstract}
 
 \section{A downstream constraint on ground driving}
-The first chapter gives the single-track vehicle a ground-driving policy (STTW) with a preference $\alpha$ over speed and path tracking. The second supplies a jump and recovery controller (RecoveryBridge, RB) for a pendulum-equipped vehicle. Chapter 3 asks which ground approach to issue when the task after landing is already known. At the same start, a left gate and a right gate can require different handback states even though they share a platform, an obstacle, and a terminal goal.
+A ground controller can trade speed tracking against path tracking during a turn. That choice affects the attitude, steering and velocity at which a jump controller takes over. On the far bank the ground controller has limited distance to reach the requested side of a wall. We study how to choose an approach before takeoff and whether to revise the planned departure once the landing state is measured.
 
 We examine four questions. Can a change of downstream task reverse which approaches succeed (H1)? Does a projected body envelope distinguish safe departures from dangerous ones (H2)? Does using the measured handback state to change a departure improve execution (H3)? How does substituting the archived Full RB controller for its Source policy change the outcome of the whole route (H4)? We evaluate these questions on simulation trajectories. Completion, wall contact and predictor admission are separate recorded events.
 
@@ -30,7 +31,7 @@ Learned control has enabled agile quadrupedal locomotion \cite{hwangbo}, percept
 \subsection{Prediction under a decision deadline}
 Online trajectory optimization uses current state measurements to update a control sequence \cite{tassa}. PETS propagates an ensemble of learned dynamics models \cite{pets}; Yang et al.\ use learned dynamics for model-based planning on legged robots \cite{yang}. Our rollout instead forecasts the response of one closed-loop ground controller under a small set of published references. Constraint tightening in robust predictive control can provide guarantees under specified disturbance bounds \cite{tube}. Here the clearance allowance is empirical and we count its errors on held-out trajectories. A model that correctly predicts the final gate can still underestimate the swept width on the way there.
 
-The robot continues moving during inference. Delay-aware control treats the action pending during that interval as part of the problem \cite{delay}. Massively parallel simulation \cite{rudin} lets us measure the physical consequence across many starts, but the wall clock of a many-robot batch has a different meaning from the deadline for a single robot. We measure three and nine candidates separately on one GPU and advance the physical simulation while each decision is pending. The ground and jump skills come from the preceding chapters \cite{sttw,rb}.
+The robot continues moving during inference. Delay-aware control treats the action pending during that interval as part of the problem \cite{delay}. Massively parallel simulation \cite{rudin} lets us measure the physical consequence across many starts, but the wall clock of a many-robot batch has a different meaning from the deadline for a single robot. We measure three and nine candidates separately on one GPU and advance the physical simulation while each decision is pending. We use the frozen ground and recovery policies described in \cite{sttw,rb}.
 
 \section{Shared execution and scoring}
 \subsection{From a turn to a jump and back to a turn}
@@ -96,8 +97,18 @@ Approval and execution are recorded separately. In particular, denial of all thr
 
 The independent TEST has two new stone seeds and wall offsets, with 40 new initial states (1001--1040) shared across layouts. Each skill is evaluated under nominal conditions and assigned lateral pulses of $-5$ or $+5$ N triggered during ascent. The statistics include every assigned run, including those that never reach the trigger. Each of twelve batches contains 1320 physical environments: 40 starts times 24 planner assignments and nine oracle paths. Reusing oracle paths to score multiple gate sections gives 15,840 physical trajectories in total. The 95\% percentile intervals resample the 40 initial-state identifiers 10,000 times, retaining all repeated layouts, sides, sections and conditions per identifier. Layout-specific generalization rests on two examples.
 
-\subsection{Decision time changes the physical problem}
-On one GPU, each single-robot benchmark discards 50 warm-up calls and times 1000 synchronized calls over a 5.10 s prediction horizon. For three exit candidates and nine approach--exit candidates, kinematic P95 times were 219.52 and 219.56 ms. Relative dynamic P95 times were 299.51 and 300.31 ms. All exceed the 20 ms middle-control period. The blind comparison debits every method the same measured allowance: 305 ms of neutral lead-in for the initial decision, and 300 ms of straight departure while the handback choice is pending. Physics and ground control advance during both intervals. This equal-budget comparison does not estimate the native lookup time of the fixed rule. The calibrated margins are 0.10178 m for R9 and 0.21057 m for Source.
+\subsection{Candidate scores and calibration}
+For a candidate $(a,d)$, let $S$ denote sufficient clearance, $K$ the correct gate crossing, and $H$ a sustained goal within the tracking domain. Let $c$ be minimum signed clearance in metres. The deployed score is
+\begin{equation}
+ u=16SKH+4S+2K+H+0.01\,\mathrm{clip}(c,-1,1).
+\end{equation}
+For the five nearest calibration starts $N_5(x)$ in standardized initial lateral position, attitude and velocity, each empirical state receives mass $1/5$. The initial command maximizes $\bar u(a,d\mid x)=\sum_{i\in N_5(x)}u_i(a,d)/5$, assigning $-4$ when an approach lacks a verified handback. At relock C-R keeps the incumbent if $SKH=1$ and otherwise selects $\arg\max_d u(d)$ from the measured state.
+For skill $\pi$, sort kinematic predicted clearances of the $n$ physically colliding calibration departures in descending order $c_{[1]}\geq\cdots\geq c_{[n]}$. The empirical upper-tail threshold is
+\begin{equation}
+ \varepsilon_\pi=\max(0,c_{[1+\lfloor0.02n\rfloor]}),\quad
+ S=\mathbf{1}\{c>\varepsilon_\pi\}.
+\end{equation}
+An empty collision set gives zero margin. Primary-map calibration yielded 0.10178 m for R9 and 0.21057 m for Source. We retained these values across the geometry and preference experiments.
 
 \section{Which approaches remain useful?}
 \begin{table}[t]\centering
@@ -111,8 +122,8 @@ For at least one section, strict reversal occurred in 32/80 R9 pairs (40.0\%, 95
 \end{figure}
 Figure~\ref{fig:map} explains why a skill with frequent handback can still have restricted downstream options. The new left tangent gave R9 verified handback in 98\% and 95\% of the two TEST layouts' starts (rounded). The new right tangent gave zero in both. Source often handed back on that right tangent. Upgrading the jump controller changed which ground entries were useful.
 
-\subsection{Link to the first chapter}
-On 30 primary DEV starts we tested approach $\alpha=0,0.5,1$ at requested speeds 1.8, 1.9 and 2.0 m/s. Across the 270 approach prefixes per preference, verified R9 handbacks numbered 179, 181 and 175, and Source handbacks numbered 187, 221 and 245. We then paired the same root, requested speed, approach and departure, requiring both world-forward and heading-projected entry speeds to agree within 0.05 m/s. For a conservative check, the matched comparisons use only same-batch speeds of 1.8 and 1.9 m/s; all three speeds count when checking whether $\alpha=0$ already solved a contract. Nonzero preferences added five previously unsolved left contracts out of 30 at each section for R9, and nine, seven and seven for Source. Sections share routes. These numbers measure the available choices; the blind planner held approach $\alpha=0$ fixed.
+\subsection{Approach preference on development starts}
+On 30 primary DEV starts we tested approach $\alpha=0,0.5,1$ at requested speeds 1.8, 1.9 and 2.0 m/s. Across the 270 approach prefixes per preference, verified R9 handbacks numbered 179, 181 and 175, and Source handbacks numbered 187, 221 and 245. We then paired the same root, requested speed, approach and departure, requiring both world-forward and heading-projected entry speeds to agree within 0.05 m/s. For a conservative check, the matched comparisons use only same-batch speeds of 1.8 and 1.9 m/s; all three speeds count when checking whether $\alpha=0$ already solved a contract. Nonzero preferences added five previously unsolved left contracts out of 30 at each section for R9, and nine, seven and seven for Source. Sections share routes. These counts describe the development library. The original blind comparison used zero approach preference.
 
 \begin{table}[t]\centering
 \caption{DEV contracts gained with nonzero approach preference at matched actual entry speeds. Each section has 30 starts.}
@@ -125,7 +136,8 @@ R9, newly solved & 5 & 5 & 5\\\bottomrule
 \end{tabular}\end{table}
 All 30 right-gate contracts at each section were already solvable at zero preference for both skills. This ceiling matters when interpreting the asymmetry. The matched comparison demonstrates additional left-gate options at similar entry speed; it does not establish a single preference setting for an unknown start.
 
-\section{What the predictor admits}
+\section{Forecasts and physical outcomes}
+\subsection{Handback-state dependence}
 \begin{figure*}[t]\centering\includegraphics[width=.93\textwidth]{platform_state.png}
 \caption{Dynamic state at handback. On the second DEV layout, R9 roots 96 and 110 use the same approach and left exit. The XY panel zooms the platform; dots along the path indicate the published reference. The right panel combines two layout-specific held-out DEV subsets at the same R9 margin. Goal recall is the fraction of actual goals approved; walls called clear is the fraction of actual wall contacts passing the clearance test alone.}\label{fig:state}
 \end{figure*}
@@ -133,56 +145,70 @@ At handback the two runs in Fig.~\ref{fig:state} differ by 3.2 mm in $x$ and 18.
 
 For the R9 calibration comparison we scored each planner on the same saved physical nine-option trajectories. Replay reproduced all 2160 original C and C-R selections and their task outcomes. Of 179 oracle-solvable left contracts, kinematic C-R approved 21 at the original 0.21057 m margin and 103 at 0.10178 m. The relative dynamic predictor approved 67 at the latter margin. Total completions for the three configurations were 419, 448 and 421 out of 1080, with 24, six and six wall contacts. We use same-bank differences because repacking the simulation changed some physical prefixes even at the same root and approach. In a separate direct online DEV comparison, the relative dynamic C-R had zero wall contacts in 469 approved assignments, and three in 1080 total. We selected that model before opening TEST.
 
-\begin{figure*}[t]\centering\includegraphics[width=.84\textwidth]{platform_tradeoff.png}
-\caption{Safety and completion. Left: R9 development assignments on a common physical bank, with fixed and nominal controls and three C-R configurations. Marker positions give observed outcomes. Right: blind C-R completions conditional on assigned push, with root-clustered 95\% intervals. Each point represents 480 assignments.}\label{fig:trade}
-\end{figure*}
-\begin{table*}[t]\centering\caption{Independent TEST. Each row contains 1440 contracts. Rates and root-clustered intervals are percentages.}\input{figures/system_table.tex}\label{tab:system}\end{table*}
-\begin{table}[t]\centering\caption{Blind admission and fallback. No solution denotes failure of all nine physical candidates. Runs ending before query are excluded from these conditional denominators.}\footnotesize\setlength{\tabcolsep}{3pt}\input{figures/votes_table.tex}\label{tab:votes}\end{table}
-In TEST, relative dynamic C-R approved 666 R9 assignments; 645 completed and 12 hit a wall (1.8\%, 95\% CI 0.4--3.7\%). Source hit a wall in 3/393 approvals (0.8\%, 0.0--2.3\%). All of these approved assignments reached command application. Of 447 queried R9 contracts denied all feasible exits, 316 had no successful oracle option. Another 327 R9 contracts never reached query. These denominators show both kinds of error: unsafe approvals and missed solvable tasks.
 
-\subsection{Contracts and distinct simulated motions}
-Each planner--skill row has $2\times40\times3\times2=480$ groups defined by layout, root, force and gate side. Three section assignments per group were simulated, giving 1440 online executions. Because section location can affect the decision, some groups have different physical histories. Within each group we deduplicated complete, equal-length recorded position and velocity arrays by their exact bytes. Statistical intervals throughout continue to cluster by initial root.
+\subsection{Real-time decisions on the two test layouts}
+\begin{table*}[t]\centering
+\caption{15/15 ms repeat on the disclosed TEST. Each row contains 1440 contracts. Entries give events/eligible contracts and 40-root bootstrap 95\% intervals in percent. Histories count distinct complete state traces within layout, root, force and side. The last column gives the fraction of vetoes for which no physical candidate completed the task.}
+\scriptsize\setlength{\tabcolsep}{3pt}\begin{tabular}{llrlllll}\toprule
+Skill & Planner & Histories & Completed & Wall contact & Completed/admitted & Contact/admitted & Unsolvable/vetoed\\\midrule
+Source & fixed & 480 & 495/1440 [30.9, 37.9] & 24/1440 [0.6, 2.7] & -- & -- & --\\
+Source & nominal & 480 & 444/1440 [27.7, 34.0] & 0/1440 [0.0, 0.0] & -- & -- & --\\
+Source & C & 489 & 447/1440 [27.6, 34.4] & 13/1440 [0.1, 1.9] & 372/384 [93.6, 99.3] & 0/384 [0.0, 0.0] & 466/624 [69.0, 80.5]\\
+Source & C-R & 497 & 447/1440 [27.8, 34.3] & 7/1440 [0.0, 1.1] & 375/387 [93.6, 99.3] & 0/387 [0.0, 0.0] & 466/621 [69.6, 80.7]\\
+R9 & fixed & 480 & 849/1440 [54.4, 63.5] & 123/1440 [6.5, 10.8] & -- & -- & --\\
+R9 & nominal & 480 & 575/1440 [36.9, 42.8] & 6/1440 [0.0, 1.2] & -- & -- & --\\
+R9 & C & 493 & 766/1440 [48.3, 58.2] & 96/1440 [4.6, 8.8] & 642/648 [97.5, 100.0] & 0/648 [0.0, 0.0] & 282/467 [52.1, 69.1]\\
+R9 & C-R & 487 & 748/1440 [47.4, 56.5] & 27/1440 [0.6, 3.3] & 644/653 [96.8, 100.0] & 3/653 [0.0, 1.5] & 279/462 [51.9, 69.3]\\
+\bottomrule\end{tabular}\label{tab:system}\end{table*}
+The nine-candidate single-robot query took 10.79 ms at P95 and the three-exit query took 10.33 ms. Both decisions were charged three 5 ms control ticks. R9 C-R incurred 27 wall contacts versus 123 for fixed (78\% fewer) and finished 748 versus 849 tasks. Only 3/653 admitted contracts hit a wall (0.46\%). Those three represent one of 219 distinct admitted motions. At the same clock, R9 C-R completed 301 more of the 1440 assignments than Source C-R. Paired R9 completion gains under assigned $-5$, zero and $+5$ N pushes were 24.0, 15.4 and 23.3 percentage points, respectively (480 contracts per condition). This comparison includes the skill-specific calibrated margins. Comparing with C on identical prefixes, C-R rescued ten failed contracts and lost 28 successful ones. In all 28 losses the executed incumbent had cleared the wall and finished, but predicted clearance fell below the margin. Twenty had positive predicted clearance and eight had predicted overlap. Seven replacement trajectories hit a wall. A rule frozen on development data permitting a switch only for clearance or domain risk changed 13 R9 commands and left both counts unchanged.
 
-\begin{table}[t]\centering\caption{Archived TEST motions after exact within-group deduplication. Wall counts distinct histories. The last column conditions on admission.}
-\small\begin{tabular}{llrrr}\toprule
-Skill & Plan & Histories & Wall & Wall/admit\\\midrule
-Source & C   & 489 & 8 & 1/130\\
-Source & C-R & 495 & 8 & 1/131\\
-R9     & C   & 498 & 70 & 2/218\\
-R9     & C-R & 489 & 32 & 4/223\\\bottomrule
+\subsection{Effect of Decision Latency}
+We benchmarked 255 forecast steps on one GPU, with 50 warm-up calls and 1000 synchronized measurements per configuration. Both the starting delay and handback delay changed together. The controller drove a neutral lead-in and then a straight pending departure while the two decisions were outstanding.
+\begin{table}[t]\centering\caption{Paired R9 C-R assignments under three charged start/exit delays. The original comparison was blind; the repeats reused its disclosed assignments.}
+\begin{tabular}{lrr}\toprule
+Delay (ms)&Done/1440&Contacts/1440\\\midrule
+305/300&701&90\\90/85&757&18\\15/15&748&27\\\bottomrule
 \end{tabular}\end{table}
-For R9 the 102 fewer wall-contact contracts correspond to a difference of 38 in the counts of distinct colliding histories. Those motion sets can differ across planners. For Source, four fewer wall-contact contracts coincide with the same count of eight distinct colliding histories. These examples show why the contractual and trajectory denominators answer different questions.
+The 15 ms repeat reduced wall contacts by 4.38 percentage points relative to the original clock (95\% interval $[-7.92,-1.25]$). The corresponding completion difference was $+3.26$ points $[-0.49,7.08]$. Approved contacts fell from 12/666 to 3/653. The intermediate clock recorded the fewest contacts. Source C-R went from 442 completions and 18 contacts to 447 and seven. Figure~\ref{fig:approvedwalls} shows how the changed clock affects actual paths.
+\begin{figure*}[t]\centering\includegraphics[width=.72\textwidth]{platform_approved_walls.png}
+\caption{Four distinct R9 motions that hit a wall after approval under the original clock. The two curves follow the same assignment at 305/300 and 15/15 ms. Dotted lines are published references, circles mark release and crosses the final pose.}\label{fig:approvedwalls}\end{figure*}
 
+\section{Obstacle geometry and approach preference}
+\subsection{Transfer to offset and staggered walls}
+Three further maps preserve the platform, roughness, weights, and clearance margins. The single-wall center moves to $y=+0.20$ or $-0.25$ m. The staggered walls have these respective lateral offsets at $x=12.8$ and 14.5 m. Each map uses the same 30 new starts under three assigned forces and six gate contracts. All planners and the nine physical oracle paths ran in matched groups, totaling 17,820 physical executions. We recomputed the forecasts for the published geometry using frozen development priors.
+\begin{table*}[t]\centering\caption{Geometry transfer. Each cell lists completions / wall contacts among 540 contracts. Intervals in the final column give paired C-R minus fixed completion differences in percentage points, resampling the 30 starts.}
+\small\begin{tabular}{llrrrrr}\toprule
+Skill & Wall & Fixed & Nominal & C & C-R & Completion difference [95\% CI]\\\midrule
+Source & Left & 190/15 & 177/0 & 177/0 & 177/0 & -2.4 [-4.6, -0.7]\\
+Source & Right & 196/18 & 196/18 & 163/38 & 167/14 & -5.4 [-10.2, -0.4]\\
+Source & Staggered & 190/27 & 160/24 & 158/29 & 149/32 & -7.6 [-13.1, -2.2]\\
+R9 & Left & 263/81 & 219/0 & 222/49 & 212/0 & -9.4 [-14.1, -5.2]\\
+R9 & Right & 324/18 & 324/18 & 319/18 & 276/16 & -8.9 [-12.8, -5.2]\\
+R9 & Staggered & 268/75 & 8/6 & 215/80 & 204/83 & -11.9 [-16.7, -7.2]\\
+\bottomrule\end{tabular}\end{table*}
+The fixed rule completed the most tasks for each skill on all three maps, tying nominal on the right-offset wall. On the left-offset wall R9 replanning eliminated all 81 contacts incurred by fixed and completed 51 fewer contracts. On the staggered walls the completion deficit grew to 64; contacts increased by eight, with a paired contact-rate difference of $+1.48$ points $[-2.41,5.56]$. Feeding new wall coordinates to the predictor did not establish a general transfer advantage.
+\begin{figure*}[t]\centering\includegraphics[width=.62\textwidth]{layout_detail.png}
+\caption{R9 at the first assigned start (1041), near left gate, zero push. Solid and dashed traces show fixed and C-R motion; dotted lines trace the published curves. Rectangles mark walls, crosses mark collision endpoints, and the vertical line marks the gate. The window shows the wall region at equal axis scale.}\end{figure*}
 
-\begin{figure*}[t]\centering\includegraphics[width=.77\textwidth]{platform_approved_walls.png}
-\caption{Every distinct R9 C-R motion that hit a wall after approval under the original blind clock. Blue and orange trace the same assignment at 305/300 and 15/15 ms (start/exit). Dotted lines are published references, circles mark release, and crosses mark the last pose. The horizontal and vertical axes use the same metric scale. Three section assignments per motion contributed the twelve approved wall-contact contracts.}
-\label{fig:approvedwalls}\end{figure*}
-Figure~\ref{fig:approvedwalls} localizes the false approvals. Each trajectory reached the point of command application. The plots do not determine whether an earlier departure would have cleared the same wall because the physical state would also have changed during the approach and release intervals. At 15 ms the three TEST A assignments complete. TEST B root 1032 still hits the wall after approval under a $-5$ N push.
+\subsection{Using ground preference as a planning action}
+For a paired follow-up on the two disclosed layouts, both arms used the same 30 development starts, five-neighbor prior, 2 m/s request, measured-state exit replanning and 15/15 ms clock. The baseline allowed three approaches at $\alpha=0$. The expanded library also allowed $\alpha=0.5,1$ on the signed left approach. The physical departure controller stayed fixed. Fifteen forecasts took 11.29 ms at P95; comparison with the reference implementation gave identical forecast outputs and decisions on the checked inputs. Four batches of 2520 environments included the two assigned planners and fifteen physical oracle paths for each root and force. Each skill contributed 720 assigned left-gate contracts per arm.
+\begin{table}[t]\centering\caption{Preference-library ablation. Counts are completions and wall contacts. Each layout has 360 left-gate contracts per skill and arm.}
+\small\begin{tabular}{llrr}\toprule
+Skill & Layout & $\alpha=0$ & Expanded\\\midrule
+R9 & A & 83 / 3 & 182 / 18\\
+R9 & B & 118 / 3 & 223 / 0\\
+Source & A & 0 / 9 & 7 / 9\\
+Source & B & 23 / 0 & 29 / 0\\\bottomrule\end{tabular}\end{table}
+R9 selected nonzero preference on 687/720 contracts. Completions rose from 201 to 405, a paired gain of 28.33 points (40-root interval $[18.61,38.06]$). Contacts increased from six to 18, all 18 on layout A. Source selected nonzero preference on 33 contracts, gained 13 completions (1.81 points $[0.42,3.61]$), and recorded nine contacts in both arms. This experiment estimates a library effect for left gates under a common 30-root prior. The main four-planner table uses 70 calibration roots and both gate sides.
+\begin{figure*}[t]\centering\includegraphics[width=.85\textwidth]{online_xy.png}
+\caption{Paired left-gate runs with zero or selectable approach preference. Each panel shows the physical trajectories and dotted published exits for one root, section and push. Cases are selected from paired outcomes for illustration; the table counts all assignments.}\end{figure*}
 
-\section{When to change the exit}
-R9 C-R reduced wall contacts by 102 relative to C, with four paired rescues and eleven losses (Table~\ref{tab:system}). For Source the corresponding changes were four fewer contacts, three rescues and five losses. A rescue means the assigned contract failed under C and completed under C-R on the same physical prefix. Avoiding a wall can instead end in a missed gate or timeout. Figure~\ref{fig:rescues} gives two rescues on different layouts and with different jump policies. The fixed rule achieved the largest total completions for either skill but had the most wall contacts. Nominal planning gave the lowest contact counts with fewer completions than the fixed rule.
+\section{Discussion and conclusion}
+The controller's ground preference changed which states the jump policy delivered to the platform. Making that preference selectable yielded the largest completion improvement in the paired left-gate experiment. Exit replanning primarily changed collision exposure. Its benefit depended on wall placement, and collision-margin false alarms explained all 28 lost R9 completions in the realtime comparison. A planner for an unfamiliar geometry must therefore account for both the cost of a missed gate and the risk of a contact.
 
-\begin{figure*}[t]\centering\includegraphics[width=.86\textwidth]{platform_rescues.png}
-\caption{Two blind assignments in which C hit the wall and C-R completed after changing departure. Left: actual XY paths, published exit references (dotted), walls, and terminal positions. Right: steering after lock. The vertical dotted line marks the 300 ms decision allowance. The count of losses in the text includes the reverse outcome.}\label{fig:rescues}
-\end{figure*}
-\begin{table}[t]\centering\caption{C-R completion under assigned push. Difference is R9 minus Source in percentage points; intervals resample paired initial states.}\footnotesize\input{figures/skill_table.tex}\label{tab:skill}\end{table}
-Across the same 1440 C-R contracts, R9 completed 701 and Source 442. The paired advantage was positive at each assigned push (Table~\ref{tab:skill}), including the nominal comparison. This is a system comparison with skill-specific calibration. The fixed rule, which ignores the forecasts, also completed more contracts with R9 (796 versus 492). The controllers differ in handback coverage and the mix of states exposed to walls, so the completion gain does not imply lower collision risk.
-
-\section{Limits and conclusion}
-The experiments isolate a task-level dependency: approaches that both deliver the robot to the platform can support different subsequent tasks. They also establish a cost of conservative exit selection and show that a preference change can expand the available ground approaches at matched entry speeds. The measured-state update reduced contacts on the unseen layouts with a small loss in total completions. The development result of zero contacts among approved paths did not transfer. Results cover two simulated layouts, one platform height and a finite action library.
-
-\subsection{Checkpoint identity and interpretation}
-The frozen controller for every R9 row is the exported student from round 9 in the Chapter 2 recovery campaign (actor digest prefix \texttt{c3eae39c7c11}). Its formal report and actor binding accompany the controller registry. The specified campaign's completed-round ledger ends at round 40; its round-41 directory is incomplete. A separate 200-round experimental campaign contains a round-100 actor with a different digest, continued under a rule that waived nominal performance evaluation. The second chapter's aggregate tables and 100-round traces do not bind that actor to any of the three reported final policies. The system comparison in this chapter therefore identifies the checkpoint and its observed task performance directly.
-
-\subsection{Paired decision-time ablation}
-The fused GPU query predicts all 255 steps in 10.33/10.79 ms (P95 for three/nine candidates, after graph capture). All poses, velocities, domain outputs and decisions matched the original on three calibration inputs. We repeated the disclosed TEST assignments with both decisions charged three 5 ms ticks, retaining the original batched simulation and frozen weights.
-
-At 15/15 ms, R9 C-R completed 748/1440 contracts with 27 contacts, versus 701 and 90 at 305/300 ms. The paired contact-rate difference was $-4.38$ percentage points (95\% interval $[-7.92,-1.25]$); the completion difference was $+3.26$ $[-0.49,7.08]$. Approved contacts fell from 12/666 to 3/653. At the intermediate 90/85 ms clock, R9 completed 757 contracts with 18 contacts. Shortening both delays together thus produced a nonmonotonic response. Source C-R went from 442 completions and 18 contacts to 447 and seven at 15/15 ms.
-
-At 15/15 ms, R9 C finished 766 contracts with 96 contacts. C-R rescued ten C failures and lost 28 C successes. Replanning improved avoidance with a net loss of 18 completions. The gate-specific fixed rule yielded 849 completions and 123 contacts.
-
-With the original clock, the fixed gate-specific rule achieves the unforced R9 oracle ceiling. Predictive admission exposes a different choice: 645 of 666 approved R9 contracts complete, and 316 of 447 vetoes identify contracts that no candidate solves. Reconsidering the exit at handback reduces R9 wall-contact contracts from 192 to 90 with seven fewer completions. Together with the matched-speed preference gains and the paired push results, these measurements connect the capabilities of the two frozen controllers to the choice of a route through the platform.
+The R9 recovery actor had 31 stable recoveries in 32 archived native-platform starts; a matched RK4 replay at 5 ms reproduced its recovery labels. This benchmark uses direct RB entry. The full-route experiments additionally require curved approach, verified flight, loaded landing, relock and goal hold. The frozen round-nine actor SHA-256 is
+\texttt{c3eae39c7c116d5d}\allowbreak\texttt{b56122d5aff4f29a}\allowbreak\texttt{6f95b8971a51c4c4}\allowbreak\texttt{6864754ecb58b040}.
+The evidence covers simulated forward jumps on a 0.16 m platform with known geometry and a finite controller library. Independent hardware evaluation and transfer to other platform heights remain open.
 
 \input{references.tex}
-
 \end{document}

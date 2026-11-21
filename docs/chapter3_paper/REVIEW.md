@@ -1,6 +1,6 @@
 # Current execution-outline audit
 
-**当前验收。** 原盲测及随后两个物理时钟的配对复验均已完成。R9 C-R 在 15/15 ms 下通关 748/1440，撞墙 27/1440，获准撞墙 3/653。原始盲测与复验按数据角色分别报告。八页稿件与各项证据见[当前论文入口](README.md)。
+**当前验收。** T1–T4 已执行，空间转移与偏好消融均已写入八页英文稿。原始独立盲测、公开任务的配对复验与三种新墙布局分别报告。[证据与章节映射](README.md)。
 
 The current manuscript follows the supplied Chapter3 execution outline. The older two-interface critique and its numerical evidence are retained below as historical work, not current acceptance criteria.
 
