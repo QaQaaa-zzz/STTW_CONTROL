@@ -1,0 +1,7 @@
+layout,planner,contracts,completed,walls,veto_contacts,avoidable,unavoidable,missed_feasible
+config_double,expanded,450,159,142,142,88,54,3
+config_double,veto_bank,450,156,116,116,62,54,6
+config_l,expanded,450,125,15,15,12,3,39
+config_l,veto_bank,450,123,14,14,11,3,41
+config_r,expanded,450,301,8,8,8,0,0
+config_r,veto_bank,450,301,9,9,9,0,0

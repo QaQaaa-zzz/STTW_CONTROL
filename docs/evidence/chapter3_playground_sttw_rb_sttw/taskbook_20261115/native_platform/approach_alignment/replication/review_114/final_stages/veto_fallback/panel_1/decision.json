@@ -1,0 +1,12 @@
+{
+  "contracts": 1350,
+  "matched_prefixes": 1350,
+  "same_admissions": 1350,
+  "switches": 70,
+  "switches_outside_veto": 0,
+  "completion_gains": 2,
+  "completion_losses": 7,
+  "avoided_contacts": 32,
+  "new_contacts": 6,
+  "meets_paired_outcome_criterion": true
+}

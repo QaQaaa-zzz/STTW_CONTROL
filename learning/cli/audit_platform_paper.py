@@ -261,6 +261,7 @@ def transfer_audit(raw, output):
                  "loaded_landing_s", "relock_s", "success", "collision", "trajectory"]).to_csv(
         output / "illustrated_events.csv", index=False)
     plot(raw, output / "online_xy.png", arms=ARMS)
+    plot(raw, output / "selected_paths.png", arms=ARMS, selected=True)
 
 
 if __name__ == "__main__":

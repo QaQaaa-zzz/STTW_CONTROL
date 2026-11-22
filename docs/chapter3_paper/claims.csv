@@ -18,3 +18,6 @@ R9 admitted completions 131/131 to 366/366; zero admitted contacts,disclosed T3 
 T3 finite-library oracle and committed controls,same-batch physical library,alpha_library/RESULTS_BREAKDOWN.md,pending
 Differences at takeoff and relock,outcome-selected R9 paired clock cases,realtime_15ms/clock_state_pairs.csv,pending
 R9 paired preference transfer on three offset-wall layouts,T2 geometries and starts revisited; left gates only,alpha_transfer/paired_metrics.csv; alpha_transfer/layout_outcomes.csv,pending
+Over 70000 physical rollouts,Six frozen physical panels; 81090 trajectories,source_manifest.json rollout_receipts,pending
+191 previously unsolvable R9 contracts and Fixed/C/C-R contrasts,Disclosed TEST A/B left gates; same-batch lookup for Fixed and C,alpha_library/RESULTS_BREAKDOWN.md; alpha_library/fixed_lookup.csv; alpha_library/commit_only.csv,pending
+Three-wall transfer 238 of 246 admitted complete; zero admitted contact,R9 left gates on revisited T2 geometries,alpha_transfer/layout_outcomes.csv,pending

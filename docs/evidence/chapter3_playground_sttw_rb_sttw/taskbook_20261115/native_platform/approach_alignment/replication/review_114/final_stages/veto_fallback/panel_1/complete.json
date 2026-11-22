@@ -1,0 +1,5 @@
+{
+  "physical_trajectories": 9450,
+  "worlds_per_batch": 3150,
+  "batches": 3
+}

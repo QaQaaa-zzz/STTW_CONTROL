@@ -1,6 +1,6 @@
 {
-  "paper_sha256": "562d87782bb6f4722dd3f7f791db748bce35beebde525a1243db9870b49a93e5",
-  "pdf_sha256": "e4ff36aaecc5d6b0f83c0ffa3e89bbdc8177cbab8e812e1c446d2344a0c10ebc",
+  "paper_sha256": "91061dd9d5d850890c6a22319cf0ac28f34a10c55334cbe36e1b5603c6188e61",
+  "pdf_sha256": "6c9ab1c4196073c8c0e8077e19b48904f3d124bb8483c984d556af67c6549ce4",
   "submission_ready": false,
   "author_verification": "pending",
   "historical_draft_local_commit": "7219dbe6abac4075eea94c4feea87a74f67b37e8",
@@ -183,7 +183,7 @@
     },
     {
       "path": "docs/chapter3_paper/claims.csv",
-      "sha256": "025dac8ebbde0d5478275831f01544f12d0732d8f674d01bf131c47f48551289"
+      "sha256": "661f060c4bb7f8d260cc22eacecf4c224922a784fd97fd62c985911031280f83"
     },
     {
       "path": "learning/cli/score_platform_review.py",
@@ -191,11 +191,13 @@
     },
     {
       "path": "learning/cli/run_platform_alpha_library.py",
-      "sha256": "32c4e2bc58b3d1b4d625b59ad8ce1df01f7292c4d89954804d8d25726d9c1c2d"
+      "sha256": "510dc7da28d8627e6507837f63dfad1d238cf3f61bc748588196c9d693cb25e9",
+      "paper_experiment_sha256": "32c4e2bc58b3d1b4d625b59ad8ce1df01f7292c4d89954804d8d25726d9c1c2d",
+      "paper_experiment_revision": "eca46fd3"
     },
     {
       "path": "learning/cli/plot_platform_layout_detail.py",
-      "sha256": "f3eb94d4ffe5134d60280ce1ee68215243a35ef5cb14a9852b0ddb67232e9748"
+      "sha256": "33e1fa5e9f01fcd90d76a52c3e2561b0bd933c3789e37c2f74c8c0a6795cfc4e"
     },
     {
       "path": "learning/configs/playground_rb_skill_sources.json",
@@ -207,7 +209,7 @@
     },
     {
       "path": "docs/chapter3_paper/README.md",
-      "sha256": "fe511df5ae7a9775e8b35e2ef2c9346d12ac7fc6e73aae4d5965484191fd21a1"
+      "sha256": "eabc1f459e134c96dc51faa2023f78e5baa19c5199f90903beb8046cb9fc3b08"
     },
     {
       "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_library/RESULTS_BREAKDOWN.md",
@@ -251,11 +253,13 @@
     },
     {
       "path": "learning/cli/audit_platform_paper.py",
-      "sha256": "175826619b0503bee9a479c5dd09a5f06a5110ceb0888d9fca3a153791baaf15"
+      "sha256": "549f5d27e4358d7e1902eae56e41d7052e57f4eafe8754bbd26d1bcfaa009160"
     },
     {
       "path": "learning/cli/run_blind_platform.py",
-      "sha256": "cee32d0729a7e9cf995c9e095194e68ef5551b982cef3d3d7d673fb1cadd51a7"
+      "sha256": "834cf1cf918b23229e01f2db6527f64294b9b92d35b2e8b2990b370104a8bffd",
+      "paper_experiment_sha256": "cee32d0729a7e9cf995c9e095194e68ef5551b982cef3d3d7d673fb1cadd51a7",
+      "paper_experiment_revision": "eca46fd3"
     },
     {
       "path": "learning/cli/report_platform_online_review.py",
@@ -291,7 +295,7 @@
     },
     {
       "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_transfer/online_xy.png",
-      "sha256": "aed39312a24dd96e9f03a20743d79249aab231ca27cb2053e9316f0aa01d3efe"
+      "sha256": "c2c643fdb69aec2368bd9026371f00f64356d8fe0b6321b0ecd5d9bd8d482b65"
     },
     {
       "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_transfer/paired_metrics.csv",
@@ -299,11 +303,71 @@
     },
     {
       "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_transfer/selected_paths.png",
-      "sha256": "c8e3f6734f06ef7727f9b988f94d9835faa2154d909d6d0789c1ccd8858396ee"
+      "sha256": "2573dd503d79e6384c0a758587680a6473c3cc12dadde204161b4162a3bd76d1"
     },
     {
       "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_transfer/test_freeze_manifest.json",
       "sha256": "c45e8bd4d48f0e942b2aafcadcab317f647cc87e6dc79d2bad73f6638ccfb45f"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/veto_fallback/RESULTS.md",
+      "sha256": "5b49fda5cf6574cb963be087ca4992b9add657b5db334ea51b3353bc98c0b9a4"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/veto_fallback/panel_2/fallback_latency.json",
+      "sha256": "633325d928dec7dbe638366f8046ba108afee59ab654562d7bc4122d0b53d15d"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/veto_fallback/panel_2/assignments.csv.gz",
+      "sha256": "533b1a09dbac01e52dbd02e021877155023438736db17ffe37ef7d16a09b6cf3"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/veto_fallback/panel_2/fallback_diagnosis.csv",
+      "sha256": "48d82c7e7361d0b5effbe3cc4ad8b6e0621880ddcb27e0177f8c99f96b62aee2"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/veto_fallback/panel_2/paired_metrics.csv",
+      "sha256": "84d1d974b569ca6564fbb6dae494f51be89461829d0d7b4d832de73e2101a354"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/veto_fallback/panel_2/complete.json",
+      "sha256": "f90efe26b108757c549a232952f4e0d0fa80a6fb71abe7619863841319d391f6"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/veto_fallback/panel_2/online_xy.png",
+      "sha256": "b9202de3fe5d59f64eeb015f5289fb720286755953ef0497bfd398995328d480"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/veto_fallback/panel_2/decision.json",
+      "sha256": "34f782e2e1695ccf17eff567bf059e213aadcba7aacdd250411ed8ca3c4bba95"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/veto_fallback/panel_1/fallback_latency.json",
+      "sha256": "2cfb9aadf6d2e8c47864f0aec402a8b4f1164b2dcced5d219ef186a0cf7288e2"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/veto_fallback/panel_1/assignments.csv.gz",
+      "sha256": "1a2ee18f0e9f26a5162ef42673712b7ceea0322a2a569416ab72e7cecd6b604e"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/veto_fallback/panel_1/fallback_diagnosis.csv",
+      "sha256": "e8c3c1bdb352aa6caac7330d71ca97c2e262c2c74b8d1c956ec75547e1c8c77a"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/veto_fallback/panel_1/paired_metrics.csv",
+      "sha256": "76d3ba8607ef6c59ae54f842240f2407e406a09cb90f8efb3f754b31dff77c68"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/veto_fallback/panel_1/complete.json",
+      "sha256": "f90efe26b108757c549a232952f4e0d0fa80a6fb71abe7619863841319d391f6"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/veto_fallback/panel_1/online_xy.png",
+      "sha256": "8ad2032583d82eabd08ea8f3278ea9cceb2b399cb81be5975648e47725ee9ee2"
+    },
+    {
+      "path": "docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/veto_fallback/panel_1/decision.json",
+      "sha256": "2168c9b3a5b23961bf38cd00b9eae497951da45d1212ebcc3158cc558c585e7f"
     }
   ],
   "rb_checkpoint": {
@@ -332,5 +396,77 @@
     "takeoff_s": 3.9600000381469727,
     "airborne_end_s": 4.539999961853027,
     "loaded_landing_s": 4.574999809265137
+  },
+  "rollout_receipts": [
+    {
+      "path": "chapter_mainline/blind_test/complete.json",
+      "sha256": "2927e0e4f423f40dc946162f018a85a06001488ea91366ad696d952591e4c3aa",
+      "physical_trajectories": 15840,
+      "worlds_per_batch": 1320,
+      "batches": 12
+    },
+    {
+      "path": "chapter_mainline/post_review/latency_ablation/complete.json",
+      "sha256": "2927e0e4f423f40dc946162f018a85a06001488ea91366ad696d952591e4c3aa",
+      "physical_trajectories": 15840,
+      "worlds_per_batch": 1320,
+      "batches": 12
+    },
+    {
+      "path": "chapter_mainline/post_review/realtime_15ms/complete.json",
+      "sha256": "2927e0e4f423f40dc946162f018a85a06001488ea91366ad696d952591e4c3aa",
+      "physical_trajectories": 15840,
+      "worlds_per_batch": 1320,
+      "batches": 12
+    },
+    {
+      "path": "chapter_mainline/post_review/wall_layouts/complete.json",
+      "sha256": "db7379297ca384d81890a26ae76cc73a7c2223e3c8f3d650953318d66c1c7266",
+      "physical_trajectories": 17820,
+      "worlds_per_batch": [
+        1485,
+        2970,
+        1485,
+        2970,
+        2970,
+        2970,
+        2970
+      ],
+      "batches": 7
+    },
+    {
+      "path": "chapter_mainline/post_review/alpha_library/complete.json",
+      "sha256": "6ab95d7e84131ebe98a611b2016015d70fa7958dcecabd63a8bf273efadbd2fb",
+      "physical_trajectories": 10080,
+      "worlds_per_batch": 2520,
+      "batches": 4
+    },
+    {
+      "path": "chapter_mainline/post_review/alpha_transfer/complete.json",
+      "sha256": "99c5d0b30e8e90cc974ca2e00723061bc2ef31a0492c85e3ac4d144ac9de93db",
+      "physical_trajectories": 5670,
+      "worlds_per_batch": 1890,
+      "batches": 3
+    }
+  ],
+  "reference_11": {
+    "url": "https://arxiv.org/abs/2611.15280",
+    "title": "Autonomous Trail Racing with a Bicycle Robot",
+    "authors": [
+      "Jenelten, Fabian",
+      "Ishtaweera, Deepana",
+      "Garcia, Pablo",
+      "Margolese, Liana",
+      "Bogoslavskyi, Igor",
+      "Buonocore, Luca",
+      "Migliazza, Jan",
+      "Ecins, Aleksandrs",
+      "Wollschlaeger, Annika",
+      "Bellicoso, Dario",
+      "Nelson, Gabriel",
+      "Gawel, Abel",
+      "Hutter, Marco"
+    ],
+    "date": "2026/11/11"
   }
 }

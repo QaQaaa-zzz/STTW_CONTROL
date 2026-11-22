@@ -36,8 +36,8 @@ Our bounded simulation contributions are:
 \begin{enumerate}
 \item A finite-library formulation and blind evaluation of strict downstream approach reversal (32/80 for R9), showing why reversal alone does not ensure planner gains over a fixed gate rule.
 \item A fused GPU platform-relative dynamic predictor and lexicographic planner running 3-, 9-, and 15-candidate full-horizon (5.10~s) rollouts in 10.33, 10.79, and 11.29~ms (P95) with zero calibration drift.
-\item A paired real-time, latency, and unseen-geometry study ($>65{,}000$ rollouts) separating admitted errors from vetoed fallbacks to explain both a 78\% contact drop on standard layouts and over-vetoing on staggered walls.
-\item A paired preference-library ablation showing that selecting $\alpha\in\{0,0.5,1\}$ before takeoff lifts left-gate completions from 201 to 405/720 (+28.33 percentage points) with 0/366 admitted wall contacts.
+\item Paired timing, geometry and preference experiments ($>70{,}000$ physical rollouts) separating admitted errors from vetoed fallbacks to explain both a 78\% contact drop on standard layouts and over-vetoing on staggered walls.
+\item A paired preference-library ablation in which selecting $\alpha\in\{0,0.5,1\}$ before takeoff raised R9 left-gate completions from 201 to 405/720 on TEST~A/B. On three revisited wall layouts, completions rose from 197 to 361/810 (+20.2 percentage points), with 0/246 admitted wall contacts.
 \end{enumerate}
 
 \section{Related Work}
@@ -302,7 +302,9 @@ R9, newly solved ($\alpha>0$) & 5 & 5 & 5\\\bottomrule
 \end{tabular}\label{tab:dev_alpha}
 \end{table}
 
-Table~\ref{tab:alpha_lib} and Fig.~\ref{fig:alpha_xy} report the paired online ablation (T3) adding $\alpha\in\{0.5,1\}$ on the signed left approach (15 candidates, 11.29~ms P95). Making $\alpha$ selectable before takeoff increased R9 completions on TEST~A/B: R9 selected $\alpha>0$ in 687/720 left-gate contracts, lifting completions from \textbf{201 to 405 out of 720} ($+28.33$ percentage points, 95\% CI $[18.61,38.06]$). Crucially, admitted R9 completions nearly tripled from 131/131 to \textbf{366/366 with 0/366 admitted wall contacts}. Total R9 wall contacts rose from 6 to 18 (all 18 on Layout~A; 0 on Layout~B), and every single one of those 18 collisions occurred in vetoed fallback trajectories rather than admitted plans. Source selected $\alpha>0$ on 33/720 contracts, gaining 13 completions ($+1.81$ points $[0.42,3.61]$) with unchanged collisions (9/720, all fallbacks).
+On TEST~A/B, R9 selected nonzero $\alpha$ in 687/720 left-gate contracts (Table~\ref{tab:alpha_lib}, Fig.~\ref{fig:alpha_xy}). Completions rose from 201 to 405 ($+28.33$ points, 95\% CI $[18.61,38.06]$); admitted completions rose from 131/131 to 366/366. All 18 expanded-library contacts followed a veto on A. Source selected nonzero $\alpha$ in 33/720 contracts, gaining 13 completions ($+1.81$ points $[0.42,3.61]$) with nine fallback contacts in each arm.
+
+Of the 204 net additional R9 completions, 191 came from contracts with no successful nine-option branch; the per-layout oracle ceilings rose from 147 to 298 on A and from 170 to 308 on B (360 contracts each). Within-library lookup reproduced the selected physical outcomes in all 2,880 online assignments across both skills and arms. On the 720 R9 contracts, lookup gave 307 completions and 90 contacts for fixed-rule $\alpha=0$, and 430 and 81 for start-only C with selectable $\alpha$; online C-R achieved 405 and 18, gaining 98 completions over Fixed while trading 25 completions for 63 fewer contacts (78\%) relative to C. Fixed and C used archived branches without additional online trials.
 
 \begin{table}[t]\centering
 \caption{Paired preference libraries on disclosed TEST~A/B (360 left-gate contracts/layout) and three revisited T2 layouts (270/layout; R9 only). Both arms used the 30-root prior and 15/15~ms C-R. Cells show Total Completed / Wall, and Admitted Completed / Admitted Wall.}
@@ -323,9 +325,8 @@ R9 & Double & 44 / 36 & 6 / 1 & 94 / 67 & 29 / 0\\\bottomrule
 Transferring the frozen library to the same 30 starts on the three previously evaluated T2 geometries changed R9 completions from 197 to 361/810 (paired difference +20.2 points, 95\% CI $[10.2, 30.1]$), and wall contacts from 46 to 75. Across layouts, the physical oracle found a successful branch for 265 versus 618 of the 810 tasks. Of the 353 newly solvable tasks, 186 were completed online. On staggered walls, admission rose from 11 to 30 tasks, yet all 67 expanded-library contacts followed a veto.
 
 \section{Discussion, Limitations, and Conclusion}
-Across all four experiments, a clear division of roles emerges between pre-jump approach shaping and post-landing exit replanning:
 \begin{itemize}
-\item \textbf{Pre-jump shaping expands feasibility:} Adjusting the ground controller's preference $\alpha$ before takeoff alters the takeoff and landing state distribution delivered by the frozen jump skill, expanding admitted left-gate completions from 131 to 366 and total completions from 201 to 405/720 (+28.33 points) at 11.29~ms P95.
+\item \textbf{Pre-jump shaping expands feasibility:} Adjusting the ground controller's preference $\alpha$ before takeoff alters the takeoff and landing state distribution delivered by the frozen jump skill, raising completions from 201 to 405/720 on TEST~A/B and from 197 to 361/810 on the three revisited wall layouts. On those three layouts, 238/246 admitted contracts completed, with zero admitted wall contacts.
 \item \textbf{Post-landing replanning acts as a high-precision safety filter, not a completion booster:} Once the robot lands, kinematic and steering momentum limit recovery authority. Predictive replanning cuts wall contacts by 72--78\% on standard layouts and maintains $<0.5\%$ admitted contact rates across both standard (3/653) and unseen transfer geometries (1/508), but its net utility breaks down when fixed margins over-veto novel geometries (staggered walls) and force execution onto uncertified fallbacks.
 \end{itemize}
 

@@ -19,3 +19,5 @@
 在工作树根目录运行 `python3 docs/chapter3_paper/build.py` 可从已提交的图表编译 PDF。方法与数据角色已按实验归档核对。文献 [18]、[19] 按本地未发表手稿著录；署名、单位及投稿审批由作者确认。
 
 [新增零仿真归因、同批 C/Fixed 与 18 个撞墙合同](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/alpha_library/RESULTS_BREAKDOWN.md)。文献 [11] 已对照 arXiv 原始页面核验题名、作者顺序和日期，编号 2611.15280，2026 年 11 月 11 日。文献 [18]、[19] 沿用已核实的未发表稿题名，作者顺序待作者确认。
+
+封箱正文在第 VI-E 节区分同批物理分支查表的 Fixed、C 与在线 C-R。六个实验阶段共 81,090 条物理轨迹，分母与运行回执见来源清单。随后完成的[两批否决保底策略复验](../evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/veto_fallback/RESULTS.md) 单独归档。
