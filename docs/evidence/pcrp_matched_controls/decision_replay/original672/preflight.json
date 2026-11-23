@@ -1,0 +1,41 @@
+{
+  "stage": "cpu_verified",
+  "archive": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/position",
+  "archive_code": "4331f82196b23bcbaf5b8da260bd6d78ae4c1cf6",
+  "simulation_code": "3d90f8187b55cee7b95f9593840ba9e65d300af1",
+  "complete_resolved_settings_identical": true,
+  "original_case_order": true,
+  "implicit_grid_shape": [
+    27,
+    25
+  ],
+  "world_origins_matched": 672,
+  "archives_verified": 672,
+  "case_count": 112,
+  "terrain_assets": 14,
+  "physical_groups": 8,
+  "original_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/position/position_s3.3_v2.6_seed401.json",
+  "config_sha256": "5c406119b7677df3bd44c36fc4c27ba49c0b279dbfc4c8f0613594c109ec7858",
+  "cases_sha256": "d66d6b732e8eee41c8ac39f1e53e6efe988c9dbeb8e9ad076501f0d6cf46d6b8",
+  "command": [
+    "/home/qy/miniconda3/envs/env_isaaclab/bin/python",
+    "-u",
+    "learning/cli/evaluate_isaac_gpu.py",
+    "--backend",
+    "lab",
+    "--bundle",
+    "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_selected_local300_flat/bundle",
+    "--config",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/position/position_s3.3_v2.6_seed401.json",
+    "--case-manifest",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/replay672/cases.json",
+    "--terrain",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.3_length0.8_oblique0.25_h0.1",
+    "--output",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/replay672/batch",
+    "--seconds",
+    "10"
+  ],
+  "cwd": "/home/qy/STTW_CONTROL/runs/worktrees/pcrp-replay-3d90f818",
+  "PYTHONPATH": "/home/qy/STTW_CONTROL/runs/worktrees/pcrp-replay-3d90f818/learning/src"
+}

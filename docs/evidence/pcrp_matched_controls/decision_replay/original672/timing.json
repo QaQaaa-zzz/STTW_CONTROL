@@ -1,0 +1,23 @@
+{
+  "stage": "physics_complete",
+  "returncode": 0,
+  "wall_s": 640.920456501015,
+  "lanes": 672,
+  "cases": 112,
+  "runtime_match": [
+    "settings",
+    "identity",
+    "origin",
+    "bodies",
+    "terrain",
+    "randomization_readback",
+    "delay_steps",
+    "physics_dt",
+    "lower_dt",
+    "policy_dt",
+    "backend"
+  ],
+  "sampling_s": 603.1610646247864,
+  "export_s": 22.59973430633545,
+  "initialization_and_shutdown_s": 15.15965756989317
+}

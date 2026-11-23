@@ -1,0 +1,119 @@
+{
+  "stage": "complete",
+  "passed": true,
+  "matched_lanes": 672,
+  "total_lanes": 672,
+  "c10_flips": 0,
+  "hold_flips": 0,
+  "task_c_flips": 0,
+  "verdict": "restored_original_packing_reproduces_archive",
+  "comparisons": {
+    "new672_vs_original672": {
+      "n": 672,
+      "passed": 672,
+      "bitwise": 672,
+      "close": 672,
+      "same_ticks": 672,
+      "same_terminal": 672,
+      "tested_config_matches": 672,
+      "max_xy_m": 0.0,
+      "full_flip": 0,
+      "full_a": 264,
+      "full_b": 264,
+      "hold_flip": 0,
+      "hold_a": 224,
+      "hold_b": 224,
+      "C_flip": 0,
+      "C_a": 59,
+      "C_b": 59
+    },
+    "prior36_vs_new672": {
+      "n": 36,
+      "passed": 0,
+      "bitwise": 0,
+      "close": 0,
+      "same_ticks": 21,
+      "same_terminal": 31,
+      "tested_config_matches": 36,
+      "max_xy_m": 2.0148844718933105,
+      "full_flip": 1,
+      "full_a": 21,
+      "full_b": 20,
+      "hold_flip": 2,
+      "hold_a": 19,
+      "hold_b": 17,
+      "C_flip": 2,
+      "C_a": 13,
+      "C_b": 13
+    },
+    "prior36_vs_original672": {
+      "n": 36,
+      "passed": 0,
+      "bitwise": 0,
+      "close": 0,
+      "same_ticks": 21,
+      "same_terminal": 31,
+      "tested_config_matches": 36,
+      "max_xy_m": 2.0148844718933105,
+      "full_flip": 1,
+      "full_a": 21,
+      "full_b": 20,
+      "hold_flip": 2,
+      "hold_a": 19,
+      "hold_b": 17,
+      "C_flip": 2,
+      "C_a": 13,
+      "C_b": 13
+    },
+    "overlap_new672_vs_original672": {
+      "n": 36,
+      "passed": 36,
+      "bitwise": 36,
+      "close": 36,
+      "same_ticks": 36,
+      "same_terminal": 36,
+      "tested_config_matches": 36,
+      "max_xy_m": 0.0,
+      "full_flip": 0,
+      "full_a": 20,
+      "full_b": 20,
+      "hold_flip": 0,
+      "hold_a": 17,
+      "hold_b": 17,
+      "C_flip": 0,
+      "C_a": 13,
+      "C_b": 13
+    }
+  },
+  "outcome_flips": {
+    "new672_vs_original672": {
+      "C10": 0,
+      "hold": 0,
+      "C": 0
+    },
+    "prior36_vs_new672": {
+      "C10": 1,
+      "hold": 2,
+      "C": 2
+    },
+    "prior36_vs_original672": {
+      "C10": 1,
+      "hold": 2,
+      "C": 2
+    },
+    "overlap_new672_vs_original672": {
+      "C10": 0,
+      "hold": 0,
+      "C": 0
+    }
+  },
+  "prior36_disagreements": 36,
+  "restored_after_full_packing": 36,
+  "replay_code": "3d90f8187b55cee7b95f9593840ba9e65d300af1",
+  "archive_code": "4331f82196b23bcbaf5b8da260bd6d78ae4c1cf6",
+  "full_batch_contract_difference_fields": [],
+  "panels": 112,
+  "report": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/replay672/analysis/README.md",
+  "plotting_s": 19.9777330874349,
+  "analysis_total_s": 34.06793623097474
+}
