@@ -100,9 +100,21 @@ class P0Branches:
             old = getattr(route, field)
             setattr(route, field, torch.cat((old, old.new_zeros((self.n, *old.shape[1:])))))
         self.work = {k: torch.empty_like(getattr(route, k)[-self.n:]) for k in ('xy','heading','curvature')}
-        budget = cfg.get('candidates', 16)
-        self.latencies = q.new_tensor(cfg['latency_ms'])
-        self.models = ContinuousExitPlanner(query, route, candidates=budget, iterations=2,
+        self.smooth_event = cfg.get('planner_mode','frozen')=='smooth_event'
+        mode=cfg.get('planner_mode','frozen')
+        budget = cfg.get('candidates',64 if self.smooth_event else 16)
+        if self.smooth_event:
+            schedule=cfg.get('arm_schedule_ticks',[cfg['schedule_ticks']]*self.g)
+            if len(schedule)!=self.g or min(schedule)<0:raise ValueError('Expect nonnegative observation intervals for every arm')
+            self.intervals=torch.as_tensor(schedule,device=q.device,dtype=torch.long)[self.arm]
+            self.held=self.active_plan.clone()
+            self.ever_covered=self.active_plan.clone()
+            self.event_ms={k:q.new_tensor(v) for k,v in cfg.get('smooth_latency_ms',{}).items()}
+            if self.event_ms and (set(self.event_ms)!={'monitor','search'} or any(len(a)==0 or not torch.all(torch.isfinite(a)&(a>0)) for a in self.event_ms.values())):
+                raise ValueError('Provide measured single-vehicle monitor and search latency distributions')
+        else:
+            self.latencies = q.new_tensor(cfg['latency_ms'])
+        self.models = ContinuousExitPlanner(query, route, candidates=budget, iterations=2,mode=mode,
                                             robots_per_chunk=cfg.get('robots_per_chunk', 8))
         init_twist = velocity_state(q[:1],v[:1])
         self.models.plan(q[:1],init_twist,init_twist,route,q.new_tensor([1.]),self.section[:1],
@@ -225,6 +237,16 @@ class P0Branches:
             required = (middle.projection['progress'][ids]+middle.follower['lookahead'][ids]+middle.v_user[ids]*.02).clamp_max(route.s[-1])
             publish = (self.admitted[ids] & self.in_time[ids] & (tick<=self.pending_until[ids])
                        & (self.version[ids]==self.pending_version[ids]) & (required<=self.committed[ids]+1e-6))
+            kept=torch.zeros_like(publish)
+            if self.smooth_event:
+                # Timely confirmation extends coverage of the SAME row, without an actuator-visible publication.
+                kept=publish & self.held[ids]
+                accepted=ids[publish]
+                self.ever_covered[accepted]=True
+                keep_ids=ids[kept]
+                self.valid_until[keep_ids]=self.pending_until[keep_ids]
+                self.active_plan[keep_ids]=True
+                publish=publish&~kept
             rows = ids[publish]
             if len(rows):
                 for key in self.work:
@@ -236,12 +258,18 @@ class P0Branches:
                 np.savez_compressed(self.ref_dir/f'tick_{tick:04d}.npz',lanes=rows.cpu().numpy(),
                     **{k:self.work[k][rows].cpu().numpy() for k in self.work})
             self.event(kind='publication',tick=tick,lanes=ids.tolist(),sample_tick=self.received[ids].tolist(),
+                       **({'incumbent_renewed':kept.tolist()} if self.smooth_event else {}),
                        published=publish.tolist(),in_time=self.in_time[ids].tolist(),model_admitted=self.admitted[ids].tolist(),
                        pending_valid_until=self.pending_until[ids].tolist(),route_version=self.version[ids].tolist(),
                        route_id=route.route_ids[ids].tolist(),travel_m=(self.distance[ids]-self.start_distance[ids]).tolist())
             self.due[ids]=-1
         expired = rolling & self.active_plan & (tick>self.valid_until)
-        if bool(expired.any()):
+        if self.smooth_event and bool(expired.any()):
+            ids=torch.where(expired)[0]
+            self.active_plan[ids]=False
+            self.event(kind='expired_keep_reference',tick=tick,lanes=ids.tolist(),valid_until=self.valid_until[ids].tolist(),
+                       route_id=route.route_ids[ids].tolist(),route_version=self.version[ids].tolist())
+        elif bool(expired.any()):
             ids = torch.where(expired)[0]
             required = (middle.projection['progress'][ids]+middle.follower['lookahead'][ids]+middle.v_user[ids]*.02).clamp_max(route.s[-1])
             fields = rejoin_default(route,route.route_ids[ids],self.default_rows[ids],required)
@@ -256,7 +284,8 @@ class P0Branches:
                        route_version=self.version[ids].tolist(),default_route_id=self.default_rows[ids].tolist(),
                        committed_s=required.tolist(),route_id=route.route_ids[ids].tolist())
         query = rolling & (self.next==tick)
-        self.next = torch.where(query,tick+self.cfg['schedule_ticks'],self.next)
+        next_tick=(torch.where(self.intervals>0,tick+self.intervals,-1) if self.smooth_event else tick+self.cfg['schedule_ticks'])
+        self.next = torch.where(query,next_tick,self.next)
         self.skipped_pending += (query & (self.due>=0)).long()
         query &= self.due<0
         if bool(query.any()):
@@ -270,8 +299,19 @@ class P0Branches:
             torch.cuda.synchronize()
             batch_ms=1000*(time.monotonic()-start)
             # Corresponding arms of the same physical prefix see identical latency samples.
-            number = (ids//self.g + self.queries[ids]) % len(self.latencies)
-            ms=self.latencies[number]
+            ordinal=ids//self.g+self.queries[ids]
+            if self.smooth_event:
+                self.held[ids]=proposed.incumbent_admitted
+                if self.event_ms:
+                    mon,opt=self.event_ms['monitor'],self.event_ms['search']
+                    number=torch.where(proposed.searched,ordinal%len(opt),ordinal%len(mon))
+                    ms=torch.where(proposed.searched,opt[ordinal%len(opt)],mon[ordinal%len(mon)])
+                    latency_source='smooth_measured_single_vehicle'
+                else:
+                    number=torch.full_like(ids,-1);ms=q.new_full((len(ids),),batch_ms)
+                    latency_source='actual_batch_wall_clock'
+            else:
+                number=ordinal%len(self.latencies);ms=self.latencies[number]
             self.received[ids]=tick
             self.pending_version[ids]=self.version[ids]
             # The path publication is visible only at the next absolute 20 ms policy boundary.
@@ -286,13 +326,15 @@ class P0Branches:
             for k in self.work:
                 self.work[k][ids]=getattr(proposed,k)
             self.event(kind='query',tick=tick,lanes=ids.tolist(),ms=ms.tolist(),due=physical_due.tolist(),
+                       **({'searched':proposed.searched.tolist(),'latency_source':latency_source} if self.smooth_event else {}),
                        admitted=proposed.admitted.tolist(),incumbent=proposed.incumbent_admitted.tolist(),
                        sample_index=number.tolist(),offline_batch_wall_ms=batch_ms)
         uncovered = rolling & (tick>self.valid_until)
         self.cover_lost |= uncovered
         self.uncovered_ticks += uncovered.long()
-        self.initial_uncovered_ticks += (uncovered & (self.version==0)).long()
-        self.expired_uncovered_ticks += (uncovered & (self.version>0)).long()
+        ever=self.ever_covered if self.smooth_event else self.version>0
+        self.initial_uncovered_ticks += (uncovered & ~ever).long()
+        self.expired_uncovered_ticks += (uncovered & ever).long()
 
     def record_change(self,tick,ids,observed_tick,observed_distance):
         replaced = ids[self.await_actor[ids] | self.await_pursuit[ids]]

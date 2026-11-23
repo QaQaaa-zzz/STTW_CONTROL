@@ -22,6 +22,7 @@ class ExitProposal:
     incumbent_admitted: torch.Tensor
     clearance_m: torch.Tensor
     valid_for_s: torch.Tensor
+    searched: torch.Tensor | None = None
 
 
 def committed_progress(progress, lookahead, speed_request, publication_budget_s=.1):
@@ -82,8 +83,14 @@ def _score(query, poses, velocity, domain, section, side, remaining, gate_status
 class ContinuousExitPlanner:
     """Batched independent single-robot searches. Parameters and noise never mix robots."""
 
-    def __init__(self, query, route, *, candidates=16, iterations=2, robots_per_chunk=1,
-                 horizon_steps=255, seed=20261122, fused=True):
+    def __init__(self, query, route, *, candidates=None, iterations=2, robots_per_chunk=1,
+                 horizon_steps=255, seed=20261122, fused=True, mode='frozen'):
+        if mode not in ('frozen','smooth_event'):
+            raise ValueError('Unknown continuous-exit mode')
+        self.mode = mode
+        candidates = (64 if mode=='smooth_event' else 16) if candidates is None else candidates
+        if mode=='smooth_event' and candidates!=64:
+            raise ValueError('The smooth-event comparison uses 64 proposals per round')
         if candidates < 8 or candidates % 2 or iterations < 1 or robots_per_chunk < 1 or horizon_steps < 1:
             raise ValueError('CEM needs two equal populations of at least four and a positive horizon')
         if not query.relative or query.model.model_kind == 'direct' or query.model.alpha_conditioned:
@@ -109,6 +116,10 @@ class ContinuousExitPlanner:
         self.noise = torch.randn(iterations, 2, candidates // 2, 6, generator=generator).to(route.s)
         self.signs = route.s.new_tensor([1., -1.]).reshape(1, 2, 1)
         self.splines = []
+        if mode=='smooth_event':
+            # Separate fixed-size graphs for monitoring one current path and scoring 64 alternatives.
+            self.event_graphs = {}
+            return
         one = torch.zeros(1, dtype=torch.long, device=device)
         basic = SimpleNamespace(s=route.s, xy=route.xy[:1], heading=route.heading[:1],
                                 curvature=route.curvature[:1], route_ids=one)
@@ -184,6 +195,126 @@ class ContinuousExitPlanner:
                 best_score = torch.where(take, best_score_this, best_score)
         return best
 
+    def _smooth_paths(self, xy, heading, curvature, end, parameters):
+        """Three smooth lateral parameters on the mutable interval; all rows use the published arc grid."""
+        s = self.s
+        x, y = xy.unbind(-1)
+        ids = torch.arange(len(s),device=s.device)
+        start = x.gather(1,end[:,None])
+        length = (self.query.goal['x_min_m']-start).clamp_min(0.)
+        u = ((x-start)/length.clamp_min(1e-6)).clamp(0.,1.)
+        # The bump and its first two derivatives vanish at both ends.
+        bump = (4*u*(1-u))**3
+        z = 2*u-1
+        a,b,c = parameters.unbind(-1)
+        displacement = a[:,:,None]-y[:,None] + b[:,:,None]*z[:,None] + c[:,:,None]*z[:,None].square()
+        # A second spatial derivative scales as 1/L². Four metres is the reference full window.
+        scale = (length/4.).clamp_max(1.).square()
+        yy = y[:,None] + scale[:,None]*bump[:,None]*displacement
+        xx = x[:,None].expand_as(yy)
+        # Anchor the new arc to the last immutable sample, not the beginning of a possibly resampled route.
+        distances = torch.hypot(xx.diff(dim=2),yy.diff(dim=2))
+        distances = torch.where(ids[:-1]>=end[:,None,None],distances,0.)
+        arc = s[end,None,None]+torch.cat((distances[:,:,:1]*0,distances.cumsum(2)),2)
+        target = s.expand_as(arc).contiguous()
+        hi = torch.searchsorted(arc,target,right=True).clamp(1,len(s)-1);lo = hi-1
+        prev = arc.gather(2,lo)
+        frac = ((target-prev)/(arc.gather(2,hi)-prev).clamp_min(1e-9)).clamp(0,1)
+        after = ids>end[:,None,None]
+        x1 = torch.where(after,torch.lerp(xx.gather(2,lo),xx.gather(2,hi),frac)+(target-arc[:,:,-1:]).clamp_min(0),xx)
+        y1 = torch.where(after,torch.lerp(yy.gather(2,lo),yy.gather(2,hi),frac),y[:,None])
+        h = torch.atan2(torch.gradient(y1,dim=2)[0],torch.gradient(x1,dim=2)[0])
+        k = torch.gradient(h,spacing=(s,),dim=(2,))[0]
+        return (torch.stack((x1,y1),3).flatten(0,1).contiguous(),
+                torch.where(after,h,heading[:,None]).flatten(0,1).contiguous(),
+                torch.where(after,k,curvature[:,None]).flatten(0,1).contiguous())
+
+    def _smooth_score(self,q,velocity,previous,xy,h,k,section,side,remain,gate,hold):
+        args = (q,velocity,previous,xy,h,k,section,side,remain,gate,hold)
+        if not self.fused:
+            raw,passed,clear,valid = self._evaluate(*args)
+        else:
+            # A monitoring call must not overwrite the graph captured for a full CEM population.
+            n = len(q)
+            if n not in self.event_graphs:
+                inputs = [arg.clone() for arg in args]
+                self._evaluate(*inputs)
+                graph = torch.cuda.CUDAGraph()
+                with torch.cuda.graph(graph):out=self._evaluate(*inputs)
+                self.event_graphs[n] = inputs,graph,out
+            inputs,graph,out = self.event_graphs[n]
+            for buf,arg in zip(inputs,args):buf.copy_(arg)
+            graph.replay()
+            raw,passed,clear,valid = out
+        # These raised-platform references advance in world x. Include the grid segment
+        # containing the vehicle and every remaining segment, including the committed preview.
+        forward_x = xy[:, :, 0].contiguous()
+        current = torch.searchsorted(forward_x, q[:, :1].contiguous()).sub(1).clamp_min(0)
+        remaining_path = torch.arange(k.shape[1], device=k.device) >= current
+        remaining_k = torch.where(remaining_path, k, 0.)
+        peak = remaining_k.abs().amax(1)
+        finite = torch.isfinite(peak)
+        geometry = finite & (peak<=1.)
+        # Mean squared curvature over the remaining reference, in m⁻².
+        # Admitted paths rank above every rejected one. The penalty only orders geometrically eligible paths.
+        score = torch.where(geometry,raw-.05*remaining_k.square().sum(1)/remaining_path.sum(1),-1000.-torch.nan_to_num(peak,nan=1e6))
+        return score,passed&geometry,clear,valid
+
+    def _smooth_search(self,q,v,previous,xy,h,k,committed,section,side,remaining,gate,hold):
+        n,b = len(q),self.candidates
+        rows = torch.arange(n,device=q.device)
+        end = torch.searchsorted(self.s,committed.contiguous()).clamp_max(len(self.s)-1)
+        left = q.new_tensor([.36,0.,0.]);right = -left
+        means = torch.stack((left,right)).expand(n,-1,-1).clone()
+        std = q.new_tensor([.35,.25,.20]).expand_as(means).clone()
+        repeated = [x.repeat_interleave(b,0) for x in (q,v,previous,section,side,remaining,gate,hold)]
+        best_score = q.new_full((n,),-torch.inf)
+        selected = [xy.clone(),h.clone(),k.clone(),torch.zeros(n,dtype=torch.bool,device=q.device),q.new_full((n,),-torch.inf),q.new_zeros(n)]
+        for it in range(self.iterations):
+            p = (means[:,:,None]+std[:,:,None]*self.noise[it,:,:,:3]).clamp(-1.25,1.25)
+            # Exact seeds of this NEW family, not the three frozen legacy departure arrays.
+            p[:,:,0]=means
+            p[:,0,1]=left;p[:,0,2]=0.;p[:,1,1]=right
+            bank = self._smooth_paths(xy,h,k,end,p.reshape(n,b,3))
+            score,allowed,clear,valid = self._smooth_score(*repeated[:3],*bank,*repeated[3:])
+            score = score.reshape(n,2,b//2)
+            elite = score.argsort(dim=2,descending=True,stable=True)[:,:,:b//8]
+            population = p.gather(2,elite[:,:,:,None].expand(-1,-1,-1,3))
+            means = population.mean(2);std = population.std(2,unbiased=False).clamp_min(.06)
+            # Rejected candidates can steer CEM, but they can never become a published plan.
+            feasible_score = torch.where(allowed.reshape(n,b),score.flatten(1),-torch.inf)
+            top,rank = feasible_score.max(1);take = top>best_score;index = rows*b+rank
+            current = [a[index] for a in (*bank,allowed,clear,valid)]
+            selected = [torch.where(take.reshape((n,)+(1,)*(a.ndim-1)),a,old) for a,old in zip(current,selected)]
+            best_score = torch.maximum(best_score,top)
+        return selected
+
+    def _event_plan(self, q, velocity, previous, route, ids, fields):
+        n=len(q);committed,section,side,remaining,gate,hold=fields
+        bank=[t[ids].clone() for t in (route.xy,route.heading,route.curvature)]
+        admitted=torch.zeros(n,device=q.device,dtype=torch.bool)
+        clear=q.new_empty(n);valid=q.new_empty(n)
+        for start in range(0,n,self.chunk):
+            ix=torch.arange(start,start+self.chunk,device=q.device).clamp_max(n-1)
+            _,ok,c,t=self._smooth_score(q[ix],velocity[ix],previous[ix],*[a[ix] for a in bank],
+                                        section[ix],side[ix],remaining[ix],gate[ix],hold[ix])
+            size=min(n-start,self.chunk);sl=slice(start,start+size)
+            admitted[sl]=ok[:size];clear[sl]=c[:size];valid[sl]=t[:size]
+        incumbent=admitted.clone()
+        # A wrong first crossing cannot be undone. A still-valid incumbent needs no new geometry.
+        searched=~incumbent & (gate!=-1)
+        todo=torch.where(searched)[0]
+        for start in range(0,len(todo),self.chunk):
+            ix=todo[torch.arange(start,start+self.chunk,device=q.device).clamp_max(len(todo)-1)]
+            out=self._smooth_search(q[ix],velocity[ix],previous[ix],*[a[ix] for a in bank],
+                                    committed[ix],section[ix],side[ix],remaining[ix],gate[ix],hold[ix])
+            size=min(len(todo)-start,self.chunk);ix=ix[:size];found=out[3][:size]
+            for dest,value in zip(bank,out[:3]):dest[ix]=value[:size]
+            admitted[ix]=found
+            clear[ix]=torch.where(found,out[4][:size],clear[ix])
+            valid[ix]=torch.where(found,out[5][:size],valid[ix])
+        return ExitProposal(*bank,admitted,incumbent,clear,valid,searched)
+
     def _run_evaluate(self, args):
         if not self.fused:
             return self._evaluate(*args)
@@ -212,6 +343,8 @@ class ContinuousExitPlanner:
         ids = route.route_ids if rows is None else rows
         fields = [torch.as_tensor(t, device=q.device, dtype=q.dtype).reshape(-1).expand(n)
                   for t in (committed_s, section, side, remaining_s, gate_status, hold_s)]
+        if self.mode=='smooth_event':
+            return self._event_plan(q,velocity,previous,route,ids,fields)
         result = []
         for start in range(0, n, self.chunk):
             index = torch.arange(start, start + self.chunk, device=q.device).clamp_max(n - 1)
