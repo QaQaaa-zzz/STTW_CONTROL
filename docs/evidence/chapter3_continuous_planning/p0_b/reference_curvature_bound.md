@@ -26,4 +26,6 @@ D_{\max}=\int_0^L\frac{\min(u_0+Kx,K(L-x))}{\sqrt{1-\min(u_0+Kx,K(L-x))^2}}\,dx
 
 [288 项逐条对应的锚点、几何判定和预测结果](prepared_corridor_first_query.csv)
 
+旧选择器已有 8 个严格配对任务实际通过指定门并到达终点，但已发布参考曾超过 1/m。它们来自 6 个起点、7 条轨迹，表明此数值限制参考设计时会排除可执行的旧选项。[实走 XY 和逐任务核对](actual_outcomes_above_reference_cap.md)
+
 [半径与转向距离图](reference_curvature_bound.png) · [逐任务锚点、冻结规则和复现程序](prepared_turn_dev_cpu.tar.gz)
