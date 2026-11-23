@@ -233,6 +233,11 @@ def main():
     if cfg.get('collect_model_state'):
         contract.update(role=cfg['role'],scope='Bounded ground model collection; 4 s timeout denotes completed slice, not goal success. Splits are frozen in the collection manifest.',collect_model_state=True)
     if cfg.get('task_evaluation'):contract.update(scope=cfg['role'],completed_slice_semantics=False)
+    if cfg.get('p0_branches'):
+        # This protocol records contacts through one shared plant for ground and jump.
+        contract.update(role=cfg['role'], physics_steps_max=round(a.seconds/.005)*n*a.physics_substeps,
+                        unique_prefixes=n//cfg['p0_branches']['group_size'],
+                        backend='MJX-Warp batched physics, Torch ground planning, JAX jump control; on-event handback and route exports')
     contract['fixed_order_tree_reductions']=cfg.get('fixed_order_tree_reductions',False)
     contract['ordered_solver_reductions']=cfg.get('ordered_solver_reductions',False)
     contract['canonical_constraint_rows']=cfg.get('canonical_constraint_rows',False)

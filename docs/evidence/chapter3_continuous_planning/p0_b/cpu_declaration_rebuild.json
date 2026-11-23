@@ -1,0 +1,34 @@
+{
+  "mujoco": "3.6.0",
+  "mode": "CPU CLI terrain and declaration only; no GPU model transfer or rollout",
+  "batches": [
+    {
+      "batch": "right_offset/part_0",
+      "lanes": 2268,
+      "unique_prefixes": 324,
+      "max_substeps": 22680000,
+      "reconstructed_mjb_sha256": "e50822db060a73bcb53917061bbad413e3ca035339a09c94d105b3d521daad54"
+    },
+    {
+      "batch": "right_offset/part_1",
+      "lanes": 2268,
+      "unique_prefixes": 324,
+      "max_substeps": 22680000,
+      "reconstructed_mjb_sha256": "e50822db060a73bcb53917061bbad413e3ca035339a09c94d105b3d521daad54"
+    },
+    {
+      "batch": "staggered/part_0",
+      "lanes": 2268,
+      "unique_prefixes": 324,
+      "max_substeps": 22680000,
+      "reconstructed_mjb_sha256": "eac70ababe4e8eae90ad583218f879608aad22aaf38453b5909e8b3177f1df91"
+    },
+    {
+      "batch": "staggered/part_1",
+      "lanes": 2268,
+      "unique_prefixes": 324,
+      "max_substeps": 22680000,
+      "reconstructed_mjb_sha256": "eac70ababe4e8eae90ad583218f879608aad22aaf38453b5909e8b3177f1df91"
+    }
+  ]
+}
