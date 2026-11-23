@@ -1,0 +1,11 @@
+{
+  "E1a": {
+    "unit": "pcrp-matched-e1a-deadline.timer",
+    "deadline": "2026-11-23T01:27:08-08:00"
+  },
+  "E2": {
+    "unit": "pcrp-matched-e2-deadline.timer",
+    "deadline": "2026-11-23T01:27:44-08:00"
+  },
+  "trigger": "30 minutes from physical stage submission, once per stage while unfinished; future stages use an absolute systemd calendar deadline at submission. Only the receipt with status sent establishes delivery."
+}

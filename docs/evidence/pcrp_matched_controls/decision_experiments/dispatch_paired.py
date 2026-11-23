@@ -1,5 +1,5 @@
 """Run the approved paired stages, preserve their gate outcomes, and notify by Bark."""
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import json
 import os
 from pathlib import Path
@@ -43,7 +43,9 @@ def start(stage):
     frozen=read(ROOT/'paired_authorization.json')
     if frozen['decision']!='matched_packing' or sum(ALLOCATION.values())+72>frozen['main_experiment_rollout_cap']:
         raise ValueError('运行决议或 9,500 主预算不符')
-    prefix=['systemd-run','--user','--quiet',f'--unit=pcrp-matched-{stage.lower()}-wait30','--on-active=30min','--timer-property=AccuracySec=1s']
+    deadline=(datetime.now(timezone.utc)+timedelta(minutes=30)).strftime('%Y-%m-%d %H:%M:%S UTC')
+    prefix=['systemd-run','--user','--quiet',f'--unit=pcrp-matched-{stage.lower()}-wait30',
+            '--on-calendar='+deadline,'--timer-property=AccuracySec=1s','--timer-property=Persistent=true']
     subprocess.run([*prefix,'/usr/bin/python3',str(Path(__file__).resolve()),stage,'overdue'],check=True)
     env=dict(os.environ,PYTHONPATH=str(pin/'learning/src'),PYTHONDONTWRITEBYTECODE='1',PYTHONUNBUFFERED='1')
     def cli(script,*args):
@@ -83,6 +85,11 @@ def start(stage):
         if result['stage']!='complete' or result.get('completed_physical',result.get('completed'))!=96:
             raise RuntimeError('E1c 实际物理数与96条预登记不符')
         report=dest/'README.md'
+        if result.get('decision')=='nominal_replay_mismatch':
+            d=read(dest/'decision.json')
+            text=f"PCRP E1c 同槽名义对照仅 {d['matched_nominal_controls']}/32 通过。地形稳健性与路线判断须结合差异复核。"
+            record('E1c名义对照差异',text+' '+str(report))
+            bark(stage,'nominal_mismatch',text+' 报告 '+str(report))
         msg='E1c 已完成 64 条真实脊位扰动及 32 条原地形对照。'
     if not report.is_file():
         raise FileNotFoundError(report)

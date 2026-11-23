@@ -46,3 +46,10 @@ E2 冻结到 `41a68418468c05fa2d8aa99453d03e3fc5908a95`，E1a 和 E1b 到 `58386
 四份服务文件保存了实际的 `ExecStart`、`ExecStopPost` 和阶段依赖。两个 CPU 编排可并行提交；每个完整的 Isaac 子批单独通过 `gpu_queue.sh` 取得公用 GPU 锁 `research-hub/.gpu-job.lock`，子批退出后交接。调度器从第 0 步入口导入持锁记录函数 `record`；通知程序在运行主机读取私有 Bark 配置。阶段启动、完成、错误、中断及对照异常触发相应通知；从进入队列起 30 分钟仍运行则发送一次等候通知。用户交互在报告长等待后暂停，后台阶段按依赖继续。[实际调度器](dispatch_paired.py) · [台账记录函数](dispatch_step0.py) · [E2 服务](paired_services/pcrp-matched-e2.service) · [E1a](paired_services/pcrp-matched-e1a.service) · [E1b](paired_services/pcrp-matched-e1b.service) · [E1c](paired_services/pcrp-matched-e1c.service) · [队列脚本](helpers/gpu_queue.sh) · [Bark 程序](helpers/notify_sttw_job.py)
 
 第 0 步两个 36 槽批实测从采样到导出为 173.64 s、173.40 s。若以 173.52 s/批估算，E2 的 60 批约 2.9 h，E1a、E1b 各 326 批约 15.7 h/阶段。正式各批为 3、16、21 或 24 槽，实际用时会随槽数变化，另需计入 GPU 排队、Isaac 初始化和退出及分析绘图。最终以各阶段记录的批次墙钟、采样、导出和分析耗时为准。[原始计时摘录](launch_snapshot.json) · [E1a 启动回执](paired_services/E1a_started_receipt.json) · [E2 启动回执](paired_services/E2_started_receipt.json) · [包内 SHA-256](SHA256SUMS)
+
+
+## 长任务收尾
+
+E2 的首个几何批（名义脊位，α=0）已回收 24 条，采样 163.78 s，含写出共 192.46 s。按各自首批的采样与写出估算，E2 全阶段约 3.2 小时、E1a 约 14.7 小时；需另计排队、初始化和报告用时。E2、E1a 的半小时提醒分别定在洛杉矶时间 11 月 23 日 01:27:44、01:27:08。[提醒登记](paired_services/notification_schedule.json)
+
+全部通过相应阶段门槛后，由依赖队列运行综合分析与证据导出。完整本机报告索引保留 7,824 个候选的逐回合数据；远端紧凑包收录各案例 XY、可达前沿、最优候选与五档基准的时序、全部候选的外盘来源以及 E2 全网格图与数据。实际完成、异常和发布状态记录于运行目录 final_status.json。[收尾运行版本](paired_services/final_pin.json) · [最终服务定义](paired_services/pcrp-matched-final.service) · [汇总与发布程序](finish_paired.py)
