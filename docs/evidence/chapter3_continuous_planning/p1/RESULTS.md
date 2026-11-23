@@ -79,6 +79,10 @@
 
 第 7 条新曲线（α=0.5）得分 0.1052，高于原路线 0.0739。这个分数由小模型预测，两个候选分别有 4/16、3/16 个落地样本通过至少一个出口判据。原逐粒 CPU 实现耗时 20.433 秒，其中地面预测 20.424 秒。真实归档轨迹用了 0.678 秒便走完出发点到已承诺末端的 1.361 m，而这一次参考更新实际只预留 15 ms。接口按时间判断保留了原路线及原 α=0。该次工程测试没有让小车执行新轨迹，也未用这台小模型比较实测过门率。[候选参考和得分](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p1_20261123/actions/continuous_examples/departure_plan/three_alpha/decision_xy.png) · [实际时间与发布结果](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p1_20261123/actions/continuous_examples/departure_plan/three_alpha/timing_window.json)
 
+同一批 144 个样本的完整地面评分另作了单线程配对计时。每轮把候选一起送入冻结动力学模型，各样本在各自的剩余时间处截断预测，仍按原规则判断碰墙、过门和保持。逐个评分 20.868 s，合批评分 1.667 s，约快 12.5 倍。144 个接入点、144 个出口选择、432 个方向判据逐项相同；110 个三方向全拒绝的样本均按原规则继续直行。接入完整搜索后，从输入到返回参考路线实测 1.716 s，原逐粒全链路为 20.433 s。两版对全套候选、评分、最高分路线和最终保留旧路的决定一致。1.716 s 仍长于这个出发案例 0.678 s 的车身行驶窗口。[同机同样本的逐项对照](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p1_20261123/actions/continuous_examples/departure_plan/three_alpha/batched_cpu/receipt.json)
+
+α 的生效时刻也会改变出发状态到落地的演化。在六张训练图的全部 72 个起点，固定同一条接近曲线、同一左出口和零横推，分别用 α=0 和 1。72 对起点的初始位置、姿态和速度逐项相同，第一帧下发的执行器指令就已不同，实测车辆状态在 5–10 ms 首次出现差异。0.5 s 时两车平面位置间距的中位数为 5.83 mm，1.6 s 时为 7.78 cm，最大 24.97 cm。提前在模型里使用新 α、随后等运算完成才给车辆切换 α，会产生不同的输入历程；闭环验证须按真实切换时刻发指令和计分。[72 个起点的实测控制与位置差](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p1_20261123/export/exit_decision_time/alpha_actuation.csv) · [批量规划源码、固定权重和六次 CPU 计时](continuous_planner_timing.tar.gz)
+
 ## 复算入口
 
 [冻结采集配置、采集与评分源码及四图逐车记录](p1_source_and_protocol.tar.gz)保留相对于本次运行目录的结构。归档内记录运行所用的既有控制器、地形、原始轨迹及原目录绝对路径。[运行数据目录](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p1_20261123)
