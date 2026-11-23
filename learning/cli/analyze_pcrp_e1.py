@@ -165,10 +165,12 @@ def archive_lanes(rows, output):
 
 def report_case(name, rows, out):
     out.mkdir(parents=True, exist_ok=True)
+    if "physical_slot" in rows[0] and len({r["physical_slot"] for r in rows})!=1:
+        raise ValueError(f"{name}: warm and CEM trajectories occupy different physical slots")
     archive_lanes(rows, out/"rollouts")
     warm = [r for r in rows if int(r["generation"]) == 0]
     zero, = (r for r in warm if r["method"].lower() == "zero")
-    fixed = sorted((r for r in warm if r is not zero), key=lambda r: int(r["lane"]))
+    fixed = sorted((r for r in warm if r is not zero), key=lambda r: float(r["method"].removeprefix("fixed")))
     fixed_by_alpha = {float(r["method"].removeprefix("fixed")):r for r in fixed}
     if sorted(fixed_by_alpha) != list(ALPHAS):
         raise ValueError(f"{name} requires a generation-zero result for each frozen preference")
@@ -296,7 +298,7 @@ def report_case(name, rows, out):
     return dict(case=name,candidates=len(rows),eligible=len(eligible),pareto=len(pareto),method=best["method"],
                 generation=int(best["generation"]),candidate=best["candidate"],alpha=alpha,V=float(best["V"]),
                 A=int(best["A"]),B=int(best["B"]),C=int(best["C"]),fixed_V=float(best_fixed["V"]),
-                fixed_C=int(best_fixed["C"]),raw=best["raw"],lane=int(best["lane"]),
+                fixed_C=int(best_fixed["C"]),raw=best["raw"],lane=int(best["lane"]),physical_slot=best.get("physical_slot",""),
                 reward_closure_max=max(closure,paired_closure),**{k:v for k,v in events[id(best)].items() if k!="method"})
 
 
@@ -316,19 +318,18 @@ def main():
     result=[report_case(case,rows,out/case) for case,rows in groups.items()]
     table(out/"cases.csv",result)
     batches = []
-    for folder in sorted([stage/"warm",*stage.glob("g[0-9][0-9]")]):
-        path = folder/"timing.json"
-        if path.is_file():
-            values = json.loads(path.read_text())
-            values["setup_and_process_overhead_s"] = values["wall_s"]-values["sampling_s"]-values["export_s"]
-            batches.append(dict(batch=folder.name, **values))
+    timing_files = sorted([*stage.glob("warm/w*/timing.json"),*stage.glob("g[0-9][0-9]/c*/timing.json")])
+    for path in timing_files:
+        values = json.loads(path.read_text())
+        values["queue_setup_and_process_overhead_s"] = values["wall_s"]-values["sampling_s"]-values["export_s"]
+        batches.append(dict(batch=str(path.parent.relative_to(stage)), **values))
     lines=["# E1 可行性搜索档案","","每一行对应冻结 H75、Local300 和原始参考下的一个布局/物理组。XY 包含五档 H75、Zero 与搜索返回的最佳候选。","",
            "|案例|实际/参考 XY|可达前沿|入障时序|同 α 奖励|候选数|满窗且保持|非支配|最佳代 / V|固定档 C → 最佳 C|",
            "|---|---|---|---|---|---:|---:|---:|---|---|"]
     for r in result:
         case=r["case"]
         lines.append(f'|{case}|[XY]({case}/xy.png)|[Ep/Ev]({case}/frontier.png) · [CSV]({case}/frontier.csv)|[时间轴]({case}/timeline.png) · [入障提前量]({case}/entry_events.csv)|[每步与累计]({case}/reward.png) · [CSV]({case}/reward.csv)|[{r["candidates"]} 条索引]({case}/rollouts/index.csv)|{r["eligible"]}|{r["pareto"]}|{r["generation"]} / {r["V"]:.4f}|{r["fixed_C"]} → {r["C"]}|')
-    lines+=["","前沿仅在满 10 秒且末秒保持的实际候选中计算，图中提前终止的 H75 点仅描述其观察窗口。A/B 使用 C 搜索档案事后评分。第 0 代代表固定档或 Zero 热启动。", "",
+    lines+=["","本阶段每个案例固定一个物理槽。各匹配热启动和 CEM 候选由相同的案例次序、槽位、地形集合与世界坐标组成的独立批次产生。每代 32 个候选全部完成后才更新分布。前沿仅在满 10 秒且末秒保持的实际候选中计算，图中提前终止的 H75 点仅描述其观察窗口。A/B 使用 C 搜索档案事后评分。第 0 代代表固定档或 Zero 热启动。", "",
             "时间轴的前后轮接触量为各轮法向接触力向量之和的欧氏范数，单位 N。入障提前量取各自的前轮上游几何边界越过时刻减首次施加非零偏置时刻。平地、碎石、未越界或全零偏置的对应字段留空。", "",
             "每条候选均有单独的压缩 NPZ（200 Hz 轨迹、真实速度、交付参考与 50 Hz 奖励）及逐步奖励 CSV。各自按生成时实际 α 计分。索引的 raw、lane、knots_npz、knots_lane 定位完整原始轨迹与对应偏置。各案例的 selected_traces.npz 保存最佳候选与最佳固定档的时间序列，reward_parts.npz 保存重建奖励。", "",
             f'[候选索引]({os.path.relpath(stage/"candidates.csv",out)}) · [逐案例指标](cases.csv) · [分析与绘图墙钟](timing.json)。']
