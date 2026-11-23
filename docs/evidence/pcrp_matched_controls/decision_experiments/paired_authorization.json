@@ -1,0 +1,35 @@
+{
+  "decision": "matched_packing",
+  "decided_utc": "2026-11-23T08:51:26.847792+00:00",
+  "user_reply": "可以",
+  "issues_notice": "后续如果有问题要 bark 通知我",
+  "decision_question": "将额外诊断672条单列，E2/E1a按相同批次/车道排列重测对照，原计划上限9500",
+  "original_step0": "complete; historical mismatch retained",
+  "diagnostic": {
+    "separate": 672,
+    "matched": 672,
+    "report": "replay672/analysis/summary.json"
+  },
+  "main_experiment_rollout_cap": 9500,
+  "new_training_updates": 0,
+  "physics": "frozen H75/Local300 on original route, identities and all frequencies in step0/protocol.json",
+  "data_role": "previously examined groups 401–408, matched DEV",
+  "main_budget": {
+    "step0": 72,
+    "E2": 1240,
+    "E1a": 978,
+    "E1b_increment": 6846,
+    "E1c_reserved": 96,
+    "total_reserved": 9232,
+    "unallocated": 268
+  },
+  "matched_design": {
+    "E2": "DS: 24 fixed (layout, group) slots × 7 changes × 5 alpha. DV: 16 fixed (layout, group) slots × 5 speeds incl new axis-specific zero × 5 alpha. Within each axis all alpha and perturbations retain the same slot, origins, ordering and physics; primary grid remains 1160.",
+    "E1": "single physical slot per case, all six controls and 10 generations of exactly 32 candidates in this identical slot and batch. Pilot 3 slots; 21 further distinct cases in E1b only after flat control passes. No historical score as a paired control.",
+    "knots": "0 to 10 s, 0.25 s from 1 to 4 inclusive and 0.5 s elsewhere: exactly 27 knots / 54 dimensions. See attachment for approximate count.",
+    "E1c": "No change to the flat/gravel disturbance while applicability awaits the user. Reserve all 96 in budget."
+  },
+  "stop": "E2 one pass. Stop E1 if E1a flat control fails. No automatic optional extensions, no extra trials beyond registered cells. E1c undefined flat/gravel pending decision.",
+  "queue": "per whole physical batch through shared research-hub/.gpu-job.lock; E1a and E2 independently scheduled",
+  "notifications": "Bark at >30 min, and on errors, failed controls, unresolved blockers or stage completion; retain receipts"
+}

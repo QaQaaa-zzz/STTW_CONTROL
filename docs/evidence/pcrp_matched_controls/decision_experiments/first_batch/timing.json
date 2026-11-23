@@ -1,0 +1,8 @@
+{
+  "wall_s": 304.66227374901064,
+  "sampling_s": 159.555725812912,
+  "export_s": 2.5691936016082764,
+  "scoring_and_archive_s": 0.3443500529974699,
+  "lanes": 3,
+  "measured_wall_includes_queue": true
+}

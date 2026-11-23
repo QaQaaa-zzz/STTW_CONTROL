@@ -1,0 +1,66 @@
+{
+  "captured_utc": "2026-11-23T09:01:02.247857+00:00",
+  "raw_run_root": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122",
+  "stages": {
+    "E2": {
+      "ActiveState": "activating",
+      "SubState": "start",
+      "FragmentPath": "/run/user/1000/systemd/user/pcrp-matched-e2.service",
+      "dispatcher": {
+        "path": "paired_services/E2.json",
+        "stage": "running",
+        "updated_utc": "2026-11-23T08:57:44.246379+00:00",
+        "reserved": 1240
+      },
+      "worker": {
+        "path": "e2/status.json",
+        "stage": "running",
+        "completed_new": 0,
+        "active": "ds+0cm_a0"
+      }
+    },
+    "E1a": {
+      "ActiveState": "activating",
+      "SubState": "start",
+      "FragmentPath": "/run/user/1000/systemd/user/pcrp-matched-e1a.service",
+      "dispatcher": {
+        "path": "paired_services/E1a.json",
+        "stage": "running",
+        "updated_utc": "2026-11-23T08:57:08.635217+00:00",
+        "reserved": 978
+      },
+      "worker": {
+        "path": "e1/E1a/status.json",
+        "stage": "running",
+        "completed_new": 0,
+        "submitted_new": 3,
+        "generation": 0,
+        "subbatch": "warm/w00"
+      }
+    },
+    "E1b": {
+      "ActiveState": "inactive",
+      "SubState": "dead",
+      "FragmentPath": "/run/user/1000/systemd/user/pcrp-matched-e1b.service"
+    },
+    "E1c": {
+      "ActiveState": "inactive",
+      "SubState": "dead",
+      "FragmentPath": "/run/user/1000/systemd/user/pcrp-matched-e1c.service"
+    }
+  },
+  "prior_step0_batch_time": {
+    "step0/repeat_1/batch/status.json": {
+      "policy_steps": 500,
+      "physics_steps": 1800000,
+      "elapsed_s": 172.56878757476807,
+      "elapsed_with_output_s": 173.63721585273743
+    },
+    "step0/repeat_2/batch/status.json": {
+      "policy_steps": 500,
+      "physics_steps": 1800000,
+      "elapsed_s": 172.4276373386383,
+      "elapsed_with_output_s": 173.4040756225586
+    }
+  }
+}

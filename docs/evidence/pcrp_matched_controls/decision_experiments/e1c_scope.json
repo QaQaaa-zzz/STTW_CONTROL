@@ -1,0 +1,20 @@
+{
+  "user_confirmation": "用户授权自行判断并向前推进。四个平地和四个碎石案例无单脊中心；在相同物理槽保留原地形并回放名义赢家。",
+  "design": "same_slot_winner_replay",
+  "nonridge": {
+    "flat_original": null,
+    "gravel010": null
+  },
+  "nonridge_role": "unchanged_nominal_controls",
+  "primary_shifted_lanes": 64,
+  "nominal_control_lanes": 32,
+  "physical_lanes": 96,
+  "shifts_cm": [
+    -2,
+    -1,
+    1,
+    2
+  ],
+  "batches": "preserve the E1a three-slot and E1b twenty-one-slot ordering for each shift",
+  "statistics": "ridge robustness for 16 single-ridge cases; report 8 flat/gravel controls separately, with uncertainty for unmeasured gravel shifts in any whole-nonflat verdict."
+}

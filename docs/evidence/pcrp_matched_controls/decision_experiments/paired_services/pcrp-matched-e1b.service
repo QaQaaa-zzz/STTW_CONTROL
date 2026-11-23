@@ -1,0 +1,13 @@
+[Unit]
+Description=STTW PCRP matched E1b, shared GPU per physical batch
+Requires=pcrp-matched-e2.service pcrp-matched-e1a.service
+After=pcrp-matched-e2.service pcrp-matched-e1a.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+TimeoutStartSec=infinity
+TimeoutStopSec=45s
+WorkingDirectory=/home/qy/STTW_CONTROL/runs/worktrees/sttw-gravel
+ExecStart=/usr/bin/python3 -u /media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/dispatch_paired.py E1b run
+ExecStopPost=/usr/bin/python3 -u /media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/dispatch_paired.py E1b stopped

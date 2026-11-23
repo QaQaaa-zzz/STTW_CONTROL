@@ -1,0 +1,253 @@
+{
+  "stage": "E1a",
+  "times_s": [
+    0.0,
+    0.5,
+    1.0,
+    1.25,
+    1.5,
+    1.75,
+    2.0,
+    2.25,
+    2.5,
+    2.75,
+    3.0,
+    3.25,
+    3.5,
+    3.75,
+    4.0,
+    4.5,
+    5.0,
+    5.5,
+    6.0,
+    6.5,
+    7.0,
+    7.5,
+    8.0,
+    8.5,
+    9.0,
+    9.5,
+    10.0
+  ],
+  "dimensions": 54,
+  "random_seed": 401,
+  "rng": "PCG64 SeedSequence([random_seed, index in declared six layouts, physical group])",
+  "population": 32,
+  "elites": 6,
+  "generations": 10,
+  "mean": "0.7 * current elite mean + 0.3 * previous mean",
+  "sigma": "Population std of current six elites with per-channel floors",
+  "initial_std": [
+    0.4,
+    0.1
+  ],
+  "std_floors": [
+    0.02,
+    0.005
+  ],
+  "bounds": [
+    [
+      -1.25,
+      -0.4
+    ],
+    [
+      1.25,
+      0.4
+    ]
+  ],
+  "sampler": "Independent diagonal Gaussian then clip to bounds",
+  "incumbent": "minimum V over six warm-start and all search candidates; ties retain earliest",
+  "alpha_seed": "minimum V over five fixed H75; ties retain earliest",
+  "budget": 978,
+  "new_budget": 978,
+  "packing": "One fixed physical slot per case. Six warm-start batches then 32 single-candidate batches per generation. Order, terrain inventory and native world origins stay fixed across all 326 batches.",
+  "stage_batch_size": 3,
+  "warm_start_archive_reuse": 0,
+  "candidates_per_generation": 32,
+  "reference_scope": "Five fixed alphas and Zero measured in each candidate slot within this stage",
+  "counted_budget": {
+    "step0": 72,
+    "E2": 1240,
+    "E1a": 978,
+    "E1b": 6846,
+    "E1c_reserved": 96,
+    "total_reserved": 9232,
+    "cap": 9500,
+    "separate_replay672": 672
+  },
+  "role": "Privileged case-specific feasibility search on previously examined DEV groups",
+  "times_sha256_f64le": "ffea137c9a4008e0c8d2a1d06e8c0b845ada3dba7b0a237b71fc5080ccfbb194",
+  "reference_bias_timing": "50 Hz before original 200 Hz shaper; shared across each four lower ticks",
+  "cases": [
+    {
+      "case": "flat_original_v2.6_seed401",
+      "layout": "flat_original",
+      "group": 401,
+      "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s4.2_length0.8_oblique0.25_h0",
+      "terrain_sha256": "27bad36d188834082a9d41edfb1249b049afcc267623d2705bf3c29805f88c4c",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/position/flat_original_v2.6_seed401",
+      "slot": 0,
+      "randomization": {
+        "base_body": "chasis",
+        "friction_range": [
+          0.820328375903832,
+          0.820328375903832
+        ],
+        "mass_scale": [
+          0.9945363548999354,
+          0.9945363548999354
+        ],
+        "base_com_m": [
+          0,
+          0
+        ],
+        "latency_s": [
+          0.0,
+          0.0
+        ],
+        "servo_gain_scale": [
+          0.9932037842455803,
+          0.9932037842455803
+        ],
+        "steer_zero_offset_rad": [
+          0.0011024138621809876,
+          0.0011024138621809876
+        ],
+        "measurement_noise": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "push_interval_s": 1000000000,
+        "push_velocity_range": {
+          "x": [
+            0,
+            0
+          ],
+          "y": [
+            0,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "case": "position_s4.2_v2.6_seed401",
+      "layout": "position_s4.2",
+      "group": 401,
+      "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s4.2_length0.8_oblique0.25_h0.1",
+      "terrain_sha256": "3307e0c03ae090a01d7e4af7d0271613c2dd68eb6fb3c4b626297256d98161f6",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/position/position_s4.2_v2.6_seed401",
+      "slot": 1,
+      "randomization": {
+        "base_body": "chasis",
+        "friction_range": [
+          0.820328375903832,
+          0.820328375903832
+        ],
+        "mass_scale": [
+          0.9945363548999354,
+          0.9945363548999354
+        ],
+        "base_com_m": [
+          0,
+          0
+        ],
+        "latency_s": [
+          0.0,
+          0.0
+        ],
+        "servo_gain_scale": [
+          0.9932037842455803,
+          0.9932037842455803
+        ],
+        "steer_zero_offset_rad": [
+          0.0011024138621809876,
+          0.0011024138621809876
+        ],
+        "measurement_noise": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "push_interval_s": 1000000000,
+        "push_velocity_range": {
+          "x": [
+            0,
+            0
+          ],
+          "y": [
+            0,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "case": "position_s4.5_v2.6_seed401",
+      "layout": "position_s4.5",
+      "group": 401,
+      "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s4.5_length0.8_oblique0.25_h0.1",
+      "terrain_sha256": "32f13e780186a6a67ce246e9c0fabc50a13be61d380a50b5211e66446e1fc17c",
+      "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/position/position_s4.5_v2.6_seed401",
+      "slot": 2,
+      "randomization": {
+        "base_body": "chasis",
+        "friction_range": [
+          0.820328375903832,
+          0.820328375903832
+        ],
+        "mass_scale": [
+          0.9945363548999354,
+          0.9945363548999354
+        ],
+        "base_com_m": [
+          0,
+          0
+        ],
+        "latency_s": [
+          0.0,
+          0.0
+        ],
+        "servo_gain_scale": [
+          0.9932037842455803,
+          0.9932037842455803
+        ],
+        "steer_zero_offset_rad": [
+          0.0011024138621809876,
+          0.0011024138621809876
+        ],
+        "measurement_noise": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "push_interval_s": 1000000000,
+        "push_velocity_range": {
+          "x": [
+            0,
+            0
+          ],
+          "y": [
+            0,
+            0
+          ]
+        }
+      }
+    }
+  ],
+  "step0_protocol_sha256": "22628183880b2bc6930f8767819626e0b9c6b72e4ca8b92e56fe24af8b8f249c",
+  "replay672_summary_sha256": "bfe6499717fe6cd6a6578aad05884e6528293837fc64d8c751ef246ed27039fa"
+}

@@ -1,0 +1,19 @@
+{
+  "primary_f_alpha": "At DS zero, 3 centers x 8 groups x 4 adjacent alphas, 96 pairs. Each comparison keeps the global slot and world origin fixed.",
+  "geometry_flips": "3 centers x 8 groups x 5 alphas x 6 adjacent geometric shifts, 720 pairs. DS zero is the new 24-lane packing.",
+  "speed_flips": "3 centers x 4 groups x 5 alphas x 4 velocity adjacencies including the new DV zero at the same physical slot, 240 pairs. Flat 80 with its own DV zero.",
+  "primary_verdict": "Retain primary threshold comparison against the single 96-edge DS nominal-center f_alpha. In the group-matched sensitivity calculation compare f_v to f_alpha measured in DV's own zero-speed four-group grid (48 edges); all-shifts comparison uses the corresponding axis. Report differences across these classifications.",
+  "mixed_chain": "Restrict to single-group ordered chains containing both completion outcomes.",
+  "mixed_group_cell": "Restrict to adjacent edges where at least one of the endpoint operating settings contains both completion outcomes across physical groups.",
+  "smoothed_reversal": "7 shifts x 8 groups per center and alpha. Strictly P(alpha0)>P(alpha1) at 3.9m and reverse at 4.5m.",
+  "confidence": "10000 resamples of whole groups with replacement; 2.5th and 97.5th percentiles, retain original mixed subsets. Descriptive only.",
+  "bootstrap_seed": 401,
+  "zero_f_alpha": "If all flip fractions zero, comparison has no alpha contrast; report as degenerate. Positive perturbation flip fraction with corresponding zero alpha contrast satisfies phase criterion.",
+  "flat_control": "Show flip count and rate; any observed flat flip prompts review. Proposal does not give a numerical near-zero cutoff.",
+  "entry": "First 200Hz observed front-wheel center crossing of q=s-sc-0.25 n=-0.4 m on finite ridge width; retain missing arrivals in count.",
+  "margin": "Actual Euler roll derivative, B_nom=6146.05 deg/s², phi_limit=0.70rad. Include 200Hz time, H, vertical front and rear net contact forces to actual terminal tick.",
+  "source_code": "learning/cli/analyze_pcrp_e2.py",
+  "paper_archive_check": "From published S2 source 3.9m and 4.5m x two endpoint alphas x four groups, mean v,roll,steer at entry reproduce all 12 printed Table IV values to three decimals.",
+  "e2_execution": "Physics requires the user's matched-packing authorization and completed 672/672 archived-order replay. See ../paired_authorization.json; this predeclared analysis alone reports no E2 results.",
+  "matching": "DS: 35 batches x 24 slots. DV: 25 batches x 16 slots. Compare shifts and alphas only within the same axis/physical group/physical slot/world origin. Source identity comes from split and aggregate runtime contracts. Both grids include new per-axis zero controls; the 80 additional DV controls are excluded from primary-episode counts."
+}

@@ -1,0 +1,14 @@
+{
+  "stage": "CPU_checked",
+  "design": "matched_packing",
+  "primary_conditions": 1160,
+  "physical_lanes": 1240,
+  "dv_extra_zero_lanes": 80,
+  "ds_batches": 35,
+  "ds_lanes_per_batch": 24,
+  "dv_batches": 25,
+  "dv_lanes_per_batch": 16,
+  "matched_fields": "Each layout and group retains its original alpha0 world origin and identical physical slot in every alpha and perturbation batch. Within shift only alpha may change; within alpha only the designated perturbation may change.",
+  "alignment_file": "paired_lanes.csv",
+  "rollouts_launched_by_prepare": 0
+}

@@ -1,0 +1,212 @@
+[
+  {
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds-4cm",
+    "center_m": 3.9,
+    "ds_cm": -4,
+    "actual_center_m": 3.86,
+    "terrain_sha256": "ff9a15c918c4aa3dfeebec207dea0c7a82b34c3783b4d7dc4b2d2924ca464dcd",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "cells_changed_from_original": 77,
+    "max_height_change_m": 0.015
+  },
+  {
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds-2cm",
+    "center_m": 3.9,
+    "ds_cm": -2,
+    "actual_center_m": 3.88,
+    "terrain_sha256": "17fa92e743b8ba26e48b76e388df2b978bd5e93b5d0565a09495bfae5dba1ae2",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "cells_changed_from_original": 55,
+    "max_height_change_m": 0.01
+  },
+  {
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds-1cm",
+    "center_m": 3.9,
+    "ds_cm": -1,
+    "actual_center_m": 3.89,
+    "terrain_sha256": "cf989b0fd0fabfd035c563bf4c9424d918cb565769a0e4b4c8aa02bff84faa71",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "cells_changed_from_original": 32,
+    "max_height_change_m": 0.005
+  },
+  {
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+    "center_m": 3.9,
+    "ds_cm": 0,
+    "actual_center_m": 3.9,
+    "terrain_sha256": "060724442a07dd10a7edd884cd44dd2764dafc0c0b48759026d12586c1d70735",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "cells_changed_from_original": 0,
+    "max_height_change_m": 0.0
+  },
+  {
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds+1cm",
+    "center_m": 3.9,
+    "ds_cm": 1,
+    "actual_center_m": 3.91,
+    "terrain_sha256": "dd151ffdf7cfb03adb96cef4f1dac688ed0bdd6bc6ea4b3a85dab8493a0c35e1",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "cells_changed_from_original": 33,
+    "max_height_change_m": 0.005
+  },
+  {
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds+2cm",
+    "center_m": 3.9,
+    "ds_cm": 2,
+    "actual_center_m": 3.92,
+    "terrain_sha256": "437d928d5c430e439ed1ed2599167154dfd7f8656ba58e59439a49d50f396f9f",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "cells_changed_from_original": 58,
+    "max_height_change_m": 0.01
+  },
+  {
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds+4cm",
+    "center_m": 3.9,
+    "ds_cm": 4,
+    "actual_center_m": 3.94,
+    "terrain_sha256": "bad06e2764706b06c84f589ec859cb3a5584d322b89b25a79b9623daf40825ac",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "cells_changed_from_original": 74,
+    "max_height_change_m": 0.015
+  },
+  {
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s4.2_ds-4cm",
+    "center_m": 4.2,
+    "ds_cm": -4,
+    "actual_center_m": 4.16,
+    "terrain_sha256": "2c02d735759dfd16d4a054837e7fd0001bda7f22ce88444874bed4682e58832c",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "cells_changed_from_original": 77,
+    "max_height_change_m": 0.015
+  },
+  {
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s4.2_ds-2cm",
+    "center_m": 4.2,
+    "ds_cm": -2,
+    "actual_center_m": 4.18,
+    "terrain_sha256": "ff6717df2c596e76aa4b190f94188b7b209d77587437e122c6fcb9530dfd89fb",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "cells_changed_from_original": 57,
+    "max_height_change_m": 0.01
+  },
+  {
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s4.2_ds-1cm",
+    "center_m": 4.2,
+    "ds_cm": -1,
+    "actual_center_m": 4.19,
+    "terrain_sha256": "31ff269857be5fade21d5330184b867ecb70ea78093f464cb55c053053e1e3e7",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "cells_changed_from_original": 34,
+    "max_height_change_m": 0.005
+  },
+  {
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s4.2_length0.8_oblique0.25_h0.1",
+    "center_m": 4.2,
+    "ds_cm": 0,
+    "actual_center_m": 4.2,
+    "terrain_sha256": "3307e0c03ae090a01d7e4af7d0271613c2dd68eb6fb3c4b626297256d98161f6",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "cells_changed_from_original": 0,
+    "max_height_change_m": 0.0
+  },
+  {
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s4.2_ds+1cm",
+    "center_m": 4.2,
+    "ds_cm": 1,
+    "actual_center_m": 4.21,
+    "terrain_sha256": "9020bfe4e116bddd2f9592c073f931c5f68d32df9ba431c3ddb2f0c02bc2e085",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "cells_changed_from_original": 34,
+    "max_height_change_m": 0.005
+  },
+  {
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s4.2_ds+2cm",
+    "center_m": 4.2,
+    "ds_cm": 2,
+    "actual_center_m": 4.22,
+    "terrain_sha256": "a2cd697deafcd6b79f1e15a29db739732114c2d6d4b70fe02db157147cd77d90",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "cells_changed_from_original": 53,
+    "max_height_change_m": 0.01
+  },
+  {
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s4.2_ds+4cm",
+    "center_m": 4.2,
+    "ds_cm": 4,
+    "actual_center_m": 4.24,
+    "terrain_sha256": "f294ba2251677ee717ddd995478d3d28f8dc7a96e656d2825299470f493f05a3",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "cells_changed_from_original": 80,
+    "max_height_change_m": 0.015
+  },
+  {
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s4.5_ds-4cm",
+    "center_m": 4.5,
+    "ds_cm": -4,
+    "actual_center_m": 4.46,
+    "terrain_sha256": "acc5c432b07f59d98051ddf99573e6a3fbcf77995095afe8da40a98c3a0eebfa",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "cells_changed_from_original": 79,
+    "max_height_change_m": 0.015
+  },
+  {
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s4.5_ds-2cm",
+    "center_m": 4.5,
+    "ds_cm": -2,
+    "actual_center_m": 4.48,
+    "terrain_sha256": "a3d81df1f2deb7349fe82f6d95933e9234cb574da524bff2c8ed6033f0947052",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "cells_changed_from_original": 58,
+    "max_height_change_m": 0.01
+  },
+  {
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s4.5_ds-1cm",
+    "center_m": 4.5,
+    "ds_cm": -1,
+    "actual_center_m": 4.49,
+    "terrain_sha256": "48f02f780b92c07520a2d6abf92d1c34e7e8a48fdc7ae4078cb9629938a754e7",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "cells_changed_from_original": 35,
+    "max_height_change_m": 0.005
+  },
+  {
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s4.5_length0.8_oblique0.25_h0.1",
+    "center_m": 4.5,
+    "ds_cm": 0,
+    "actual_center_m": 4.5,
+    "terrain_sha256": "32f13e780186a6a67ce246e9c0fabc50a13be61d380a50b5211e66446e1fc17c",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "cells_changed_from_original": 0,
+    "max_height_change_m": 0.0
+  },
+  {
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s4.5_ds+1cm",
+    "center_m": 4.5,
+    "ds_cm": 1,
+    "actual_center_m": 4.51,
+    "terrain_sha256": "adac608db293f3091e7c89eaa1f4bc0d54c4b78dd3e460b7ba00403e67f60316",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "cells_changed_from_original": 33,
+    "max_height_change_m": 0.005
+  },
+  {
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s4.5_ds+2cm",
+    "center_m": 4.5,
+    "ds_cm": 2,
+    "actual_center_m": 4.52,
+    "terrain_sha256": "0aff6e64352dfc82706570d62822802752985eb69cf6ed06bffc7960708c517d",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "cells_changed_from_original": 56,
+    "max_height_change_m": 0.01
+  },
+  {
+    "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s4.5_ds+4cm",
+    "center_m": 4.5,
+    "ds_cm": 4,
+    "actual_center_m": 4.54,
+    "terrain_sha256": "613824e1fabb75dd726e86161890bf4be8c38d2600388dc13f3e3fdb756547d7",
+    "route_sha256": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "cells_changed_from_original": 73,
+    "max_height_change_m": 0.015
+  }
+]

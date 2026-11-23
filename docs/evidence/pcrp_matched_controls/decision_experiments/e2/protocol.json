@@ -1,0 +1,646 @@
+{
+  "counts": {
+    "E2a": 840,
+    "E2b": 240,
+    "E2c": 80
+  },
+  "new": 1240,
+  "reused": 0,
+  "batches": [
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds+0cm_a0",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "ds",
+      "alpha": 0.0,
+      "shift": 0,
+      "zero_batch": "ds+0cm_a0",
+      "alpha0_batch": "ds+0cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds+0cm_a0.25",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "ds",
+      "alpha": 0.25,
+      "shift": 0,
+      "zero_batch": "ds+0cm_a0.25",
+      "alpha0_batch": "ds+0cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds+0cm_a0.5",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "ds",
+      "alpha": 0.5,
+      "shift": 0,
+      "zero_batch": "ds+0cm_a0.5",
+      "alpha0_batch": "ds+0cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds+0cm_a0.75",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "ds",
+      "alpha": 0.75,
+      "shift": 0,
+      "zero_batch": "ds+0cm_a0.75",
+      "alpha0_batch": "ds+0cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds+0cm_a1",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "ds",
+      "alpha": 1.0,
+      "shift": 0,
+      "zero_batch": "ds+0cm_a1",
+      "alpha0_batch": "ds+0cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds-4cm_a0",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds-4cm",
+      "axis": "ds",
+      "alpha": 0.0,
+      "shift": -4,
+      "zero_batch": "ds+0cm_a0",
+      "alpha0_batch": "ds-4cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds-4cm_a0.25",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds-4cm",
+      "axis": "ds",
+      "alpha": 0.25,
+      "shift": -4,
+      "zero_batch": "ds+0cm_a0.25",
+      "alpha0_batch": "ds-4cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds-4cm_a0.5",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds-4cm",
+      "axis": "ds",
+      "alpha": 0.5,
+      "shift": -4,
+      "zero_batch": "ds+0cm_a0.5",
+      "alpha0_batch": "ds-4cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds-4cm_a0.75",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds-4cm",
+      "axis": "ds",
+      "alpha": 0.75,
+      "shift": -4,
+      "zero_batch": "ds+0cm_a0.75",
+      "alpha0_batch": "ds-4cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds-4cm_a1",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds-4cm",
+      "axis": "ds",
+      "alpha": 1.0,
+      "shift": -4,
+      "zero_batch": "ds+0cm_a1",
+      "alpha0_batch": "ds-4cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds-2cm_a0",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds-2cm",
+      "axis": "ds",
+      "alpha": 0.0,
+      "shift": -2,
+      "zero_batch": "ds+0cm_a0",
+      "alpha0_batch": "ds-2cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds-2cm_a0.25",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds-2cm",
+      "axis": "ds",
+      "alpha": 0.25,
+      "shift": -2,
+      "zero_batch": "ds+0cm_a0.25",
+      "alpha0_batch": "ds-2cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds-2cm_a0.5",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds-2cm",
+      "axis": "ds",
+      "alpha": 0.5,
+      "shift": -2,
+      "zero_batch": "ds+0cm_a0.5",
+      "alpha0_batch": "ds-2cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds-2cm_a0.75",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds-2cm",
+      "axis": "ds",
+      "alpha": 0.75,
+      "shift": -2,
+      "zero_batch": "ds+0cm_a0.75",
+      "alpha0_batch": "ds-2cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds-2cm_a1",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds-2cm",
+      "axis": "ds",
+      "alpha": 1.0,
+      "shift": -2,
+      "zero_batch": "ds+0cm_a1",
+      "alpha0_batch": "ds-2cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds-1cm_a0",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds-1cm",
+      "axis": "ds",
+      "alpha": 0.0,
+      "shift": -1,
+      "zero_batch": "ds+0cm_a0",
+      "alpha0_batch": "ds-1cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds-1cm_a0.25",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds-1cm",
+      "axis": "ds",
+      "alpha": 0.25,
+      "shift": -1,
+      "zero_batch": "ds+0cm_a0.25",
+      "alpha0_batch": "ds-1cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds-1cm_a0.5",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds-1cm",
+      "axis": "ds",
+      "alpha": 0.5,
+      "shift": -1,
+      "zero_batch": "ds+0cm_a0.5",
+      "alpha0_batch": "ds-1cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds-1cm_a0.75",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds-1cm",
+      "axis": "ds",
+      "alpha": 0.75,
+      "shift": -1,
+      "zero_batch": "ds+0cm_a0.75",
+      "alpha0_batch": "ds-1cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds-1cm_a1",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds-1cm",
+      "axis": "ds",
+      "alpha": 1.0,
+      "shift": -1,
+      "zero_batch": "ds+0cm_a1",
+      "alpha0_batch": "ds-1cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds+1cm_a0",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds+1cm",
+      "axis": "ds",
+      "alpha": 0.0,
+      "shift": 1,
+      "zero_batch": "ds+0cm_a0",
+      "alpha0_batch": "ds+1cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds+1cm_a0.25",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds+1cm",
+      "axis": "ds",
+      "alpha": 0.25,
+      "shift": 1,
+      "zero_batch": "ds+0cm_a0.25",
+      "alpha0_batch": "ds+1cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds+1cm_a0.5",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds+1cm",
+      "axis": "ds",
+      "alpha": 0.5,
+      "shift": 1,
+      "zero_batch": "ds+0cm_a0.5",
+      "alpha0_batch": "ds+1cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds+1cm_a0.75",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds+1cm",
+      "axis": "ds",
+      "alpha": 0.75,
+      "shift": 1,
+      "zero_batch": "ds+0cm_a0.75",
+      "alpha0_batch": "ds+1cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds+1cm_a1",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds+1cm",
+      "axis": "ds",
+      "alpha": 1.0,
+      "shift": 1,
+      "zero_batch": "ds+0cm_a1",
+      "alpha0_batch": "ds+1cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds+2cm_a0",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds+2cm",
+      "axis": "ds",
+      "alpha": 0.0,
+      "shift": 2,
+      "zero_batch": "ds+0cm_a0",
+      "alpha0_batch": "ds+2cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds+2cm_a0.25",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds+2cm",
+      "axis": "ds",
+      "alpha": 0.25,
+      "shift": 2,
+      "zero_batch": "ds+0cm_a0.25",
+      "alpha0_batch": "ds+2cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds+2cm_a0.5",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds+2cm",
+      "axis": "ds",
+      "alpha": 0.5,
+      "shift": 2,
+      "zero_batch": "ds+0cm_a0.5",
+      "alpha0_batch": "ds+2cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds+2cm_a0.75",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds+2cm",
+      "axis": "ds",
+      "alpha": 0.75,
+      "shift": 2,
+      "zero_batch": "ds+0cm_a0.75",
+      "alpha0_batch": "ds+2cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds+2cm_a1",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds+2cm",
+      "axis": "ds",
+      "alpha": 1.0,
+      "shift": 2,
+      "zero_batch": "ds+0cm_a1",
+      "alpha0_batch": "ds+2cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds+4cm_a0",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds+4cm",
+      "axis": "ds",
+      "alpha": 0.0,
+      "shift": 4,
+      "zero_batch": "ds+0cm_a0",
+      "alpha0_batch": "ds+4cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds+4cm_a0.25",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds+4cm",
+      "axis": "ds",
+      "alpha": 0.25,
+      "shift": 4,
+      "zero_batch": "ds+0cm_a0.25",
+      "alpha0_batch": "ds+4cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds+4cm_a0.5",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds+4cm",
+      "axis": "ds",
+      "alpha": 0.5,
+      "shift": 4,
+      "zero_batch": "ds+0cm_a0.5",
+      "alpha0_batch": "ds+4cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds+4cm_a0.75",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds+4cm",
+      "axis": "ds",
+      "alpha": 0.75,
+      "shift": 4,
+      "zero_batch": "ds+0cm_a0.75",
+      "alpha0_batch": "ds+4cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/ds+4cm_a1",
+      "lanes": 24,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds+4cm",
+      "axis": "ds",
+      "alpha": 1.0,
+      "shift": 4,
+      "zero_batch": "ds+0cm_a1",
+      "alpha0_batch": "ds+4cm_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv+0.00_a0",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 0.0,
+      "shift": 0.0,
+      "zero_batch": "dv+0.00_a0",
+      "alpha0_batch": "dv+0.00_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv+0.00_a0.25",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 0.25,
+      "shift": 0.0,
+      "zero_batch": "dv+0.00_a0.25",
+      "alpha0_batch": "dv+0.00_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv+0.00_a0.5",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 0.5,
+      "shift": 0.0,
+      "zero_batch": "dv+0.00_a0.5",
+      "alpha0_batch": "dv+0.00_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv+0.00_a0.75",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 0.75,
+      "shift": 0.0,
+      "zero_batch": "dv+0.00_a0.75",
+      "alpha0_batch": "dv+0.00_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv+0.00_a1",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 1.0,
+      "shift": 0.0,
+      "zero_batch": "dv+0.00_a1",
+      "alpha0_batch": "dv+0.00_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv-0.02_a0",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 0.0,
+      "shift": -0.02,
+      "zero_batch": "dv+0.00_a0",
+      "alpha0_batch": "dv-0.02_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv-0.02_a0.25",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 0.25,
+      "shift": -0.02,
+      "zero_batch": "dv+0.00_a0.25",
+      "alpha0_batch": "dv-0.02_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv-0.02_a0.5",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 0.5,
+      "shift": -0.02,
+      "zero_batch": "dv+0.00_a0.5",
+      "alpha0_batch": "dv-0.02_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv-0.02_a0.75",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 0.75,
+      "shift": -0.02,
+      "zero_batch": "dv+0.00_a0.75",
+      "alpha0_batch": "dv-0.02_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv-0.02_a1",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 1.0,
+      "shift": -0.02,
+      "zero_batch": "dv+0.00_a1",
+      "alpha0_batch": "dv-0.02_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv-0.01_a0",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 0.0,
+      "shift": -0.01,
+      "zero_batch": "dv+0.00_a0",
+      "alpha0_batch": "dv-0.01_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv-0.01_a0.25",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 0.25,
+      "shift": -0.01,
+      "zero_batch": "dv+0.00_a0.25",
+      "alpha0_batch": "dv-0.01_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv-0.01_a0.5",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 0.5,
+      "shift": -0.01,
+      "zero_batch": "dv+0.00_a0.5",
+      "alpha0_batch": "dv-0.01_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv-0.01_a0.75",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 0.75,
+      "shift": -0.01,
+      "zero_batch": "dv+0.00_a0.75",
+      "alpha0_batch": "dv-0.01_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv-0.01_a1",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 1.0,
+      "shift": -0.01,
+      "zero_batch": "dv+0.00_a1",
+      "alpha0_batch": "dv-0.01_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv+0.01_a0",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 0.0,
+      "shift": 0.01,
+      "zero_batch": "dv+0.00_a0",
+      "alpha0_batch": "dv+0.01_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv+0.01_a0.25",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 0.25,
+      "shift": 0.01,
+      "zero_batch": "dv+0.00_a0.25",
+      "alpha0_batch": "dv+0.01_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv+0.01_a0.5",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 0.5,
+      "shift": 0.01,
+      "zero_batch": "dv+0.00_a0.5",
+      "alpha0_batch": "dv+0.01_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv+0.01_a0.75",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 0.75,
+      "shift": 0.01,
+      "zero_batch": "dv+0.00_a0.75",
+      "alpha0_batch": "dv+0.01_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv+0.01_a1",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 1.0,
+      "shift": 0.01,
+      "zero_batch": "dv+0.00_a1",
+      "alpha0_batch": "dv+0.01_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv+0.02_a0",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 0.0,
+      "shift": 0.02,
+      "zero_batch": "dv+0.00_a0",
+      "alpha0_batch": "dv+0.02_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv+0.02_a0.25",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 0.25,
+      "shift": 0.02,
+      "zero_batch": "dv+0.00_a0.25",
+      "alpha0_batch": "dv+0.02_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv+0.02_a0.5",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 0.5,
+      "shift": 0.02,
+      "zero_batch": "dv+0.00_a0.5",
+      "alpha0_batch": "dv+0.02_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv+0.02_a0.75",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 0.75,
+      "shift": 0.02,
+      "zero_batch": "dv+0.00_a0.75",
+      "alpha0_batch": "dv+0.02_a0"
+    },
+    {
+      "directory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/matched/dv+0.02_a1",
+      "lanes": 16,
+      "first_terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "axis": "dv",
+      "alpha": 1.0,
+      "shift": 0.02,
+      "zero_batch": "dv+0.00_a1",
+      "alpha0_batch": "dv+0.02_a0"
+    }
+  ],
+  "packing": "matched_packing",
+  "single_alpha_batches": true,
+  "extra_dv_zero": 80,
+  "primary": 1160,
+  "wall_s_scope": "shared GPU queue waiting time plus process startup, simulation, output, and shutdown",
+  "historical_step0": false,
+  "gate": "Require user matched_packing decision, completed original step0 and successful 672/672 replay",
+  "bundle": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_selected_local300_flat/bundle",
+  "input_state_sha256": "7c2849dc467f5d9c03a11675b59d88abfac7e92e6545cfc228fa621456c024b1",
+  "initial_speed_increment": "Horizontal root-link velocity along the yaw direction used by TorchVehicleSignals.observe",
+  "initial_states": [
+    {
+      "dv_m_s": -0.02,
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/initial_states/dv-0.02.npz",
+      "sha256": "db19ae2cf43d2bbbdb7121227418a565c54231b1e118eda471a9a018e0dfcc39"
+    },
+    {
+      "dv_m_s": -0.01,
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/initial_states/dv-0.01.npz",
+      "sha256": "b3cd1afa665a3292e8739e1010e58c7effde7baeec183056875293c52c5ef379"
+    },
+    {
+      "dv_m_s": 0.01,
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/initial_states/dv+0.01.npz",
+      "sha256": "e38269c65bf34fed702aa7c6974173038c0af1a40fb8b891150137a9847fb7f9"
+    },
+    {
+      "dv_m_s": 0.02,
+      "path": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/initial_states/dv+0.02.npz",
+      "sha256": "835358b700a1d0b8206cab6735f58f34a36fc8b7861ebf49b80097dd8befb218"
+    }
+  ],
+  "archive_batch": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/position/batches/batch_000",
+  "role": "Previously examined physical groups 401-408 DEV",
+  "stop": "One pass of the declared design; no automatic additional samples."
+}
