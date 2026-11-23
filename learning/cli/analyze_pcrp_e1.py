@@ -239,13 +239,17 @@ def report_case(name, rows, out):
         d,e = data[id(row)], events[id(row)]
         for (key,ylabel),ax in zip(fields,axes.flat):
             clock = d["bias_time_s"] if key.startswith("bias") else d["time_s"]
-            ax.plot(clock, d[key], ls, color=color, lw=1.1, label=label)
+            ax.plot(clock, d[key], ls, color=color, lw=1.1, label=label,
+                    drawstyle="steps-post" if key.startswith("bias") else "default")
             ax.set_ylabel(ylabel)
         ax = axes[-1,-1]
         for key,marker in [("front_normal_resultant_N","o"),("rear_normal_resultant_N","x")]:
             ax.plot(d["time_s"],d[key],ls,color=color,label=label+" "+key.split("_")[0],
                     marker=marker,ms=3,markevery=max(len(d[key])//14,1),lw=.9)
         ax.set_ylabel("Wheel normal resultant norm (N)")
+        if e["first_nonzero_bias_s"] is not None:
+            for sub in axes[0]:
+                sub.axvline(e["first_nonzero_bias_s"], color=color, lw=1.1, ls="-.")
         for sub in axes.flat:
             if e["entry_s"] is not None:
                 sub.axvline(e["entry_s"], color=color, lw=.8, ls=":")
@@ -257,7 +261,16 @@ def report_case(name, rows, out):
         ax.set_xlabel("Time (s)")
     axes[0,0].legend(fontsize=8)
     axes[-1,-1].legend(fontsize=7,ncol=2)
-    fig.suptitle(name+" · best fixed H75 and oracle incumbent · dotted vertical: front-wheel upstream crossing")
+    onset = events[id(best)]["first_nonzero_bias_s"]
+    lead = events[id(best)]["lead_before_entry_s"]
+    if onset is None:
+        note = "Incumbent retains zero bias throughout"
+    else:
+        note = f"First nonzero bias at {onset:.3f} s"
+        if lead is not None:
+            note += f" ({abs(lead):.3f} s {'before' if lead >= 0 else 'after'} measured entry)"
+    fig.suptitle(name+" · best fixed H75 and oracle incumbent\n"+note+" · dotted: front-wheel entry")
+
     finish(fig,out/"timeline.png")
 
     scores, closure = policy_rewards(best)
