@@ -1,0 +1,68 @@
+{
+  "scope": "First of four planned P0-B batches; fixed development cases, exploratory interim; no selection until both maps and all four batches. Bounds concern finite-library potential, not deployed success rates or sampling confidence intervals.",
+  "batch": "right_offset/part_0",
+  "roots": [
+    1171,
+    1172,
+    1173,
+    1174,
+    1175,
+    1176
+  ],
+  "physical_lanes": 2268,
+  "planned_prefixes": 324,
+  "prefix_quality": {
+    "matched": 272,
+    "unmatched_other": 23,
+    "unmatched_no_handback_before_any_exit": 29
+  },
+  "physical_run": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p0b_20261123/right_offset/part_0",
+  "elapsed": {
+    "returncode": 0,
+    "seconds": 629.3788620510022
+  },
+  "contracts_per_cell": 72,
+  "strict_bounds_in_contract_counts": {
+    "A": [
+      35,
+      59
+    ],
+    "B": [
+      24,
+      56
+    ],
+    "B-A": [
+      -35,
+      21
+    ],
+    "C": [
+      48,
+      70
+    ],
+    "C-A": [
+      5,
+      31
+    ],
+    "D": [
+      40,
+      69
+    ],
+    "D-A": [
+      -19,
+      34
+    ],
+    "D-B": [
+      5,
+      39
+    ],
+    "D-B-C+A": [
+      -26,
+      34
+    ],
+    "D-C": [
+      -30,
+      21
+    ]
+  },
+  "partial_estimator": "For any uncertified prefix, allow every binary branch outcome. A/B share their old entry set with C/D respectively. Aggregate lower and upper bounds over pre-observation shared choices."
+}
