@@ -1,0 +1,48 @@
+{
+  "stage": "complete",
+  "passed": false,
+  "repeats": [
+    {
+      "repeat": 1,
+      "lanes": 36,
+      "wall_s": 180.9452659059898,
+      "sampling_s": 172.56878757476807,
+      "init_and_shutdown_s": 7.308050053252373,
+      "export_s": 1.0684282779693604
+    },
+    {
+      "repeat": 2,
+      "lanes": 36,
+      "wall_s": 180.75112612801604,
+      "sampling_s": 172.4276373386383,
+      "init_and_shutdown_s": 7.347050505457446,
+      "export_s": 0.9764382839202881
+    }
+  ],
+  "completed_rollouts": 72,
+  "gate": "mismatch",
+  "totals": {
+    "repeat_1_vs_2": {
+      "passed": 36,
+      "times_equal": 36,
+      "xy_close": 36,
+      "xy_bitwise": 36,
+      "terminal_equal": 36
+    },
+    "repeat_1_vs_archive": {
+      "passed": 0,
+      "times_equal": 21,
+      "xy_close": 0,
+      "xy_bitwise": 0,
+      "terminal_equal": 31
+    },
+    "repeat_2_vs_archive": {
+      "passed": 0,
+      "times_equal": 21,
+      "xy_close": 0,
+      "xy_bitwise": 0,
+      "terminal_equal": 31
+    }
+  },
+  "analysis_plot_s": 1.6340675380197354
+}

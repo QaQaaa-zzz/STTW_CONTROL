@@ -1,0 +1,31 @@
+{
+  "archive": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/position",
+  "original_cases": [
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/position/flat_original_v2.6_seed401",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/position/flat_original_v2.6_seed402",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/position/position_s4.2_v2.6_seed401",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/position/position_s4.2_v2.6_seed402",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/position/position_s4.5_v2.6_seed401",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/position/position_s4.5_v2.6_seed402"
+  ],
+  "original_batch": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/position/batches/batch_000",
+  "bundle": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_selected_local300_flat/bundle",
+  "identities": {
+    "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+    "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+    "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "local300": "517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125",
+    "initial_state": "7c2849dc467f5d9c03a11675b59d88abfac7e92e6545cfc228fa621456c024b1",
+    "controller": "418a55486c863f5efb249c22987bc43017aee95ff0913582f59508230b18e00c",
+    "asset": "226c0681d8ae55b2ac579eb7d06d94b9306847d06158551ff737ca13f07e0b35"
+  },
+  "xy_rtol": 1e-05,
+  "xy_atol_m": 1e-08,
+  "terminal": "Same integer 5 kHz tick and active-step failure flags",
+  "passed": "Every 200 Hz observed XY coordinate allclose and identical terminal tick/type in all 108 pairs",
+  "repeat": "Two fresh processes of 36 lanes, archive-matched world translations and order within each case",
+  "batch_context": "Original 672 lanes, repeats 36 lanes",
+  "budget": 72,
+  "role": "Previously examined DEV",
+  "stop": "On any mismatch pause E1 and E2. No automatic change of design."
+}
