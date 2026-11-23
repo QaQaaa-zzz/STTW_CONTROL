@@ -1,0 +1,5 @@
+map,wall_family,prefixes,physical_branches,verified_relock,left_only,right_only,both,neither_after_relock,one_goal_other_wall,left_wall,right_wall,min_errors,min_brier,min_point_xy_rmse_m
+train_00,left,576,1152,267,41,49,10,167,19,90,7,76,0.08796296296296295,0.1083286981103919
+train_01,right,576,1152,294,97,39,10,148,52,4,110,54,0.0625,0.11963632368444728
+train_02,staggered,576,1152,284,49,35,2,198,25,98,136,66,0.0763888888888889,0.11759641035994625
+train_03,left,576,1152,268,34,63,5,166,36,109,0,78,0.09027777777777778,0.0988469654665704

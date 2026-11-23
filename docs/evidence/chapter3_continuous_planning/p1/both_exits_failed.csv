@@ -1,0 +1,13 @@
+outcome_pair,train_00,train_01,train_02,train_03,total
+tracking_domain_exit + wrong_gate_at_goal,49,56,40,48,193
+forbidden_obstacle_contact + wrong_gate_at_goal,33,60,42,53,188
+tracking_domain_exit + tracking_domain_exit,25,20,15,24,84
+forbidden_obstacle_contact + forbidden_obstacle_contact,3,0,78,0,81
+forbidden_obstacle_contact + timeout,38,1,8,19,66
+wrong_gate_at_goal + wrong_gate_at_goal,10,8,4,13,35
+timeout + wrong_gate_at_goal,6,1,5,6,18
+forbidden_obstacle_contact + tracking_domain_exit,1,1,2,1,5
+timeout + tracking_domain_exit,0,1,2,1,4
+physical_failure + tracking_domain_exit,1,0,0,1,2
+physical_failure + physical_failure,1,0,1,0,2
+forbidden_obstacle_contact + physical_failure,0,0,1,0,1
