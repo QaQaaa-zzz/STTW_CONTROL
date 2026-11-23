@@ -1,0 +1,37 @@
+{
+  "python": "/home/qy/mujoco_playground/.venv/bin/python",
+  "mujoco": "3.6.0",
+  "maps": {
+    "right_offset": {
+      "read_back_ngeom": 30,
+      "compilation_version": "3.6.0",
+      "world_sha256": "f3d014e828c2e028cc634204c642e01485a136dc4a4c25f868fdc0a961708c3a",
+      "mjb_sha256": "e50822db060a73bcb53917061bbad413e3ca035339a09c94d105b3d521daad54",
+      "raster_sha256": "fcc5d7db183f2c8c2b3eae7c287bc2d352d532cae4caf7d6aa0b12c4d5ba3227",
+      "superseded_raster_max_differences": {
+        "height": 0.0,
+        "support": 0.0,
+        "bounds": 0.0,
+        "spacing": 0.0
+      },
+      "geometry_count": 30,
+      "source_xml": "/home/qy/DVGC/assets/orange_bike_4kg_horizontal.xml"
+    },
+    "staggered": {
+      "read_back_ngeom": 31,
+      "compilation_version": "3.6.0",
+      "world_sha256": "6aeaf0c3d7663515e793c37c4b4a86694a7d82e4f26d2baccb5be39dbb610f9e",
+      "mjb_sha256": "eac70ababe4e8eae90ad583218f879608aad22aaf38453b5909e8b3177f1df91",
+      "raster_sha256": "8dc03bd9c6d20932bbef80dcf9f51cc835e26c31db054dd471f33385506b2bac",
+      "superseded_raster_max_differences": {
+        "height": 0.0,
+        "support": 0.0,
+        "bounds": 0.0,
+        "spacing": 0.0
+      },
+      "geometry_count": 31,
+      "source_xml": "/home/qy/DVGC/assets/orange_bike_4kg_horizontal.xml"
+    }
+  },
+  "physical_worlds_executed": 0
+}

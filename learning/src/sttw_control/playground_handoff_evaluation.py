@@ -317,6 +317,10 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         updates={round(u['time_s']/.005):(u,TorchPathReference(dict(np.load(u['reference_path'])),hcfg,device,route_ids=[r for r,m,i in lanes]))
                  for u in cfg.get('plan_updates',[]) if name in u['skills']}
         plan_receipts=[]
+        p0_branches=None
+        if cfg.get('p0_branches'):
+            from .chapter3_p0_physical import P0Branches
+            p0_branches=P0Branches(cfg['p0_branches'],args.output,query,route,contracts,q,v)
         rolling_cfg=cfg.get('rolling_planner')
         rolling=None;pending=None;rolling_events=[]
         if rolling_cfg:
@@ -423,6 +427,9 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                         route.route_ids=approach_ids.clone()
                     # Every departure keeps the common approach until the first tick after physical relock.
                     just_locked=alive & (phase==2) & ((handoff_time/.005).round().long()==tick-1)
+                    if p0_branches is not None:
+                        p0_branches.audit(tick,locals(),just_locked)
+                        previous_p0_velocity=velocity_state(*velocity_history[tick%4])
                     after_x=torch.stack([torch.searchsorted(x,q[:,0].double().contiguous()+.05) for x in approach_x])
                     join=torch.maximum(after_x[approach_ids,world_index],torch.searchsorted(arc64,middle.projection['progress'].double().contiguous())+1)
                     if online and bool((just_locked & (reselect|shadow)).any()):
@@ -458,11 +465,17 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                         branch=len(approach_x)+(approach_ids*3+1)*len(arc64)+anchor
                         directions=torch.where(just_locked,1,directions)
                         apply=alive & (release==tick)
+                        if p0_branches is not None:
+                            # Rolling arms start on the common straight branch and their own
+                            # publication receipt controls every subsequent route assignment.
+                            apply &= p0_branches.arm<3
                         route.route_ids=torch.where(apply,pending_route,torch.where(just_locked,branch,route.route_ids))
                         directions=torch.where(apply,proposed,directions)
                         applied_tick=torch.where(apply,tick,applied_tick)
                     else:
                         route.route_ids=torch.where(just_locked,branch,route.route_ids)
+                    if p0_branches is not None:
+                        p0_branches.step(tick,locals(),just_locked,previous_p0_velocity)
                     if tick in (1,8,32) or tick%256==0:
                         data.qpos.block_until_ready()
                         (args.output/'gpu_progress.json').write_text(json.dumps(dict(tick=tick,worlds=data.qpos.shape[0],device=str(data.qpos.device),elapsed_s=time.perf_counter()-rollout_start)))
@@ -659,6 +672,8 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                     span=torch.where(delta>=0,hi[2:]-home_pose,home_pose-lo[2:]).clamp_min(1e-6)
                     actual=to_torch(last).clone();actual[:,2:]=(delta/span).clamp(-1,1)
                     last=jp.where(to_jax((phase==4)&alive)[:,None],to_jax(actual),last)
+                if p0_branches is not None:
+                    p0_branches.actor_command(tick,alive,phase,middle,target)
                 if cfg.get('collect_model_state'):
                     applied_rows.append(target.clone());applied_masks.append(alive.clone())
                 if online:
@@ -688,6 +703,8 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 flags=to_torch(jflags)
                 q,v,m,pose,speed,angles,joint_bias=map(to_torch,observe(data))
                 middle.after(m,pose,speed,governed,torch.stack((steer,target[:,1]),1),torch.zeros(n,2,device=device),ctl)
+                if p0_branches is not None:
+                    p0_branches.pursuit_read(tick+1,alive,phase,middle)
                 if (tick+1)%4==0:
                     if ground_action_history:
                         # Last actuator target in the observed 20 ms interval, in actor units.
@@ -703,6 +720,7 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                         signal=(data.qpos[:,0]>=signal_window[0])&(data.qpos[:,0]<=signal_window[1])
                     history,obs=frame(data,history,last,height_offset,signal)
             torch.cuda.synchronize();rollout_s=time.perf_counter()-rollout_start
+            if p0_branches is not None:p0_branches.finish()
             traces=torch.stack(rows).cpu().numpy();positions=torch.stack(poses).cpu().numpy();speeds=torch.stack(velocities).cpu().numpy();valid=torch.stack(valid_rows).cpu().numpy();contact_trace=torch.stack(contact_rows).cpu().numpy();world_trace=torch.stack(world_rows).cpu().numpy();ownership_max=ownership_error.cpu().numpy()
             if cfg.get('collect_model_state'):
                 controller_trace=torch.stack(controller_rows).cpu().numpy()

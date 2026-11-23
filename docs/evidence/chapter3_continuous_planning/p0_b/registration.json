@@ -1,0 +1,57 @@
+{
+  "experiment": "Chapter 3 P0-B",
+  "role": "paired development",
+  "registered_utc": "2026-11-23T06:28:13.304039+00:00",
+  "question": "With an identical takeoff and physical handback, can rolling continuous exit planning improve completion? Does a larger approach family still add recoverable cases under that stronger exit?",
+  "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p0b_20261123/protocol.json",
+  "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p0b_20261123/terrain_build_receipt.json",
+  "baseline": "original three exits, fixed clearance and common default. Fixed gate entry and unfiltered straight/gate-action are extra same-state controls.",
+  "cells": {
+    "A": "5 historical entries / original filtered exit",
+    "B": "5 historical entries / continuous rolling exit",
+    "C": "18 entries / original filtered exit",
+    "D": "18 entries / continuous rolling exit"
+  },
+  "primary": "For each root and gate, one approach selected in hindsight based on average over the three hidden pushes. Report as finite-family potential. Also report deployed gate-rule paired old/rolling and physical losses and rescues.",
+  "grouping": "Paired by root, stratified by the two fixed maps. Report gate side, section, pushes and whole-task and collision denominators.",
+  "acceptance": {
+    "worth_following_pp": 5,
+    "pre": "D-B >=5pp and net rescues across multiple roots on shared-force rule. Mark inconclusive when paired intervals and effects across maps or sides do not support a direction.",
+    "post": "If B-A >=5pp but D-B small, prioritize post-lock planning. Check fixed gate paired results and collisions before choosing method.",
+    "admission": "When old entries and physical exits suffice but scoring loses, compare correcting admission under held-out calibration.",
+    "limits": "Directional screen. No guaranteed success, continuous optimality or independence across branch replicas."
+  },
+  "budget": {
+    "training_updates": 0,
+    "unique_prefixes": 1296,
+    "potential_suffixes": 9072,
+    "parallel_lanes_each": 2268,
+    "physics_batches": 4,
+    "simulation_timestep_s": 0.001,
+    "max_simulated_s": 10,
+    "latency_repetitions": 100,
+    "latency_candidates": [
+      16,
+      64,
+      256,
+      512,
+      1024
+    ],
+    "physics_candidates": 16,
+    "cem_iterations": 2,
+    "deadline_ms": 100
+  },
+  "scope_latency": "Saved DEV state resident on device through publication or rejection. Report observation extraction and first subsequent real controller consumption separately when available.",
+  "stop": "Stop at four paired batches and analysis, or record a technical failure for repair. No replacement maps, data-dependent expansion or training in P0-B.",
+  "run_queue": {
+    "latency": "sttw-ch3-p0b-benchmark.service",
+    "physical": "sttw-ch3-p0b-physical.service",
+    "goal": "sttw-ch3-rolling-goal-check.timer"
+  },
+  "physics_versions": {
+    "mujoco": "3.6.0",
+    "torch": "2.9.1+cu128"
+  },
+  "protocol_version": "preflight_revision 2",
+  "status_at_registration": "Queued; physical trajectories=0"
+}
