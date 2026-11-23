@@ -29,6 +29,7 @@ class TorchPathPolicy:
         self.execution_mode = torch.zeros(count,device=device,dtype=torch.long)
         self.hold_channels = torch.zeros(count,2,device=device,dtype=torch.bool)
         self.channel_intervention_mode = "hold"
+        self.evaluation_target_bias = None
         c=config['residual_interface'];dt=config['timing']['lower_dt_s']
         self.decay=torch.exp(-dt*torch.ones(2,device=device)/torch.tensor(c['filter_tau_s'],device=device))
         self.increment_low=dt*torch.tensor([-c['correction_speed_down_m_s2'],-c['correction_steer_rate_rad_s']],device=device)
@@ -49,6 +50,8 @@ class TorchPathPolicy:
     def correct(self,z,nominal):
         c=self.config['residual_interface'];a=torch.tanh(z)
         target=torch.stack((a[:,0]*torch.where(a[:,0]>=0,c['speed_positive_scale_m_s'],c['speed_negative_scale_m_s']),a[:,1]*c['steer_scale_rad']),dim=-1)
+        if self.evaluation_target_bias is not None:
+            target = self.evaluation_target_bias(target)
         f=self.decay*self.filtered+(1-self.decay)*target
         delta=f-self.offsets
         increment=torch.maximum(self.increment_low,torch.minimum(self.increment_high,delta))

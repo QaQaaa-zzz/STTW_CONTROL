@@ -50,6 +50,16 @@ if s.get('fixed_randomization_groups'):
     from sttw_control.isaaclab_randomization import apply_fixed_evaluation_groups
     apply_fixed_evaluation_groups(env,s['fixed_randomization_groups'])
 if intervention:env.policy.channel_intervention_mode=intervention.get('channel_mode',intervention.get('kind','hold'))
+oracle_bias = None
+if s.get('oracle_knots'):
+    import hashlib
+    from sttw_control.pcrp_oracle import OracleTargetBias
+    if hashlib.sha256(Path(s['oracle_knots']).read_bytes()).hexdigest()!=s['oracle_knots_sha256']:
+        raise ValueError('Oracle bias schedule identity mismatch')
+    with np.load(s['oracle_knots']) as knots:
+        oracle_bias = OracleTargetBias(knots['times_s'], knots['offsets'], env.n, env.horizon,
+                                     env.policy.config['residual_interface'], env.device)
+    env.policy.evaluation_target_bias = oracle_bias
 if s.get('record_controller_terms'):env.controller.config['record_terms']=True
 if s.get('zero_reference_channels'):
     mask=torch.tensor(s['zero_reference_channels'],device=env.device,dtype=torch.bool)
@@ -119,6 +129,7 @@ for step in range(env.horizon):
         if fork_step is not None:
             active=(step-fork_step)*.02<intervention['hold_s'];env.policy.hold_channels.copy_(torch.tensor(intervention['hold_channels'],device=env.device,dtype=torch.bool) if active else torch.zeros_like(env.policy.hold_channels))
     if planner is not None:planner.update()
+    if oracle_bias is not None:oracle_bias.set_step(step)
     result=env.step(None,latent=env.middle.curvature_cap_action(rule)) if rule else env.step(None)
     keys=['reward','valid','done','failure','lower_trace']
     keys.extend(key for key in ('executed_commands','body_poses') if key in result)
