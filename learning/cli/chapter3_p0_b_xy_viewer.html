@@ -1,0 +1,54 @@
+<!doctype html><html lang="zh"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{TITLE}} · P0-B 轨迹</title>
+<style>
+body{font:16px/1.5 system-ui,sans-serif;color:#18222c;max-width:1200px;margin:1.25rem auto;padding:0 1rem}a{color:#176388}label{display:inline-flex;flex-direction:column;margin:.25rem 1rem .4rem 0}select{font:inherit}svg{width:100%;height:auto;border:1px solid #c5cbd2}#legend{display:flex;gap:1.5rem;flex-wrap:wrap}p{margin:.65rem 0}small{color:#333}
+</style>
+<a href="index.html">全部起点</a><h1>{{TITLE}}</h1>
+<label>推力 N / 接近曲线 / α<select id="key"></select></label>
+<label>过门任务<select id="task"></select></label>
+<label>旧出口对照<select id="old"><option value="auto">原打分器实选</option><option value="left">左出口物理分支</option><option value="straight">直行物理分支</option><option value="right">右出口物理分支</option></select></label>
+<label>滚动分支参考轨迹<select id="version"></select></label>
+<svg id="plot" viewBox="0 0 1100 420" role="img" aria-label="以米计量的同尺度 XY 实际与参考轨迹；每条线截至该次实际终点"></svg>
+<div id="legend"><span style="color:#176388">蓝线与圆点：旧出口</span><span style="color:#ac470f">橙线与方块：滚动规划</span><span>虚线：参考；△：跳跃技能接手；竖杠：复锁</span></div>
+<p id="stats" aria-live="polite"></p><p id="source"></p><small>实线从逐 5 ms 归档中每 50 ms 取点，并保留技能交接、各连续片段及末帧。空缺处断线。选择中间发布时刻时，橙色虚线展示当次发布的完整路径；实线始终展示实际整程。原始轨迹含完整坐标和采样时间。</small>
+<noscript>动态轨迹需要启用 JavaScript。可返回总索引查看静态图与完整轨迹文件索引。</noscript>
+<script>
+'use strict';
+window.p0Versions={};
+const el=id=>document.getElementById(id);
+async function decode(s){const bytes=Uint8Array.from(atob(s),c=>c.charCodeAt(0));return JSON.parse(await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).text());}
+const payload=decode('{{PAYLOAD}}'),NS='http://www.w3.org/2000/svg';
+let data,token=0;const initial=new URLSearchParams(location.search);
+function setOptions(sel,items){sel.replaceChildren(...items.map(([value,label])=>new Option(label,value)));}
+function node(tag,attrs,content){const n=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,v);if(content!==undefined)n.textContent=content;el('plot').append(n);return n;}
+function explain(tr,v,task){if(v)return v.result;if(tr.verified && tr.goal && !tr.wall && tr.gates[task])return 'completed';if(tr.wall)return '撞墙';return tr.termination==='goal'?'已到目标，门或复锁条件未满足':tr.termination;}
+function sources(items){const node=el('source');node.replaceChildren();for(const [path,label] of items){const a=document.createElement('a');a.href=path;a.textContent=label;node.append(a,'　');}}
+async function versionXY(entry,lane){const path=entry[1];if(!window.p0Versions[path]){await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=path;s.onload=resolve;s.onerror=()=>reject(new Error('无法读取发布轨迹 '+path));document.body.append(s);});}const dataset=await decode(window.p0Versions[path]);return dataset[lane];}
+async function render(){const n=++token, g=data.pairs[el('key').value], task=el('task').value, pair=g.task[task], manual=el('old').value, old=data.trajectories[manual==='auto'?pair.old_filter.lane:g.arms[manual]], cem=data.trajectories[pair.rolling.lane], ver=el('version').value;
+let ref=data.refs[cem.final_ref],historical=null;if(ver==='approach'){ref=data.refs[cem.entry_ref]}else if(ver==='default'){ref=data.refs[data.trajectories[g.arms.straight].final_ref]}else if(ver!=='final'){historical=cem.hist[Number(ver)];ref=await versionXY(historical,cem.lane)}if(n!==token)return;
+const [sec,side]=task.split('/'),geo=data.scene,gate=geo.section[sec],sg=side==='left'?1:-1,p=el('plot');p.replaceChildren();
+const actual=[...old.parts,...cem.parts].flat(),target=geo.goal;let xmin=target.x_min_m,xmax=target.x_max_m,ymin=-1.4,ymax=1.4;
+for(const [a,b] of actual){xmin=Math.min(xmin,a/1000);xmax=Math.max(xmax,a/1000);ymin=Math.min(ymin,b/1000-.2);ymax=Math.max(ymax,b/1000+.2);}
+for(const w of geo.walls){xmin=Math.min(xmin,w[0]);xmax=Math.max(xmax,w[1]);ymin=Math.min(ymin,w[2]-.1);ymax=Math.max(ymax,w[3]+.1);}
+xmin-=.3;xmax+=.3;const W=1100,H=420,scale=Math.min((W-100)/(xmax-xmin),(H-90)/(ymax-ymin)),left=(W-(xmax-xmin)*scale)/2,top=(H-(ymax-ymin)*scale)/2;
+const X=x=>left+(x-xmin)*scale,Y=y=>top+(ymax-y)*scale;
+const line=(x1,y1,x2,y2,col,w,dash)=>node('line',{x1:X(x1),y1:Y(y1),x2:X(x2),y2:Y(y2),stroke:col,'stroke-width':w,'stroke-dasharray':dash||''});
+const rect=(x1,x2,y1,y2,col)=>node('rect',{x:X(x1),y:Y(y2),width:(x2-x1)*scale,height:(y2-y1)*scale,fill:col});
+rect(target.x_min_m,target.x_max_m,-target.abs_y_max_m,target.abs_y_max_m,'#d7eada');for(const wall of geo.walls)rect(...wall,'#444');
+line(geo.edge,ymin,geo.edge,ymax,'#777',1,'3 4');line(gate,Math.max(ymin,sg>0?.06:-3.9),gate,Math.min(ymax,sg>0?3.9:-.06),'#8a6a16',2);
+for(let x=Math.ceil(xmin);x<=xmax;x+=2){node('text',{x:X(x),y:H-19,'font-size':13,'text-anchor':'middle'},x)}
+for(let y=Math.ceil(ymin);y<=ymax;y+=1){node('text',{x:left-9,y:Y(y)+5,'text-anchor':'end','font-size':13},y)}
+node('text',{x:W/2,y:H-2,'text-anchor':'middle'},'世界 x (m)');node('text',{x:7,y:22},'y (m)');
+const path=(points,colour,w,dash)=>node('polyline',{points:points.map(a=>X(a[0]/1000)+','+Y(a[1]/1000)).join(' '),fill:'none',stroke:colour,'stroke-width':w,'stroke-dasharray':dash||''});
+path(data.refs[old.final_ref],'#176388',1.1,'4 4');path(ref,'#ac470f',1.4,'4 4');
+for(const [tr,col,sq] of [[old,'#176388',false],[cem,'#ac470f',true]]){for(const part of tr.parts)path(part,col,2.2);const a=tr.parts.at(-1).at(-1),x=X(a[0]/1000),y=Y(a[1]/1000);
+if(sq)node('rect',{x:x-4,y:y-4,width:8,height:8,stroke:col,fill:'white'});else node('circle',{cx:x,cy:y,r:4,stroke:col,fill:'white'});
+if(tr.handback){const a=tr.handback,xx=X(a[0]/1000),yy=Y(a[1]/1000);node('line',{x1:xx,x2:xx,y1:yy-7,y2:yy+7,stroke:col,'stroke-width':2});}
+if(tr.jump_entry){const a=tr.jump_entry,xx=X(a[0]/1000),yy=Y(a[1]/1000);node('polygon',{points:[xx+','+(yy-5),(xx-5)+','+(yy+4),(xx+5)+','+(yy+4)].join(' '),stroke:col,fill:'none'});}}
+const st=explain(old,manual==='auto'?pair.old_filter:null,task);
+el('stats').textContent=(g.paired===false?'共享前缀校验未通过。此图只用于核对每条实际轨迹。 ':'')+'旧出口 '+old.arm+' · '+st+' · 最后有效位置 '+old.finite_end_s.toFixed(3)+' s；滚动规划 '+pair.rolling.result+' · 最后有效位置 '+cem.finite_end_s.toFixed(3)+' s · 共实际接受 '+cem.accepted_count+' 次。初次接受前默认 '+(cem.initial_default_ticks*.005).toFixed(3)+' s，接受后过期默认 '+(cem.expired_default_ticks*.005).toFixed(3)+' s。'+(historical?' 所选参考实际发布于 '+(historical[0]*.005).toFixed(3)+' s。H75 消费 '+(historical[4]===null?'未收到':(historical[4]*.005).toFixed(3)+' s')+'，追踪器读入 '+(historical[5]===null?'未收到':(historical[5]*.005).toFixed(3)+' s')+'。':'');
+sources([[old.raw,'旧出口轨迹 NPZ'],[cem.raw,'滚动轨迹 NPZ'],...(historical?[[historical[2],'本次发布原始 NPZ']]:[])]);}
+function updateTask(){const g=data.pairs[el('key').value],pair=g.task[el('task').value],cem=data.trajectories[pair.rolling.lane];setOptions(el('version'),[['final','最后发布的参考'],['approach','最初接近参考'],['default','初始直行出口参考'],...cem.hist.map((v,i)=>[i,(v[3]==='accepted_plan'?'规划发布':'过期回默认')+' · '+(v[0]*.005).toFixed(3)+' s'])]);render().catch(e=>el('stats').textContent=e.message);}
+function updateKey(){const g=data.pairs[el('key').value],prev=el('task').value||initial.get('task');setOptions(el('task'),Object.keys(g.task).map(k=>[k,k]));if(g.task[prev])el('task').value=prev;updateTask();}
+payload.then(v=>{data=v;setOptions(el('key'),Object.keys(data.pairs).map(k=>[k,k.replaceAll('/',' / ')]));if(data.pairs[initial.get('case')])el('key').value=initial.get('case');if(['left','right','straight'].includes(initial.get('old')))el('old').value=initial.get('old');el('key').onchange=updateKey;el('task').onchange=updateTask;el('old').onchange=()=>render();el('version').onchange=()=>render().catch(e=>el('stats').textContent=e.message);updateKey();}).catch(e=>el('stats').textContent=e.message);
+</script></html>
