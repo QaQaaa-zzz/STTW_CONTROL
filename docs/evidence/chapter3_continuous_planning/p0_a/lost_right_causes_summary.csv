@@ -1,0 +1,12 @@
+layout,diagnosis,all_veto,cases,full_wins_at_zero_margin
+config_double,no_successful_exit_admissible_even_at_zero_margin,True,14,0
+config_double,no_verified_relock,False,8,0
+config_double,none_of_three_exits_physically_successful,True,26,0
+config_double,successful_exit_becomes_admissible_at_zero_margin,False,3,3
+config_double,successful_exit_becomes_admissible_at_zero_margin,True,63,63
+config_l,no_successful_exit_admissible_even_at_zero_margin,True,2,0
+config_r,no_successful_exit_admissible_even_at_zero_margin,True,14,0
+config_r,no_verified_relock,False,3,0
+config_r,none_of_three_exits_physically_successful,True,2,0
+config_r,successful_exit_becomes_admissible_at_zero_margin,False,17,16
+config_r,successful_exit_becomes_admissible_at_zero_margin,True,143,143

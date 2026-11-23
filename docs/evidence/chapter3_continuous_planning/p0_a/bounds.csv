@@ -1,0 +1,11 @@
+layout,side,n_forces,actual_wins,best_pre_shared_wins,best_pre_force_known_wins,best_physical_branch_wins
+config_double,-1,900,576,612,679,773
+config_double,1,900,355,505,567,585
+config_l,-1,900,693,781,821,824
+config_l,1,900,302,460,502,611
+config_r,-1,900,492,519,558,769
+config_r,1,900,659,815,828,828
+test_a,-1,360,270,280,310,313
+test_a,1,360,182,258,281,298
+test_b,-1,360,255,261,300,310
+test_b,1,360,223,281,290,308

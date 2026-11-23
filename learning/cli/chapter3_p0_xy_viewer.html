@@ -1,0 +1,89 @@
+<!doctype html><html lang="zh"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第三章｜配对实际与参考 XY</title>
+<style>
+body{max-width:1110px;margin:2rem auto;padding:0 1rem;font:16px/1.55 system-ui,sans-serif;color:#1b2630;background:#fff}
+h1{font-size:1.6rem} .form{display:flex;flex-wrap:wrap;gap:1rem}label,select{display:block}
+select,button{font:inherit;padding:.2rem .4rem} svg{display:block;width:100%;height:auto;margin-top:1rem}
+table{border-collapse:collapse;width:100%}th,td{border-bottom:1px solid #ddd;text-align:left;padding:.4rem}p{margin:.55rem 0}
+</style><h1>第三章 · 配对实际与参考 XY</h1>
+<div class="form" id="filters"></div>
+<p>蓝色圆点代表 Fixed，橙色方点代表待评方法。实线为实际轨迹，点线为该回合的最终发布参考曲线，短竖线为复锁位置。深灰为墙，浅绿为目标区，棕色竖线为指定侧的通行截面。</p>
+<svg id="chart" viewBox="0 0 1040 440" role="img" aria-labelledby="desc"><title id="desc">世界坐标下的等比例配对轨迹</title></svg>
+<table><thead><tr><th>方法</th><th>整程结果</th><th>记录终点（秒）</th><th>最后有效 XY（米）</th></tr></thead><tbody id="summary"></tbody></table>
+<p id="counter"></p><p>显示按 50 ms 抽样和毫米取整，缺失坐标处断线；坐标缺失的终点标记在最后一个有效位置，表中另列记录终止时间。任务判定使用原始数据。可从 <a href="contracts.csv">逐任务 CSV</a> 查到原始轨迹、查询与终止记录。<a href="paired_xy.png">静态配对图</a>。</p>
+<script>
+(async function () {
+const b64="{{PAYLOAD}}";
+const bytes=Uint8Array.from(atob(b64), c=>c.charCodeAt(0));
+const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
+const data=JSON.parse(await new Response(stream).text());
+const chart=document.getElementById("chart");
+const axes=["布局","门向","距离","扰动（N）","初态"];
+const fields=[0,4,3,2,1];
+const selects=axes.map((name,i)=>{
+  const label=document.createElement("label");
+  label.append(name);
+  const s=document.createElement("select");
+  label.append(s);document.getElementById("filters").append(label);
+  s.onchange=()=>filter(i+1);return s;
+});
+function filter(from=0) {
+ let rows=data.cases;
+ selects.forEach((s,i)=>{
+   const col=fields[i];
+   if(i>=from) {
+      const values=[...new Set(rows.map(r=>r[col]))];
+      if(typeof values[0]==="number")values.sort((a,b)=>a-b);else values.sort();
+      const old=s.value;
+      s.replaceChildren(...values.map(v=>new Option(i===1?(v===1?"左门":"右门"):String(v),String(v))));
+      if(values.some(v=>String(v)===old))s.value=old;
+   }
+   rows=rows.filter(r=>String(r[col])===s.value);
+ });
+ draw(rows[0]);
+}
+function draw(row) {
+ const [layout,root,push,section,side,planner]=row;
+ const geo=data.maps[layout],arms=row.slice(6),lanes=arms.map(arm=>data.trajectories[arm[0]]);
+ const inputPoints=lanes.flatMap(l=>l.parts.flat());
+ const lo=Math.min(0,...inputPoints.map(p=>p[0]/1000))-.4;
+ const hi=Math.max(19,...inputPoints.map(p=>p[0]/1000))+.4;
+ const bound=Math.max(1.45,...inputPoints.map(p=>Math.abs(p[1]/1000)+.15));
+ const W=1040,H=440,s=Math.min((W-106)/(hi-lo),(H-80)/(2*bound));
+ const X=x=>(W-s*(hi-lo))/2+(x-lo)*s;
+ const Y=y=>H/2-y*s;
+ chart.replaceChildren();
+ function put(tag,attrs,text) {
+   const el=document.createElementNS("http://www.w3.org/2000/svg",tag);
+   Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,v));
+   if(text!==undefined)el.textContent=text;chart.append(el);return el;
+ }
+ const description=put("title",{id:"desc"},layout+" "+section+" 起点 "+root+" 配对实际与参考轨迹");
+ const rect=(x0,x1,y0,y1,fill)=>put("rect",{x:X(x0),y:Y(y1),width:s*(x1-x0),height:s*(y1-y0),fill});
+ const line=(x0,x1,y0,y1,stroke,dash="")=>put("line",{x1:X(x0),x2:X(x1),y1:Y(y0),y2:Y(y1),stroke,"stroke-dasharray":dash});
+ for(let x=Math.ceil(lo);x<=hi;x+=2){line(x,x,-bound,bound,"#e2e4e8");put("text",{x:X(x),y:Y(-bound)+20,"text-anchor":"middle"},x);}
+ for(let y=Math.ceil(-bound);y<=bound;y++){line(lo,hi,y,y,"#e2e4e8");put("text",{x:X(lo)-8,y:Y(y)+4,"text-anchor":"end"},y);}
+ put("text",{x:X(hi),y:Y(-bound)+40,"text-anchor":"end"},"x（米）");put("text",{x:X(lo),y:Y(bound)-12},"y（米）");
+ const g=geo.goal; rect(g.x_min_m,g.x_max_m,-g.abs_y_max_m,g.abs_y_max_m,"#dfede3");
+ line(geo.edge,geo.edge,-bound,bound,"#777","4 3");
+ line(geo.section[section],geo.section[section],side*.06,side*Math.min(3.9,bound),"#966c16");
+ const colours=["#176388","#ac470f"];
+ function path(p,colour,dotted=false){
+   put("polyline",{points:p.map(a=>[X(a[0]/1000),Y(a[1]/1000)].join(",")).join(" "),
+      fill:"none",stroke:colour,"stroke-width":dotted?1.4:2.6,"stroke-dasharray":dotted?"2 4":""});
+ }
+ lanes.forEach((l,i)=>path(data.references[l.ref].filter(p=>p[0]>=lo*1000&&p[0]<=hi*1000),colours[i],true));
+ const summary=document.getElementById("summary");summary.replaceChildren();
+ lanes.forEach((l,i)=>{
+   l.parts.forEach(part=>path(part,colours[i]));const last=l.parts.at(-1).at(-1),x=X(last[0]/1000),y=Y(last[1]/1000);
+   if(i===0)put("circle",{cx:x,cy:y,r:4.5,fill:"white",stroke:colours[i],"stroke-width":2});
+   else put("rect",{x:x-4,y:y-4,width:8,height:8,fill:"none",stroke:colours[i],"stroke-width":2});
+   if(l.hb){const [hx,hy]=l.hb;put("line",{x1:X(hx/1000),x2:X(hx/1000),y1:Y(hy/1000)-8,y2:Y(hy/1000)+8,stroke:colours[i],"stroke-width":2});}
+   const tr=document.createElement("tr");[i?planner:"Fixed",arms[i][1],l.t.toFixed(3),(last[0]/1000).toFixed(3)+", "+(last[1]/1000).toFixed(3)+(l.last_xy_t!==l.t?" @ "+l.last_xy_t.toFixed(3)+" s":"")].forEach(v=>{const td=document.createElement("td");td.textContent=v;tr.append(td);});summary.append(tr);
+ });
+ geo.walls.forEach(b=>rect(...b,"#333"));
+ document.getElementById("counter").textContent="已核对任务共 "+data.cases.length+" 个，使用 "+data.trajectories.length+" 份不同路径的实测分支记录。";
+}
+filter();
+})().catch(error=>document.getElementById("counter").textContent="浏览器无法打开本地图集："+error.message);
+</script></html>

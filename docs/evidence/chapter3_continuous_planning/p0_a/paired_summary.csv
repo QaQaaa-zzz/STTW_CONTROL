@@ -1,0 +1,11 @@
+suite,layout,side,n,fixed_wins,selected_wins,fixed_walls,selected_walls,losses,rescues,selected_verified,valid_queries,all_veto,solvable_all_veto,all_old_exits_hit_wall,veto_walls,same_entry_missed,selected_pre_precommitted_wins,fixed_pre_same_post_wins,margin_zero_wins,margin_zero_walls
+test_ab,test_a,-1,360,274,270,3,9,4,0,288,288,24,13,0,9,4,274,270,270,9
+test_ab,test_a,1,360,142,182,66,18,52,92,266,266,112,42,0,18,14,196,123,188,12
+test_ab,test_b,-1,360,255,255,3,0,0,0,267,267,18,9,0,0,0,255,255,255,3
+test_ab,test_b,1,360,165,223,24,0,41,99,266,266,54,22,0,0,11,234,138,234,2
+three_wall,config_double,-1,900,690,576,6,18,114,0,718,718,551,496,6,18,87,650,607,623,26
+three_wall,config_double,1,900,183,355,207,231,79,251,730,730,569,212,128,231,12,359,178,351,175
+three_wall,config_l,-1,900,695,693,0,3,2,0,717,717,45,26,0,3,5,695,693,693,3
+three_wall,config_l,1,900,168,302,234,28,86,220,740,740,592,228,6,28,71,326,116,322,36
+three_wall,config_r,-1,900,666,492,30,10,179,5,711,711,262,221,9,10,178,651,496,644,20
+three_wall,config_r,1,900,383,659,30,15,77,353,702,702,46,11,0,15,0,659,382,659,15

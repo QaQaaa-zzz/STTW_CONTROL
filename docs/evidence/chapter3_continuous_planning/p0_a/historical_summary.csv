@@ -1,0 +1,37 @@
+layout,side,system,n,done,wall
+config_double,-1,C-R (Exp. a),900,559,33
+config_double,-1,C-R (a=0),900,575,32
+config_double,-1,Fixed (a=0),900,690,6
+config_double,-1,Full 3-Stage,900,576,18
+config_double,1,C-R (Exp. a),900,355,294
+config_double,1,C-R (a=0),900,126,110
+config_double,1,Fixed (a=0),900,183,207
+config_double,1,Full 3-Stage,900,355,231
+config_l,-1,C-R (Exp. a),900,693,3
+config_l,-1,C-R (a=0),900,693,3
+config_l,-1,Fixed (a=0),900,695,0
+config_l,-1,Full 3-Stage,900,693,3
+config_l,1,C-R (Exp. a),900,302,33
+config_l,1,C-R (a=0),900,62,6
+config_l,1,Fixed (a=0),900,168,234
+config_l,1,Full 3-Stage,900,302,28
+config_r,-1,C-R (Exp. a),900,492,10
+config_r,-1,C-R (a=0),900,492,13
+config_r,-1,Fixed (a=0),900,666,30
+config_r,-1,Full 3-Stage,900,492,10
+config_r,1,C-R (Exp. a),900,659,13
+config_r,1,C-R (a=0),900,379,32
+config_r,1,Fixed (a=0),900,383,30
+config_r,1,Full 3-Stage,900,659,15
+test_a,-1,C-R (Exp. a),360,270,9
+test_a,-1,C-R (a=0),360,270,9
+test_a,-1,Fixed (a=0),360,274,3
+test_a,1,C-R (Exp. a),360,182,18
+test_a,1,C-R (a=0),360,83,3
+test_a,1,Fixed (a=0),360,142,66
+test_b,-1,C-R (Exp. a),360,255,0
+test_b,-1,C-R (a=0),360,255,0
+test_b,-1,Fixed (a=0),360,255,3
+test_b,1,C-R (Exp. a),360,223,0
+test_b,1,C-R (a=0),360,118,3
+test_b,1,Fixed (a=0),360,165,24

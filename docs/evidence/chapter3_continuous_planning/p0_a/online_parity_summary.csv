@@ -1,0 +1,11 @@
+layout,arm,n,queries,vetoes,plan_mismatches,decisions,admissions,outcomes
+config_double,expanded,900,730,569,0,0,0,0
+config_double,veto_bank,900,730,569,0,0,0,0
+config_l,expanded,900,740,592,0,0,0,0
+config_l,veto_bank,900,740,592,0,0,0,0
+config_r,expanded,900,702,46,0,0,0,0
+config_r,veto_bank,900,702,46,0,0,0,0
+test_a,alpha0,360,259,216,0,0,0,0
+test_a,alpha_enabled,360,266,112,0,0,0,0
+test_b,alpha0,360,229,141,0,0,0,0
+test_b,alpha_enabled,360,266,54,0,0,0,0

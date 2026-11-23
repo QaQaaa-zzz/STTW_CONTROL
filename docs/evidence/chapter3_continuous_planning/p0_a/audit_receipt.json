@@ -1,0 +1,39 @@
+{
+  "mode": "CPU replay on archived measured trajectories",
+  "new_physics_rollouts": 0,
+  "training_updates": 0,
+  "gpu_rollouts": 0,
+  "archived_post_review": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/chapter_mainline/post_review",
+  "reference_tables": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/docs/evidence/chapter3_playground_sttw_rb_sttw/taskbook_20261115/native_platform/approach_alignment/replication/review_114/final_stages/journal_closure",
+  "panel_contracts": {
+    "three_wall": 5400,
+    "test_ab": 1440
+  },
+  "counted_precommitment_groups": 2280,
+  "branch_count_per_task": 15,
+  "archived_summary_groups_checked": 36,
+  "online_left_arm_rows": 6840,
+  "online_mismatches": {
+    "plan_mismatch": 0,
+    "decision_mismatch": 0,
+    "admission_mismatch": 0,
+    "outcome_mismatch": 0
+  },
+  "physical_prefixes_unavailable_at_query": [
+    {
+      "layout": "test_b",
+      "prefix": "0823cb4e8af6ea19d630adb2d107b1fc8451ad9f03b81bd7ae8ea470d5b36bf4",
+      "reason": "ended_before_query"
+    }
+  ],
+  "trajectory_fields": [
+    "fixed_trajectory",
+    "selected_trajectory"
+  ],
+  "planning_reference_fields": [
+    "fixed_dep",
+    "selected_dep",
+    "departure_applied_tick (prefixed)"
+  ],
+  "scope": "Three-wall selected=Full including Stage 3; A/B selected=C-R expanded. Both right panels reconstructed. All online parity reference rows are left gate."
+}

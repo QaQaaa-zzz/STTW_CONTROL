@@ -1,0 +1,18 @@
+{
+  "tasks": 6840,
+  "unique_files": 3585,
+  "unique_references": 146,
+  "files_with_missing_xy": 8,
+  "layout_counts": {
+    "config_double": 1800,
+    "config_l": 1800,
+    "config_r": 1800,
+    "test_a": 720,
+    "test_b": 720
+  },
+  "actual_sample_ms": 50,
+  "reference": "archived final published reference, drawn as dotted geometric curve",
+  "units": "metres; display rounded to 0.001 m. Endpoints and handbacks retained.",
+  "raw_index": "contracts.csv",
+  "selection": "Static examples: lowest root, force, then section label per layout and loss/rescue."
+}
