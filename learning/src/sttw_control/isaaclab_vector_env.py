@@ -15,7 +15,7 @@ from .torch_controller import TorchVelocityServos,TorchPositionServos
 from .torch_observation import TorchVehicleSignals
 
 class IsaacLabVectorPlant:
-    def __init__(self,asset,terrain_paths,terrain_ids,output,servo_mode="explicit",hull_vertices=None,mesh_collision_on_geometry=False,compliant_wheels=None,friction_correlation_distance=.025,external_forces_every_iteration=False,wheel_collision="convexHull",friction_offset_threshold=.04,env_spacing=None,track_wheel_contacts=False,terrain_layout="external",pendulum_rest=None,pendulum_locked=False,physics_dt=.0002,gpu_pair_capacities=None,actuator_force_limits=None,wheel_radius_m=.1,robot_contact_offset=.01,solver_position_iterations=4,solver_velocity_iterations=1,wheel_contact_slop=0.,wheel_width_m=None,wheel_profile_slices=1,terrain_base_plane=False,track_contact_wrench=False,max_contact_data_count_per_prim=16,raw_contact_only=False):
+    def __init__(self,asset,terrain_paths,terrain_ids,output,servo_mode="explicit",hull_vertices=None,mesh_collision_on_geometry=False,compliant_wheels=None,friction_correlation_distance=.025,external_forces_every_iteration=False,wheel_collision="convexHull",friction_offset_threshold=.04,env_spacing=None,track_wheel_contacts=False,terrain_layout="external",pendulum_rest=None,pendulum_locked=False,physics_dt=.0002,gpu_pair_capacities=None,actuator_force_limits=None,wheel_radius_m=.1,robot_contact_offset=.01,solver_position_iterations=4,solver_velocity_iterations=1,wheel_contact_slop=0.,wheel_width_m=None,wheel_profile_slices=1,terrain_base_plane=False,track_contact_wrench=False,max_contact_data_count_per_prim=16,raw_contact_only=False,replay_clone_origins=None):
         self.raw_contact_only=raw_contact_only;self.track_contact_wrench=track_contact_wrench;self.servo_mode=servo_mode;self.physics_dt=physics_dt;self.wheel_radius_m=wheel_radius_m
         pair_capacities=gpu_pair_capacities or [2**24,2**24,2**27]
         asset=Path(asset);output=Path(output);self.contract=json.loads(asset.with_name('contract.json').read_text());self.device='cuda:0';self.count=len(terrain_ids);self.diagnostic_joint_torque=None
@@ -46,6 +46,10 @@ class IsaacLabVectorPlant:
         cloner=GridCloner(spacing=100. if env_spacing is None else env_spacing,stage=self.sim.stage);cloner.define_base_env('/World/Envs')
         env_paths=cloner.generate_paths('/World/Envs/Env',self.count)
         origins=np.array([[20.*i,0.,0.] for i in range(self.count)],dtype=np.float32) if self.count<=6 and env_spacing is None else np.asarray(cloner.get_clone_transforms(self.count)[0],dtype=np.float32)
+        if replay_clone_origins is not None:
+            origins=np.asarray(replay_clone_origins,dtype=np.float32)
+            if origins.shape!=(self.count,3) or not np.isfinite(origins).all():
+                raise ValueError('Replay requires a finite archived world origin for each lane')
         clone_origins=origins.copy()
         replicated_terrain=terrain_layout=='replicated'
         terrain_offsets=np.zeros((len(terrain_paths),3),dtype=np.float32)
