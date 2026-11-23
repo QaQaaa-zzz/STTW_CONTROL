@@ -229,6 +229,10 @@ def audit():
     commitment_keys = ['layout','root','section','side']
     action_keys = ['approach','alpha','incumbent']
     assert not b.duplicated(KEY + action_keys).any()
+    certificate = b.pivot(index=commitment_keys + action_keys, columns='force', values='won')
+    certificate = certificate[[-5, 0, 5]].set_axis(['win_minus5', 'win_zero', 'win_plus5'], axis=1)
+    assert certificate.isin([0, 1]).all().all()
+    certificate.to_csv(OUT / 'finite_library_actions.csv.gz', compression={'method':'gzip','mtime':0})
     shared = b.groupby(commitment_keys + action_keys, as_index=False).agg(won=('won','sum'),
                     raw_branch_won=('raw_branch_won','sum'), trials=('force','size'))
     assert (shared.trials == 3).all()
