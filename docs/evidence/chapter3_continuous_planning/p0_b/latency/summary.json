@@ -1,0 +1,91 @@
+{
+  "device": "cuda",
+  "part": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/chapter_mainline/s1/phase2_relative/primary/part_0/rb_run1",
+  "trajectory": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/chapter_mainline/s1/phase2_relative/primary/part_0/rb_run1/rb_run1_route0_h75_v454/trajectory.npz",
+  "tick": 980,
+  "deadline_ms": 100.0,
+  "budget_ms": 100.0,
+  "steps": 255,
+  "iterations": 2,
+  "warmup": 10,
+  "section": 12.7,
+  "side": 0,
+  "batches": [
+    {
+      "candidates": 16,
+      "obs_to_publish_ms": {
+        "p50": 33.5442515,
+        "p95": 33.9635121,
+        "p99": 34.07331193
+      },
+      "model_score_gpu_ms": {
+        "p50": 15.97374439239502,
+        "p95": 16.107657814025877,
+        "p99": 16.159337577819826
+      },
+      "deadline_missed": 0,
+      "n": 100
+    },
+    {
+      "candidates": 64,
+      "obs_to_publish_ms": {
+        "p50": 43.2625245,
+        "p95": 43.843816,
+        "p99": 44.01575107
+      },
+      "model_score_gpu_ms": {
+        "p50": 20.687615394592285,
+        "p95": 21.141752815246583,
+        "p99": 21.21635503768921
+      },
+      "deadline_missed": 0,
+      "n": 100
+    },
+    {
+      "candidates": 256,
+      "obs_to_publish_ms": {
+        "p50": 46.442972499999996,
+        "p95": 47.040393800000004,
+        "p99": 47.309010390000005
+      },
+      "model_score_gpu_ms": {
+        "p50": 22.281760215759277,
+        "p95": 22.795048713684082,
+        "p99": 22.872779273986815
+      },
+      "deadline_missed": 0,
+      "n": 100
+    },
+    {
+      "candidates": 512,
+      "obs_to_publish_ms": {
+        "p50": 45.196864000000005,
+        "p95": 45.699300300000004,
+        "p99": 45.841618229999995
+      },
+      "model_score_gpu_ms": {
+        "p50": 21.46123218536377,
+        "p95": 21.80719232559204,
+        "p99": 21.896720237731934
+      },
+      "deadline_missed": 0,
+      "n": 100
+    },
+    {
+      "candidates": 1024,
+      "obs_to_publish_ms": {
+        "p50": 53.8789275,
+        "p95": 54.56220385,
+        "p99": 54.69784895
+      },
+      "model_score_gpu_ms": {
+        "p50": 25.831503868103027,
+        "p95": 26.33646059036255,
+        "p99": 26.397603740692144
+      },
+      "deadline_missed": 0,
+      "n": 100
+    }
+  ],
+  "scope": "Replay observation-to-publication/rejection as measured on a saved DEV state. Physics observation extraction excluded. Recorded travel follows original ground path."
+}

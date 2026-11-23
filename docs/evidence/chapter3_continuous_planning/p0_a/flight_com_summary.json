@@ -1,0 +1,38 @@
+{
+  "layout": "config_double",
+  "root": 1135,
+  "oracle": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/chapter_mainline/post_review/veto_fallback_followup/oracle_cases.csv",
+  "model": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/chapter_mainline/post_review/veto_fallback_followup/config_double/part_0/rb_run1/terrain.mjb",
+  "model_sha256": "9e950140c85ff62055fea8fc20063bb88338f66780df378fdeda39615e562be9",
+  "mass_kg": 5.091,
+  "body": "base_link",
+  "mujoco": "3.6.0",
+  "control_dt_s": 0.005,
+  "archived_attempts": 15,
+  "complete_matched_triples": 2,
+  "contrasts": [
+    {
+      "approach": 0,
+      "alpha": 0.0,
+      "onset_tick": 772,
+      "duration_s": 0.1,
+      "measured_plus_minus_y_m": 0.00982112171455618,
+      "ideal_plus_minus_y_m": 0.009821253191907287,
+      "measured_plus_minus_vy_m_s": 0.19641975311438192,
+      "ideal_plus_minus_vy_m_s": 0.19642506383814573
+    },
+    {
+      "approach": 2,
+      "alpha": 0.0,
+      "onset_tick": 764,
+      "duration_s": 0.1,
+      "measured_plus_minus_y_m": 0.009821216128616361,
+      "ideal_plus_minus_y_m": 0.009821253191907287,
+      "measured_plus_minus_vy_m_s": 0.19642011471514065,
+      "ideal_plus_minus_vy_m_s": 0.19642506383814573
+    }
+  ],
+  "max_abs_y_residual_m": 1.4585449258364136e-06,
+  "selection": "All five approaches for one diagnostic root; zero recorded substep loads/body flag, zero terrain and world contact flags during each of the 20 intervals. Identical onset qpos/qvel for all three forces. Reconstructed from archived qpos and qvel without integrating dynamics.",
+  "new_physics": 0
+}
