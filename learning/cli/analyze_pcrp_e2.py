@@ -1,6 +1,7 @@
 """Score the fixed E2 geometry and initial-speed grids using the frozen 200 Hz traces."""
 import argparse
-from collections import defaultdict
+from collections import Counter, defaultdict
+from functools import lru_cache
 import csv
 import json
 from pathlib import Path
@@ -26,6 +27,108 @@ def write_csv(path, rows):
         writer = csv.DictWriter(f, fieldnames=list(rows[0]))
         writer.writeheader()
         writer.writerows(rows)
+
+
+def read_specs(stage, matched):
+    with (stage/'lanes.csv').open() as f:
+        reader = csv.DictReader(f)
+        primary_fields = reader.fieldnames
+        primary = list(reader)
+    baseline = {}
+    specs = defaultdict(list)
+    manifest = primary
+    if matched:
+        with (stage/'paired_lanes.csv').open() as f:
+            manifest = list(csv.DictReader(f))
+        if Counter(r['role'] for r in manifest) != {'primary':1160, 'paired_zero_only':80}:
+            raise ValueError('Matched E2 requires 1160 primary lanes and 80 velocity zero controls')
+        primary_keys = Counter(tuple(r[k] for k in primary_fields) for r in primary)
+        actual_primary = Counter(tuple(r[k] for k in primary_fields) for r in manifest if r['role']=='primary')
+        if len(primary_keys) != 1160 or primary_keys != actual_primary:
+            raise ValueError('Declared primary lanes and pairing map differ')
+    for r in manifest:
+        row = dict(experiment=r['stage'],center_m=float(r['center_m']) if r['center_m'] else None,
+                   group=int(r['seed']),ds_cm=int(r['ds_cm']),dv_m_s=float(r['dv_m_s']),alpha=float(r['alpha']),
+                   source=r['output'],lane=int(r['lane']),route=r['route'],terrain=r['terrain'],
+                   data_origin=r['source'],role=r.get('role','primary'))
+        if matched:
+            ds = r['stage']=='E2a'
+            if (r['axis'] != ('ds' if ds else 'dv') or r['source']!='new'
+                    or (row['role']=='paired_zero_only') != (not ds and row['dv_m_s']==0)
+                    or r['base_output']!=r['zero_output'] or r['global_slot']!=r['zero_global_slot']):
+                raise ValueError(f"Inconsistent matched E2 source or control: {row['source']}")
+            row.update(axis=r['axis'],batch=r['batch'],planned_slot=int(r['global_slot']),
+                       planned_origin=json.loads(r['world_origin']),zero_source=r['zero_output'],
+                       alpha0_source=r['alpha0_output'])
+        elif r['stage']!='E2a':
+            key = (r['stage'],row['center_m'],row['group'],row['alpha'])
+            baseline[key] = dict(row,dv_m_s=0.,source=r['base_output'],lane=ALPHAS.index(row['alpha']),
+                                 data_origin='reference_archive',role='paired_zero_only')
+        specs[row['source']].append(row)
+    for row in baseline.values():
+        specs[row['source']].append(row)
+    return specs
+
+
+@lru_cache(maxsize=4)
+def runtime_batch(path):
+    contract = json.loads((path/'contract.json').read_text())
+    return contract['settings']['num_envs'], contract['settings']['alphas'], contract['origin']
+
+
+def measured_slot(row, contract):
+    split = contract['batch_source']
+    lane = row['lane']
+    slot = split['lane_start'] + lane
+    source = Path(row['source'])
+    batch = source.parent/'batch'
+    if (Path(split['output']).resolve()!=batch.resolve() or source.parent.name!=row['batch']
+            or lane!=0 or split['lane_stop']-split['lane_start']!=1 or slot!=row['planned_slot']):
+        raise ValueError(f'Actual batch or physical slot differs from the pairing map at {source}')
+    count, alphas, origins = runtime_batch(batch)
+    origin = contract['origin'][lane]
+    if (count!=(24 if row['axis']=='ds' else 16) or alphas[slot]!=row['alpha']
+            or origin!=origins[slot] or origin!=row['planned_origin']):
+        raise ValueError(f'Actual batch size, alpha or world origin differs at {source}, slot {slot}')
+    return dict(actual_batch=str(batch),actual_global_slot=slot,actual_origin_m=origin)
+
+
+def adjacent_pair_evidence(rows):
+    # A physical slot is local to a packing family. DS and DV are independent grids.
+    cells = {}
+    for r in rows:
+        arm, alpha = r['experiment'], r['alpha']
+        offset = r['ds_cm'] if arm=='E2a' else r['dv_m_s']
+        key = (arm,r['center_m'],r['group'],offset,alpha)
+        if key in cells:
+            raise ValueError(f'Duplicate matched E2 cell {key}')
+        cells[key] = r
+    pairs = []
+    for (arm,center,group,offset,alpha),left in cells.items():
+        offsets = SHIFTS if arm=='E2a' else SPEEDS
+        zero = cells[arm,center,group,0,alpha]
+        alpha0 = cells[arm,center,group,offset,0]
+        if left['zero_source']!=zero['source'] or left['alpha0_source']!=alpha0['source']:
+            raise ValueError(f'Incorrect same-axis zero or same-offset alpha control for {left["source"]}')
+        i, j = offsets.index(offset), ALPHAS.index(alpha)
+        next_cells = []
+        if i+1 < len(offsets):
+            next_cells.append((left['axis'],cells[arm,center,group,offsets[i+1],alpha]))
+        if j+1 < len(ALPHAS):
+            next_cells.append(('alpha',cells[arm,center,group,offset,ALPHAS[j+1]]))
+        for factor,right in next_cells:
+            if (left['actual_global_slot']!=right['actual_global_slot']
+                    or left['actual_origin_m']!=right['actual_origin_m'] or left['actual_batch']==right['actual_batch']):
+                raise ValueError(f'Actual same-slot/world-origin comparison failed: {left["source"]}, {right["source"]}')
+            pairs.append(dict(experiment=arm,center_m=center,group=group,comparison=factor,
+                              primary_alpha=int(factor=='alpha' and arm=='E2a' and offset==0),
+                              left_ds_cm=left['ds_cm'],right_ds_cm=right['ds_cm'],
+                              left_dv_m_s=left['dv_m_s'],right_dv_m_s=right['dv_m_s'],
+                              left_alpha=alpha,right_alpha=right['alpha'],left_source=left['source'],
+                              right_source=right['source'],left_global_slot=left['actual_global_slot'],
+                              right_global_slot=right['actual_global_slot'],left_origin_m=left['actual_origin_m'],
+                              right_origin_m=right['actual_origin_m'],left_full=left['full'],right_full=right['full']))
+    return pairs
 
 
 def entry_index(wheel_xy, route, terrain):
@@ -75,6 +178,7 @@ def extract_case(requests, output, curve_name):
         i = spec['lane']
         if settings['alphas'][i] != spec['alpha'] or settings['zero_middle'][i] or settings['seed'] != spec['group']:
             raise ValueError(f'{source}: alpha, controller or group differs from lane manifest')
+        observed = measured_slot(spec, contract) if 'planned_slot' in spec else {}
         terrain = contract['terrain'][i]
         center = spec['center_m']
         if center is None:
@@ -90,7 +194,7 @@ def extract_case(requests, output, curve_name):
         H = margin(phi, omega, .7, B_NOM)[2]
         m = metrics[i]
         terminal = '+'.join(k for k in FLAGS if data[k][ids,i].any()) or 'unresolved'
-        row = dict(**spec, full=int(not m['failed']), hold=int(m['final_hold']),
+        row = dict(**spec, **observed, full=int(not m['failed']), hold=int(m['final_hold']),
                    terminal=terminal if m['failed'] else 'full_window', time_s=t[-1],
                    peak_roll_rad=float(x[:,4].max()), min_H_rad=float(H.min()),
                    entry_time_s=None, entry_v_m_s=None, entry_phi_rad=None, entry_omega_rad_s=None,
@@ -173,7 +277,7 @@ def summarize(rows):
     counts = []
     for grid,axis,groups,name in [(geo[:,:,3:4,:],3,groups8,'f_alpha'),(geo,2,groups8,'f_s'),
                                   (vel,2,groups4,'f_v'),(flat,2,groups4,'f_v_flat'),
-                                  (geo[:,:4,3:4,:],3,groups4,'f_alpha_groups401_404'),
+                                  (vel[:,:,2:3,:],3,groups4,'f_alpha_groups401_404'),
                                   (geo,3,groups8,'f_alpha_all_geometry'),(vel,3,groups4,'f_alpha_all_ridge_speeds')]:
         counts.extend(flip_stats(grid,axis,groups,name))
     rates = {r['metric']:r['fraction'] for r in counts if r['subset']=='overall'}
@@ -206,34 +310,30 @@ def main():
     out = stage/'analysis'
     clock = time.monotonic()
     (out/'curves').mkdir(parents=True,exist_ok=True)
-    specs, baseline = defaultdict(list), {}
-    with (stage/'lanes.csv').open() as f:
-        for r in csv.DictReader(f):
-            row = dict(experiment=r['stage'], center_m=float(r['center_m']) if r['center_m'] else None,
-                       group=int(r['seed']),ds_cm=int(r['ds_cm']),dv_m_s=float(r['dv_m_s']),alpha=float(r['alpha']),
-                       source=r['output'],lane=int(r['lane']),route=r['route'],terrain=r['terrain'],data_origin=r['source'])
-            specs[r['output']].append(row)
-            if r['stage'] != 'E2a':
-                key = (r['stage'],row['center_m'],row['group'],row['alpha'])
-                baseline[key] = dict(row,dv_m_s=0.,source=r['base_output'],lane=ALPHAS.index(row['alpha']),
-                                     data_origin='reference_archive')
-    for row in baseline.values():
-        specs[row['source']].append(row)
+    matched = json.loads((stage/'protocol.json').read_text()).get('packing')=='matched_packing'
+    specs = read_specs(stage, matched)
     rows = []
     for j,(source,requests) in enumerate(specs.items()):
         rows.extend(extract_case(requests,out,f'case_{j:04d}'))
-    episodes = [r for r in rows if r['data_origin'] != 'reference_archive']
+    episodes = [r for r in rows if r['role']=='primary']
+    velocity_zeros = [r for r in rows if r['role']=='paired_zero_only']
+    pairs = adjacent_pair_evidence(rows) if matched else []
+    if pairs:
+        write_csv(out/'actual_adjacent_pairs.csv',pairs)
     write_csv(out/'episodes.csv',episodes)
-    write_csv(out/'velocity_zero_references.csv',[r for r in rows if r['data_origin']=='reference_archive'])
+    write_csv(out/'velocity_zero_references.csv',velocity_zeros)
     counts, smooth, summary = summarize(rows)
     write_csv(out/'flip_rates.csv',counts)
     write_csv(out/'smoothed_windows.csv',smooth)
     elapsed = time.monotonic()-clock
     from sttw_control.pcrp_decision_figures import write_e2_figures
-    paths = write_e2_figures(episodes,out)
+    paths = write_e2_figures(rows,out)
     summary.update(scoring_s=elapsed,plotting_s=time.monotonic()-clock-elapsed,
                    archive_rows=sum(r['data_origin']=='archive' for r in episodes),
-                   planned_rows=len(episodes),bootstrap_samples=10000,bootstrap_seed=BOOTSTRAP_SEED)
+                   planned_rows=len(episodes),velocity_zero_references=len(velocity_zeros),
+                   physics_lanes=len(rows) if matched else None,matched_packing=matched,
+                   checked_adjacent_pairs=len(pairs),checked_primary_alpha_pairs=sum(r['primary_alpha'] for r in pairs),
+                   bootstrap_samples=10000,bootstrap_seed=BOOTSTRAP_SEED)
     (out/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
     lines = ['# E2 接触相位敏感性', '', '## 实际和原始参考轨迹', '']
     lines.extend(f'- [{Path(path).name}]({Path(path).relative_to(out)})' for path in paths)
@@ -247,7 +347,12 @@ def main():
         score = f"{r['fraction']:.3f}" if r['pairs'] else '—'
         interval = f"{r['bootstrap_low']:.3f}–{r['bootstrap_high']:.3f}" if r['pairs'] else '—'
         lines.append(f"|{r['metric']}|{r['subset']}|{r['flips']}/{r['pairs']}|{score}|{interval}|")
-    lines += ['', '主判定采用三处名义中心、8 组、4 对相邻 α 的总体 f_alpha。几何和初速扰动按各自有序网格计算，初速零点复用同条件档案。mixed_chain 仅统计固定组的沿单因素非恒定序列；mixed_group_cell 仅统计一端或两端在物理组之间有分歧的相邻对。稀释检查两者与 overall 并列。条件子集在重采样前固定，按整组抽取 10,000 次；分母为零的抽样次数另计。', '',
+    pairing = ('几何轴在 24 个固定物理槽位分 35 批运行，初速轴（含平地）在独立的 16 个固定物理槽位分 25 批运行。'
+               '两轴各自使用同组、同 α、同槽位的新零点。相邻 α 对也在同一轴、同组、同偏移、同物理槽位和同一世界平移下比较。'
+               '组匹配灵敏度中 f_v 的相邻 α 基准直接取初速轴自己的零点。具体左右槽号、平移及原轨迹见[实际相邻对](actual_adjacent_pairs.csv)。'
+               if matched else '初速零点复用同条件档案。')
+    lines += ['', '主判定采用几何轴三处名义中心、8 组、4 对相邻 α 的总体 f_alpha。'+pairing, '',
+              'mixed_chain 仅统计固定组的沿单因素非恒定序列；mixed_group_cell 仅统计一端或两端在物理组之间有分歧的相邻对。稀释检查两者与 overall 并列。条件子集在重采样前固定，按整组抽取 10,000 次；分母为零的抽样次数另计。', '',
               '入障定义取前轮轮心在原路线投影首次越过斜脊上游边界且位于有效宽度内的 200 Hz 实测样点。平地及未到达边界的轨迹保留空值。H 使用 φc=0.70 rad、Bnom=6146.05°/s² 与真实欧拉侧倾角速度，逐步保留时间、H 和前后轮竖向净力至实测终点。它是名义模型裕度。', '',
               '[逐轨迹入障值与原始文件](episodes.csv) · [初速零点来源](velocity_zero_references.csv) · [各中心 × α 的 56 次平滑完成率](smoothed_windows.csv) · [翻转数与区间](flip_rates.csv) · [分析耗时及判决](summary.json)']
     (out/'README.md').write_text('\n'.join(lines)+'\n')
