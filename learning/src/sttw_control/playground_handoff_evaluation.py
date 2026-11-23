@@ -268,15 +268,26 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
         nearest=(route.xy[route.route_ids]-pose[:,None,:2]).square().sum(-1).argmin(-1)
         middle.reset(m,pose,speed,raw,raw,previous,ctl,initial_progress=route.s[nearest])
         paired_departures=cfg.get('paired_departures')
+        continuous_routes=None
+        if cfg.get('continuous_handoff_routes'):
+            from .continuous_handoff_routes import ContinuousHandoffRoutes
+            if cfg.get('live_ground_cem') or cfg.get('rolling_planner') or cfg.get('locked_departures'):
+                raise ValueError('Continuous handback uses the P2 published approach from plan_updates; a second route publisher is incompatible')
+            if not paired_departures or cfg.get('p0_branches') or cfg.get('platform_online',{}).get('veto_bank'):
+                raise ValueError('Continuous handback needs fixed direction IDs and supports its own generated three-exit routes')
+            continuous_routes=ContinuousHandoffRoutes(route,hand['goal']['x_min_m'])
+            route=continuous_routes.route
+            shutil.copy2(Path(__file__).with_name('continuous_handoff_routes.py'),source/'continuous_handoff_routes.py')
         if paired_departures:
             approach_ids=tensor([r for r,_,_ in lanes]).long()
-            route=TorchPathReference(dict(np.load(paired_departures['route_bank'])),hcfg,device,route_ids=approach_ids)
+            if continuous_routes is None:
+                route=TorchPathReference(dict(np.load(paired_departures['route_bank'])),hcfg,device,route_ids=approach_ids)
+                approach_ref=dict(np.load(paired_departures['approach_file']))
+                approach_x=tensor(approach_ref['xy'][:,:,0]).contiguous()
+                arc64=tensor(saved['s'])
+                world_index=torch.arange(n,device=device)
             middle.route=route
-            approach_ref=dict(np.load(paired_departures['approach_file']))
-            approach_x=tensor(approach_ref['xy'][:,:,0]).contiguous()
             directions=tensor(paired_departures['direction_ids']).long()
-            arc64=tensor(saved['s'])
-            world_index=torch.arange(n,device=device)
         online=cfg.get('platform_online')
         if online:
             from .platform_online import PlatformDepartureQuery, velocity_state
@@ -303,19 +314,30 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
             latency=online.get('latency_ticks')
             if latency:
                 # Publish the neutral lead-in while the initial plan is pending.
-                neutral_id=len(route.xy)
-                for field in ('xy','heading','curvature'):
-                    values=getattr(route,field)
-                    setattr(route,field,torch.cat((values,tensor(saved[field][0:1]).to(values))))
-                route.route_ids=torch.full_like(approach_ids,neutral_id)
+                if continuous_routes is None:
+                    neutral_id=len(route.xy)
+                    for field in ('xy','heading','curvature'):
+                        values=getattr(route,field)
+                        setattr(route,field,torch.cat((values,tensor(saved[field][0:1]).to(values))))
+                    route.route_ids=torch.full_like(approach_ids,neutral_id)
                 release=torch.full_like(approach_ids,-1)
                 pending_route=torch.zeros_like(approach_ids)
                 applied_tick=torch.full_like(approach_ids,-1)
                 proposed=directions.clone()
         middle.lane_ticks=torch.zeros(n,device=device,dtype=torch.long);middle.latent=torch.zeros_like(raw)
         ground_adapter=GroundAdapter(middle,ctl)
-        updates={round(u['time_s']/.005):(u,TorchPathReference(dict(np.load(u['reference_path'])),hcfg,device,route_ids=[r for r,m,i in lanes]))
-                 for u in cfg.get('plan_updates',[]) if name in u['skills']}
+        updates={}
+        for u in cfg.get('plan_updates',[]):
+            if name not in u['skills']:continue
+            ref=dict(np.load(u['reference_path']))
+            rows=[r for r,m,i in lanes]
+            if continuous_routes is not None:
+                rows=u.get('reference_rows',list(range(n)) if len(ref['xy'])==n else [0]*n)
+                if len(rows)!=n or (len(ref['xy']) not in (1,n) and 'reference_rows' not in u):
+                    raise ValueError('Specify one candidate reference row for each physical lane')
+            tick=round(u['time_s']/.005) if continuous_routes is None else 4*math.ceil(u['time_s']/.02-1e-9)
+            if continuous_routes is not None and tick in updates:raise ValueError('Provide one combined approach packet per publication boundary')
+            updates[tick]=(u,TorchPathReference(ref,hcfg,device,route_ids=rows))
         plan_receipts=[]
         p0_branches=None
         if cfg.get('p0_branches'):
@@ -423,18 +445,29 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
             for tick in range(start_tick,round(args.seconds/.005)+1):
                 t=tick*.005
                 if paired_departures:
-                    if online and latency and tick==latency['start']:
+                    if continuous_routes is None and online and latency and tick==latency['start']:
                         route.route_ids=approach_ids.clone()
                     # Every departure keeps the common approach until the first tick after physical relock.
                     just_locked=alive & (phase==2) & ((handoff_time/.005).round().long()==tick-1)
                     if p0_branches is not None:
                         p0_branches.audit(tick,locals(),just_locked)
                         previous_p0_velocity=velocity_state(*velocity_history[tick%4])
-                    after_x=torch.stack([torch.searchsorted(x,q[:,0].double().contiguous()+.05) for x in approach_x])
-                    join=torch.maximum(after_x[approach_ids,world_index],torch.searchsorted(arc64,middle.projection['progress'].double().contiguous())+1)
+                    if continuous_routes is None:
+                        after_x=torch.stack([torch.searchsorted(x,q[:,0].double().contiguous()+.05) for x in approach_x])
+                        join=torch.maximum(after_x[approach_ids,world_index],torch.searchsorted(arc64,middle.projection['progress'].double().contiguous())+1)
+                    else:
+                        locked_ids=torch.where(just_locked)[0]
+                        if len(locked_ids):
+                            torch.cuda.synchronize(device);start_geometry=time.perf_counter()
+                            continuous_routes.at_handback(locked_ids,q[locked_ids,:2],middle.projection['progress'][locked_ids])
+                            torch.cuda.synchronize(device)
+                            continuous_routes.geometry_ms[locked_ids]=1000*(time.perf_counter()-start_geometry)
+                            if online:query_ms[locked_ids]=continuous_routes.geometry_ms[locked_ids].to(query_ms)
+                        choice_rows=continuous_routes.branch_rows
                     if online and bool((just_locked & (reselect|shadow)).any()):
                         ids=torch.where(just_locked & (reselect|shadow))[0]
-                        choices=len(approach_x)+(approach_ids[ids,None]*3+torch.arange(3,device=device))*len(arc64)+join[ids,None].clamp_max(len(arc64)-1)
+                        choices=(len(approach_x)+(approach_ids[ids,None]*3+torch.arange(3,device=device))*len(arc64)+join[ids,None].clamp_max(len(arc64)-1)
+                                 if continuous_routes is None else choice_rows[ids])
                         torch.cuda.synchronize()
                         start_query=time.perf_counter()
                         # Rotate world velocity into body x exactly as in the offline predictor.
@@ -453,16 +486,21 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                         query_pass[ids]=torch.where(reselect[ids],admitted,incumbent) if online.get('committed_vote') else admitted
                         torch.cuda.synchronize()
                         query_ms[ids]=1000*(time.perf_counter()-start_query)
+                        if continuous_routes is not None:query_ms[ids]+=continuous_routes.geometry_ms[ids].to(query_ms)
                     if online and query.relative:
                         velocity_history[tick%4] = (q,v)
-                    branch=len(approach_x)+(approach_ids*3+directions)*len(arc64)+join.clamp_max(len(arc64)-1)
+                    branch=(len(approach_x)+(approach_ids*3+directions)*len(arc64)+join.clamp_max(len(arc64)-1)
+                            if continuous_routes is None else choice_rows.gather(1,directions[:,None]).squeeze(1))
                     if online and latency:
-                        anchor=join.clamp_max(len(arc64)-1)
-                        exit_branch=len(approach_x)+(approach_ids*3+proposed)*len(arc64)+anchor
+                        if continuous_routes is None:
+                            anchor=join.clamp_max(len(arc64)-1)
+                            exit_branch=len(approach_x)+(approach_ids*3+proposed)*len(arc64)+anchor
+                        else:exit_branch=choice_rows.gather(1,proposed[:,None]).squeeze(1)
                         pending_route=torch.where(just_locked,exit_branch,pending_route)
                         release=torch.where(just_locked,tick+latency['departure'],release)
                         # All comparators execute the same straight exit during the measured decision time.
-                        branch=len(approach_x)+(approach_ids*3+1)*len(arc64)+anchor
+                        branch=(len(approach_x)+(approach_ids*3+1)*len(arc64)+anchor
+                                if continuous_routes is None else choice_rows[:,1])
                         directions=torch.where(just_locked,1,directions)
                         apply=alive & (release==tick)
                         if p0_branches is not None:
@@ -514,7 +552,13 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                     if collect_handoff:handoff_snapshot_saved=True
                     if snapshot_tick==tick:replay_snapshot=snapshot
                     if snapshot_tick==tick:prefix=[rows.copy(),poses.copy(),velocities.copy(),contact_rows.copy(),valid_rows.copy(),world_rows.copy(),plan_receipts.copy(),load_rows.copy(),controller_rows.copy(),applied_rows.copy(),applied_masks.copy(),rb_state_rows.copy()]
-                if tick in updates:
+                if continuous_routes is not None and tick in updates:
+                    update,new_route=updates[tick]
+                    receipt=continuous_routes.publish(ground_adapter,new_route,tensor(update['committed_until_m']).expand(n),
+                        tensor(update.get('ready_s',update['time_s'])).expand(n),tensor(update['deadline_s']).expand(n),alive & (phase==0),update['expected_previous_version'])
+                    route=middle.route
+                    plan_receipts.append(receipt)
+                elif tick in updates:
                     update,new_route=updates[tick]
                     before=ground_adapter.snapshot()
                     receipt=ground_adapter.update_plan(new_route,torch.full((n,),update['committed_until_m'],device=device),t,update['expected_previous_version'])
@@ -752,14 +796,16 @@ def evaluate_handoff(model, mm, idx, cfg, bundle, hcfg, identity, controller_con
                 if telemetry:
                     samples=load_trace[keep,lane]
                     contact_data.update(dict(contact_substep=samples,contact_substep_columns=['front_normal_N','rear_normal_N','body_normal_N','body_contact'],contact_physics_dt_s=.005/args.physics_substeps,contact_interval_mean_N=samples[:,:,:3].mean(1),contact_interval_peak_N=samples[:,:,:3].max(1),contact_interval_impulse_Ns=samples[:,:,:3].sum(1)*(.005/args.physics_substeps)))
-                np.savez_compressed(target_dir/'trajectory.npz',**contact_data,trace=trace,qpos=qsave,qvel=speeds[keep,lane],world_flags=world_trace[keep,lane],world_flag_columns=['physical_map_exit','nonwheel_terrain_contact','forbidden_obstacle_contact'],wheel_contact_flags=contact_trace[keep,lane],wheel_contact_columns=['any_terrain','any_far','both_far'],reference_xy=(approach_ref['xy'] if paired_departures else saved['xy'])[route_id],published_reference_xy=route.xy[route.route_ids[lane]].cpu().numpy(),columns=['time','x','y','z','roll','pitch','yaw','vx','vy','vz','ground_active','path_distance','steer_target','rear_target','hip_target','knee_target','approaching','rear_rate_rad_s','requested_speed_m_s','phase'])
+                np.savez_compressed(target_dir/'trajectory.npz',**contact_data,trace=trace,qpos=qsave,qvel=speeds[keep,lane],world_flags=world_trace[keep,lane],world_flag_columns=['physical_map_exit','nonwheel_terrain_contact','forbidden_obstacle_contact'],wheel_contact_flags=contact_trace[keep,lane],wheel_contact_columns=['any_terrain','any_far','both_far'],reference_xy=route.xy[lane].cpu().numpy() if continuous_routes is not None else (approach_ref['xy'] if paired_departures else saved['xy'])[route_id],published_reference_xy=route.xy[route.route_ids[lane]].cpu().numpy(),columns=['time','x','y','z','roll','pitch','yaw','vx','vy','vz','ground_active','path_distance','steer_target','rear_target','hip_target','knee_target','approaching','rear_rate_rad_s','requested_speed_m_s','phase'])
                 row=dict(continuation_alpha=continuation_alpha,case_dir=case_dir,variant=variants[variant],skill=case_name,route=route_id,continuation=mode,termination=['timeout','physical_failure','tracking_domain_exit' if world else 'corridor_or_domain_exit','goal','world_boundary_exit','forbidden_obstacle_contact'][codes[lane]],actuator_owner_max_difference=float(ownership_max[lane]) if audit_owner else None,nonwheel_contact_steps=int(world_trace[keep,lane,1].sum()),forbidden_contact_steps=int(world_trace[keep,lane,2].sum()),goal=bool(codes[lane]==3),rb_entry_s=None if entry_time[lane]<0 else float(entry_time[lane]),goal_hold_s=float(hold[lane]),airborne=bool(airborne[lane]),far_contact=bool(far_time[lane]>=0),first_far_contact_s=None if far_time[lane]<0 else float(far_time[lane]),handoff_s=None if handoff_time[lane]<0 else float(handoff_time[lane]),duration_s=float(durations[lane]),final_xy=positions[-1,lane,:2].tolist())
+                if continuous_routes is not None:
+                    row.update(approach_published_tick=int(continuous_routes.published_tick[lane]),handoff_join=int(continuous_routes.handoff_join[lane]),handoff_geometry_batch_ms=float(continuous_routes.geometry_ms[lane]))
                 if online:
                     dep,onset,ticks,admitted=online_end[lane]
                     if latency:
                         proposed_dep,due,applied=delay_receipt[lane]
                         row.update(proposed_departure=int(proposed_dep),departure_due_tick=int(due),departure_applied_tick=int(applied),
-                                   initial_release_tick=latency['start'])
+                                   initial_release_tick=latency['start'] if continuous_routes is None else int(continuous_routes.published_tick[lane]))
                     row.update(selected_departure=int(dep),air_event_tick=int(onset),applied_force_ticks=int(ticks),query_batch_ms=float(query_clock[lane]),handoff_query_feasible=bool(admitted))
                 if cfg.get('collect_model_state') and not cfg.get('task_evaluation'):row['completed_slice']=bool(codes[lane]==0)
                 if rolling is not None:
