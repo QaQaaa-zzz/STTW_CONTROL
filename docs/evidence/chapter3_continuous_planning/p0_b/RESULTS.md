@@ -53,6 +53,23 @@
 
 对这两例的每次实际发布，从当时车体所在纵向位置往前取 1 m，按参考 XY 相邻方向角差除以平均弧长估计曲率。每次先取窗口内最大绝对曲率，再在同一个任务的发布间取中位数。1171 的滚动路线为 8.26 m⁻¹，旧出口参考在相同纵向窗口为 0.49 m⁻¹；1175 分别为 10.32 和 0.56 m⁻¹。这里测的是路线要求转得多急。把这些数解释为车辆一定无法执行，还需要转向、侧倾及速度界。后续单次与滚动对照应记录重复改线是否放大了转弯要求，以及实际车身有没有跟上。[42 次实际发布的逐次数据](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p0b_20261123/analysis/fixed_entry_two_cases_published_reference_curvature.csv)
 
+全 284 项按同一算法统计。95 项至少发布过一次滚动路线，共 1,815 次实际发布。其余 189 项保留在各自任务分母中。
+
+| 旧出口与滚动出口 | 总项数 | 曾发布数 | 滚动参考曲率中位数 [四分位区间]，m⁻¹ | 同纵向窗口的旧参考，m⁻¹ |
+|---|---:|---:|---:|---:|
+| 两者均完成 | 26 | 26 | 约 0 [约 0, 1.30] | 约 0 [约 0, 0.27] |
+| 滚动新增完成 | 11 | 11 | 1.29 [1.00, 1.56] | 约 0 [约 0, 约 0] |
+| 滚动丢失完成 | 58 | 38 | 1.95 [0.62, 6.33] | 0.35 [0.31, 0.54] |
+| 两者均失败 | 189 | 20 | 1.30 [1.16, 2.99] | 0.49 [0.25, 1.12] |
+
+表中每个有发布的任务先对其各次发布取中位数，再对任务汇总。曾发布的 38 项丢失中有 35 项的滚动路线比旧路线更弯，11 项救回也全部更弯。更急的转弯能帮助车绕过障碍，问题是当时的车速与侧倾能否跟上。后续可用同起点的真实跟踪与实际转向检验。[逐任务数据](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p0b_20261123/analysis/fixed_entry_published_reference_curvature_by_contract.csv) · [分组结果](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p0b_20261123/analysis/fixed_entry_published_reference_curvature_summary.csv)
+
 ## 直接重标定现有裕量
 
 旧系统共享的 10.18 cm 来自运动学模型。对同样的 73 条开发撞墙记录，改用本次平台动力学预测器计算同一顺位的预测净空，得到 5.33 cm。以这两个数重评分同批 44 个旧留出起点的已执行分支，主图 249 条中放行数 100→129，新增 25 条到目标、4 条超时；另一图 258 条中放行数 110→138，新增 28 条均到目标。新增 57 条分支中记录到 0 次碰墙。下一组在线对照比较原裕量、动力学预测器自己的固定裕量、按预测时长校准的裕量，同时报告是否通过指定门和能否稳住到终点。[原始标定逻辑](../../../../learning/cli/score_platform_review.py:31) · [主图分支](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/review_114/forecasts_primary_rb_run1.csv) · [另一图分支](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_playground_sttw_rb_sttw/platform_test0_20261120/approach_alignment/replication_wide/review_114/forecasts_alternate_rb_run1.csv)
+
+历史主图起点 24 的两个出口，可以从同一实际状态、实际参考分别重放到各自的真实终点。左转实际到达，直行实际碰墙。按原程序复算全程最小预测净空分别为 4.775 cm 和 −8.511 cm，与旧 CSV 的最大差为 1.49×10⁻⁸ m。左转在 1 秒处预测净空 8.85 cm，随后 20 ms 中实测车身包围盒最小净空 29.12 cm；2 秒处预测 123.42 cm、实测 109.30 cm。误差方向随这条路线上的位置发生变化，左转全程实测最小净空为 10.60 cm。该对出口用于验证重放方法与时间对齐，两个出口来自同一起点。[逐时净空](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p0b_20261123/analysis/clearance_pilot/root24_clearance.csv) · [模型和几何来源](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p0b_20261123/analysis/clearance_pilot/receipt.json)
+
+### 5.33 cm 首批实际对照
+
+右偏墙起点 1171–1176，72 个按门固定入口的任务。右门 36 项全部通过同车接管配对，余量从 10.18 cm 改为 5.33 cm 后，完整完成 0→3，碰墙 21→16。三个新完成分属两个起点，1172 的 −5 N 近右门和远右门，以及 1176 的 +5 N 近右门。左门严格可比 33 项，完成 5→5，碰墙 4→2。全批 72 项的实测完成数 7→10，三项左门的全车状态检查只有固定世界坐标体上的一个合力分量相差 0.000061；保留为未配对时，69 项可比，完成 5→8、碰墙 25→18，整批净完成变化界为 0 至 +6。1171 与 1175 上述两个滚动失败的全程姿态、速度、实际轨迹记录和最后参考，在这两种余量下分别完全相同。[三个救回的实际与参考 XY](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_margin_fixed_20261123/analysis/margin_pairs/right_offset_part_0_rescued_xy.png) · [首批逐项核对](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_margin_fixed_20261123/analysis/margin_pairs/right_offset_part_0.csv)
