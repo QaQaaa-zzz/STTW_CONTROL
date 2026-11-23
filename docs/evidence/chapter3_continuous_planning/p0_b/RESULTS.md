@@ -70,6 +70,50 @@
 
 历史主图起点 24 的两个出口，可以从同一实际状态、实际参考分别重放到各自的真实终点。左转实际到达，直行实际碰墙。按原程序复算全程最小预测净空分别为 4.775 cm 和 −8.511 cm，与旧 CSV 的最大差为 1.49×10⁻⁸ m。左转在 1 秒处预测净空 8.85 cm，随后 20 ms 中实测车身包围盒最小净空 29.12 cm；2 秒处预测 123.42 cm、实测 109.30 cm。误差方向随这条路线上的位置发生变化，左转全程实测最小净空为 10.60 cm。该对出口用于验证重放方法与时间对齐，两个出口来自同一起点。[逐时净空](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p0b_20261123/analysis/clearance_pilot/root24_clearance.csv) · [模型和几何来源](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p0b_20261123/analysis/clearance_pilot/receipt.json)
 
-### 5.33 cm 首批实际对照
+### 5.33 cm 在右偏墙的实际对照
 
 右偏墙起点 1171–1176，72 个按门固定入口的任务。右门 36 项全部通过同车接管配对，余量从 10.18 cm 改为 5.33 cm 后，完整完成 0→3，碰墙 21→16。三个新完成分属两个起点，1172 的 −5 N 近右门和远右门，以及 1176 的 +5 N 近右门。左门严格可比 33 项，完成 5→5，碰墙 4→2。全批 72 项的实测完成数 7→10，三项左门的全车状态检查只有固定世界坐标体上的一个合力分量相差 0.000061；保留为未配对时，69 项可比，完成 5→8、碰墙 25→18，整批净完成变化界为 0 至 +6。1171 与 1175 上述两个滚动失败的全程姿态、速度、实际轨迹记录和最后参考，在这两种余量下分别完全相同。[三个救回的实际与参考 XY](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_margin_fixed_20261123/analysis/margin_pairs/right_offset_part_0_rescued_xy.png) · [首批逐项核对](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_margin_fixed_20261123/analysis/margin_pairs/right_offset_part_0.csv)
+
+第二批右偏墙 72 项全部严格配对，完成 3→6，碰墙 28→22。合并两批，144 项实测完成 10→16，碰墙 53→40，6 个新增任务都集中在 3 个起点（1172、1176、1180）。右门 0→5/72、碰墙 43→32；左门 10→11/72、碰墙 10→8。按含固定世界体内部合力的严格口径，可比 141 项，完成 8→14、碰墙 53→40。第二批增加的 3 项均来自起点 1180 的 0 N 条件，两道右门旧车曾过门后超出跟踪范围，远左门旧车超时。新车三项均继续到目标并保持。1172 和 1180 的两个右门分别复用了相同的物理轨迹；六项成功有四组不同的新旧实际 XY。[两个批次的完整轨迹索引](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_margin_fixed_20261123/analysis/margin_pairs/right_offset_two_batch_index.html) · [全六项配对实跑](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_margin_fixed_20261123/analysis/margin_pairs/right_offset_all_changes_xy.png)
+
+### 固定净空的四批最终结果
+
+四批各 2,268 条物理轨迹全部结束。主比较在同一个门向固定入口、同样的滚动出口下只更改净空阈值。下表保留全部实测合同。
+
+| 开发地图与门向 | 任务 | 完整完成，10.18→5.33 cm | 碰墙，10.18→5.33 cm |
+|---|---:|---:|---:|
+| 右偏墙，右门 | 72 | 0→5 | 43→32 |
+| 右偏墙，左门 | 72 | 10→11 | 10→8 |
+| 错位双墙，右门 | 72 | 15→17 | 8→7 |
+| 错位双墙，左门 | 72 | 12→14 | 24→25 |
+| 两图合计 | 288 | **37→47** | **85→72** |
+
+新阈值救回 11 项，丢失 1 项。24 个起点中有 6 个净增加、1 个净减少、17 个持平。原计划的逐车接管状态严格一致或两边均已结束的合同有 284 项，完成 35→45、碰墙 85→72。其余四项实测均持平；若保留全部未知反事实，完整面板净完成增益为 6 至 14 项。44 根旧分支集的准入碰墙率不能替代这两张图的实际闭环碰墙率。错位双墙起点 1185、0 N、近右门，两车均通过正确一侧且未碰墙。10.18 cm 的车完成最后 0.505 s 保持；5.33 cm 的车在 7.825 s、x=16.393 m 跟踪越域。阈值选择为后续开发保留 5.33 cm；两图实测净增加 3.47 个百分点，整体完整完成率仍只有 16.32%。[全部 288 项实际及参考 XY](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_margin_fixed_20261123/analysis/margin_pairs/all_288_xy.html) · [逐项实测与接管核对](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_margin_fixed_20261123/analysis/margin_pairs/matched_lane_index.csv) · [四批的地图与门侧分解](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_margin_fixed_20261123/analysis/margin_pairs/batch_by_side.csv)
+
+同样用 5.33 cm 并固定跳前入口，只换落地选路算法，在七个物理分支通过逐字节配对的 236 项中，旧三出口选择完成 **91/236**、碰墙 **42/236**，滚动连续选择完成 **39/236**、碰墙 **60/236**。其中右偏墙完成 56→12/116、错位双墙完成 35→27/120。这个比较问落地算法选哪个好，前面的 288 项比较问同一个滚动算法换裕量有何效果。[逐项实跑终点](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_margin_fixed_20261123/analysis/measured_exits.csv.gz)。
+
+### 按预测时长放大净空的全档复核
+
+使用两张历史图全部 2,052 个 RB 物理出口，1,317 个复锁出口可重放。拟合尺度用根 8–24，校准用 25–77，两图共用的根合并为一个单位。78–121 的 44 根已参与过历史分析，用来检查开发效果。每个预测时刻与随后 20 ms 内每 5 ms 记录的车身包围盒净空最小值比较。以每个校准根全部已观察时间和出口的最大归一化高估量标定 98% 目标。53 个校准根的有限样本顺位为第 53 个，得到公用乘数 5.538。相应余量在前 0.5 秒为 17.35 cm、0.5–1 秒为 18.34 cm、1 秒后为 135.93 cm。历史开发检查 44/44 根的已观察区间均覆盖，进入决策的方案全部被拒绝。
+
+| 44 根、507 条已实跑的复锁出口 | 放行 | 放行且实际完成 | 放行且实际碰墙 |
+|---|---:|---:|---:|
+| 原固定值 10.18 cm | 210 | 170 | 0 |
+| 预测器固定值 5.33 cm | 267 | 223 | 0 |
+| 上述时变余量 | **0** | **0** | **0** |
+
+507 条中实际有 279 条完成、73 条碰墙。全 114 根（含拟合和校准）按冻结原始预测值和严格大于规则，5.33 cm 放行 699 条，有 2 条碰墙；旧 10.18 cm 放行 549 条，记录到 0 条碰墙。CPU 重放中一个撞墙出口的预测净空比阈值多 7.45×10⁻⁹ m，原档恰好等于阈值，因此 CPU 计为 700 次放行、3 次碰墙。两种口径的上述 44 根开发检查结果完全相同。当前时变余量配方退出在线候选。其全轨迹同时覆盖目标与出口能否通过并非同一指标，今后若重做需另立方案，在同等准入下考察实际完成与碰墙。[全部原始分母与决策](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p0b_20261123/analysis/clearance_by_horizon/admission_physical_branches.csv) · [时距与有效根数](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p0b_20261123/analysis/clearance_by_horizon/bins_and_support.csv) · [复算结果](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p0b_20261123/analysis/clearance_by_horizon/results.json)
+
+## 在起跳前，同一个输入可能对应几个真实结果
+
+两张开发地图的 1,296 条实际跳前样本已按真实时间导出。每个起点在第一帧有一套实测车辆状态；到 15 ms 时，控制偏好 α 已经改变了车辆状态，24 个起点都出现三套数值。开发输入取 t=0，候选曲线与 α 作为拟执行动作。432 组“起点 × 路线 × α”的八项模型输入，对三种尚未发生的横推逐元素相同。581 次成功的落地标签包含实测复锁时刻、首次出口查询时的姿态与速度，以及该查询之前 20 ms 的速度，均和对应车辆快照逐位一致。715 次未复锁保留失败标签。[输入与标签说明](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p0b_20261123/analysis/p1_dev_prefixes/export_receipt.json) · [逐例源轨迹](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p0b_20261123/analysis/p1_dev_prefixes/prefix_index.csv)
+
+**本面板的数学下界。** 固定车的出发状态、地图和拟执行动作。三个等权横推中若有 \(k\) 次落稳，只看上述输入的确定性二元预测只能给三次同一个答案，因此至少会错 \(\min(k,3-k)\) 次。给定一个概率 \(q\)，记 \(p=k/3\)，三次二次概率误差（Brier 分数）的均值为
+\[
+\frac13\sum_{j=1}^3(q-y_j)^2=(q-p)^2+p(1-p).
+\]
+432 组中，\(k=0,1,2,3\) 的组数分别为 148、106、59、119。即使逐组知道最优答案，二元预测至少错 165/1,296 次（12.73%），概率预测的平均 Brier 分数至少为 0.08488。例为右偏墙 1171 的原右弯、α=0.5，−5 N 和 0 N 都能复锁，+5 N 未复锁。该推导针对出发帧的观测、这三种等权推力与所测动作；24 个起点都存在某条三种推力均可落稳的候选。
+同样做完 3 次跳跃的 119 组中，按同一组里三个结果的最大差取中位数，首次落地查询时横向位置差 14.17 cm、车头方向差 16.41°，复锁时间差 0.105 s。这些是状态差，不要求推力产生 14 cm 的纯空中横移。[落稳状态的实测差异](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p0b_20261123/analysis/p1_dev_prefixes/successful_outcome_ranges.csv) · [逐组下界计数](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p0b_20261123/analysis/hidden_push_relock_by_root_action.csv)
+固定相同的落地滚动规划器，逐“起点 × 门”比较两个有限库最优值。合法参考在三种未知横推中共用一个起跳选择；另一参考可预知未来推力再各自选。对每个合同枚举尚未认证的二值结果，并在前后两个最优值中使用同一份填充，后者在这 288 项的计数会高出 37–42 项。故使用提前知道推力的参考，会把车上其实无法使用的信息计入指标。[逐起点和门的界](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p0b_20261123/analysis/unknown_push_selection_bounds.csv)
+
+**跳前模型的开发基线。** 在一张图的 12 个起点上，按同一候选入口统计复锁率，在另一张图 12 个起点上按原协议评分，然后两图交换。18 种动作都参与，三种未来横推均不可见。仅按动作取 12 个起点的平均，合并 Brier 为 0.15391；按原稿的起点状态距离取最近 5 个独立起点，合并为 0.16623。两张图均是已检查的 0.16 m 高台开发图。数值越低代表复锁概率预测越准。新分布模型需要在独立地图上与这两个基线同台比较，再看过门表现。[比较协议](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p0b_20261123/analysis/p1_dev_prefixes/dev_comparator_protocol.json) · [每条预测和目标](/media/qy/6A7E3DB07E3D75C3/STTW_runs/chapter3_continuous_p0b_20261123/analysis/p1_dev_prefixes/development_probability_predictions.csv)
