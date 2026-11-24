@@ -28,6 +28,23 @@ def case_name(layout, group):
     return f'{layout}_v2.6{suffix}_seed{group}'
 
 
+def pure_cem_flat_passed(rows):
+    """The flat pilot must supply its own passing candidate after the warm starts."""
+    return any(
+        row['case'] == case_name('flat_original', 401)
+        and int(row['generation']) > 0 and row['method'].startswith('CEM_')
+        and int(row['C']) == 1 and float(row['V']) <= 0.676
+        for row in rows
+    )
+
+
+def archived_flat_passed(directory, status):
+    if directory.name != 'E1a':
+        return status.get('flat_control_passed') is True
+    with (directory/'candidates.csv').open() as stream:
+        return pure_cem_flat_passed(csv.DictReader(stream))
+
+
 def case_records(root, stage):
     raw = read(root.parent/'pcrp_curvature_governor_20261121'/'source_cases.json')
     protocol = read(root/'step0/protocol.json')
@@ -182,7 +199,7 @@ def execute(root,stage):
     if stage=='E1b':
         pilot=read(root/'e1/E1a/status.json')
         pilot_protocol=read(root/'e1/E1a/protocol.json')
-        if pilot.get('stage')!='complete' or pilot.get('flat_control_passed') is not True:
+        if pilot.get('stage')!='complete' or not archived_flat_passed(root/'e1/E1a',pilot):
             raise SystemExit('E1b held: E1a flat control has not passed.')
         if any(pilot_protocol[k]!=protocol[k] for k in ('times_s','random_seed','packing','replay672_summary_sha256')):
             raise ValueError('E1 stages differ in search or packing rules')
@@ -252,7 +269,8 @@ def execute(root,stage):
         status.update(generation=gen)
         write(status_path,status)
     flat=[r for k,r in incumbents.items() if k.startswith('flat_original')]
-    status.update(stage='complete',flat_control_passed=all(int(r['C'])==1 for r in flat),completed_total=len(rows))
+    passed=pure_cem_flat_passed(rows) if stage=='E1a' else all(int(r['C'])==1 for r in flat)
+    status.update(stage='complete',flat_control_passed=passed,completed_total=len(rows))
     if status['submitted_new']!=protocol['new_budget'] or status['completed_new']!=len(rows) or len(rows)!=protocol['budget']:
         raise ValueError('Realized E1 count differs from the registered budget')
     write(status_path,status)

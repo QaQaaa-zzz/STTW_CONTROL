@@ -10,7 +10,7 @@ import time
 
 import numpy as np
 
-from pcrp_oracle_search import LABELS, LAYOUTS, LAB, REPO, case_manifest, case_name, csv_write
+from pcrp_oracle_search import LABELS, LAYOUTS, LAB, REPO, archived_flat_passed, case_manifest, case_name, csv_write
 from pcrp_phase_grid import GYM
 from pcrp_replay_gate import compare_case, read, sha, write
 
@@ -205,7 +205,7 @@ def execute_legacy(root, scope_path):
     stages = [root/'e1'/s for s in ('E1a','E1b')]
     for stage in stages:
         status = read(stage/'status.json')
-        if status.get('stage')!='complete' or status.get('generation')!=10 or status.get('flat_control_passed') is not True:
+        if status.get('stage')!='complete' or status.get('generation')!=10 or not archived_flat_passed(stage,status):
             raise SystemExit(f'E1c requires complete search and positive flat control in {stage}.')
     nominal = []
     cases = {}
@@ -400,7 +400,7 @@ def execute_matched(root, scope):
     for name in ('E1a','E1b'):
         stage = root/'e1'/name
         status, protocol = read(stage/'status.json'), read(stage/'protocol.json')
-        if status.get('stage')!='complete' or status.get('generation')!=10 or status.get('flat_control_passed') is not True:
+        if status.get('stage')!='complete' or status.get('generation')!=10 or not archived_flat_passed(stage,status):
             raise SystemExit(f'E1c requires 10 generations and positive flat controls in {name}')
         with (stage/'best.csv').open() as f:
             best = {r['case']:r for r in csv.DictReader(f)}
