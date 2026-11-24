@@ -1,0 +1,345 @@
+{
+  "role": "archived DEV oracle development on four previously examined PCRP DEV cases; not an independent test",
+  "cases": [
+    {
+      "case": "flat_original_v2.6_seed401",
+      "layout": "flat_original",
+      "seed": 401,
+      "alpha": 0.5,
+      "alpha_source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e1/E1a/candidates.csv",
+      "reference_V": 0.6759738922119141,
+      "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s4.2_length0.8_oblique0.25_h0",
+      "terrain_sha256": "27bad36d188834082a9d41edfb1249b049afcc267623d2705bf3c29805f88c4c",
+      "randomization": {
+        "base_body": "chasis",
+        "friction_range": [
+          0.820328375903832,
+          0.820328375903832
+        ],
+        "mass_scale": [
+          0.9945363548999354,
+          0.9945363548999354
+        ],
+        "base_com_m": [
+          0,
+          0
+        ],
+        "latency_s": [
+          0.0,
+          0.0
+        ],
+        "servo_gain_scale": [
+          0.9932037842455803,
+          0.9932037842455803
+        ],
+        "steer_zero_offset_rad": [
+          0.0011024138621809876,
+          0.0011024138621809876
+        ],
+        "measurement_noise": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "push_interval_s": 1000000000,
+        "push_velocity_range": {
+          "x": [
+            0,
+            0
+          ],
+          "y": [
+            0,
+            0
+          ]
+        }
+      },
+      "initial_state": "runs/h75_selected_local300_flat/initial_state.npz",
+      "offsets": {}
+    },
+    {
+      "case": "position_s4.2_v2.6_seed401",
+      "layout": "position_s4.2",
+      "seed": 401,
+      "alpha": 0.5,
+      "alpha_source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e1/E1a/candidates.csv",
+      "reference_V": 0.8428346117337545,
+      "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s4.2_length0.8_oblique0.25_h0.1",
+      "terrain_sha256": "3307e0c03ae090a01d7e4af7d0271613c2dd68eb6fb3c4b626297256d98161f6",
+      "randomization": {
+        "base_body": "chasis",
+        "friction_range": [
+          0.820328375903832,
+          0.820328375903832
+        ],
+        "mass_scale": [
+          0.9945363548999354,
+          0.9945363548999354
+        ],
+        "base_com_m": [
+          0,
+          0
+        ],
+        "latency_s": [
+          0.0,
+          0.0
+        ],
+        "servo_gain_scale": [
+          0.9932037842455803,
+          0.9932037842455803
+        ],
+        "steer_zero_offset_rad": [
+          0.0011024138621809876,
+          0.0011024138621809876
+        ],
+        "measurement_noise": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "push_interval_s": 1000000000,
+        "push_velocity_range": {
+          "x": [
+            0,
+            0
+          ],
+          "y": [
+            0,
+            0
+          ]
+        }
+      },
+      "initial_state": "runs/h75_selected_local300_flat/initial_state.npz",
+      "offsets": {
+        "-1": {
+          "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s4.2_ds-1cm",
+          "sha256": "31ff269857be5fade21d5330184b867ecb70ea78093f464cb55c053053e1e3e7"
+        },
+        "1": {
+          "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s4.2_ds+1cm",
+          "sha256": "9020bfe4e116bddd2f9592c073f931c5f68d32df9ba431c3ddb2f0c02bc2e085"
+        }
+      }
+    },
+    {
+      "case": "position_s4.5_v2.6_seed401",
+      "layout": "position_s4.5",
+      "seed": 401,
+      "alpha": 1.0,
+      "alpha_source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e1/E1a/candidates.csv",
+      "reference_V": 1.3247942924499512,
+      "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s4.5_length0.8_oblique0.25_h0.1",
+      "terrain_sha256": "32f13e780186a6a67ce246e9c0fabc50a13be61d380a50b5211e66446e1fc17c",
+      "randomization": {
+        "base_body": "chasis",
+        "friction_range": [
+          0.820328375903832,
+          0.820328375903832
+        ],
+        "mass_scale": [
+          0.9945363548999354,
+          0.9945363548999354
+        ],
+        "base_com_m": [
+          0,
+          0
+        ],
+        "latency_s": [
+          0.0,
+          0.0
+        ],
+        "servo_gain_scale": [
+          0.9932037842455803,
+          0.9932037842455803
+        ],
+        "steer_zero_offset_rad": [
+          0.0011024138621809876,
+          0.0011024138621809876
+        ],
+        "measurement_noise": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "push_interval_s": 1000000000,
+        "push_velocity_range": {
+          "x": [
+            0,
+            0
+          ],
+          "y": [
+            0,
+            0
+          ]
+        }
+      },
+      "initial_state": "runs/h75_selected_local300_flat/initial_state.npz",
+      "offsets": {
+        "-1": {
+          "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s4.5_ds-1cm",
+          "sha256": "48f02f780b92c07520a2d6abf92d1c34e7e8a48fdc7ae4078cb9629938a754e7"
+        },
+        "1": {
+          "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s4.5_ds+1cm",
+          "sha256": "adac608db293f3091e7c89eaa1f4bc0d54c4b78dd3e460b7ba00403e67f60316"
+        }
+      }
+    },
+    {
+      "case": "position_s3.9_v2.6_seed401",
+      "layout": "position_s3.9",
+      "seed": 401,
+      "alpha": 0.0,
+      "alpha_source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/archive_baseline/scores.csv",
+      "reference_V": 0.9955047567685446,
+      "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/terrains/s3.9_length0.8_oblique0.25_h0.1",
+      "terrain_sha256": "060724442a07dd10a7edd884cd44dd2764dafc0c0b48759026d12586c1d70735",
+      "randomization": {
+        "base_body": "chasis",
+        "friction_range": [
+          0.820328375903832,
+          0.820328375903832
+        ],
+        "mass_scale": [
+          0.9945363548999354,
+          0.9945363548999354
+        ],
+        "base_com_m": [
+          0,
+          0
+        ],
+        "latency_s": [
+          0.0,
+          0.0
+        ],
+        "servo_gain_scale": [
+          0.9932037842455803,
+          0.9932037842455803
+        ],
+        "steer_zero_offset_rad": [
+          0.0011024138621809876,
+          0.0011024138621809876
+        ],
+        "measurement_noise": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "push_interval_s": 1000000000,
+        "push_velocity_range": {
+          "x": [
+            0,
+            0
+          ],
+          "y": [
+            0,
+            0
+          ]
+        }
+      },
+      "initial_state": "runs/h75_selected_local300_flat/initial_state.npz",
+      "offsets": {
+        "-1": {
+          "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds-1cm",
+          "sha256": "cf989b0fd0fabfd035c563bf4c9424d918cb565769a0e4b4c8aa02bff84faa71"
+        },
+        "1": {
+          "terrain": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e2/terrains/s3.9_ds+1cm",
+          "sha256": "dd151ffdf7cfb03adb96cef4f1dac688ed0bdd6bc6ea4b3a85dab8493a0c35e1"
+        }
+      }
+    }
+  ],
+  "bundle": "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_selected_local300_flat/bundle",
+  "identity": {
+    "actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+    "config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+    "route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+    "local300": "517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125",
+    "initial_state": "7c2849dc467f5d9c03a11675b59d88abfac7e92e6545cfc228fa621456c024b1",
+    "controller": "418a55486c863f5efb249c22987bc43017aee95ff0913582f59508230b18e00c",
+    "asset": "226c0681d8ae55b2ac579eb7d06d94b9306847d06158551ff737ca13f07e0b35"
+  },
+  "code_commit": "216ef27bab6407ba99ff2e0c27ed8f973e8b787e",
+  "source_files": {
+    "/home/qy/STTW_CONTROL/runs/worktrees/pcrp-decision-delivery/learning/cli/evaluate_isaac_gpu.py": "a0dc24615255d83760d21d76e03aa02d63e07ceb65486a66e4a2375dcd7175b4",
+    "/home/qy/STTW_CONTROL/runs/worktrees/pcrp-decision-delivery/learning/src/sttw_control/isaac_resident_evaluation.py": "eeda90874547bae39261b14f080914581988b5e98d75c493ec35649dc72025d4",
+    "/home/qy/STTW_CONTROL/runs/worktrees/pcrp-decision-delivery/learning/src/sttw_control/isaaclab_vector_env.py": "3051e9b63c66803933b68817bd89a048a5d2c5251cb2a8d4adb312abbe16ccc0",
+    "/home/qy/STTW_CONTROL/runs/worktrees/pcrp-decision-delivery/learning/src/sttw_control/pcrp_oracle.py": "e397e900f06828670edf05d65f066cf5ae419979a7cd4d3648338bb6d2349f7d",
+    "/home/qy/STTW_CONTROL/runs/worktrees/pcrp-decision-delivery/learning/src/sttw_control/isaac_evaluation_batch.py": "113756ca78c2105538eb973422e1405c882e889f4668f5895def82d2d090fbcb",
+    "/home/qy/STTW_CONTROL/runs/worktrees/pcrp-decision-delivery/learning/cli/pcrp_oracle_search.py": "068dde38b3491ddf880a94441290e77e5c4bcddb5d23d19bd02d0a64d1b95f13",
+    "/home/qy/STTW_CONTROL/runs/worktrees/pcrp-decision-delivery/docs/paper/english/score_decision_oracle.py": "fa0750d760762b422487fbcbb65f33916adb1f19a4e2961a9492b8d3a716d965",
+    "/home/qy/STTW_CONTROL/runs/worktrees/pcrp-decision-delivery/docs/paper/english/analyze_matched_controls.py": "5b4c7e9ddc1ffb23812f81e8a44d540bdf3c702e2235f3a384f77ffeb21669cd",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/train_search_a1/a1.py": "288fc12e069c9835c05d0ceec292007712c238e7493214a3179a6e06ab95c925"
+  },
+  "base_config": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/h75_contact_oat/position/flat_original_v2.6_seed401.json",
+  "base_sha256": "5c406119b7677df3bd44c36fc4c27ba49c0b279dbfc4c8f0613594c109ec7858",
+  "times_s": [
+    0.0,
+    1.0,
+    1.2,
+    1.6,
+    2.0,
+    2.4,
+    2.8,
+    3.2,
+    3.6,
+    3.8,
+    4.0,
+    10.0
+  ],
+  "free_indices": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "outside": "zero through t=1.0 and from t=4.0; frozen linear interpolation on native 50Hz register",
+  "initial_std": [
+    0.2,
+    0.05
+  ],
+  "floor": [
+    0.02,
+    0.005
+  ],
+  "bounds": [
+    1.25,
+    0.4
+  ],
+  "seed": 401,
+  "seed_mapping": "PCG64 SeedSequence([401, case_index]); one stream per declared case",
+  "update": "six lowest V, ties by candidate index; 0.7 elite mean + 0.3 previous mean, six elite std with floors. Carry those six unchanged, then draw 26 new candidates on each later round.",
+  "population_per_case": 32,
+  "real_physics_envs_per_search_step": 128,
+  "zero_reference_physical": 128,
+  "search_max": 1024,
+  "single_nominal": 4,
+  "shifted_geometry": 6,
+  "scope_max": 1162,
+  "global_cap": 1200,
+  "clock": "Target around 30 minutes for search. Bark if waiting beyond 30 minutes. Run eight 128-lane CEM generations and the registered verification, bounded by physical count.",
+  "single": "One genuine one-environment replay per selected case, same winning physical world origin, terrain/seed/alpha/offsets; raw bitwise fields and finite errors reported.",
+  "robust": "Two batches of three tilted-location assets; each case keeps winning world origin, full bias, initial condition and alpha. Report nominal Task C and count of two full 10s survivors, and C at both offsets separately.",
+  "decision": "Pure nonzero CEM flat V<=0.676, check in single slot. Route B if >=2/3 ridges have nominal C and >=1/2 shifted full-window survival. Exactly one qualifying ridge is partial (no expansion), no robust ridge with confirmed flat positive follows route A. If flat or physical verification incomplete, report searcher failure/incomplete. Expansion requires exact nominal packed versus single-slot replay at flat and at each qualifying ridge. Report nominal mismatches explicitly.",
+  "historical_reference_roles": "generation-zero, same-slot zeros and all archived baselines excluded from pure search positives"
+}

@@ -1,5 +1,5 @@
 [Unit]
-Description=STTW PCRP matched E1a, shared GPU per physical batch
+Description=STTW PCRP matched E1a, shared GPU per resident candidate generation
 
 [Service]
 Type=oneshot

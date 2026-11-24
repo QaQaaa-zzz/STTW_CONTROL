@@ -1,4 +1,7 @@
 {
-  "commit": "583865efe408891263259e150f2eeeadaa81a69e",
-  "worktree": "/home/qy/STTW_CONTROL/runs/worktrees/pcrp-matched-583865ef"
+  "commit": "641aa4c7d41710df48c663fc94fbb0f1f9e0da3c",
+  "worktree": "/home/qy/STTW_CONTROL/runs/worktrees/pcrp-resident-release",
+  "execution": "resident_generation",
+  "resume_existing": true,
+  "verified_replay": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/resident_upgrade/probe_a/summary.json"
 }

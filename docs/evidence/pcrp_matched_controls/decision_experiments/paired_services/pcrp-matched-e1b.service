@@ -1,5 +1,5 @@
 [Unit]
-Description=STTW PCRP matched E1b, shared GPU per physical batch
+Description=STTW PCRP matched E1b, shared GPU per resident candidate generation
 Requires=pcrp-matched-e2.service pcrp-matched-e1a.service
 After=pcrp-matched-e2.service pcrp-matched-e1a.service
 

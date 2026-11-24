@@ -39,14 +39,21 @@ def progress(stage):
     keep=('stage','active','active_batch','generation','completed_new','completed_total','completed','candidate')
     return ', '.join(f'{k}={d[k]}' for k in keep if k in d)
 def start(stage):
-    pin=Path(read(STATE/(stage+'_pin.json'))['worktree'])
+    pin_record=read(STATE/(stage+'_pin.json'))
+    pin=Path(pin_record['worktree'])
+    resident=pin_record.get('execution')=='resident_generation'
+    if resident:
+        gate=read(Path(pin_record['verified_replay']))
+        if stage not in ('E1a','E1b') or gate.get('passed') is not True:
+            raise ValueError('Resident execution requires the passed fixed-slot replay for this source')
     frozen=read(ROOT/'paired_authorization.json')
     if frozen['decision']!='matched_packing' or sum(ALLOCATION.values())+72>frozen['main_experiment_rollout_cap']:
         raise ValueError('运行决议或 9,500 主预算不符')
     deadline=(datetime.now(timezone.utc)+timedelta(minutes=30)).strftime('%Y-%m-%d %H:%M:%S UTC')
     prefix=['systemd-run','--user','--quiet',f'--unit=pcrp-matched-{stage.lower()}-wait30',
             '--on-calendar='+deadline,'--timer-property=AccuracySec=1s','--timer-property=Persistent=true']
-    subprocess.run([*prefix,'/usr/bin/python3',str(Path(__file__).resolve()),stage,'overdue'],check=True)
+    if not (STATE/f'{stage}_wait30_receipt.json').exists():
+        subprocess.run([*prefix,'/usr/bin/python3',str(Path(__file__).resolve()),stage,'overdue'],check=True)
     env=dict(os.environ,PYTHONPATH=str(pin/'learning/src'),PYTHONDONTWRITEBYTECODE='1',PYTHONUNBUFFERED='1')
     def cli(script,*args):
         subprocess.run([PYTHON,'-u',str(pin/'learning/cli'/script),*map(str,args)],cwd=pin,env=env,check=True)
@@ -68,7 +75,10 @@ def start(stage):
             record('E2平地阴性对照警报',warning+' '+str(report))
             bark(stage,'flat_review',warning+' 报告 '+str(report))
     elif stage in ('E1a','E1b'):
-        cli('pcrp_oracle_search.py','--run',ROOT,'--stage',stage,'--execute')
+        extra=['--resident'] if resident else []
+        if (dest/'status.json').exists() and pin_record.get('resume_existing'):
+            extra.append('--resume')
+        cli('pcrp_oracle_search.py','--run',ROOT,'--stage',stage,'--execute',*extra)
         result=read(dest/'status.json')
         if result['stage']!='complete' or result['completed_new']!=ALLOCATION[stage]:
             raise RuntimeError('E1 实际搜索或预算与预登记不符')
@@ -97,6 +107,8 @@ def start(stage):
     record(stage+'同槽阶段完成',msg+' '+str(report))
     bark(stage,'complete',f'PCRP {msg} 报告 {report}')
 def stopped(stage):
+    if stage=='E1a' and (ROOT/'resident_upgrade/planned_stop.json').is_file():
+        return
     p=STATE/(stage+'.json')
     state=read(p) if p.exists() else {}
     result=os.environ.get('SERVICE_RESULT','unknown')

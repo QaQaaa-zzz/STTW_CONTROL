@@ -1,0 +1,40 @@
+{
+  "verdict": "nominal_replay_disagreement_no_expansion",
+  "flat_passed": true,
+  "ridge_cases": [
+    {
+      "case": "position_s4.2_v2.6_seed401",
+      "nominal_C": 1,
+      "search_C": 1,
+      "shift_survived": 1,
+      "shift_C": 0,
+      "qualifies": true
+    },
+    {
+      "case": "position_s4.5_v2.6_seed401",
+      "nominal_C": 0,
+      "search_C": 1,
+      "shift_survived": 0,
+      "shift_C": 0,
+      "qualifies": false
+    },
+    {
+      "case": "position_s3.9_v2.6_seed401",
+      "nominal_C": 1,
+      "search_C": 1,
+      "shift_survived": 1,
+      "shift_C": 1,
+      "qualifies": true
+    }
+  ],
+  "reproducible_bitwise": [
+    false,
+    false,
+    false,
+    false
+  ],
+  "wall_s": 2956.2290560270194,
+  "submitted": 1162,
+  "finished": 1162,
+  "complete_search_generations": 8
+}

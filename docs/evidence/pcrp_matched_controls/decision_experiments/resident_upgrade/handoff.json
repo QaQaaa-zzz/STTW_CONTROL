@@ -1,0 +1,25 @@
+{
+  "archived_candidates": 57,
+  "archived_physical_lanes": 171,
+  "first_resumed_candidate": "g02/c19",
+  "remaining_candidates": {
+    "E1a": 269,
+    "E1b": 326
+  },
+  "remaining_processes_if_uninterrupted": {
+    "E1a": 9,
+    "E1b": 11
+  },
+  "historical_e1a_sampling_s_mean": 156.40264503161112,
+  "historical_e1a_sampling_s_median": 156.13303399085999,
+  "historical_e2_24slot_sampling_s_mean": 161.28172721181596,
+  "estimated_sampling_hours_excludes_queue": {
+    "E1a": 11.686753198195385,
+    "E1b_21slot_using_24slot_proxy": 14.604956408625556
+  },
+  "science": 9232,
+  "resident_probe_entered": 9,
+  "original_replay_separate": 672,
+  "within_9500": 9241,
+  "remaining_budget": 259
+}

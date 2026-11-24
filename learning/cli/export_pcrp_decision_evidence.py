@@ -222,12 +222,29 @@ def export(run, destination):
     if (decision.get('stage')!='complete' or decision.get('main_allocation')!={'step0':72,'E2':1240,'E1a':978,'E1b':6846,'E1c':96}
             or decision['diagnostic_rollouts']!=672 or decision['training_updates']!=0):
         raise ValueError('Expected the final matched PCRP decision and its separate 672-lane diagnostic')
+    probes=decision.get('resident_probe_attempts',[])
+    science=sum(decision['main_allocation'].values())
+    charged=science+sum(attempt['entered'] for attempt in probes)
+    if decision.get('main_rollouts')!=charged or decision.get('all_rollouts')!=charged+672:
+        raise ValueError('Resident diagnostic and scientific counts differ from final totals')
     if not (root/final/'README.md').is_file():
         raise FileNotFoundError(root/final/'README.md')
     destination.parent.mkdir(parents=True,exist_ok=True)
     with TemporaryDirectory(dir=destination.parent) as tmp:
         out = Path(tmp)/'evidence'
         copy_names(root,out,final,['README.md','summary.json'])
+        for attempt in probes:
+            probe=Path('resident_upgrade')/attempt['probe']
+            copy_names(root,out,probe.parent,[probe.name+'_launch.json'])
+            for filename in ('summary.json','status.json'):
+                if (root/probe/filename).is_file():
+                    copy_names(root,out,probe,[filename])
+            for i,state in enumerate(attempt['batches'],1):
+                if state=='unstarted':
+                    continue
+                b=probe/f'replay_{i}'/'batch'
+                files=[f for f in ['contract.json','status.json','resident_timing.json'] if (root/b/f).is_file()]
+                copy_names(root,out,b,files)
         copy_names(root,out,'.',['registration.json','paired_authorization.json','e1c_scope.json','decision_experiments_plan.md'])
         copy_names(root,out,'step0',['README.md','status.json','protocol.json','comparisons.csv'])
         copy_names(root,out,'step0/packing_sensitivity',['archives.md','archives.csv','complete.md','complete.csv',
@@ -255,6 +272,7 @@ def export(run, destination):
             f'E2 收录全部 {e2_lanes:,} 份曲线 NPZ 和 {e2_figures} 张图。'
             '实际批次及物理槽位可由各车道的来源记录与相邻比较表追溯。'
             '完整物理轨迹保存在运行主机。CSV/JSON 中绝对路径指向运行主机，本包内报告使用相对链接。\n\n'
+            f'科学样本 {science:,} 条，主上限内常驻诊断实进场 {charged-science} 槽，主预算实耗 {charged:,}。原排列诊断另列 672 条。\n\n'
             f'完整运行目录为 `{root}`。[包内文件清单](evidence_manifest.json)\n')
         manifest_path=out/'evidence_manifest.json'
         manifest_path.write_text('{}')

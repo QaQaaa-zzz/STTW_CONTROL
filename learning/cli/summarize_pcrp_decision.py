@@ -50,6 +50,91 @@ def joint_readout(e1, e2, flat_review, sensitivities_disagree):
     return statements
 
 
+def resident_probe_accounting(root):
+    """Charge a candidate when the evaluator enters its three slots, even on reset failure."""
+    upgrade=root/'resident_upgrade'
+    attempts=[]
+    for f in sorted(upgrade.glob('probe_*_launch.json')):
+        launch=read(f)
+        name=f.name.removesuffix('_launch.json')
+        folder=upgrade/name
+        reserved=launch['reserved_diagnostic']
+        require(Path(launch['output']).name==name and reserved==9, f'Unexpected resident probe allocation at {f}')
+        progress=[]
+        for i in range(1,4):
+            batch=folder/f'replay_{i}'/'batch'
+            # The probe prepares three manifests before it starts its single queued
+            # worker. Only evaluate() in that worker creates an individual batch.
+            state='unstarted'
+            if batch.is_dir():
+                state='entered_setup'
+                if (batch/'contract.json').is_file():
+                    state='physics_contract_written'
+                if (batch/'status.json').is_file():
+                    result=read(batch/'status.json')
+                    require(result['stage']=='complete' and result['policy_steps']==500 and
+                            result['physics_steps']==150000 and len(result['valid_steps'])==3,
+                            f'Invalid completed probe status at {batch}')
+                    state='complete'
+            progress.append(state)
+        report=read(folder/'summary.json') if (folder/'summary.json').is_file() else {}
+        entered=sum(3 for state in progress if state!='unstarted')
+        complete=3*progress.count('complete')
+        attempts.append(dict(probe=name,reserved=reserved,entered=entered,complete=complete,
+                             incomplete=entered-complete,unstarted=reserved-entered,
+                             batches=progress,passed=report.get('passed'),wall_s=report.get('wall_s_including_queue')))
+    return attempts
+
+
+def e1_execution_timing(stage, archive):
+    """Candidate wall intervals are disjoint; only the first call on each lease includes waiting."""
+    rows=archive['batches']
+    slices={}
+    sessions={}
+    for row in rows:
+        timing=row.get('resident')
+        candidate=row.get('batch')
+        if candidate:
+            path=stage/candidate/'batch/resident_timing.json'
+            if path.exists():
+                raw=read(path)
+                require(timing is None or timing==raw,f'Conflicting resident timing in {path}')
+                timing=raw
+        mode='resident' if timing else 'cold'
+        piece=slices.setdefault(mode,dict(batches=0,lanes=0,wall_s=0.,sampling_s=0.,export_s=0.,
+                                          scoring_s=0.,recovered_wall_estimates=0,measured_queue_inclusive_calls=0))
+        piece['batches']+=1
+        piece['lanes']+=row['lanes']
+        piece['wall_s']+=row['wall_s']
+        phases=timing or row
+        for k in ('sampling_s','export_s'):
+            piece[k]+=phases[k]
+        piece['scoring_s']+=row['scoring_and_archive_s']
+        piece['recovered_wall_estimates']+=int(row.get('recovered_wall_estimate',False))
+        piece['measured_queue_inclusive_calls']+=int(row.get('measured_wall_includes_queue',False))
+        if timing:
+            source=timing['scene_source']
+            session=sessions.setdefault(source,dict(pid=timing['process_id'],indices=[],wall_s=0.,
+                app_startup_s=0., setup_or_reset_s=0.,candidate_initialization_s=0.,sampling_s=0.,export_s=0.))
+            index=timing['candidate']
+            require(timing['process_id']==session['pid'] and index not in session['indices'] and
+                    (index==0 or not row.get('measured_wall_includes_queue',False)),
+                    f'Repeated or inconsistent resident lease accounting at {candidate}')
+            session['indices'].append(index)
+            session['wall_s']+=row['wall_s']
+            session['setup_or_reset_s']+=timing['plant_setup_or_reset_s']
+            for k in ('app_startup_s','candidate_initialization_s','sampling_s','export_s'):
+                session[k]+=timing[k]
+    for lease in sessions.values():
+        ids=sorted(lease.pop('indices'))
+        require(ids==list(range(len(ids))), 'Missing candidate in measured resident lease')
+        lease['batches']=len(ids)
+    return dict(batches=len(rows),lanes=sum(r['lanes'] for r in rows),
+                wall_s=sum(r['wall_s'] for r in rows),sampling_s=sum(t['sampling_s'] for t in slices.values()),
+                scoring_and_archive_s=sum(r['scoring_and_archive_s'] for r in rows),
+                analysis_s=archive['analysis_and_plot_s'],execution_modes=slices,resident_leases=sessions)
+
+
 def summarize(root):
     out=root/'decision_report'
     e2=root/'e2'; e2a=e2/'analysis'; rc=root/'e1/E1c'
@@ -81,10 +166,7 @@ def summarize(root):
         batches=read(analysis/'timing.json')
         require(len(batches['batches'])==326 and sum(b['lanes'] for b in batches['batches'])==counts[name],
                 f'{name} timed physical batch count mismatch')
-        timing[name]=dict(batches=326,lanes=counts[name],wall_s=sum(b['wall_s'] for b in batches['batches']),
-                          sampling_s=sum(b['sampling_s'] for b in batches['batches']),
-                          analysis_s=batches['analysis_and_plot_s'],
-                          scoring_and_archive_s=sum(b['scoring_and_archive_s'] for b in batches['batches']))
+        timing[name]=e1_execution_timing(stage,batches)
         best={r['case']:r for r in table(stage/'best.csv')}
         cases=table(analysis/'cases.csv')
         require(len(best)==len(cases)==expected and set(best)=={r['case'] for r in cases},f'Unmatched {name} cases')
@@ -123,6 +205,13 @@ def summarize(root):
     require(counts==dict(step0=72,E1a=978,E1b=6846,E1c=96,E2=1240)
             and diagnostic==672 and sum(counts.values())<=read(root/'paired_authorization.json')['main_experiment_rollout_cap'],
             'Final physical counts do not match the registered allocation')
+    probes=resident_probe_accounting(root)
+    reserved=sum(p['reserved'] for p in probes)
+    entered=sum(p['entered'] for p in probes)
+    science=sum(counts.values())
+    cap=read(root/'paired_authorization.json')['main_experiment_rollout_cap']
+    charged=science+entered
+    require(charged<=cap, f'Main budget exceeded: {science} science plus {entered} resident probe lanes')
     fa_rows=table(e2a/'flip_rates.csv')
     selected={r['metric']:r for r in fa_rows if r['subset']=='overall'}
     statements=joint_readout(decision['verdict'],es['decisions']['nominal_centers'],
@@ -180,7 +269,8 @@ def summarize(root):
             ' · '+link(e2a/'flip_rates.csv','全体与条件翻转率')+' · '+link(e2a/'smoothed_windows.csv','平滑窗口'),'',
             '## 物理预算与耗时','',
             f"正式设计共 {sum(counts.values()):,} 条，含第 0 步的 {counts['step0']} 条。另列原排列诊断 {diagnostic} 条。"
-            f"两项实际合计 {sum(counts.values())+diagnostic:,} 条，训练更新数 0。",'',
+            f"常驻验证累计登记 {reserved} 槽，实进场 {entered} 槽，含完成 {sum(p['complete'] for p in probes)} 槽和部分执行 {sum(p['incomplete'] for p in probes)} 槽。"
+            f"主预算实耗 {charged:,}/{cap:,}，含原排列诊断的总计 {charged+diagnostic:,}，训练更新数 0。",'',
             '|阶段／轴|物理回合|批数|批次墙钟和 (s)|采样 (s)|评分／出图 (s)|','|---|---:|---:|---:|---:|---:|']
     for name in ('第0步','原排列诊断（单列）','E2 ds','E2 dv','E1a','E1b','E1c'):
         r=timing[name]; analysis=r['analysis_s']
@@ -188,11 +278,24 @@ def summarize(root):
             analysis+=r['scoring_and_archive_s']
         lines.append(f"|{name}|{r['lanes']}|{r['batches']}|{r['wall_s']:.1f}|{r['sampling_s']:.1f}|"
                      +('见两轴合并' if name.startswith('E2') else ('未单列' if analysis is None else f'{analysis:.1f}'))+'|')
-    lines+=['',f'E2 两轴统一评分与出图 {e2_analysis:.1f} s。E2 和 E1 各物理批次的墙钟含共享 GPU 排队、初始化、采样、导出和退出；阶段可以交错。表中按批累加，采样列取运行器实测。','',
+    if probes:
+        lines+=['','|常驻复验|预留槽|实际进场|跑满批次的槽数（含提前终止车道）|进场未完成|未进场|验证通过|',
+                '|---|---:|---:|---:|---:|---:|---|']
+        for p in probes:
+            lines.append(f"|{p['probe']}|{p['reserved']}|{p['entered']}|{p['complete']}|{p['incomplete']}|{p['unstarted']}|{p['passed']}|")
+    lines+=['','|E1阶段 / 执行方式|候选批|独立含排队实测区间|墙钟和 (s)|采样 (s)|导出 (s)|估算墙钟批数|',
+            '|---|---:|---:|---:|---:|---:|---:|']
+    for name in ('E1a','E1b'):
+        for mode,t in timing[name]['execution_modes'].items():
+            lines.append(f"|{name} / {mode}|{t['batches']}|{t['measured_queue_inclusive_calls']}|{t['wall_s']:.1f}|{t['sampling_s']:.1f}|{t['export_s']:.1f}|{t['recovered_wall_estimates']}|")
+    lines+=['','常驻进程的共享 GPU 排队计入每次进程首个候选的实测墙钟。分项及各代各进程详见 summary.json，初始化含场景创建或复位，分项不再加到墙钟列。','',
+            f'E2 两轴统一评分与出图 {e2_analysis:.1f} s。E2 的批次墙钟含排队、初始化、采样、导出和退出；各阶段可交错。E1 的常驻批次计至该候选导出确认，进程退出耗时未单列。','',
             link(root/'step0/README.md','第 0 步 2 × 36 复验')+' · '+link(root/'replay672/analysis/README.md','另列的原排列 672 条复验')+' · '+
             link(root/'e1/E1a/analysis/README.md','E1a 全候选与奖励')+' · '+link(root/'e1/E1b/analysis/README.md','E1b 全候选与总索引')]
-    summary=dict(stage='complete',main_rollouts=sum(counts.values()),diagnostic_rollouts=diagnostic,
-                 all_rollouts=sum(counts.values())+diagnostic,training_updates=0,main_allocation=counts,
+    summary=dict(stage='complete',main_rollouts=charged,diagnostic_rollouts=diagnostic,
+                 scientific_rollouts=science,resident_probe_rollouts=entered,resident_probe_reserved=reserved,
+                 resident_probe_attempts=probes,main_cap=cap,main_budget_remaining=cap-charged,
+                 all_rollouts=charged+diagnostic,training_updates=0,main_allocation=counts,
                  role='Previously examined physical groups, paired DEV; E1 privileged case-specific search',
                  E1=decision,E2=es,conclusions=statements,
                  verdict_zh=f"非平地名义 {decision['nonflat_nominal_pass']}/20 通过任务 C。"+' '.join(statements[:2]),

@@ -1,0 +1,541 @@
+{
+  "source_stage": {
+    "stage": "complete",
+    "decision": "nominal_replay_disagreement_no_expansion",
+    "submitted": 1162,
+    "finished": 1162,
+    "complete_search_generations": 8
+  },
+  "verified_route": "nominal_replay_disagreement_no_expansion",
+  "confirmed_flat": true,
+  "confirmed_ridge_gates": [
+    true,
+    false,
+    true
+  ],
+  "completed_scores": 1162,
+  "cases": [
+    {
+      "case": "flat_original_v2.6_seed401",
+      "alpha": 0.5,
+      "pure": {
+        "n": 256,
+        "full": 255,
+        "hold": 254,
+        "A": 176,
+        "B": 156,
+        "C": 203,
+        "min_V": 0.46601901451746625
+      },
+      "same_slot_zeros": {
+        "n": 32,
+        "full": 32,
+        "hold": 32,
+        "A": 32,
+        "B": 32,
+        "C": 32,
+        "min_V": 0.600583553314209
+      },
+      "selected": {
+        "batch": "g08",
+        "slot": 10,
+        "lane": 10,
+        "origin": [
+          16.5,
+          15.0,
+          0.0
+        ],
+        "V": 0.46601901451746625,
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "peak_path_m": 0.1343860626220703,
+        "speed_rmse_m_s": 0.06990285217761993
+      },
+      "matched_control": {
+        "slot": 10,
+        "origin": [
+          16.5,
+          15.0,
+          0.0
+        ],
+        "V": 0.6805276870727539,
+        "C": 1
+      },
+      "archive_n": 6,
+      "pure_full_hold_frontier_size": 7,
+      "nominal": {
+        "n": 1,
+        "full": 1,
+        "hold": 1,
+        "A": 1,
+        "B": 1,
+        "C": 1,
+        "min_V": 0.46402300397555035
+      },
+      "shifted": {}
+    },
+    {
+      "case": "position_s4.2_v2.6_seed401",
+      "alpha": 0.5,
+      "pure": {
+        "n": 256,
+        "full": 189,
+        "hold": 181,
+        "A": 18,
+        "B": 0,
+        "C": 52,
+        "min_V": 0.744941234588623
+      },
+      "same_slot_zeros": {
+        "n": 32,
+        "full": 32,
+        "hold": 32,
+        "A": 3,
+        "B": 0,
+        "C": 31,
+        "min_V": 0.8282088239987692
+      },
+      "selected": {
+        "batch": "g08",
+        "slot": 47,
+        "lane": 15,
+        "origin": [
+          4.5,
+          -6.0,
+          0.0
+        ],
+        "V": 0.744941234588623,
+        "A": 1,
+        "B": 0,
+        "C": 1,
+        "peak_path_m": 0.2979764938354492,
+        "speed_rmse_m_s": 0.10979748517274857
+      },
+      "matched_control": {
+        "slot": 47,
+        "origin": [
+          4.5,
+          -6.0,
+          0.0
+        ],
+        "V": 0.8376169204711914,
+        "C": 1
+      },
+      "archive_n": 6,
+      "pure_full_hold_frontier_size": 5,
+      "nominal": {
+        "n": 1,
+        "full": 1,
+        "hold": 1,
+        "A": 1,
+        "B": 0,
+        "C": 1,
+        "min_V": 0.7649296522140503
+      },
+      "shifted": {
+        "1": {
+          "full": 0,
+          "hold": 0,
+          "C": 0,
+          "V": 17.59500000011176
+        },
+        "-1": {
+          "full": 1,
+          "hold": 1,
+          "C": 0,
+          "V": 1.0546636581420898
+        }
+      }
+    },
+    {
+      "case": "position_s4.5_v2.6_seed401",
+      "alpha": 1.0,
+      "pure": {
+        "n": 256,
+        "full": 113,
+        "hold": 103,
+        "A": 5,
+        "B": 0,
+        "C": 4,
+        "min_V": 0.8352793256441753
+      },
+      "same_slot_zeros": {
+        "n": 32,
+        "full": 29,
+        "hold": 15,
+        "A": 0,
+        "B": 0,
+        "C": 1,
+        "min_V": 0.8505082130432129
+      },
+      "selected": {
+        "batch": "g06",
+        "slot": 93,
+        "lane": 29,
+        "origin": [
+          -7.5,
+          0.0,
+          0.0
+        ],
+        "V": 0.8352793256441753,
+        "A": 1,
+        "B": 0,
+        "C": 1,
+        "peak_path_m": 0.2868545651435852,
+        "speed_rmse_m_s": 0.12529189884662628
+      },
+      "matched_control": {
+        "slot": 93,
+        "origin": [
+          -7.5,
+          0.0,
+          0.0
+        ],
+        "V": 1.9614934921264648,
+        "C": 0
+      },
+      "archive_n": 6,
+      "pure_full_hold_frontier_size": 8,
+      "nominal": {
+        "n": 1,
+        "full": 0,
+        "hold": 0,
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "min_V": 17.316200000168756
+      },
+      "shifted": {
+        "1": {
+          "full": 0,
+          "hold": 0,
+          "C": 0,
+          "V": 17.33000000011176
+        },
+        "-1": {
+          "full": 0,
+          "hold": 0,
+          "C": 0,
+          "V": 17.750200000237673
+        }
+      }
+    },
+    {
+      "case": "position_s3.9_v2.6_seed401",
+      "alpha": 0.0,
+      "pure": {
+        "n": 256,
+        "full": 192,
+        "hold": 177,
+        "A": 35,
+        "B": 0,
+        "C": 23,
+        "min_V": 0.8947055538495382
+      },
+      "same_slot_zeros": {
+        "n": 32,
+        "full": 32,
+        "hold": 32,
+        "A": 19,
+        "B": 0,
+        "C": 3,
+        "min_V": 0.94707856575648
+      },
+      "selected": {
+        "batch": "g06",
+        "slot": 119,
+        "lane": 23,
+        "origin": [
+          -13.5,
+          12.0,
+          0.0
+        ],
+        "V": 0.8947055538495382,
+        "A": 1,
+        "B": 0,
+        "C": 1,
+        "peak_path_m": 0.2672271728515625,
+        "speed_rmse_m_s": 0.13420583307743073
+      },
+      "matched_control": {
+        "slot": 119,
+        "origin": [
+          -13.5,
+          12.0,
+          0.0
+        ],
+        "V": 1.0404243071873984,
+        "C": 0
+      },
+      "archive_n": 6,
+      "pure_full_hold_frontier_size": 6,
+      "nominal": {
+        "n": 1,
+        "full": 1,
+        "hold": 1,
+        "A": 0,
+        "B": 0,
+        "C": 1,
+        "min_V": 0.9126309553782146
+      },
+      "shifted": {
+        "1": {
+          "full": 0,
+          "hold": 0,
+          "C": 0,
+          "V": 16.04000000011176
+        },
+        "-1": {
+          "full": 1,
+          "hold": 1,
+          "C": 1,
+          "V": 0.9341983000437419
+        }
+      }
+    }
+  ],
+  "unscored_batches": [],
+  "single_bitwise": [
+    {
+      "case": "flat_original_v2.6_seed401",
+      "all_recorded_arrays_bitwise": false,
+      "equal_members": 19,
+      "members": 52,
+      "fields": {
+        "reward": false,
+        "valid": true,
+        "done": true,
+        "failure": true,
+        "lower_trace": false,
+        "contact_failure": true,
+        "numerical_failure": true,
+        "roll_limit_failure": true,
+        "nominal": false,
+        "progress": false,
+        "pose": false,
+        "measurement": false,
+        "target": false,
+        "offsets": false,
+        "filtered": false,
+        "held_channels": true,
+        "rate_clipped": false,
+        "alive": true,
+        "domain_exit": true,
+        "policy_fault": true,
+        "alpha": true,
+        "switch_tick": true,
+        "execution_mode": true,
+        "channel_progress": false,
+        "contact_force": false,
+        "body_state": false,
+        "reward_normal": false,
+        "raw_speed": false,
+        "raw_path": false,
+        "raw_primary": false,
+        "raw_roll": false,
+        "raw_working_roll": false,
+        "raw_roll_rate": true,
+        "raw_overspeed": false,
+        "raw_low_speed": true,
+        "raw_offset_magnitude": false,
+        "raw_offset_rate": true,
+        "effective_speed": false,
+        "effective_path": false,
+        "effective_primary": false,
+        "effective_roll": false,
+        "effective_working_roll": false,
+        "effective_roll_rate": true,
+        "effective_overspeed": false,
+        "effective_low_speed": true,
+        "effective_offset_magnitude": false,
+        "effective_offset_rate": true,
+        "controller_terms": false,
+        "controller_output": false,
+        "controller_gains": false,
+        "lower_residual": false,
+        "final_command": false
+      }
+    },
+    {
+      "case": "position_s4.2_v2.6_seed401",
+      "all_recorded_arrays_bitwise": false,
+      "equal_members": 17,
+      "members": 52,
+      "fields": {
+        "reward": false,
+        "valid": true,
+        "done": true,
+        "failure": true,
+        "lower_trace": false,
+        "contact_failure": true,
+        "numerical_failure": true,
+        "roll_limit_failure": true,
+        "nominal": false,
+        "progress": false,
+        "pose": false,
+        "measurement": false,
+        "target": false,
+        "offsets": false,
+        "filtered": false,
+        "held_channels": true,
+        "rate_clipped": false,
+        "alive": true,
+        "domain_exit": true,
+        "policy_fault": true,
+        "alpha": true,
+        "switch_tick": true,
+        "execution_mode": true,
+        "channel_progress": false,
+        "contact_force": false,
+        "body_state": false,
+        "reward_normal": false,
+        "raw_speed": false,
+        "raw_path": false,
+        "raw_primary": false,
+        "raw_roll": false,
+        "raw_working_roll": false,
+        "raw_roll_rate": false,
+        "raw_overspeed": false,
+        "raw_low_speed": true,
+        "raw_offset_magnitude": false,
+        "raw_offset_rate": true,
+        "effective_speed": false,
+        "effective_path": false,
+        "effective_primary": false,
+        "effective_roll": false,
+        "effective_working_roll": false,
+        "effective_roll_rate": false,
+        "effective_overspeed": false,
+        "effective_low_speed": true,
+        "effective_offset_magnitude": false,
+        "effective_offset_rate": true,
+        "controller_terms": false,
+        "controller_output": false,
+        "controller_gains": false,
+        "lower_residual": false,
+        "final_command": false
+      }
+    },
+    {
+      "case": "position_s4.5_v2.6_seed401",
+      "all_recorded_arrays_bitwise": false,
+      "equal_members": 9,
+      "members": 52,
+      "fields": {
+        "reward": false,
+        "valid": false,
+        "done": false,
+        "failure": false,
+        "lower_trace": false,
+        "contact_failure": false,
+        "numerical_failure": true,
+        "roll_limit_failure": true,
+        "nominal": false,
+        "progress": false,
+        "pose": false,
+        "measurement": false,
+        "target": false,
+        "offsets": false,
+        "filtered": false,
+        "held_channels": true,
+        "rate_clipped": false,
+        "alive": false,
+        "domain_exit": false,
+        "policy_fault": true,
+        "alpha": true,
+        "switch_tick": true,
+        "execution_mode": true,
+        "channel_progress": false,
+        "contact_force": false,
+        "body_state": false,
+        "reward_normal": false,
+        "raw_speed": false,
+        "raw_path": false,
+        "raw_primary": false,
+        "raw_roll": false,
+        "raw_working_roll": false,
+        "raw_roll_rate": false,
+        "raw_overspeed": false,
+        "raw_low_speed": false,
+        "raw_offset_magnitude": false,
+        "raw_offset_rate": true,
+        "effective_speed": false,
+        "effective_path": false,
+        "effective_primary": false,
+        "effective_roll": false,
+        "effective_working_roll": false,
+        "effective_roll_rate": false,
+        "effective_overspeed": false,
+        "effective_low_speed": false,
+        "effective_offset_magnitude": false,
+        "effective_offset_rate": true,
+        "controller_terms": false,
+        "controller_output": false,
+        "controller_gains": false,
+        "lower_residual": false,
+        "final_command": false
+      }
+    },
+    {
+      "case": "position_s3.9_v2.6_seed401",
+      "all_recorded_arrays_bitwise": false,
+      "equal_members": 17,
+      "members": 52,
+      "fields": {
+        "reward": false,
+        "valid": true,
+        "done": true,
+        "failure": true,
+        "lower_trace": false,
+        "contact_failure": true,
+        "numerical_failure": true,
+        "roll_limit_failure": true,
+        "nominal": false,
+        "progress": false,
+        "pose": false,
+        "measurement": false,
+        "target": false,
+        "offsets": false,
+        "filtered": false,
+        "held_channels": true,
+        "rate_clipped": false,
+        "alive": true,
+        "domain_exit": true,
+        "policy_fault": true,
+        "alpha": true,
+        "switch_tick": true,
+        "execution_mode": true,
+        "channel_progress": false,
+        "contact_force": false,
+        "body_state": false,
+        "reward_normal": false,
+        "raw_speed": false,
+        "raw_path": false,
+        "raw_primary": false,
+        "raw_roll": false,
+        "raw_working_roll": false,
+        "raw_roll_rate": false,
+        "raw_overspeed": false,
+        "raw_low_speed": true,
+        "raw_offset_magnitude": false,
+        "raw_offset_rate": true,
+        "effective_speed": false,
+        "effective_path": false,
+        "effective_primary": false,
+        "effective_roll": false,
+        "effective_working_roll": false,
+        "effective_roll_rate": false,
+        "effective_overspeed": false,
+        "effective_low_speed": true,
+        "effective_offset_magnitude": false,
+        "effective_offset_rate": true,
+        "controller_terms": false,
+        "controller_output": false,
+        "controller_gains": false,
+        "lower_residual": false,
+        "final_command": false
+      }
+    }
+  ]
+}

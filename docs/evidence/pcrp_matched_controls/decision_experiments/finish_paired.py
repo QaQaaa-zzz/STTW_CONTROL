@@ -60,9 +60,9 @@ def gather():
     worktree = Path(pin['worktree'])
     if git(worktree,'rev-parse','HEAD') != pin['commit']:
         raise ValueError('The final analysis worktree differs from its registered commit')
-    mark('research_complete', final_pin=pin, main_rollouts=9232, diagnostic_rollouts=672)
+    mark('research_complete', final_pin=pin, scientific_rollouts=9232, diagnostic_rollouts=672)
     bark('final', 'research_complete',
-         'PCRP 必做阶段已完成。主实验 9,232 条、单列诊断 672 条。正在汇总判决和远端交付。')
+         'PCRP 必做阶段已完成。科学工况 9,232 条，原排列诊断 672 条。正在核算常驻复验实耗，汇总判决并交付。')
     record('必做阶段全部完成', 'E2、E1a、E1b、E1c 的阶段报告和物理回合预算均已核实。原始记录 '+str(ROOT))
     env = dict(os.environ, PYTHONPATH=str(worktree/'learning/src'), PYTHONDONTWRITEBYTECODE='1',
                JAX_PLATFORMS='cpu', CUDA_VISIBLE_DEVICES='')
@@ -73,9 +73,7 @@ def gather():
         mark('summarizing')
         cli('summarize_pcrp_decision.py')
         summary=read(ROOT/'decision_report/summary.json')
-        if (summary.get('stage'),summary.get('main_rollouts'),summary.get('diagnostic_rollouts'),
-                summary.get('all_rollouts')) != ('complete',9232,672,9904):
-            raise ValueError('Unexpected final research summary or rollout accounting')
+        check_accounting(summary)
         OUT.parent.mkdir(exist_ok=True)
         mark('exporting')
         with tempfile.TemporaryDirectory(dir=OUT.parent,prefix='export-') as tmp:
@@ -84,10 +82,22 @@ def gather():
             check_export(staged)
             staged.rename(OUT)
     check_export(OUT)
-    verdict=read(ROOT/'decision_report/summary.json')['verdict_zh'].strip()
+    summary=read(ROOT/'decision_report/summary.json')
+    check_accounting(summary)
+    verdict=summary['verdict_zh'].strip()
     if not verdict:
         raise ValueError('Missing final E1/E2 verdict')
     return verdict
+
+
+def check_accounting(summary):
+    probes=summary.get('resident_probe_rollouts',0)
+    main=summary['main_rollouts']
+    cap=read(ROOT/'paired_authorization.json')['main_experiment_rollout_cap']
+    if (summary['stage']!='complete' or summary.get('scientific_rollouts',9232)!=9232 or
+            probes<0 or main!=9232+probes or main>cap or summary['diagnostic_rollouts']!=672 or
+            summary['all_rollouts']!=main+672):
+        raise ValueError('Unexpected final research summary or rollout accounting')
 
 
 def publish_files(tree,verdict):
@@ -106,7 +116,8 @@ def publish_files(tree,verdict):
         doc=tree/rel
         link=os.path.relpath(RESULTS/'README.md',rel.parent)
         decision_link=os.path.relpath(RESULTS/'decision_report/README.md',rel.parent)
-        line=f'必做阶段已完成，主实验 9,232 条，原批诊断 672 条，新增训练 0 次。{verdict} [逐案例 XY 与指标]({link}) · [两项判决及证据]({decision_link})'
+        counts=read(ROOT/'decision_report/summary.json')
+        line=f'必做科学工况 9,232 条，常驻复验 {counts.get("resident_probe_rollouts",0)} 条，原批诊断 672 条，新增训练 0 次。{verdict} [逐案例 XY 与指标]({link}) · [两项判决及证据]({decision_link})'
         old=doc.read_text()
         if line in old:
             continue
@@ -236,10 +247,11 @@ def deliver():
     for tree in (remote,local):git(REPO,'worktree','remove',tree)
     tmp.rmdir()
     report=f'https://github.com/QaQaaa-zzz/STTW_CONTROL/blob/{verified}/{RESULTS}/README.md'
-    msg=f'PCRP 判决实验已完成并核验远端 {verified}，本地 {local_sha}；主预算 9232，另列672，0训练。{verdict} 逐案结果 {report}'
+    counts=read(ROOT/'decision_report/summary.json')
+    msg=f'PCRP 判决实验已完成并核验远端 {verified}，本地 {local_sha}；科学工况 9232，常驻复验 {counts.get("resident_probe_rollouts",0)}，主预算实耗 {counts["main_rollouts"]}，另列672，0训练。{verdict} 逐案结果 {report}'
     record('最终报告发布并核验',msg+' 外盘 '+str(ROOT/'decision_report/README.md'))
     bark('final','complete',msg)
-    mark('complete',remote_report=report,verdict_zh=verdict,main_rollouts=9232,diagnostic_rollouts=672,
+    mark('complete',remote_report=report,verdict_zh=verdict,main_rollouts=counts['main_rollouts'],diagnostic_rollouts=672,
          completion_receipt=str(STATE/'final_complete_receipt.json'))
 
 

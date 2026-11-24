@@ -1,0 +1,337 @@
+{
+  "stage": "complete",
+  "passed": true,
+  "reference": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e1/E1a/warm/w00",
+  "command": [
+    "bash",
+    "/home/qy/STTW_CONTROL/runs/worktrees/pcrp-resident-release/learning/scripts/gpu_queue.sh",
+    "/home/qy/miniconda3/envs/env_isaaclab/bin/python",
+    "-u",
+    "/home/qy/STTW_CONTROL/runs/worktrees/pcrp-resident-release/learning/cli/evaluate_isaac_gpu.py",
+    "--backend",
+    "lab",
+    "--bundle",
+    "/home/qy/STTW_CONTROL/runs/worktrees/sttw-offroad/runs/h75_selected_local300_flat/bundle",
+    "--seconds",
+    "10",
+    "--resident-jobs",
+    "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/resident_upgrade/probe_a/jobs.json"
+  ],
+  "cold_timing": {
+    "wall_s": 304.66227374901064,
+    "sampling_s": 159.555725812912,
+    "export_s": 2.5691936016082764,
+    "scoring_and_archive_s": 0.3443500529974699,
+    "lanes": 3,
+    "measured_wall_includes_queue": true
+  },
+  "batches": [
+    {
+      "index": 0,
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/resident_upgrade/probe_a/replay_1/batch",
+      "lanes": [
+        {
+          "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e1/E1a/warm/w00/flat_original_v2.6_seed401",
+          "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/resident_upgrade/probe_a/replay_1/flat_original_v2.6_seed401",
+          "contract_diff": [],
+          "status_diff": [],
+          "valid_steps": [
+            500
+          ],
+          "failures": [
+            0
+          ],
+          "members": 52,
+          "member_diff": [],
+          "passed": true
+        },
+        {
+          "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e1/E1a/warm/w00/position_s4.2_v2.6_seed401",
+          "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/resident_upgrade/probe_a/replay_1/position_s4.2_v2.6_seed401",
+          "contract_diff": [],
+          "status_diff": [],
+          "valid_steps": [
+            139
+          ],
+          "failures": [
+            1
+          ],
+          "members": 52,
+          "member_diff": [],
+          "passed": true
+        },
+        {
+          "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e1/E1a/warm/w00/position_s4.5_v2.6_seed401",
+          "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/resident_upgrade/probe_a/replay_1/position_s4.5_v2.6_seed401",
+          "contract_diff": [],
+          "status_diff": [],
+          "valid_steps": [
+            107
+          ],
+          "failures": [
+            1
+          ],
+          "members": 52,
+          "member_diff": [],
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "batch": {
+        "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e1/E1a/warm/w00/batch",
+        "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/resident_upgrade/probe_a/replay_1/batch",
+        "contract_diff": [],
+        "status_diff": [],
+        "valid_steps": [
+          500,
+          139,
+          107
+        ],
+        "failures": [
+          0,
+          1,
+          1
+        ],
+        "passed": true
+      },
+      "timing": {
+        "candidate": 0,
+        "process_id": 155584,
+        "scene_source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/resident_upgrade/probe_a/replay_1/batch",
+        "reset": "cold construction",
+        "initial_native_clock_s": 0.00039999998989515007,
+        "initial_native_physics_step": 2,
+        "app_startup_s": 3.445858735998627,
+        "plant_setup_or_reset_s": 2.884701861999929,
+        "candidate_initialization_s": 3.170440338028129,
+        "sampling_s": 153.86157168698264,
+        "export_s": 0.085189450008329,
+        "total_s": 157.1172014750191,
+        "queue_scope": "one shared GPU lease for this resident job list; exterior waiting is measured by caller"
+      }
+    },
+    {
+      "index": 1,
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/resident_upgrade/probe_a/replay_2/batch",
+      "lanes": [
+        {
+          "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e1/E1a/warm/w00/flat_original_v2.6_seed401",
+          "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/resident_upgrade/probe_a/replay_2/flat_original_v2.6_seed401",
+          "contract_diff": [],
+          "status_diff": [],
+          "valid_steps": [
+            500
+          ],
+          "failures": [
+            0
+          ],
+          "members": 52,
+          "member_diff": [],
+          "passed": true
+        },
+        {
+          "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e1/E1a/warm/w00/position_s4.2_v2.6_seed401",
+          "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/resident_upgrade/probe_a/replay_2/position_s4.2_v2.6_seed401",
+          "contract_diff": [],
+          "status_diff": [],
+          "valid_steps": [
+            139
+          ],
+          "failures": [
+            1
+          ],
+          "members": 52,
+          "member_diff": [],
+          "passed": true
+        },
+        {
+          "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e1/E1a/warm/w00/position_s4.5_v2.6_seed401",
+          "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/resident_upgrade/probe_a/replay_2/position_s4.5_v2.6_seed401",
+          "contract_diff": [],
+          "status_diff": [],
+          "valid_steps": [
+            107
+          ],
+          "failures": [
+            1
+          ],
+          "members": 52,
+          "member_diff": [],
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "batch": {
+        "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e1/E1a/warm/w00/batch",
+        "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/resident_upgrade/probe_a/replay_2/batch",
+        "contract_diff": [],
+        "status_diff": [],
+        "valid_steps": [
+          500,
+          139,
+          107
+        ],
+        "failures": [
+          0,
+          1,
+          1
+        ],
+        "passed": true
+      },
+      "timing": {
+        "candidate": 1,
+        "process_id": 155584,
+        "scene_source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/resident_upgrade/probe_a/replay_1/batch",
+        "reset": "stop and restart native physics on identical USD stage",
+        "initial_native_clock_s": 0.00039999998989515007,
+        "initial_native_physics_step": 2,
+        "app_startup_s": 0.0,
+        "plant_setup_or_reset_s": 0.9300539839896373,
+        "candidate_initialization_s": 0.968050024996046,
+        "sampling_s": 154.4975192809943,
+        "export_s": 0.08624146098736674,
+        "total_s": 155.55181076697772,
+        "queue_scope": "one shared GPU lease for this resident job list; exterior waiting is measured by caller"
+      }
+    },
+    {
+      "index": 2,
+      "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/resident_upgrade/probe_a/replay_3/batch",
+      "lanes": [
+        {
+          "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e1/E1a/warm/w00/flat_original_v2.6_seed401",
+          "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/resident_upgrade/probe_a/replay_3/flat_original_v2.6_seed401",
+          "contract_diff": [],
+          "status_diff": [],
+          "valid_steps": [
+            500
+          ],
+          "failures": [
+            0
+          ],
+          "members": 52,
+          "member_diff": [],
+          "passed": true
+        },
+        {
+          "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e1/E1a/warm/w00/position_s4.2_v2.6_seed401",
+          "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/resident_upgrade/probe_a/replay_3/position_s4.2_v2.6_seed401",
+          "contract_diff": [],
+          "status_diff": [],
+          "valid_steps": [
+            139
+          ],
+          "failures": [
+            1
+          ],
+          "members": 52,
+          "member_diff": [],
+          "passed": true
+        },
+        {
+          "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e1/E1a/warm/w00/position_s4.5_v2.6_seed401",
+          "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/resident_upgrade/probe_a/replay_3/position_s4.5_v2.6_seed401",
+          "contract_diff": [],
+          "status_diff": [],
+          "valid_steps": [
+            107
+          ],
+          "failures": [
+            1
+          ],
+          "members": 52,
+          "member_diff": [],
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "batch": {
+        "source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/e1/E1a/warm/w00/batch",
+        "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/resident_upgrade/probe_a/replay_3/batch",
+        "contract_diff": [],
+        "status_diff": [],
+        "valid_steps": [
+          500,
+          139,
+          107
+        ],
+        "failures": [
+          0,
+          1,
+          1
+        ],
+        "passed": true
+      },
+      "timing": {
+        "candidate": 2,
+        "process_id": 155584,
+        "scene_source": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/resident_upgrade/probe_a/replay_1/batch",
+        "reset": "stop and restart native physics on identical USD stage",
+        "initial_native_clock_s": 0.00039999998989515007,
+        "initial_native_physics_step": 2,
+        "app_startup_s": 0.0,
+        "plant_setup_or_reset_s": 0.9313289119745605,
+        "candidate_initialization_s": 1.0434184260084294,
+        "sampling_s": 156.87687548302347,
+        "export_s": 0.08264486299594864,
+        "total_s": 158.00293877202785,
+        "queue_scope": "one shared GPU lease for this resident job list; exterior waiting is measured by caller"
+      }
+    }
+  ],
+  "cold_isaac_sample_progress": [
+    {
+      "step": 50,
+      "alive": 3,
+      "seconds": 15.60730791091919
+    },
+    {
+      "step": 100,
+      "alive": 3,
+      "seconds": 31.22113013267517
+    },
+    {
+      "step": 150,
+      "alive": 1,
+      "seconds": 47.22698473930359
+    },
+    {
+      "step": 200,
+      "alive": 1,
+      "seconds": 63.3413610458374
+    },
+    {
+      "step": 250,
+      "alive": 1,
+      "seconds": 79.36916613578796
+    },
+    {
+      "step": 300,
+      "alive": 1,
+      "seconds": 95.35972380638123
+    },
+    {
+      "step": 350,
+      "alive": 1,
+      "seconds": 111.39824771881104
+    },
+    {
+      "step": 400,
+      "alive": 1,
+      "seconds": 127.41823649406433
+    },
+    {
+      "step": 450,
+      "alive": 1,
+      "seconds": 143.48864650726318
+    },
+    {
+      "step": 500,
+      "alive": 1,
+      "seconds": 159.499253988266
+    }
+  ],
+  "returncode": 0,
+  "wall_s_including_queue": 474.6967757010134,
+  "one_process": true
+}

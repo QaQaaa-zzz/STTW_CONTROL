@@ -184,6 +184,35 @@ class IsaacLabVectorPlant:
             self.metadata['pendulum_lock_model']='joint brake with 1e-4 rad half-play, clipped to native limits; not finite motor holding'
             self.set_pendulum_locked(pendulum_locked)
 
+    def reset_fixed_scene(self, nominal):
+        """Start fresh PhysX and sensor views with the original, unrandomized bike properties."""
+        old_view = self.robot.root_physx_view
+        sensors = [self.sensor, *self.wheel_sensors]
+        old_contacts = [sensor.contact_physx_view for sensor in sensors]
+        # Isaac Lab applies COM offsets to the live COM. On PLAY the articulation
+        # also captures the live masses/inertias as the next randomizer defaults.
+        # Undo the previous candidate's writes before the hard-reset warm-up.
+        ids = torch.arange(self.count, device='cpu', dtype=torch.long)
+        old_view.set_masses(nominal['masses'], ids)
+        old_view.set_inertias(nominal['inertias'], ids)
+        old_view.set_coms(nominal['coms'], ids)
+        old_view.set_material_properties(nominal['materials'], ids)
+        self.sim.reset(soft=False)
+        if self.robot.root_physx_view is old_view:
+            raise RuntimeError('The hard reset did not recreate the articulation physics view')
+        if any(sensor.contact_physx_view is old for sensor, old in zip(sensors, old_contacts)):
+            raise RuntimeError('The hard reset did not recreate a contact sensor physics view')
+        self.robot.update(self.physics_dt)
+        self.sensor.update(self.physics_dt, force_recompute=True)
+        for sensor in self.wheel_sensors:
+            sensor.update(self.physics_dt, force_recompute=True)
+        # The per-group actuator randomizer expands this gain from (2,) to
+        # (lane, 2) and mutates it. Start from the original source actuators.
+        self.servos = TorchVelocityServos(self.contract, self.joints, self.device)
+        self.signals = TorchVehicleSignals(self.contract, self.joints, self.device)
+        self.diagnostic_joint_torque = None
+        self.reset()
+
     def set_pendulum_locked(self,locked,env_ids=None):
         """Brake selected lanes at current posture; omitted IDs retain whole-batch API."""
         indices=self.pendulum_servos.indices

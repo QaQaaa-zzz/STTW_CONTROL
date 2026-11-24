@@ -41,12 +41,20 @@ journalctl --user -u pcrp-matched-e2.service -u pcrp-matched-e1a.service -n 40 -
 
 ## 复现入口与墙钟
 
-E2 冻结到 `41a68418468c05fa2d8aa99453d03e3fc5908a95`，E1a 和 E1b 到 `583865efe408891263259e150f2eeeadaa81a69e`。服务从本机外盘根目录读取调度脚本，以各自 pin 指定的 Git 工作树运行采样和分析。需具备本机原 OAT、H75/Local300 转储、资产、冻结环境和用户级 systemd。查看本包及已完成的 XY 图无需运行仿真。[E2 pin](paired_services/E2_pin.json) · [E1a pin](paired_services/E1a_pin.json) · [E1b pin](paired_services/E1b_pin.json)
+E2 使用 `41a68418`。E1a 最初 57 个候选使用 `583865ef`，其余 E1a 和 E1b 使用通过同槽复验的 `641aa4c7`。服务从本机外盘根目录读取调度脚本，以各自 pin 指定的 Git 工作树运行采样和分析。需具备本机原 OAT、H75/Local300 转储、资产、冻结环境和用户级 systemd。查看本包及已完成的 XY 图无需运行仿真。[E2 pin](paired_services/E2_pin.json) · [E1a pin](paired_services/E1a_pin.json) · [E1b pin](paired_services/E1b_pin.json)
 
-四份服务文件保存了实际的 `ExecStart`、`ExecStopPost` 和阶段依赖。两个 CPU 编排可并行提交；每个完整的 Isaac 子批单独通过 `gpu_queue.sh` 取得公用 GPU 锁 `research-hub/.gpu-job.lock`，子批退出后交接。调度器从第 0 步入口导入持锁记录函数 `record`；通知程序在运行主机读取私有 Bark 配置。阶段启动、完成、错误、中断及对照异常触发相应通知；从进入队列起 30 分钟仍运行则发送一次等候通知。用户交互在报告长等待后暂停，后台阶段按依赖继续。[实际调度器](dispatch_paired.py) · [台账记录函数](dispatch_step0.py) · [E2 服务](paired_services/pcrp-matched-e2.service) · [E1a](paired_services/pcrp-matched-e1a.service) · [E1b](paired_services/pcrp-matched-e1b.service) · [E1c](paired_services/pcrp-matched-e1c.service) · [队列脚本](helpers/gpu_queue.sh) · [Bark 程序](helpers/notify_sttw_job.py)
+四份服务文件保存了实际的 `ExecStart`、`ExecStopPost` 和阶段依赖。两个 CPU 编排可并行提交；E2 按子批取得公用 GPU 锁 `research-hub/.gpu-job.lock`。常驻 E1 在热启动块或每代开始时取锁，整代候选用同一组 3 或 21 个物理槽，代末交接。调度器从第 0 步入口导入持锁记录函数 `record`；通知程序在运行主机读取私有 Bark 配置。阶段启动、完成、错误、中断及对照异常触发相应通知；从进入队列起 30 分钟仍运行则发送一次等候通知。用户交互在报告长等待后暂停，后台阶段按依赖继续。[实际调度器](dispatch_paired.py) · [台账记录函数](dispatch_step0.py) · [E2 服务](paired_services/pcrp-matched-e2.service) · [E1a](paired_services/pcrp-matched-e1a.service) · [E1b](paired_services/pcrp-matched-e1b.service) · [E1c](paired_services/pcrp-matched-e1c.service) · [队列脚本](helpers/gpu_queue.sh) · [Bark 程序](helpers/notify_sttw_job.py)
 
 第 0 步两个 36 槽批实测从采样到导出为 173.64 s、173.40 s。若以 173.52 s/批估算，E2 的 60 批约 2.9 h，E1a、E1b 各 326 批约 15.7 h/阶段。正式各批为 3、16、21 或 24 槽，实际用时会随槽数变化，另需计入 GPU 排队、Isaac 初始化和退出及分析绘图。最终以各阶段记录的批次墙钟、采样、导出和分析耗时为准。[原始计时摘录](launch_snapshot.json) · [E1a 启动回执](paired_services/E1a_started_receipt.json) · [E2 启动回执](paired_services/E2_started_receipt.json) · [包内 SHA-256](SHA256SUMS)
 
+
+## E1 常驻执行与同槽复验
+
+同一 Isaac 进程三次执行原 E1a 的 warm/w00，每次为平地、4.2 m 和 4.5 m 的原始三槽。9/9 条的真实终点一致，全部 468 个 NPZ 成员逐字节相同。应用启动 3.45 s，初次场景构建 2.88 s，后两次复位均为 0.93 s。三批采样分别为 153.86、154.50、156.88 s，含排队总计 474.70 s。[检验结果与分段计时](resident_upgrade/verification.json) · [同槽恢复与预算](resident_upgrade/handoff.json)
+
+旧 E1a 的 171 条物理回放全部用于恢复，g02/c19 为首个新候选。剩余 269 个 E1a 和 326 个 E1b 候选在正常接续时分属 9 和 11 个常驻进程。原 57 个三槽批次平均采样 156.40 s。以该均值估算 E1a 余下积分约 11.7 小时；以 E2 的 35 个 24 槽批次估计 E1b 的 21 槽批次，约 14.6 小时，实际另计排队与导出。正式科学工况 9,232 条，工程复验 9 条计入 9,500 上限，原 672 条诊断单列。[验证入口](../../../../learning/cli/verify_pcrp_resident_replay.py) · [通过后接续](promote_resident.py)
+
+E2 已收齐 1,240 条。按预登记的满 10 s 判据，原脊位相邻 α 有 42/96 对翻转，相邻厘米级脊位有 275/720 对翻转，初速轴有 28/240 对，平地阴性对照为 0/80。几何微移触发相位主导判定，平滑后未保留端点反转。[4.2 m、物理组 401 的实际与参考 XY](e2_completed/E2a_s4.2_g401_xy.png) · [各组翻转统计及区间](e2_completed/flip_rates.csv) · [判定](e2_completed/summary.json)
 
 ## 长任务收尾
 

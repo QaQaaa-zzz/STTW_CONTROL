@@ -1,0 +1,874 @@
+[
+  {
+    "case": "flat_original_v2.6_seed401",
+    "packed_V": 0.46601901451746625,
+    "single_V": 0.46402300397555035,
+    "packed_C": 1,
+    "single_C": 1,
+    "all_recorded_arrays_bitwise": false,
+    "arrays": {
+      "reward": {
+        "bitwise": false,
+        "max_abs": 0.016989484429359436
+      },
+      "valid": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "done": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "failure": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "lower_trace": {
+        "bitwise": false,
+        "max_abs": 0.0491330623626709
+      },
+      "contact_failure": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "numerical_failure": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "roll_limit_failure": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "nominal": {
+        "bitwise": false,
+        "max_abs": 0.006593593396246433
+      },
+      "progress": {
+        "bitwise": false,
+        "max_abs": 0.002956390380859375
+      },
+      "pose": {
+        "bitwise": false,
+        "max_abs": 0.01543426513671875
+      },
+      "measurement": {
+        "bitwise": false,
+        "max_abs": 0.5528488159179688
+      },
+      "target": {
+        "bitwise": false,
+        "max_abs": 0.025408774614334106
+      },
+      "offsets": {
+        "bitwise": false,
+        "max_abs": 0.007749795913696289
+      },
+      "filtered": {
+        "bitwise": false,
+        "max_abs": 0.009069167077541351
+      },
+      "held_channels": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "rate_clipped": {
+        "bitwise": false,
+        "max_abs": 1.0
+      },
+      "alive": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "domain_exit": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "policy_fault": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "alpha": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "switch_tick": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "execution_mode": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "channel_progress": {
+        "bitwise": false,
+        "max_abs": 0.6455436646938324
+      },
+      "contact_force": {
+        "bitwise": false,
+        "max_abs": 18.28536605834961
+      },
+      "body_state": {
+        "bitwise": false,
+        "max_abs": 1.417155146598816
+      },
+      "reward_normal": {
+        "bitwise": false,
+        "max_abs": 0.004610728472471237
+      },
+      "raw_speed": {
+        "bitwise": false,
+        "max_abs": 2.0535526275634766
+      },
+      "raw_path": {
+        "bitwise": false,
+        "max_abs": 1.4098081588745117
+      },
+      "raw_primary": {
+        "bitwise": false,
+        "max_abs": 3.7530269622802734
+      },
+      "raw_roll": {
+        "bitwise": false,
+        "max_abs": 8.779098510742188
+      },
+      "raw_working_roll": {
+        "bitwise": false,
+        "max_abs": 0.8317208290100098
+      },
+      "raw_roll_rate": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "raw_overspeed": {
+        "bitwise": false,
+        "max_abs": 0.00205819308757782
+      },
+      "raw_low_speed": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "raw_offset_magnitude": {
+        "bitwise": false,
+        "max_abs": 0.0001015212619677186
+      },
+      "raw_offset_rate": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "effective_speed": {
+        "bitwise": false,
+        "max_abs": 2.0535526275634766
+      },
+      "effective_path": {
+        "bitwise": false,
+        "max_abs": 1.4098081588745117
+      },
+      "effective_primary": {
+        "bitwise": false,
+        "max_abs": 3.7530269622802734
+      },
+      "effective_roll": {
+        "bitwise": false,
+        "max_abs": 8.779098510742188
+      },
+      "effective_working_roll": {
+        "bitwise": false,
+        "max_abs": 0.8317208290100098
+      },
+      "effective_roll_rate": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "effective_overspeed": {
+        "bitwise": false,
+        "max_abs": 0.00205819308757782
+      },
+      "effective_low_speed": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "effective_offset_magnitude": {
+        "bitwise": false,
+        "max_abs": 0.0001015212619677186
+      },
+      "effective_offset_rate": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "controller_terms": {
+        "bitwise": false,
+        "max_abs": 0.35253870487213135
+      },
+      "controller_output": {
+        "bitwise": false,
+        "max_abs": 0.3215785324573517
+      },
+      "controller_gains": {
+        "bitwise": false,
+        "max_abs": 0.3094320297241211
+      },
+      "lower_residual": {
+        "bitwise": false,
+        "max_abs": 0.6001954674720764
+      },
+      "final_command": {
+        "bitwise": false,
+        "max_abs": 0.599151611328125
+      }
+    }
+  },
+  {
+    "case": "position_s4.2_v2.6_seed401",
+    "packed_V": 0.744941234588623,
+    "single_V": 0.7649296522140503,
+    "packed_C": 1,
+    "single_C": 1,
+    "all_recorded_arrays_bitwise": false,
+    "arrays": {
+      "reward": {
+        "bitwise": false,
+        "max_abs": 0.4197388291358948
+      },
+      "valid": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "done": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "failure": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "lower_trace": {
+        "bitwise": false,
+        "max_abs": 0.29081177711486816
+      },
+      "contact_failure": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "numerical_failure": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "roll_limit_failure": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "nominal": {
+        "bitwise": false,
+        "max_abs": 0.06918243784457445
+      },
+      "progress": {
+        "bitwise": false,
+        "max_abs": 0.06622505187988281
+      },
+      "pose": {
+        "bitwise": false,
+        "max_abs": 0.13763844966888428
+      },
+      "measurement": {
+        "bitwise": false,
+        "max_abs": 4.73731803894043
+      },
+      "target": {
+        "bitwise": false,
+        "max_abs": 0.08717454969882965
+      },
+      "offsets": {
+        "bitwise": false,
+        "max_abs": 0.0620526447892189
+      },
+      "filtered": {
+        "bitwise": false,
+        "max_abs": 0.0620526447892189
+      },
+      "held_channels": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "rate_clipped": {
+        "bitwise": false,
+        "max_abs": 1.0
+      },
+      "alive": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "domain_exit": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "policy_fault": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "alpha": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "switch_tick": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "execution_mode": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "channel_progress": {
+        "bitwise": false,
+        "max_abs": 0.8214692175388336
+      },
+      "contact_force": {
+        "bitwise": false,
+        "max_abs": 138.9961395263672
+      },
+      "body_state": {
+        "bitwise": false,
+        "max_abs": 4.476888656616211
+      },
+      "reward_normal": {
+        "bitwise": false,
+        "max_abs": 0.10749461501836777
+      },
+      "raw_speed": {
+        "bitwise": false,
+        "max_abs": 17.289644718170166
+      },
+      "raw_path": {
+        "bitwise": false,
+        "max_abs": 16.738380432128906
+      },
+      "raw_primary": {
+        "bitwise": false,
+        "max_abs": 23.46666289595305
+      },
+      "raw_roll": {
+        "bitwise": false,
+        "max_abs": 61.633338928222656
+      },
+      "raw_working_roll": {
+        "bitwise": false,
+        "max_abs": 158.584379196167
+      },
+      "raw_roll_rate": {
+        "bitwise": false,
+        "max_abs": 0.1779908835887909
+      },
+      "raw_overspeed": {
+        "bitwise": false,
+        "max_abs": 0.44805264472961426
+      },
+      "raw_low_speed": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "raw_offset_magnitude": {
+        "bitwise": false,
+        "max_abs": 0.006113484734669328
+      },
+      "raw_offset_rate": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "effective_speed": {
+        "bitwise": false,
+        "max_abs": 17.289644718170166
+      },
+      "effective_path": {
+        "bitwise": false,
+        "max_abs": 16.738380432128906
+      },
+      "effective_primary": {
+        "bitwise": false,
+        "max_abs": 23.46666289595305
+      },
+      "effective_roll": {
+        "bitwise": false,
+        "max_abs": 61.633338928222656
+      },
+      "effective_working_roll": {
+        "bitwise": false,
+        "max_abs": 158.584379196167
+      },
+      "effective_roll_rate": {
+        "bitwise": false,
+        "max_abs": 0.1779908835887909
+      },
+      "effective_overspeed": {
+        "bitwise": false,
+        "max_abs": 0.44805264472961426
+      },
+      "effective_low_speed": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "effective_offset_magnitude": {
+        "bitwise": false,
+        "max_abs": 0.006113484734669328
+      },
+      "effective_offset_rate": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "controller_terms": {
+        "bitwise": false,
+        "max_abs": 2.272888630628586
+      },
+      "controller_output": {
+        "bitwise": false,
+        "max_abs": 2.5407320261001587
+      },
+      "controller_gains": {
+        "bitwise": false,
+        "max_abs": 2.372256278991699
+      },
+      "lower_residual": {
+        "bitwise": false,
+        "max_abs": 1.6314096748828888
+      },
+      "final_command": {
+        "bitwise": false,
+        "max_abs": 1.7481141090393066
+      }
+    }
+  },
+  {
+    "case": "position_s4.5_v2.6_seed401",
+    "packed_V": 0.8352793256441753,
+    "single_V": 17.316200000168756,
+    "packed_C": 1,
+    "single_C": 0,
+    "all_recorded_arrays_bitwise": false,
+    "arrays": {
+      "reward": {
+        "bitwise": false,
+        "max_abs": 3998.174268513918
+      },
+      "valid": {
+        "bitwise": false,
+        "max_abs": 1.0
+      },
+      "done": {
+        "bitwise": false,
+        "max_abs": 1.0
+      },
+      "failure": {
+        "bitwise": false,
+        "max_abs": 1.0
+      },
+      "lower_trace": {
+        "bitwise": false,
+        "max_abs": 18.572888612747192
+      },
+      "contact_failure": {
+        "bitwise": false,
+        "max_abs": 1.0
+      },
+      "numerical_failure": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "roll_limit_failure": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "nominal": {
+        "bitwise": false,
+        "max_abs": 0.30994114372879267
+      },
+      "progress": {
+        "bitwise": false,
+        "max_abs": 18.564669609069824
+      },
+      "pose": {
+        "bitwise": false,
+        "max_abs": 18.572888612747192
+      },
+      "measurement": {
+        "bitwise": false,
+        "max_abs": 30.835594654083252
+      },
+      "target": {
+        "bitwise": false,
+        "max_abs": 0.8901677280664444
+      },
+      "offsets": {
+        "bitwise": false,
+        "max_abs": 0.6781563758850098
+      },
+      "filtered": {
+        "bitwise": false,
+        "max_abs": 0.7899299114942551
+      },
+      "held_channels": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "rate_clipped": {
+        "bitwise": false,
+        "max_abs": 1.0
+      },
+      "alive": {
+        "bitwise": false,
+        "max_abs": 1.0
+      },
+      "domain_exit": {
+        "bitwise": false,
+        "max_abs": 1.0
+      },
+      "policy_fault": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "alpha": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "switch_tick": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "execution_mode": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "channel_progress": {
+        "bitwise": false,
+        "max_abs": 0.9859365513548255
+      },
+      "contact_force": {
+        "bitwise": false,
+        "max_abs": 326.4131889343262
+      },
+      "body_state": {
+        "bitwise": false,
+        "max_abs": 28.299033522605896
+      },
+      "reward_normal": {
+        "bitwise": false,
+        "max_abs": 4.037673938844819
+      },
+      "raw_speed": {
+        "bitwise": false,
+        "max_abs": 511.1508775949478
+      },
+      "raw_path": {
+        "bitwise": false,
+        "max_abs": 25.27984495833516
+      },
+      "raw_primary": {
+        "bitwise": false,
+        "max_abs": 162.3359375
+      },
+      "raw_roll": {
+        "bitwise": false,
+        "max_abs": 5292.2490234375
+      },
+      "raw_working_roll": {
+        "bitwise": false,
+        "max_abs": 31033.4921875
+      },
+      "raw_roll_rate": {
+        "bitwise": false,
+        "max_abs": 23.611692428588867
+      },
+      "raw_overspeed": {
+        "bitwise": false,
+        "max_abs": 5.601278305053711
+      },
+      "raw_low_speed": {
+        "bitwise": false,
+        "max_abs": 56.4754638671875
+      },
+      "raw_offset_magnitude": {
+        "bitwise": false,
+        "max_abs": 0.012260636314749718
+      },
+      "raw_offset_rate": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "effective_speed": {
+        "bitwise": false,
+        "max_abs": 199.99998722864802
+      },
+      "effective_path": {
+        "bitwise": false,
+        "max_abs": 19.99522647727281
+      },
+      "effective_primary": {
+        "bitwise": false,
+        "max_abs": 162.3359375
+      },
+      "effective_roll": {
+        "bitwise": false,
+        "max_abs": 1800.0
+      },
+      "effective_working_roll": {
+        "bitwise": false,
+        "max_abs": 6000.0
+      },
+      "effective_roll_rate": {
+        "bitwise": false,
+        "max_abs": 23.611692428588867
+      },
+      "effective_overspeed": {
+        "bitwise": false,
+        "max_abs": 5.601278305053711
+      },
+      "effective_low_speed": {
+        "bitwise": false,
+        "max_abs": 56.4754638671875
+      },
+      "effective_offset_magnitude": {
+        "bitwise": false,
+        "max_abs": 0.012260636314749718
+      },
+      "effective_offset_rate": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "controller_terms": {
+        "bitwise": false,
+        "max_abs": 487.72300547361374
+      },
+      "controller_output": {
+        "bitwise": false,
+        "max_abs": 72.87704116106033
+      },
+      "controller_gains": {
+        "bitwise": false,
+        "max_abs": 129.76223850250244
+      },
+      "lower_residual": {
+        "bitwise": false,
+        "max_abs": 6.296750068664551
+      },
+      "final_command": {
+        "bitwise": false,
+        "max_abs": 4.137859344482422
+      }
+    }
+  },
+  {
+    "case": "position_s3.9_v2.6_seed401",
+    "packed_V": 0.8947055538495382,
+    "single_V": 0.9126309553782146,
+    "packed_C": 1,
+    "single_C": 1,
+    "all_recorded_arrays_bitwise": false,
+    "arrays": {
+      "reward": {
+        "bitwise": false,
+        "max_abs": 0.4226667284965515
+      },
+      "valid": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "done": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "failure": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "lower_trace": {
+        "bitwise": false,
+        "max_abs": 0.2330777645111084
+      },
+      "contact_failure": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "numerical_failure": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "roll_limit_failure": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "nominal": {
+        "bitwise": false,
+        "max_abs": 0.015910446643829346
+      },
+      "progress": {
+        "bitwise": false,
+        "max_abs": 0.051733970642089844
+      },
+      "pose": {
+        "bitwise": false,
+        "max_abs": 0.07301044464111328
+      },
+      "measurement": {
+        "bitwise": false,
+        "max_abs": 3.474456787109375
+      },
+      "target": {
+        "bitwise": false,
+        "max_abs": 0.10722988843917847
+      },
+      "offsets": {
+        "bitwise": false,
+        "max_abs": 0.037052154541015625
+      },
+      "filtered": {
+        "bitwise": false,
+        "max_abs": 0.052054714411497116
+      },
+      "held_channels": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "rate_clipped": {
+        "bitwise": false,
+        "max_abs": 1.0
+      },
+      "alive": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "domain_exit": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "policy_fault": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "alpha": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "switch_tick": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "execution_mode": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "channel_progress": {
+        "bitwise": false,
+        "max_abs": 0.9276604354381561
+      },
+      "contact_force": {
+        "bitwise": false,
+        "max_abs": 66.46126365661621
+      },
+      "body_state": {
+        "bitwise": false,
+        "max_abs": 3.0955257415771484
+      },
+      "reward_normal": {
+        "bitwise": false,
+        "max_abs": 0.10865059494972229
+      },
+      "raw_speed": {
+        "bitwise": false,
+        "max_abs": 8.67772102355957
+      },
+      "raw_path": {
+        "bitwise": false,
+        "max_abs": 13.521133422851562
+      },
+      "raw_primary": {
+        "bitwise": false,
+        "max_abs": 9.11763334274292
+      },
+      "raw_roll": {
+        "bitwise": false,
+        "max_abs": 47.47972106933594
+      },
+      "raw_working_roll": {
+        "bitwise": false,
+        "max_abs": 191.3340301513672
+      },
+      "raw_roll_rate": {
+        "bitwise": false,
+        "max_abs": 1.4935557842254639
+      },
+      "raw_overspeed": {
+        "bitwise": false,
+        "max_abs": 1.5000450611114502
+      },
+      "raw_low_speed": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "raw_offset_magnitude": {
+        "bitwise": false,
+        "max_abs": 0.0021577482111752033
+      },
+      "raw_offset_rate": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "effective_speed": {
+        "bitwise": false,
+        "max_abs": 8.67772102355957
+      },
+      "effective_path": {
+        "bitwise": false,
+        "max_abs": 13.521133422851562
+      },
+      "effective_primary": {
+        "bitwise": false,
+        "max_abs": 9.11763334274292
+      },
+      "effective_roll": {
+        "bitwise": false,
+        "max_abs": 47.47972106933594
+      },
+      "effective_working_roll": {
+        "bitwise": false,
+        "max_abs": 191.3340301513672
+      },
+      "effective_roll_rate": {
+        "bitwise": false,
+        "max_abs": 1.4935557842254639
+      },
+      "effective_overspeed": {
+        "bitwise": false,
+        "max_abs": 1.5000450611114502
+      },
+      "effective_low_speed": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "effective_offset_magnitude": {
+        "bitwise": false,
+        "max_abs": 0.0021577482111752033
+      },
+      "effective_offset_rate": {
+        "bitwise": true,
+        "max_abs": 0.0
+      },
+      "controller_terms": {
+        "bitwise": false,
+        "max_abs": 1.9240115880966187
+      },
+      "controller_output": {
+        "bitwise": false,
+        "max_abs": 1.8811938762664795
+      },
+      "controller_gains": {
+        "bitwise": false,
+        "max_abs": 1.7841815948486328
+      },
+      "lower_residual": {
+        "bitwise": false,
+        "max_abs": 1.6332685351371765
+      },
+      "final_command": {
+        "bitwise": false,
+        "max_abs": 1.7677557468414307
+      }
+    }
+  }
+]

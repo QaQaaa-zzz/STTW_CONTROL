@@ -1,0 +1,22 @@
+{
+  "smoothed_endpoint_reversal": false,
+  "decisions": {
+    "nominal_centers": "phase_dominated",
+    "matched_groups": "phase_dominated",
+    "all_shifts": "phase_dominated"
+  },
+  "sensitivity_changes_verdict": false,
+  "flat_f_v": 0.0,
+  "flat_control_needs_review": false,
+  "scoring_s": 42.393011143023614,
+  "plotting_s": 57.35290574998362,
+  "archive_rows": 0,
+  "planned_rows": 1160,
+  "velocity_zero_references": 80,
+  "physics_lanes": 1240,
+  "matched_packing": true,
+  "checked_adjacent_pairs": 2032,
+  "checked_primary_alpha_pairs": 96,
+  "bootstrap_samples": 10000,
+  "bootstrap_seed": 401
+}

@@ -1,0 +1,9 @@
+{
+  "unit": "pcrp-resident-probe-a.service",
+  "worktree": "/home/qy/STTW_CONTROL/runs/worktrees/pcrp-resident-release",
+  "commit": "641aa4c7d41710df48c663fc94fbb0f1f9e0da3c",
+  "output": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_decision_20261122/resident_upgrade/probe_a",
+  "started": "2026-11-23T16:22:03.873350+00:00",
+  "reserved_diagnostic": 9,
+  "total_including_diagnostic": 9241
+}
