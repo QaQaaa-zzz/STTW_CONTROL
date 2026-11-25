@@ -1,4 +1,4 @@
-"""Frozen H75 alpha-modulated Actor and 200 Hz reference correction."""
+"""Frozen 351-input path policies and the shared 200 Hz reference correction."""
 import hashlib
 import io
 from pathlib import Path
@@ -6,22 +6,27 @@ import numpy as np
 import torch
 
 
+MODULATION_SHAPES = {'gain_2': (128,), 'shift_2': (128,), 'gain_3': (64,), 'shift_3': (64,)}
+
+
 class TorchPathPolicy:
     def __init__(self, actor, sha256, config, count, device='cpu'):
         data = Path(actor).read_bytes()
         if hashlib.sha256(data).hexdigest() != sha256:
             raise ValueError('path actor identity mismatch')
-        if config['network']['architecture'] != 'alpha_modulated_v1':
-            raise ValueError('H75 alpha-modulated architecture required')
+        architecture = config['network'].get('architecture', 'legacy')
+        if architecture not in ('legacy', 'alpha_modulated_v1'):
+            raise ValueError(f'Unsupported frozen path actor architecture: {architecture}')
+        modulation = MODULATION_SHAPES if architecture == 'alpha_modulated_v1' else {}
         shapes = [(351,128),(128,128),(128,64),(64,2)]
         expected = {f'Dense_{i}_{name}' for i in range(4) for name in ('kernel','bias')}
-        expected |= {'gain_2','shift_2','gain_3','shift_3'}
+        expected.update(modulation)
         archive = np.load(io.BytesIO(data), allow_pickle=False)
         if set(archive.files) != expected or any(
                 archive[f'Dense_{i}_kernel'].shape != shape or archive[f'Dense_{i}_bias'].shape != (shape[1],)
-                for i,shape in enumerate(shapes)) or any(archive[name].shape != (width,)
-                for name,width in [('gain_2',128),('shift_2',128),('gain_3',64),('shift_3',64)]):
-            raise ValueError('H75 parameter shapes mismatch')
+                for i,shape in enumerate(shapes)) or any(archive[name].shape != shape
+                for name, shape in modulation.items()):
+            raise ValueError(f'Path actor parameters do not match architecture {architecture}')
         self.weights = {k:torch.tensor(archive[k],device=device,dtype=torch.float32) for k in archive.files}
         self.config = config
         self.filtered = torch.zeros(count,2,device=device)
@@ -78,10 +83,11 @@ class TorchPathPolicy:
 
 def path_latent(weights,obs):
     """Shared mean network for frozen evaluation and gradient-based finetuning."""
-    x=obs;q=2*obs[:,336:337]-1;w=weights
+    x=obs;w=weights
+    q = 2*obs[:,336:337]-1 if 'gain_2' in w else None
     for i in range(3):
         x=x@w[f'Dense_{i}_kernel']+w[f'Dense_{i}_bias']
-        if i>0:x=(1+q*w[f'gain_{i+1}'])*x+q*w[f'shift_{i+1}']
+        if i>0 and q is not None:x=(1+q*w[f'gain_{i+1}'])*x+q*w[f'shift_{i+1}']
         x=torch.nn.functional.elu(x)
     return x@w['Dense_3_kernel']+w['Dense_3_bias']
 
@@ -108,7 +114,6 @@ def make_torch_path_network(input_dim, output_dim, config):
     architecture = config.get('network',{}).get('architecture','legacy')
     if architecture not in ('legacy','alpha_modulated_v1'):raise ValueError('unsupported path network architecture')
     MODULATED_ARCHITECTURE='alpha_modulated_v1';ALPHA_INDEX=336
-    MODULATION_SHAPES={'gain_2':(128,),'shift_2':(128,),'gain_3':(64,),'shift_3':(64,)}
     if (input_dim, output_dim) not in ((351, 2), (352, 1)):
         raise ValueError('path network requires Actor351/2 or Critic352/1')
 

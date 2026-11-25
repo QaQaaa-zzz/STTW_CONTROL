@@ -14,11 +14,15 @@ from .torch_path_policy import TorchPathPolicy
 from .torch_path_reference import TorchPathReference
 from .torch_middle_control import TorchMiddleControl
 from .torch_observation import rotate_inverse
+from .reference_action_channel import CHANNEL_INDEX, expand_reference_action
 
 
 class Go2PathEnv:
     def __init__(self,cfg,output):
-        self.cfg=cfg;self.device=cfg['device'];self.num_envs=cfg['num_envs'];self.num_obs=351;self.num_privileged_obs=352;self.num_actions=2;self.max_episode_length=500
+        self.cfg=cfg;self.device=cfg['device'];self.num_envs=cfg['num_envs'];self.num_obs=351;self.num_privileged_obs=352;self.max_episode_length=500
+        channel=cfg.get('reference_action_channel')
+        self.action_index=None if channel is None else CHANNEL_INDEX[channel]
+        self.num_actions=2 if self.action_index is None else 1
         bundle=Path(cfg['bundle']);identity=json.loads((bundle/'identity.json').read_text());config=json.loads((bundle/'config.json').read_text())
         terrains=list(cfg['terrains'].values());self.plant=IsaacLabVectorPlant(cfg['asset'],terrains,[i%len(terrains) for i in range(self.num_envs)],output,**cfg['plant_options'])
         policy=TorchPathPolicy(bundle/'actor.npz',identity['files']['actor.npz'],config,self.num_envs,self.device)
@@ -52,7 +56,18 @@ class Go2PathEnv:
 
     def reset_idx(self,ids):
         if self.cfg.get('reset_mode')=='common_start':
-            self.reset_common_start(ids);return
+            self.reset_common_start(ids)
+        else:
+            self.reset_prefix(ids)
+        if self.action_index is not None:
+            disabled=1-self.action_index
+            policy=self.rollout.policy
+            policy.hold_channels[ids,disabled]=True
+            policy.channel_intervention_mode='zero'
+            policy.filtered[ids,disabled]=0
+            policy.offsets[ids,disabled]=0
+
+    def reset_prefix(self,ids):
         r=self.rollout;count=len(ids);picked=torch.randint(len(self.speeds),(count,),device=self.device);self.route.route_ids[ids]=picked
         state={key:self.bank[key][picked].float() for key in ('root_pose','root_velocity','joint_position','joint_velocity')}
         if self.cfg.get('random_terrain_reset',False):
@@ -119,6 +134,7 @@ class Go2PathEnv:
     def get_privileged_observations(self):return self.privileged_obs_buf
 
     def step(self,actions):
+        actions=expand_reference_action(actions,self.action_index)
         if self.cfg.get('profile_first_step',False) and self.sampling_steps==0:
             with torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU,torch.profiler.ProfilerActivity.CUDA]) as profile:
                 out=self.rollout.step(latent=actions)

@@ -31,6 +31,12 @@ class IsaacPathRollout:
             from .isaaclab_randomization import randomize_vehicle_properties,VehicleControlRandomization
             self.randomization_properties=randomize_vehicle_properties(self.plant,settings['randomization'])
             self.randomization=VehicleControlRandomization(self.plant,settings['randomization'])
+        self.channel_audit=None
+        if settings.get('reference_action_channel') is not None:
+            from .reference_action_channel import CHANNEL_INDEX
+            self.channel_index=CHANNEL_INDEX[settings['reference_action_channel']]
+            self.channel_audit=torch.zeros(5,device=self.device,dtype=torch.long)
+            self.channel_offset_sums=torch.zeros(2,device=self.device,dtype=torch.float64)
         self.initial_state=None;self.initial_physical_tick=0
         self.auto_reset_horizon=settings.get('auto_reset_horizon',True)
         self.training_pulse=None
@@ -122,6 +128,17 @@ class IsaacPathRollout:
             signals=self.plant.signals;position=self.plant.dofs[:,:,0];row=torch.stack((control_m[:,5]*self.wheel_radius_m,control_m[:,2],control_m[:,3],control_m[:,0],control_m[:,1],governed[:,1]),dim=-1);output=self.controller.step(row,self.physical_tick*.005>3.)
             steer=(output[:,0]+applied[:,0]).clamp(-3,3);steer=torch.maximum(torch.maximum(torch.full_like(steer,-3),(-.8-position[:,signals.steer])/.005),torch.minimum(torch.minimum(torch.full_like(steer,3),(.8-position[:,signals.steer])/.005),steer));command=torch.stack((steer,(governed[:,0]/self.wheel_radius_m+applied[:,1]).clamp(-60,60)),dim=-1)
             pre_failure=self.middle.fault|domain_exit|~finite|~torch.isfinite(m).all(-1)|(m[:,0].abs()>.7);just_failed=self.alive&pre_failure;new_failure|=just_failed;self.alive&=~pre_failure;active_lower=self.alive.clone();peak=m[:,0].abs();endpoint=self.plant.roots.clone();stop_tick=torch.full((self.n,),self.physics_substeps,device=self.device,dtype=torch.long)
+            if self.channel_audit is not None:
+                # Counts cover all physically active 5 ms updates between lane resets.
+                disabled=1-self.channel_index
+                target=self.middle.flags['target']
+                self.channel_audit+=torch.stack((active_lower.sum(),
+                    (active_lower&(target[:,disabled]!=0)).sum(),
+                    (active_lower&(self.policy.filtered[:,disabled]!=0)).sum(),
+                    (active_lower&(self.policy.offsets[:,disabled]!=0)).sum(),
+                    (active_lower&(self.policy.offsets[:,self.channel_index]!=0)).sum()))
+                issued=torch.where(active_lower,self.policy.offsets[:,self.channel_index],0.)
+                self.channel_offset_sums+=torch.stack((issued.sum(),issued.abs().sum()))
             contact_failure=torch.zeros_like(valid)
             numerical_failure=just_failed&(~finite|~torch.isfinite(m).all(-1))
             roll_limit_failure=just_failed&(m[:,0].abs()>.7)

@@ -141,33 +141,40 @@ class SeparatedPPO(PPO):
 class H75ActorCritic(torch.nn.Module):
     is_recurrent = False
 
-    def __init__(self, actor, critic,log_std=None):
+    def __init__(self, actor, critic,log_std=None,active_channel=None):
         super().__init__()
+        from .reference_action_channel import CHANNEL_INDEX
+        index = None if active_channel is None else CHANNEL_INDEX[active_channel]
+        self.action_slice = slice(None) if index is None else slice(index,index+1)
+        self.single_channel = index is not None
         self.actor = actor
         self.critic = critic
         self.log_std=None if log_std is None else torch.nn.Parameter(log_std.clone())
 
     @classmethod
-    def from_original_policy(cls,config,state_dict,device):
+    def from_original_policy(cls,config,state_dict,device,active_channel=None):
         """Reuse original alpha-modulated Actor/Critic and learned log std.
 
         The new Go2 optimizer is separate; this is a weights-only import.
         """
         from .torch_path_policy import make_torch_path_network
-        policy=cls(make_torch_path_network(351,2,config),make_torch_path_network(352,1,config),state_dict['log_std'])
+        policy=cls(make_torch_path_network(351,2,config),make_torch_path_network(352,1,config),state_dict['log_std'],active_channel=active_channel)
         policy.load_state_dict(state_dict)
         return policy.to(device)
 
     def act(self, observations, **kwargs):
-        self.distribution = self.actor.distribution(observations) if self.log_std is None else torch.distributions.Normal(self.actor(observations),self.std)
+        if self.log_std is None and not self.single_channel:
+            self.distribution=self.actor.distribution(observations)
+        else:
+            self.distribution=torch.distributions.Normal(self.act_inference(observations),self.std)
         return self.distribution.sample()
 
     def act_inference(self,observations):
-        return self.actor(observations)
+        return self.actor(observations)[...,self.action_slice]
 
     @property
     def std(self):
-        return (self.actor.log_std if self.log_std is None else self.log_std).exp()
+        return (self.actor.log_std if self.log_std is None else self.log_std)[...,self.action_slice].exp()
 
     def evaluate(self, observations, **kwargs):
         return self.critic(observations)
