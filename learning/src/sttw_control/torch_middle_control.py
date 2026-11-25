@@ -4,6 +4,7 @@ Call reset on the initial physical state, before() before each lower update,
 and after() exactly once after its 25 physical steps. Controller/actuator state
 must already reflect that completed lower interval when calling after().
 """
+import math
 import torch
 from .torch_local_lower import local_frame
 from .torch_path_reference import wrap
@@ -77,13 +78,23 @@ class TorchMiddleControl:
         negative = interface['speed_negative_scale_m_s']
         offset = (speed - self.nominal[:, 0]).clamp(-negative + 1e-6, positive - 1e-6)
         magnitude = torch.where(offset >= 0, positive, negative)
-        return torch.stack((torch.atanh(offset / magnitude), torch.zeros_like(offset)), dim=-1)
+        steer_latent = torch.zeros_like(offset)
+        if 'curvature_bias_gain' in rule:
+            follower = route.config['follower']
+            scale = follower['wheelbase_m_expected'] / math.cos(math.radians(follower['caster_deg_expected']))
+            # Change in feedforward steer over one pursuit lookahead on the original route.
+            ahead = route.at(start + self.follower['lookahead'])[2]
+            change = torch.atan(scale * ahead) - torch.atan(scale * route.at(start)[2])
+            ratio = rule['curvature_bias_gain'] * change / interface['steer_scale_rad']
+            steer_latent = torch.atanh(ratio.clamp(-1 + 1e-6, 1 - 1e-6))
+        return torch.stack((torch.atanh(offset / magnitude), steer_latent), dim=-1)
 
-    def before(self,pose,zero_middle=False,noise_std=None,zero_mask=None,latent_override=None):
+    def before(self,pose,zero_middle=False,noise_std=None,zero_mask=None,latent_override=None,latent_mask=None):
         if self.tick%4==0:
             self.obs,fault=self.observation(pose)
             self.latent=torch.zeros_like(self.nominal) if zero_middle else self.policy.latent(self.obs)
-            if latent_override is not None:self.latent=latent_override
+            if latent_override is not None:
+                self.latent = latent_override if latent_mask is None else torch.where(latent_mask[:, None], latent_override, self.latent)
             if noise_std is not None:
                 self.latent=self.latent+noise_std*torch.randn_like(self.latent)
             if zero_mask is not None:self.latent=torch.where(zero_mask[:,None],0.,self.latent)

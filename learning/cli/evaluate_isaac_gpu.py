@@ -72,6 +72,14 @@ def evaluate(a,resident=None):
             oracle_bias = OracleTargetBias(knots['times_s'], knots['offsets'], env.n, env.horizon,
                                          env.policy.config['residual_interface'], env.device)
         env.policy.evaluation_target_bias = oracle_bias
+    guard = None
+    if s.get('roll_envelope_brake'):
+        from sttw_control.envelope_intervention import RollEnvelopeBrake
+        if oracle_bias or s.get('auto_reset_horizon', True) or a.channel_protocol:
+            raise ValueError('The roll-envelope intervention requires a fixed episode without an oracle or fork')
+        guard = RollEnvelopeBrake(env.controller, env.wheel_radius_m, env.policy.config['residual_interface'],
+                                  env.n, env.device, s['roll_envelope_brake'])
+        env.policy.evaluation_target_bias = guard
     if s.get('record_controller_terms'):env.controller.config['record_terms']=True
     if s.get('zero_reference_channels'):
         mask=torch.tensor(s['zero_reference_channels'],device=env.device,dtype=torch.bool)
@@ -118,9 +126,33 @@ def evaluate(a,resident=None):
             raise ValueError('Contact torque experiment requires its own solved-step hook and fixed route')
         from sttw_control.contact_torque_intervention import ContactTorqueExperiment
         env.physics_recorder=ContactTorqueExperiment(env,s['contact_torque_intervention'],a.output)
+    rule_mask = None
     rule=s.get('traditional_rule')
     if rule and (intervention or planner or any(s['zero_middle']) or rule['preview_m']<=0 or rule['lateral_acceleration_limit_m_s2']<=0):
         raise ValueError('The curvature-cap comparator requires a fixed route, positive limits and dedicated comparator lanes')
+    if cases and 'traditional_rules' in cases[0]:
+        lane_rules = [item for case in cases for item in case['traditional_rules']]
+        if rule or intervention or planner or any(s['zero_middle']) or any(
+            len(case['traditional_rules']) != case['lane_count'] for case in cases
+        ):
+            raise ValueError('Each dedicated comparator lane requires its own rule')
+        # A null rule delegates this lane to the original frozen network.
+        active_rules = [item for item in lane_rules if item is not None]
+        if not active_rules:
+            raise ValueError('Use ordinary fixed-policy evaluation for all-network batches')
+        if len(active_rules) < len(lane_rules):
+            rule_mask = torch.tensor([item is not None for item in lane_rules], device=env.device)
+            lane_rules = [active_rules[0] if item is None else item for item in lane_rules]
+        if any(min(item['preview_m'], item['lateral_acceleration_limit_m_s2']) <= 0 for item in lane_rules):
+            raise ValueError('Preview and acceleration cap must be positive')
+        rule = {key: torch.tensor([item[key] for item in lane_rules], device=env.device)
+                for key in ('preview_m', 'lateral_acceleration_limit_m_s2', 'curvature_bias_gain')}
+    governor = None
+    if s.get('predictive_reference_governor'):
+        from sttw_control.predictive_reference_governor import PredictiveReferenceGovernor
+        if rule or intervention or guard or planner or oracle_bias or any(s['zero_middle']) or s.get('zero_reference_channels'):
+            raise ValueError('Use dedicated model-governor lanes with the unchanged reference interface')
+        governor = PredictiveReferenceGovernor(env, s['predictive_reference_governor'])
     fork_step=None
     sampling_started=time.monotonic()
     for step in range(env.horizon):
@@ -143,8 +175,24 @@ def evaluate(a,resident=None):
                 active=(step-fork_step)*.02<intervention['hold_s'];env.policy.hold_channels.copy_(torch.tensor(intervention['hold_channels'],device=env.device,dtype=torch.bool) if active else torch.zeros_like(env.policy.hold_channels))
         if planner is not None:planner.update()
         if oracle_bias is not None:oracle_bias.set_step(step)
-        result=env.step(None,latent=env.middle.curvature_cap_action(rule)) if rule else env.step(None)
+        if guard is not None:
+            measurement = env.measurement if env.randomization is not None else env.plant.observe()[0]
+            guard_record = guard.observe(measurement, env.alive)
+        if governor is not None:
+            measured, _, speed = env.plant.observe()
+            latent, governor_record = governor.action(env.measurement if env.randomization is not None else measured, speed)
+            result = env.step(None, latent=latent)
+        elif rule:
+            result = env.step(None, latent=env.middle.curvature_cap_action(rule), latent_mask=rule_mask)
+        else:
+            result = env.step(None)
         keys=['reward','valid','done','failure','lower_trace']
+        if governor is not None:
+            result.update(governor_record)
+            keys.extend(governor_record)
+        if guard is not None:
+            result.update(guard_record)
+            keys.extend(guard_record)
         keys.extend(key for key in ('executed_commands','body_poses') if key in result)
         rows.append({key:result[key] for key in keys})
         omitted=s.get('omit_diagnostic_fields',[])

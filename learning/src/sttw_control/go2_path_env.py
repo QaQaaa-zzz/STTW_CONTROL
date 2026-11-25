@@ -44,6 +44,9 @@ class Go2PathEnv:
         self.force_levels=torch.tensor(cfg['pulse']['forces_N'],device=self.device);self.force_world=torch.zeros(self.num_envs,3,device=self.device);self.pulse_start=torch.zeros(self.num_envs,device=self.device,dtype=torch.long);self.impulse=torch.zeros_like(self.force_world)
         self.chassis=torch.tensor([self.plant.bodies.index(cfg['randomization']['base_body'])],device=self.device);self.site_position=torch.tensor(cfg['pulse']['site_body_position_m'],device=self.device).expand(self.num_envs,1,3).contiguous();self.zero_torque=torch.zeros(self.num_envs,1,3,device=self.device);r.training_pulse=self.apply_pulse
         self.terrain_center=torch.zeros(self.num_envs,3,device=self.device);self.terrain_kind_id=torch.zeros(self.num_envs,device=self.device,dtype=torch.long);self.terrain_entered=torch.zeros(self.num_envs,device=self.device,dtype=torch.bool);self.terrain_cleared=self.terrain_entered.clone();self.terrain_contacted=self.terrain_entered.clone()
+        self.fixed_preference_counts = None
+        if len(cfg['alphas']) == 1:
+            self.fixed_preference_counts = torch.zeros(2, device=self.device, dtype=torch.long)
         self.sampling_steps=0;self.sampling_started=time.time()
         self.reset()
 
@@ -97,10 +100,12 @@ class Go2PathEnv:
         r.preference_progress[ids]=r.middle.projection['progress'][ids];r.policy.execution_mode[ids]=0
         self.episode_length_buf[ids]=0;self.episode_reward[ids]=0;self.error_squares[ids]=0;self.switched[ids]=False;self.switch_enabled[ids]=False
         force=self.force_levels[torch.randint(len(self.force_levels),(n,),device=self.device)];force*=torch.rand(n,device=self.device)<self.cfg['pulse']['probability'];yaw=pose[ids,2]
-        self.force_world[ids]=force[:,None]*torch.stack((-yaw.sin(),yaw.cos(),torch.zeros_like(yaw)),dim=-1);self.pulse_start[ids]=r.physical_tick[ids];self.impulse[ids]=0
+        delay_lo,delay_hi=self.cfg['pulse'].get('delay_s_range',[0.0,0.0])
+        delay_ticks=torch.randint(round(delay_lo/.005),round(delay_hi/.005)+1,(n,),device=self.device) if delay_hi>delay_lo else round(delay_lo/.005)
+        self.force_world[ids]=force[:,None]*torch.stack((-yaw.sin(),yaw.cos(),torch.zeros_like(yaw)),dim=-1);self.pulse_start[ids]=r.physical_tick[ids]+delay_ticks;self.impulse[ids]=0
 
     def apply_pulse(self,physics_tick):
-        r=self.rollout;active=(r.physical_tick-self.pulse_start<round(self.cfg['pulse']['duration_s']/.005))&r.alive;force=self.force_world*active[:,None];self.impulse+=force*.0002
+        r=self.rollout;elapsed=r.physical_tick-self.pulse_start;active=(elapsed>=0)&(elapsed<round(self.cfg['pulse']['duration_s']/.005))&r.alive;force=self.force_world*active[:,None];self.impulse+=force*.0002
         local=rotate_inverse(self.plant.roots[:,3:7],force)
         self.plant.robot.permanent_wrench_composer.set_forces_and_torques(forces=local[:,None].contiguous(),torques=self.zero_torque,positions=self.site_position,body_ids=self.chassis,is_global=False)
 
@@ -119,6 +124,10 @@ class Go2PathEnv:
                 out=self.rollout.step(latent=actions)
             Path(self.cfg['profile_output']).write_text(profile.key_averages().table(sort_by='self_cuda_time_total',row_limit=40))
         else:out=self.rollout.step(latent=actions)
+        if self.fixed_preference_counts is not None:
+            valid = out['valid']
+            self.fixed_preference_counts[0] += valid.sum()
+            self.fixed_preference_counts[1] += (valid & (self.rollout.alpha != self.cfg['alphas'][0])).sum()
         distance=torch.linalg.vector_norm(self.plant.roots[:,:2]-self.terrain_center[:,:2],dim=-1)
         self.terrain_entered|=(distance>=2.6)&(self.terrain_kind_id>0)
         self.terrain_cleared|=(distance>=3.4)&(self.terrain_kind_id>0)

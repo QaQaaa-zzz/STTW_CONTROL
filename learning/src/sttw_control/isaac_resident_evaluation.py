@@ -36,9 +36,15 @@ class FixedSlotSession:
         # Hold fixed initial state, group draws, asset, terrain inventory and slot
         # order. Only the CEM target and the associated policy selection can vary.
         mutable = {'alphas','lane_alphas','zero_middle','case_labels','evaluation_role',
-                   'oracle_knots','oracle_knots_sha256'}
+                   'oracle_knots','oracle_knots_sha256','roll_envelope_brake','predictive_reference_governor'}
+        mutable.add('sampled_feedback')
         fixed = {k:v for k,v in settings.items() if k not in mutable}
         case_inputs = [{k:v for k,v in c.items() if k not in mutable and k!='output'} for c in cases]
+        # The target preference is a controller input. Keep the route trigger,
+        # coordinate frame and execution mode in the matched scene signature.
+        for item in [fixed, *case_inputs]:
+            if 'alpha_switch' in item:
+                item['alpha_switch'] = {k:v for k,v in item['alpha_switch'].items() if k!='target_alpha'}
         signature = (fixed,case_inputs)
         options = settings['plant_options']
         if (options.get('pendulum_rest') is not None or options.get('servo_mode','explicit')!='explicit'

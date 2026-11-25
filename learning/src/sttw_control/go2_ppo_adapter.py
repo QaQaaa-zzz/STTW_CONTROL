@@ -4,8 +4,138 @@ PPO losses, optimizer, adaptive learning rate and GAE stay upstream. Failed
 STTW lanes remain inactive until the existing synchronous reset and are not
 optimization samples. No quadruped symmetry mapping applies to this policy.
 """
+import math
 import torch
+from rsl_rl.algorithms import PPO
 from rsl_rl.storage import RolloutStorage
+
+
+def init_near_zero_output(actor, gain=0.01):
+    """Scale the final actor linear layer near zero so fresh training starts near Zero."""
+    last = actor[-1]
+    with torch.no_grad():
+        last.weight.mul_(gain)
+        last.bias.zero_()
+
+
+class SeparatedPPO(PPO):
+    """PPO with independent actor/critic optimizers, clipping, warmup, and KL guard.
+
+    Prevents large failure-penalty value losses (~1e5) from crushing actor gradients
+    under joint gradient clipping or triggering explosive adaptive LR growth.
+    """
+
+    def __init__(
+        self,
+        actor_critic,
+        actor_lr=1e-4,
+        critic_lr=3e-4,
+        grad_clip_actor=1.0,
+        grad_clip_critic=1.0,
+        critic_warmup_updates=2,
+        hard_kl=0.03,
+        std_min=0.05,
+        std_max=0.5,
+        **kwargs,
+    ):
+        kwargs['learning_rate'] = actor_lr
+        kwargs['schedule'] = 'fixed'
+        kwargs['use_clipped_value_loss'] = False
+        super().__init__(actor_critic, **kwargs)
+        actor_params = list(actor_critic.actor.parameters())
+        if actor_critic.log_std is not None:
+            actor_params.append(actor_critic.log_std)
+        self.actor_params = actor_params
+        self.critic_params = list(actor_critic.critic.parameters())
+        self.actor_optimizer = torch.optim.Adam(self.actor_params, lr=actor_lr)
+        self.critic_optimizer = torch.optim.Adam(self.critic_params, lr=critic_lr)
+        self.optimizer = self.actor_optimizer
+        self.learning_rate = actor_lr
+        self.critic_lr = critic_lr
+        self.grad_clip_actor = grad_clip_actor
+        self.grad_clip_critic = grad_clip_critic
+        self.critic_warmup_updates = critic_warmup_updates
+        self.hard_kl = hard_kl
+        self.log_std_min = math.log(std_min)
+        self.log_std_max = math.log(std_max)
+        self.completed_updates = 0
+        self.last_kl = 0.0
+        self.last_actor_steps = 0
+
+    def update(self):
+        mean_value_loss = 0.0
+        mean_surrogate_loss = 0.0
+        mean_entropy_loss = 0.0
+        actor_active = self.completed_updates >= self.critic_warmup_updates
+        actor_steps = 0
+        last_kl = 0.0
+        generator = self.storage.mini_batch_generator(self.num_mini_batches, self.num_learning_epochs)
+        for (
+            obs_batch,
+            critic_obs_batch,
+            actions_batch,
+            _target_values_batch,
+            advantages_batch,
+            returns_batch,
+            old_actions_log_prob_batch,
+            old_mu_batch,
+            old_sigma_batch,
+            _hid_states_batch,
+            _masks_batch,
+        ) in generator:
+            value_batch = self.actor_critic.evaluate(critic_obs_batch)
+            value_loss = (returns_batch - value_batch).pow(2).mean()
+            self.critic_optimizer.zero_grad()
+            value_loss.backward()
+            torch.nn.utils.clip_grad_norm_(self.critic_params, self.grad_clip_critic)
+            self.critic_optimizer.step()
+            mean_value_loss += value_loss.item()
+
+            if actor_active:
+                self.actor_critic.act(obs_batch)
+                mu_batch = self.actor_critic.action_mean
+                sigma_batch = self.actor_critic.action_std
+                with torch.inference_mode():
+                    kl = torch.sum(
+                        torch.log(sigma_batch / old_sigma_batch + 1e-8)
+                        + (old_sigma_batch.square() + (old_mu_batch - mu_batch).square())
+                        / (2.0 * sigma_batch.square())
+                        - 0.5,
+                        dim=-1,
+                    )
+                    last_kl = kl.mean().item()
+                if self.hard_kl is not None and last_kl > self.hard_kl:
+                    actor_active = False
+                    continue
+                actions_log_prob_batch = self.actor_critic.get_actions_log_prob(actions_batch)
+                entropy_batch = self.actor_critic.entropy
+                ratio = torch.exp(actions_log_prob_batch - old_actions_log_prob_batch.squeeze(-1))
+                adv = advantages_batch.squeeze(-1)
+                surrogate = -adv * ratio
+                surrogate_clipped = -adv * torch.clamp(ratio, 1.0 - self.clip_param, 1.0 + self.clip_param)
+                surrogate_loss = torch.max(surrogate, surrogate_clipped).mean()
+                actor_loss = surrogate_loss - self.entropy_coef * entropy_batch.mean()
+                self.actor_optimizer.zero_grad()
+                actor_loss.backward()
+                torch.nn.utils.clip_grad_norm_(self.actor_params, self.grad_clip_actor)
+                self.actor_optimizer.step()
+                if self.actor_critic.log_std is not None:
+                    with torch.no_grad():
+                        self.actor_critic.log_std.clamp_(self.log_std_min, self.log_std_max)
+                mean_surrogate_loss += surrogate_loss.item()
+                mean_entropy_loss += entropy_batch.mean().item()
+                actor_steps += 1
+
+        num_updates = self.num_learning_epochs * self.num_mini_batches
+        mean_value_loss /= num_updates
+        if actor_steps:
+            mean_surrogate_loss /= actor_steps
+            mean_entropy_loss /= actor_steps
+        self.completed_updates += 1
+        self.last_kl = last_kl
+        self.last_actor_steps = actor_steps
+        self.storage.clear()
+        return mean_value_loss, mean_surrogate_loss, 0.0, mean_entropy_loss
 
 
 class H75ActorCritic(torch.nn.Module):

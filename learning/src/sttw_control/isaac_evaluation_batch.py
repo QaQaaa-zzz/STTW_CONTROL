@@ -85,7 +85,7 @@ def split_case(arrays, contract, case, case_index):
     settings.update(num_envs=count, trace_lanes=count, alphas=case.get('alphas',ALPHAS[:count]),
                     zero_middle=case.get('zero_middle',([False]*5+[True])[:count]), user_speed_m_s=case['user_speed_m_s'],
                     terrains={'evaluation': case['terrain_path']})
-    for key in ('evaluation_pulse','zero_reference_channels','case_labels','alpha_switch'):
+    for key in ('evaluation_pulse','zero_reference_channels','case_labels','alpha_switch','traditional_rules'):
         if key in case:settings[key]=deepcopy(case[key])
     if case.get('randomization') is not None:
         settings.update(seed=case['seed'],randomization=deepcopy(case['randomization']))

@@ -15,7 +15,7 @@ from .torch_controller import TorchVelocityServos,TorchPositionServos
 from .torch_observation import TorchVehicleSignals
 
 class IsaacLabVectorPlant:
-    def __init__(self,asset,terrain_paths,terrain_ids,output,servo_mode="explicit",hull_vertices=None,mesh_collision_on_geometry=False,compliant_wheels=None,friction_correlation_distance=.025,external_forces_every_iteration=False,wheel_collision="convexHull",friction_offset_threshold=.04,env_spacing=None,track_wheel_contacts=False,terrain_layout="external",pendulum_rest=None,pendulum_locked=False,physics_dt=.0002,gpu_pair_capacities=None,actuator_force_limits=None,wheel_radius_m=.1,robot_contact_offset=.01,solver_position_iterations=4,solver_velocity_iterations=1,wheel_contact_slop=0.,wheel_width_m=None,wheel_profile_slices=1,terrain_base_plane=False,track_contact_wrench=False,max_contact_data_count_per_prim=16,raw_contact_only=False,replay_clone_origins=None):
+    def __init__(self,asset,terrain_paths,terrain_ids,output,servo_mode="explicit",hull_vertices=None,mesh_collision_on_geometry=False,compliant_wheels=None,friction_correlation_distance=.025,external_forces_every_iteration=False,wheel_collision="convexHull",friction_offset_threshold=.04,env_spacing=None,track_wheel_contacts=False,terrain_layout="external",pendulum_rest=None,pendulum_locked=False,physics_dt=.0002,gpu_pair_capacities=None,actuator_force_limits=None,wheel_radius_m=.1,robot_contact_offset=.01,solver_position_iterations=4,solver_velocity_iterations=1,wheel_contact_slop=0.,wheel_width_m=None,wheel_profile_slices=1,terrain_base_plane=False,track_contact_wrench=False,max_contact_data_count_per_prim=16,raw_contact_only=False,replay_clone_origins=None,sdf_resolution=None,contact_material_friction=.8):
         self.raw_contact_only=raw_contact_only;self.track_contact_wrench=track_contact_wrench;self.servo_mode=servo_mode;self.physics_dt=physics_dt;self.wheel_radius_m=wheel_radius_m
         pair_capacities=gpu_pair_capacities or [2**24,2**24,2**27]
         asset=Path(asset);output=Path(output);self.contract=json.loads(asset.with_name('contract.json').read_text());self.device='cuda:0';self.count=len(terrain_ids);self.diagnostic_joint_torque=None
@@ -42,7 +42,7 @@ class IsaacLabVectorPlant:
         tree.write(staged/'vehicle.urdf',encoding='unicode')
         converter=UrdfConverter(UrdfConverterCfg(asset_path=str((staged/'vehicle.urdf').resolve()),usd_dir=str((output/'usd').resolve()),usd_file_name='vehicle.usd',fix_base=False,merge_fixed_joints=False,make_instanceable=False,force_usd_conversion=True,self_collision=self_collision,collider_type='convex_hull',joint_drive=UrdfConverterCfg.JointDriveCfg(target_type='none',gains=UrdfConverterCfg.JointDriveCfg.PDGainsCfg(stiffness=0.,damping=0.))))
         self.sim=sim_utils.SimulationContext(sim_utils.SimulationCfg(dt=self.physics_dt,device=self.device,gravity=(0.,0.,-9.81),physx=sim_utils.PhysxCfg(solver_type=1,friction_offset_threshold=friction_offset_threshold,enable_external_forces_every_iteration=external_forces_every_iteration,bounce_threshold_velocity=.2,friction_correlation_distance=friction_correlation_distance,gpu_found_lost_pairs_capacity=pair_capacities[0],gpu_total_aggregate_pairs_capacity=pair_capacities[1],gpu_found_lost_aggregate_pairs_capacity=pair_capacities[2])))
-        material=sim_utils.RigidBodyMaterialCfg(static_friction=.8,dynamic_friction=.8,restitution=0.,friction_combine_mode='average');material.func('/World/Material',material)
+        material=sim_utils.RigidBodyMaterialCfg(static_friction=contact_material_friction,dynamic_friction=contact_material_friction,restitution=0.,friction_combine_mode='average');material.func('/World/Material',material)
         cloner=GridCloner(spacing=100. if env_spacing is None else env_spacing,stage=self.sim.stage);cloner.define_base_env('/World/Envs')
         env_paths=cloner.generate_paths('/World/Envs/Env',self.count)
         origins=np.array([[20.*i,0.,0.] for i in range(self.count)],dtype=np.float32) if self.count<=6 and env_spacing is None else np.asarray(cloner.get_clone_transforms(self.count)[0],dtype=np.float32)
@@ -111,7 +111,9 @@ class IsaacLabVectorPlant:
         if wheel_collision == "sdf":
             for prim in self.sim.stage.Traverse():
                 if '/Robot/' in str(prim.GetPath()) and prim.IsA(UsdGeom.Mesh) and prim.HasAPI(UsdPhysics.MeshCollisionAPI):
-                    sim_utils.define_mesh_collision_properties(str(prim.GetPath()),sim_utils.SDFMeshPropertiesCfg(sdf_resolution=256),stage=self.sim.stage)
+                    wheel_mesh = any('/Robot/'+wheel+'/' in str(prim.GetPath()) for wheel in ('frontwheel','rearwheel'))
+                    resolution = sdf_resolution if wheel_mesh and sdf_resolution is not None else 256
+                    sim_utils.define_mesh_collision_properties(str(prim.GetPath()),sim_utils.SDFMeshPropertiesCfg(sdf_resolution=resolution),stage=self.sim.stage)
         if wheel_collision == "cylinder":
             if wheel_width_m is None:raise ValueError("Cylinder wheels require explicit full wheel_width_m")
             if wheel_profile_slices<1 or wheel_profile_slices%2!=1:raise ValueError('Wheel profile requires a positive odd slice count')
@@ -133,7 +135,7 @@ class IsaacLabVectorPlant:
         if compliant_wheels:
             for wheel,parameters in compliant_wheels.items():
                 path='/World/'+wheel+'_material'
-                wheel_material=sim_utils.RigidBodyMaterialCfg(static_friction=.8,dynamic_friction=.8,restitution=0.,friction_combine_mode='average',compliant_contact_stiffness=parameters['stiffness'],compliant_contact_damping=parameters['damping'])
+                wheel_material=sim_utils.RigidBodyMaterialCfg(static_friction=contact_material_friction,dynamic_friction=contact_material_friction,restitution=0.,friction_combine_mode='average',compliant_contact_stiffness=parameters['stiffness'],compliant_contact_damping=parameters['damping'])
                 wheel_material.func(path,wheel_material)
                 for prim in self.sim.stage.Traverse():
                     if '/Robot/'+wheel+'/' in str(prim.GetPath()) and prim.HasAPI(UsdPhysics.CollisionAPI):
@@ -170,6 +172,20 @@ class IsaacLabVectorPlant:
         self.jump_steering_servo=None if pendulum_rest is None else TorchPositionServos(self.contract,self.joints,['cmd_steering_p'],self.device,allow_inactive=True)
         self.pendulum_target=None if pendulum_rest is None else torch.tensor(pendulum_rest,device=self.device).expand(self.count,-1).clone()
         self.metadata=dict(wheel_profile_slices=wheel_profile_slices,wheel_width_m=wheel_width_m,solver_iterations=[solver_position_iterations,solver_velocity_iterations],robot_contact_offset_m=robot_contact_offset,wheel_radius_m=wheel_radius_m,actuator_force_limits_Nm=actuator_force_limits, gpu_pair_capacities=pair_capacities,physics_dt_s=self.physics_dt,env_origins=origins.tolist(),env_spacing=env_spacing,friction_offset_threshold=PhysxSchema.PhysxSceneAPI(self.sim.stage.GetPrimAtPath(self.sim.cfg.physics_prim_path)).GetFrictionOffsetThresholdAttr().Get(),wheel_collision=wheel_collision,external_forces_every_iteration=PhysxSchema.PhysxSceneAPI(self.sim.stage.GetPrimAtPath(self.sim.cfg.physics_prim_path)).GetEnableExternalForcesEveryIterationAttr().Get(),friction_correlation_distance=PhysxSchema.PhysxSceneAPI(self.sim.stage.GetPrimAtPath(self.sim.cfg.physics_prim_path)).GetFrictionCorrelationDistanceAttr().Get(),compliant_wheels=compliant_wheels,mesh_collision_on_geometry=mesh_collision_on_geometry,collision_cooking=self.collision_cooking,servo_mode=servo_mode,device=self.device,num_envs=self.count,replicate_physics=True,terrain_asset_count=len(terrain_sources),masses=self.robot.root_physx_view.get_masses().cpu().tolist(),materials=self.robot.root_physx_view.get_material_properties().cpu().tolist(),contact_sensor_bodies=self.sensor.body_names,mesh_filename_mapping=mapping,scope='original meshes imported by Isaac Sim 5.1; contact representation may be recooked')
+        if sdf_resolution is not None:
+            stage=self.sim.stage
+            ground=UsdPhysics.MaterialAPI(stage.GetPrimAtPath('/World/Material'))
+            wheels={}
+            for wheel in ('frontwheel','rearwheel'):
+                prim=stage.GetPrimAtPath('/World/'+wheel+'_material')
+                material_api=PhysxSchema.PhysxMaterialAPI(prim)
+                body=stage.GetPrimAtPath(f'{env_paths[0]}/Robot/{wheel}')
+                sdf=[PhysxSchema.PhysxSDFMeshCollisionAPI(p).GetSdfResolutionAttr().Get()
+                     for p in Usd.PrimRange(body) if p.HasAPI(PhysxSchema.PhysxSDFMeshCollisionAPI)]
+                wheels[wheel]=dict(sdf_resolution=sdf,stiffness=material_api.GetCompliantContactStiffnessAttr().Get(),
+                                   damping=material_api.GetCompliantContactDampingAttr().Get())
+            self.metadata['contact_oat_readback']=dict(wheels=wheels,ground_friction=[
+                ground.GetStaticFrictionAttr().Get(),ground.GetDynamicFrictionAttr().Get()])
         self.metadata['raw_contact_only']=raw_contact_only
         self.metadata['wheel_contact_slop_m']={wheel:PhysxSchema.PhysxRigidBodyAPI(self.sim.stage.GetPrimAtPath(f'{env_paths[0]}/Robot/{wheel}')).GetContactSlopCoefficientAttr().Get() for wheel in ('frontwheel','rearwheel')}
         self.metadata['runtime_inertial']=dict(body_names=self.bodies,coms=self.robot.root_physx_view.get_coms()[0].cpu().tolist(),inertias=self.robot.root_physx_view.get_inertias()[0].cpu().tolist())

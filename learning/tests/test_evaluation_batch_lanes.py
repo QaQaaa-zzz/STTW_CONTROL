@@ -28,3 +28,19 @@ def test_legacy_six_lane_batch_is_unchanged():
     assert settings['num_envs']==12
     assert settings['lane_alphas']==[0,.25,.5,.75,1,0]*2
     assert settings['lane_terrain_ids']==[0]*6+[1]*6
+
+
+def test_comparator_mask_preserves_network_action_on_other_lanes():
+    from types import SimpleNamespace
+    import torch
+    from sttw_control.torch_middle_control import TorchMiddleControl
+
+    nominal = torch.zeros(2, 2)
+    policy = SimpleNamespace(latent=lambda _: nominal + 2,
+                             correct=lambda latent, _: (latent, {'policy_fault': torch.zeros(2, dtype=torch.bool)}))
+    middle = SimpleNamespace(policy=policy, tick=0, nominal=nominal, fault=torch.zeros(2, dtype=torch.bool),
+                             observation=lambda _: (nominal, torch.zeros(2, dtype=torch.bool)))
+    overrides = torch.tensor([[3., 4.], [5., 6.]])
+    actual = TorchMiddleControl.before(middle, None, latent_override=overrides,
+                                       latent_mask=torch.tensor([True, False]))
+    torch.testing.assert_close(actual, torch.tensor([[3., 4.], [2., 2.]]))

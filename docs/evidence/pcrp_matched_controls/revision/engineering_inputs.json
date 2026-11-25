@@ -1,0 +1,100 @@
+{
+  "purpose": "External inputs for the PCRP review engineering entry points",
+  "source_scope": "Source and CPU behavior tests. Simulation assets, new checkpoints and historical trajectory data are provisioned separately.",
+  "mounts": {
+    "archive": "/media/qy/6A7E3DB07E3D75C3/STTW_runs",
+    "repo": "working checkout (paths beginning runs/ or docs/)",
+    "go2_checkout": "/home/qy/projects/My_unitree_go2_gym",
+    "go2_revision": "5c47fa3dd43930057d4aa9de3e38fdf0f23a4ab1"
+  },
+  "usage": "Run CLI commands from the checkout root with learning/src on PYTHONPATH. For preparation, put the experiment output directory beside the source archive directories. The historical manifests contain absolute paths. Mount or map the original archive and bundle locations before using them. The specialist trainer uses the original Go2 checkout, RSL-RL and the installed Isaac environment.",
+  "inputs": {
+    "vehicle": {
+      "required_files": {
+        "runs/h75_selected_local300_flat/bundle/actor.npz": "03ec241dee698ac50987fe2888961b96dbd7db67c9c7eaca1ab7e544168b7a5b",
+        "runs/h75_selected_local300_flat/bundle/config.json": "92ea05bdfa0f32a6c2e95814efe39ca68a4b26f99139060c3ff6ebdcc3eff364",
+        "runs/h75_selected_local300_flat/bundle/route.npz": "fb800da4e7551e59881d900b6883a5bfd2b95db9b9703fc96ea423aaee2327b1",
+        "runs/h75_selected_local300_flat/bundle/identity.json": "cbe279f3d731fe63bd3bb81297a96a9f72d813c39e456d0ecb3cfaaba64935c6",
+        "runs/h75_selected_local300_flat/initial_state.npz": "7c2849dc467f5d9c03a11675b59d88abfac7e92e6545cfc228fa621456c024b1",
+        "runs/isaac_signals_parity/dynamic.json": "418a55486c863f5efb249c22987bc43017aee95ff0913582f59508230b18e00c",
+        "runs/isaac_urdf_drive/vehicle.urdf": "226c0681d8ae55b2ac579eb7d06d94b9306847d06158551ff737ca13f07e0b35",
+        "runs/local300_torch_portable_parity/actor.npz": "517f41fe825282ac4d4260a9757802e2258c644a1b235d0c328cd12e7b45f125",
+        "runs/h75_original_training_portable/identity.json": "2dfa6c344d0f889dc506eed8c89dc808490fdbc89939101b269b4fb64a9cc3ed"
+      },
+      "description": "Checkout-relative runtime paths. Restore the complete vehicle asset with referenced meshes and the complete training bank indexed by its identity file."
+    },
+    "contact_and_brake": {
+      "required_files": {
+        "pcrp_decision_20261122/step0/protocol.json": "22628183880b2bc6930f8767819626e0b9c6b72e4ca8b92e56fe24af8b8f249c",
+        "pcrp_decision_20261122/e2/matched/ds-4cm_a0/settings.json": "50e39701afc6914c5f043b7927a645bbd705fea4de34886ef204382bd52ad054",
+        "pcrp_decision_20261122/e2/matched/ds-4cm_a0/cases.json": "694ba8b14845a6134b66417531c170a27d783d00d632bf9c23837b77b9010714",
+        "pcrp_decision_20261122/e2/matched/ds-4cm_a0/batch/contract.json": "93bc6ab69652bb328e788cb3194e4f1d66ccfa09a3eb650b1db9398bf1e98048",
+        "pcrp_decision_20261122/e2/matched/ds-2cm_a0/settings.json": "50e39701afc6914c5f043b7927a645bbd705fea4de34886ef204382bd52ad054",
+        "pcrp_decision_20261122/e2/matched/ds-2cm_a0/cases.json": "b880a524af7d6347abe7693ec1579e188d5973fc1fc097749e103c9b0dbf59a5",
+        "pcrp_decision_20261122/e2/matched/ds-2cm_a0/batch/contract.json": "3080c7f812e6f0f4ce881dfd2bed3687459a7cb68224a57eaaf4b20b58bdf466",
+        "pcrp_decision_20261122/e2/matched/ds-1cm_a0/settings.json": "50e39701afc6914c5f043b7927a645bbd705fea4de34886ef204382bd52ad054",
+        "pcrp_decision_20261122/e2/matched/ds-1cm_a0/cases.json": "d3733b44526c8df3424ca726eb043e70ca0f402e03da8f0a2283161ef154fe6f",
+        "pcrp_decision_20261122/e2/matched/ds-1cm_a0/batch/contract.json": "fcf2994128ce6a902bfc6ee7e0882f85634239790168df0e98aa4e20672b5fc5",
+        "pcrp_decision_20261122/e2/matched/ds+0cm_a0/settings.json": "50e39701afc6914c5f043b7927a645bbd705fea4de34886ef204382bd52ad054",
+        "pcrp_decision_20261122/e2/matched/ds+0cm_a0/cases.json": "4ce83799dfca5383ccc6d1b5334281beb9202d1ef80ab3f3489d2d762c2a1d32",
+        "pcrp_decision_20261122/e2/matched/ds+0cm_a0/batch/contract.json": "0ce352bbbca7361a1032a213efc46df6d3058d5798c72fda68106c6a626aa67b",
+        "pcrp_decision_20261122/e2/matched/ds+1cm_a0/settings.json": "50e39701afc6914c5f043b7927a645bbd705fea4de34886ef204382bd52ad054",
+        "pcrp_decision_20261122/e2/matched/ds+1cm_a0/cases.json": "d634de2561accc7ec4a1b590a058700170d03706946aa3101b5a6f65d2728603",
+        "pcrp_decision_20261122/e2/matched/ds+1cm_a0/batch/contract.json": "f4b127a041ec6398c09f4754c170f63629a94f6c3cf0704fbdafc84239317132",
+        "pcrp_decision_20261122/e2/matched/ds+2cm_a0/settings.json": "50e39701afc6914c5f043b7927a645bbd705fea4de34886ef204382bd52ad054",
+        "pcrp_decision_20261122/e2/matched/ds+2cm_a0/cases.json": "4a5397a867d88aee1575b4c8504b5ce5401829503041ec1880a97c58ce79fa8d",
+        "pcrp_decision_20261122/e2/matched/ds+2cm_a0/batch/contract.json": "9b418c30330d54a6cd4c2081e54efc8670ebd98dd7ce8bace78bd9ee604729c3",
+        "pcrp_decision_20261122/e2/matched/ds+4cm_a0/settings.json": "50e39701afc6914c5f043b7927a645bbd705fea4de34886ef204382bd52ad054",
+        "pcrp_decision_20261122/e2/matched/ds+4cm_a0/cases.json": "253955de42753a7f8ed459e259856b5dec05cf9aa438dd989414e421097e5818",
+        "pcrp_decision_20261122/e2/matched/ds+4cm_a0/batch/contract.json": "0618aae218f14fe89c1d6bf3385f727a23ba0c1c08b33b71ac4b6b84cd699e4a",
+        "pcrp_decision_20261122/e2/matched/ds+0cm_a0.5/settings.json": "50e39701afc6914c5f043b7927a645bbd705fea4de34886ef204382bd52ad054",
+        "pcrp_decision_20261122/e2/matched/ds+0cm_a0.5/cases.json": "a23c78b05ba0202b27786ade9949f472325d0144830ff11b3cea1b3b26659a4d",
+        "pcrp_decision_20261122/e2/matched/ds+0cm_a0.5/batch/contract.json": "4f8e600e3459dd3735668a625f671ed003a11bc2137244fe3becea94e4b79cab",
+        "pcrp_decision_20261122/e2/matched/ds+0cm_a1/settings.json": "50e39701afc6914c5f043b7927a645bbd705fea4de34886ef204382bd52ad054",
+        "pcrp_decision_20261122/e2/matched/ds+0cm_a1/cases.json": "d380908860ce2c9c9182596373ce25f8d9b6ee8d9d2fab8485e3b2dc4a7ea841",
+        "pcrp_decision_20261122/e2/matched/ds+0cm_a1/batch/contract.json": "3c4502cfbe67e5bd5daf349cafe135059f98ab3221c83a2f762631985f5d71d6",
+        "pcrp_decision_20261122/e2/matched/ds+1cm_a0.5/settings.json": "50e39701afc6914c5f043b7927a645bbd705fea4de34886ef204382bd52ad054",
+        "pcrp_decision_20261122/e2/matched/ds+1cm_a0.5/cases.json": "90005cdf86fc3c1680097fc558ee88c8c77b07f23f5fa9d14ea3fc950291dd4a",
+        "pcrp_decision_20261122/e2/matched/ds+1cm_a0.5/batch/contract.json": "4691116ae0103d6c3c89aa4d5150155f9999b7f69f5cd3e778367bb703e97e96",
+        "pcrp_decision_20261122/e2/matched/ds+1cm_a1/settings.json": "50e39701afc6914c5f043b7927a645bbd705fea4de34886ef204382bd52ad054",
+        "pcrp_decision_20261122/e2/matched/ds+1cm_a1/cases.json": "76274d50adee1777450382819fe35de6b433ad60f5d00e024b3d729162b24e89",
+        "pcrp_decision_20261122/e2/matched/ds+1cm_a1/batch/contract.json": "65b85927c9d1ca9bbaa5ebd05e75cf606c5c14226a9d97e09810d31cc29aa46d"
+      },
+      "description": "Archive-relative E2 slot/geometry manifests. Supply the case directories, original batch records, terrain arrays and archived trajectories named in these files."
+    },
+    "bends_and_corridor": {
+      "required_files": {
+        "pcrp_local300_p0_20261121/full_ground/settings.json": "fefa88f678301fb6ab0122b5a7753aee508f6b5a865c557014a5f7ac266834e0",
+        "pcrp_local300_p0_20261121/full_ground/both_bends/cases.json": "a9ee1ff2155f0ad254038c4e0b0891c89166d7312d076833f7eb2ab443848127",
+        "h75_theory_iteration/calibration/single04_scene.json": "d884a0ce4b643609f09245fd87a5c5c795731c6fbaa3f9cc1c074d6f93fbe88a"
+      },
+      "description": "Archive-relative. Restore the two bend bundles and all case contracts and archives referenced by both_bends/cases.json. The 25-case panel also uses checkout-relative runs/h75_tradeoff_repeats/{flat,oblique_2cm,oblique_4cm}_v2p6_seed{101..105}/evaluation."
+    },
+    "governor_frontier_and_sensor_feedback": {
+      "required_files": {
+        "pcrp_curvature_governor_20261121/source_cases.json": "2327296e399b8ca8b846f5469838495e4c4b058f3620157630d78dc9c3b5d7f8",
+        "pcrp_curvature_governor_20261121/batch/contract.json": "d4f8097a7c9faee0d0f90f4f8b55ce5172b37ff398d2b880dae226cb064186c2",
+        "pcrp_curvature_governor_20261121/settings.json": "d15b2422cf54944710d5a07e0e94b0fc4431ef7c0214b834ccb01e706d961882",
+        "pcrp_curvature_governor_20261121/cases.json": "31b978d1bc3da74755bef6489b91b8b5733cd870f414001e51e709181221bfb6",
+        "pcrp_p1_20261121/matched/cases.json": "46a9714d43faf390a40a66bb04590ad48d652dd9acbfd8c056ec55929cfa863a",
+        "h75_theory_iteration/layout_test/jobs.json": "0d3c174ba28ce7033b09c19a55348e6c0732ef2999614f8d01b3ab81a67dbe4c"
+      },
+      "description": "Archive-relative. Copy each original trajectory referenced by these archived manifests, with its bundle and terrain. Read the per-case evidence on its original declared timescale."
+    },
+    "fixed_preference_training": {
+      "required_files": {
+        "pcrp_train_20261121/shared7101/config.json": "777d5e31393f0cfc4d85345028e710ba86a771c3c349e7354e4fe8efaa516bb1",
+        "pcrp_train_20261121/shared7101/training/model_initial.pt": "61531392a60651b23bf478f52df3e36b5fdae4046ea119fc40e7be04e9421e18",
+        "pcrp_train_20261121/shared7101/training/model_150.pt": "6f7bb2cd4843780aee1a236af51dd7aaba2d41ec30da122f6e26faeaed56a382"
+      },
+      "description": "Archive-relative. Restore the two original tensors and the complete shared7101 run and exported bundle from pcrp_train_20261121. The runner checks initialization and writes three new specialist outputs only when invoked."
+    },
+    "offline_warning_replay": {
+      "required_files": {
+        "docs/evidence/pcrp_matched_controls/forensic/warning_comparison/episodes.csv": "f2c911cbd1399736d5a3de77cc0fc676f5dd98855244322d3583adbd6a6a25d2",
+        "docs/evidence/pcrp_matched_controls/forensic/events.csv": "2eba4b0090ba1fd193344b86a429f1b8e3d6402f836f641346cbdeca52d98a9c"
+      },
+      "description": "Checkout-relative or pass --input / --events. The indexes point to the private original per-case contract.json and trajectory.npz files, which must be available under their recorded paths."
+    }
+  }
+}
