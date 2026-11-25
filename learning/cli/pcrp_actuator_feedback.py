@@ -1,6 +1,7 @@
 """Pair a velocity-servo gain perturbation with the registered PCRP sensor experiment."""
 import argparse
 import csv
+import hashlib
 import os
 import select
 from pathlib import Path
@@ -8,15 +9,19 @@ import subprocess
 import sys
 import time
 
-import numpy as np
-
-from pcrp_contact_sensitivity import notice
-from pcrp_corridor import digest
 from pcrp_review_batches import LAB, load, write
-from pcrp_sensor_feedback import ARMS, analyze as analyze_feedback
 
 GAIN = 0.85
 OBSERVATIONS = ("native", "loc10_delay30")
+
+
+def digest(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def notice(root, stage, message):
+    subprocess.run(["/usr/bin/python3", "learning/scripts/notify_sttw_job.py", "--message", message,
+                    "--receipt", str(root / (stage + "_notice.json"))])
 
 
 def prepare(root, parent):
@@ -79,6 +84,9 @@ def check_physics(level, contract, nominal):
 
 
 def analyze(root):
+    import numpy as np
+    from pcrp_sensor_feedback import ARMS, analyze as analyze_feedback
+
     spec = load(root / "protocol.json")
     paper = str(Path(__file__).resolve().parents[2] / "docs/paper/english")
     sys.path.insert(0, paper)
@@ -159,6 +167,7 @@ def analyze(root):
 
 def audit_torques(root):
     """Replay the first physics substep per lower tick using the previous recorded joint velocity."""
+    import numpy as np
     import torch
     from sttw_control.torch_controller import TorchVelocityServos
 
