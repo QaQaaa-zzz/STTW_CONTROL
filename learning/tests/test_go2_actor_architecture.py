@@ -102,3 +102,13 @@ def test_resumed_native_export_matches_frozen(architecture, tmp_path):
             applied,_=frozen.correct(frozen.latent(x),nominal)
             baseline,_=expected.correct(policy.actor(x),nominal)
             torch.testing.assert_close(applied,baseline,atol=2e-6,rtol=2e-6)
+
+
+def test_paired_initialization_names_and_bits_are_checked():
+    from sttw_control.go2_ppo_adapter import verify_initial_weights
+    reference = {"w": torch.tensor([.0, 1.]), "mod": torch.zeros(2)}
+    assert verify_initial_weights({"w": reference["w"]}, reference, ["mod"])["identical_shared"]
+    with pytest.raises(ValueError, match="names"):
+        verify_initial_weights({"w": reference["w"]}, reference)
+    with pytest.raises(ValueError, match="mismatch"):
+        verify_initial_weights({"w": torch.tensor([-.0, 1.])}, reference, ["mod"])

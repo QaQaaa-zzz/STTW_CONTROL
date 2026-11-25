@@ -17,7 +17,7 @@ app=AppLauncher(headless=True,device=s['device']).app
 import torch
 from sttw_control.go2_training_config import spring_jump_recipe
 from sttw_control.go2_path_env import Go2PathEnv
-from sttw_control.go2_ppo_adapter import H75ActorCritic, SeparatedPPO, init_near_zero_output
+from sttw_control.go2_ppo_adapter import H75ActorCritic, SeparatedPPO, init_near_zero_output, verify_initial_weights
 runner_path=Path(s['go2_checkout'])/'rsl_rl/rsl_rl/runners/on_policy_runner.py';spec=importlib.util.spec_from_file_location('sttw_go2_path_runner',runner_path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
 module.SeparatedPPO = SeparatedPPO
 policy_config=json.loads((Path(s['bundle'])/'config.json').read_text())
@@ -125,10 +125,8 @@ if a.resume_checkpoint:
 runner.save(a.output/'training/model_initial.pt',infos={'completed_updates':a.completed_updates,'source':str(a.resume_checkpoint) if a.resume_checkpoint else initial_description})
 if s.get('initial_weight_reference'):
     reference = torch.load(s['initial_weight_reference'], map_location='cpu', weights_only=False)['model_state_dict']
-    current = runner.alg.actor_critic.state_dict()
-    if current.keys() != reference.keys() or not all(torch.equal(v.cpu(), reference[k]) for k,v in current.items()):
-        raise ValueError('Fresh actor/critic parameters differ from the paired shared initialization')
-    (a.output/'initial_weight_check.json').write_text(json.dumps(dict(reference=s['initial_weight_reference'], arrays=len(reference), elements=sum(v.numel() for v in reference.values()), identical=True),indent=2))
+    audit = verify_initial_weights(runner.alg.actor_critic.state_dict(), reference, s.get('initial_weight_reference_excluded', ()))
+    (a.output/'initial_weight_check.json').write_text(json.dumps(dict(reference=s['initial_weight_reference'], **audit),indent=2))
 runner.learn(num_learning_iterations=s['updates']-a.completed_updates,init_at_random_ep_len=False)
 runner.writer.close()
-status.update(stage='training_complete',completed_updates=s['updates'],elapsed_s=time.time()-started,final_checkpoint=f'training/model_{s["updates"]}.pt');(a.output/'status.json').write_text(json.dumps(status,indent=2));app.close(wait_for_replicator=False,skip_cleanup=True)
+status.update(stage='training_complete',run_sampled_transitions=env.num_envs*env.sampling_steps,completed_updates=s['updates'],elapsed_s=time.time()-started,final_checkpoint=f'training/model_{s["updates"]}.pt');(a.output/'status.json').write_text(json.dumps(status,indent=2));app.close(wait_for_replicator=False,skip_cleanup=True)

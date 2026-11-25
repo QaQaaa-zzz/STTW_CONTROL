@@ -10,6 +10,19 @@ from rsl_rl.algorithms import PPO
 from rsl_rl.storage import RolloutStorage
 
 
+def verify_initial_weights(current, reference, excluded=()):
+    """Require the declared key difference and exact identity of every shared tensor."""
+    if set(current) != set(reference) - set(excluded) or not set(excluded) <= set(reference):
+        raise ValueError('Paired initialization tensor names differ from the declared architecture')
+    for name, value in current.items():
+        a, b = value.detach().cpu(), reference[name]
+        if a.shape != b.shape or a.dtype != b.dtype or not torch.equal(
+                a.contiguous().view(torch.uint8), b.contiguous().view(torch.uint8)):
+            raise ValueError(f'Paired initialization mismatch: {name}')
+    return dict(arrays=len(current), elements=sum(v.numel() for v in current.values()),
+                identical=not excluded, identical_shared=True, reference_only=sorted(excluded))
+
+
 def init_near_zero_output(actor, gain=0.01):
     """Scale the final actor linear layer near zero so fresh training starts near Zero."""
     last = actor[-1]

@@ -37,6 +37,9 @@ STYLE = dict(
     )
 )
 STYLE["Predictive governor"] = ("#C5531A", "v")
+RETRAINED = {"concat": "Direct-input alpha", "speed_only": "Speed only (retrained)", "steer_only": "Steer only (retrained)"}
+STYLE.update({name: (color, marker) for name, color, marker in
+              zip(RETRAINED.values(), ("#0072B2", "#008966", "#A34879"), ("s", "^", "D"))})
 BOX = np.array([0.8, 0.3])
 
 
@@ -58,6 +61,8 @@ def family(row):
         return "Pre-run selector" if row["cohort"] == "selector" else "Fixed H75"
     if row["cohort"] in ("fixed0", "fixed05", "fixed1"):
         return "Specialists"
+    if row["cohort"] in RETRAINED:
+        return RETRAINED[row["cohort"]]
     if row["cohort"] == "predictive_governor":
         return "Predictive governor"
     if "7101" in text:

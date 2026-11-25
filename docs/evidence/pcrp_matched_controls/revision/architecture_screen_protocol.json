@@ -1,0 +1,63 @@
+{
+  "role": "Single-seed matched development screen of three middle-policy controls; independent seeds and full H75 lineages absent",
+  "archival_eval_revision": "332974a9b4913680d7226e09184733cff36c8c89",
+  "archive": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_train_20261121/shared7101",
+  "archive_eval": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_train_20261121/shared7101_eval",
+  "source_inputs": "/media/qy/6A7E3DB07E3D75C3/STTW_runs/pcrp_architecture_screen_20261125/source_files.json",
+  "budget_per_arm": 14745600,
+  "total_new_transitions": 44236800,
+  "selection": "training/model_150.pt exclusively",
+  "new_episodes": 600,
+  "historical_7101_episodes": 200,
+  "physical_groups": 40,
+  "alphas": [
+    0,
+    0.25,
+    0.5,
+    0.75,
+    1
+  ],
+  "historical_zero": "40 contextual trajectories; group-matched but different placement",
+  "stages": "run each arm fresh, export update 150, evaluate one 200-slot scene per arm for 10 seconds, compare to archived 7101",
+  "failure_rule": "First budget, identity, slot or permission violation stops that stage. Never replace missing, failed or interrupted samples.",
+  "initial_tensor_checks": {
+    "concat": {
+      "arrays": 21,
+      "elements": 140357,
+      "identical": false,
+      "identical_shared": true,
+      "reference_only": [
+        "actor.gain_2",
+        "actor.gain_3",
+        "actor.shift_2",
+        "actor.shift_3"
+      ]
+    },
+    "speed_only": {
+      "arrays": 25,
+      "elements": 140741,
+      "identical": true,
+      "identical_shared": true,
+      "reference_only": []
+    },
+    "steer_only": {
+      "arrays": 25,
+      "elements": 140741,
+      "identical": true,
+      "identical_shared": true,
+      "reference_only": []
+    }
+  },
+  "frozen": {
+    "source_files.json": "ce2d2979ad6b0d363761037b625f036ca5256b4f658bc7a6970fb1dbffbc3b32",
+    "concat.json": "adac3d86e04c2b87cf418c24e03d8a673fdcb9cefdc43c3a48d0d92af219f8cb",
+    "concat_eval/settings.json": "e41e3b18349ca2147f8a62f38ed27ba7ff8ae7415aa1187c9f7384d3c7658e9e",
+    "concat_eval/cases.json": "1cb74e98257254c88c7463c7ca0d10615453ba1030965e055401cc02684b67d3",
+    "speed_only.json": "84eddc2a068b469cd185777bd30fe74aa64ab1516d2783b19fa382d1dc1465a6",
+    "speed_only_eval/settings.json": "f180c66394b538fddc4c919b113ddfb66350a7554be8b9be3ba4aad36e81405a",
+    "speed_only_eval/cases.json": "5b1e6b500551e46f44360a7c67969c2c08a97894625aefd681978f20236a294e",
+    "steer_only.json": "63628cda239e02d72b81e73bc7f1c5781c74024114bbc3b0678ede91a24ed709",
+    "steer_only_eval/settings.json": "335e5ee5d47acf2b1a71ded76f2a681c14bcfbd23bdb636b84fe769b0f942150",
+    "steer_only_eval/cases.json": "2d9ca20f5a72a0c85c0d2e7cfc7ea034fcac6b7ee24c9859213b94702c44b1c4"
+  }
+}
