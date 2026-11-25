@@ -92,5 +92,11 @@ class FixedSlotSession:
                       candidate_initialization_s=sampling-started, sampling_s=exporting-sampling,
                       export_s=finished-exporting, total_s=finished-started,
                       queue_scope='one shared GPU lease for this resident job list; exterior waiting is measured by caller')
+        # Fixed evaluation groups keep these explicit velocity-servo settings through the episode.
+        servo = self.plant.servos
+        report['velocity_servos'] = dict(order=['steering', 'rear'],
+                                         gain_Nm_per_rad_s=servo.gain.detach().cpu().tolist(),
+                                         torque_limits_Nm=servo.force.detach().cpu().tolist(),
+                                         velocity_limits_rad_s=servo.control.detach().cpu().tolist())
         (output/'resident_timing.json').write_text(json.dumps(report,indent=2)+'\n')
         self.count += 1

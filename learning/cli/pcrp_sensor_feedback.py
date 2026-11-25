@@ -72,7 +72,7 @@ def prepare(root):
     write(root/'status.json',dict(stage='prepared',episodes=96))
 
 
-def analyze(root):
+def analyze(root, *, arms=ARMS, sources=None, check=None, title="Closed-loop sampled feedback"):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
@@ -81,27 +81,32 @@ def analyze(root):
     from audit_warning_sensors import scores
     from sttw_control.isaac_path_reporting import replay_rewards
     out=root/'analysis';out.mkdir(exist_ok=True)
-    scenarios=load(root/'native/cases.json')
+    sources = sources or {level:root/level for level in arms}
+    scenarios=load(sources['native']/'cases.json')
     records=[]; links=[]
     for case in scenarios:
         name=Path(case['output']).name
-        fig,axes=plt.subplots(len(ARMS),4,figsize=(15,10),layout='constrained')
+        fig,axes=plt.subplots(len(arms),4,figsize=(15,3.2*len(arms)),layout='constrained')
         anchor=None
-        for (level,setting),axs in zip(ARMS.items(),axes,strict=True):
-            raw=root/level/name; contract,lanes=read_case(raw,LABELS)
+        for (level,setting),axs in zip(arms.items(),axes,strict=True):
+            raw=sources[level]/name; contract,lanes=read_case(raw,LABELS)
             route=np.load(Path(contract['bundle'])/'route.npz')
             if anchor is None:anchor=contract
             else:
-                check_pair(contract,anchor)
+                if check is None:check_pair(contract,anchor)
+                else:check(level,contract,anchor)
                 assert contract['origin']==anchor['origin']
             xy,ev,rew,cum=axs
             progress_limit=max(x[3].max() for x in lanes)
             xy.plot(*route['xy'][route['s']<=progress_limit+.4].T,'k:',label='Original route')
             with np.load(raw/'trajectory.npz') as z:
                 _,parts,closure=replay_rewards(z,load(Path(contract['bundle'])/'config.json'))
-                np.savez_compressed(raw/'reward_components.npz',**parts)
+                if raw.parent.parent == root:
+                    np.savez_compressed(raw/'reward_components.npz',**parts)
                 measured=z['policy_measurement']
                 for lane,(metrics,tr,t,progress,r) in enumerate(lanes):
+                    # Use every scored transition, including a terminal decision with no further active lower tick.
+                    r=z['reward'][z['valid'][:,lane].astype(bool),lane]
                     method=LABELS[lane];ids=np.flatnonzero(z['lower_trace'][:,:,lane,6].ravel())
                     imu=z['feedback_imu_tick'][ids,lane] if setting else ids+1
                     fix=z['feedback_location_tick'][ids,lane] if setting else ids+1
@@ -134,17 +139,17 @@ def analyze(root):
         links.append(f'- [{name}]({name}.png)')
     with (out/'episodes.csv').open('w',newline='') as stream:
         writer=csv.DictWriter(stream,fieldnames=list(records[0]));writer.writeheader();writer.writerows(records)
-    summary=['# Closed-loop sampled feedback','','[All 96 physical trajectories](episodes.csv)','',
+    summary=['# '+title,'',f'[All {len(records)} physical trajectories](episodes.csv)','','## Actual and reference trajectories','',*links,'',
              '| Terrain | Method | Observation setting | Full | Hold | A | B | C | Roll limits | Full-window alerts |',
              '|---|---|---|---:|---:|---:|---:|---:|---:|---:|']
     for terrain in ('flat_original','position_s4.2'):
         for label in LABELS:
-            for level in ARMS:
+            for level in arms:
                 a=[r for r in records if r['condition'].startswith(terrain) and r['level']==level and r['method']==label]
                 counts=[f'{sum(r[k] for r in a)}/{len(a)}' for k in ('full','hold','A','B','C')]
                 full=[r for r in a if r['full']]
                 summary.append('| '+' | '.join([terrain,label,level,*counts,f"{sum('roll_limit' in r['terminal'] for r in a)}/{len(a)}",f"{sum(r['warning_s'] is not None for r in full)}/{len(full)}"])+' |')
-    (out/'README.md').write_text('\n'.join(summary+['',*links])+'\n')
+    (out/'README.md').write_text('\n'.join(summary)+'\n')
 
 
 def run(root):
